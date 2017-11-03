@@ -5,7 +5,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 import App from './App/App';
 import Login from './containers/Login/Login';
-import Garnett from './containers/Garnett/Garnett';
+import ActiveMerit from './containers/ActiveMerit/ActiveMerit';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -14,7 +14,7 @@ ReactDOM.render(
     <App>
       <Switch>
         <Route exact path='/' component={Login}/>
-        <Route exact path='/garnett' component={Garnett}/>
+        <Route exact path='/active-merit' component={ActiveMerit}/>
         <Route path='*' component={Login}/>
       </Switch>
     </App>

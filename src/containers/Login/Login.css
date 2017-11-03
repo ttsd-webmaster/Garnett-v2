@@ -1,5 +1,5 @@
 /* Garnett Container */
-.garnett {
+.login {
   position: absolute;
   background-color: #2e2f33;
   color: #fff;
@@ -15,7 +15,7 @@
 }
 
 /* Logo and Title */
-.garnett-logo {
+.login-logo {
   display: flex;
   justify-content: space-around;
   width: 400px;
@@ -24,29 +24,29 @@
   margin-bottom: 50px;
 }
 @media(max-width: 768px) {
-  .garnett-logo {
+  .login-logo {
     width: 280px;
     margin-bottom: 20px;
   }
 }
 
-.garnett-logo img {
+.login-logo img {
   height: 75px;
   margin: auto 0;
 }
 @media(max-width: 768px) {
-  .garnett-logo img {
+  .login-logo img {
     height: 50px;
   }
 }
 
-.garnett-logo h1 {
+.login-logo h1 {
   font-size: 60px;
   margin-bottom: 20px;
   text-transform: uppercase;
 }
 @media(max-width: 768px) {
-  .garnett-logo h1 {
+  .login-logo h1 {
     font-size: 45px;
   }
 }
@@ -87,23 +87,22 @@
 }
 
 /* Form Fields */
-.garnett-form {
+.login-form {
   display: none;
   margin: 50px auto;
 }
 @media(max-width: 768px) {
-  .garnett-form {
+  .login-form {
     margin: 30px auto;
   }
 }
 
-.garnett-form.active {
+.login-form.active {
   display: block;
   animation: fadeIn .5s ease-in forwards;
 }
 
-.garnett-input {
-  height: 40px;
+.login-input {
   width: 40%;
   max-width: 576px;
   font-size: 16px;
@@ -111,13 +110,26 @@
   border-radius: 20px;
 }
 @media(max-width: 768px) {
-  .garnett-input {
+  .login-input {
     width: 80%;
   }
 }
 
+.form-control {
+  height: 40px;
+}
+
+/* Select Dropdown */
+.Select .Select-control {
+  border-radius: 20px;
+}
+
+.Select div {
+  text-align: left;
+}
+
 /* Login and Sign Up Buttons */
-.garnett-button {
+.login-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -134,11 +146,11 @@
   cursor: pointer;
 }
 @media(max-width: 768px) {
-  .garnett-button {
+  .login-button {
     width: 80%;
   }
 }
-.garnett-button:hover {
+.login-button:hover {
   background-color: var(--primary-dark);
 }
 
@@ -158,7 +170,7 @@
   cursor: pointer;
 }
 
-.garnett input[type="checkbox"]{
+.login input[type="checkbox"]{
   display: none;
 }
 
