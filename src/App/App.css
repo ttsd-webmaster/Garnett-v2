@@ -52,6 +52,11 @@ body {
   }
 }
 
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 100px var(--secondary-dark) inset;
+  -webkit-text-fill-color: #fff;
+}
+
 #loading {
   display: block;
   position: fixed;

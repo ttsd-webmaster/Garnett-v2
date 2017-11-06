@@ -71,7 +71,8 @@
 
 .sign-options span {
     cursor: pointer;
-  }
+}
+
 .sign-options span:after {
   content: '';
   display: block;
@@ -89,43 +90,25 @@
 /* Form Fields */
 .login-form {
   display: none;
-  margin: 50px auto;
-}
-@media(max-width: 768px) {
-  .login-form {
-    margin: 30px auto;
-  }
+  margin: 20px auto;
 }
 
 .login-form.active {
-  display: block;
+  display: flex;
+  flex-direction: column;
   animation: fadeIn .5s ease-in forwards;
 }
 
 .login-input {
-  width: 40%;
+  width: 40% !important;
   max-width: 576px;
-  font-size: 16px;
   margin: auto;
-  border-radius: 20px;
+  text-align: left;
 }
 @media(max-width: 768px) {
   .login-input {
-    width: 80%;
+    width: 80% !important;
   }
-}
-
-.form-control {
-  height: 40px;
-}
-
-/* Select Dropdown */
-.Select .Select-control {
-  border-radius: 20px;
-}
-
-.Select div {
-  text-align: left;
 }
 
 /* Login and Sign Up Buttons */
@@ -152,6 +135,10 @@
 }
 .login-button:hover {
   background-color: var(--primary-dark);
+}
+
+.login-button:last-child {
+  margin-top: 40px;
 }
 
 /* Checkbox */

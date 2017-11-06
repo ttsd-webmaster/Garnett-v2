@@ -1,11 +1,16 @@
 import './Login.css';
-import 'react-select/dist/react-select.css';
 
 import React, {Component} from 'react';
-import {Image, FormGroup, FormControl} from 'react-bootstrap';
-import Select from 'react-select';
+import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import {formData1, selectData, formData2} from './data.js';
 const firebase = window.firebase;
+
+function validateEmail(email) {
+  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
 
 export default class Login extends Component {
   constructor(props) {
@@ -13,8 +18,8 @@ export default class Login extends Component {
     this.state = {
       signEmail: '',
       signPassword: '',
-      firstname: '',
-      lastname: '',
+      firstName: '',
+      lastName: '',
       class: '',
       major: '',
       email: '',
@@ -22,6 +27,16 @@ export default class Login extends Component {
       password: '',
       confirmation: '',
       staySigned: false,
+      signEmailValidation: true,
+      signPasswordValidation: true,
+      firstNameValidation: true,
+      lastNameValidation: true,
+      classValidation: true,
+      majorValidation: true,
+      emailValidation: true,
+      codeValidation: true,
+      passwordValidation: true,
+      confirmationValidation: true,
     };
 
     this.toggleSignState = this.toggleSignState.bind(this);
@@ -46,17 +61,10 @@ export default class Login extends Component {
     }
   }
 
-  handleChange(value, e) {
-    if (e.target) {
-      this.setState({
-        [value]: e.target.value
-      })
-    }
-    else {
-      this.setState({
-        [value]: e.value
-      })
-    }
+  handleChange(label, newValue) {
+    this.setState({
+      [label]: newValue,
+    });
   }
 
   toggleSignState() {
@@ -68,56 +76,126 @@ export default class Login extends Component {
   login() {
     let email = this.state.signEmail;
     let password = this.state.signPassword;
+    let emailValidation = true;
+    let passwordValidation = true;
 
-    firebase.auth().signInWithEmailAndPassword(email, password)
-    .then((user) => {
-      if (user.emailVerified) {
-        this.props.history.push('/active-merit');
+    if (!email || !validateEmail(email) || !password) {
+      if (!email || !validateEmail(email)) {
+        emailValidation = false;
       }
-      else {
-        console.log('Not Verified')
+      if (!password) {
+        passwordValidation = false;
       }
-    })
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // ...
-      console.log(errorCode, errorMessage);
-    })
+
+      this.setState({
+        signEmailValidation: emailValidation,
+        signPasswordValidation: passwordValidation,
+      });
+    }
+    else {
+      firebase.auth().signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        if (user.emailVerified) {
+          this.props.history.push('/active-merit');
+        }
+        else {
+          console.log('Not Verified')
+        }
+      })
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // ...
+        console.log(errorCode, errorMessage);
+      })
+    }
   }
 
   signUp() {
-    let code = this.state.code;
+    let firstName = this.state.firstName;
+    let lastName = this.state.lastName;
+    let className = this.state.class;
+    let majorName = this.state.major;
     let email = this.state.email;
+    let code = this.state.code;
     let password = this.state.password;
+    let confirmation = this.state.confirmation;
+    let firstNameValidation = true;
+    let lastNameValidation = true;
+    let classValidation = true;
+    let majorValidation = true;
+    let emailValidation = true;
+    let codeValidation = true;
+    let passwordValidation = true;
+    let confirmationValidation = true;
 
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then((user) => {
-      if (user && !user.emailVerified) {
-        user.sendEmailVerification().then(function() {
-          document.getElementById('sign-in').click();
-        });
+    if (!firstName || !lastName || !className || !majorName || !validateEmail(email) ||
+        !code || code !== 'garnett' || password.length < 8 || confirmation !== password) {
+      if (!firstName) {
+        firstNameValidation = false;
       }
-    })
-    .catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
+      if (!lastName) {
+        lastNameValidation = false;
+      }
+      if (!className) {
+        classValidation = false;
+      }
+      if (!majorName) {
+        majorValidation = false;
+      }
+      if (!email || !validateEmail(email)) {
+        emailValidation = false;
+      }
+      if (!code || code !== 'garnett') {
+        codeValidation = false;
+      }
+      if (password.length < 8) {
+        passwordValidation = false;
+      }
+      if (confirmation !== password) {
+        confirmationValidation = false;
+      }
 
-      console.log(errorCode, errorMessage);
-    });
+      this.setState({
+        firstNameValidation: firstNameValidation,
+        lastNameValidation: lastNameValidation,
+        classValidation: classValidation,
+        majorValidation: majorValidation,
+        emailValidation: emailValidation,
+        codeValidation: codeValidation,
+        passwordValidation: passwordValidation,
+        confirmationValidation: confirmationValidation,
+      });
+    }
+    else {
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then((user) => {
+        if (user && !user.emailVerified) {
+          user.sendEmailVerification().then(function() {
+            document.getElementById('sign-in').click();
+          });
+        }
+      })
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+
+        console.log(errorCode, errorMessage);
+      });
+    }
   }
 
   render() {
     return (
       <div className="login">
         <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
-          <Image className="logo" src={require('./images/logo.webp')}/>
+          <img className="logo" src={require('./images/logo.webp')} alt="logo"/>
         </a>
 
         <div className="login-logo">
-          <Image src={require('./images/garnett.svg')} />
+          <img src={require('./images/garnett.svg')} alt="garnett"/>
           <h1> Garne<span className="tt">tt</span> </h1>
         </div>
 
@@ -136,28 +214,32 @@ export default class Login extends Component {
           </span>
         </div>
 
-        <form className="login-form sign-in active" id="sign-in-form">
-          <FormGroup controlId="formHorizontalEmail">
-            <FormControl
-              className="login-input"
-              type="email"
-              placeholder="Email"
-              value={this.state.signEmail}
-              onChange={(e) => this.handleChange('signEmail', e)}
-             />
-          </FormGroup>
+        <form className="login-form active" id="sign-in-form">
+          <TextField
+            className="login-input"
+            type="email"
+            inputStyle={{color: '#fff'}}
+            floatingLabelText="Email"
+            floatingLabelStyle={{color: '#888'}}
+            floatingLabelFocusStyle={{color: 'var(--primary-color)'}}
+            value={this.state.signEmail}
+            onChange={(e, newValue) => this.handleChange('signEmail', newValue)}
+            errorText={!this.state.signEmailValidation && 'Please enter a valid email.'}
+           />
 
-          <FormGroup controlId="formHorizontalPassword">
-            <FormControl
-              className="login-input"
-              type="password"
-              placeholder="Password"
-              value={this.state.signPassword}
-              onChange={(e) => this.handleChange('signPassword', e)}
-             />
-          </FormGroup>
+          <TextField
+            className="login-input"
+            type="password"
+            inputStyle={{color: '#fff'}}
+            floatingLabelText="Password"
+            floatingLabelStyle={{color: '#888'}}
+            floatingLabelFocusStyle={{color: 'var(--primary-color'}}
+            value={this.state.signPassword}
+            onChange={(e, newValue) => this.handleChange('signPassword', newValue)}
+            errorText={!this.state.signPasswordValidation && 'Please enter a password.'}
+           />
 
-          <div className="checkbox-container">
+          {/*<div className="checkbox-container">
             <input 
               type="checkbox" 
               id="checkbox"
@@ -167,52 +249,58 @@ export default class Login extends Component {
             <label htmlFor="checkbox">
               <span className="checkbox">stay signed in</span>
             </label>
-          </div>
+          </div>*/}
 
           <div className="login-button" onClick={this.login}>
             Login
           </div>
         </form>
-
         <form className="login-form sign-up" id="sign-up-form">
           {formData1.map((form, i) => (
-            <FormGroup controlId="formBasicText" key={i}>
-              <FormControl
-                className="login-input"
-                type={form.type}
-                placeholder={form.name}
-                value={this.state[`${form.value}`]}
-                onChange={(e) => this.handleChange(form.value, e)}
-               />
-            </FormGroup>
+            <TextField
+              className="login-input"
+              type={form.type}
+              inputStyle={{color: '#fff'}}
+              floatingLabelText={form.name}
+              floatingLabelStyle={{color: '#888'}}
+              floatingLabelFocusStyle={{color: 'var(--primary-color'}}
+              value={this.state[`${form.value}`]}
+              onChange={(e, newValue) => this.handleChange(form.value, newValue)}
+              errorText={!this.state[`${form.value + 'Validation'}`] && form.errorText}
+              key={i}
+            />
           ))}
 
           {selectData.map((select, i) => (
-            <FormGroup key={i}>
-              <Select
-                className="login-input"
-                value={this.state[`${select.value}`]}
-                placeholder={select.name}
-                options={select.options}
-                clearable={false}
-                backspaceRemoves={false}
-                searchable={false}
-                onChange={(e) => this.handleChange(select.value, e)}
-                key={i}
-              />
-            </FormGroup>
+            <SelectField
+              className="login-input"
+              value={this.state[`${select.value}`]}
+              floatingLabelText={select.name}
+              floatingLabelStyle={{color: '#888'}}
+              labelStyle={{color: '#fff'}}
+              onChange={(e, key, newValue) => this.handleChange(select.value, newValue)}
+              errorText={!this.state[`${select.value + 'Validation'}`] && select.errorText}
+              key={i}
+            >
+              {select.options.map((item, i) => (
+                <MenuItem key={i} value={item.value} primaryText={item.label} />
+              ))}
+            </SelectField>
           ))}
 
           {formData2.map((form, i) => (
-            <FormGroup controlId="formBasicText" key={i}>
-              <FormControl
-                className="login-input"
-                type={form.type}
-                placeholder={form.name}
-                value={this.state[`${form.value}`]}
-                onChange={(e) => this.handleChange(form.value, e)}
-               />
-            </FormGroup>
+            <TextField
+              className="login-input"
+              type={form.type}
+              inputStyle={{color: '#fff'}}
+              floatingLabelText={form.name}
+              floatingLabelStyle={{color: '#888'}}
+              floatingLabelFocusStyle={{color: 'var(--primary-color'}}
+              value={this.state[`${form.value}`]}
+              onChange={(e, newValue) => this.handleChange(form.value, newValue)}
+              errorText={!this.state[`${form.value + 'Validation'}`] && form.errorText}
+              key={i}
+            />
           ))}
           <div className="login-button" onClick={this.signUp}>
             Sign Up

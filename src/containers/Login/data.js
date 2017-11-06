@@ -1,13 +1,15 @@
 const formData1 = [
   {
     name: 'First Name',
-    value: 'firstname',
+    value: 'firstName',
     type: 'text',
+    errorText: 'Please enter a first name.',
   },
   {
     name: 'Last Name',
-    value: 'lastname',
+    value: 'lastName',
     type: 'text',
+    errorText: 'Please enter a last name.',
   },
 ];
 
@@ -15,6 +17,7 @@ const selectData = [
   {
     name: 'Class',
     value: 'class',
+    errorText: 'Please select a class.',
     options: [
       { 
         value: 'kappa', 
@@ -53,6 +56,7 @@ const selectData = [
   {
     name: 'Major',
     value: 'major',
+    errorText: 'Please select a major.',
     options: [
       { 
       value: 'aero', 
@@ -103,21 +107,25 @@ const formData2 = [
     name: 'Email',
     value: 'email',
     type: 'email',
+    errorText: 'Please enter a valid email.',
   },
   {
     name: 'Authorization Code',
     value: 'code',
     type: 'password',
+    errorText: 'The authorization code is not correct.',
   },
   {
     name: 'Password',
     value: 'password',
     type: 'password',
+    errorText: 'Please enter a password that is longer than 8 characters.',
   },
   {
     name: 'Password Confirmation',
     value: 'confirmation',
     type: 'password',
+    errorText: 'The confirmation password does not match.',
   },
 ];
 
