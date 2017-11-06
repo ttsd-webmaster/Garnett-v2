@@ -1,3 +1,7 @@
+const activeCode = 'garnett';
+
+const pledgeCode = 'rhoclass';
+
 const formData1 = [
   {
     name: 'First Name',
@@ -129,4 +133,4 @@ const formData2 = [
   },
 ];
 
-export {formData1, selectData, formData2};
+export {activeCode, pledgeCode, formData1, selectData, formData2};

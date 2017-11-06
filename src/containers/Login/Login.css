@@ -1,7 +1,7 @@
 /* Garnett Container */
 .login {
   position: absolute;
-  background-color: #2e2f33;
+  background-color: var(--secondary-dark);
   color: #fff;
   height: 100%;
   width: 100%;

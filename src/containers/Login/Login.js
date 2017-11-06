@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import {formData1, selectData, formData2} from './data.js';
+import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
 const firebase = window.firebase;
 
 function validateEmail(email) {
@@ -62,15 +62,18 @@ export default class Login extends Component {
   }
 
   handleChange(label, newValue) {
+    let validationLabel = [label] + 'Validation';
+
     this.setState({
       [label]: newValue,
+      [validationLabel]: true,
     });
   }
 
   toggleSignState() {
     this.setState({
       staySigned: !this.state.staySigned
-    })
+    });
   }
 
   login() {
@@ -95,8 +98,20 @@ export default class Login extends Component {
     else {
       firebase.auth().signInWithEmailAndPassword(email, password)
       .then((user) => {
-        if (user.emailVerified) {
-          this.props.history.push('/active-merit');
+        if (!user.emailVerified) {
+          let userRef = firebase.database().ref('/users/' + user.displayName);
+          let userStatus;
+          
+          userRef.once('value').then((snapshot) => {
+            userStatus = snapshot.val().status;
+
+            if (userStatus === 'active') {
+              this.props.history.push('/active-merit');
+            }
+            else {
+              this.props.history.push('/pledge-merit');
+            }
+          });
         }
         else {
           console.log('Not Verified')
@@ -131,7 +146,8 @@ export default class Login extends Component {
     let confirmationValidation = true;
 
     if (!firstName || !lastName || !className || !majorName || !validateEmail(email) ||
-        !code || code !== 'garnett' || password.length < 8 || confirmation !== password) {
+        !code || (code !== activeCode && code !== pledgeCode) || password.length < 8 || 
+        confirmation !== password) {
       if (!firstName) {
         firstNameValidation = false;
       }
@@ -147,7 +163,7 @@ export default class Login extends Component {
       if (!email || !validateEmail(email)) {
         emailValidation = false;
       }
-      if (!code || code !== 'garnett') {
+      if (!code || (code !== activeCode && code !== pledgeCode)) {
         codeValidation = false;
       }
       if (password.length < 8) {
@@ -172,8 +188,36 @@ export default class Login extends Component {
       firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((user) => {
         if (user && !user.emailVerified) {
-          user.sendEmailVerification().then(function() {
-            document.getElementById('sign-in').click();
+          user.updateProfile({
+            displayName: firstName + lastName
+          })
+          .then(function() {
+            firebase.database().ref('users/' + user.displayName).set({
+              firstName: firstName,
+              lastName: lastName,
+              class: className,
+              major: majorName,
+              email: email,
+              photoURL: '',
+            });
+            if (code === activeCode) {
+              firebase.database().ref('users/' + user.displayName).update({
+                status: 'active',
+              });
+            }
+            else {
+              firebase.database().ref('users/' + user.displayName).update({
+                status: 'pledge',
+              });
+            }
+
+            user.sendEmailVerification()
+            .then(function() {
+              document.getElementById('sign-in').click();
+            });
+          })
+          .catch(function(error) {
+            console.log(error)
           });
         }
       })
