@@ -1,9 +1,19 @@
-.pledge-name {
+.pledge-info-container {
   display: inline-block;
+  text-align: left;
+}
+
+.pledge-name {
   font-family: 'Lato';
   font-weight: 700;
-  font-size: 18px;
-  text-align: center;
+  font-size: 16px;
+  margin: 0 0 5px;
+}
+
+.pledge-info {
+  font-family: 'Lato';
+  font-size: 14px;
+  margin: 0;
 }
 
 .active-merits {
