@@ -1,10 +1,13 @@
 .pledge-name {
   display: inline-block;
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 18px;
   text-align: center;
-  margin: 0;
 }
 
 .active-merits {
+  font-family: 'Luckiest Guy';
+  font-size: 18px;
   float: right;
-  margin: 0;
 }
