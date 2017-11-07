@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-export default class PledgeeMerit extends Component {
+export default class PledgeMerit extends Component {
   render() {
     return (
       <div> Pledge </div>

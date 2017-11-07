@@ -98,20 +98,8 @@ export default class Login extends Component {
     else {
       firebase.auth().signInWithEmailAndPassword(email, password)
       .then((user) => {
-        if (!user.emailVerified) {
-          let userRef = firebase.database().ref('/users/' + user.displayName);
-          let userStatus;
-          
-          userRef.once('value').then((snapshot) => {
-            userStatus = snapshot.val().status;
-
-            if (userStatus === 'active') {
-              this.props.history.push('/active-merit');
-            }
-            else {
-              this.props.history.push('/pledge-merit');
-            }
-          });
+        if (user && !user.emailVerified) {
+          this.props.history.push('/pledge-app');
         }
         else {
           console.log('Not Verified')
