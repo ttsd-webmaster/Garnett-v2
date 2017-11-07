@@ -1,0 +1,10 @@
+.pledge-name {
+  display: inline-block;
+  text-align: center;
+  margin: 0;
+}
+
+.active-merits {
+  float: right;
+  margin: 0;
+}

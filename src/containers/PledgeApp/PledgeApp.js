@@ -6,6 +6,11 @@ import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
 const firebase = window.firebase;
 
+const tabContainerStyle = {
+  position: 'fixed',
+  zIndex: '1'
+}
+
 function MeritBook(props) {
   let user = firebase.auth().currentUser;
   let userRef = firebase.database().ref('/users/' + user.displayName);
@@ -41,6 +46,7 @@ export default class PledgeApp extends Component {
     return (
       <div>
         <Tabs
+          tabItemContainerStyle={tabContainerStyle}
           onChange={this.handleChange}
           value={this.state.slideIndex}
         >
@@ -58,12 +64,14 @@ export default class PledgeApp extends Component {
           />
         </Tabs>
         <SwipeableViews
+          style={{marginTop: '48px'}}
+          animateHeight={true}
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
           <MeritBook />
-          <div> Hello </div>
-          <div> Bye </div>
+          <div> Chalkboards </div>
+          <div> Settings </div>
         </SwipeableViews>
       </div>
     )
