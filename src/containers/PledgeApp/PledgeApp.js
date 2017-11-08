@@ -65,7 +65,6 @@ export default class PledgeApp extends Component {
         </Tabs>
         <SwipeableViews
           style={{marginTop: '48px'}}
-          animateHeight={true}
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
