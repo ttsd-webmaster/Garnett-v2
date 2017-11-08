@@ -8,7 +8,8 @@ const firebase = window.firebase;
 
 const tabContainerStyle = {
   position: 'fixed',
-  zIndex: '1'
+  top: 50,
+  zIndex: 1
 }
 
 function MeritBook(props) {
@@ -32,12 +33,26 @@ export default class PledgeApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      title: 'Merit Book',
       slideIndex: 0,
     };
   }
 
   handleChange = (value) => {
+    let title;
+
+    if (value === 0) {
+      title = 'Merit Book';
+    }
+    else if (value == 1) {
+      title = 'Chalkboards';
+    }
+    else {
+      title = 'Settings';
+    }
+
     this.setState({
+      title: title,
       slideIndex: value,
     });
   };
@@ -45,6 +60,9 @@ export default class PledgeApp extends Component {
   render() {
     return (
       <div>
+        <div className="app-header">
+          {this.state.title}
+        </div>
         <Tabs
           tabItemContainerStyle={tabContainerStyle}
           onChange={this.handleChange}
@@ -64,7 +82,7 @@ export default class PledgeApp extends Component {
           />
         </Tabs>
         <SwipeableViews
-          style={{marginTop: '48px'}}
+          style={{marginTop: '100px'}}
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
