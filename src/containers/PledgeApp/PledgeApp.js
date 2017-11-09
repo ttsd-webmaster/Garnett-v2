@@ -11,7 +11,7 @@ const tabContainerStyle = {
   position: 'fixed',
   top: 50,
   zIndex: 1
-}
+};
 
 function MeritBook(props) {
   let user = firebase.auth().currentUser;
@@ -74,7 +74,7 @@ export default class PledgeApp extends Component {
             value={0}
           />
           <Tab
-            icon={<i className="icon-users"></i>}
+            icon={<i className="icon-calendar-empty"></i>}
             value={1}
           />
           <Tab

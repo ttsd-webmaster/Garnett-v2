@@ -2,7 +2,11 @@
   object-fit: cover;
   height: 150px;
   width: 150px;
-  margin-top: 15px;
+  margin: 15px 0;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
+}
+
+.settings-icon {
+  color: var(--primary-color);
 }

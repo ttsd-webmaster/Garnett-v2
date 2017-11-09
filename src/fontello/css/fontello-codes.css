@@ -1,4 +1,9 @@
 
+.icon-user:before { content: '\e800'; } /* '' */
+.icon-phone:before { content: '\e801'; } /* '' */
+.icon-briefcase:before { content: '\e802'; } /* '' */
 .icon-users:before { content: '\e804'; } /* '' */
+.icon-mail-alt:before { content: '\f0e0'; } /* '' */
+.icon-calendar-empty:before { content: '\f133'; } /* '' */
 .icon-sliders:before { content: '\f1de'; } /* '' */
 .icon-address-book:before { content: '\f2b9'; } /* '' */
