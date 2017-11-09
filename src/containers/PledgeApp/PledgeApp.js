@@ -4,6 +4,7 @@ import SwipeableViews from 'react-swipeable-views';
 
 import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
+import Settings from '../../components/Settings/Settings';
 const firebase = window.firebase;
 
 const tabContainerStyle = {
@@ -44,7 +45,7 @@ export default class PledgeApp extends Component {
     if (value === 0) {
       title = 'Merit Book';
     }
-    else if (value == 1) {
+    else if (value === 1) {
       title = 'Chalkboards';
     }
     else {
@@ -83,12 +84,13 @@ export default class PledgeApp extends Component {
         </Tabs>
         <SwipeableViews
           style={{marginTop: '100px'}}
+          animateHeight={true}
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
           <MeritBook />
           <div> Chalkboards </div>
-          <div> Settings </div>
+          <Settings />
         </SwipeableViews>
       </div>
     )

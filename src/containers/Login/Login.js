@@ -22,6 +22,7 @@ export default class Login extends Component {
       lastName: '',
       class: '',
       major: '',
+      phone: '',
       email: '',
       code: '',
       password: '',
@@ -33,6 +34,7 @@ export default class Login extends Component {
       lastNameValidation: true,
       classValidation: true,
       majorValidation: true,
+      phoneValidation: true,
       emailValidation: true,
       codeValidation: true,
       passwordValidation: true,
@@ -42,6 +44,12 @@ export default class Login extends Component {
     this.toggleSignState = this.toggleSignState.bind(this);
     this.login = this.login.bind(this);
     this.signUp = this.signUp.bind(this);
+  }
+
+  componentDidMount() {
+    if (firebase.auth().currentUser) {
+      this.props.history.push('/pledge-app');
+    }
   }
 
   active = (event) => {
@@ -120,6 +128,7 @@ export default class Login extends Component {
     let lastName = this.state.lastName;
     let className = this.state.class;
     let majorName = this.state.major;
+    let phone = this.state.phone;
     let email = this.state.email;
     let code = this.state.code;
     let password = this.state.password;
@@ -128,14 +137,15 @@ export default class Login extends Component {
     let lastNameValidation = true;
     let classValidation = true;
     let majorValidation = true;
+    let phoneValidation = true;
     let emailValidation = true;
     let codeValidation = true;
     let passwordValidation = true;
     let confirmationValidation = true;
 
     if (!firstName || !lastName || !className || !majorName || !validateEmail(email) ||
-        !code || (code !== activeCode && code !== pledgeCode) || password.length < 8 || 
-        confirmation !== password) {
+        phone.length !== 10 || !code || (code !== activeCode && code !== pledgeCode) || 
+        password.length < 8 || confirmation !== password) {
       if (!firstName) {
         firstNameValidation = false;
       }
@@ -147,6 +157,9 @@ export default class Login extends Component {
       }
       if (!majorName) {
         majorValidation = false;
+      }
+      if (phone.length !== 10) {
+        phoneValidation = false;
       }
       if (!email || !validateEmail(email)) {
         emailValidation = false;
@@ -166,6 +179,7 @@ export default class Login extends Component {
         lastNameValidation: lastNameValidation,
         classValidation: classValidation,
         majorValidation: majorValidation,
+        phoneValidation: phoneValidation,
         emailValidation: emailValidation,
         codeValidation: codeValidation,
         passwordValidation: passwordValidation,
@@ -185,6 +199,7 @@ export default class Login extends Component {
               lastName: lastName,
               class: className,
               major: majorName,
+              phone: phone,
               email: email,
               photoURL: '',
             });

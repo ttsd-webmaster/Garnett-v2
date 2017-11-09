@@ -108,6 +108,12 @@ const selectData = [
 
 const formData2 = [
   {
+    name: 'Phone',
+    value: 'phone',
+    type: 'number',
+    errorText: 'Please enter a valid phone number.',
+  },
+  {
     name: 'Email',
     value: 'email',
     type: 'email',
