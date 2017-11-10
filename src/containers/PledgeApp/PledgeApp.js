@@ -13,21 +13,21 @@ const tabContainerStyle = {
   zIndex: 1
 };
 
-function MeritBook(props) {
-  let user = firebase.auth().currentUser;
-  let userRef = firebase.database().ref('/users/' + user.displayName);
-  let userStatus;
+const swipeableViewStyle = {
+  height: 'calc(100vh - 100px)',
+  backgroundColor: '#fafafa',
+  marginTop: '100px'
+};
 
-  userRef.on('value', function(snapshot) {
-    userStatus = snapshot.val().status;
-  });
+function MeritBook(props) {
   
-  if (userStatus === 'active') {
-    return <ActiveMerit />;
-  }
-  else {
-    return <PledgeMerit />;
-  }
+  const isActive = props.active;
+  console.log("is active:"+isActive);
+  if(isActive){
+    return <ActiveMerit/>;
+  }  
+  return <PledgeMerit />;
+
 }
 
 export default class PledgeApp extends Component {
@@ -36,7 +36,29 @@ export default class PledgeApp extends Component {
     this.state = {
       title: 'Merit Book',
       slideIndex: 0,
+      active:false,
+      loaded:false
     };
+  }
+  componentDidMount=()=>{
+    let user = firebase.auth().currentUser;
+    let userRef = firebase.database().ref('/users/' + user.displayName);
+    let userStatus;
+
+    console.log("im here");
+    let self = this;
+
+    userRef.on('value', function(snapshot) {
+      userStatus = snapshot.val().status;
+      console.log("usersnapshot",snapshot.val())
+      console.log(userStatus === 'active')
+      if (userStatus === 'active') {
+        self.setState({
+          active:true,
+          loaded:true
+        })
+      }
+    });
   }
 
   handleChange = (value) => {
@@ -83,12 +105,12 @@ export default class PledgeApp extends Component {
           />
         </Tabs>
         <SwipeableViews
-          style={{marginTop: '100px'}}
+          style={swipeableViewStyle}
           animateHeight={true}
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
-          <MeritBook />
+          {this.state.loaded?<MeritBook active={this.state.active} />:<div></div>}
           <div> Chalkboards </div>
           <Settings />
         </SwipeableViews>

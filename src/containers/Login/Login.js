@@ -106,7 +106,7 @@ export default class Login extends Component {
     else {
       firebase.auth().signInWithEmailAndPassword(email, password)
       .then((user) => {
-        if (user && !user.emailVerified) {
+        if (user && user.emailVerified) {
           this.props.history.push('/pledge-app');
         }
         else {
