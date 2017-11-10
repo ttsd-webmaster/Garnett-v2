@@ -20,26 +20,10 @@ const swipeableViewStyle = {
 };
 
 function MeritBook(props) {
-  let user = firebase.auth().currentUser;
-  let dbRef = firebase.database().ref('/users/');
-  let userRef = firebase.database().ref('/users/' + user.displayName);
-  let userStatus;
-  let userArray = [];
+  const isActive = props.active;
 
-  userRef.on('value', function(snapshot) {
-    userStatus = snapshot.val().status;
-  });
-  
-  if (userStatus === 'active') {
-    dbRef.on('value', function(snapshot) {
-      userArray = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key]
-      });
-      userArray = userArray.filter(function(user) {
-        return user.status === 'pledge';
-      })
-    })
-    return <ActiveMerit userArray={userArray} />;
+  if (isActive) {
+    return <ActiveMerit userArray={props.userArray} />;
   }
   else {
     return <PledgeMerit />;
@@ -52,7 +36,42 @@ export default class PledgeApp extends Component {
     this.state = {
       title: 'Merit Book',
       slideIndex: 0,
+      active: false,
+      loaded: false,
+      userArray: [],
     };
+  }
+
+  componentDidMount() {
+    let user = firebase.auth().currentUser;
+    let dbRef = firebase.database().ref('/users/');
+    let userRef = firebase.database().ref('/users/' + user.displayName);
+    let userStatus;
+    let userArray = [];
+
+    dbRef.on('value', (snapshot) => {
+      userArray = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key]
+      });
+      userArray = userArray.filter(function(user) {
+        return user.status === 'pledge';
+      })
+
+      this.setState({
+        userArray: userArray
+      })
+    });
+
+    userRef.on('value', (snapshot) => {
+      userStatus = snapshot.val().status;
+
+      if (userStatus === 'active') {
+        this.setState({
+          active:true,
+          loaded:true
+        })
+      }
+    });
   }
 
   handleChange = (value) => {
@@ -104,7 +123,10 @@ export default class PledgeApp extends Component {
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}
         >
-          <MeritBook />
+          {this.state.loaded ? 
+            <MeritBook active={this.state.active} userArray={this.state.userArray} /> : 
+            <div></div>
+          }
           <div> Chalkboards </div>
           <Settings />
         </SwipeableViews>
