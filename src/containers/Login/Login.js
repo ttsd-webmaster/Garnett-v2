@@ -22,6 +22,7 @@ export default class Login extends Component {
       lastName: '',
       class: '',
       major: '',
+      year: '',
       phone: '',
       email: '',
       code: '',
@@ -34,6 +35,7 @@ export default class Login extends Component {
       lastNameValidation: true,
       classValidation: true,
       majorValidation: true,
+      yearValidation: true,
       phoneValidation: true,
       emailValidation: true,
       codeValidation: true,
@@ -128,6 +130,7 @@ export default class Login extends Component {
     let lastName = this.state.lastName;
     let className = this.state.class;
     let majorName = this.state.major;
+    let year = this.state.year;
     let phone = this.state.phone;
     let email = this.state.email;
     let code = this.state.code;
@@ -137,13 +140,14 @@ export default class Login extends Component {
     let lastNameValidation = true;
     let classValidation = true;
     let majorValidation = true;
+    let yearValidation = true;
     let phoneValidation = true;
     let emailValidation = true;
     let codeValidation = true;
     let passwordValidation = true;
     let confirmationValidation = true;
 
-    if (!firstName || !lastName || !className || !majorName || !validateEmail(email) ||
+    if (!firstName || !lastName || !className || !majorName || !year || !validateEmail(email) ||
         phone.length !== 10 || !code || (code !== activeCode && code !== pledgeCode) || 
         password.length < 8 || confirmation !== password) {
       if (!firstName) {
@@ -157,6 +161,9 @@ export default class Login extends Component {
       }
       if (!majorName) {
         majorValidation = false;
+      }
+      if (!year) {
+        yearValidation = false;
       }
       if (phone.length !== 10) {
         phoneValidation = false;
@@ -179,6 +186,7 @@ export default class Login extends Component {
         lastNameValidation: lastNameValidation,
         classValidation: classValidation,
         majorValidation: majorValidation,
+        yearValidation: yearValidation,
         phoneValidation: phoneValidation,
         emailValidation: emailValidation,
         codeValidation: codeValidation,
@@ -199,6 +207,7 @@ export default class Login extends Component {
               lastName: lastName,
               class: className,
               major: majorName,
+              year: year,
               phone: phone,
               email: email,
               photoURL: '',

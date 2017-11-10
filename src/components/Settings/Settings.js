@@ -5,8 +5,13 @@ import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 const firebase = window.firebase;
 
+const listStyle = {
+  textAlign: 'left',
+};
+
 const listItemStyle = {
-  textAlign: 'left'
+  backgroundColor: '#fff',
+  zIndex: -1
 };
 
 const dividerStyle = {
@@ -45,9 +50,10 @@ export default class Settings extends Component {
     return (
       <div>
         <img className="user-photo" src={require(`${this.state.photoURL}`)} />
-        <List style={listItemStyle}>
+        <List style={listStyle}>
           <Divider />
           <ListItem
+            innerDivStyle={listItemStyle}
             primaryText="Name"
             secondaryText={this.state.name}
             leftIcon={
@@ -56,6 +62,7 @@ export default class Settings extends Component {
           />
           <Divider inset={true} />
           <ListItem
+            innerDivStyle={listItemStyle}
             primaryText="Phone Number"
             secondaryText={this.state.phone}
             leftIcon={
@@ -64,6 +71,7 @@ export default class Settings extends Component {
           />
           <Divider inset={true} />
           <ListItem
+            innerDivStyle={listItemStyle}
             primaryText="Email Address"
             secondaryText={this.state.email}
             leftIcon={
@@ -72,6 +80,7 @@ export default class Settings extends Component {
           />
           <Divider inset={true} />
           <ListItem
+            innerDivStyle={listItemStyle}
             primaryText="Class"
             secondaryText={this.state.class}
             leftIcon={
@@ -80,6 +89,7 @@ export default class Settings extends Component {
           />
           <Divider inset={true} />
           <ListItem
+            innerDivStyle={listItemStyle}
             primaryText="Major"
             secondaryText={this.state.major}
             leftIcon={

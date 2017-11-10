@@ -13,17 +13,33 @@ const tabContainerStyle = {
   zIndex: 1
 };
 
+const swipeableViewStyle = {
+  height: 'calc(100vh - 100px)',
+  backgroundColor: '#fafafa',
+  marginTop: '100px'
+};
+
 function MeritBook(props) {
   let user = firebase.auth().currentUser;
+  let dbRef = firebase.database().ref('/users/');
   let userRef = firebase.database().ref('/users/' + user.displayName);
   let userStatus;
+  let userArray = [];
 
   userRef.on('value', function(snapshot) {
     userStatus = snapshot.val().status;
   });
   
   if (userStatus === 'active') {
-    return <ActiveMerit />;
+    dbRef.on('value', function(snapshot) {
+      userArray = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key]
+      });
+      userArray = userArray.filter(function(user) {
+        return user.status === 'pledge';
+      })
+    })
+    return <ActiveMerit userArray={userArray} />;
   }
   else {
     return <PledgeMerit />;
@@ -83,7 +99,7 @@ export default class PledgeApp extends Component {
           />
         </Tabs>
         <SwipeableViews
-          style={{marginTop: '100px'}}
+          style={swipeableViewStyle}
           animateHeight={true}
           index={this.state.slideIndex}
           onChangeIndex={this.handleChange}

@@ -24,35 +24,35 @@ const selectData = [
     errorText: 'Please select a class.',
     options: [
       { 
-        value: 'kappa', 
+        value: 'Kappa', 
         label: 'Kappa',
       },
       { 
-        value: 'lambda', 
+        value: 'Lambda', 
         label: 'Lambda',
       },
       { 
-        value: 'mu', 
+        value: 'Mu', 
         label: 'Mu',
       },
       { 
-        value: 'nu', 
+        value: 'Nu', 
         label: 'Nu',
       },
       { 
-        value: 'xi', 
+        value: 'Xi', 
         label: 'Xi',
       },
       { 
-        value: 'omicron', 
+        value: 'Omicron', 
         label: 'Omicron',
       },
       { 
-        value: 'pi', 
+        value: 'Pi', 
         label: 'Pi',
       },
       {
-        value: 'rho',
+        value: 'Rho',
         label: 'Rho',
       }
     ]
@@ -63,47 +63,74 @@ const selectData = [
     errorText: 'Please select a major.',
     options: [
       { 
-      value: 'aero', 
-      label: 'Aerospace Engineering',
-    },
-    { 
-      value: 'bio', 
-      label: 'Bioengineering',
-    },
-    { 
-      value: 'chem', 
-      label: 'Chemical Engineering',
-    },
-    { 
-      value: 'ce', 
-      label: 'Computer Engineering',
-    },
-    { 
-      value: 'cs', 
-      label: 'Computer Science', 
-    },
-    { 
-      value: 'ee', 
-      label: 'Electrical Engineering',
-    },
-    { 
-      value: 'env', 
-      label: 'Environmental Engineering',
-    },
-    { 
-      value: 'mech', 
-      label: 'Mechanical Engineering',
-    },
-    { 
-      value: 'nano', 
-      label: 'Nanoengineering',
-    },
-    { 
-      value: 'struct', 
-      label: 'Structural Engineering',
-    },
+        value: 'Aerospace Engineering', 
+        label: 'Aerospace Engineering',
+      },
+      { 
+        value: 'Bioengineering', 
+        label: 'Bioengineering',
+      },
+      { 
+        value: 'Chemical Engineering', 
+        label: 'Chemical Engineering',
+      },
+      { 
+        value: 'Computer Engineering', 
+        label: 'Computer Engineering',
+      },
+      { 
+        value: 'Computer Science', 
+        label: 'Computer Science', 
+      },
+      { 
+        value: 'Electrical Engineering', 
+        label: 'Electrical Engineering',
+      },
+      { 
+        value: 'Environmental Engineering', 
+        label: 'Environmental Engineering',
+      },
+      { 
+        value: 'Mechanical Engineering', 
+        label: 'Mechanical Engineering',
+      },
+      { 
+        value: 'Nanoengineering', 
+        label: 'Nanoengineering',
+      },
+      { 
+        value: 'Structural Engineering', 
+        label: 'Structural Engineering',
+      },
     ]
   },
+  {
+    name: 'Year',
+    value: 'year',
+    errorText: 'Please select an year.',
+    options: [
+      {
+        value: '1st Year',
+        label: '1st Year'
+      },
+      {
+        value: '2nd Year',
+        label: '2nd Year'
+      },
+      {
+        value: '3rd Year',
+        label: '3rd Year'
+      },
+      {
+        value: '4th Year',
+        label: '4th Year'
+      },
+      {
+        value: '5th Year',
+        label: '5th Year'
+      },
+    ]
+  }
 ];
 
 const formData2 = [
