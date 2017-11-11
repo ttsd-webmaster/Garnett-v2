@@ -1,0 +1,10 @@
+#loading-app {
+  display: block;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #2e2f33;
+  z-index: 1099;
+}

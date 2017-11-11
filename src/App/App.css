@@ -68,7 +68,7 @@ input:-webkit-autofill {
   z-index: 1099;
 }
 
-#loading-image {
+.loading-image {
   position: absolute;
   background-image: url('./gear.png');
   background-size: cover;
@@ -81,7 +81,7 @@ input:-webkit-autofill {
   z-index: 1100;
 }
 @media(max-width: 768px) {
-  #loading-image {
+  .loading-image {
     height: 150px;
     width: 150px;
     top: calc(50% - 75px);

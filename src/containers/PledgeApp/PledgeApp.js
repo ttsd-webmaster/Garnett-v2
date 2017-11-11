@@ -1,3 +1,5 @@
+import './PledgeApp.css';
+
 import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
@@ -67,8 +69,8 @@ export default class PledgeApp extends Component {
 
       if (userStatus === 'active') {
         this.setState({
-          active:true,
-          loaded:true
+          active: true,
+          loaded: true
         })
       }
     });
@@ -95,42 +97,44 @@ export default class PledgeApp extends Component {
 
   render() {
     return (
-      <div>
-        <div className="app-header">
-          {this.state.title}
+      this.state.loaded ?
+        <div>
+          <div className="app-header">
+            {this.state.title}
+          </div>
+          <Tabs
+            tabItemContainerStyle={tabContainerStyle}
+            onChange={this.handleChange}
+            value={this.state.slideIndex}
+          >
+            <Tab 
+              icon={<i className="icon-address-book"></i>}
+              value={0}
+            />
+            <Tab
+              icon={<i className="icon-calendar-empty"></i>}
+              value={1}
+            />
+            <Tab
+              icon={<i className="icon-sliders"></i>}
+              value={2} 
+            />
+          </Tabs>
+          <SwipeableViews
+            style={swipeableViewStyle}
+            animateHeight={true}
+            index={this.state.slideIndex}
+            onChangeIndex={this.handleChange}
+          >
+            <MeritBook active={this.state.active} userArray={this.state.userArray} />
+            <div> Chalkboards </div>
+            <Settings />
+          </SwipeableViews>
+        </div> :
+
+        <div id="loading-app">
+          <div className="loading-image"></div>
         </div>
-        <Tabs
-          tabItemContainerStyle={tabContainerStyle}
-          onChange={this.handleChange}
-          value={this.state.slideIndex}
-        >
-          <Tab 
-            icon={<i className="icon-address-book"></i>}
-            value={0}
-          />
-          <Tab
-            icon={<i className="icon-calendar-empty"></i>}
-            value={1}
-          />
-          <Tab
-            icon={<i className="icon-sliders"></i>}
-            value={2} 
-          />
-        </Tabs>
-        <SwipeableViews
-          style={swipeableViewStyle}
-          animateHeight={true}
-          index={this.state.slideIndex}
-          onChangeIndex={this.handleChange}
-        >
-          {this.state.loaded ? 
-            <MeritBook active={this.state.active} userArray={this.state.userArray} /> : 
-            <div></div>
-          }
-          <div> Chalkboards </div>
-          <Settings />
-        </SwipeableViews>
-      </div>
     )
   }
 }

@@ -49,7 +49,7 @@ export default class Settings extends Component {
   render() {
     return (
       <div>
-        <img className="user-photo" src={require(`${this.state.photoURL}`)} />
+        <img className="user-photo" src={this.state.photoURL} />
         <List style={listStyle}>
           <Divider />
           <ListItem

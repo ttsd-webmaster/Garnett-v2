@@ -39,7 +39,7 @@ export default class ActiveMerit extends Component {
           <div>
             <ListItem
               innerDivStyle={listItemStyle}
-              leftAvatar={<Avatar size={70} src={require(`${pledge.photoURL}`)} style={avatarStyle} />}
+              leftAvatar={<Avatar size={70} src={pledge.photoURL} style={avatarStyle} />}
               primaryText={
                 <p className="pledge-name"> {pledge.firstName + ' ' + pledge.lastName} </p>
               }
