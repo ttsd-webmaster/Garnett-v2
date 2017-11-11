@@ -2,7 +2,8 @@
   object-fit: cover;
   height: 150px;
   width: 150px;
-  margin: 15px 0;
+  display: block;
+  margin: 0 auto;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
 }

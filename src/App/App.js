@@ -49,13 +49,13 @@ class App extends Component {
 
   render() {
     return (
-      <Router history={browserHistory}>
+      <Router >
         <div>
           <Route exact path='/'render={() => (
             this.state.isAuthenticated ? (
               <Redirect to="/pledge-app"/>
             ) : (
-              <Login history={browserHistory} state={this.state} loginCallBack={this.loginCallBack} />
+              <Login  state={this.state} loginCallBack={this.loginCallBack} />
             )
           )}/>
           <Route exact path='/pledge-app' render={()=><PledgeApp state={this.state}/>}/>

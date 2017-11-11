@@ -1,12 +1,9 @@
 {
   "main.css": "static/css/main.08149518.css",
   "main.css.map": "static/css/main.08149518.css.map",
-  "main.js": "static/js/main.c649544e.js",
-  "main.js.map": "static/js/main.c649544e.js.map",
+  "main.js": "static/js/main.79ba2af8.js",
+  "main.js.map": "static/js/main.79ba2af8.js.map",
   "static\\media\\HelveticaNeue-CondensedBold.otf": "static/media/HelveticaNeue-CondensedBold.fb95cfea.otf",
-  "static\\media\\angie_joung.jpg": "static/media/angie_joung.250596af.jpg",
-  "static\\media\\dat_nguyen.jpg": "static/media/dat_nguyen.942191a6.jpg",
-  "static\\media\\erick_wilson.jpg": "static/media/erick_wilson.308d423f.jpg",
   "static\\media\\fontello.eot?89183284": "static/media/fontello.85217178.eot",
   "static\\media\\fontello.svg?89183284": "static/media/fontello.463509f5.svg",
   "static\\media\\fontello.ttf?89183284": "static/media/fontello.667f0f2f.ttf",
@@ -15,10 +12,5 @@
   "static\\media\\garnett.svg": "static/media/garnett.7647567d.svg",
   "static\\media\\gear.png": "static/media/gear.66b49201.png",
   "static\\media\\helvetica-neue-condensed.otf": "static/media/helvetica-neue-condensed.3936a448.otf",
-  "static\\media\\jerry_qing.jpg": "static/media/jerry_qing.285cfdc0.jpg",
-  "static\\media\\justin_lee.jpg": "static/media/justin_lee.32795bda.jpg",
-  "static\\media\\kaiser.jpg": "static/media/kaiser.ba01e79f.jpg",
-  "static\\media\\kakeru_imanaka.jpg": "static/media/kakeru_imanaka.111301e3.jpg",
-  "static\\media\\logo.webp": "static/media/logo.0569bbcd.webp",
-  "static\\media\\sydney_huynh.jpg": "static/media/sydney_huynh.a4c371e3.jpg"
+  "static\\media\\logo.webp": "static/media/logo.0569bbcd.webp"
 }
