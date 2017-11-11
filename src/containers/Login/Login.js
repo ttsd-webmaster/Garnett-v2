@@ -1,5 +1,5 @@
 import './Login.css';
-
+import API from "../../api/API.js"
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
@@ -49,9 +49,7 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-    if (firebase.auth().currentUser) {
-      this.props.history.push('/pledge-app');
-    }
+
   }
 
   active = (event) => {
@@ -106,22 +104,14 @@ export default class Login extends Component {
       });
     }
     else {
-      firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        if (user && !user.emailVerified) {
-          this.props.history.push('/pledge-app');
-        }
-        else {
-          console.log('Not Verified')
-        }
-      })
-      .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ...
-        console.log(errorCode, errorMessage);
-      })
+      API.login(email,password)
+          .then(res => {
+            if(res.status==200){
+              console.log(res)
+              this.props.loginCallBack(res);  
+            }
+          })
+            .catch(err => console.log("err",err))
     }
   }
 

@@ -5,6 +5,7 @@ import SwipeableViews from 'react-swipeable-views';
 import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
 import Settings from '../../components/Settings/Settings';
+import API from "../../api/API.js"
 const firebase = window.firebase;
 
 const tabContainerStyle = {
@@ -22,7 +23,7 @@ const swipeableViewStyle = {
 function MeritBook(props) {
   const isActive = props.active;
 
-  if (isActive) {
+  if (isActive=='active') {
     return <ActiveMerit userArray={props.userArray} />;
   }
   else {
@@ -43,35 +44,20 @@ export default class PledgeApp extends Component {
   }
 
   componentDidMount() {
-    let user = firebase.auth().currentUser;
-    let dbRef = firebase.database().ref('/users/');
-    let userRef = firebase.database().ref('/users/' + user.displayName);
-    let userStatus;
-    let userArray = [];
-
-    dbRef.on('value', (snapshot) => {
-      userArray = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key]
-      });
-      userArray = userArray.filter(function(user) {
-        return user.status === 'pledge';
-      })
-
-      this.setState({
-        userArray: userArray
-      })
-    });
-
-    userRef.on('value', (snapshot) => {
-      userStatus = snapshot.val().status;
-
-      if (userStatus === 'active') {
-        this.setState({
-          active:true,
-          loaded:true
-        })
-      }
-    });
+    console.log("Pledge app mount: ",this.props.state.token)
+    API.getPledges(this.props.state.token)
+        .then(res => {
+                if(res.status==200){
+                  
+                  this.setState({
+                    loaded:true,
+                    userArray:res.data
+                  })
+                  console.log("userArray: ", this.state.userArray)
+                }
+              })
+                .catch(err => console.log("err",err))
+   
   }
 
   handleChange = (value) => {
@@ -124,11 +110,11 @@ export default class PledgeApp extends Component {
           onChangeIndex={this.handleChange}
         >
           {this.state.loaded ? 
-            <MeritBook active={this.state.active} userArray={this.state.userArray} /> : 
+            <MeritBook active={this.props.state.status} userArray={this.state.userArray} /> : 
             <div></div>
           }
           <div> Chalkboards </div>
-          <Settings />
+          <Settings state={this.props.state}/>
         </SwipeableViews>
       </div>
     )
