@@ -16,7 +16,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token:'',
+      token: '',
       isAuthenticated: false
     };
 
@@ -32,7 +32,7 @@ class App extends Component {
 
   loginCallBack=(res) => {
     this.setState({
-      token : res.data.token,
+      token: res.data.token,
       name: `${res.data.user.firstName} ${res.data.user.lastName}`,
       phone: res.data.user.phone,
       email: res.data.user.email,
@@ -40,7 +40,7 @@ class App extends Component {
       major: res.data.user.major,
       status: res.data.user.status,
       photoURL: res.data.user.photoURL,
-      isAuthenticated:true
+      isAuthenticated: true
     })
   };
   
