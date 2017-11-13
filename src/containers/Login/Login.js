@@ -49,7 +49,7 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-
+    console.log("Login js mount")
   }
 
   active = (event) => {

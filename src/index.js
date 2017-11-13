@@ -1,5 +1,5 @@
 import './index.css';
-import registerServiceWorker from './registerServiceWorker.js';
+//import registerServiceWorker from './registerServiceWorker.js';
 
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -24,5 +24,5 @@ ReactDOM.render(
   <Index/>,
   document.getElementById('root')
 );
-registerServiceWorker();
+
   
