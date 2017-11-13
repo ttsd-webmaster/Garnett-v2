@@ -41,7 +41,7 @@ export default class ActiveMerit extends Component {
               innerDivStyle={listItemStyle}
               leftAvatar={<Avatar size={70} src={pledge.photoURL} style={avatarStyle} />}
               primaryText={
-                <p className="pledge-name"> {pledge.firstName + ' ' + pledge.lastName} </p>
+                <p className="pledge-name"> `${pledge.firstName} ${pledge.lastName}` </p>
               }
               secondaryText={
                 <p>

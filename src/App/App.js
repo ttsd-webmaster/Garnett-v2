@@ -31,19 +31,17 @@ class App extends Component {
   }
 
   loginCallBack=(res) => {
-    
-      this.setState({
-        token : res.data.token,
-        name: `${res.data.user.firstName} ${res.data.user.lastName}`,
-        phone: res.data.user.phone,
-        email: res.data.user.email,
-        class: res.data.user.class,
-        major: res.data.user.major,
-        status: res.data.user.status,
-        photoURL: res.data.user.photoURL,
-        isAuthenticated:true
-
-      })
+    this.setState({
+      token : res.data.token,
+      name: `${res.data.user.firstName} ${res.data.user.lastName}`,
+      phone: res.data.user.phone,
+      email: res.data.user.email,
+      class: res.data.user.class,
+      major: res.data.user.major,
+      status: res.data.user.status,
+      photoURL: res.data.user.photoURL,
+      isAuthenticated:true
+    })
   };
   
 
@@ -55,10 +53,12 @@ class App extends Component {
             this.state.isAuthenticated ? (
               <Redirect to="/pledge-app"/>
             ) : (
-              <Login  state={this.state} loginCallBack={this.loginCallBack} />
+              <Login state={this.state} loginCallBack={this.loginCallBack} />
             )
           )}/>
-          <Route exact path='/pledge-app' render={()=><PledgeApp state={this.state}/>}/>
+          <Route exact path='/pledge-app' render={() =>
+            <PledgeApp state={this.state} />
+          }/>
         </div>
       </Router>
     );

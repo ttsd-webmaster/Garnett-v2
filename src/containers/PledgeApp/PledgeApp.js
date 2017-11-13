@@ -46,18 +46,16 @@ export default class PledgeApp extends Component {
   componentDidMount() {
     console.log("Pledge app mount: ",this.props.state.token)
     API.getPledges(this.props.state.token)
-        .then(res => {
-                if(res.status==200){
-                  
-                  this.setState({
-                    loaded:true,
-                    userArray:res.data
-                  })
-                  console.log("userArray: ", this.state.userArray)
-                }
-              })
-                .catch(err => console.log("err",err))
-   
+    .then(res => {
+      if(res.status==200){
+        this.setState({
+          loaded: true,
+          userArray: res.data
+        })
+        console.log("userArray: ", this.state.userArray)
+      }
+    })
+    .catch(err => console.log("err",err))
   }
 
   handleChange = (value) => {
