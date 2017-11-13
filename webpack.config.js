@@ -1,4 +1,4 @@
-var path = require('path');
+
 module.exports = {
 
   // This is the entry point or start of our react applicaton
@@ -6,7 +6,8 @@ module.exports = {
 
   // The plain compiled Javascript will be output into this file
   output: {
-    filename: "public/bundle.js"
+    filename: "public/bundle.js",
+    publicPath: ASSET_PATH
   },
 
   // This section desribes the transformations we will perform
@@ -31,13 +32,13 @@ module.exports = {
       {
         test: /\.(gif|png|jpe?g|svg|webp)$/i,
         loaders: [
-          'file-loader?name=public/images/[name].[ext]',
+          'file-loader?name=images/[name].[ext]',
         ],
       },
       {
                 test: /\.(otf|eot|svg|ttf|woff|woff2)$/,
-                loader: 'file-loader?name=public/fonts/[name].[ext]'
-            }
+                loader: 'file-loader?name=fonts/[name].[ext]'
+      }
     ]
   },
   // This lets us debug our react code in chrome dev tools. Errors will have lines and file names
