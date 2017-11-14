@@ -1,7 +1,6 @@
 import './index.css';
 //import registerServiceWorker from './registerServiceWorker.js';
 
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import App from './App/App';

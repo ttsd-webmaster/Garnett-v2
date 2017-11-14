@@ -5,12 +5,7 @@ import React, {Component} from 'react';
 import Login from '../containers/Login/Login';
 import PledgeApp from '../containers/PledgeApp/PledgeApp';
 
-import { BrowserRouter as Router, Route, browserHistory,Redirect } from 'react-router-dom';
-
-function validateEmail(email) {
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 class App extends Component {
   constructor(props) {

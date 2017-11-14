@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "concurrently": "^3.5.0",
     "image-webpack-loader": "^3.4.2",
     "imagemin": "^5.3.1",
     "imagemin-webp": "^4.0.0",
@@ -20,10 +21,11 @@
     "svg-loader": "0.0.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run server\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "cd server && npm start"
   },
   "main": "./src/index.js",
   "repository": "https://github.com/UCSDTT/Garnett-v2.git",

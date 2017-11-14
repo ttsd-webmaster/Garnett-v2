@@ -21,7 +21,7 @@ export default class Settings extends Component {
   render() {
     return (
       <div>
-        <img className="user-photo" src={this.props.state.photoURL} />
+        <img className="user-photo" src={this.props.state.photoURL} alt="User" />
         <List style={listStyle}>
           <Divider />
           <ListItem

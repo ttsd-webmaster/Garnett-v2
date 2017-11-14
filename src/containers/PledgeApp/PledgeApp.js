@@ -8,6 +8,7 @@ import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
 import Settings from '../../components/Settings/Settings';
 import API from "../../api/API.js";
+const firebase = window.firebase;
 
 const tabContainerStyle = {
   position: 'fixed',
@@ -24,7 +25,7 @@ let swipeableViewStyle = {
 function MeritBook(props) {
   const isActive = props.state.status;
 
-  if (isActive=='active') {
+  if (isActive === 'active') {
     return <ActiveMerit state={props.state} userArray={props.userArray} />;
   }
   else {
