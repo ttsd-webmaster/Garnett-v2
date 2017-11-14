@@ -169,8 +169,12 @@ export default class PledgeApp extends Component {
             <Settings state={this.props.state} />
           </SwipeableViews>
 
-          {this.props.state.status === 'pledge' && this.state.slideIndex === 0 ? (
-            <div className="total-merits"> Total Merits: {this.props.totalMerits} </div>
+          {this.state.slideIndex === 0 ? (
+            this.props.state.status === 'pledge' ? (
+              <div className="total-merits"> Total Merits: {this.props.state.totalMerits} </div>
+            ) : (
+              <div className="merit-button">+</div>
+            )
           ) : (
             <div></div>
           )}

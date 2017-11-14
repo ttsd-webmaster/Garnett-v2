@@ -29,10 +29,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Login Get Route
@@ -260,6 +258,6 @@ app.post('/merits', function(req, res) {
 })
 
 const server = http.createServer(app);
-server.listen(4000, function () {
-  console.log('Example app listening on port 4000!')
+server.listen(3000, function () {
+  console.log('Example app listening on port 3000!')
 });
