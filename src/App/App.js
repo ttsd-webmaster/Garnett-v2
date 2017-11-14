@@ -1,6 +1,6 @@
 import './App.css';
 import '../fontello/css/fontello.css';
-import API from "../api/API.js"
+import API from '../api/API.js'
 import React, {Component} from 'react';
 import Login from '../containers/Login/Login';
 import PledgeApp from '../containers/PledgeApp/PledgeApp';
@@ -17,11 +17,34 @@ class App extends Component {
     super(props);
     this.state = {
       token: '',
-      isAuthenticated: false
+      isAuthenticated: false,
+      loaded: false
     };
 
     this.toggleSignState = this.toggleSignState.bind(this);
     this.loginCallBack = this.loginCallBack.bind(this);
+  }
+
+  componentWillMount() {
+    let isAuthenticated = false;
+
+    API.getAuthStatus()
+    .then(res => {
+      if (res.data !== 'Not Authenticated') {
+        isAuthenticated = true;
+
+        console.log(res)
+
+        this.loginCallBack(res);
+      }
+
+      console.log('yo')
+      this.setState({
+        isAuthenticated: isAuthenticated,
+        loaded: true
+      });
+    })
+    .catch(err => console.log('err', err));
   }
 
   toggleSignState() {
@@ -30,7 +53,7 @@ class App extends Component {
     });
   }
 
-  loginCallBack=(res) => {
+  loginCallBack = (res) => {
     this.setState({
       token: res.data.token,
       name: `${res.data.user.firstName} ${res.data.user.lastName}`,
@@ -41,7 +64,13 @@ class App extends Component {
       status: res.data.user.status,
       photoURL: res.data.user.photoURL,
       isAuthenticated: true
-    })
+    });
+
+    if (res.data.user.status === 'pledge') {
+      this.setState({
+        totalMerits: res.data.user.totalMerits
+      });
+    }
   };
   
 
@@ -53,7 +82,13 @@ class App extends Component {
             this.state.isAuthenticated ? (
               <Redirect to="/pledge-app"/>
             ) : (
-              <Login state={this.state} loginCallBack={this.loginCallBack} />
+              this.state.loaded ? (
+                <Login state={this.state} loginCallBack={this.loginCallBack} />
+              ) : (
+              <div className="loading">
+                <div className="loading-image"></div>
+              </div>
+              )
             )
           )}/>
           <Route exact path='/pledge-app' render={() =>

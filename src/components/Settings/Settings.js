@@ -3,7 +3,6 @@ import './Settings.css';
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-const firebase = window.firebase;
 
 const listStyle = {
   textAlign: 'left',
@@ -19,22 +18,6 @@ const dividerStyle = {
 };
 
 export default class Settings extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      phone: '',
-      email: '',
-      class: '',
-      major: '',
-      photoURL: '',
-    }
-  }
-
-  componentWillMount() {
-   
-  }
-
   render() {
     return (
       <div>

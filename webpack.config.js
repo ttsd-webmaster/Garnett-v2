@@ -35,8 +35,8 @@ module.exports = {
         ],
       },
       {
-                test: /\.(otf|eot|svg|ttf|woff|woff2)$/,
-                loader: 'file-loader?name=fonts/[name].[ext]'
+        test: /\.(otf|eot|svg|ttf|woff|woff2)$/,
+        loader: 'file-loader?name=fonts/[name].[ext]'
       }
     ]
   },
