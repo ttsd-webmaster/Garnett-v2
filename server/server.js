@@ -27,10 +27,10 @@ admin.initializeApp({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../build')));
 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+  res.sendFile(path.join(__dirname, '../build/index.html'));
 });
 
 // Login Get Route

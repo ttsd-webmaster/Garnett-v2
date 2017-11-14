@@ -21,7 +21,7 @@
     "svg-loader": "0.0.2"
   },
   "scripts": {
-    "start": "npm run server" ,
+    "start": "concurrently \"npm run server\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
