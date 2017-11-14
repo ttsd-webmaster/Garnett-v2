@@ -1,24 +1,27 @@
 import './index.css';
-// import registerServiceWorker from './registerServiceWorker.js';
+//import registerServiceWorker from './registerServiceWorker.js';
 
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
-
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import App from './App/App';
-import Login from './containers/Login/Login';
-import PledgeApp from './containers/PledgeApp/PledgeApp';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: 'var(--primary-color)',
+  },
+});
+
+const Index = () => (
+  <MuiThemeProvider muiTheme={muiTheme}>
+    <App />
+  </MuiThemeProvider>
+)
+
 ReactDOM.render(
-  <BrowserRouter>
-    <App>
-      <Switch>
-        <Route exact path='/' component={Login}/>
-        <Route exact path='/pledge-app' component={PledgeApp}/>
-        <Route path='*' component={Login}/>
-      </Switch>
-    </App>
-  </BrowserRouter>, 
+  <Index/>,
   document.getElementById('root')
 );
+
   

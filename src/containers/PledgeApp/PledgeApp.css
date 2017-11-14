@@ -1,10 +1,13 @@
-#loading-app {
-  display: block;
+.total-merits {
   position: fixed;
-  height: 100%;
+  background-color: var(--primary-color);
+  color: #fff;
+  bottom: 0;
+  height: 40px;
+  line-height: 40px;
   width: 100%;
-  top: 0;
-  left: 0;
-  background-color: #2e2f33;
-  z-index: 1099;
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 20px;
+  text-align: center;
 }

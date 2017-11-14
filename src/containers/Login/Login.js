@@ -1,11 +1,10 @@
 import './Login.css';
-
+import API from "../../api/API.js"
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
-const firebase = window.firebase;
 
 function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -49,9 +48,7 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-    if (firebase.auth().currentUser) {
-      this.props.history.push('/pledge-app');
-    }
+    console.log("Login js mount")
   }
 
   active = (event) => {
@@ -106,22 +103,14 @@ export default class Login extends Component {
       });
     }
     else {
-      firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        if (user && !user.emailVerified) {
-          this.props.history.push('/pledge-app');
-        }
-        else {
-          console.log('Not Verified')
+      API.login(email, password)
+      .then(res => {
+        if(res.status === 200){
+          console.log(res)
+          this.props.loginCallBack(res);  
         }
       })
-      .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // ...
-        console.log(errorCode, errorMessage);
-      })
+      .catch(err => console.log("err", err))
     }
   }
 
@@ -195,51 +184,14 @@ export default class Login extends Component {
       });
     }
     else {
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then((user) => {
-        if (user && !user.emailVerified) {
-          user.updateProfile({
-            displayName: firstName + lastName
-          })
-          .then(function() {
-            firebase.database().ref('users/' + user.displayName).set({
-              firstName: firstName,
-              lastName: lastName,
-              class: className,
-              major: majorName,
-              year: year,
-              phone: phone,
-              email: email,
-              photoURL: '',
-            });
-            if (code === activeCode) {
-              firebase.database().ref('users/' + user.displayName).update({
-                status: 'active',
-              });
-            }
-            else {
-              firebase.database().ref('users/' + user.displayName).update({
-                status: 'pledge',
-              });
-            }
-
-            user.sendEmailVerification()
-            .then(function() {
-              document.getElementById('sign-in').click();
-            });
-          })
-          .catch(function(error) {
-            console.log(error)
-          });
+      API.signUp(email, password, firstName, lastName, className, majorName, year, phone, code, activeCode)
+      .then(res => {
+        if (res.status === 200) {
+          console.log(res)
+          document.getElementById('sign-in').click();
         }
       })
-      .catch(function(error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-
-        console.log(errorCode, errorMessage);
-      });
+      .catch(err => console.log("err", err))
     }
   }
 

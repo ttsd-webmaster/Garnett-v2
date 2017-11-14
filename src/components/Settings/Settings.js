@@ -3,7 +3,6 @@ import './Settings.css';
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-const firebase = window.firebase;
 
 const listStyle = {
   textAlign: 'left',
@@ -19,43 +18,16 @@ const dividerStyle = {
 };
 
 export default class Settings extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      phone: '',
-      email: '',
-      class: '',
-      major: '',
-      photoURL: '',
-    }
-  }
-
-  componentWillMount() {
-    let user = firebase.auth().currentUser;
-    let userRef = firebase.database().ref('/users/' + user.displayName);
-    userRef.on('value', (snapshot) => {
-      this.setState({
-        name: snapshot.val().firstName + ' ' + snapshot.val().lastName,
-        phone: snapshot.val().phone,
-        email: snapshot.val().email,
-        class: snapshot.val().class,
-        major: snapshot.val().major,
-        photoURL: snapshot.val().photoURL,
-      });
-    })
-  }
-
   render() {
     return (
       <div>
-        <img className="user-photo" src={this.state.photoURL} />
+        <img className="user-photo" src={this.props.state.photoURL} alt="User" />
         <List style={listStyle}>
           <Divider />
           <ListItem
             innerDivStyle={listItemStyle}
             primaryText="Name"
-            secondaryText={this.state.name}
+            secondaryText={this.props.state.name}
             leftIcon={
               <i className="icon-user settings-icon"></i>
             }
@@ -64,7 +36,7 @@ export default class Settings extends Component {
           <ListItem
             innerDivStyle={listItemStyle}
             primaryText="Phone Number"
-            secondaryText={this.state.phone}
+            secondaryText={this.props.state.phone}
             leftIcon={
               <i className="icon-phone settings-icon"></i>
             }
@@ -73,7 +45,7 @@ export default class Settings extends Component {
           <ListItem
             innerDivStyle={listItemStyle}
             primaryText="Email Address"
-            secondaryText={this.state.email}
+            secondaryText={this.props.state.email}
             leftIcon={
               <i className="icon-mail-alt settings-icon"></i>
             }
@@ -82,7 +54,7 @@ export default class Settings extends Component {
           <ListItem
             innerDivStyle={listItemStyle}
             primaryText="Class"
-            secondaryText={this.state.class}
+            secondaryText={this.props.state.class}
             leftIcon={
               <i className="icon-users settings-icon"></i>
             }
@@ -91,7 +63,7 @@ export default class Settings extends Component {
           <ListItem
             innerDivStyle={listItemStyle}
             primaryText="Major"
-            secondaryText={this.state.major}
+            secondaryText={this.props.state.major}
             leftIcon={
               <i className="icon-briefcase settings-icon"></i>
             }

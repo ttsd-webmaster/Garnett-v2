@@ -7,6 +7,7 @@ import SwipeableViews from 'react-swipeable-views';
 import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
 import Settings from '../../components/Settings/Settings';
+import API from "../../api/API.js";
 const firebase = window.firebase;
 
 const tabContainerStyle = {
@@ -15,20 +16,20 @@ const tabContainerStyle = {
   zIndex: 1
 };
 
-const swipeableViewStyle = {
+let swipeableViewStyle = {
   height: 'calc(100vh - 100px)',
   backgroundColor: '#fafafa',
   marginTop: '100px'
 };
 
 function MeritBook(props) {
-  const isActive = props.active;
+  const isActive = props.state.status;
 
-  if (isActive) {
-    return <ActiveMerit userArray={props.userArray} />;
+  if (isActive === 'active') {
+    return <ActiveMerit state={props.state} userArray={props.userArray} />;
   }
   else {
-    return <PledgeMerit />;
+    return <PledgeMerit meritArray={props.meritArray} totalMerits={props.state.totalMerits} />;
   }
 }
 
@@ -38,42 +39,75 @@ export default class PledgeApp extends Component {
     this.state = {
       title: 'Merit Book',
       slideIndex: 0,
-      active: false,
       loaded: false,
       userArray: [],
+      meritArray: []
     };
   }
 
   componentDidMount() {
-    let user = firebase.auth().currentUser;
-    let dbRef = firebase.database().ref('/users/');
-    let userRef = firebase.database().ref('/users/' + user.displayName);
-    let userStatus;
-    let userArray = [];
+    console.log('Pledge app mount: ', this.props.state.token)
 
-    dbRef.on('value', (snapshot) => {
-      userArray = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key]
-      });
-      userArray = userArray.filter(function(user) {
-        return user.status === 'pledge';
-      })
+    if (this.props.state.status === 'active') {
+      firebase.auth().signInWithCustomToken(this.props.state.token)
+      .then(() => {
+        let dbRef = firebase.database().ref('/users/');
+        let userArray = [];
 
-      this.setState({
-        userArray: userArray
-      })
-    });
-
-    userRef.on('value', (snapshot) => {
-      userStatus = snapshot.val().status;
-
-      if (userStatus === 'active') {
-        this.setState({
-          active: true,
-          loaded: true
+        dbRef.on('value', (snapshot) => {
+          userArray = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
+          userArray = userArray.filter(function(user) {
+            return user.status === 'pledge';
+          })
+          console.log("Pledge array: ", userArray);
+          
+          this.setState({
+            loaded: true,
+            userArray: userArray
+          })
         })
-      }
-    });
+      })
+      .catch(function(error) {
+        console.log("Token error: ", error);
+      });
+    }
+    else {
+      API.getMerits(this.props.state.token)
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({
+            loaded: true,
+            meritArray: res.data
+          });
+          console.log('meritArray: ', this.state.meritArray);
+        }
+      })
+      .catch(err => console.log('err', err));
+    }
+
+    // Changes view height if view is pledge merit book
+    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
+      swipeableViewStyle.height = 'calc(100vh - 140px)';
+      swipeableViewStyle.marginBottom = '40px';
+    }
+    else {
+      swipeableViewStyle.height = 'calc(100vh - 100px)';
+      swipeableViewStyle.marginBottom = '0px';
+    }
+  }
+
+  // Changes view height if view is pledge merit book
+  componentDidUpdate() {
+    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
+      swipeableViewStyle.height = 'calc(100vh - 140px)';
+      swipeableViewStyle.marginBottom = '40px';
+    }
+    else {
+      swipeableViewStyle.height = 'calc(100vh - 100px)';
+      swipeableViewStyle.marginBottom = '0px';
+    }
   }
 
   handleChange = (value) => {
@@ -97,7 +131,7 @@ export default class PledgeApp extends Component {
 
   render() {
     return (
-      this.state.loaded ?
+      this.state.loaded ? (
         <div>
           <div className="app-header">
             {this.state.title}
@@ -126,15 +160,26 @@ export default class PledgeApp extends Component {
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
           >
-            <MeritBook active={this.state.active} userArray={this.state.userArray} />
+            <MeritBook 
+              state={this.props.state} 
+              userArray={this.state.userArray}
+              meritArray={this.state.meritArray}
+            />
             <div> Chalkboards </div>
-            <Settings />
+            <Settings state={this.props.state} />
           </SwipeableViews>
-        </div> :
 
-        <div id="loading-app">
+          {this.props.state.status === 'pledge' && this.state.slideIndex === 0 ? (
+            <div className="total-merits"> Total Merits: {this.props.totalMerits} </div>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      ) : (
+        <div className="loading">
           <div className="loading-image"></div>
         </div>
+      )
     )
   }
 }
