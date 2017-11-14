@@ -7,7 +7,7 @@ const app = express();
 const firebase = require('firebase')
 const admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 4000;
 
 require('dotenv').config();
 
@@ -34,12 +34,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('./client/build'));
 }
 
-app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, './client/public/index.html'));
-});
-
 // Login Get Route
-app.post('/', function(req, res) {
+app.post('/api/', function(req, res) {
   let user = firebase.auth().currentUser;
 
   if (user === null) {
@@ -70,7 +66,7 @@ app.post('/', function(req, res) {
 });
 
 // Login Post Route
-app.post('/login', function(req, res) {
+app.post('/api/login', function(req, res) {
 
   // Authenticate the credentials
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
@@ -109,7 +105,7 @@ app.post('/login', function(req, res) {
 });
 
 // Signup Route
-app.post('/signup', function(req, res) {
+app.post('/api/signup', function(req, res) {
 
   // Create user with email and password
   firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
@@ -179,7 +175,7 @@ app.post('/signup', function(req, res) {
 });
 
 // Query for pledges data
-app.post('/pledges', function(req, res) {
+app.post('/api/pledges', function(req, res) {
   // Verify the Token
   firebase.auth().signInWithCustomToken(req.body.token)
   .then(function() {
@@ -203,7 +199,7 @@ app.post('/pledges', function(req, res) {
 });
 
 // Post merit data
-app.post('/merit', function(req, res) {
+app.post('/api/merit', function(req, res) {
   let user = firebase.auth().currentUser;
 
   // Verify the Token
@@ -240,7 +236,7 @@ app.post('/merit', function(req, res) {
 });
 
 // Query for merit data
-app.post('/merits', function(req, res) {
+app.post('/api/merits', function(req, res) {
   let user = firebase.auth().currentUser;
 
   // Verify the Token
@@ -263,5 +259,5 @@ app.post('/merits', function(req, res) {
 })
 
 app.listen(port, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('Example app listening on port 4000!')
 });
