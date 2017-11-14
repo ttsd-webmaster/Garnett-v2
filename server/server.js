@@ -7,6 +7,7 @@ const app = express();
 const firebase = require('firebase')
 const admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
+var port = process.env.PORT || 3000;
 
 require('dotenv').config();
 
@@ -27,10 +28,14 @@ admin.initializeApp({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, '../build')));
+app.use(express.static(path.join(__dirname, '../public')));
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('../build'));
+}
 
 app.get('*', function(req, res) {
-  res.sendFile(path.join(__dirname, '../build/index.html'));
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Login Get Route
@@ -257,7 +262,6 @@ app.post('/merits', function(req, res) {
   })
 })
 
-const server = http.createServer(app);
-server.listen(3000, function () {
+app.listen(port, function () {
   console.log('Example app listening on port 3000!')
 });
