@@ -2,11 +2,11 @@
   "short_name": "Garnett",
   "icons": [
     {
-      "src": "garnett.svg",
+      "src": "/images/garnett.svg",
       "sizes": "192x192"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "theme_color": "#ffffff",
   "background_color": "#2e2f33"
