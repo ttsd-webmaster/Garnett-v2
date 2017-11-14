@@ -11,3 +11,18 @@
   font-size: 20px;
   text-align: center;
 }
+
+.merit-button {
+  position: fixed;
+  background-color: var(--primary-color);
+  color: #fff;
+  bottom: 10px;
+  right: 10px;
+  line-height: 50px;
+  height: 60px;
+  width: 60px;
+  font-size: 40px;
+  text-align: center;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
+}

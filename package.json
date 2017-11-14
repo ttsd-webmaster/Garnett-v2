@@ -27,6 +27,7 @@
     "eject": "react-scripts eject",
     "server": "cd server && npm start"
   },
+  "proxy": "http://localhost:4000",
   "main": "./src/index.js",
   "repository": "https://github.com/UCSDTT/Garnett-v2.git",
   "author": "Blake Desktop <bhhuynh@ucsd.edu>",
