@@ -28,14 +28,14 @@ admin.initializeApp({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './client/public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('./client/build'));
+  app.use(express.static('../build'));
 }
 
 // Login Get Route
-app.post('/api/', function(req, res) {
+app.post('/api', function(req, res) {
   let user = firebase.auth().currentUser;
 
   if (user === null) {
