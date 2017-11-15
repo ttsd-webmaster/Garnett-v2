@@ -98,7 +98,8 @@ class App extends Component {
           <Route exact path='/pledge-app' render={({history}) =>
             <PledgeApp 
               state={this.state} 
-              history={history} 
+              history={history}
+              loginCallBack={this.loginCallBack}
               logOutCallBack={this.logOutCallBack}
             />
           }/>

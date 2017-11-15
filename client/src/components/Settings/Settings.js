@@ -81,7 +81,9 @@ export default class Settings extends Component {
           />
           <Divider style={dividerStyle} />
         </List>
+        <br />
         <div className="logout-button" onClick={this.logOut}> Log Out </div>
+        <br />
       </div>
     )
   }

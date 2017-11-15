@@ -45,11 +45,25 @@ export default class PledgeApp extends Component {
     };
   }
 
-  componentDidMount() {
-    console.log('Pledge app mount: ', this.props.state.token)
+  componentWillMount() {
+    API.getAuthStatus()
+    .then(res => {
+      if (res.data !== 'Not Authenticated') {
+        console.log(res)
 
-    if (this.props.state.status === 'active') {
-      firebase.auth().signInWithCustomToken(this.props.state.token)
+        this.props.loginCallBack(res);
+      }
+
+      console.log('Got Auth Status')
+    })
+    .catch(err => console.log('err', err));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('Pledge app mount: ', nextProps.state.token)
+
+    if (nextProps.state.status === 'active') {
+      firebase.auth().signInWithCustomToken(nextProps.state.token)
       .then(() => {
         let dbRef = firebase.database().ref('/users/');
         let userArray = [];
