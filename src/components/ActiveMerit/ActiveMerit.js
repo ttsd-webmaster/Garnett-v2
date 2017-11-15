@@ -34,7 +34,7 @@ export default class ActiveMerit extends Component {
       open: false,
       pledge: null,
       description: '',
-      amount: null,
+      amount: '',
       descriptionValidation: true,
       amountValidation: true
     };
@@ -71,7 +71,7 @@ export default class ActiveMerit extends Component {
         this.setState({
           open: false,
           description: '',
-          amount: null
+          amount: ''
         });
       })
       .catch(err => console.log('err', err));
