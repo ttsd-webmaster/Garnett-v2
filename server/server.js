@@ -34,6 +34,12 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static('../build'));
 }
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Login Get Route
 app.post('/api', function(req, res) {
   let user = firebase.auth().currentUser;
