@@ -12,6 +12,9 @@ export default {
     let body = {email, password, firstName, lastName, className, majorName, year, phone, code, activeCode};
     return axios.post('/api/signup', body);
   },
+  logOut: function() {
+    return axios.post('/api/logout');
+  },
   merit: function(token, pledgeName, activeName, description, amount, photoURL) {
     let body = {token, pledgeName, activeName, description, amount, photoURL};
     return axios.post('/api/merit', body);

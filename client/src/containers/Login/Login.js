@@ -1,5 +1,5 @@
 import './Login.css';
-import API from "../../api/API.js"
+import API from "../../API/API.js"
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
@@ -107,7 +107,12 @@ export default class Login extends Component {
       .then(res => {
         if(res.status === 200){
           console.log(res)
-          this.props.loginCallBack(res);  
+          
+          this.setState({
+            signEmail: '',
+            signPassword: '',
+          });
+          this.props.loginCallBack(res);
         }
       })
       .catch(err => console.log("err", err))
@@ -189,6 +194,19 @@ export default class Login extends Component {
         if (res.status === 200) {
           console.log(res)
           document.getElementById('sign-in').click();
+
+          this.setState({
+            firstName: '',
+            lastName: '',
+            class: '',
+            major: '',
+            year: '',
+            phone: '',
+            email: '',
+            code: '',
+            password: '',
+            confirmation: '',
+          });
         }
       })
       .catch(err => console.log("err", err))

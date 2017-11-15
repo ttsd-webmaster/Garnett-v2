@@ -173,6 +173,17 @@ app.post('/api/signup', function(req, res) {
   });
 });
 
+app.post('/api/logout', function(req, res) {
+  firebase.auth().signOut()
+  .then(function() {
+    res.sendStatus(200);
+  })
+  .catch(function(error) {
+    console.log(error);
+    res.sendStatus(404);
+  });
+})
+
 // Query for pledges data
 app.post('/api/pledges', function(req, res) {
   // Verify the Token

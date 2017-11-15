@@ -7,7 +7,7 @@ import SwipeableViews from 'react-swipeable-views';
 import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
 import Settings from '../../components/Settings/Settings';
-import API from "../../api/API.js";
+import API from "../../API/API.js";
 const firebase = window.firebase;
 
 const tabContainerStyle = {
@@ -166,7 +166,11 @@ export default class PledgeApp extends Component {
               meritArray={this.state.meritArray}
             />
             <div> Chalkboards </div>
-            <Settings state={this.props.state} />
+            <Settings 
+              state={this.props.state} 
+              logOutCallBack={this.props.logOutCallBack} 
+              history={this.props.history}
+            />
           </SwipeableViews>
 
           {this.state.slideIndex === 0 ? (

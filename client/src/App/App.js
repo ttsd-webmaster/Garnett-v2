@@ -1,6 +1,6 @@
 import './App.css';
 import '../fontello/css/fontello.css';
-import API from '../api/API.js'
+import API from '../API/API.js'
 import React, {Component} from 'react';
 import Login from '../containers/Login/Login';
 import PledgeApp from '../containers/PledgeApp/PledgeApp';
@@ -33,7 +33,7 @@ class App extends Component {
         this.loginCallBack(res);
       }
 
-      console.log('yo')
+      console.log('Got Auth Status')
       this.setState({
         isAuthenticated: isAuthenticated,
         loaded: true
@@ -67,13 +67,19 @@ class App extends Component {
       });
     }
   };
+
+  logOutCallBack = () => {
+    this.setState({
+      isAuthenticated: false
+    })
+  }
   
 
   render() {
     return (
       <Router >
         <div>
-          <Route exact path='/'render={() => (
+          <Route exact path='/' render={() => (
             this.state.isAuthenticated ? (
               <Redirect to="/pledge-app"/>
             ) : (
@@ -86,8 +92,12 @@ class App extends Component {
               )
             )
           )}/>
-          <Route exact path='/pledge-app' render={() =>
-            <PledgeApp state={this.state} />
+          <Route exact path='/pledge-app' render={({history}) =>
+            <PledgeApp 
+              state={this.state} 
+              history={history} 
+              logOutCallBack={this.logOutCallBack}
+            />
           }/>
         </div>
       </Router>

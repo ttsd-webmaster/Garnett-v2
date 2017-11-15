@@ -3,6 +3,7 @@ import './Settings.css';
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import API from '../../API/API.js';
 
 const listStyle = {
   textAlign: 'left',
@@ -18,6 +19,16 @@ const dividerStyle = {
 };
 
 export default class Settings extends Component {
+  logOut = () => {
+    API.logOut()
+    .then(res => {
+      console.log(res);
+      this.props.logOutCallBack();
+      this.props.history.push('/');
+    })
+    .catch(err => console.log('err', err));
+  }
+
   render() {
     return (
       <div>
@@ -70,6 +81,7 @@ export default class Settings extends Component {
           />
           <Divider style={dividerStyle} />
         </List>
+        <div className="logout-button" onClick={this.logOut}> Log Out </div>
       </div>
     )
   }
