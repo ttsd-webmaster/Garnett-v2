@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const nodemailer = require('nodemailer');
 const http = require('http');
 const path = require('path');
 const app = express();
