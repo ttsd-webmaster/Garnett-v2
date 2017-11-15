@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Login Get Route
-app.post('/api/', function(req, res) {
+app.post('/api', function(req, res) {
   let user = firebase.auth().currentUser;
 
   if (user === null) {
