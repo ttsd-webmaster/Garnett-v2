@@ -7,7 +7,7 @@ import Divider from 'material-ui/Divider';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import API from "../../API/API.js";
+import API from "../../api/API.js";
 
 const listStyle = {
   textAlign: 'left'

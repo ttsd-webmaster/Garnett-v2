@@ -1,6 +1,6 @@
 import './App.css';
 import '../fontello/css/fontello.css';
-import API from '../API/API.js';
+import API from '../api/API.js'
 import React, {Component} from 'react';
 import Login from '../containers/Login/Login';
 import PledgeApp from '../containers/PledgeApp/PledgeApp';

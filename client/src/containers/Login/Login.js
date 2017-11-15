@@ -1,5 +1,5 @@
 import './Login.css';
-import API from "../../API/API.js"
+import API from "../../api/API.js"
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';

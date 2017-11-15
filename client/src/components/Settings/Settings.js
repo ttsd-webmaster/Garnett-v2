@@ -3,7 +3,7 @@ import './Settings.css';
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import API from '../../API/API.js';
+import API from '../../api/API.js';
 
 const listStyle = {
   textAlign: 'left',

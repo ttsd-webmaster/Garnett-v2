@@ -7,7 +7,7 @@ import SwipeableViews from 'react-swipeable-views';
 import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
 import Settings from '../../components/Settings/Settings';
-import API from "../../API/API.js";
+import API from "../../api/API.js";
 const firebase = window.firebase;
 
 const tabContainerStyle = {
