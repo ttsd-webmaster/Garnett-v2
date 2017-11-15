@@ -27,11 +27,6 @@ admin.initializeApp({
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './client/public')));
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/public/index.html'));
-});
 
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('./client/build'));
@@ -39,6 +34,11 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, './client/build/index.html'));
   })
 }
+
+app.use(express.static(path.join(__dirname, './client/public')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, './client/public/index.html'));
+});
 
 // Login Get Route
 app.post('/api', function(req, res) {
