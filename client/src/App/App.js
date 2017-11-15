@@ -84,7 +84,10 @@ class App extends Component {
               <Redirect to="/pledge-app"/>
             ) : (
               this.state.loaded ? (
-                <Login state={this.state} loginCallBack={this.loginCallBack} />
+                <Login 
+                  state={this.state}
+                  loginCallBack={this.loginCallBack}
+                />
               ) : (
               <div className="loading">
                 <div className="loading-image"></div>

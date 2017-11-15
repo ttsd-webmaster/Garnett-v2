@@ -70,7 +70,7 @@ app.post('/api/login', function(req, res) {
   // Authenticate the credentials
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
   .then((user) => {
-    if (user && !user.emailVerified) {
+    if (user && user.emailVerified) {
       const uid = user.uid;
       const fullName = user.displayName;
 
@@ -256,12 +256,15 @@ app.post('/api/merits', function(req, res) {
     let meritArray = [];
 
     meritRef.once('value', (snapshot) => {
-      meritArray = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      });
+      if (snapshot.val()) {
+        meritArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+      }
+      
       console.log('Merit array: ', meritArray);
       res.json(meritArray);
-    })
+    });
   })
   .catch(function(error) {
     console.log('Token error: ', error)

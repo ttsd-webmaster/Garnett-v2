@@ -41,10 +41,6 @@ export default class Login extends Component {
       passwordValidation: true,
       confirmationValidation: true,
     };
-
-    this.toggleSignState = this.toggleSignState.bind(this);
-    this.login = this.login.bind(this);
-    this.signUp = this.signUp.bind(this);
   }
 
   componentDidMount() {
@@ -77,13 +73,13 @@ export default class Login extends Component {
     });
   }
 
-  toggleSignState() {
+  toggleSignState = () => {
     this.setState({
       staySigned: !this.state.staySigned
     });
   }
 
-  login() {
+  login = () => {
     let email = this.state.signEmail;
     let password = this.state.signPassword;
     let emailValidation = true;
@@ -119,7 +115,7 @@ export default class Login extends Component {
     }
   }
 
-  signUp() {
+  signUp = () => {
     let firstName = this.state.firstName;
     let lastName = this.state.lastName;
     let className = this.state.class;
