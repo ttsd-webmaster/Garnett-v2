@@ -93,7 +93,7 @@ export default class PledgeApp extends Component {
       });
     }
     else {
-      API.getMerits(this.props.state.token)
+      API.getPledgeMerits(this.props.state.token)
       .then(res => {
         if (res.status === 200) {
           this.setState({

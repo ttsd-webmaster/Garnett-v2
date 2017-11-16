@@ -71,7 +71,7 @@ class App extends Component {
   logOutCallBack = () => {
     this.setState({
       isAuthenticated: false
-    })
+    });
   }
 
   render() {

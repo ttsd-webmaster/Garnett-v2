@@ -19,10 +19,13 @@ export default {
     let body = {token, pledgeName, activeName, description, amount, photoURL};
     return axios.post('/api/merit', body);
   },
-  getPledges: function(token) {
-    return axios.post('/api/pledges', {token});
+  getPledges: function() {
+    return axios.post('/api/pledges');
   },
-  getMerits: function(token) {
-    return axios.post('/api/merits', {token});
+  getActiveMerits: function(pledge) {
+    return axios.post('/api/activemerits', {pledge})
+  },
+  getPledgeMerits: function() {
+    return axios.post('/api/pledgemerits');
   }
 };

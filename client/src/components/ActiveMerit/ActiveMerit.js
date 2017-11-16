@@ -25,6 +25,7 @@ export default class ActiveMerit extends Component {
       description: '',
       amount: '',
       meritArray: [],
+      remainingMerits: '',
       descriptionValidation: true,
       amountValidation: true
     };
@@ -40,11 +41,11 @@ export default class ActiveMerit extends Component {
     let descriptionValidation = true;
     let amountValidation = true;
 
-    if (!description || !amount) {
+    if (!description || !amount || amount > 30) {
       if (!description) {
         descriptionValidation = false;
       }
-      if (!amount) {
+      if (!amount || amount > 30) {
         amountValidation = false;
       }
 
@@ -83,24 +84,16 @@ export default class ActiveMerit extends Component {
   }
 
   handleOpen = (pledge) => {
-    let pledgeName = pledge.firstName + pledge.lastName;
-    let pledgeRef = firebase.database().ref('/users/' + pledgeName);
-
-    pledgeRef.once('value', (snapshot) => {
-      let meritArray = [];
-
-      if (snapshot.val().Merits) {
-        meritArray = Object.keys(snapshot.val().Merits).map(function(key) {
-          return snapshot.val().Merits[key];
-        });
-      }
-
+    API.getActiveMerits(pledge)
+    .then(res => {
       this.setState({
         open: true,
         pledge: pledge,
-        meritArray: meritArray
+        remainingMerits: res.data.remainingMerits,
+        meritArray: res.data.meritArray
       });
-    });
+    })
+    .catch(err => console.log('err', err));
   }
 
   handleClose = () => {
@@ -175,7 +168,7 @@ export default class ActiveMerit extends Component {
                   floatingLabelText="Description"
                   value={this.state.description}
                   onChange={(e, newValue) => this.handleChange('description', newValue)}
-                  errorText={!this.state.descriptionValidation && 'Enter a description'}
+                  errorText={!this.state.descriptionValidation && 'Enter a description.'}
                 />
                 <br />
                 <TextField 
@@ -183,8 +176,9 @@ export default class ActiveMerit extends Component {
                   floatingLabelText="Amount"
                   value={this.state.amount}
                   onChange={(e, newValue) => this.handleChange('amount', newValue)}
-                  errorText={!this.state.amountValidation && 'Enter an amount'}
+                  errorText={!this.state.amountValidation && 'Enter a valid amount.'}
                 />
+                <p> Merits remaining: {this.state.remainingMerits} </p>
               </div>
             </Tab>
             <Tab label="Past Merits">

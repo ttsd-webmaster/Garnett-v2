@@ -100,18 +100,17 @@ app.post('/api/login', function(req, res) {
     // ...
     console.log(errorCode, errorMessage);
     res.status(404).send('Wrong credentials')
-  })
+  });
 });
 
 // Signup Route
 app.post('/api/signup', function(req, res) {
+  let dbRef = firebase.database().ref('/users/');
 
   // Create user with email and password
   firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
   .then((user) => {
     if (user && !user.emailVerified) {
-      let dbRef = firebase.database().ref('/users/');
-
       user.updateProfile({
         displayName: req.body.firstName + req.body.lastName
       })
@@ -139,7 +138,7 @@ app.post('/api/signup', function(req, res) {
                 let pledgeName = child.key;
 
                 userRef.child('/Pledges/' + pledgeName).set({
-                  merits: 0
+                  merits: 100
                 });
               }
             });
@@ -157,7 +156,7 @@ app.post('/api/signup', function(req, res) {
                 let pledgeName = user.displayName;
 
                 memberRef.child('/Pledges/' + pledgeName).set({
-                  merits: 0
+                  merits: 100
                 });
               }
             });
@@ -192,46 +191,38 @@ app.post('/api/logout', function(req, res) {
     console.log(error);
     res.sendStatus(404);
   });
-})
+});
 
 // Query for pledges data
 app.post('/api/pledges', function(req, res) {
-  // Verify the Token
-  firebase.auth().signInWithCustomToken(req.body.token)
-  .then(function() {
-    let dbRef = firebase.database().ref('/users/');
-    let userArray = [];
+  let dbRef = firebase.database().ref('/users/');
+  let userArray = [];
 
-    dbRef.once('value', (snapshot) => {
-      userArray = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      });
-      userArray = userArray.filter(function(user) {
-        return user.status === 'pledge';
-      })
-      console.log("Pledge array: ", userArray);
-      res.json(userArray);
+  dbRef.once('value', (snapshot) => {
+    userArray = Object.keys(snapshot.val()).map(function(key) {
+      return snapshot.val()[key];
+    });
+    userArray = userArray.filter(function(user) {
+      return user.status === 'pledge';
     })
-  })
-  .catch(function(error) {
-    console.log("Token error: ", error);
+    console.log("Pledge array: ", userArray);
+    res.json(userArray);
   });
 });
 
 // Post merit data
 app.post('/api/merit', function(req, res) {
   let user = firebase.auth().currentUser;
+  let userRef = firebase.database().ref('/users/' + user.displayName + '/Pledges/' + req.body.pledgeName);
+  let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
+  let meritRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Merits/');
 
   // Verify the Token
   firebase.auth().signInWithCustomToken(req.body.token)
   .then(function() {
-    let userRef = firebase.database().ref('/users/' + user.displayName + '/Pledges/' + req.body.pledgeName);
-    let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
-    let meritRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Merits/');
-
     userRef.once('value', (snapshot) => {
       userRef.update({
-        merits: snapshot.val().merits + req.body.amount 
+        merits: snapshot.val().merits - req.body.amount 
       });
     });
 
@@ -255,15 +246,17 @@ app.post('/api/merit', function(req, res) {
   });
 });
 
-// Query for merit data
-app.post('/api/merits', function(req, res) {
+// Query for merit data on Active App
+app.post('/api/activemerits', function(req, res) {
   let user = firebase.auth().currentUser;
-
-  // Verify the Token
-  firebase.auth().signInWithCustomToken(req.body.token)
-  .then(function() {
-    let meritRef = firebase.database().ref('/users/' + user.displayName + '/Merits/');
-    let meritArray = [];
+  let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
+  let meritRef = firebase.database().ref('/users/' + pledgeName + '/Merits/');
+  let userRef = firebase.database().ref('/users/' + user.displayName + '/Pledges/' + pledgeName);
+  let remainingMerits;
+  let meritArray = [];
+  
+  userRef.once('value', (snapshot) => {
+    remainingMerits = snapshot.val().merits;
 
     meritRef.once('value', (snapshot) => {
       if (snapshot.val()) {
@@ -271,15 +264,33 @@ app.post('/api/merits', function(req, res) {
           return snapshot.val()[key];
         });
       }
-      
-      console.log('Merit array: ', meritArray);
-      res.json(meritArray);
+
+      const data = {
+        remainingMerits: remainingMerits,
+        meritArray: meritArray
+      };
+      res.json(data);
     });
-  })
-  .catch(function(error) {
-    console.log('Token error: ', error)
-  })
-})
+  });
+});
+
+// Query for merit data on Pledge App
+app.post('/api/pledgemerits', function(req, res) {
+  let user = firebase.auth().currentUser;
+  let meritRef = firebase.database().ref('/users/' + user.displayName + '/Merits/');
+  let meritArray = [];
+
+  meritRef.once('value', (snapshot) => {
+    if (snapshot.val()) {
+      meritArray = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      });
+    }
+    
+    console.log('Merit array: ', meritArray);
+    res.json(meritArray);
+  });
+});
 
 app.listen(port, function () {
   console.log('Example app listening on port 4000!')
