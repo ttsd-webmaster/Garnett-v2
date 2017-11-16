@@ -132,6 +132,18 @@ app.post('/api/signup', function(req, res) {
           userRef.update({
             status: 'active',
           });
+
+          dbRef.once('value', (snapshot) => {
+            snapshot.forEach((child) => {
+              if (child.val().status === 'pledge') {
+                let pledgeName = child.key;
+
+                userRef.child('/Pledges/' + pledgeName).set({
+                  merits: 0
+                });
+              }
+            });
+          });
         }
         else {
           userRef.update({
@@ -141,15 +153,13 @@ app.post('/api/signup', function(req, res) {
 
           dbRef.once('value', (snapshot) => {
             snapshot.forEach((child) => {
-              let activeRef = firebase.database().ref('/users/' + child.key);
+              if (child.val().status === 'active') {
+                let pledgeName = user.displayName;
 
-              activeRef.once('value', (snapshot) => {
-                if (snapshot.val().status === 'active') {
-                  activeRef.child('/Pledges/' + user.displayName).set({
-                    merits: 0
-                  });
-                }
-              });
+                memberRef.child('/Pledges/' + pledgeName).set({
+                  merits: 0
+                });
+              }
             });
           });
         }
