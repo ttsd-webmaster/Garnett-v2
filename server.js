@@ -25,9 +25,23 @@ admin.initializeApp({
   databaseURL: "https://garnett-42475.firebaseio.com"
 })
 
+// Redirect all HTTP traffic to HTTPS
+function ensureSecure(req, res, next){
+  if(req.headers["x-forwarded-proto"] === "https"){
+    // OK, continue
+    return next();
+  };
+  res.redirect('https://'+req.hostname+req.url);
+};
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './client/build')));
+
+// Handle environments
+if (process.env.NODE_ENV == 'production') {
+  app.all('*', ensureSecure);
+}
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
