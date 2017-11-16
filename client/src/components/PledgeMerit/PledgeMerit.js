@@ -42,7 +42,7 @@ export default class PledgeMerit extends Component {
                 innerDivStyle={listItemStyle}
                 leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
                 primaryText={
-                  <p className="active-name"> {merit.name} </p>
+                  <p className="merit-name"> {merit.name} </p>
                 }
                 secondaryText={
                   <p>
@@ -51,7 +51,7 @@ export default class PledgeMerit extends Component {
                 }
                 secondaryTextLines={2}
               >
-                <p className="active-merits"> {merit.amount} </p>
+                <p className="merit-amount"> {merit.amount} </p>
               </ListItem>
               <Divider style={dividerStyle} inset={true} />
             </div>

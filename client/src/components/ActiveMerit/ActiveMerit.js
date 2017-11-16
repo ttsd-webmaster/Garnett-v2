@@ -11,6 +11,11 @@ import FlatButton from 'material-ui/FlatButton';
 import API from "../../api/API.js";
 const firebase = window.firebase;
 
+const inkBarStyle = {
+  position: 'relative',
+  top: '48px'
+};
+
 export default class ActiveMerit extends Component {
   constructor(props) {
     super(props);
@@ -99,7 +104,11 @@ export default class ActiveMerit extends Component {
   }
 
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({
+      open: false,
+      descriptionValidation: true,
+      amountValidation: true
+    });
   }
 
   render() {
@@ -137,15 +146,18 @@ export default class ActiveMerit extends Component {
                 secondaryTextLines={2}
                 onClick={() => this.handleOpen(pledge)}
               >
-                <p className="active-merits"> {pledge.totalMerits} </p>
+                <p className="pledge-merits"> {pledge.totalMerits} </p>
               </ListItem>
               <Divider className="pledge-divider large" inset={true} />
             </div>
           ))}
         </List>
+        <div style={{height: '60px'}}></div>
+        
         <Dialog
           actions={actions}
           modal={false}
+          className="merit-dialog"
           bodyClassName="merit-dialog-body"
           contentClassName="merit-dialog-content"
           open={this.state.open}
@@ -154,6 +166,7 @@ export default class ActiveMerit extends Component {
         >
           <Tabs 
             className="merit-dialog-tabs"
+            inkBarStyle={inkBarStyle}
           >
             <Tab label="Merits">
               <div className="merit-container">
@@ -182,7 +195,7 @@ export default class ActiveMerit extends Component {
                       className="pledge-list-item"
                       leftAvatar={<Avatar src={merit.photoURL} />}
                       primaryText={
-                        <p className="active-name"> {merit.name} </p>
+                        <p className="merit-name"> {merit.name} </p>
                       }
                       secondaryText={
                         <p>
@@ -190,7 +203,7 @@ export default class ActiveMerit extends Component {
                         </p>
                       }
                     >
-                      <p className="active-merits small"> {merit.amount} </p>
+                      <p className="merit-amount small"> {merit.amount} </p>
                     </ListItem>
                     <Divider className="pledge-divider" inset={true} />
                   </div>

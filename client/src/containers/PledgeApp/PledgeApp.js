@@ -10,6 +10,11 @@ import Settings from '../../components/Settings/Settings';
 import API from "../../api/API.js";
 const firebase = window.firebase;
 
+const inkBarStyle = {
+  position: 'relative',
+  top: '100px'
+};
+
 const tabContainerStyle = {
   position: 'fixed',
   top: 50,
@@ -151,6 +156,7 @@ export default class PledgeApp extends Component {
             {this.state.title}
           </div>
           <Tabs
+            inkBarStyle={inkBarStyle}
             tabItemContainerStyle={tabContainerStyle}
             onChange={this.handleChange}
             value={this.state.slideIndex}

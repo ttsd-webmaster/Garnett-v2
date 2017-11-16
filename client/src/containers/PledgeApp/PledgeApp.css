@@ -1,3 +1,18 @@
+.app-header {
+  position: fixed;
+  background-color: var(--primary-color);
+  color: #fff;
+  height: 60px;
+  width: 100%;
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-top: 20px;
+  text-align: left;
+  z-index: 1;
+}
+
 .total-merits {
   position: fixed;
   background-color: var(--primary-color);
@@ -16,9 +31,9 @@
   position: fixed;
   background-color: var(--primary-color);
   color: #fff;
-  bottom: 10px;
-  right: 10px;
-  line-height: 50px;
+  bottom: 20px;
+  right: 20px;
+  line-height: 60px;
   height: 60px;
   width: 60px;
   font-size: 40px;

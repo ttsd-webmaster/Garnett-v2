@@ -66,14 +66,13 @@ class App extends Component {
         totalMerits: res.data.user.totalMerits
       });
     }
-  };
+  }
 
   logOutCallBack = () => {
     this.setState({
       isAuthenticated: false
     })
   }
-  
 
   render() {
     return (
