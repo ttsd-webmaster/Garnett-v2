@@ -35,31 +35,28 @@ app.get('*', (req, res) => {
 
 // Login Get Route
 app.post('/api', function(req, res) {
-  let user = firebase.auth().currentUser;
-
-  if (user === null) {
+  if (req.body.token === null) {
     res.status(200).send('Not Authenticated');
   }
   else {
-    const uid = user.uid;
-    const fullName = user.displayName;
-
     // Send back user's info and a token to the client
-    admin.auth().createCustomToken(uid)
-    .then(function(customToken) {
+    firebase.auth().signInWithCustomToken(req.body.token)
+    .then(function() {
+      let fullName = firebase.auth().currentUser.displayName;
+      console.log(fullName)
       // Look for user's info in data base
       let userRef = firebase.database().ref('/users/' + fullName);
       userRef.once('value', (snapshot) => {
         const userInfo = snapshot.val();
         const data = {
-          token: customToken,
-          user: userInfo
+          user: userInfo,
+          databaseURL: 'https://garnett-42475.firebaseio.com'
         };
         res.json(data);
       });
     })
     .catch(function(error) {
-      console.log("Error creating custom token:", error);
+      console.log("Error signing in with custom token:", error);
     });
   }
 });
@@ -83,7 +80,8 @@ app.post('/api/login', function(req, res) {
           const userInfo = snapshot.val();
           const data = {
             token: customToken,
-            user: userInfo
+            user: userInfo,
+            databaseURL: 'https://garnett-42475.firebaseio.com'
           };
           res.json(data);
         });

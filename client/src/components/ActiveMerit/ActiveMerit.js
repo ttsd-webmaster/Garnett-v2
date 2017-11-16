@@ -9,7 +9,6 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import API from "../../api/API.js";
-const firebase = window.firebase;
 
 const inkBarStyle = {
   position: 'relative',
@@ -121,7 +120,7 @@ export default class ActiveMerit extends Component {
     return (
       <div>
         <List className="pledge-list">
-          {this.props.userArray.map((pledge, i) => (
+          {this.props.pledgeArray.map((pledge, i) => (
             <div key={i}>
               <ListItem
                 className="pledge-list-item large"

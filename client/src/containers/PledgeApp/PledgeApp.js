@@ -3,12 +3,12 @@ import './PledgeApp.css';
 import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import SwipeableViews from 'react-swipeable-views';
+import firebase from 'firebase';
 
 import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
 import Settings from '../../components/Settings/Settings';
 import API from "../../api/API.js";
-const firebase = window.firebase;
 
 const inkBarStyle = {
   position: 'relative',
@@ -31,7 +31,7 @@ function MeritBook(props) {
   const isActive = props.state.status;
 
   if (isActive === 'active') {
-    return <ActiveMerit state={props.state} userArray={props.userArray} />;
+    return <ActiveMerit state={props.state} pledgeArray={props.pledgeArray} />;
   }
   else {
     return <PledgeMerit meritArray={props.meritArray} totalMerits={props.state.totalMerits} />;
@@ -45,51 +45,31 @@ export default class PledgeApp extends Component {
       title: 'Merit Book',
       slideIndex: 0,
       loaded: false,
-      userArray: [],
+      pledgeArray: [],
       meritArray: []
     };
   }
 
-  componentWillMount() {
-    API.getAuthStatus()
-    .then(res => {
-      if (res.data !== 'Not Authenticated') {
-        console.log(res)
+  componentDidMount() {
+    console.log('Pledge app mount: ', this.props.state.token)
 
-        this.props.loginCallBack(res);
-      }
+    if (this.props.state.status === 'active') {
+      let dbRef = firebase.database().ref('/users/');
+      let pledgeArray = [];
 
-      console.log('Got Auth Status')
-    })
-    .catch(err => console.log('err', err));
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log('Pledge app mount: ', nextProps.state.token)
-
-    if (nextProps.state.status === 'active') {
-      firebase.auth().signInWithCustomToken(nextProps.state.token)
-      .then(() => {
-        let dbRef = firebase.database().ref('/users/');
-        let userArray = [];
-
-        dbRef.on('value', (snapshot) => {
-          userArray = Object.keys(snapshot.val()).map(function(key) {
-            return snapshot.val()[key];
-          });
-          userArray = userArray.filter(function(user) {
-            return user.status === 'pledge';
-          })
-          console.log("Pledge array: ", userArray);
-          
-          this.setState({
-            loaded: true,
-            userArray: userArray
-          })
-        })
-      })
-      .catch(function(error) {
-        console.log("Token error: ", error);
+      dbRef.on('value', (snapshot) => {
+        pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+        pledgeArray = pledgeArray.filter(function(user) {
+          return user.status === 'pledge';
+        });
+        console.log("Pledge array: ", pledgeArray);
+        
+        this.setState({
+          loaded: true,
+          pledgeArray: pledgeArray
+        });
       });
     }
     else {
@@ -114,6 +94,43 @@ export default class PledgeApp extends Component {
     else {
       swipeableViewStyle.height = 'calc(100vh - 100px)';
       swipeableViewStyle.marginBottom = '0px';
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log('Pledge app mount: ', nextProps.state.token)
+
+    if (nextProps.state.status === 'active') {
+      let dbRef = firebase.database().ref('/users/');
+      let pledgeArray = [];
+
+      dbRef.on('value', (snapshot) => {
+        pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+        pledgeArray = pledgeArray.filter(function(user) {
+          return user.status === 'pledge';
+        });
+        console.log("Pledge array: ", pledgeArray);
+        
+        this.setState({
+          loaded: true,
+          pledgeArray: pledgeArray
+        });
+      });
+    }
+    else {
+      API.getPledgeMerits(nextProps.state.token)
+      .then(res => {
+        if (res.status === 200) {
+          this.setState({
+            loaded: true,
+            meritArray: res.data
+          });
+          console.log('meritArray: ', this.state.meritArray);
+        }
+      })
+      .catch(err => console.log('err', err));
     }
   }
 
@@ -182,13 +199,13 @@ export default class PledgeApp extends Component {
           >
             <MeritBook 
               state={this.props.state} 
-              userArray={this.state.userArray}
+              pledgeArray={this.state.pledgeArray}
               meritArray={this.state.meritArray}
             />
             <div> Chalkboards </div>
             <Settings 
               state={this.props.state} 
-              logOutCallBack={this.props.logOutCallBack} 
+              logoutCallBack={this.props.logoutCallBack} 
               history={this.props.history}
             />
           </SwipeableViews>

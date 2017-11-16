@@ -6,6 +6,7 @@ import Login from '../containers/Login/Login';
 import PledgeApp from '../containers/PledgeApp/PledgeApp';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import firebase from 'firebase';
 
 class App extends Component {
   constructor(props) {
@@ -20,26 +21,30 @@ class App extends Component {
     this.loginCallBack = this.loginCallBack.bind(this);
   }
 
-  componentWillMount() {
-    let isAuthenticated = false;
+  componentDidMount() {
+    let token = localStorage.getItem('token');
 
-    API.getAuthStatus()
-    .then(res => {
-      if (res.data !== 'Not Authenticated') {
-        isAuthenticated = true;
+    if (token !== null) {
+      API.getAuthStatus(token)
+      .then(res => {
+        if (res.data !== 'Not Authenticated') {
+          console.log(res)
 
-        console.log(res)
+          this.loginCallBack(res);
+        }
 
-        this.loginCallBack(res);
-      }
-
-      console.log('Got Auth Status')
+        console.log('Got Auth Status')
+        this.setState({
+          isAuthenticated: true
+        });
+      })
+      .catch(err => console.log('err', err));
+    }
+    else {
       this.setState({
-        isAuthenticated: isAuthenticated,
         loaded: true
       });
-    })
-    .catch(err => console.log('err', err));
+    }
   }
 
   toggleSignState() {
@@ -49,6 +54,14 @@ class App extends Component {
   }
 
   loginCallBack = (res) => {
+    if (!firebase.apps.length) {
+      firebase.initializeApp({databaseURL: res.data.databaseURL});
+    }
+    if (res.data.token) {
+      localStorage.setItem('token', res.data.token);
+    }
+    console.log(localStorage.getItem('token'));
+    
     this.setState({
       token: res.data.token,
       name: `${res.data.user.firstName} ${res.data.user.lastName}`,
@@ -68,9 +81,12 @@ class App extends Component {
     }
   }
 
-  logOutCallBack = () => {
+  logoutCallBack = () => {
+    localStorage.removeItem('token');
+
     this.setState({
-      isAuthenticated: false
+      isAuthenticated: false,
+      loaded: true
     });
   }
 
@@ -99,7 +115,7 @@ class App extends Component {
               state={this.state} 
               history={history}
               loginCallBack={this.loginCallBack}
-              logOutCallBack={this.logOutCallBack}
+              logoutCallBack={this.logoutCallBack}
             />
           }/>
         </div>

@@ -2,8 +2,8 @@ import axios from 'axios';
 
 //Search functions to connect with back-end
 export default {
-  getAuthStatus: function() {
-    return axios.post('/api/');
+  getAuthStatus: function(token) {
+    return axios.post('/api/', {token});
   },
   login: function(email, password) {
     return axios.post('/api/login', {email, password});
@@ -12,7 +12,7 @@ export default {
     let body = {email, password, firstName, lastName, className, majorName, year, phone, code, activeCode};
     return axios.post('/api/signup', body);
   },
-  logOut: function() {
+  logout: function() {
     return axios.post('/api/logout');
   },
   merit: function(token, pledgeName, activeName, description, amount, photoURL) {

@@ -19,11 +19,11 @@ const dividerStyle = {
 };
 
 export default class Settings extends Component {
-  logOut = () => {
-    API.logOut()
+  logout = () => {
+    API.logout()
     .then(res => {
       console.log(res);
-      this.props.logOutCallBack();
+      this.props.logoutCallBack();
       this.props.history.push('/');
     })
     .catch(err => console.log('err', err));
@@ -82,7 +82,7 @@ export default class Settings extends Component {
           <Divider style={dividerStyle} />
         </List>
         <br />
-        <div className="logout-button" onClick={this.logOut}> Log Out </div>
+        <div className="logout-button" onClick={this.logout}> Log Out </div>
         <br />
       </div>
     )
