@@ -172,6 +172,8 @@ export default class ActiveMerit extends Component {
                 <br />
                 <TextField 
                   type="number"
+                  step={5}
+                  max={30}
                   floatingLabelText="Amount"
                   value={this.state.amount}
                   onChange={(e, newValue) => this.handleChange('amount', newValue)}

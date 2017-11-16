@@ -53,37 +53,26 @@ export default class PledgeApp extends Component {
   componentDidMount() {
     console.log('Pledge app mount: ', this.props.state.token)
 
-    if (this.props.state.status === 'active') {
-      let dbRef = firebase.database().ref('/users/');
-      let pledgeArray = [];
+    if (!this.props.state.token) {
+      let token = localStorage.getItem('token');
 
-      dbRef.on('value', (snapshot) => {
-        pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-          return snapshot.val()[key];
-        });
-        pledgeArray = pledgeArray.filter(function(user) {
-          return user.status === 'pledge';
-        });
-        console.log("Pledge array: ", pledgeArray);
-        
-        this.setState({
-          loaded: true,
-          pledgeArray: pledgeArray
-        });
-      });
-    }
-    else {
-      API.getPledgeMerits(this.props.state.token)
+      API.getAuthStatus(token)
       .then(res => {
-        if (res.status === 200) {
-          this.setState({
-            loaded: true,
-            meritArray: res.data
-          });
-          console.log('meritArray: ', this.state.meritArray);
+        if (res.data !== 'Not Authenticated') {
+          if (!firebase.apps.length) {
+            firebase.initializeApp({databaseURL: res.data.databaseURL});
+          }
+
+          this.getData(res.data.user.status, token);
+        }
+        else {
+          this.props.history.push('/');
         }
       })
       .catch(err => console.log('err', err));
+    }
+    else {
+      this.getData(this.props.state.status, this.props.state.token);
     }
 
     // Changes view height if view is pledge merit book
@@ -97,10 +86,20 @@ export default class PledgeApp extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('Pledge app mount: ', nextProps.state.token)
+  // Changes view height if view is pledge merit book
+  componentDidUpdate() {
+    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
+      swipeableViewStyle.height = 'calc(100vh - 140px)';
+      swipeableViewStyle.marginBottom = '40px';
+    }
+    else {
+      swipeableViewStyle.height = 'calc(100vh - 100px)';
+      swipeableViewStyle.marginBottom = '0px';
+    }
+  }
 
-    if (nextProps.state.status === 'active') {
+  getData = (userStatus, token) => {
+    if (userStatus === 'active') {
       let dbRef = firebase.database().ref('/users/');
       let pledgeArray = [];
 
@@ -120,7 +119,7 @@ export default class PledgeApp extends Component {
       });
     }
     else {
-      API.getPledgeMerits(nextProps.state.token)
+      API.getPledgeMerits(token)
       .then(res => {
         if (res.status === 200) {
           this.setState({
@@ -131,18 +130,6 @@ export default class PledgeApp extends Component {
         }
       })
       .catch(err => console.log('err', err));
-    }
-  }
-
-  // Changes view height if view is pledge merit book
-  componentDidUpdate() {
-    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      swipeableViewStyle.height = 'calc(100vh - 140px)';
-      swipeableViewStyle.marginBottom = '40px';
-    }
-    else {
-      swipeableViewStyle.height = 'calc(100vh - 100px)';
-      swipeableViewStyle.marginBottom = '0px';
     }
   }
 
