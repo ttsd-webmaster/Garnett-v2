@@ -1,0 +1,71 @@
+.app-header {
+  position: fixed;
+  background-color: var(--primary-color);
+  color: #fff;
+  height: 60px;
+  width: 100%;
+  font-family: 'Lato';
+  font-weight: 700;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-top: 20px;
+  text-align: left;
+  z-index: 1;
+}
+
+.pledge-name {
+  font-weight: 700;
+  margin: 0;
+}
+
+.active-merits {
+  font-family: 'Luckiest Guy';
+  font-size: 18px;
+  float: right;
+}
+.active-merits.small {
+  margin-top: 10px;
+}
+
+.pledge-list {
+  text-align: left;
+}
+
+.pledge-list-item > div > div {
+  background-color: #fff;
+}
+.pledge-list-item.large > div > div {
+  padding-left: 102px !important;
+}
+
+.pledge-image {
+  top: 8px !important;
+}
+
+.pledge-divider {
+  position: relative;
+}
+.pledge-divider.large {
+  margin-left: 102px !important;
+}
+
+/* Merit Dialog */
+.merit-dialog-tabs > div:first-child {
+  position: fixed;
+  z-index: 2;
+}
+.merit-dialog-tabs > div:last-child > div {
+  top: 48px;
+}
+.merit-container {
+  margin-left: 20px;
+}
+
+.merit-dialog-body {
+  min-height: 225px;
+  padding: 0 !important;
+}
+
+.merit-dialog-content {
+  width: 90% !important;
+}
