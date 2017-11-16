@@ -54,17 +54,22 @@ export default class ActiveMerit extends Component {
       });
     }
     else {
-      API.merit(token, pledgeName, activeName, description, amount, photoURL)
-      .then(res => {
-        console.log(res);
+      if (this.state.remainingMerits - amount > 0) {
+        API.merit(token, pledgeName, activeName, description, amount, photoURL)
+        .then(res => {
+          console.log(res);
 
-        this.setState({
-          open: false,
-          description: '',
-          amount: ''
-        });
-      })
-      .catch(err => console.log('err', err));
+          this.setState({
+            open: false,
+            description: '',
+            amount: ''
+          });
+        })
+        .catch(err => console.log('err', err));
+      }
+      else {
+        console.log('Not enough merits');
+      }
     }
   }
 

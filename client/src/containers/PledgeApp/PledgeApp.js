@@ -64,6 +64,7 @@ export default class PledgeApp extends Component {
           }
 
           this.getData(res.data.user.status, token);
+          this.props.loginCallBack(res);
         }
         else {
           this.props.history.push('/');

@@ -63,6 +63,7 @@ app.post('/api', function(req, res) {
       userRef.once('value', (snapshot) => {
         const userInfo = snapshot.val();
         const data = {
+          token: req.body.token,
           user: userInfo,
           databaseURL: 'https://garnett-42475.firebaseio.com'
         };
