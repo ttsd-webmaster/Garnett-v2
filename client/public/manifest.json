@@ -2,7 +2,7 @@
   "short_name": "Garnett",
   "icons": [
     {
-      "src": "garnett.svg",
+      "src": "images/gear.png",
       "sizes": "192x192"
     }
   ],

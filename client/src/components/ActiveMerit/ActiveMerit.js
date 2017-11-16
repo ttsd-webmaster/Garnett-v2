@@ -4,28 +4,12 @@ import React, {Component} from 'react';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import API from "../../api/API.js";
-
-const listStyle = {
-  textAlign: 'left'
-};
-
-const listItemStyle = {
-  backgroundColor: '#fff',
-  paddingLeft: '102px',
-  zIndex: -1
-};
-
-const avatarStyle = {
-  top: 8
-};
-
-const dividerStyle = {
-  marginLeft: '102px'
-};
+const firebase = window.firebase;
 
 export default class ActiveMerit extends Component {
   constructor(props) {
@@ -35,6 +19,7 @@ export default class ActiveMerit extends Component {
       pledge: null,
       description: '',
       amount: '',
+      meritArray: [],
       descriptionValidation: true,
       amountValidation: true
     };
@@ -93,15 +78,29 @@ export default class ActiveMerit extends Component {
   }
 
   handleOpen = (pledge) => {
-    this.setState({
-      open: true,
-      pledge: pledge
+    let pledgeName = pledge.firstName + pledge.lastName;
+    let pledgeRef = firebase.database().ref('/users/' + pledgeName);
+
+    pledgeRef.once('value', (snapshot) => {
+      let meritArray = [];
+
+      if (snapshot.val().Merits) {
+        meritArray = Object.keys(snapshot.val().Merits).map(function(key) {
+          return snapshot.val().Merits[key];
+        });
+      }
+
+      this.setState({
+        open: true,
+        pledge: pledge,
+        meritArray: meritArray
+      });
     });
-  };
+  }
 
   handleClose = () => {
     this.setState({open: false});
-  };
+  }
 
   render() {
     const actions = [
@@ -119,12 +118,12 @@ export default class ActiveMerit extends Component {
 
     return (
       <div>
-        <List style={listStyle}>
+        <List className="pledge-list">
           {this.props.userArray.map((pledge, i) => (
             <div key={i}>
               <ListItem
-                innerDivStyle={listItemStyle}
-                leftAvatar={<Avatar size={70} src={pledge.photoURL} style={avatarStyle} />}
+                className="pledge-list-item large"
+                leftAvatar={<Avatar className="pledge-image" size={70} src={pledge.photoURL} />}
                 primaryText={
                   <p className="pledge-name"> {pledge.firstName} {pledge.lastName} </p>
                 }
@@ -140,31 +139,65 @@ export default class ActiveMerit extends Component {
               >
                 <p className="active-merits"> {pledge.totalMerits} </p>
               </ListItem>
-              <Divider style={dividerStyle} inset={true} />
+              <Divider className="pledge-divider large" inset={true} />
             </div>
           ))}
         </List>
         <Dialog
-          title="Merit"
           actions={actions}
           modal={false}
+          bodyClassName="merit-dialog-body"
+          contentClassName="merit-dialog-content"
           open={this.state.open}
           onRequestClose={this.handleClose}
+          autoScrollBodyContent={true}
         >
-          <TextField 
-            type="text"
-            floatingLabelText="Description"
-            value={this.state.description}
-            onChange={(e, newValue) => this.handleChange('description', newValue)}
-            errorText={!this.state.descriptionValidation && 'Enter a description'}
-          />
-          <TextField 
-            type="number"
-            floatingLabelText="Amount"
-            value={this.state.amount}
-            onChange={(e, newValue) => this.handleChange('amount', newValue)}
-            errorText={!this.state.amountValidation && 'Enter an amount'}
-          />
+          <Tabs 
+            className="merit-dialog-tabs"
+          >
+            <Tab label="Merits">
+              <div className="merit-container">
+                <TextField 
+                  type="text"
+                  floatingLabelText="Description"
+                  value={this.state.description}
+                  onChange={(e, newValue) => this.handleChange('description', newValue)}
+                  errorText={!this.state.descriptionValidation && 'Enter a description'}
+                />
+                <br />
+                <TextField 
+                  type="number"
+                  floatingLabelText="Amount"
+                  value={this.state.amount}
+                  onChange={(e, newValue) => this.handleChange('amount', newValue)}
+                  errorText={!this.state.amountValidation && 'Enter an amount'}
+                />
+              </div>
+            </Tab>
+            <Tab label="Past Merits">
+              <List className="pledge-list">
+                {this.state.meritArray.map((merit, i) => (
+                  <div key={i}>
+                    <ListItem
+                      className="pledge-list-item"
+                      leftAvatar={<Avatar src={merit.photoURL} />}
+                      primaryText={
+                        <p className="active-name"> {merit.name} </p>
+                      }
+                      secondaryText={
+                        <p>
+                          {merit.description}
+                        </p>
+                      }
+                    >
+                      <p className="active-merits small"> {merit.amount} </p>
+                    </ListItem>
+                    <Divider className="pledge-divider" inset={true} />
+                  </div>
+                ))}
+              </List>
+            </Tab>
+          </Tabs>
         </Dialog>
       </div>
     )
