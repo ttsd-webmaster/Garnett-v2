@@ -4,7 +4,8 @@ import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
-import firebase from 'firebase';
+import firebase from '@firebase/app';
+import '@firebase/database';
 
 import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
 import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';

@@ -3,10 +3,13 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
 const app = express();
-const firebase = require('firebase')
+const firebase = require('@firebase/app').firebase;
+require('@firebase/auth');
+require('@firebase/database');
 const admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
 var port = process.env.PORT || 4000;
+global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
 require('dotenv').config();
 

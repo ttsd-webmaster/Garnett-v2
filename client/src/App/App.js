@@ -6,7 +6,7 @@ import Login from '../containers/Login/Login';
 import PledgeApp from '../containers/PledgeApp/PledgeApp';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import firebase from 'firebase';
+import firebase from '@firebase/app';
 
 class App extends Component {
   constructor(props) {
