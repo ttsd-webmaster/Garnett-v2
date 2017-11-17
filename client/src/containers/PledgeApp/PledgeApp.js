@@ -48,6 +48,7 @@ export default class PledgeApp extends Component {
       slideIndex: 0,
       loaded: false,
       open: false,
+      message: '',
       pledgeArray: [],
       meritArray: []
     };
@@ -156,9 +157,10 @@ export default class PledgeApp extends Component {
     });
   };
 
-  handleRequestOpen = () => {
+  handleRequestOpen = (message) => {
     this.setState({
-      open: true
+      open: true,
+      message: message
     });
   }
 
@@ -222,7 +224,7 @@ export default class PledgeApp extends Component {
                 <div className="merit-button">+</div>
                 <Snackbar
                   open={this.state.open}
-                  message="Not enough merits."
+                  message={this.state.message}
                   autoHideDuration={4000}
                   onRequestClose={this.handleRequestClose}
                 />
