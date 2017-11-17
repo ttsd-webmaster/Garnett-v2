@@ -19,13 +19,16 @@ export default {
     let body = {token, pledgeName, activeName, description, amount, photoURL};
     return axios.post('/api/merit', body);
   },
+  complain: function(token, activeName, pledgeName, description) {
+    return axios.post('/api/complain', {token, activeName, pledgeName, description});
+  },
   getPledges: function() {
     return axios.post('/api/pledges');
   },
   getActiveMerits: function(pledge) {
     return axios.post('/api/activemerits', {pledge})
   },
-  getPledgeMerits: function() {
-    return axios.post('/api/pledgemerits');
+  getPledgeData: function() {
+    return axios.post('/api/pledgedata');
   }
 };

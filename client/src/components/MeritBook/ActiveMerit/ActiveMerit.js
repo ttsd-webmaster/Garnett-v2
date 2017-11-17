@@ -8,7 +8,7 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import API from "../../api/API.js";
+import API from "../../../api/API.js";
 
 const inkBarStyle = {
   position: 'relative',

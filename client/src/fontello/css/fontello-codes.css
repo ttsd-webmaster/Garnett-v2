@@ -2,6 +2,7 @@
 .icon-user:before { content: '\e800'; } /* '' */
 .icon-phone:before { content: '\e801'; } /* '' */
 .icon-briefcase:before { content: '\e802'; } /* '' */
+.icon-thumbs-down:before { content: '\e803'; } /* '' */
 .icon-users:before { content: '\e804'; } /* '' */
 .icon-mail-alt:before { content: '\f0e0'; } /* '' */
 .icon-calendar-empty:before { content: '\f133'; } /* '' */

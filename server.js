@@ -264,6 +264,25 @@ app.post('/api/merit', function(req, res) {
   });
 });
 
+// Post complaint data
+app.post('/api/complain', function(req, res) {
+  let complaintsRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Complaints/');
+
+  // Verify the Token
+  firebase.auth().signInWithCustomToken(req.body.token)
+  .then(function() {
+    complaintsRef.push({
+      description: req.body.description,
+      name: req.body.activeName
+    });
+
+    res.sendStatus(200);
+  })
+  .catch(function(error) {
+    console.log("Token error: ", error);
+  });
+});
+
 // Query for merit data on Active App
 app.post('/api/activemerits', function(req, res) {
   let user = firebase.auth().currentUser;
@@ -293,10 +312,12 @@ app.post('/api/activemerits', function(req, res) {
 });
 
 // Query for merit data on Pledge App
-app.post('/api/pledgemerits', function(req, res) {
+app.post('/api/pledgedata', function(req, res) {
   let user = firebase.auth().currentUser;
   let meritRef = firebase.database().ref('/users/' + user.displayName + '/Merits/');
+  let complaintsRef = firebase.database().ref('/users/' + user.displayName + '/Complaints/');
   let meritArray = [];
+  let complaintsArray = [];
 
   meritRef.once('value', (snapshot) => {
     if (snapshot.val()) {
@@ -304,9 +325,24 @@ app.post('/api/pledgemerits', function(req, res) {
         return snapshot.val()[key];
       });
     }
-    
-    console.log('Merit array: ', meritArray);
-    res.json(meritArray);
+
+    complaintsRef.once('value', (snapshot) => {
+      if (snapshot.val()) {
+        complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+      }
+
+      console.log('Merit array: ', meritArray);
+      console.log('Complaints array: ', complaintsArray);
+
+      const data = {
+        meritArray: meritArray,
+        complaintsArray: complaintsArray
+      };
+
+      res.json(data);
+    });
   });
 });
 

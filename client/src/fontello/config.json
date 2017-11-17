@@ -53,6 +53,12 @@
       "css": "calendar-empty",
       "code": 61747,
       "src": "fontawesome"
+    },
+    {
+      "uid": "7533e68038fc6d520ede7a7ffa0a2f64",
+      "css": "thumbs-down",
+      "code": 59395,
+      "src": "fontawesome"
     }
   ]
 }

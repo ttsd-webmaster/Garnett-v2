@@ -7,8 +7,10 @@ import SwipeableViews from 'react-swipeable-views';
 import firebase from '@firebase/app';
 import '@firebase/database';
 
-import ActiveMerit from '../../components/ActiveMerit/ActiveMerit';
-import PledgeMerit from '../../components/PledgeMerit/PledgeMerit';
+import ActiveMerit from '../../components/MeritBook/ActiveMerit/ActiveMerit';
+import PledgeMerit from '../../components/MeritBook/PledgeMerit/PledgeMerit';
+import ActiveComplaints from '../../components/Complaints/ActiveComplaints/ActiveComplaints';
+import PledgeComplaints from '../../components/Complaints/PledgeComplaints/PledgeComplaints';
 import Settings from '../../components/Settings/Settings';
 import API from "../../api/API.js";
 
@@ -33,10 +35,33 @@ function MeritBook(props) {
   const isActive = props.state.status;
 
   if (isActive === 'active') {
-    return <ActiveMerit state={props.state} pledgeArray={props.pledgeArray} handleRequestOpen={props.handleRequestOpen} />;
+    return (
+      <ActiveMerit 
+        state={props.state} 
+        pledgeArray={props.pledgeArray} 
+        handleRequestOpen={props.handleRequestOpen} 
+      />
+    );
   }
   else {
     return <PledgeMerit meritArray={props.meritArray} totalMerits={props.state.totalMerits} />;
+  }
+}
+
+function Complaints(props) {
+  const isActive = props.state.status;
+
+  if (isActive === 'active') {
+    return (
+      <ActiveComplaints 
+        state={props.state} 
+        pledgeArray={props.pledgeArray}
+        handleRequestOpen={props.handleRequestOpen}
+      />
+    );
+  }
+  else {
+    return <PledgeComplaints complaintsArray={props.complaintsArray} />;
   }
 }
 
@@ -50,7 +75,8 @@ export default class PledgeApp extends Component {
       open: false,
       message: '',
       pledgeArray: [],
-      meritArray: []
+      meritArray: [],
+      complaintsArray: []
     };
   }
 
@@ -124,14 +150,16 @@ export default class PledgeApp extends Component {
       });
     }
     else {
-      API.getPledgeMerits(token)
+      API.getPledgeData(token)
       .then(res => {
         if (res.status === 200) {
           this.setState({
             loaded: true,
-            meritArray: res.data
+            meritArray: res.data.meritArray,
+            complaintsArray: res.data.complaintsArray
           });
           console.log('meritArray: ', this.state.meritArray);
+          console.log('complaintsArray: ', this.state.complaintsArray);
         }
       })
       .catch(err => console.log('err', err));
@@ -192,8 +220,12 @@ export default class PledgeApp extends Component {
               value={1}
             />
             <Tab
+              icon={<i className="icon-thumbs-down"></i>}
+              value={2}
+            />
+            <Tab
               icon={<i className="icon-sliders"></i>}
-              value={2} 
+              value={3} 
             />
           </Tabs>
           <SwipeableViews
@@ -209,6 +241,12 @@ export default class PledgeApp extends Component {
               handleRequestOpen={this.handleRequestOpen}
             />
             <div> Chalkboards </div>
+            <Complaints
+              state={this.props.state}
+              pledgeArray={this.state.pledgeArray}
+              complaintsArray={this.state.complaintsArray}
+              handleRequestOpen={this.handleRequestOpen}
+            />
             <Settings 
               state={this.props.state} 
               logoutCallBack={this.props.logoutCallBack} 
@@ -222,17 +260,18 @@ export default class PledgeApp extends Component {
             ) : (
               <div>
                 <div className="merit-button">+</div>
-                <Snackbar
-                  open={this.state.open}
-                  message={this.state.message}
-                  autoHideDuration={4000}
-                  onRequestClose={this.handleRequestClose}
-                />
               </div>
             )
           ) : (
             <div></div>
           )}
+
+          <Snackbar
+            open={this.state.open}
+            message={this.state.message}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
         </div>
       ) : (
         <div className="loading">
