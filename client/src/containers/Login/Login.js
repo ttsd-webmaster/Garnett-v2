@@ -154,7 +154,7 @@ export default class Login extends Component {
     let year = this.state.year;
     let phone = this.state.phone;
     let email = this.state.email;
-    let code = this.state.code;
+    let code = this.state.code.toLowerCase();
     let password = this.state.password;
     let confirmation = this.state.confirmation;
     let firstNameValidation = true;
