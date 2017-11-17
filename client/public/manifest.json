@@ -5,6 +5,21 @@
     {
       "src": "images/garnett.png",
       "sizes": "192x192"
+    },
+    {  
+      "src": "images/garnett.png",  
+      "sizes": "256x256",  
+      "type": "image/png"  
+    },  
+    {  
+      "src": "images/garnett.png",  
+      "sizes": "384x384",  
+      "type": "image/png"  
+    },  
+    {  
+      "src": "images/garnett.png",  
+      "sizes": "512x512",  
+      "type": "image/png"  
     }
   ],
   "start_url": ".",
