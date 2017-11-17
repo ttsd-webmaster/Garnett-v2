@@ -300,6 +300,12 @@ export default class Login extends Component {
             onChange={(e, newValue) => this.handleChange('signPassword', newValue)}
             errorText={!this.state.signPasswordValidation && 'Please enter a password.'}
             onSubmit={this.login}
+            onKeyPress={(ev) => {
+              if (ev.key === 'Enter') {
+                this.login();
+                ev.preventDefault();
+              }
+            }}
            />
 
           {/*<div className="checkbox-container">
@@ -364,6 +370,12 @@ export default class Login extends Component {
               errorText={!this.state[`${form.value + 'Validation'}`] && form.errorText}
               key={i}
               onSubmit={this.signUp}
+              onKeyPress={(ev) => {
+                if (ev.key === 'Enter') {
+                  this.signUp();
+                  ev.preventDefault();
+                }
+              }}
             />
           ))}
           <div className="login-button" onClick={this.signUp}>
