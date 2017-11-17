@@ -28,6 +28,8 @@ export default class Login extends Component {
       code: '',
       password: '',
       confirmation: '',
+      open: false,
+      message: '',
       staySigned: false,
       signEmailValidation: true,
       signPasswordValidation: true,
@@ -74,6 +76,12 @@ export default class Login extends Component {
     });
   }
 
+  handleRequestClose = () => {
+    this.setState({
+      open: false
+    });
+  }
+
   toggleSignState = () => {
     this.setState({
       staySigned: !this.state.staySigned
@@ -112,7 +120,14 @@ export default class Login extends Component {
           this.props.loginCallBack(res);
         }
       })
-      .catch(err => console.log("err", err))
+      .catch((error) => {
+        console.log(error);
+
+        this.setState({
+          open: true,
+          message: 'Email or password is incorrect.'
+        });
+      });
     }
   }
 
@@ -203,10 +218,19 @@ export default class Login extends Component {
             code: '',
             password: '',
             confirmation: '',
+            open: true,
+            message: 'Verification email has been sent.'
           });
         }
       })
-      .catch(err => console.log("err", err))
+      .catch((error) => {
+        console.log(error);
+
+        this.setState({
+          open: true,
+          message: 'Email has already been taken.'
+        });
+      });
     }
   }
 
@@ -214,7 +238,7 @@ export default class Login extends Component {
     return (
       <div className="login">
         <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
-          <img className="logo" src={require('./images/logo.webp')} alt="logo"/>
+          <img className="logo" src={require('./images/logo.png')} alt="logo"/>
         </a>
 
         <div className="login-logo">
@@ -330,7 +354,12 @@ export default class Login extends Component {
           </div>
         </form>
 
-        
+        <Snackbar
+          open={this.state.open}
+          message={this.state.message}
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+        />
       </div>
     );
   }

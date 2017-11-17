@@ -220,7 +220,7 @@ export default class PledgeApp extends Component {
                 <div className="merit-button">+</div>
                 <Snackbar
                   open={this.state.snackbarOpen}
-                  message="Not enough merits"
+                  message="Not enough merits."
                   autoHideDuration={4000}
                   onRequestClose={this.handleRequestClose}
                 />

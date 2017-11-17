@@ -112,7 +112,7 @@ app.post('/api/login', function(req, res) {
     var errorMessage = error.message;
     // ...
     console.log(errorCode, errorMessage);
-    res.status(404).send('Wrong credentials')
+    res.status(400).send(error);
   });
 });
 
@@ -182,7 +182,8 @@ app.post('/api/signup', function(req, res) {
         });
       })
       .catch(function(error) {
-        console.log(error)
+        console.log(error);
+        res.status(400).send(error);
       });
     }
   })
@@ -192,6 +193,7 @@ app.post('/api/signup', function(req, res) {
     var errorMessage = error.message;
 
     console.log(errorCode, errorMessage);
+    res.status(400).send(error);
   });
 });
 
@@ -202,7 +204,7 @@ app.post('/api/logout', function(req, res) {
   })
   .catch(function(error) {
     console.log(error);
-    res.sendStatus(404);
+    res.status(400).send(error);
   });
 });
 

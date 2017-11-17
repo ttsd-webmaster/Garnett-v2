@@ -19,8 +19,7 @@ export default class ActiveMerit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalOpen: false,
-      snackbarOpen: false,
+      open: false,
       pledge: null,
       description: '',
       amount: '',
@@ -61,7 +60,7 @@ export default class ActiveMerit extends Component {
           console.log(res);
 
           this.setState({
-            modalOpen: false,
+            open: false,
             description: '',
             amount: ''
           });
@@ -94,7 +93,7 @@ export default class ActiveMerit extends Component {
     API.getActiveMerits(pledge)
     .then(res => {
       this.setState({
-        modalOpen: true,
+        open: true,
         pledge: pledge,
         remainingMerits: res.data.remainingMerits,
         meritArray: res.data.meritArray
@@ -105,7 +104,7 @@ export default class ActiveMerit extends Component {
 
   handleClose = () => {
     this.setState({
-      modalOpen: false,
+      open: false,
       description: '',
       amount: '',
       descriptionValidation: true,
@@ -162,7 +161,7 @@ export default class ActiveMerit extends Component {
           className="merit-dialog"
           bodyClassName="merit-dialog-body"
           contentClassName="merit-dialog-content"
-          open={this.state.modalOpen}
+          open={this.state.open}
           onRequestClose={this.handleClose}
           autoScrollBodyContent={true}
         >
