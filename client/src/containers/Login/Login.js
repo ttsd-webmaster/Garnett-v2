@@ -65,6 +65,21 @@ export default class Login extends Component {
         .classList
         .toggle('active');
     }
+
+    this.setState({
+      signEmailValidation: true,
+      signPasswordValidation: true,
+      firstNameValidation: true,
+      lastNameValidation: true,
+      classValidation: true,
+      majorValidation: true,
+      yearValidation: true,
+      phoneValidation: true,
+      emailValidation: true,
+      codeValidation: true,
+      passwordValidation: true,
+      confirmationValidation: true,
+    });
   }
 
   handleChange(label, newValue) {
@@ -284,6 +299,12 @@ export default class Login extends Component {
             value={this.state.signPassword}
             onChange={(e, newValue) => this.handleChange('signPassword', newValue)}
             errorText={!this.state.signPasswordValidation && 'Please enter a password.'}
+            onKeyPress={(ev) => {
+              if (ev.key === 'Enter') {
+                this.login();
+                ev.preventDefault();
+              }
+            }}
            />
 
           {/*<div className="checkbox-container">
@@ -347,6 +368,12 @@ export default class Login extends Component {
               onChange={(e, newValue) => this.handleChange(form.value, newValue)}
               errorText={!this.state[`${form.value + 'Validation'}`] && form.errorText}
               key={i}
+              onKeyPress={(ev) => {
+                if (ev.key === 'Enter') {
+                  this.signUp();
+                  ev.preventDefault();
+                }
+              }}
             />
           ))}
           <div className="login-button" onClick={this.signUp}>
