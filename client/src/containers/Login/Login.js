@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import Snackbar from 'material-ui/Snackbar';
 import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
 
 function validateEmail(email) {
@@ -328,6 +329,8 @@ export default class Login extends Component {
             Sign Up
           </div>
         </form>
+
+        
       </div>
     );
   }

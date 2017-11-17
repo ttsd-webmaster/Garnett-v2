@@ -2,6 +2,7 @@ import './PledgeApp.css';
 
 import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
 import firebase from 'firebase';
 
@@ -31,7 +32,7 @@ function MeritBook(props) {
   const isActive = props.state.status;
 
   if (isActive === 'active') {
-    return <ActiveMerit state={props.state} pledgeArray={props.pledgeArray} />;
+    return <ActiveMerit state={props.state} pledgeArray={props.pledgeArray} handleRequestOpen={props.handleRequestOpen} />;
   }
   else {
     return <PledgeMerit meritArray={props.meritArray} totalMerits={props.state.totalMerits} />;
@@ -153,6 +154,18 @@ export default class PledgeApp extends Component {
     });
   };
 
+  handleRequestOpen = () => {
+    this.setState({
+      snackbarOpen: true
+    });
+  }
+
+  handleRequestClose = () => {
+    this.setState({
+      snackbarOpen: false
+    });
+  }
+
   render() {
     return (
       this.state.loaded ? (
@@ -189,6 +202,7 @@ export default class PledgeApp extends Component {
               state={this.props.state} 
               pledgeArray={this.state.pledgeArray}
               meritArray={this.state.meritArray}
+              handleRequestOpen={this.handleRequestOpen}
             />
             <div> Chalkboards </div>
             <Settings 
@@ -202,7 +216,15 @@ export default class PledgeApp extends Component {
             this.props.state.status === 'pledge' ? (
               <div className="total-merits"> Total Merits: {this.props.state.totalMerits} </div>
             ) : (
-              <div className="merit-button">+</div>
+              <div>
+                <div className="merit-button">+</div>
+                <Snackbar
+                  open={this.state.snackbarOpen}
+                  message="Not enough merits"
+                  autoHideDuration={4000}
+                  onRequestClose={this.handleRequestClose}
+                />
+              </div>
             )
           ) : (
             <div></div>
