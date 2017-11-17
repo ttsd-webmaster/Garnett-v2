@@ -108,6 +108,9 @@ app.post('/api/login', function(req, res) {
         console.log("Error creating custom token:", error);
       });
     }
+    else {
+      res.status(200).send('Email not verified.');
+    }
   })
   .catch(function(error) {
     // Handle Errors here.

@@ -7,6 +7,14 @@ import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
 import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
 
+const snackbarBackground = {
+  backgroundColor: '#fff'
+};
+
+const snackbarText = {
+  color: 'var(--primary-color)'
+};
+
 function validateEmail(email) {
   var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
@@ -125,7 +133,7 @@ export default class Login extends Component {
     else {
       API.login(email, password)
       .then(res => {
-        if(res.status === 200){
+        if(res.data !== 'Email not verified.'){
           console.log(res)
           
           this.setState({
@@ -133,6 +141,12 @@ export default class Login extends Component {
             signPassword: '',
           });
           this.props.loginCallBack(res);
+        }
+        else {
+          this.setState({
+            open: true,
+            message: 'Email is not verified.'
+          });
         }
       })
       .catch((error) => {
@@ -384,6 +398,8 @@ export default class Login extends Component {
         </form>
 
         <Snackbar
+          bodyStyle={snackbarBackground}
+          contentStyle={snackbarText}
           open={this.state.open}
           message={this.state.message}
           autoHideDuration={4000}

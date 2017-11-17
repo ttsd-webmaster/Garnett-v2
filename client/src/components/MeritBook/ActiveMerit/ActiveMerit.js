@@ -58,7 +58,7 @@ export default class ActiveMerit extends Component {
         API.merit(token, pledgeName, activeName, description, amount, photoURL)
         .then(res => {
           console.log(res);
-          this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits.`);
+          this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
 
           this.setState({
             open: false,
