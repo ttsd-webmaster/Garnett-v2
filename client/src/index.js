@@ -10,7 +10,7 @@ import ReactDOM from 'react-dom';
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: 'var(--primary-color)',
-    accent1Color: '#00967e'
+    accent1Color: '#fff'
   },
 });
 

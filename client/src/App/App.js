@@ -38,7 +38,10 @@ class App extends Component {
           isAuthenticated: true
         });
       })
-      .catch(err => console.log('err', err));
+      .catch((error) => {
+        console.log(error);
+        localStorage.removeItem('token');
+      });
     }
     else {
       this.setState({

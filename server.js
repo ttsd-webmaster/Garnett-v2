@@ -75,6 +75,7 @@ app.post('/api', function(req, res) {
     })
     .catch(function(error) {
       console.log("Error signing in with custom token:", error);
+      res.status(400).send(error);
     });
   }
 });

@@ -12,7 +12,8 @@ import API from "../../../api/API.js";
 
 const inkBarStyle = {
   position: 'relative',
-  top: '48px'
+  top: '46px',
+  zIndex: 2
 };
 
 export default class ActiveMerit extends Component {

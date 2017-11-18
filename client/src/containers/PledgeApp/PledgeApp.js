@@ -16,7 +16,8 @@ import API from "../../api/API.js";
 
 const inkBarStyle = {
   position: 'relative',
-  top: '100px'
+  top: '98px',
+  zIndex: 1
 };
 
 const tabContainerStyle = {
@@ -174,6 +175,9 @@ export default class PledgeApp extends Component {
     }
     else if (value === 1) {
       title = 'Chalkboards';
+    }
+    else if (value === 2) {
+      title = 'Complaints';
     }
     else {
       title = 'Settings';
