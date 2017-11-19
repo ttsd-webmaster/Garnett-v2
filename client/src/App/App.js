@@ -27,20 +27,29 @@ class App extends Component {
     if (token !== null) {
       API.getAuthStatus(token)
       .then(res => {
-        if (res.data !== 'Not Authenticated') {
-          console.log(res)
+        console.log(res);
+        this.loginCallBack(res);
 
-          this.loginCallBack(res);
-        }
-
-        console.log('Got Auth Status')
         this.setState({
           isAuthenticated: true
         });
       })
       .catch((error) => {
         console.log(error);
-        localStorage.removeItem('token');
+
+        if (token) {
+          localStorage.removeItem('token');
+          API.refreshToken()
+          .then(res => {
+            console.log(res);
+            this.loginCallBack(res);
+
+            this.setState({
+              isAuthenticated: true
+            });
+          })
+          .catch(err => console.log(err));
+        }
       });
     }
     else {

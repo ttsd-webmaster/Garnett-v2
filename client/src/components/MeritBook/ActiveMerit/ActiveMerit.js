@@ -13,6 +13,7 @@ import API from "../../../api/API.js";
 const inkBarStyle = {
   position: 'relative',
   top: '46px',
+  backgroundColor: '#fff',
   zIndex: 2
 };
 

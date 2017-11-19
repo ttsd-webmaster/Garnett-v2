@@ -103,7 +103,6 @@
   width: 40% !important;
   max-width: 576px;
   margin: auto;
-  text-align: left;
 }
 @media(max-width: 768px) {
   .login-input {

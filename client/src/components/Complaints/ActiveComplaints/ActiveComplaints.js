@@ -1,12 +1,10 @@
-import '../../MeritBook/ActiveMerit/ActiveMerit.css';
+import './ActiveComplaints.css';
 
 import React, {Component} from 'react';
-import Avatar from 'material-ui/Avatar';
-import {List, ListItem} from 'material-ui/List';
-import Divider from 'material-ui/Divider';
-import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
 import API from "../../../api/API.js";
 
 export default class ActiveMerit extends Component {
@@ -16,34 +14,56 @@ export default class ActiveMerit extends Component {
       open: false,
       pledge: null,
       description: '',
+      pledgeArray: [],
       complaintsArray: [],
+      pledgeValidation: true,
       descriptionValidation: true
     };
+  }
+
+  componentDidMount() {
+    let pledgeArray = [];
+
+    pledgeArray = this.props.pledgeArray.map(function(pledge) {
+      return {'value': pledge.firstName + pledge.lastName, 
+              'label': `${pledge.firstName} ${pledge.lastName}`};
+    });
+
+    this.setState({
+      pledgeArray: pledgeArray
+    });
   }
 
   complain = (pledge) => {
     let token = this.props.state.token;
     let activeName = this.props.state.name;
-    let pledgeName = pledge.firstName + pledge.lastName;
     let description = this.state.description;
     let descriptionValidation = true;
+    let pledgeValidation = true;
 
-    if (!description) {
-      descriptionValidation = false;
+    if (!pledge || !description) {
+      if (!pledge) {
+        pledgeValidation = false;
+      }
+      if (!description) {
+        descriptionValidation = false;
+      }
 
       this.setState({
-        descriptionValidation: descriptionValidation,
+        pledgeValidation: pledgeValidation,
+        descriptionValidation: descriptionValidation
       });
     }
     else {
-      API.complain(token, activeName, pledgeName, description)
+      API.complain(token, activeName, pledge.value, description)
       .then(res => {
         console.log(res);
-        this.props.handleRequestOpen(`Created a complaint for ${pledge.firstName} ${pledge.lastName}`);
+        this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
 
         this.setState({
           open: false,
-          description: ''
+          description: '',
+          pledge: null
         });
       })
       .catch(err => console.log('err', err));
@@ -60,79 +80,35 @@ export default class ActiveMerit extends Component {
     });
   }
 
-  handleOpen = (pledge) => {
-    this.setState({
-      open: true,
-      pledge: pledge
-    });
-  }
-
-  handleClose = () => {
-    this.setState({
-      open: false,
-      description: '',
-      amount: '',
-      descriptionValidation: true,
-      amountValidation: true
-    });
-  }
-
   render() {
-    const actions = [
-      <FlatButton
-        label="Close"
-        primary={true}
-        onClick={this.handleClose}
-      />,
-      <FlatButton
-        label="Complain"
-        primary={true}
-        onClick={() => this.complain(this.state.pledge)}
-      />,
-    ];
-
     return (
-      <div>
-        <List className="pledge-list">
-          {this.props.pledgeArray.map((pledge, i) => (
-            <div key={i}>
-              <ListItem
-                className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image" size={70} src={pledge.photoURL} />}
-                primaryText={
-                  <p className="pledge-name"> {pledge.firstName} {pledge.lastName} </p>
-                }
-                secondaryText={
-                  <p>
-                    {pledge.year}
-                    <br />
-                    {pledge.major}
-                  </p>
-                }
-                secondaryTextLines={2}
-                onClick={() => this.handleOpen(pledge)}
-              >
-              </ListItem>
-              <Divider className="pledge-divider large" inset={true} />
-            </div>
-          ))}
-        </List>
-        <div style={{height: '60px'}}></div>
-        
-        <Dialog
-          actions={actions}
-          modal={false}
-          open={this.state.open}
-          onRequestClose={this.handleClose}
+      <div className="complaints-container">
+        <SelectField
+          className="complaints-input"
+          value={this.state.pledge}
+          floatingLabelText="Pledge Name"
+          onChange={(e, key, newValue) => this.handleChange('pledge', newValue)}
+          errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
         >
-          <TextField 
-            type="text"
-            floatingLabelText="Description"
-            value={this.state.description}
-            onChange={(e, newValue) => this.handleChange('description', newValue)}
-            errorText={!this.state.descriptionValidation && 'Enter a description.'}
-          />
-        </Dialog>
+          {this.state.pledgeArray.map((pledge, i) => (
+            <MenuItem key={i} value={pledge} primaryText={pledge.label} />
+          ))}
+        </SelectField>
+        <TextField
+          className="complaints-input"
+          type="text"
+          floatingLabelText="Description"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.description}
+          onChange={(e, newValue) => this.handleChange('description', newValue)}
+          errorText={!this.state.descriptionValidation && 'Enter a description.'}
+        />
+        <div style={{height: '60px'}}></div>
+        <div className="complain-button" onClick={() => this.complain(this.state.pledge)}> 
+          Submit Complaint
+        </div>
+        <div style={{height: '60px'}}></div>
       </div>
     )
   }

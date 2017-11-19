@@ -5,6 +5,9 @@ export default {
   getAuthStatus: function(token) {
     return axios.post('/api/', {token});
   },
+  refreshToken: function() {
+    return axios.post('/api/refreshtoken');
+  },
   login: function(email, password) {
     return axios.post('/api/login', {email, password});
   },

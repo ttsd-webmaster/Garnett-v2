@@ -50,17 +50,46 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
 });
 
-// Login Get Route
+// Retrieving Authentication Status Route
 app.post('/api', function(req, res) {
-  if (req.body.token === null) {
-    res.status(200).send('Not Authenticated');
-  }
-  else {
+  // Send back user's info and a token to the client
+  firebase.auth().signInWithCustomToken(req.body.token)
+  .then(function() {
+    let fullName = firebase.auth().currentUser.displayName;
+    console.log(fullName)
+
+    // Look for user's info in data base
+    let userRef = firebase.database().ref('/users/' + fullName);
+    userRef.once('value', (snapshot) => {
+      const userInfo = snapshot.val();
+      const data = {
+        token: req.body.token,
+        user: userInfo,
+        databaseURL: 'https://garnett-42475.firebaseio.com'
+      };
+      res.json(data);
+    });
+  })
+  .catch(function(error) {
+    console.log("Error signing in with custom token:", error);
+    res.status(400).send(error);
+  });
+});
+
+// Refreshing Token Route
+app.post('/api/refreshtoken', function(req, res) {
+  let user = firebase.auth().currentUser;
+  console.log(user);
+
+  // Creates a custom token
+  admin.auth().createCustomToken(user.uid)
+  .then(function(customToken) {
     // Send back user's info and a token to the client
-    firebase.auth().signInWithCustomToken(req.body.token)
+    firebase.auth().signInWithCustomToken(customToken)
     .then(function() {
-      let fullName = firebase.auth().currentUser.displayName;
+      let fullName = user.displayName;
       console.log(fullName)
+
       // Look for user's info in data base
       let userRef = firebase.database().ref('/users/' + fullName);
       userRef.once('value', (snapshot) => {
@@ -77,7 +106,10 @@ app.post('/api', function(req, res) {
       console.log("Error signing in with custom token:", error);
       res.status(400).send(error);
     });
-  }
+  })
+  .catch(function(error) {
+    console.log("Error creating custom token:", error);
+  });
 });
 
 // Login Post Route

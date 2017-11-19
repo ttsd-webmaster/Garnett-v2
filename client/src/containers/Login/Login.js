@@ -12,7 +12,7 @@ const snackbarBackground = {
 };
 
 const snackbarText = {
-  color: 'var(--primary-color)'
+  color: '#000'
 };
 
 function validateEmail(email) {
