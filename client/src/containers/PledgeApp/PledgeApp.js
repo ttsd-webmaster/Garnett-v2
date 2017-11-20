@@ -1,29 +1,25 @@
 import './PledgeApp.css';
+import API from '../../api/API.js';
+import MeritBook from '../../components/MeritBook/MeritBook';
 
 import React, {Component} from 'react';
+import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
 import firebase from '@firebase/app';
 import '@firebase/database';
 
-import ActiveMerit from '../../components/MeritBook/ActiveMerit/ActiveMerit';
-import PledgeMerit from '../../components/MeritBook/PledgeMerit/PledgeMerit';
-import ActiveComplaints from '../../components/Complaints/ActiveComplaints/ActiveComplaints';
-import PledgeComplaints from '../../components/Complaints/PledgeComplaints/PledgeComplaints';
-import Settings from '../../components/Settings/Settings';
-import API from "../../api/API.js";
-
 const inkBarStyle = {
   position: 'relative',
-  top: '98px',
+  top: '100px',
   backgroundColor: '#fff',
   zIndex: 1
 };
 
 const tabContainerStyle = {
   position: 'fixed',
-  top: 50,
+  top: 52,
   zIndex: 1
 };
 
@@ -33,39 +29,27 @@ let swipeableViewStyle = {
   marginTop: '100px'
 };
 
-function MeritBook(props) {
-  const isActive = props.state.status;
+const LoadableComplaints = Loadable({
+  loader: () => import('../../components/Complaints/Complaints'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>
+  }
+});
 
-  if (isActive === 'active') {
-    return (
-      <ActiveMerit 
-        state={props.state} 
-        pledgeArray={props.pledgeArray} 
-        handleRequestOpen={props.handleRequestOpen} 
-      />
-    );
+const LoadableSettings = Loadable({
+  loader: () => import('../../components/Settings/Settings'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>
   }
-  else {
-    return <PledgeMerit meritArray={props.meritArray} totalMerits={props.state.totalMerits} />;
-  }
-}
-
-function Complaints(props) {
-  const isActive = props.state.status;
-
-  if (isActive === 'active') {
-    return (
-      <ActiveComplaints 
-        state={props.state} 
-        pledgeArray={props.pledgeArray}
-        handleRequestOpen={props.handleRequestOpen}
-      />
-    );
-  }
-  else {
-    return <PledgeComplaints complaintsArray={props.complaintsArray} />;
-  }
-}
+});
 
 export default class PledgeApp extends Component {
   constructor(props) {
@@ -246,13 +230,13 @@ export default class PledgeApp extends Component {
               handleRequestOpen={this.handleRequestOpen}
             />
             <div> Chalkboards </div>
-            <Complaints
+            <LoadableComplaints
               state={this.props.state}
               pledgeArray={this.state.pledgeArray}
               complaintsArray={this.state.complaintsArray}
               handleRequestOpen={this.handleRequestOpen}
             />
-            <Settings 
+            <LoadableSettings 
               state={this.props.state} 
               logoutCallBack={this.props.logoutCallBack} 
               history={this.props.history}

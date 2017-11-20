@@ -4,10 +4,9 @@ import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import RaisedButton from 'material-ui/RaisedButton';
 import API from "../../../api/API.js";
 
-export default class ActiveMerit extends Component {
+export default class ActiveComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {

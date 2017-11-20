@@ -1,13 +1,14 @@
 import './App.css';
 import '../fontello/css/fontello.css';
-import API from '../api/API.js'
-import React, {Component} from 'react';
-import Login from '../containers/Login/Login';
-import PledgeApp from '../containers/PledgeApp/PledgeApp';
+import API from '../api/API.js';
+import asyncComponent from './AsyncComponent';
 
+import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import firebase from '@firebase/app';
 import '@firebase/storage';
+const Login = asyncComponent(() => import('../containers/Login/Login'));
+const PledgeApp = asyncComponent(() => import('../containers/PledgeApp/PledgeApp'));
 
 class App extends Component {
   constructor(props) {
@@ -76,54 +77,43 @@ class App extends Component {
     if (res.data.token) {
       localStorage.setItem('token', res.data.token);
     }
-    console.log(localStorage.getItem('token'));
 
-    if (res.data.user.photoURL === 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png') {
+    let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+
+    if (res.data.user.photoURL === defaultPhoto) {
       let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
       storage.getDownloadURL().then(function(url) {
         API.setPhoto(url)
         .then((response) => {
           console.log(response)
 
-          this.setState({
-            token: res.data.token,
-            name: `${res.data.user.firstName} ${res.data.user.lastName}`,
-            phone: res.data.user.phone,
-            email: res.data.user.email,
-            class: res.data.user.class,
-            major: res.data.user.major,
-            status: res.data.user.status,
-            photoURL: res.data.user.photoURL,
-            isAuthenticated: true
-          });
-
-          if (res.data.user.status === 'pledge') {
-            this.setState({
-              totalMerits: res.data.user.totalMerits
-            });
-          }
+          this.setData(res);
         })
         .catch(err => console.log(err));
       });
     }
     else {
-      this.setState({
-        token: res.data.token,
-        name: `${res.data.user.firstName} ${res.data.user.lastName}`,
-        phone: res.data.user.phone,
-        email: res.data.user.email,
-        class: res.data.user.class,
-        major: res.data.user.major,
-        status: res.data.user.status,
-        photoURL: res.data.user.photoURL,
-        isAuthenticated: true
-      });
+      this.setData(res);
+    }
+  }
 
-      if (res.data.user.status === 'pledge') {
-        this.setState({
-          totalMerits: res.data.user.totalMerits
-        });
-      }
+  setData(res) {
+    this.setState({
+      token: res.data.token,
+      name: `${res.data.user.firstName} ${res.data.user.lastName}`,
+      phone: res.data.user.phone,
+      email: res.data.user.email,
+      class: res.data.user.class,
+      major: res.data.user.major,
+      status: res.data.user.status,
+      photoURL: res.data.user.photoURL,
+      isAuthenticated: true
+    });
+
+    if (res.data.user.status === 'pledge') {
+      this.setState({
+        totalMerits: res.data.user.totalMerits
+      });
     }
   }
 

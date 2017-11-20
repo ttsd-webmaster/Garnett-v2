@@ -11,7 +11,7 @@ const listItemStyle = {
   zIndex: -1
 };
 
-export default class PledgeMerit extends Component {
+export default class PledgeComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
