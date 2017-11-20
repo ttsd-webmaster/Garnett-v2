@@ -32,7 +32,7 @@ export default class PledgeMerit extends Component {
                 }
               >
               </ListItem>
-              <Divider inset={true} />
+              <Divider />
             </div>
           ))}
         </List>

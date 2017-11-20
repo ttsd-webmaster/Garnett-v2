@@ -8,6 +8,9 @@ export default {
   refreshToken: function() {
     return axios.post('/api/refreshtoken');
   },
+  setPhoto: function(url) {
+    return axios.post('/api/photo', {url});
+  },
   login: function(email, password) {
     return axios.post('/api/login', {email, password});
   },

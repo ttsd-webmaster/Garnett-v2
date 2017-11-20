@@ -79,7 +79,6 @@ app.post('/api', function(req, res) {
 // Refreshing Token Route
 app.post('/api/refreshtoken', function(req, res) {
   let user = firebase.auth().currentUser;
-  console.log(user);
 
   // Creates a custom token
   admin.auth().createCustomToken(user.uid)
@@ -118,7 +117,7 @@ app.post('/api/login', function(req, res) {
   // Authenticate the credentials
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
   .then((user) => {
-    if (user && user.emailVerified) {
+    if (user) {
       const uid = user.uid;
       const fullName = user.displayName;
 
@@ -163,8 +162,11 @@ app.post('/api/signup', function(req, res) {
   firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
   .then((user) => {
     if (user && !user.emailVerified) {
+      let firstName = req.body.firstName.replace(/ /g,'');
+      let lastName = req.body.lastName.replace(/ /g,'');
+
       user.updateProfile({
-        displayName: req.body.firstName + req.body.lastName
+        displayName: firstName + lastName
       })
       .then(function() {
         let userRef = firebase.database().ref('/users/' + user.displayName);
@@ -236,6 +238,18 @@ app.post('/api/signup', function(req, res) {
   });
 });
 
+app.post('/api/photo', function(req, res) {
+  let user = firebase.auth().currentUser.displayName;
+  let userRef = firebase.database().ref('/users/' + user);
+
+  userRef.update({
+    photoURL: req.body.url
+  });
+
+  res.sendStatus(200);
+})
+
+// Log Out Route
 app.post('/api/logout', function(req, res) {
   firebase.auth().signOut()
   .then(function() {

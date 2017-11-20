@@ -7,6 +7,7 @@ import PledgeApp from '../containers/PledgeApp/PledgeApp';
 
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import firebase from '@firebase/app';
+import '@firebase/storage';
 
 class App extends Component {
   constructor(props) {
@@ -67,29 +68,62 @@ class App extends Component {
 
   loginCallBack = (res) => {
     if (!firebase.apps.length) {
-      firebase.initializeApp({databaseURL: res.data.databaseURL});
+      firebase.initializeApp({
+        databaseURL: res.data.databaseURL,
+        storageBucket: "garnett-42475.appspot.com"
+      });
     }
     if (res.data.token) {
       localStorage.setItem('token', res.data.token);
     }
     console.log(localStorage.getItem('token'));
-    
-    this.setState({
-      token: res.data.token,
-      name: `${res.data.user.firstName} ${res.data.user.lastName}`,
-      phone: res.data.user.phone,
-      email: res.data.user.email,
-      class: res.data.user.class,
-      major: res.data.user.major,
-      status: res.data.user.status,
-      photoURL: res.data.user.photoURL,
-      isAuthenticated: true
-    });
 
-    if (res.data.user.status === 'pledge') {
-      this.setState({
-        totalMerits: res.data.user.totalMerits
+    if (res.data.user.photoURL === 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png') {
+      let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
+      storage.getDownloadURL().then(function(url) {
+        API.setPhoto(url)
+        .then((response) => {
+          console.log(response)
+
+          this.setState({
+            token: res.data.token,
+            name: `${res.data.user.firstName} ${res.data.user.lastName}`,
+            phone: res.data.user.phone,
+            email: res.data.user.email,
+            class: res.data.user.class,
+            major: res.data.user.major,
+            status: res.data.user.status,
+            photoURL: res.data.user.photoURL,
+            isAuthenticated: true
+          });
+
+          if (res.data.user.status === 'pledge') {
+            this.setState({
+              totalMerits: res.data.user.totalMerits
+            });
+          }
+        })
+        .catch(err => console.log(err));
       });
+    }
+    else {
+      this.setState({
+        token: res.data.token,
+        name: `${res.data.user.firstName} ${res.data.user.lastName}`,
+        phone: res.data.user.phone,
+        email: res.data.user.email,
+        class: res.data.user.class,
+        major: res.data.user.major,
+        status: res.data.user.status,
+        photoURL: res.data.user.photoURL,
+        isAuthenticated: true
+      });
+
+      if (res.data.user.status === 'pledge') {
+        this.setState({
+          totalMerits: res.data.user.totalMerits
+        });
+      }
     }
   }
 
