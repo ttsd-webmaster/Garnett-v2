@@ -23,6 +23,7 @@
 }
 
 body {
+  background-color: #2e2f33;
   margin: 0;
   padding: 0;
   --primary-color: #960018;

@@ -190,7 +190,7 @@ export default class PledgeApp extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <div>
+        <div style={{backgroundColor: '#fff'}}>
           <div className="app-header">
             {this.state.title}
           </div>
