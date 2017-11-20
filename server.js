@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
-const compression = require(‘compression’);
+const compression = require('compression');
 const app = express();
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
