@@ -1,5 +1,6 @@
 import './PledgeApp.css';
 import API from '../../api/API.js';
+import loadFirebase from '../../loadFirebase.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 
 import React, {Component} from 'react';
@@ -7,8 +8,6 @@ import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
-import firebase from '@firebase/app';
-import '@firebase/database';
 
 const inkBarStyle = {
   position: 'relative',
@@ -74,13 +73,18 @@ export default class PledgeApp extends Component {
 
       API.getAuthStatus(token)
       .then(res => {
-        if (res.data !== 'Not Authenticated') {
-          if (!firebase.apps.length) {
-            firebase.initializeApp({databaseURL: res.data.databaseURL});
-          }
+        if (res.status === 200) {
+          loadFirebase('app')
+          .then(() => {
+            let firebase = window.firebase;
 
-          this.getData(res.data.user.status, token);
-          this.props.loginCallBack(res);
+            if (!firebase.apps.length) {
+              firebase.initializeApp({databaseURL: res.data.databaseURL});
+            }
+
+            this.getData(res.data.user.status, token);
+            this.props.loginCallBack(res);
+          });
         }
         else {
           this.props.history.push('/');
@@ -117,21 +121,25 @@ export default class PledgeApp extends Component {
 
   getData = (userStatus, token) => {
     if (userStatus === 'active') {
-      let dbRef = firebase.database().ref('/users/');
-      let pledgeArray = [];
+      loadFirebase('database')
+      .then(() => {
+        let firebase = window.firebase;
+        let dbRef = firebase.database().ref('/users/');
+        let pledgeArray = [];
 
-      dbRef.on('value', (snapshot) => {
-        pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-          return snapshot.val()[key];
-        });
-        pledgeArray = pledgeArray.filter(function(user) {
-          return user.status === 'pledge';
-        });
-        console.log("Pledge array: ", pledgeArray);
-        
-        this.setState({
-          loaded: true,
-          pledgeArray: pledgeArray
+        dbRef.on('value', (snapshot) => {
+          pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
+          pledgeArray = pledgeArray.filter(function(user) {
+            return user.status === 'pledge';
+          });
+          console.log("Pledge array: ", pledgeArray);
+          
+          this.setState({
+            loaded: true,
+            pledgeArray: pledgeArray
+          });
         });
       });
     }
@@ -190,7 +198,7 @@ export default class PledgeApp extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <div style={{backgroundColor: '#fff'}}>
+        <div>
           <div className="app-header">
             {this.state.title}
           </div>

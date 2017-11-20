@@ -1,12 +1,11 @@
 import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
+import loadFirebase from '../loadFirebase.js';
 import asyncComponent from './AsyncComponent';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import firebase from '@firebase/app';
-import '@firebase/storage';
 const Login = asyncComponent(() => import('../containers/Login/Login'));
 const PledgeApp = asyncComponent(() => import('../containers/PledgeApp/PledgeApp'));
 
@@ -68,33 +67,41 @@ class App extends Component {
   }
 
   loginCallBack = (res) => {
-    if (!firebase.apps.length) {
-      firebase.initializeApp({
-        databaseURL: res.data.databaseURL,
-        storageBucket: "garnett-42475.appspot.com"
-      });
-    }
-    if (res.data.token) {
-      localStorage.setItem('token', res.data.token);
-    }
+    loadFirebase('app')
+    .then(() => {
+      let firebase = window.firebase;
+      
+      if (!firebase.apps.length) {
+        firebase.initializeApp({
+          databaseURL: res.data.databaseURL,
+          storageBucket: "garnett-42475.appspot.com"
+        });
+      }
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+      }
 
-    let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+      let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
-    if (res.data.user.photoURL === defaultPhoto) {
-      let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
-      storage.getDownloadURL().then(function(url) {
-        API.setPhoto(url)
-        .then((response) => {
-          console.log(response)
+      if (res.data.user.photoURL === defaultPhoto) {
+        loadFirebase('storage')
+        .then(() => {
+          let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
+          storage.getDownloadURL().then(function(url) {
+            API.setPhoto(url)
+            .then((response) => {
+              console.log(response)
 
-          this.setData(res);
-        })
-        .catch(err => console.log(err));
-      });
-    }
-    else {
-      this.setData(res);
-    }
+              this.setData(res);
+            })
+            .catch(err => console.log(err));
+          });
+        });
+      }
+      else {
+        this.setData(res);
+      }
+    });
   }
 
   setData(res) {
