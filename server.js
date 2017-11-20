@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
+const compression = require(‘compression’);
 const app = express();
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
@@ -42,6 +43,7 @@ if (process.env.NODE_ENV == 'production') {
   app.all('*', ensureSecure);
 }
 
+app.use(compression()); // Gzips file
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, './client/build')));
