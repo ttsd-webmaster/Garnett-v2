@@ -24,45 +24,41 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.setState({
-      loaded: true,
-      authenticated: false
-    })
-    // let token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
-    // if (token !== null) {
-    //   API.getAuthStatus(token)
-    //   .then(res => {
-    //     console.log(res);
-    //     this.loginCallBack(res);
+    if (token !== null) {
+      API.getAuthStatus(token)
+      .then(res => {
+        console.log(res);
+        this.loginCallBack(res);
 
-    //     this.setState({
-    //       isAuthenticated: true
-    //     });
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
+        this.setState({
+          isAuthenticated: true
+        });
+      })
+      .catch((error) => {
+        console.log(error);
 
-    //     if (token) {
-    //       localStorage.removeItem('token');
-    //       API.refreshToken()
-    //       .then(res => {
-    //         console.log(res);
-    //         this.loginCallBack(res);
+        if (token) {
+          localStorage.removeItem('token');
+          API.refreshToken()
+          .then(res => {
+            console.log(res);
+            this.loginCallBack(res);
 
-    //         this.setState({
-    //           isAuthenticated: true
-    //         });
-    //       })
-    //       .catch(err => console.log(err));
-    //     }
-    //   });
-    // }
-    // else {
-    //   this.setState({
-    //     loaded: true
-    //   });
-    // }
+            this.setState({
+              isAuthenticated: true
+            });
+          })
+          .catch(err => console.log(err));
+        }
+      });
+    }
+    else {
+      this.setState({
+        loaded: true
+      });
+    }
   }
 
   toggleSignState() {
