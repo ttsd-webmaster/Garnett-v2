@@ -36,7 +36,7 @@ export default class PledgeMerit extends Component {
     return (
       <div>
         <List style={listStyle}>
-          {this.props.meritArray.map((merit, i) => (
+          {this.props.meritArray.reverse().map((merit, i) => (
             <div key={i}>
               <ListItem
                 innerDivStyle={listItemStyle}

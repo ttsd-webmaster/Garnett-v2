@@ -256,7 +256,9 @@ export default class PledgeApp extends Component {
               <div className="total-merits"> Total Merits: {this.props.state.totalMerits} </div>
             ) : (
               <div>
-                <div className="merit-button">+</div>
+                <div className="merit-button">
+                  <i className="icon-pencil"></i>
+                </div>
               </div>
             )
           ) : (

@@ -27,15 +27,16 @@
 
 .merit-button {
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--primary-color);
   color: #fff;
   bottom: 20px;
   right: 20px;
-  line-height: 60px;
   height: 60px;
   width: 60px;
-  font-size: 40px;
-  text-align: center;
+  font-size: 1.6em;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
 }

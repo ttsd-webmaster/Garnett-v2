@@ -195,7 +195,7 @@ export default class ActiveMerit extends Component {
             </Tab>
             <Tab label="Past Merits">
               <List className="pledge-list">
-                {this.state.meritArray.map((merit, i) => (
+                {this.state.meritArray.reverse().map((merit, i) => (
                   <div key={i}>
                     <ListItem
                       className="pledge-list-item"
