@@ -1,21 +1,20 @@
-import './ActiveMerit.css';
-
 import React, {Component} from 'react';
+import Loadable from 'react-loadable';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import {Tabs, Tab} from 'material-ui/Tabs';
-import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
 import API from "../../../api/API.js";
 
-const inkBarStyle = {
-  position: 'relative',
-  top: '46px',
-  backgroundColor: '#fff',
-  zIndex: 2
-};
+const LoadableActiveMeritDialog = Loadable({
+  loader: () => import('./ActiveMeritDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>
+  }
+});
 
 export default class ActiveMerit extends Component {
   constructor(props) {
@@ -115,19 +114,6 @@ export default class ActiveMerit extends Component {
   }
 
   render() {
-    const actions = [
-      <FlatButton
-        label="Demerit"
-        primary={true}
-        onClick={this.handleClose}
-      />,
-      <FlatButton
-        label="Merit"
-        primary={true}
-        onClick={() => this.merit(this.state.pledge)}
-      />,
-    ];
-
     return (
       <div>
         <List className="pledge-list">
@@ -158,67 +144,19 @@ export default class ActiveMerit extends Component {
         </List>
         <div style={{height: '60px'}}></div>
         
-        <Dialog
-          actions={actions}
-          modal={false}
-          className="merit-dialog"
-          bodyClassName="merit-dialog-body"
-          contentClassName="merit-dialog-content"
+        <LoadableActiveMeritDialog
           open={this.state.open}
-          onRequestClose={this.handleClose}
-          autoScrollBodyContent={true}
-        >
-          <Tabs 
-            className="merit-dialog-tabs"
-            inkBarStyle={inkBarStyle}
-          >
-            <Tab label="Merits">
-              <div className="merit-container">
-                <TextField 
-                  type="text"
-                  floatingLabelText="Description"
-                  value={this.state.description}
-                  onChange={(e, newValue) => this.handleChange('description', newValue)}
-                  errorText={!this.state.descriptionValidation && 'Enter a description.'}
-                />
-                <br />
-                <TextField 
-                  type="number"
-                  step={5}
-                  max={30}
-                  floatingLabelText="Amount"
-                  value={this.state.amount}
-                  onChange={(e, newValue) => this.handleChange('amount', newValue)}
-                  errorText={!this.state.amountValidation && 'Enter a valid amount.'}
-                />
-                <p> Merits remaining: {this.state.remainingMerits} </p>
-              </div>
-            </Tab>
-            <Tab label="Past Merits">
-              <List className="pledge-list">
-                {this.state.meritArray.reverse().map((merit, i) => (
-                  <div key={i}>
-                    <ListItem
-                      className="pledge-list-item"
-                      leftAvatar={<Avatar src={merit.photoURL} />}
-                      primaryText={
-                        <p className="merit-name"> {merit.name} </p>
-                      }
-                      secondaryText={
-                        <p>
-                          {merit.description}
-                        </p>
-                      }
-                    >
-                      <p className="merit-amount small"> {merit.amount} </p>
-                    </ListItem>
-                    <Divider className="pledge-divider" inset={true} />
-                  </div>
-                ))}
-              </List>
-            </Tab>
-          </Tabs>
-        </Dialog>
+          pledge={this.state.pledge}
+          description={this.state.description}
+          amount={this.state.amount}
+          descriptionValidation={this.state.descriptionValidation}
+          amountValidation={this.state.amountValidation}
+          remainingMerits={this.state.remainingMerits}
+          meritArray={this.state.meritArray}
+          merit={this.merit}
+          handleClose={this.handleClose}
+          handleChange={this.handleChange}
+        />
       </div>
     )
   }

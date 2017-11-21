@@ -2,12 +2,36 @@ import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
 import loadFirebase from '../loadFirebase.js';
-import asyncComponent from './AsyncComponent';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-const Login = asyncComponent(() => import('../containers/Login/Login'));
-const PledgeApp = asyncComponent(() => import('../containers/PledgeApp/PledgeApp'));
+import Loadable from 'react-loadable';
+
+function Loading() {
+  return (
+    <div className="loading">
+      <div className="loading-image"></div>
+    </div>
+  )
+}
+
+const LoadableLogin = Loadable({
+  loader: () => import('../containers/Login/Login'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading: Loading
+});
+
+const LoadablePledgeApp = Loadable({
+  loader: () => import('../containers/PledgeApp/PledgeApp'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading: Loading
+});
 
 class App extends Component {
   constructor(props) {
@@ -17,9 +41,6 @@ class App extends Component {
       isAuthenticated: false,
       loaded: false
     };
-
-    this.toggleSignState = this.toggleSignState.bind(this);
-    this.loginCallBack = this.loginCallBack.bind(this);
   }
 
   componentDidMount() {
@@ -60,7 +81,7 @@ class App extends Component {
     }
   }
 
-  toggleSignState() {
+  toggleSignState = () => {
     this.setState({
       staySigned: !this.state.staySigned
     });
@@ -148,19 +169,17 @@ class App extends Component {
               <Redirect to="/pledge-app"/>
             ) : (
               this.state.loaded ? (
-                <Login 
+                <LoadableLogin 
                   state={this.state}
                   loginCallBack={this.loginCallBack}
                 />
               ) : (
-              <div className="loading">
-                <div className="loading-image"></div>
-              </div>
+                <Loading />
               )
             )
           )}/>
           <Route exact path='/pledge-app' render={({history}) =>
-            <PledgeApp 
+            <LoadablePledgeApp 
               state={this.state} 
               history={history}
               loginCallBack={this.loginCallBack}

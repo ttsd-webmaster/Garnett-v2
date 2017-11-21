@@ -2,11 +2,11 @@ import './PledgeApp.css';
 import API from '../../api/API.js';
 import loadFirebase from '../../loadFirebase.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
-
-import React, {Component} from 'react';
 import Contacts from '../../components/Contacts/Contacts';
 import Complaints from '../../components/Complaints/Complaints';
 import Settings from '../../components/Settings/Settings';
+
+import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
