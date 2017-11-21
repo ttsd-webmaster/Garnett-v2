@@ -87,7 +87,8 @@ class App extends Component {
         loadFirebase('storage')
         .then(() => {
           let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
-          storage.getDownloadURL().then((url) => {
+          storage.getDownloadURL()
+          .then((url) => {
             API.setPhoto(url, res.data.token)
             .then((response) => {
               console.log(response)
@@ -95,6 +96,11 @@ class App extends Component {
               this.setData(response);
             })
             .catch(err => console.log(err));
+          })
+          .catch((error) => {
+            console.log(error);
+
+            this.setData(res);
           });
         });
       }
