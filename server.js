@@ -159,84 +159,99 @@ app.post('/api/login', function(req, res) {
 // Signup Route
 app.post('/api/signup', function(req, res) {
   let dbRef = firebase.database().ref('/users/');
+  let firstName = req.body.firstName.replace(/ /g,'');
+  let lastName = req.body.lastName.replace(/ /g,'');
+  let fullName = firstName + lastName;
+  let checkRef = firebase.database().ref('/users/' + fullName);
 
-  // Create user with email and password
-  firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
-  .then((user) => {
-    if (user && !user.emailVerified) {
-      let firstName = req.body.firstName.replace(/ /g,'');
-      let lastName = req.body.lastName.replace(/ /g,'');
+  checkRef.once('value', (snapshot) => {
+    if (snapshot.val()) {
+      res.status(400).send('This active is already signed up.');
+    }
+    else {
+      // Create user with email and password
+      firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
+      .then((user) => {
+        if (user && !user.emailVerified) {
+          let firstName = req.body.firstName.replace(/ /g,'');
+          let lastName = req.body.lastName.replace(/ /g,'');
 
-      user.updateProfile({
-        displayName: firstName + lastName
-      })
-      .then(function() {
-        let userRef = firebase.database().ref('/users/' + user.displayName);
+          user.updateProfile({
+            displayName: fullName
+          })
+          .then(function() {
+            let userRef = firebase.database().ref('/users/' + user.displayName);
 
-        userRef.set({
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          class: req.body.className,
-          major: req.body.majorName,
-          year: req.body.year,
-          phone: req.body.phone,
-          email: req.body.email,
-          photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
-        });
-        if (req.body.code === req.body.activeCode) {
-          userRef.update({
-            status: 'active',
-          });
-
-          dbRef.once('value', (snapshot) => {
-            snapshot.forEach((child) => {
-              if (child.val().status === 'pledge') {
-                let pledgeName = child.key;
-
-                userRef.child('/Pledges/' + pledgeName).set({
-                  merits: 100
-                });
-              }
+            userRef.set({
+              firstName: req.body.firstName,
+              lastName: req.body.lastName,
+              class: req.body.className,
+              major: req.body.majorName,
+              year: req.body.year,
+              phone: req.body.phone,
+              email: req.body.email,
+              photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
             });
+            if (req.body.code === req.body.activeCode) {
+              userRef.update({
+                status: 'active',
+              });
+
+              dbRef.once('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                  if (child.val().status === 'pledge') {
+                    let pledgeName = child.key;
+
+                    userRef.child('/Pledges/' + pledgeName).set({
+                      merits: 100
+                    });
+                  }
+                });
+              });
+            }
+            else {
+              userRef.update({
+                status: 'pledge',
+                totalMerits: 0
+              });
+
+              dbRef.once('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                  if (child.val().status === 'active') {
+                    let pledgeName = user.displayName;
+
+                    memberRef.child('/Pledges/' + pledgeName).set({
+                      merits: 100
+                    });
+                  }
+                });
+              });
+            }
+
+            user.sendEmailVerification()
+            .then(function() {
+              res.sendStatus(200);
+            });
+          })
+          .catch(function(error) {
+            // Handle errors here.
+            let errorCode = error.code;
+            let errorMessage = error.message;
+
+            console.log(errorCode, errorMessage);
+            res.status(400).send('Something went wrong on the server.');
           });
         }
-        else {
-          userRef.update({
-            status: 'pledge',
-            totalMerits: 0
-          });
-
-          dbRef.once('value', (snapshot) => {
-            snapshot.forEach((child) => {
-              if (child.val().status === 'active') {
-                let pledgeName = user.displayName;
-
-                memberRef.child('/Pledges/' + pledgeName).set({
-                  merits: 100
-                });
-              }
-            });
-          });
-        }
-
-        user.sendEmailVerification()
-        .then(function() {
-          res.sendStatus(200);
-        });
       })
       .catch(function(error) {
-        console.log(error);
-        res.status(400).send(error);
+        // Handle errors here.
+        let errorCode = error.code;
+        let errorMessage = error.message;
+
+        console.log(errorCode, errorMessage);
+        res.status(400).send('Email has already been taken.');
       });
     }
-  })
-  .catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-
-    console.log(errorCode, errorMessage);
-    res.status(400).send(error);
   });
 });
 
@@ -248,8 +263,15 @@ app.post('/api/photo', function(req, res) {
     photoURL: req.body.url
   });
 
-  res.sendStatus(200);
-})
+  userRef.once('value', (snapshot) => {
+    const userInfo = snapshot.val();
+    const data = {
+      token: req.body.token,
+      user: userInfo
+    };
+    res.json(data);
+  });
+});
 
 // Log Out Route
 app.post('/api/logout', function(req, res) {

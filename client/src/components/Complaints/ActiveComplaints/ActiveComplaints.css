@@ -2,13 +2,14 @@
 .complaints-container {
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 100px);
   margin-left: 20px;
 }
 
 .complaints-input {
   width: 40% !important;
   max-width: 576px;
-  margin: auto;
+  margin: 0 auto;
 }
 @media(max-width: 768px) {
   .complaints-input {

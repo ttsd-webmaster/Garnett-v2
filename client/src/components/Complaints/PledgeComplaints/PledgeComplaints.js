@@ -19,9 +19,18 @@ export default class PledgeComplaints extends Component {
     }
   }
 
+  componentDidMount() {
+    let height = document.getElementById('pledge-complaints').clientHeight;
+    let screenHeight = document.body.clientHeight - 100;
+
+    if (height < screenHeight) {
+      document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
+    }
+  }
+
   render() {
     return (
-      <div>
+      <div id="pledge-complaints">
         <List style={listStyle}>
           {this.props.complaintsArray.map((complaint, i) => (
             <div key={i}>

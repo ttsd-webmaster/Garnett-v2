@@ -4,7 +4,6 @@
   color: #fff;
   height: 60px;
   width: 100%;
-  font-weight: 700;
   font-size: 20px;
   padding-left: 20px;
   padding-top: 20px;
@@ -17,10 +16,9 @@
   background-color: var(--primary-color);
   color: #fff;
   bottom: 0;
-  height: 40px;
-  line-height: 40px;
+  height: 50px;
+  line-height: 50px;
   width: 100%;
-  font-weight: 700;
   font-size: 20px;
   text-align: center;
 }

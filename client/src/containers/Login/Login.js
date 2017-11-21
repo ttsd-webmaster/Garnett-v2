@@ -253,11 +253,13 @@ export default class Login extends Component {
         }
       })
       .catch((error) => {
-        console.log(error);
+        let message = error.response.data;
+
+        console.log(message);
 
         this.setState({
           open: true,
-          message: 'Email has already been taken.'
+          message: message
         });
       });
     }

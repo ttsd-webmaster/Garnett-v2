@@ -32,9 +32,18 @@ export default class PledgeMerit extends Component {
     }
   }
 
+  componentDidMount() {
+    let height = document.getElementById('pledge-merit').clientHeight;
+    let screenHeight = document.body.clientHeight - 150;
+
+    if (height < screenHeight) {
+      document.getElementById('pledge-merit').style.height = 'calc(100vh - 150px)';
+    }
+  }
+
   render() {
     return (
-      <div>
+      <div id="pledge-merit">
         <List style={listStyle}>
           {this.props.meritArray.reverse().map((merit, i) => (
             <div key={i}>

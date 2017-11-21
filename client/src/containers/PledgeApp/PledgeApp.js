@@ -98,8 +98,8 @@ export default class PledgeApp extends Component {
 
     // Changes view height if view is pledge merit book
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      swipeableViewStyle.height = 'calc(100vh - 140px)';
-      swipeableViewStyle.marginBottom = '40px';
+      swipeableViewStyle.height = 'calc(100vh - 150px)';
+      swipeableViewStyle.marginBottom = '50px';
     }
     else {
       swipeableViewStyle.height = 'calc(100vh - 100px)';
@@ -110,8 +110,8 @@ export default class PledgeApp extends Component {
   // Changes view height if view is pledge merit book
   componentDidUpdate() {
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      swipeableViewStyle.height = 'calc(100vh - 140px)';
-      swipeableViewStyle.marginBottom = '40px';
+      swipeableViewStyle.height = 'calc(100vh - 150px)';
+      swipeableViewStyle.marginBottom = '50px';
     }
     else {
       swipeableViewStyle.height = 'calc(100vh - 100px)';

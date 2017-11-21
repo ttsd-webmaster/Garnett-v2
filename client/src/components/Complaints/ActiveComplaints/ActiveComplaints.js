@@ -107,7 +107,6 @@ export default class ActiveComplaints extends Component {
         <div className="complain-button" onClick={() => this.complain(this.state.pledge)}> 
           Submit Complaint
         </div>
-        <div style={{height: '60px'}}></div>
       </div>
     )
   }
