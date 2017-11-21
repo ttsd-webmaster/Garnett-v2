@@ -4,7 +4,9 @@ import loadFirebase from '../../loadFirebase.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 
 import React, {Component} from 'react';
-import Loadable from 'react-loadable';
+import Contacts from '../../components/Contacts/Contacts';
+import Complaints from '../../components/Complaints/Complaints';
+import Settings from '../../components/Settings/Settings';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
@@ -27,39 +29,6 @@ let swipeableViewStyle = {
   backgroundColor: '#fafafa',
   marginTop: '100px'
 };
-
-const LoadableContacts = Loadable({
-  loader: () => import('../../components/Contacts/Contacts'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>
-  }
-});
-
-const LoadableComplaints = Loadable({
-  loader: () => import('../../components/Complaints/Complaints'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>
-  }
-});
-
-const LoadableSettings = Loadable({
-  loader: () => import('../../components/Settings/Settings'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>
-  }
-});
 
 export default class PledgeApp extends Component {
   constructor(props) {
@@ -253,17 +222,17 @@ export default class PledgeApp extends Component {
               meritArray={this.state.meritArray}
               handleRequestOpen={this.handleRequestOpen}
             />
-            <LoadableContacts
+            <Contacts
               state={this.props.state}
               activeArray={this.state.activeArray}
             />
-            <LoadableComplaints
+            <Complaints
               state={this.props.state}
               pledgeArray={this.state.pledgeArray}
               complaintsArray={this.state.complaintsArray}
               handleRequestOpen={this.handleRequestOpen}
             />
-            <LoadableSettings 
+            <Settings 
               state={this.props.state} 
               logoutCallBack={this.props.logoutCallBack} 
               history={this.props.history}
