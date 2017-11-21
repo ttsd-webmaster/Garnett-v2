@@ -21,7 +21,6 @@ export default class ContactsDialog extends Component {
       <Dialog
         actions={actions}
         modal={false}
-        className="contacts-dialog"
         bodyClassName="contacts-dialog-body"
         contentClassName="contacts-dialog-content"
         open={this.props.open}
