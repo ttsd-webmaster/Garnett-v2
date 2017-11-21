@@ -1,0 +1,43 @@
+.contacts-photo {
+  object-fit: cover;
+  display: block;
+  height: 100px;
+  width: 100px;
+  margin: 15px auto;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
+}
+
+.contacts-icon {
+  font-size: 1.4em;
+  color: var(--primary-color);
+}
+
+.contacts-list {
+  text-align: left;
+}
+
+.contacts-list-item > div > div {
+  background-color: #fff;
+}
+
+.contacts-divider {
+  position: relative;
+}
+.contacts-divider.last {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+}
+
+.contacts-dialog {
+  padding-top: 90px !important;
+}
+
+.contacts-dialog-body {
+  min-height: 285px;
+  max-height: 352px !important;
+  padding: 0 !important;
+}
+
+.contacts-dialog-content {
+  width: 90% !important;
+}

@@ -34,6 +34,7 @@ export default class PledgeComplaints extends Component {
         <List style={listStyle}>
           {this.props.complaintsArray.map((complaint, i) => (
             <div key={i}>
+              <Divider />
               <ListItem
                 innerDivStyle={listItemStyle}
                 primaryText={

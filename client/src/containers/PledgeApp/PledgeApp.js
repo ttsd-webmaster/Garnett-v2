@@ -28,6 +28,17 @@ let swipeableViewStyle = {
   marginTop: '100px'
 };
 
+const LoadableContacts = Loadable({
+  loader: () => import('../../components/Contacts/Contacts'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>
+  }
+});
+
 const LoadableComplaints = Loadable({
   loader: () => import('../../components/Complaints/Complaints'),
   render(loaded, props) {
@@ -82,7 +93,7 @@ export default class PledgeApp extends Component {
               firebase.initializeApp({databaseURL: res.data.databaseURL});
             }
 
-            this.getData(res.data.user.status, token);
+            this.getData(res.data.user.status);
             this.props.loginCallBack(res);
           });
         }
@@ -93,7 +104,7 @@ export default class PledgeApp extends Component {
       .catch(err => console.log('err', err));
     }
     else {
-      this.getData(this.props.state.status, this.props.state.token);
+      this.getData(this.props.state.status);
     }
 
     // Changes view height if view is pledge merit book
@@ -119,45 +130,50 @@ export default class PledgeApp extends Component {
     }
   }
 
-  getData = (userStatus, token) => {
-    if (userStatus === 'active') {
-      loadFirebase('database')
-      .then(() => {
-        let firebase = window.firebase;
-        let dbRef = firebase.database().ref('/users/');
-        let pledgeArray = [];
+  getData = (userStatus) => {
+    API.getActives()
+    .then(response => {
+      if (userStatus === 'active') {
+        loadFirebase('database')
+        .then(() => {
+          let firebase = window.firebase;
+          let dbRef = firebase.database().ref('/users/');
+          let pledgeArray = [];
 
-        dbRef.on('value', (snapshot) => {
-          pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-            return snapshot.val()[key];
-          });
-          pledgeArray = pledgeArray.filter(function(user) {
-            return user.status === 'pledge';
-          });
-          console.log("Pledge array: ", pledgeArray);
-          
-          this.setState({
-            loaded: true,
-            pledgeArray: pledgeArray
+          dbRef.on('value', (snapshot) => {
+            pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+              return snapshot.val()[key];
+            });
+            pledgeArray = pledgeArray.filter(function(user) {
+              return user.status === 'pledge';
+            });
+            console.log('Pledge array: ', pledgeArray);
+            console.log('Active array: ', response.data);
+            
+            this.setState({
+              loaded: true,
+              pledgeArray: pledgeArray,
+              activeArray: response.data
+            });
           });
         });
-      });
-    }
-    else {
-      API.getPledgeData(token)
-      .then(res => {
-        if (res.status === 200) {
+      }
+      else {
+        API.getPledgeData()
+        .then(res => {
           this.setState({
             loaded: true,
             meritArray: res.data.meritArray,
-            complaintsArray: res.data.complaintsArray
+            complaintsArray: res.data.complaintsArray,
+            activeArray: response.data
           });
-          console.log('meritArray: ', this.state.meritArray);
-          console.log('complaintsArray: ', this.state.complaintsArray);
-        }
-      })
-      .catch(err => console.log('err', err));
-    }
+          console.log('Merit array: ', this.state.meritArray);
+          console.log('Complaints array: ', this.state.complaintsArray);
+          console.log('Active array: ', this.state.activeArray);
+        })
+        .catch(err => console.log('err', err));
+      }
+    });
   }
 
   handleChange = (value) => {
@@ -167,7 +183,7 @@ export default class PledgeApp extends Component {
       title = 'Merit Book';
     }
     else if (value === 1) {
-      title = 'Chalkboards';
+      title = 'Contacts';
     }
     else if (value === 2) {
       title = 'Complaints';
@@ -209,11 +225,11 @@ export default class PledgeApp extends Component {
             value={this.state.slideIndex}
           >
             <Tab 
-              icon={<i className="icon-address-book"></i>}
+              icon={<i className="icon-star"></i>}
               value={0}
             />
             <Tab
-              icon={<i className="icon-calendar-empty"></i>}
+              icon={<i className="icon-address-book"></i>}
               value={1}
             />
             <Tab
@@ -237,7 +253,10 @@ export default class PledgeApp extends Component {
               meritArray={this.state.meritArray}
               handleRequestOpen={this.handleRequestOpen}
             />
-            <div> Chalkboards </div>
+            <LoadableContacts
+              state={this.props.state}
+              activeArray={this.state.activeArray}
+            />
             <LoadableComplaints
               state={this.props.state}
               pledgeArray={this.state.pledgeArray}
@@ -251,7 +270,7 @@ export default class PledgeApp extends Component {
             />
           </SwipeableViews>
 
-          {this.state.slideIndex === 0 ? (
+          {this.state.slideIndex === 0 && (
             this.props.state.status === 'pledge' ? (
               <div className="total-merits"> Total Merits: {this.props.state.totalMerits} </div>
             ) : (
@@ -261,8 +280,6 @@ export default class PledgeApp extends Component {
                 </div>
               </div>
             )
-          ) : (
-            <div></div>
           )}
 
           <Snackbar

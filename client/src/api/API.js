@@ -31,6 +31,9 @@ export default {
   getPledges: function() {
     return axios.post('/api/pledges');
   },
+  getActives: function() {
+    return axios.post('/api/actives');
+  },
   getActiveMerits: function(pledge) {
     return axios.post('/api/activemerits', {pledge})
   },

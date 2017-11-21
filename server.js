@@ -288,17 +288,34 @@ app.post('/api/logout', function(req, res) {
 // Query for pledges data
 app.post('/api/pledges', function(req, res) {
   let dbRef = firebase.database().ref('/users/');
-  let userArray = [];
+  let pledgeArray = [];
 
   dbRef.once('value', (snapshot) => {
-    userArray = Object.keys(snapshot.val()).map(function(key) {
+    pledgeArray = Object.keys(snapshot.val()).map(function(key) {
       return snapshot.val()[key];
     });
-    userArray = userArray.filter(function(user) {
+    pledgeArray = pledgeArray.filter(function(user) {
       return user.status === 'pledge';
     })
-    console.log("Pledge array: ", userArray);
-    res.json(userArray);
+    console.log("Pledge array: ", pledgeArray);
+    res.json(pledgeArray);
+  });
+});
+
+// Query for active data
+app.post('/api/actives', function(req, res) {
+  let dbRef = firebase.database().ref('/users/');
+  let activeArray = [];
+
+  dbRef.once('value', (snapshot) => {
+    activeArray = Object.keys(snapshot.val()).map(function(key) {
+      return snapshot.val()[key];
+    });
+    activeArray = activeArray.filter(function(user) {
+      return user.status === 'active';
+    })
+    console.log("Active array: ", activeArray);
+    res.json(activeArray);
   });
 });
 

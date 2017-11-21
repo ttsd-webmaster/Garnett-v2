@@ -133,6 +133,7 @@ export default class ActiveMerit extends Component {
         <List className="pledge-list">
           {this.props.pledgeArray.map((pledge, i) => (
             <div key={i}>
+              <Divider className="pledge-divider large" inset={true} />
               <ListItem
                 className="pledge-list-item large"
                 leftAvatar={<Avatar className="pledge-image" size={70} src={pledge.photoURL} />}
