@@ -5,10 +5,6 @@ import Loadable from 'react-loadable';
 import {List} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 
-const listStyle = {
-  textAlign: 'left'
-};
-
 const LoadableContactsDialog = Loadable({
   loader: () => import('./ContactsDialog'),
   render(loaded, props) {
@@ -24,18 +20,10 @@ export default class Contacts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      classArray: [],
+      classArray: ['Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'],
       open: false,
       active: null
     }
-  }
-
-  componentDidMount() {
-    let classArray = ['Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'];
-
-    this.setState({
-      classArray: classArray
-    });
   }
 
   handleOpen = (active) => {
@@ -53,7 +41,7 @@ export default class Contacts extends Component {
 
   render() {
     return (
-      <List style={listStyle}>
+      <List>
         {this.state.classArray.map((classLabel, i) => (
           <div key={i}>
             <Subheader> {classLabel} </Subheader>

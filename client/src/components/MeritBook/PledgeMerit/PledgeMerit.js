@@ -5,10 +5,6 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-const listStyle = {
-  textAlign: 'left'
-};
-
 const listItemStyle = {
   backgroundColor: '#fff',
   paddingLeft: '102px',
@@ -43,8 +39,8 @@ export default class PledgeMerit extends Component {
 
   render() {
     return (
-      <List id="pledge-merit" style={listStyle}>
-        {this.props.meritArray.reverse().map((merit, i) => (
+      <List id="pledge-merit">
+        {this.props.meritArray.map((merit, i) => (
           <div key={i}>
             <Divider style={dividerStyle} inset={true} />
             <ListItem

@@ -5,10 +5,6 @@ import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import API from '../../api/API.js';
 
-const listStyle = {
-  textAlign: 'left',
-};
-
 const listItemStyle = {
   backgroundColor: '#fff',
   zIndex: -1
@@ -33,7 +29,7 @@ export default class Settings extends Component {
     return (
       <div>
         <img className="user-photo" src={this.props.state.photoURL} alt="User" />
-        <List style={listStyle}>
+        <List>
           <Divider />
           <ListItem
             innerDivStyle={listItemStyle}

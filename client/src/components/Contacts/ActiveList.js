@@ -1,3 +1,5 @@
+import './Contacts.css';
+
 import React, {Component} from 'react';
 import Avatar from 'material-ui/Avatar';
 import {ListItem} from 'material-ui/List';
@@ -30,7 +32,7 @@ export default class ActiveList extends Component {
               innerDivStyle={listItemStyle}
               leftAvatar={<Avatar size={70} src={active.photoURL} style={avatarStyle} />}
               primaryText={
-                <p className="merit-name"> {active.firstName} {active.lastName}</p>
+                <p className="active-name"> {active.firstName} {active.lastName}</p>
               }
               secondaryText={
                 <p>
