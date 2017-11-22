@@ -1,3 +1,5 @@
+import './ActiveMerit.css';
+
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import Avatar from 'material-ui/Avatar';
@@ -142,7 +144,7 @@ export default class ActiveMerit extends Component {
             </div>
           ))}
         </List>
-        <div style={{height: '60px'}}></div>
+        <div style={{height: '40px'}}></div>
         
         <LoadableActiveMeritDialog
           open={this.state.open}
