@@ -329,11 +329,13 @@ app.post('/api/merit', function(req, res) {
   // Verify the Token
   firebase.auth().signInWithCustomToken(req.body.token)
   .then(function() {
-    userRef.once('value', (snapshot) => {
-      userRef.update({
-        merits: snapshot.val().merits - req.body.amount 
+    if (req.body.amount > 0) {
+      userRef.once('value', (snapshot) => {
+        userRef.update({
+          merits: snapshot.val().merits - req.body.amount 
+        });
       });
-    });
+    }
 
     pledgeRef.once('value', (snapshot) => {
       pledgeRef.update({
