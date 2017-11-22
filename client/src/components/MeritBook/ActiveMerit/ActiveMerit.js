@@ -43,11 +43,11 @@ export default class ActiveMerit extends Component {
     let descriptionValidation = true;
     let amountValidation = true;
 
-    if (!description || !amount || amount > 30) {
+    if (!description || !amount || amount > 30 || amount < 0) {
       if (!description) {
         descriptionValidation = false;
       }
-      if (!amount || amount > 30) {
+      if (!amount || amount > 30 || amount < 0) {
         amountValidation = false;
       }
 
@@ -75,6 +75,45 @@ export default class ActiveMerit extends Component {
         console.log('Not enough merits');
         this.props.handleRequestOpen('Not enough merits.');
       }
+    }
+  }
+
+  demerit = (pledge) => {
+    let token = this.props.state.token;
+    let pledgeName = pledge.firstName + pledge.lastName;
+    let activeName = this.props.state.name;
+    let description = this.state.description;
+    let amount = this.state.amount;
+    let photoURL = this.props.state.photoURL;
+    let descriptionValidation = true;
+    let amountValidation = true;
+
+    if (!description || !amount) {
+      if (!description) {
+        descriptionValidation = false;
+      }
+      if (!amount || amount < 0) {
+        amountValidation = false;
+      }
+
+      this.setState({
+        descriptionValidation: descriptionValidation,
+        amountValidation: amountValidation,
+      });
+    }
+    else {
+      API.merit(token, pledgeName, activeName, description, -amount, photoURL)
+      .then(res => {
+        console.log(res);
+        this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+
+        this.setState({
+          open: false,
+          description: '',
+          amount: ''
+        });
+      })
+      .catch(err => console.log('err', err));
     }
   }
 
@@ -156,6 +195,7 @@ export default class ActiveMerit extends Component {
           remainingMerits={this.state.remainingMerits}
           meritArray={this.state.meritArray}
           merit={this.merit}
+          demerit={this.demerit}
           handleClose={this.handleClose}
           handleChange={this.handleChange}
         />

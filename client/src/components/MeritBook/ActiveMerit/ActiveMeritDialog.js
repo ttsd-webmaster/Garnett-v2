@@ -22,7 +22,7 @@ export default class ActiveMerit extends Component {
       <FlatButton
         label="Demerit"
         primary={true}
-        onClick={this.props.handleClose}
+        onClick={() => this.props.demerit(this.props.pledge)}
       />,
       <FlatButton
         label="Merit"
