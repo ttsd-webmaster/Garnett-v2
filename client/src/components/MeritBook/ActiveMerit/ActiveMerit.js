@@ -76,7 +76,7 @@ export default class ActiveMerit extends Component {
     }
   }
 
-  handleChange(label, newValue) {
+  handleChange = (label, newValue) => {
     let validationLabel = [label] + 'Validation';
     let value = newValue;
 

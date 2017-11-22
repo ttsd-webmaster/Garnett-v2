@@ -312,7 +312,7 @@ app.post('/api/actives', function(req, res) {
       return snapshot.val()[key];
     });
     activeArray = activeArray.filter(function(user) {
-      return user.status === 'active';
+      return user.status === 'active' || user.status === 'alumni';
     })
     console.log("Active array: ", activeArray);
     res.json(activeArray);

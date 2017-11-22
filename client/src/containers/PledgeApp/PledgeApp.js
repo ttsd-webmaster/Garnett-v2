@@ -62,7 +62,7 @@ export default class PledgeApp extends Component {
               firebase.initializeApp({databaseURL: res.data.databaseURL});
             }
 
-            this.getData(res.data.user.status);
+            this.getData(res.data.user);
             this.props.loginCallBack(res);
           });
         }
@@ -73,7 +73,7 @@ export default class PledgeApp extends Component {
       .catch(err => console.log('err', err));
     }
     else {
-      this.getData(this.props.state.status);
+      this.getData(this.props.state);
     }
 
     // Changes view height if view is pledge merit book
@@ -99,10 +99,10 @@ export default class PledgeApp extends Component {
     }
   }
 
-  getData = (userStatus) => {
+  getData = (user) => {
     API.getActives()
     .then(response => {
-      if (userStatus === 'active') {
+      if (user.status === 'active') {
         loadFirebase('database')
         .then(() => {
           let firebase = window.firebase;
@@ -116,6 +116,7 @@ export default class PledgeApp extends Component {
             pledgeArray = pledgeArray.filter(function(user) {
               return user.status === 'pledge';
             });
+
             console.log('Pledge array: ', pledgeArray);
             console.log('Active array: ', response.data);
             
@@ -128,19 +129,42 @@ export default class PledgeApp extends Component {
         });
       }
       else {
-        API.getPledgeData()
-        .then(res => {
-          this.setState({
-            loaded: true,
-            meritArray: res.data.meritArray,
-            complaintsArray: res.data.complaintsArray,
-            activeArray: response.data
+        loadFirebase('database')
+        .then(() => {
+          let firebase = window.firebase;
+          let fullName = user.firstName + user.lastName;
+          let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
+          let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
+          let meritArray = [];
+          let complaintsArray = [];
+
+          meritRef.on('value', (snapshot) => {
+            if (snapshot.val()) {
+              meritArray = Object.keys(snapshot.val()).map(function(key) {
+                return snapshot.val()[key];
+              });
+            }
+
+            complaintsRef.on('value', (snapshot) => {
+              if (snapshot.val()) {
+                complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+                  return snapshot.val()[key];
+                });
+              }
+
+              console.log('Merit array: ', meritArray);
+              console.log('Complaints array: ', complaintsArray);
+              console.log('Active array: ', response.data);
+
+              this.setState({
+                loaded: true,
+                meritArray: meritArray,
+                complaintsArray: complaintsArray,
+                activeArray: response.data
+              });
+            });
           });
-          console.log('Merit array: ', this.state.meritArray);
-          console.log('Complaints array: ', this.state.complaintsArray);
-          console.log('Active array: ', this.state.activeArray);
-        })
-        .catch(err => console.log('err', err));
+        });
       }
     });
   }

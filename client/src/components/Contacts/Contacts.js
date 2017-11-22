@@ -31,7 +31,7 @@ export default class Contacts extends Component {
   }
 
   componentDidMount() {
-    let classArray = ['Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'];
+    let classArray = ['Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'];
 
     this.setState({
       classArray: classArray
