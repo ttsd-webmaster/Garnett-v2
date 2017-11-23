@@ -5,9 +5,6 @@ export default {
   getAuthStatus: function(token) {
     return axios.post('/api/', {token});
   },
-  refreshToken: function() {
-    return axios.post('/api/refreshtoken');
-  },
   setPhoto: function(url, token) {
     return axios.post('/api/photo', {url, token});
   },
