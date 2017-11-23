@@ -37,6 +37,13 @@
   width: 90% !important;
 }
 
+.contacts-subheader {
+  line-height: 88px !important;
+  font-size: 18px !important;
+  padding-left: 0 !important;
+  text-align: center;
+}
+
 .active-name {
   font-weight: 700;
   margin: 0;
