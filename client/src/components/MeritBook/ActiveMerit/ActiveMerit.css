@@ -60,3 +60,10 @@
 .merit-dialog-content {
   width: 90% !important;
 }
+
+.merit-all-dialog {
+  background-color: var(--primary-color);
+  color: #fff !important;
+  font-size: 20px !important;
+}
+

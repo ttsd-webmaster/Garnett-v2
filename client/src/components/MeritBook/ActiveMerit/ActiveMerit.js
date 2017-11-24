@@ -88,7 +88,7 @@ export default class ActiveMerit extends Component {
     let descriptionValidation = true;
     let amountValidation = true;
 
-    if (!description || !amount) {
+    if (!description || !amount || amount < 0) {
       if (!description) {
         descriptionValidation = false;
       }

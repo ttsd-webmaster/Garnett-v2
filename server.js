@@ -93,6 +93,7 @@ app.post('/api/login', function(req, res) {
       .then(function(customToken) {
         // Look for user's info in data base
         let userRef = firebase.database().ref('/users/' + fullName);
+
         userRef.once('value', (snapshot) => {
           const userInfo = snapshot.val();
           const data = {
@@ -158,6 +159,7 @@ app.post('/api/signup', function(req, res) {
               email: req.body.email,
               photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
             });
+
             if (req.body.code === req.body.activeCode) {
               userRef.update({
                 status: 'active',
@@ -184,10 +186,10 @@ app.post('/api/signup', function(req, res) {
               dbRef.once('value', (snapshot) => {
                 snapshot.forEach((child) => {
                   if (child.val().status === 'active') {
-                    let memberRef = firebase.database().ref('/users/' + child.key);
+                    let activeRef = firebase.database().ref('/users/' + child.key);
                     let pledgeName = user.displayName;
 
-                    memberRef.child('/Pledges/' + pledgeName).set({
+                    activeRef.child('/Pledges/' + pledgeName).set({
                       merits: 100
                     });
                   }
@@ -288,21 +290,21 @@ app.post('/api/actives', function(req, res) {
 
 // Post merit data
 app.post('/api/merit', function(req, res) {
-  let user = firebase.auth().currentUser;
-  let userRef = firebase.database().ref('/users/' + user.displayName + '/Pledges/' + req.body.pledgeName);
+  let fullName = firebase.auth().currentUser.displayName;
+  let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + req.body.pledgeName);
   let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
   let meritRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Merits/');
 
   // Verify the Token
   firebase.auth().signInWithCustomToken(req.body.token)
   .then(function() {
-    if (req.body.amount > 0) {
-      userRef.once('value', (snapshot) => {
+    userRef.once('value', (snapshot) => {
+      if (req.body.amount > 0) {
         userRef.update({
           merits: snapshot.val().merits - req.body.amount 
         });
-      });
-    }
+      }
+    });
 
     pledgeRef.once('value', (snapshot) => {
       pledgeRef.update({
@@ -318,6 +320,65 @@ app.post('/api/merit', function(req, res) {
     });
 
     res.sendStatus(200);
+  })
+  .catch(function(error) {
+    console.log("Token error: ", error);
+  });
+});
+
+// Post merit data for all pledges
+app.post('/api/meritall', function(req, res) {
+  let fullName = firebase.auth().currentUser.displayName;
+  let dbRef = firebase.database().ref('/users/');
+  let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/');
+
+  // Verify the Token
+  firebase.auth().signInWithCustomToken(req.body.token)
+  .then(function() {
+    userRef.once('value', (snapshot) => {
+      snapshot.forEach((child) => {
+        let userPledgeRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + child.key);
+        let remainingMerits = snapshot.val().merits - req.body.amount;
+
+        if (req.body.amount > 0) {
+          if (remainingMerits > 0) {
+            userPledgeRef.update({
+              merits: snapshot.val().merits - req.body.amount
+            });
+          }
+          else {
+            let pledgeRef = firebase.database().ref('/users/' + child.key);
+            pledgeRef.once('value', (snap) => {
+              let pledgeName = `${snap.val().firstName} ${snap.val().lastName}`;
+              res.status(400).send(pledgeName);
+              return;
+            });
+          }
+        }
+      });
+
+      dbRef.once('value', (snapshot) => {
+        snapshot.forEach((child) => {
+          if (child.val().status === 'pledge') {
+            let pledgeRef = firebase.database().ref('/users/' + child.key);
+            let meritRef = firebase.database().ref('/users/' + child.key + '/Merits/');
+
+            pledgeRef.update({
+              totalMerits: child.val().totalMerits + req.body.amount
+            });
+
+            meritRef.push({
+              name: req.body.activeName,
+              description: req.body.description,
+              amount: req.body.amount,
+              photoURL: req.body.photoURL
+            });
+          }
+        });
+
+        res.sendStatus(200);
+      });
+    });
   })
   .catch(function(error) {
     console.log("Token error: ", error);

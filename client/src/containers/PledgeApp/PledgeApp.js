@@ -7,6 +7,7 @@ import Complaints from '../../components/Complaints/Complaints';
 import Settings from '../../components/Settings/Settings';
 
 import React, {Component} from 'react';
+import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
@@ -28,6 +29,17 @@ let swipeableViewStyle = {
   backgroundColor: '#fafafa',
   marginTop: '100px'
 };
+
+const LoadableActiveMeritAllDialog = Loadable({
+  loader: () => import('./ActiveMeritAllDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>
+  }
+});
 
 export default class PledgeApp extends Component {
   constructor(props) {
@@ -226,8 +238,102 @@ export default class PledgeApp extends Component {
 
   handleMeritClose = () => {
     this.setState({
-
+      openMerit: false
     });
+  }
+
+  meritAll = () => {
+    let token = this.props.state.token;
+    let activeName = this.props.state.name;
+    let description = this.state.description;
+    let amount = this.state.amount;
+    let photoURL = this.props.state.photoURL;
+    let descriptionValidation = true;
+    let amountValidation = true;
+
+    if (!description || !amount || amount > 30 || amount < 0) {
+      if (!description) {
+        descriptionValidation = false;
+      }
+      if (!amount || amount > 30 || amount < 0) {
+        amountValidation = false;
+      }
+
+      this.setState({
+        descriptionValidation: descriptionValidation,
+        amountValidation: amountValidation,
+      });
+    }
+    else {
+      API.meritAll(token, activeName, description, amount, photoURL)
+      .then(res => {
+        console.log(res);
+        this.handleRequestOpen(`Merited all pledges: ${amount} merits`);
+
+        this.setState({
+          openMerit: false,
+          description: '',
+          amount: ''
+        });
+      })
+      .catch((error) => {
+        let pledge = error.response.data;
+
+        console.log('Not enough merits for ', pledge);
+
+        this.setState({
+          open: true,
+          message: `Not enough merits for ${pledge}.`
+        });
+      });
+    }
+  }
+
+  demeritAll = () => {
+    let token = this.props.state.token;
+    let activeName = this.props.state.name;
+    let description = this.state.description;
+    let amount = this.state.amount;
+    let photoURL = this.props.state.photoURL;
+    let descriptionValidation = true;
+    let amountValidation = true;
+
+    if (!description || !amount || amount < 0) {
+      if (!description) {
+        descriptionValidation = false;
+      }
+      if (!amount || amount < 0) {
+        amountValidation = false;
+      }
+
+      this.setState({
+        descriptionValidation: descriptionValidation,
+        amountValidation: amountValidation,
+      });
+    }
+    else {
+      API.meritAll(token, activeName, description, -amount, photoURL)
+      .then(res => {
+        console.log(res);
+        this.handleRequestOpen(`Demerited all pledges: ${amount} merits`);
+
+        this.setState({
+          openMerit: false,
+          description: '',
+          amount: ''
+        });
+      })
+      .catch((error) => {
+        let pledge = error.response.data;
+
+        console.log('Not enough merits for', pledge);
+
+        this.setState({
+          open: true,
+          message: `Not enough merits for ${pledge}.`
+        });
+      });
+    }
   }
 
   render() {
@@ -309,7 +415,17 @@ export default class PledgeApp extends Component {
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
-          
+          <LoadableActiveMeritAllDialog
+            open={this.state.openMerit}
+            description={this.state.description}
+            amount={this.state.amount}
+            descriptionValidation={this.state.descriptionValidation}
+            amountValidation={this.state.amountValidation}
+            meritAll={this.meritAll}
+            demeritAll={this.demeritAll}
+            handleClose={this.handleMeritClose}
+            handleChange={this.handleMeritChange}
+          />
         </div>
       ) : (
         <div className="loading">

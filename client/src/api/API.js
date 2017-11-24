@@ -22,6 +22,10 @@ export default {
     let body = {token, pledgeName, activeName, description, amount, photoURL};
     return axios.post('/api/merit', body);
   },
+  meritAll: function(token, activeName, description, amount, photoURL) {
+    let body = {token, activeName, description, amount, photoURL};
+    return axios.post('/api/meritall', body);
+  },
   complain: function(token, activeName, pledgeName, description) {
     return axios.post('/api/complain', {token, activeName, pledgeName, description});
   },
