@@ -2,11 +2,11 @@
 .icon-user:before { content: '\e800'; } /* '' */
 .icon-phone:before { content: '\e801'; } /* '' */
 .icon-briefcase:before { content: '\e802'; } /* '' */
-.icon-thumbs-down:before { content: '\e803'; } /* '' */
 .icon-users:before { content: '\e804'; } /* '' */
 .icon-pencil:before { content: '\e805'; } /* '' */
 .icon-star:before { content: '\e807'; } /* '' */
 .icon-mail-alt:before { content: '\f0e0'; } /* '' */
 .icon-calendar-empty:before { content: '\f133'; } /* '' */
+.icon-thumbs-down-alt:before { content: '\f165'; } /* '' */
 .icon-sliders:before { content: '\f1de'; } /* '' */
 .icon-address-book:before { content: '\f2b9'; } /* '' */

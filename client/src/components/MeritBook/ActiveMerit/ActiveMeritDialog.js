@@ -1,7 +1,6 @@
 import './ActiveMerit.css';
 
 import React, {Component} from 'react';
-import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -72,7 +71,7 @@ export default class ActiveMerit extends Component {
           <Tab label="Past Merits">
             <List className="pledge-list">
               {this.props.meritArray.reverse().map((merit, i) => (
-                <LazyLoad height={88} offset={300} overflow unmountIfInvisible key={i}>
+                <div key={i}>
                   <div>
                     <ListItem
                       className="pledge-list-item"
@@ -90,7 +89,7 @@ export default class ActiveMerit extends Component {
                     </ListItem>
                     <Divider className="pledge-divider" inset={true} />
                   </div>
-                </LazyLoad>
+                </div>
               ))}
             </List>
           </Tab>

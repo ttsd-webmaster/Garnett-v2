@@ -55,12 +55,6 @@
       "src": "fontawesome"
     },
     {
-      "uid": "7533e68038fc6d520ede7a7ffa0a2f64",
-      "css": "thumbs-down",
-      "code": 59395,
-      "src": "fontawesome"
-    },
-    {
       "uid": "d35a1d35efeb784d1dc9ac18b9b6c2b6",
       "css": "pencil",
       "code": 59397,
@@ -70,6 +64,12 @@
       "uid": "474656633f79ea2f1dad59ff63f6bf07",
       "css": "star",
       "code": 59399,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "ddcd918b502642705838815d40aea9e3",
+      "css": "thumbs-down-alt",
+      "code": 61797,
       "src": "fontawesome"
     }
   ]

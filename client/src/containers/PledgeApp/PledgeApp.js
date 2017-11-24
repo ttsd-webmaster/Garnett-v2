@@ -238,7 +238,11 @@ export default class PledgeApp extends Component {
 
   handleMeritClose = () => {
     this.setState({
-      openMerit: false
+      openMerit: false,
+      description: '',
+      amount: '',
+      descriptionValidation: true,
+      amountValidation: true
     });
   }
 
@@ -358,7 +362,7 @@ export default class PledgeApp extends Component {
               value={1}
             />
             <Tab
-              icon={<i className="icon-thumbs-down"></i>}
+              icon={<i className="icon-thumbs-down-alt"></i>}
               value={2}
             />
             <Tab

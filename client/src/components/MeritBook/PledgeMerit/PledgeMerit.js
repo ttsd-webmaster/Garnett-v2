@@ -42,7 +42,7 @@ export default class PledgeMerit extends Component {
     return (
       <List id="pledge-merit">
         {this.props.meritArray.map((merit, i) => (
-          <LazyLoad height={88} offset={100} unmountIfInvisible key={i}>
+          <LazyLoad height={88} offset={500} unmountIfInvisible key={i}>
             <div>
               <Divider style={dividerStyle} inset={true} />
               <ListItem

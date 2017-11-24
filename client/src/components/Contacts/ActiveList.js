@@ -27,7 +27,7 @@ export default class ActiveList extends Component {
     return (
       this.props.activeArray.map((active, i) => (
         this.props.classLabel === active.class &&
-          <LazyLoad height={88} offset={100} unmountIfInvisible key={i}>
+          <LazyLoad height={88} offset={500} unmountIfInvisible key={i}>
             <div>
               <Divider style={dividerStyle} inset={true} />
               <ListItem

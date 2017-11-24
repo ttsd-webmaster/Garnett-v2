@@ -338,33 +338,46 @@ app.post('/api/meritall', function(req, res) {
     userRef.once('value', (snapshot) => {
       snapshot.forEach((child) => {
         let userPledgeRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + child.key);
+        let pledgeRef = firebase.database().ref('/users/' + child.key);
+        let meritRef = firebase.database().ref('/users/' + child.key + '/Merits/');
         let remainingMerits = snapshot.val().merits - req.body.amount;
 
         if (req.body.amount > 0) {
           if (remainingMerits > 0) {
-            userPledgeRef.update({
-              merits: snapshot.val().merits - req.body.amount
+            pledgeRef.once('value', (snap) => {
+              pledgeRef.update({
+                totalMerits: snap.val().totalMerits + req.body.amount
+              });
+
+              userPledgeRef.update({
+                merits: snapshot.val().merits - req.body.amount
+              });
+
+              meritRef.push({
+                name: req.body.activeName,
+                description: req.body.description,
+                amount: req.body.amount,
+                photoURL: req.body.photoURL
+              });
+
+              if (!res.headersSent) {
+                res.sendStatus(200);
+              }
             });
           }
           else {
-            let pledgeRef = firebase.database().ref('/users/' + child.key);
             pledgeRef.once('value', (snap) => {
               let pledgeName = `${snap.val().firstName} ${snap.val().lastName}`;
-              res.status(400).send(pledgeName);
-              return;
+              if (!res.headersSent) {
+                res.status(400).send(pledgeName);
+              }
             });
           }
         }
-      });
-
-      dbRef.once('value', (snapshot) => {
-        snapshot.forEach((child) => {
-          if (child.val().status === 'pledge') {
-            let pledgeRef = firebase.database().ref('/users/' + child.key);
-            let meritRef = firebase.database().ref('/users/' + child.key + '/Merits/');
-
+        else {
+          pledgeRef.once('value', (snap) => {
             pledgeRef.update({
-              totalMerits: child.val().totalMerits + req.body.amount
+              totalMerits: snap.val().totalMerits + req.body.amount
             });
 
             meritRef.push({
@@ -373,10 +386,12 @@ app.post('/api/meritall', function(req, res) {
               amount: req.body.amount,
               photoURL: req.body.photoURL
             });
-          }
-        });
 
-        res.sendStatus(200);
+            if (!res.headersSent) {
+              res.sendStatus(200);
+            }
+          });
+        }
       });
     });
   })

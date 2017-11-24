@@ -34,7 +34,7 @@ export default class PledgeComplaints extends Component {
       <div id="pledge-complaints">
         <List style={listStyle}>
           {this.props.complaintsArray.map((complaint, i) => (
-            <LazyLoad height={88} offset={100} unmountIfInvisible key={i}>
+            <LazyLoad height={88} offset={500} unmountIfInvisible key={i}>
               <div>
                 <Divider />
                 <ListItem
