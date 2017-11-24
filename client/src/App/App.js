@@ -62,16 +62,22 @@ class App extends Component {
         console.log(error);
 
         localStorage.removeItem('token');
-        API.login(email, password)
+        // API.login(email, password)
+        // .then(res => {
+        //   console.log(res);
+        //   this.loginCallBack(res);
+
+        //   this.setState({
+        //     isAuthenticated: true
+        //   });
+        // })
+        // .catch(err => console.log(err));
+        API.logout()
         .then(res => {
           console.log(res);
-          this.loginCallBack(res);
-
-          this.setState({
-            isAuthenticated: true
-          });
+          this.logoutCallBack();
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log('err', err));
       });
     }
     else {

@@ -38,6 +38,11 @@ export default class PledgeApp extends Component {
       loaded: false,
       open: false,
       message: '',
+      openMerit: false,
+      description: '',
+      amount: '',
+      descriptionValidation: true,
+      amountValidation: true,
       pledgeArray: [],
       meritArray: [],
       complaintsArray: []
@@ -199,6 +204,32 @@ export default class PledgeApp extends Component {
     });
   }
 
+  handleMeritChange = (label, newValue) => {
+    let validationLabel = [label] + 'Validation';
+    let value = newValue;
+
+    if (label === 'amount') {
+      value = parseInt(newValue)
+    }
+
+    this.setState({
+      [label]: value,
+      [validationLabel]: true
+    });
+  }
+
+  handleMeritOpen = () => {
+    this.setState({
+      openMerit: true
+    });
+  }
+
+  handleMeritClose = () => {
+    this.setState({
+
+    });
+  }
+
   render() {
     return (
       this.state.loaded ? (
@@ -260,10 +291,12 @@ export default class PledgeApp extends Component {
 
           {this.state.slideIndex === 0 && (
             this.props.state.status === 'pledge' ? (
-              <div className="total-merits"> Total Merits: {this.props.state.totalMerits} </div>
+              <div className="total-merits"> 
+                Total Merits: {this.props.state.totalMerits} 
+              </div>
             ) : (
               <div>
-                <div className="merit-button">
+                <div className="merit-button" onClick={this.handleMeritOpen}>
                   <i className="icon-pencil"></i>
                 </div>
               </div>
@@ -276,6 +309,7 @@ export default class PledgeApp extends Component {
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
+          
         </div>
       ) : (
         <div className="loading">
