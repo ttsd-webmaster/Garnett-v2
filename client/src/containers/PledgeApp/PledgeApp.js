@@ -12,8 +12,8 @@ import Snackbar from 'material-ui/Snackbar';
 import SwipeableViews from 'react-swipeable-views';
 
 const inkBarStyle = {
-  position: 'relative',
-  top: '100px',
+  position: 'fixed',
+  top: 100,
   backgroundColor: '#fff',
   zIndex: 1
 };
@@ -25,7 +25,6 @@ const tabContainerStyle = {
 };
 
 let swipeableViewStyle = {
-  height: 'calc(100vh - 100px)',
   backgroundColor: '#fafafa',
   marginTop: '100px'
 };
@@ -78,24 +77,20 @@ export default class PledgeApp extends Component {
 
     // Changes view height if view is pledge merit book
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      swipeableViewStyle.height = 'calc(100vh - 150px)';
       swipeableViewStyle.marginBottom = '50px';
     }
     else {
-      swipeableViewStyle.height = 'calc(100vh - 100px)';
-      swipeableViewStyle.marginBottom = '0px';
+      swipeableViewStyle.marginBottom = 0;
     }
   }
 
   // Changes view height if view is pledge merit book
   componentDidUpdate() {
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      swipeableViewStyle.height = 'calc(100vh - 150px)';
       swipeableViewStyle.marginBottom = '50px';
     }
     else {
-      swipeableViewStyle.height = 'calc(100vh - 100px)';
-      swipeableViewStyle.marginBottom = '0px';
+      swipeableViewStyle.marginBottom = 0;
     }
   }
 

@@ -1,6 +1,7 @@
 import './PledgeMerit.css';
 
 import React, {Component} from 'react';
+import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -41,25 +42,27 @@ export default class PledgeMerit extends Component {
     return (
       <List id="pledge-merit">
         {this.props.meritArray.map((merit, i) => (
-          <div key={i}>
-            <Divider style={dividerStyle} inset={true} />
-            <ListItem
-              innerDivStyle={listItemStyle}
-              leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
-              primaryText={
-                <p className="merit-name"> {merit.name} </p>
-              }
-              secondaryText={
-                <p>
-                  {merit.description}
-                </p>
-              }
-              secondaryTextLines={2}
-            >
-              <p className="merit-amount"> {merit.amount} </p>
-            </ListItem>
-            <Divider style={dividerStyle} inset={true} />
-          </div>
+          <LazyLoad height={88} offset={100} unmountIfInvisible key={i}>
+            <div>
+              <Divider style={dividerStyle} inset={true} />
+              <ListItem
+                innerDivStyle={listItemStyle}
+                leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
+                primaryText={
+                  <p className="merit-name"> {merit.name} </p>
+                }
+                secondaryText={
+                  <p>
+                    {merit.description}
+                  </p>
+                }
+                secondaryTextLines={2}
+              >
+                <p className="merit-amount"> {merit.amount} </p>
+              </ListItem>
+              <Divider style={dividerStyle} inset={true} />
+            </div>
+          </LazyLoad>
         ))}
       </List>
     )

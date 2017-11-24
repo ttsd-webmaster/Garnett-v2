@@ -1,7 +1,7 @@
 import './Contacts.css';
 
 import React, {Component} from 'react';
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -27,7 +27,7 @@ export default class ActiveList extends Component {
     return (
       this.props.activeArray.map((active, i) => (
         this.props.classLabel === active.class &&
-          <LazyLoad height={88} key={i}>
+          <LazyLoad height={88} offset={100} unmountIfInvisible key={i}>
             <div>
               <Divider style={dividerStyle} inset={true} />
               <ListItem

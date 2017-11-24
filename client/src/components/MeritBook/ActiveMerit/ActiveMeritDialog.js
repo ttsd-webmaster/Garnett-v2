@@ -1,6 +1,7 @@
 import './ActiveMerit.css';
 
 import React, {Component} from 'react';
+import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -10,8 +11,8 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
 const inkBarStyle = {
-  position: 'relative',
-  top: '46px',
+  position: 'fixed',
+  top: '48px',
   backgroundColor: '#fff',
   zIndex: 2
 };
@@ -71,23 +72,25 @@ export default class ActiveMerit extends Component {
           <Tab label="Past Merits">
             <List className="pledge-list">
               {this.props.meritArray.reverse().map((merit, i) => (
-                <div key={i}>
-                  <ListItem
-                    className="pledge-list-item"
-                    leftAvatar={<Avatar src={merit.photoURL} />}
-                    primaryText={
-                      <p className="merit-name"> {merit.name} </p>
-                    }
-                    secondaryText={
-                      <p>
-                        {merit.description}
-                      </p>
-                    }
-                  >
-                    <p className="merit-amount small"> {merit.amount} </p>
-                  </ListItem>
-                  <Divider className="pledge-divider" inset={true} />
-                </div>
+                <LazyLoad height={88} offset={300} overflow unmountIfInvisible key={i}>
+                  <div>
+                    <ListItem
+                      className="pledge-list-item"
+                      leftAvatar={<Avatar src={merit.photoURL} />}
+                      primaryText={
+                        <p className="merit-name"> {merit.name} </p>
+                      }
+                      secondaryText={
+                        <p>
+                          {merit.description}
+                        </p>
+                      }
+                    >
+                      <p className="merit-amount small"> {merit.amount} </p>
+                    </ListItem>
+                    <Divider className="pledge-divider" inset={true} />
+                  </div>
+                </LazyLoad>
               ))}
             </List>
           </Tab>

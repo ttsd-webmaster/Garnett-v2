@@ -1,5 +1,6 @@
 .app-header {
   position: fixed;
+  top: 0;
   background-color: var(--primary-color);
   color: #fff;
   height: 60px;
