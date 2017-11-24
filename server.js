@@ -184,6 +184,7 @@ app.post('/api/signup', function(req, res) {
               dbRef.once('value', (snapshot) => {
                 snapshot.forEach((child) => {
                   if (child.val().status === 'active') {
+                    let memberRef = firebase.database().ref('/users/' + child.key);
                     let pledgeName = user.displayName;
 
                     memberRef.child('/Pledges/' + pledgeName).set({
