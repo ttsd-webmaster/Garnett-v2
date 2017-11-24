@@ -1,9 +1,7 @@
 import './ActiveMerit.css';
 
 import React, {Component} from 'react';
-import Avatar from 'material-ui/Avatar';
-import {List, ListItem} from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
@@ -16,8 +14,19 @@ const inkBarStyle = {
   zIndex: 2
 };
 
+const LoadableMeritList = Loadable({
+  loader: () => import('./MeritList'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>
+  }
+});
+
 export default class ActiveMerit extends Component {
-  render(){
+  render() {
     const actions = [
       <FlatButton
         label="Demerit"
@@ -69,29 +78,7 @@ export default class ActiveMerit extends Component {
             </div>
           </Tab>
           <Tab label="Past Merits">
-            <List className="pledge-list">
-              {this.props.meritArray.reverse().map((merit, i) => (
-                <div key={i}>
-                  <div>
-                    <ListItem
-                      className="pledge-list-item"
-                      leftAvatar={<Avatar src={merit.photoURL} />}
-                      primaryText={
-                        <p className="merit-name"> {merit.name} </p>
-                      }
-                      secondaryText={
-                        <p>
-                          {merit.description}
-                        </p>
-                      }
-                    >
-                      <p className="merit-amount small"> {merit.amount} </p>
-                    </ListItem>
-                    <Divider className="pledge-divider" inset={true} />
-                  </div>
-                </div>
-              ))}
-            </List>
+            <LoadableMeritList meritArray={this.props.meritArray} />
           </Tab>
         </Tabs>
       </Dialog>
