@@ -18,12 +18,12 @@ export default {
   logout: function() {
     return axios.post('/api/logout');
   },
-  merit: function(token, pledgeName, activeName, description, amount, photoURL) {
-    let body = {token, pledgeName, activeName, description, amount, photoURL};
+  merit: function(token, pledgeName, activeName, description, amount, photoURL, date) {
+    let body = {token, pledgeName, activeName, description, amount, photoURL, date};
     return axios.post('/api/merit', body);
   },
-  meritAll: function(token, activeName, description, amount, photoURL) {
-    let body = {token, activeName, description, amount, photoURL};
+  meritAll: function(token, activeName, description, amount, photoURL, date) {
+    let body = {token, activeName, description, amount, photoURL, date};
     return axios.post('/api/meritall', body);
   },
   complain: function(token, activeName, pledgeName, description) {

@@ -1,6 +1,6 @@
 import './PledgeApp.css';
 import API from '../../api/API.js';
-import loadFirebase from '../../loadFirebase.js';
+import loadFirebase from '../../helpers/loadFirebase.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 import Contacts from '../../components/Contacts/Contacts';
 import Complaints from '../../components/Complaints/Complaints';
@@ -47,14 +47,15 @@ export default class PledgeApp extends Component {
     this.state = {
       title: 'Merit Book',
       slideIndex: 0,
+      previousIndex: 0,
+      scrollPosition1: 0,
+      scrollPosition2: 0,
+      scrollPosition3: 0,
+      scrollPosition4: 0,
       loaded: false,
       open: false,
       message: '',
       openMerit: false,
-      description: '',
-      amount: '',
-      descriptionValidation: true,
-      amountValidation: true,
       pledgeArray: [],
       meritArray: [],
       complaintsArray: []
@@ -170,8 +171,8 @@ export default class PledgeApp extends Component {
 
               this.setState({
                 loaded: true,
-                meritArray: meritArray,
-                complaintsArray: complaintsArray,
+                meritArray: meritArray.reverse(),
+                complaintsArray: complaintsArray.reverse(),
                 activeArray: response.data
               });
             });
@@ -183,23 +184,52 @@ export default class PledgeApp extends Component {
 
   handleChange = (value) => {
     let title;
+    let tabCount = this.state.tabCount;
+    let previousIndex = this.state.previousIndex;
+    let scrollPosition1 = this.state.scrollPosition1;
+    let scrollPosition2 = this.state.scrollPosition2;
+    let scrollPosition3 = this.state.scrollPosition3;
+    let scrollPosition4 = this.state.scrollPosition4;
+    let scrollPosition = window.pageYOffset;
 
     if (value === 0) {
       title = 'Merit Book';
+      window.scrollTo(0, this.state.scrollPosition1);
     }
     else if (value === 1) {
       title = 'Contacts';
+      window.scrollTo(0, this.state.scrollPosition2);
     }
     else if (value === 2) {
       title = 'Complaints';
+      window.scrollTo(0, this.state.scrollPosition3);
     }
     else {
       title = 'Settings';
+      window.scrollTo(0, this.state.scrollPosition4);
+    }
+
+    if (previousIndex === 0) {
+      scrollPosition1 = scrollPosition;
+    }
+    else if (previousIndex === 1) {
+      scrollPosition2 = scrollPosition;
+    }
+    else if (previousIndex === 2) {
+      scrollPosition3 = scrollPosition;
+    }
+    else {
+      scrollPosition4 = scrollPosition;
     }
 
     this.setState({
       title: title,
       slideIndex: value,
+      previousIndex: value,
+      scrollPosition1: scrollPosition1,
+      scrollPosition2: scrollPosition2,
+      scrollPosition3: scrollPosition3,
+      scrollPosition4: scrollPosition4
     });
   };
 
@@ -216,20 +246,6 @@ export default class PledgeApp extends Component {
     });
   }
 
-  handleMeritChange = (label, newValue) => {
-    let validationLabel = [label] + 'Validation';
-    let value = newValue;
-
-    if (label === 'amount') {
-      value = parseInt(newValue)
-    }
-
-    this.setState({
-      [label]: value,
-      [validationLabel]: true
-    });
-  }
-
   handleMeritOpen = () => {
     this.setState({
       openMerit: true
@@ -237,107 +253,10 @@ export default class PledgeApp extends Component {
   }
 
   handleMeritClose = () => {
+    console.log('yoo')
     this.setState({
-      openMerit: false,
-      description: '',
-      amount: '',
-      descriptionValidation: true,
-      amountValidation: true
+      openMerit: false
     });
-  }
-
-  meritAll = () => {
-    let token = this.props.state.token;
-    let activeName = this.props.state.name;
-    let description = this.state.description;
-    let amount = this.state.amount;
-    let photoURL = this.props.state.photoURL;
-    let descriptionValidation = true;
-    let amountValidation = true;
-
-    if (!description || !amount || amount > 30 || amount < 0) {
-      if (!description) {
-        descriptionValidation = false;
-      }
-      if (!amount || amount > 30 || amount < 0) {
-        amountValidation = false;
-      }
-
-      this.setState({
-        descriptionValidation: descriptionValidation,
-        amountValidation: amountValidation,
-      });
-    }
-    else {
-      API.meritAll(token, activeName, description, amount, photoURL)
-      .then(res => {
-        console.log(res);
-        this.handleRequestOpen(`Merited all pledges: ${amount} merits`);
-
-        this.setState({
-          openMerit: false,
-          description: '',
-          amount: ''
-        });
-      })
-      .catch((error) => {
-        let pledge = error.response.data;
-
-        console.log('Not enough merits for ', pledge);
-
-        this.setState({
-          open: true,
-          message: `Not enough merits for ${pledge}.`
-        });
-      });
-    }
-  }
-
-  demeritAll = () => {
-    let token = this.props.state.token;
-    let activeName = this.props.state.name;
-    let description = this.state.description;
-    let amount = this.state.amount;
-    let photoURL = this.props.state.photoURL;
-    let descriptionValidation = true;
-    let amountValidation = true;
-
-    if (!description || !amount || amount < 0) {
-      if (!description) {
-        descriptionValidation = false;
-      }
-      if (!amount || amount < 0) {
-        amountValidation = false;
-      }
-
-      this.setState({
-        descriptionValidation: descriptionValidation,
-        amountValidation: amountValidation,
-      });
-    }
-    else {
-      API.meritAll(token, activeName, description, -amount, photoURL)
-      .then(res => {
-        console.log(res);
-        this.handleRequestOpen(`Demerited all pledges: ${amount} merits`);
-
-        this.setState({
-          openMerit: false,
-          description: '',
-          amount: ''
-        });
-      })
-      .catch((error) => {
-        let pledge = error.response.data;
-
-        console.log('Not enough merits for', pledge);
-
-        this.setState({
-          open: true,
-          message: `Not enough merits for ${pledge}.`
-        });
-      });
-    }
   }
 
   render() {
@@ -372,9 +291,9 @@ export default class PledgeApp extends Component {
           </Tabs>
           <SwipeableViews
             style={swipeableViewStyle}
-            animateHeight={true}
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
+            animateHeight
           >
             <MeritBook 
               state={this.props.state} 
@@ -421,14 +340,10 @@ export default class PledgeApp extends Component {
           />
           <LoadableActiveMeritAllDialog
             open={this.state.openMerit}
-            description={this.state.description}
-            amount={this.state.amount}
-            descriptionValidation={this.state.descriptionValidation}
-            amountValidation={this.state.amountValidation}
-            meritAll={this.meritAll}
-            demeritAll={this.demeritAll}
-            handleClose={this.handleMeritClose}
-            handleChange={this.handleMeritChange}
+            state={this.props.state}
+            handleMeritOpen={this.handleMeritOpen}
+            handleMeritClose={this.handleMeritClose}
+            handleRequestOpen={this.handleRequestOpen}
           />
         </div>
       ) : (

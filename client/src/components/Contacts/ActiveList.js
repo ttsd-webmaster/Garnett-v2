@@ -13,7 +13,7 @@ const listItemStyle = {
 };
 
 const avatarStyle = {
-  top: 8,
+  top: 9,
   objectFit: 'cover'
 };
 
@@ -27,7 +27,22 @@ export default class ActiveList extends Component {
     return (
       this.props.activeArray.map((active, i) => (
         this.props.classLabel === active.class &&
-          <LazyLoad height={88} offset={500} unmountIfInvisible key={i}>
+          <LazyLoad
+            height={88}
+            offset={500}
+            unmountIfInvisible
+            key={i}
+            placeholder={
+              <div className="placeholder-skeleton">
+                <Divider style={dividerStyle} inset={true} />
+                <div className="placeholder-avatar"></div>
+                <div className="placeholder-name"></div>
+                <div className="placeholder-year"></div>
+                <div className="placeholder-major"></div>
+                <Divider style={dividerStyle} inset={true} />
+              </div>
+            }
+          >
             <div>
               <Divider style={dividerStyle} inset={true} />
               <ListItem

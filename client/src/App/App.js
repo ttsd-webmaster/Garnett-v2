@@ -1,7 +1,7 @@
 import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
-import loadFirebase from '../loadFirebase.js';
+import loadFirebase from '../helpers/loadFirebase.js';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';

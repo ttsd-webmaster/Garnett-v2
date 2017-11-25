@@ -23,7 +23,7 @@
 }
 
 .pledge-image {
-  top: 8px !important;
+  top: 9px !important;
   object-fit: cover;
 }
 
@@ -55,6 +55,7 @@
   min-height: 285px;
   max-height: 352px !important;
   padding: 0 !important;
+  border-bottom: 1px solid rgb(224, 224, 224) !important;
 }
 
 .merit-dialog-content {

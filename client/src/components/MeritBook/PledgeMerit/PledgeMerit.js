@@ -13,7 +13,7 @@ const listItemStyle = {
 };
 
 const avatarStyle = {
-  top: 8,
+  top: 9,
   objectFit: 'cover'
 };
 
@@ -31,10 +31,10 @@ export default class PledgeMerit extends Component {
 
   componentDidMount() {
     let height = document.getElementById('pledge-merit').clientHeight;
-    let screenHeight = document.body.clientHeight - 150;
+    let screenHeight = window.innerHeight - 166;
 
     if (height < screenHeight) {
-      document.getElementById('pledge-merit').style.height = 'calc(100vh - 150px)';
+      document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
     }
   }
 
@@ -42,7 +42,22 @@ export default class PledgeMerit extends Component {
     return (
       <List id="pledge-merit">
         {this.props.meritArray.map((merit, i) => (
-          <LazyLoad height={88} offset={500} unmountIfInvisible key={i}>
+          <LazyLoad
+            height={88}
+            unmountIfInvisible
+            key={i}
+            placeholder={
+              <div className="placeholder-skeleton">
+                <Divider style={dividerStyle} inset={true} />
+                <div className="placeholder-avatar"></div>
+                <div className="placeholder-name"></div>
+                <div className="placeholder-year"></div>
+                <div className="placeholder-date"></div>
+                <div className="placeholder-merits"></div>
+                <Divider style={dividerStyle} inset={true} />
+              </div>
+            }
+          >
             <div>
               <Divider style={dividerStyle} inset={true} />
               <ListItem
@@ -52,13 +67,14 @@ export default class PledgeMerit extends Component {
                   <p className="merit-name"> {merit.name} </p>
                 }
                 secondaryText={
-                  <p>
-                    {merit.description}
-                  </p>
+                  <p> {merit.description} </p>
                 }
                 secondaryTextLines={2}
               >
-                <p className="merit-amount"> {merit.amount} </p>
+                <div className="merit-amount-container">
+                  <p className="merit-date"> {merit.date} </p>
+                  <p className="merit-amount"> {merit.amount} </p>
+                </div>
               </ListItem>
               <Divider style={dividerStyle} inset={true} />
             </div>

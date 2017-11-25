@@ -9,7 +9,7 @@ export default class ActiveMerit extends Component {
   render() {
     return (
       <List className="pledge-list">
-        {this.props.meritArray.reverse().map((merit, i) => (
+        {this.props.meritArray.map((merit, i) => (
           <div key={i}>
             <div>
               <ListItem
@@ -19,12 +19,13 @@ export default class ActiveMerit extends Component {
                   <p className="merit-name"> {merit.name} </p>
                 }
                 secondaryText={
-                  <p>
-                    {merit.description}
-                  </p>
+                  <p> {merit.description} </p>
                 }
               >
-                <p className="merit-amount small"> {merit.amount} </p>
+                <div className="merit-amount-container small">
+                  <p className="merit-date small"> {merit.date} </p>
+                  <p className="merit-amount small"> {merit.amount} </p>
+                </div>
               </ListItem>
               <Divider className="pledge-divider" inset={true} />
             </div>

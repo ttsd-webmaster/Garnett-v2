@@ -78,6 +78,71 @@ input:-webkit-autofill {
   }
 }
 
+/* Placeholder skeleton for list items */
+.placeholder-skeleton {
+  position: relative;
+  height: 88px;
+  background-color: #fff;
+  z-index: -1;
+}
+.placeholder-avatar {
+  position: absolute;
+  top: 9px;
+  left: 16px;
+  height: 70px;
+  width: 70px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+.placeholder-name {
+  position: absolute;
+  top: 16px;
+  left: 102px;
+  height: 16px;
+  width: 100px;
+  background-color: #eee;
+}
+.placeholder-year {
+  position: absolute;
+  top: 40px;
+  left: 102px;
+  height: 10px;
+  width: 60px;
+  background-color: #eee;
+}
+.placeholder-major {
+  position: absolute;
+  top: 54px;
+  left: 102px;
+  height: 10px;
+  width: 120px;
+  background-color: #eee;
+}
+.placeholder-date {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  height: 10px;
+  width: 34px;
+  background-color: #eee;
+}
+.placeholder-merits {
+  position: absolute;
+  top: 45px;
+  right: 30px;
+  height: 16px;
+  width: 34px;
+  background-color: #eee;
+}
+.placeholder-description {
+  position: absolute;
+  top: 32px;
+  left: 16px;
+  height: 16px;
+  width: 120px;
+  background-color: #eee;
+}
+
 .title {
   width: 55%;
   font-weight: 700;

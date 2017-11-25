@@ -1,11 +1,12 @@
 import './ActiveMerit.css';
+import getDate from '../../../helpers/getDate';
+import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import API from "../../../api/API.js";
 
 const LoadableActiveMeritDialog = Loadable({
   loader: () => import('./ActiveMeritDialog'),
@@ -58,7 +59,9 @@ export default class ActiveMerit extends Component {
     }
     else {
       if (this.state.remainingMerits - amount > 0) {
-        API.merit(token, pledgeName, activeName, description, amount, photoURL)
+        let date = getDate();
+
+        API.merit(token, pledgeName, activeName, description, amount, photoURL, date)
         .then(res => {
           console.log(res);
           this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
@@ -102,7 +105,9 @@ export default class ActiveMerit extends Component {
       });
     }
     else {
-      API.merit(token, pledgeName, activeName, description, -amount, photoURL)
+      let date = getDate();
+
+      API.merit(token, pledgeName, activeName, description, -amount, photoURL, date)
       .then(res => {
         console.log(res);
         this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
@@ -138,7 +143,7 @@ export default class ActiveMerit extends Component {
         open: true,
         pledge: pledge,
         remainingMerits: res.data.remainingMerits,
-        meritArray: res.data.meritArray
+        meritArray: res.data.meritArray.reverse()
       });
     })
     .catch(err => console.log('err', err));
