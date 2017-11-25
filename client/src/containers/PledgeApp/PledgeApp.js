@@ -191,24 +191,29 @@ export default class PledgeApp extends Component {
     let scrollPosition3 = this.state.scrollPosition3;
     let scrollPosition4 = this.state.scrollPosition4;
     let scrollPosition = window.pageYOffset;
+    let scrolled;
 
+    // Sets the title and marks scroll position based on the tab index
     if (value === 0) {
       title = 'Merit Book';
-      window.scrollTo(0, this.state.scrollPosition1);
+      scrolled = scrollPosition1;
     }
     else if (value === 1) {
       title = 'Contacts';
-      window.scrollTo(0, this.state.scrollPosition2);
+      scrolled = scrollPosition2;
     }
     else if (value === 2) {
       title = 'Complaints';
-      window.scrollTo(0, this.state.scrollPosition3);
+      console.log(this.state.scrollPosition3)
+      scrolled = scrollPosition3;
     }
     else {
       title = 'Settings';
-      window.scrollTo(0, this.state.scrollPosition4);
+      console.log(this.state.scrollPosition4)
+      scrolled = scrollPosition4;
     }
 
+    // Updates the previous scroll position based on the previous index
     if (previousIndex === 0) {
       scrollPosition1 = scrollPosition;
     }
@@ -221,6 +226,11 @@ export default class PledgeApp extends Component {
     else {
       scrollPosition4 = scrollPosition;
     }
+
+    // Sets the window scroll position based on tab
+    setTimeout(function() {
+      window.scrollTo(0, scrolled);
+    }, 1);
 
     this.setState({
       title: title,
