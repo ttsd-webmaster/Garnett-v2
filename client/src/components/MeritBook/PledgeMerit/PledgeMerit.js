@@ -44,6 +44,7 @@ export default class PledgeMerit extends Component {
         {this.props.meritArray.map((merit, i) => (
           <LazyLoad
             height={88}
+            offset={300}
             unmountIfInvisible
             key={i}
             placeholder={
