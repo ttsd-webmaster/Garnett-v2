@@ -108,6 +108,7 @@ export default class PledgeApp extends Component {
     }
     else {
       let data = localStorage.getItem('data');
+      let status = localStorage.getItem('status');
 
       if (!this.props.state.token) {
         if (token !== null) {
