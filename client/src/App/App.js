@@ -48,42 +48,56 @@ class App extends Component {
     let email = localStorage.getItem('email');
     let password = localStorage.getItem('password');
 
-    if (token !== null) {
-      API.getAuthStatus(token)
-      .then(res => {
-        console.log(res);
-        this.loginCallBack(res);
-
-        this.setState({
-          isAuthenticated: true
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-
-        localStorage.removeItem('token');
-        // API.login(email, password)
-        // .then(res => {
-        //   console.log(res);
-        //   this.loginCallBack(res);
-
-        //   this.setState({
-        //     isAuthenticated: true
-        //   });
-        // })
-        // .catch(err => console.log(err));
-        API.logout()
+    if (navigator.onLine) {
+      if (token !== null) {
+        API.getAuthStatus(token)
         .then(res => {
           console.log(res);
-          this.logoutCallBack();
+          this.loginCallBack(res);
+
+          this.setState({
+            isAuthenticated: true
+          });
         })
-        .catch(err => console.log('err', err));
-      });
+        .catch((error) => {
+          console.log(error);
+
+          localStorage.removeItem('token');
+          // API.login(email, password)
+          // .then(res => {
+          //   console.log(res);
+          //   this.loginCallBack(res);
+
+          //   this.setState({
+          //     isAuthenticated: true
+          //   });
+          // })
+          // .catch(err => console.log(err));
+          API.logout()
+          .then(res => {
+            console.log(res);
+            this.logoutCallBack();
+          })
+          .catch(err => console.log('err', err));
+        });
+      }
+      else {
+        this.setState({
+          loaded: true
+        });
+      }
     }
     else {
-      this.setState({
-        loaded: true
-      });
+      let data = localStorage.getItem('data');
+
+      if (token !== null) {
+        this.loginCallBack(data);
+      }
+      else {
+        this.setState({
+          loaded: true
+        });
+      }
     }
   }
 
@@ -167,7 +181,7 @@ class App extends Component {
   }
 
   logoutCallBack = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
 
     this.setState({
       isAuthenticated: false,

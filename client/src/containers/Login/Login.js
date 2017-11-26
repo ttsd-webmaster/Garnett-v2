@@ -135,12 +135,14 @@ export default class Login extends Component {
       .then(res => {
         if(res.data !== 'Email not verified.'){
           console.log(res)
-          
+          localStorage.setItem('data', res);
+
+          this.props.loginCallBack(res);
+
           this.setState({
             signEmail: '',
             signPassword: '',
           });
-          this.props.loginCallBack(res);
         }
         else {
           this.setState({
@@ -268,9 +270,9 @@ export default class Login extends Component {
   render() {
     return (
       <div className="login">
-        <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
+        {/*<a className="tt-logo" role="button" href="http://ucsdthetatau.org">
           <img className="logo" src={require('./images/logo.png')} alt="logo"/>
-        </a>
+        </a>*/}
 
         <div className="login-logo">
           <img src={require('./images/garnett.svg')} alt="garnett"/>

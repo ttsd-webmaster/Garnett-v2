@@ -16,13 +16,19 @@ const dividerStyle = {
 
 export default class Settings extends Component {
   logout = () => {
-    API.logout()
-    .then(res => {
-      console.log(res);
+    if (navigator.onLine) {
+      API.logout()
+      .then(res => {
+        console.log(res);
+        this.props.logoutCallBack();
+        this.props.history.push('/');
+      })
+      .catch(err => console.log('err', err));
+    }
+    else {
       this.props.logoutCallBack();
       this.props.history.push('/');
-    })
-    .catch(err => console.log('err', err));
+    }
   }
 
   render() {

@@ -66,37 +66,74 @@ export default class PledgeApp extends Component {
   componentDidMount() {
     console.log('Pledge app mount: ', this.props.state.token)
 
-    if (!this.props.state.token) {
-      let token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
 
-      if (token !== null) {
-        API.getAuthStatus(token)
-        .then(res => {
-          if (res.status === 200) {
-            loadFirebase('app')
-            .then(() => {
-              let firebase = window.firebase;
+    if (navigator.onLine) {
+      if (!this.props.state.token) {
+        if (token !== null) {
+          API.getAuthStatus(token)
+          .then(res => {
+            if (res.status === 200) {
+              loadFirebase('app')
+              .then(() => {
+                let firebase = window.firebase;
 
-              if (!firebase.apps.length) {
-                firebase.initializeApp({databaseURL: res.data.databaseURL});
-              }
+                if (!firebase.apps.length) {
+                  firebase.initializeApp({databaseURL: res.data.databaseURL});
+                }
 
-              this.getData(res.data.user);
-              this.props.loginCallBack(res);
-            });
-          }
-          else {
-            this.props.history.push('/');
-          }
-        })
-        .catch(err => console.log('err', err));
+                this.getData(res.data.user);
+                this.props.loginCallBack(res);
+              });
+            }
+            else {
+              this.props.history.push('/');
+            }
+          })
+          .catch(err => console.log('err', err));
+        }
+        else {
+          this.props.history.push('/');
+        }
       }
       else {
-        this.props.history.push('/');
+        this.getData(this.props.state);
       }
     }
     else {
-      this.getData(this.props.state);
+      let data = localStorage.getItem('data');
+
+      if (!this.props.state.token) {
+        if (token !== null) {
+          if (data.data.user.status === 'active') {
+            let pledgeArray = localStorage.getItem('pledgeArray');
+            let activeArray = localStorage.getItem('activeArray');
+
+            this.setState({
+              pledgeArray: pledgeArray,
+              activeArray: activeArray
+            });
+          }
+          else {
+            let meritArray = localStorage.getItem('meritArray');
+            let complaintsArray = localStorage.getItem('complaintsArray');
+            let activeArray = localStorage.getItem('activeArray');
+
+            this.setState({
+              meritArray: meritArray,
+              complaintsArray: complaintsArray,
+              activeArray: activeArray
+            });
+          }
+          this.props.loginCallBack(data);
+        }
+        else {
+          this.props.history.push('/');
+        }
+      }
+      else {
+        
+      }
     }
 
     // Changes view height if view is pledge merit book
@@ -138,6 +175,9 @@ export default class PledgeApp extends Component {
 
             console.log('Pledge array: ', pledgeArray);
             console.log('Active array: ', response.data);
+
+            localStorage.setItem('pledgeArray', pledgeArray);
+            localStorage.setItem('activeArray', response.data);
             
             this.setState({
               loaded: true,
@@ -174,6 +214,10 @@ export default class PledgeApp extends Component {
               console.log('Merit array: ', meritArray);
               console.log('Complaints array: ', complaintsArray);
               console.log('Active array: ', response.data);
+
+              localStorage.setItem('meritArray', meritArray);
+              localStorage.setItem('complaintsArray', complaintsArray);
+              localStorage.setItem('activeArray', response.data);
 
               this.setState({
                 loaded: true,
