@@ -107,13 +107,13 @@ export default class PledgeApp extends Component {
       }
     }
     else {
-      let data = localStorage.getItem('data');
+      let data = JSON.parse(localStorage.getItem('data'));
 
       if (!this.props.state.token) {
         if (token !== null) {
           if (data.data.user.status === 'active') {
-            let pledgeArray = localStorage.getItem('pledgeArray');
-            let activeArray = localStorage.getItem('activeArray');
+            let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
+            let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
             this.setState({
               pledgeArray: pledgeArray,
@@ -121,9 +121,9 @@ export default class PledgeApp extends Component {
             });
           }
           else {
-            let meritArray = localStorage.getItem('meritArray');
-            let complaintsArray = localStorage.getItem('complaintsArray');
-            let activeArray = localStorage.getItem('activeArray');
+            let meritArray = JSON.parse(localStorage.getItem('meritArray'));
+            let complaintsArray = JSON.parse(localStorage.getItem('complaintsArray'));
+            let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
             this.setState({
               meritArray: meritArray,

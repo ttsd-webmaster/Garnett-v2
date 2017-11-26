@@ -88,7 +88,7 @@ class App extends Component {
       }
     }
     else {
-      let data = localStorage.getItem('data');
+      let data = JSON.parse(localStorage.getItem('data'));
 
       if (token !== null) {
         this.loginCallBack(data);
