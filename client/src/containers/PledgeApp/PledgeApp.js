@@ -142,14 +142,14 @@ export default class PledgeApp extends Component {
       if (data.data.user.status === 'active' && this.state.slideIndex === 0) {
         swipeableViewContainerStyle.height = '954px';
       }
-      else {
-        swipeableViewContainerStyle.height = '';
-      }
     }
 
     // Changes view margin if view is pledge merit book
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
       swipeableViewStyle.marginBottom = '50px';
+    }
+    else {
+      swipeableViewStyle.marginBottom = 0;
     }
   }
 
