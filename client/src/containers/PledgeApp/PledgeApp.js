@@ -136,10 +136,6 @@ export default class PledgeApp extends Component {
       else {
         this.props.history.push('/');
       }
-
-      if (data.data.user.status === 'active' && this.state.slideIndex === 0) {
-        document.getElementById('swipeable-views').firstChild.style.height = 'calc(10 * 88px)';
-      }
     }
 
     // Changes view margin if view is pledge merit book
