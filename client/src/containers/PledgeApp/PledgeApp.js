@@ -138,7 +138,7 @@ export default class PledgeApp extends Component {
       }
 
       if (data.data.user.status === 'active' && this.state.slideIndex === 0) {
-        document.querySelector('.swipeable-views').firstChild.style.height = 'calc(10 * 88px)';
+        document.getElementById('swipeable-views').firstChild.style.height = 'calc(10 * 88px)';
       }
     }
 
@@ -162,7 +162,7 @@ export default class PledgeApp extends Component {
 
     if (!navigator.onLine) {
       if (this.props.state.status === 'active' && this.state.slideIndex === 0) {
-        document.querySelector('.swipeable-views').firstChild.style.height = 'calc(10 * 88px)';
+        document.getElementById('swipeable-views').firstChild.style.height = 'calc(10 * 88px)';
       }
     }
   }
@@ -362,7 +362,7 @@ export default class PledgeApp extends Component {
             />
           </Tabs>
           <SwipeableViews
-            className="swipeable-views"
+            id="swipeable-views"
             style={swipeableViewStyle}
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
