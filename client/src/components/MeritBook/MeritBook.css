@@ -1,3 +1,8 @@
+/* Active Merit Book Container */
+#active-merit-container {
+  height: calc(10 * 88px);
+}
+
 /* Pledge List */
 .pledge-name {
   font-weight: 700;
