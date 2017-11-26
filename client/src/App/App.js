@@ -62,7 +62,7 @@ class App extends Component {
         .catch((error) => {
           console.log(error);
 
-          localStorage.removeItem('token');
+          // localStorage.removeItem('token');
           // API.login(email, password)
           // .then(res => {
           //   console.log(res);

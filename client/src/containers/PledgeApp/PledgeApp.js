@@ -87,7 +87,13 @@ export default class PledgeApp extends Component {
               });
             }
             else {
-              this.props.history.push('/');
+              API.logout()
+              .then(res => {
+                console.log(res);
+                this.props.logoutCallBack();
+                this.props.history.push('/');
+              })
+              .catch(err => console.log('err', err));
             }
           })
           .catch(err => console.log('err', err));
