@@ -400,13 +400,13 @@ export default class PledgeApp extends Component {
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
           />
-          <LoadableActiveMeritAllDialog
+          {/*<LoadableActiveMeritAllDialog
             open={this.state.openMerit}
             state={this.props.state}
             handleMeritOpen={this.handleMeritOpen}
             handleMeritClose={this.handleMeritClose}
             handleRequestOpen={this.handleRequestOpen}
-          />
+          />*/}
         </div>
       ) : (
         <div className="loading">
