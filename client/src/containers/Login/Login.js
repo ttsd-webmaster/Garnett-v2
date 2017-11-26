@@ -135,7 +135,7 @@ export default class Login extends Component {
       .then(res => {
         if(res.data !== 'Email not verified.'){
           console.log(res)
-          localStorage.setItem('status', res.data.user.status);
+          localStorage.setItem('data', JSON.stringify(res));
 
           this.props.loginCallBack(res);
 
