@@ -140,7 +140,10 @@ export default class PledgeApp extends Component {
       }
 
       if (data.data.user.status === 'active' && this.state.slideIndex === 0) {
-        swipeableViewContainerStyle.height = 'calc(10 * 88px)';
+        swipeableViewContainerStyle.height = '954px';
+      }
+      else {
+        swipeableViewContainerStyle.height = '';
       }
     }
 
@@ -164,7 +167,10 @@ export default class PledgeApp extends Component {
 
     if (!navigator.onLine) {
       if (this.props.state.status === 'active' && this.state.slideIndex === 0) {
-        swipeableViewContainerStyle.height = 'calc(10 * 88px)';
+        swipeableViewContainerStyle.height = '954px';
+      }
+      else {
+        swipeableViewContainerStyle.height = '';
       }
     }
   }
