@@ -136,8 +136,6 @@ export default class PledgeApp extends Component {
       else {
         this.props.history.push('/');
       }
-
-      this.updateHeight();
     }
 
     // Changes view margin if view is pledge merit book
@@ -157,6 +155,10 @@ export default class PledgeApp extends Component {
     else {
       swipeableViewStyle.marginBottom = 0;
     }
+  }
+
+  updateHeight() {
+    this.updateHeight();
   }
 
   getData = (user) => {
@@ -356,6 +358,7 @@ export default class PledgeApp extends Component {
           <SwipeableViews
             style={swipeableViewStyle}
             index={this.state.slideIndex}
+            action={this.updateHeight}
             onChangeIndex={this.handleChange}
             animateHeight
           >
