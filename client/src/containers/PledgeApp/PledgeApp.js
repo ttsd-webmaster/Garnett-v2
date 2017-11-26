@@ -31,6 +31,8 @@ let swipeableViewStyle = {
   marginTop: '100px'
 };
 
+let swipeableActions = {};
+
 const LoadableActiveMeritAllDialog = Loadable({
   loader: () => import('./ActiveMeritAllDialog'),
   render(loaded, props) {
