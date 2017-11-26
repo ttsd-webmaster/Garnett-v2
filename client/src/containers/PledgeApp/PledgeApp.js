@@ -115,6 +115,7 @@ export default class PledgeApp extends Component {
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
           this.setState({
+            loaded: true,
             pledgeArray: pledgeArray,
             activeArray: activeArray
           });
@@ -125,6 +126,7 @@ export default class PledgeApp extends Component {
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
           this.setState({
+            loaded: true,
             meritArray: meritArray,
             complaintsArray: complaintsArray,
             activeArray: activeArray
