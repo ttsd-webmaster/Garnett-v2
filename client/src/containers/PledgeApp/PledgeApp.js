@@ -7,10 +7,11 @@ import Complaints from '../../components/Complaints/Complaints';
 import Settings from '../../components/Settings/Settings';
 
 import React, {Component} from 'react';
+import { Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
-import SwipeableViews from 'react-swipeable-views';
+import SwipeableRoutes from 'react-swipeable-routes';
 
 const inkBarStyle = {
   position: 'fixed',
@@ -68,26 +69,31 @@ export default class PledgeApp extends Component {
     if (!this.props.state.token) {
       let token = localStorage.getItem('token');
 
-      API.getAuthStatus(token)
-      .then(res => {
-        if (res.status === 200) {
-          loadFirebase('app')
-          .then(() => {
-            let firebase = window.firebase;
+      if (token !== null) {
+        API.getAuthStatus(token)
+        .then(res => {
+          if (res.status === 200) {
+            loadFirebase('app')
+            .then(() => {
+              let firebase = window.firebase;
 
-            if (!firebase.apps.length) {
-              firebase.initializeApp({databaseURL: res.data.databaseURL});
-            }
+              if (!firebase.apps.length) {
+                firebase.initializeApp({databaseURL: res.data.databaseURL});
+              }
 
-            this.getData(res.data.user);
-            this.props.loginCallBack(res);
-          });
-        }
-        else {
-          this.props.history.push('/');
-        }
-      })
-      .catch(err => console.log('err', err));
+              this.getData(res.data.user);
+              this.props.loginCallBack(res);
+            });
+          }
+          else {
+            this.props.history.push('/');
+          }
+        })
+        .catch(err => console.log('err', err));
+      }
+      else {
+        this.props.history.push('/');
+      }
     }
     else {
       this.getData(this.props.state);
@@ -184,7 +190,6 @@ export default class PledgeApp extends Component {
 
   handleChange = (value) => {
     let title;
-    let tabCount = this.state.tabCount;
     let previousIndex = this.state.previousIndex;
     let scrollPosition1 = this.state.scrollPosition1;
     let scrollPosition2 = this.state.scrollPosition2;
@@ -204,12 +209,10 @@ export default class PledgeApp extends Component {
     }
     else if (value === 2) {
       title = 'Complaints';
-      console.log(this.state.scrollPosition3)
       scrolled = scrollPosition3;
     }
     else {
       title = 'Settings';
-      console.log(this.state.scrollPosition4)
       scrolled = scrollPosition4;
     }
 
@@ -263,7 +266,6 @@ export default class PledgeApp extends Component {
   }
 
   handleMeritClose = () => {
-    console.log('yoo')
     this.setState({
       openMerit: false
     });
@@ -299,34 +301,42 @@ export default class PledgeApp extends Component {
               value={3} 
             />
           </Tabs>
-          <SwipeableViews
+          <SwipeableRoutes
             style={swipeableViewStyle}
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
             animateHeight
           >
-            <MeritBook 
-              state={this.props.state} 
-              pledgeArray={this.state.pledgeArray}
-              meritArray={this.state.meritArray}
-              handleRequestOpen={this.handleRequestOpen}
-            />
-            <Contacts
-              state={this.props.state}
-              activeArray={this.state.activeArray}
-            />
-            <Complaints
-              state={this.props.state}
-              pledgeArray={this.state.pledgeArray}
-              complaintsArray={this.state.complaintsArray}
-              handleRequestOpen={this.handleRequestOpen}
-            />
-            <Settings 
-              state={this.props.state} 
-              logoutCallBack={this.props.logoutCallBack} 
-              history={this.props.history}
-            />
-          </SwipeableViews>
+            <Route exact path='/pledge-app/merit-book' render={() => 
+              <MeritBook 
+                state={this.props.state} 
+                pledgeArray={this.state.pledgeArray}
+                meritArray={this.state.meritArray}
+                handleRequestOpen={this.handleRequestOpen}
+              />
+            }/>
+            <Route exact path='/pledge-app/contacts' render={() =>
+              <Contacts
+                state={this.props.state}
+                activeArray={this.state.activeArray}
+              />
+            }/>
+            <Route exact path='/pledge-app/complaints' render={() =>
+              <Complaints
+                state={this.props.state}
+                pledgeArray={this.state.pledgeArray}
+                complaintsArray={this.state.complaintsArray}
+                handleRequestOpen={this.handleRequestOpen}
+              />
+            }/>
+            <Route exact path='/pledge-app/settings' render={() =>
+              <Settings 
+                state={this.props.state} 
+                logoutCallBack={this.props.logoutCallBack} 
+                history={this.props.history}
+              />
+            }/>
+          </SwipeableRoutes>
 
           {this.state.slideIndex === 0 && (
             this.props.state.status === 'pledge' ? (
