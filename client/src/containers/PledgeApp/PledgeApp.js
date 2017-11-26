@@ -112,7 +112,7 @@ export default class PledgeApp extends Component {
 
       if (!this.props.state.token) {
         if (token !== null) {
-          if (data.data.user.status === 'active') {
+          if (status === 'active') {
             let pledgeArray = localStorage.getItem('pledgeArray');
             let activeArray = localStorage.getItem('activeArray');
 
