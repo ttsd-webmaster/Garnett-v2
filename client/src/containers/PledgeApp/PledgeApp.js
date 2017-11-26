@@ -11,7 +11,7 @@ import { Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
-import SwipeableRoutes from 'react-swipeable-routes';
+import SwipeableViews from 'react-swipeable-views';
 
 const inkBarStyle = {
   position: 'fixed',
@@ -190,6 +190,7 @@ export default class PledgeApp extends Component {
 
   handleChange = (value) => {
     let title;
+    let tabCount = this.state.tabCount;
     let previousIndex = this.state.previousIndex;
     let scrollPosition1 = this.state.scrollPosition1;
     let scrollPosition2 = this.state.scrollPosition2;
@@ -209,10 +210,12 @@ export default class PledgeApp extends Component {
     }
     else if (value === 2) {
       title = 'Complaints';
+      console.log(this.state.scrollPosition3)
       scrolled = scrollPosition3;
     }
     else {
       title = 'Settings';
+      console.log(this.state.scrollPosition4)
       scrolled = scrollPosition4;
     }
 
@@ -266,6 +269,7 @@ export default class PledgeApp extends Component {
   }
 
   handleMeritClose = () => {
+    console.log('yoo')
     this.setState({
       openMerit: false
     });
@@ -301,42 +305,34 @@ export default class PledgeApp extends Component {
               value={3} 
             />
           </Tabs>
-          <SwipeableRoutes
+          <SwipeableViews
             style={swipeableViewStyle}
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
             animateHeight
           >
-            <Route exact path='/pledge-app/merit-book' render={() => 
-              <MeritBook 
-                state={this.props.state} 
-                pledgeArray={this.state.pledgeArray}
-                meritArray={this.state.meritArray}
-                handleRequestOpen={this.handleRequestOpen}
-              />
-            }/>
-            <Route exact path='/pledge-app/contacts' render={() =>
-              <Contacts
-                state={this.props.state}
-                activeArray={this.state.activeArray}
-              />
-            }/>
-            <Route exact path='/pledge-app/complaints' render={() =>
-              <Complaints
-                state={this.props.state}
-                pledgeArray={this.state.pledgeArray}
-                complaintsArray={this.state.complaintsArray}
-                handleRequestOpen={this.handleRequestOpen}
-              />
-            }/>
-            <Route exact path='/pledge-app/settings' render={() =>
-              <Settings 
-                state={this.props.state} 
-                logoutCallBack={this.props.logoutCallBack} 
-                history={this.props.history}
-              />
-            }/>
-          </SwipeableRoutes>
+            <MeritBook 
+              state={this.props.state} 
+              pledgeArray={this.state.pledgeArray}
+              meritArray={this.state.meritArray}
+              handleRequestOpen={this.handleRequestOpen}
+            />
+            <Contacts
+              state={this.props.state}
+              activeArray={this.state.activeArray}
+            />
+            <Complaints
+              state={this.props.state}
+              pledgeArray={this.state.pledgeArray}
+              complaintsArray={this.state.complaintsArray}
+              handleRequestOpen={this.handleRequestOpen}
+            />
+            <Settings 
+              state={this.props.state} 
+              logoutCallBack={this.props.logoutCallBack} 
+              history={this.props.history}
+            />
+          </SwipeableViews>
 
           {this.state.slideIndex === 0 && (
             this.props.state.status === 'pledge' ? (
