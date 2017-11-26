@@ -137,7 +137,7 @@ export default class PledgeApp extends Component {
         this.props.history.push('/');
       }
 
-      if (data.data.user.status === 'active' && this.state.slideInex === 0) {
+      if (data.data.user.status === 'active' && this.state.slideIndex === 0) {
         swipeableViewStyle.height = 'calc(10 * 88px)';
       }
     }
@@ -161,7 +161,7 @@ export default class PledgeApp extends Component {
     }
 
     if (!navigator.onLine) {
-      if (this.props.state.status === 'active' && this.state.slideInex === 0) {
+      if (this.props.state.status === 'active' && this.state.slideIndex === 0) {
         swipeableViewStyle.height = 'calc(10 * 88px)';
       }
     }
