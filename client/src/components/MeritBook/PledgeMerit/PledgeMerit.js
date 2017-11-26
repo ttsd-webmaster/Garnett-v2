@@ -1,4 +1,4 @@
-import './PledgeMerit.css';
+import '../MeritBook.css';
 
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';

@@ -1,4 +1,4 @@
-import './ActiveMerit.css';
+import '../MeritBook.css';
 import getDate from '../../../helpers/getDate';
 import API from '../../../api/API.js';
 
@@ -190,7 +190,7 @@ export default class ActiveMerit extends Component {
         </List>
         <div style={{height: '40px'}}></div>
         
-        <LoadableActiveMeritDialog
+        {/*<LoadableActiveMeritDialog
           open={this.state.open}
           pledge={this.state.pledge}
           description={this.state.description}
@@ -203,7 +203,7 @@ export default class ActiveMerit extends Component {
           demerit={this.demerit}
           handleClose={this.handleClose}
           handleChange={this.handleChange}
-        />
+        />*/}
       </div>
     )
   }

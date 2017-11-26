@@ -1,4 +1,4 @@
-import '../../components/MeritBook/ActiveMerit/ActiveMerit.css';
+import '../../components/MeritBook/MeritBook.css';
 import getDate from '../../helpers/getDate';
 import API from '../../api/API.js';
 

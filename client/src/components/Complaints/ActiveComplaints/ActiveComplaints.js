@@ -81,7 +81,7 @@ export default class ActiveComplaints extends Component {
 
   render() {
     return (
-      <div className="complaints-container">
+      <div id="complaints-container">
         <SelectField
           className="complaints-input"
           value={this.state.pledge}

@@ -1,4 +1,4 @@
-import './ActiveMerit.css';
+import '../MeritBook.css';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
