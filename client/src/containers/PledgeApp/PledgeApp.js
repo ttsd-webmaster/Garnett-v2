@@ -157,10 +157,6 @@ export default class PledgeApp extends Component {
     }
   }
 
-  updateHeight() {
-    this.updateHeight();
-  }
-
   getData = (user) => {
     API.getActives()
     .then(response => {
@@ -358,7 +354,7 @@ export default class PledgeApp extends Component {
           <SwipeableViews
             style={swipeableViewStyle}
             index={this.state.slideIndex}
-            action={this.updateHeight}
+            action={updateHeight}
             onChangeIndex={this.handleChange}
             animateHeight
           >
