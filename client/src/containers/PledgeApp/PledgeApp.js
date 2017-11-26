@@ -109,36 +109,30 @@ export default class PledgeApp extends Component {
     else {
       let data = JSON.parse(localStorage.getItem('data'));
 
-      if (!this.props.state.token) {
-        if (token !== null) {
-          if (data.data.user.status === 'active') {
-            let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
-            let activeArray = JSON.parse(localStorage.getItem('activeArray'));
+      if (token !== null) {
+        if (data.data.user.status === 'active') {
+          let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
+          let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
-            this.setState({
-              pledgeArray: pledgeArray,
-              activeArray: activeArray
-            });
-          }
-          else {
-            let meritArray = JSON.parse(localStorage.getItem('meritArray'));
-            let complaintsArray = JSON.parse(localStorage.getItem('complaintsArray'));
-            let activeArray = JSON.parse(localStorage.getItem('activeArray'));
-
-            this.setState({
-              meritArray: meritArray,
-              complaintsArray: complaintsArray,
-              activeArray: activeArray
-            });
-          }
-          this.props.loginCallBack(data);
+          this.setState({
+            pledgeArray: pledgeArray,
+            activeArray: activeArray
+          });
         }
         else {
-          this.props.history.push('/');
+          let meritArray = JSON.parse(localStorage.getItem('meritArray'));
+          let complaintsArray = JSON.parse(localStorage.getItem('complaintsArray'));
+          let activeArray = JSON.parse(localStorage.getItem('activeArray'));
+
+          this.setState({
+            meritArray: meritArray,
+            complaintsArray: complaintsArray,
+            activeArray: activeArray
+          });
         }
       }
       else {
-        
+        this.props.history.push('/');
       }
     }
 
