@@ -161,7 +161,7 @@ export default class ActiveMerit extends Component {
 
   render() {
     return (
-      <div id="active-merit-container">
+      <div>
         <List className="pledge-list">
           {this.props.pledgeArray.map((pledge, i) => (
             <div key={i}>

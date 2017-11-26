@@ -136,9 +136,13 @@ export default class PledgeApp extends Component {
       else {
         this.props.history.push('/');
       }
+
+      if (data.data.user.status === 'active' && this.state.slideInex === 0) {
+        swipeableViewStyle.height = 'calc(10 * 88px)';
+      }
     }
 
-    // Changes view height if view is pledge merit book
+    // Changes view margin if view is pledge merit book
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
       swipeableViewStyle.marginBottom = '50px';
     }
@@ -147,13 +151,19 @@ export default class PledgeApp extends Component {
     }
   }
 
-  // Changes view height if view is pledge merit book
+  // Changes view margin if view is pledge merit book
   componentDidUpdate() {
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
       swipeableViewStyle.marginBottom = '50px';
     }
     else {
       swipeableViewStyle.marginBottom = 0;
+    }
+
+    if (!navigator.onLine) {
+      if (data.data.user.status === 'active' && this.state.slideInex === 0) {
+        swipeableViewStyle.height = 'calc(10 * 88px)';
+      }
     }
   }
 
