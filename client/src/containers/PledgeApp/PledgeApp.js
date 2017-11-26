@@ -31,6 +31,8 @@ let swipeableViewStyle = {
   marginTop: '100px'
 };
 
+let swipeableViewContainerStyle = {};
+
 const LoadableActiveMeritAllDialog = Loadable({
   loader: () => import('./ActiveMeritAllDialog'),
   render(loaded, props) {
@@ -136,6 +138,10 @@ export default class PledgeApp extends Component {
       else {
         this.props.history.push('/');
       }
+
+      if (data.data.user.status === 'active' && this.state.slideIndex === 0) {
+        swipeableViewContainerStyle.height = 'calc(10 * 88px)';
+      }
     }
 
     // Changes view margin if view is pledge merit book
@@ -158,7 +164,7 @@ export default class PledgeApp extends Component {
 
     if (!navigator.onLine) {
       if (this.props.state.status === 'active' && this.state.slideIndex === 0) {
-        document.getElementById('swipeable-views').firstChild.style.height = 'calc(10 * 88px)';
+        swipeableViewContainerStyle.height = 'calc(10 * 88px)';
       }
     }
   }
@@ -358,8 +364,8 @@ export default class PledgeApp extends Component {
             />
           </Tabs>
           <SwipeableViews
-            id="swipeable-views"
             style={swipeableViewStyle}
+            containerStyle={swipeableViewContainerStyle}
             index={this.state.slideIndex}
             onChangeIndex={this.handleChange}
             animateHeight
