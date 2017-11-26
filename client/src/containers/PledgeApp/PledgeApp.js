@@ -176,8 +176,8 @@ export default class PledgeApp extends Component {
             console.log('Pledge array: ', pledgeArray);
             console.log('Active array: ', response.data);
 
-            localStorage.setItem('pledgeArray', pledgeArray);
-            localStorage.setItem('activeArray', response.data);
+            localStorage.setItem('pledgeArray', JSON.stringify(pledgeArray));
+            localStorage.setItem('activeArray', JSON.stringify(response.data));
             
             this.setState({
               loaded: true,
@@ -215,9 +215,9 @@ export default class PledgeApp extends Component {
               console.log('Complaints array: ', complaintsArray);
               console.log('Active array: ', response.data);
 
-              localStorage.setItem('meritArray', meritArray);
-              localStorage.setItem('complaintsArray', complaintsArray);
-              localStorage.setItem('activeArray', response.data);
+              localStorage.setItem('meritArray', JSON.stringify(meritArray));
+              localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
+              localStorage.setItem('activeArray', JSON.stringify(response.data));
 
               this.setState({
                 loaded: true,
