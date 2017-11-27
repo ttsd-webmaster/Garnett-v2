@@ -132,12 +132,6 @@ export default class PledgeApp extends Component {
             complaintsArray: complaintsArray,
             activeArray: activeArray
           });
-
-          if (this.state.loaded === true) {
-            let swipeContainer = document.querySelector('.react-swipeable-view-container');
-
-            swipeContainer.style.height = '900px';
-          }
         }
       }
       else {
@@ -173,6 +167,12 @@ export default class PledgeApp extends Component {
     }
     else {
       swipeableViewStyle.marginBottom = 0;
+    }
+
+    if (this.state.loaded === true) {
+      let swipeContainer = document.querySelector('.react-swipeable-view-container');
+
+      swipeContainer.style.height = '900px';
     }
   }
 
