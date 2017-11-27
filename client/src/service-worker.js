@@ -7,7 +7,7 @@ const workboxSW = new WorkboxSW({
 });
 
 // Google analytics
-workbox.googleAnalytics.initialize()
+workboxSW.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
 workboxSW.precache([]);
