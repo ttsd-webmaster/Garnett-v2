@@ -7,6 +7,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const workboxPlugin = require('workbox-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
@@ -293,6 +294,10 @@ module.exports = {
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
     }),
+    // copy WorkboxSW production build file   
+    new CopyWebpackPlugin([   
+      { from: require.resolve('workbox-sw'), to: 'workbox-sw.prod.js' }   
+    ]),
     // Generate a service worker script that will precache, and keep up to date,
     // the HTML & assets that are part of the Webpack build.
     new workboxPlugin({
@@ -301,8 +306,6 @@ module.exports = {
       globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js'],
       swSrc: 'src/service-worker.js',
       swDest: path.join('build', 'service-worker.js'),
-      clientsClaim: true,
-      skipWaiting: true,
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
