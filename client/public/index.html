@@ -23,6 +23,7 @@
     -->
     
     <title>Garnett</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pulltorefreshjs/0.1.7/pulltorefresh.min.js"></script>
   </head>
   <body>
     <div class="loading" id="loading-page">
@@ -44,6 +45,14 @@
       window.onload = function() {
         document.body.style.backgroundColor = "#fff";
         document.getElementById("loading-page").style.display = "none";
+
+        PullToRefresh.init({
+          mainElement: 'body',
+          onRefresh: function(){
+            // What do you want to do when the user does the pull-to-refresh gesture
+            window.location.reload(); 
+          }
+        });
       }
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
