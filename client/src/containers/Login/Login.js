@@ -1,11 +1,13 @@
 import './Login.css';
-import API from "../../api/API.js"
+import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
+import API from '../../api/API.js';
+import loadFirebase from '../../helpers/loadFirebase.js';
+
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
-import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
 
 const snackbarBackground = {
   backgroundColor: '#fff'
@@ -137,7 +139,16 @@ export default class Login extends Component {
           console.log(res)
           localStorage.setItem('data', JSON.stringify(res));
 
-          this.props.loginCallBack(res);
+          this.props.loginCallBack(res)
+          loadFirebase('auth')
+          .then(() => {
+            let firebase = window.firebase;
+
+            firebase.auth().signInWithCustomToken(res.data.token)
+            .catch((error) => {
+              console.log(error);
+            });
+          });
 
           this.setState({
             signEmail: '',

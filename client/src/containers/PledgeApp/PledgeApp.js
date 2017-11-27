@@ -67,43 +67,44 @@ export default class PledgeApp extends Component {
     console.log('Pledge app mount: ', this.props.state.token)
 
     let token = localStorage.getItem('token');
+    let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
+    let firebase = window.firebase;
 
     if (navigator.onLine) {
       if (!this.props.state.token) {
         if (token !== null) {
-          API.getAuthStatus(token)
-          .then(res => {
-            if (res.status === 200) {
-              loadFirebase('app')
-              .then(() => {
-                let firebase = window.firebase;
+          loadFirebase('app')
+          .then(() => {
+            firebase = window.firebase;
 
-                if (!firebase.apps.length) {
-                  firebase.initializeApp({databaseURL: res.data.databaseURL});
+            if (!firebase.apps.length) {
+              firebase.initializeApp(firebaseData);
+            }
+
+            loadFirebase('auth')
+            .then(() => {
+              firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                  API.getAuthStatus(user)
+                  .then(res => {
+                    this.getData(res.data.user, firebase);
+                    this.props.loginCallBack(res);
+                  });
                 }
-
-                this.getData(res.data.user);
-                this.props.loginCallBack(res);
+                else {
+                  this.props.logoutCallBack();
+                  this.props.history.push('/');
+                }
               });
-            }
-            else {
-              API.logout()
-              .then(res => {
-                console.log(res);
-                this.props.logoutCallBack();
-                this.props.history.push('/');
-              })
-              .catch(err => console.log('err', err));
-            }
-          })
-          .catch(err => console.log('err', err));
+            });
+          });
         }
         else {
           this.props.history.push('/');
         }
       }
       else {
-        this.getData(this.props.state);
+        this.getData(this.props.state, firebase);
       }
     }
     else {
@@ -157,13 +158,12 @@ export default class PledgeApp extends Component {
     }
   }
 
-  getData = (user) => {
+  getData = (user, firebase) => {
     API.getActives()
     .then(response => {
       if (user.status === 'active') {
         loadFirebase('database')
         .then(() => {
-          let firebase = window.firebase;
           let dbRef = firebase.database().ref('/users/');
           let pledgeArray = [];
 
@@ -192,7 +192,6 @@ export default class PledgeApp extends Component {
       else {
         loadFirebase('database')
         .then(() => {
-          let firebase = window.firebase;
           let fullName = user.firstName + user.lastName;
           let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
           let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');

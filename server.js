@@ -54,27 +54,19 @@ app.get('*', (req, res) => {
 
 // Retrieving Authentication Status Route
 app.post('/api', function(req, res) {
-  // Send back user's info and a token to the client
-  firebase.auth().signInWithCustomToken(req.body.token)
-  .then(function() {
-    let fullName = firebase.auth().currentUser.displayName;
-    console.log(fullName)
+  // Send back user's info to the client
+  let fullName = req.body.user.displayName;
+  console.log(fullName)
 
-    // Look for user's info in data base
-    let userRef = firebase.database().ref('/users/' + fullName);
-    userRef.once('value', (snapshot) => {
-      const userInfo = snapshot.val();
-      const data = {
-        token: req.body.token,
-        user: userInfo,
-        databaseURL: 'https://garnett-42475.firebaseio.com'
-      };
-      res.json(data);
-    });
-  })
-  .catch(function(error) {
-    console.log("Error signing in with custom token:", error);
-    res.status(400).send(error);
+  // Look for user's info in data base
+  let userRef = firebase.database().ref('/users/' + fullName);
+  userRef.once('value', (snapshot) => {
+    const userInfo = snapshot.val();
+    const data = {
+      token: req.body.token,
+      user: userInfo
+    };
+    res.json(data);
   });
 });
 
@@ -99,8 +91,12 @@ app.post('/api/login', function(req, res) {
           const data = {
             token: customToken,
             user: userInfo,
-            password: req.body.password,
-            databaseURL: 'https://garnett-42475.firebaseio.com'
+            firebaseData: {
+              apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
+              authDomain: 'garnett-42475.firebaseapp.com',
+              databaseURL: 'https://garnett-42475.firebaseio.com',
+              storageBucket: 'garnett-42475.appspot.com'
+            }
           };
           res.json(data);
         });
@@ -295,36 +291,29 @@ app.post('/api/merit', function(req, res) {
   let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
   let meritRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Merits/');
 
-  // Verify the Token
-  firebase.auth().signInWithCustomToken(req.body.token)
-  .then(function() {
-    userRef.once('value', (snapshot) => {
-      if (req.body.amount > 0) {
-        userRef.update({
-          merits: snapshot.val().merits - req.body.amount 
-        });
-      }
-    });
-
-    pledgeRef.once('value', (snapshot) => {
-      pledgeRef.update({
-        totalMerits: snapshot.val().totalMerits + req.body.amount
+  userRef.once('value', (snapshot) => {
+    if (req.body.amount > 0) {
+      userRef.update({
+        merits: snapshot.val().merits - req.body.amount 
       });
-    });
-
-    meritRef.push({
-      name: req.body.activeName,
-      description: req.body.description,
-      amount: req.body.amount,
-      photoURL: req.body.photoURL,
-      date: req.body.date
-    });
-
-    res.sendStatus(200);
-  })
-  .catch(function(error) {
-    console.log("Token error: ", error);
+    }
   });
+
+  pledgeRef.once('value', (snapshot) => {
+    pledgeRef.update({
+      totalMerits: snapshot.val().totalMerits + req.body.amount
+    });
+  });
+
+  meritRef.push({
+    name: req.body.activeName,
+    description: req.body.description,
+    amount: req.body.amount,
+    photoURL: req.body.photoURL,
+    date: req.body.date
+  });
+
+  res.sendStatus(200);
 });
 
 // Post merit data for all pledges
@@ -333,60 +322,29 @@ app.post('/api/meritall', function(req, res) {
   let dbRef = firebase.database().ref('/users/');
   let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/');
 
-  // Verify the Token
-  firebase.auth().signInWithCustomToken(req.body.token)
-  .then(function() {
-    userRef.once('value', (snapshot) => {
-      snapshot.forEach((child) => {
-        let userPledgeRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + child.key);
-        let pledgeRef = firebase.database().ref('/users/' + child.key);
-        let meritRef = firebase.database().ref('/users/' + child.key + '/Merits/');
-        let remainingMerits = snapshot.val().merits - req.body.amount;
+  userRef.once('value', (snapshot) => {
+    snapshot.forEach((child) => {
+      let userPledgeRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + child.key);
+      let pledgeRef = firebase.database().ref('/users/' + child.key);
+      let meritRef = firebase.database().ref('/users/' + child.key + '/Merits/');
+      let remainingMerits = snapshot.val().merits - req.body.amount;
 
-        if (req.body.amount > 0) {
-          if (remainingMerits > 0) {
-            pledgeRef.once('value', (snap) => {
-              pledgeRef.update({
-                totalMerits: snap.val().totalMerits + req.body.amount
-              });
-
-              userPledgeRef.update({
-                merits: snapshot.val().merits - req.body.amount
-              });
-
-              meritRef.push({
-                name: req.body.activeName,
-                description: req.body.description,
-                amount: req.body.amount,
-                photoURL: req.body.photoURL
-              });
-
-              if (!res.headersSent) {
-                res.sendStatus(200);
-              }
-            });
-          }
-          else {
-            pledgeRef.once('value', (snap) => {
-              let pledgeName = `${snap.val().firstName} ${snap.val().lastName}`;
-              if (!res.headersSent) {
-                res.status(400).send(pledgeName);
-              }
-            });
-          }
-        }
-        else {
+      if (req.body.amount > 0) {
+        if (remainingMerits > 0) {
           pledgeRef.once('value', (snap) => {
             pledgeRef.update({
               totalMerits: snap.val().totalMerits + req.body.amount
+            });
+
+            userPledgeRef.update({
+              merits: snapshot.val().merits - req.body.amount
             });
 
             meritRef.push({
               name: req.body.activeName,
               description: req.body.description,
               amount: req.body.amount,
-              photoURL: req.body.photoURL,
-              date: req.body.date
+              photoURL: req.body.photoURL
             });
 
             if (!res.headersSent) {
@@ -394,11 +352,35 @@ app.post('/api/meritall', function(req, res) {
             }
           });
         }
-      });
+        else {
+          pledgeRef.once('value', (snap) => {
+            let pledgeName = `${snap.val().firstName} ${snap.val().lastName}`;
+            if (!res.headersSent) {
+              res.status(400).send(pledgeName);
+            }
+          });
+        }
+      }
+      else {
+        pledgeRef.once('value', (snap) => {
+          pledgeRef.update({
+            totalMerits: snap.val().totalMerits + req.body.amount
+          });
+
+          meritRef.push({
+            name: req.body.activeName,
+            description: req.body.description,
+            amount: req.body.amount,
+            photoURL: req.body.photoURL,
+            date: req.body.date
+          });
+
+          if (!res.headersSent) {
+            res.sendStatus(200);
+          }
+        });
+      }
     });
-  })
-  .catch(function(error) {
-    console.log("Token error: ", error);
   });
 });
 
@@ -406,19 +388,12 @@ app.post('/api/meritall', function(req, res) {
 app.post('/api/complain', function(req, res) {
   let complaintsRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Complaints/');
 
-  // Verify the Token
-  firebase.auth().signInWithCustomToken(req.body.token)
-  .then(function() {
-    complaintsRef.push({
-      description: req.body.description,
-      name: req.body.activeName
-    });
-
-    res.sendStatus(200);
-  })
-  .catch(function(error) {
-    console.log("Token error: ", error);
+  complaintsRef.push({
+    description: req.body.description,
+    name: req.body.activeName
   });
+
+  res.sendStatus(200);
 });
 
 // Query for merit data on Active App

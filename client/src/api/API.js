@@ -2,8 +2,8 @@ import axios from 'axios';
 
 //Search functions to connect with back-end
 export default {
-  getAuthStatus: function(token) {
-    return axios.post('/api/', {token});
+  getAuthStatus: function(user) {
+    return axios.post('/api/', {user});
   },
   setPhoto: function(url, token) {
     return axios.post('/api/photo', {url, token});
@@ -18,16 +18,16 @@ export default {
   logout: function() {
     return axios.post('/api/logout');
   },
-  merit: function(token, pledgeName, activeName, description, amount, photoURL, date) {
-    let body = {token, pledgeName, activeName, description, amount, photoURL, date};
+  merit: function(pledgeName, activeName, description, amount, photoURL, date) {
+    let body = {pledgeName, activeName, description, amount, photoURL, date};
     return axios.post('/api/merit', body);
   },
-  meritAll: function(token, activeName, description, amount, photoURL, date) {
-    let body = {token, activeName, description, amount, photoURL, date};
+  meritAll: function(activeName, description, amount, photoURL, date) {
+    let body = {activeName, description, amount, photoURL, date};
     return axios.post('/api/meritall', body);
   },
-  complain: function(token, activeName, pledgeName, description) {
-    return axios.post('/api/complain', {token, activeName, pledgeName, description});
+  complain: function(activeName, pledgeName, description) {
+    return axios.post('/api/complain', {activeName, pledgeName, description});
   },
   getPledges: function() {
     return axios.post('/api/pledges');

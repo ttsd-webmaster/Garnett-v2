@@ -45,40 +45,40 @@ class App extends Component {
 
   componentDidMount() {
     let token = localStorage.getItem('token');
-    let email = localStorage.getItem('email');
-    let password = localStorage.getItem('password');
+    let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
+    let firebase;
 
     if (navigator.onLine) {
       if (token !== null) {
-        API.getAuthStatus(token)
-        .then(res => {
-          console.log(res);
-          this.loginCallBack(res);
+        loadFirebase('app')
+        .then(() => {
+          firebase = window.firebase;
 
-          this.setState({
-            isAuthenticated: true
+          if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseData);
+          }
+
+          loadFirebase('auth')
+          .then(() => {
+            firebase = window.firebase;
+
+            firebase.auth().onAuthStateChanged((user) => {
+              if (user) {
+                API.getAuthStatus(user)
+                .then(res => {
+                  this.loginCallBack(res);
+                  this.setState({
+                    isAuthenticated: true
+                  });
+                });
+              }
+              else {
+                this.setState({
+                  loaded: true
+                })
+              }
+            });
           });
-        })
-        .catch((error) => {
-          console.log(error);
-
-          // localStorage.removeItem('token');
-          // API.login(email, password)
-          // .then(res => {
-          //   console.log(res);
-          //   this.loginCallBack(res);
-
-          //   this.setState({
-          //     isAuthenticated: true
-          //   });
-          // })
-          // .catch(err => console.log(err));
-          API.logout()
-          .then(res => {
-            console.log(res);
-            this.logoutCallBack();
-          })
-          .catch(err => console.log('err', err));
         });
       }
       else {
@@ -112,21 +112,13 @@ class App extends Component {
     .then(() => {
       let firebase = window.firebase;
       let token = localStorage.getItem('token');
-      let email = localStorage.getItem('email');
-      let password = localStorage.getItem('password');
       
       if (!firebase.apps.length) {
-        firebase.initializeApp({
-          databaseURL: res.data.databaseURL,
-          storageBucket: "garnett-42475.appspot.com"
-        });
+        firebase.initializeApp(res.data.firebaseData);
       }
       if (token === null) {
         localStorage.setItem('token', res.data.token);
-      }
-      if (email === null && password === null) {
-        localStorage.setItem('email', res.data.user.email);
-        localStorage.setItem('password', res.data.password);
+        localStorage.setItem('firebaseData', JSON.stringify(res.data.firebaseData));
       }
 
       let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
