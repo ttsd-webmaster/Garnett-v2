@@ -1,19 +1,13 @@
-importScripts('workbox-sw.prod.js');
-
-// Create Workbox service worker instance
-const workboxSW = new WorkboxSW({ 
-  clientsClaim: true,
-  skipWaiting: true
-});
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0-alpha.24/workbox-sw.js');
 
 // Google analytics
-workboxSW.googleAnalytics.initialize()
+workbox.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
-workboxSW.precache([]);
+workbox.precaching.precacheAndRoute([]);
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
-workboxSW.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('https://firebasestorage.googleapis.com'),
   workboxSW.strategies.cacheFirst({
     cacheName: 'firebasestorage',
@@ -25,7 +19,7 @@ workboxSW.router.registerRoute(
 );
 
 // Use a cache first strategy for files from googleapis.com
-workboxSW.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('https://fonts.googleapis.com'),
   workboxSW.strategies.cacheFirst({
     cacheName: 'googlefonts',
@@ -37,7 +31,7 @@ workboxSW.router.registerRoute(
 );
 
 // Note to self, woff regexp will also match woff2 :P
-workboxSW.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('.(?:ttf|otf|woff)$'),
   workboxSW.strategies.cacheFirst({
     cacheName: 'fonts',
@@ -48,7 +42,7 @@ workboxSW.router.registerRoute(
   })
 );
 
-workboxSW.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('.(css)$'),
   workboxSW.strategies.networkFirst({
     cacheName: 'css',
@@ -59,7 +53,7 @@ workboxSW.router.registerRoute(
 );
 
 // Use a cache-first strategy for the images
-workboxSW.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('.(?:png|gif|jpg|svg)$'),
   workboxSW.strategies.cacheFirst({
     cacheName: 'images',
@@ -77,7 +71,7 @@ workboxSW.router.registerRoute(
 );
 
 // Match all .htm and .html files use cacheFirst
-workboxSW.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('(.htm)$'),
   workboxSW.strategies.cacheFirst({
     cacheName: 'content',
