@@ -47,7 +47,7 @@
         document.getElementById("loading-page").style.display = "none";
 
         PullToRefresh.init({
-          mainElement: 'body',
+          mainElement: '.react-swipeable-view-container',
           onRefresh: function(){
             // What do you want to do when the user does the pull-to-refresh gesture
             window.location.reload(); 
