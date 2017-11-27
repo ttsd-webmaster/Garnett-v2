@@ -120,11 +120,9 @@ export default class PledgeApp extends Component {
             pledgeArray: pledgeArray,
             activeArray: activeArray
           }, function() {
-            if (this.state.loaded === true) {
-              let swipeContainer = document.querySelector('.react-swipeable-view-container');
+            let swipeContainer = document.querySelector('.react-swipeable-view-container');
 
-              swipeContainer.style.height = '900px';
-            }
+            swipeContainer.style.height = '900px';
           });
         }
         else {
@@ -138,11 +136,9 @@ export default class PledgeApp extends Component {
             complaintsArray: complaintsArray,
             activeArray: activeArray
           }, function() {
-            if (this.state.loaded === true) {
-              let swipeContainer = document.querySelector('.react-swipeable-view-container');
+            let swipeContainer = document.querySelector('.react-swipeable-view-container');
 
-              swipeContainer.style.height = '900px';
-            }
+            swipeContainer.style.height = '900px';
           });
         }
       }
