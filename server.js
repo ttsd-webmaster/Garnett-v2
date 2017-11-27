@@ -76,7 +76,7 @@ app.post('/api/login', function(req, res) {
   // Authenticate the credentials
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
   .then((user) => {
-    if (user) {
+    if (user && user.emailVerified) {
       const uid = user.uid;
       const fullName = user.displayName;
 
@@ -220,6 +220,19 @@ app.post('/api/signup', function(req, res) {
   });
 });
 
+// Log Out Route
+app.post('/api/logout', function(req, res) {
+  firebase.auth().signOut()
+  .then(function() {
+    res.sendStatus(200);
+  })
+  .catch(function(error) {
+    console.log(error);
+    res.status(400).send(error);
+  });
+});
+
+// Sets the user photo
 app.post('/api/photo', function(req, res) {
   let user = firebase.auth().currentUser.displayName;
   let userRef = firebase.database().ref('/users/' + user);
@@ -235,18 +248,6 @@ app.post('/api/photo', function(req, res) {
       user: userInfo
     };
     res.json(data);
-  });
-});
-
-// Log Out Route
-app.post('/api/logout', function(req, res) {
-  firebase.auth().signOut()
-  .then(function() {
-    res.sendStatus(200);
-  })
-  .catch(function(error) {
-    console.log(error);
-    res.status(400).send(error);
   });
 });
 

@@ -5,9 +5,6 @@ export default {
   getAuthStatus: function(user) {
     return axios.post('/api/', {user});
   },
-  setPhoto: function(url, token) {
-    return axios.post('/api/photo', {url, token});
-  },
   login: function(email, password) {
     return axios.post('/api/login', {email, password});
   },
@@ -17,6 +14,9 @@ export default {
   },
   logout: function() {
     return axios.post('/api/logout');
+  },
+  setPhoto: function(url, token) {
+    return axios.post('/api/photo', {url, token});
   },
   merit: function(pledgeName, activeName, description, amount, photoURL, date) {
     let body = {pledgeName, activeName, description, amount, photoURL, date};

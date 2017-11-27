@@ -5,7 +5,8 @@ import React, {Component} from 'react';
 
 export default class MeritBook extends Component {
   render() {
-    let isActive = this.props.state.status
+    let isActive = this.props.state.status;
+    
     return (
       isActive === 'active' ? (
         <ActiveMerit 

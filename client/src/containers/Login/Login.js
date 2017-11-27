@@ -1,7 +1,7 @@
 import './Login.css';
 import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
 import API from '../../api/API.js';
-import loadFirebase from '../../helpers/loadFirebase.js';
+import loadFirebase from '../../helpers/loadFirebase';
 
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
@@ -143,16 +143,17 @@ export default class Login extends Component {
           loadFirebase('auth')
           .then(() => {
             let firebase = window.firebase;
-
+            
             firebase.auth().signInWithCustomToken(res.data.token)
+            .then(() => {
+              this.setState({
+                signEmail: '',
+                signPassword: '',
+              });
+            })
             .catch((error) => {
               console.log(error);
             });
-          });
-
-          this.setState({
-            signEmail: '',
-            signPassword: '',
           });
         }
         else {
