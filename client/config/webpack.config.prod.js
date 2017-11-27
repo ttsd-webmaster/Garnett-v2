@@ -293,6 +293,10 @@ module.exports = {
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
     }),
+    // copy WorkboxSW production build file
+    new CopyWebpackPlugin([
+      { from: require.resolve('workbox-sw'), to: 'workbox-sw.prod.js' }
+    ]),
     // Generate a service worker script that will precache, and keep up to date,
     // the HTML & assets that are part of the Webpack build.
     new workboxPlugin({
