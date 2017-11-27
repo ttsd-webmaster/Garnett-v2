@@ -297,7 +297,7 @@ module.exports = {
     // the HTML & assets that are part of the Webpack build.
     new workboxPlugin({
       globDirectory: 'build',
-      globIgnores: [/\.map$/, /asset-manifest\.json$/],
+      globIgnores: ['/\.map$/', '/asset-manifest\.json$/'],
       swSrc: '../src/service-worker.js',
       swDest: path.join('build', 'service-worker.js'),
       clientsClaim: true,
