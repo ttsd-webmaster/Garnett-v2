@@ -255,7 +255,7 @@ export default class PledgeApp extends Component {
 
   handleChange = (value) => {
     let title;
-    let tabCount = this.state.tabCount;
+    let swipeContainer = document.querySelector('.react-swipeable-view-container');
     let previousIndex = this.state.previousIndex;
     let scrollPosition1 = this.state.scrollPosition1;
     let scrollPosition2 = this.state.scrollPosition2;
@@ -300,6 +300,15 @@ export default class PledgeApp extends Component {
     setTimeout(function() {
       window.scrollTo(0, scrolled);
     }, 1);
+
+    if (!navigator.onLine) {
+      if (value === 0) {
+        swipeContainer.classList.add('offline-height');
+      }
+      else {
+        swipeContainer.classList.remove('offline-height');
+      }
+    }
 
     this.setState({
       title: title,
