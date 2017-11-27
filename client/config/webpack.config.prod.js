@@ -306,6 +306,15 @@ module.exports = {
       globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
       swSrc: 'src/service-worker.js',
       swDest: path.join('build', 'service-worker.js'),
+      runtimeCaching: [
+      {
+        urlPattern: /^https:\/\/firebasestorage\.googleapis\.com\//,
+        handler: 'cacheFirst'
+      },
+      {
+        urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+        handler: 'cacheFirst'
+      }]
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
@@ -313,15 +322,6 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-    runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/firebasestorage\.googleapis\.com\//,
-      handler: 'cacheFirst'
-    },
-    {
-      urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
-      handler: 'cacheFirst'
-    }]
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
