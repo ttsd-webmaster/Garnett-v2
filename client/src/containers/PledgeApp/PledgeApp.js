@@ -122,7 +122,7 @@ export default class PledgeApp extends Component {
           }, function() {
             let swipeContainer = document.querySelector('.react-swipeable-view-container');
 
-            swipeContainer.style.height = '900px';
+            swipeContainer.classList.add('offline-height');
           });
         }
         else {
@@ -138,7 +138,7 @@ export default class PledgeApp extends Component {
           }, function() {
             let swipeContainer = document.querySelector('.react-swipeable-view-container');
 
-            swipeContainer.style.height = '900px';
+            swipeContainer.classList.add('offline-height');
           });
         }
       }
