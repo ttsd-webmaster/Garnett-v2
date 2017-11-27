@@ -8,13 +8,6 @@
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
 
-// First, import the library into the service worker global scope:
-importScripts('path/to/offline-google-analytics-import.js');
-
-// Then, call goog.offlineGoogleAnalytics.initialize():
-// See https://github.com/GoogleChrome/workbox/tree/master/packages/workbox-google-analytics
-goog.offlineGoogleAnalytics.initialize();
-
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.
@@ -37,7 +30,7 @@ export default function register() {
     }
 
     window.addEventListener('load', () => {
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+      const swUrl = './service-worker.js';
 
       if (isLocalhost) {
         // This is running on localhost. Lets check if a service worker still exists or not.
