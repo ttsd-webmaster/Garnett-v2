@@ -302,11 +302,6 @@ module.exports = {
     // the HTML & assets that are part of the Webpack build.
     new workboxPlugin({
       globDirectory: 'build',
-      // For unknown URLs, fallback to the index page
-      navigateFallback: publicUrl + '/index.html',
-      // Ignores URLs starting from /__ (useful for Firebase):
-      // https://github.com/facebookincubator/create-react-app/issues/2237#issuecomment-302693219
-      navigateFallbackWhitelist: [/^(?!\/__).*/],
       globPatterns: ['**\/*.{html,js,css}'],
       globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
       swSrc: 'src/service-worker.js',
@@ -318,6 +313,15 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    runtimeCaching: [
+    {
+      urlPattern: /^https:\/\/firebasestorage\.googleapis\.com\//,
+      handler: 'cacheFirst'
+    },
+    {
+      urlPattern: /^https:\/\/fonts\.googleapis\.com\//,
+      handler: 'cacheFirst'
+    }]
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.
