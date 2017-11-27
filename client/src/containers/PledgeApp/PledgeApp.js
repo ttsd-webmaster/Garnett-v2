@@ -133,6 +133,8 @@ export default class PledgeApp extends Component {
             activeArray: activeArray
           });
         }
+
+        this.props.loginCallBack(data);
       }
       else {
         this.props.history.push('/');
