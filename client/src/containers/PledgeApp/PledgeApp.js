@@ -255,6 +255,7 @@ export default class PledgeApp extends Component {
     let scrollPosition4 = this.state.scrollPosition4;
     let scrollPosition = window.pageYOffset;
     let scrolled;
+    let view = document.querySelector('.react-swipeable-view-container');
 
     // Sets the title and marks scroll position based on the tab index
     if (value === 0) {
@@ -292,6 +293,14 @@ export default class PledgeApp extends Component {
     setTimeout(function() {
       window.scrollTo(0, scrolled);
     }, 1);
+
+    window.PullToRefresh.init({
+      mainElement: view.childNodes[value],
+      onRefresh: function(){
+        // What do you want to do when the user does the pull-to-refresh gesture
+        window.location.reload(); 
+      }
+    });
 
     this.setState({
       title: title,
