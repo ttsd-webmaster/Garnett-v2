@@ -134,7 +134,7 @@ export default class PledgeApp extends Component {
           });
         }
 
-        this.props.loginCallBack(data);
+        //this.props.loginCallBack(data);
       }
       else {
         this.props.history.push('/');
@@ -314,7 +314,6 @@ export default class PledgeApp extends Component {
   }
 
   handleMeritClose = () => {
-    console.log('yoo')
     this.setState({
       openMerit: false
     });

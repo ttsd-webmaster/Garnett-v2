@@ -14,7 +14,7 @@ workboxSW.precache([]);
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workboxSW.router.registerRoute(
-  new RegExp('https://firebasestorage.googleapis.com'),
+  /^https:\/\/firebasestorage\.googleapis\.com\//,
   workboxSW.strategies.cacheFirst({
     cacheName: 'firebasestorage',
     cacheExpiration: {
@@ -26,7 +26,7 @@ workboxSW.router.registerRoute(
 
 // Use a cache first strategy for files from googleapis.com
 workboxSW.router.registerRoute(
-  new RegExp('https://fonts.googleapis.com'),
+  /^https:\/\/fonts\.googleapis\.com\//,
   workboxSW.strategies.cacheFirst({
     cacheName: 'googlefonts',
     cacheExpiration: {
@@ -38,7 +38,7 @@ workboxSW.router.registerRoute(
 
 // Note to self, woff regexp will also match woff2 :P
 workboxSW.router.registerRoute(
-  new RegExp('.(?:ttf|otf|woff)$'),
+  new RegExp('.(?:ttf|otf|eot|svg|woff)$'),
   workboxSW.strategies.cacheFirst({
     cacheName: 'fonts',
     cacheExpiration: {
