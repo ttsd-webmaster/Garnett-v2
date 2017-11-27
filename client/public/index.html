@@ -20,19 +20,13 @@
       Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
-    -->    
+    -->
+    
     <title>Garnett</title>
   </head>
   <body>
-    <div class="loading" id="loading-page">
+    <div class="loading-page" id="loading-page">
       <div class="loading-image"></div>
-    </div>
-
-    <div class="refresher">
-      <div class="loading-bar"></div>
-      <div class="loading-bar"></div>
-      <div class="loading-bar"></div>
-      <div class="loading-bar"></div>
     </div>
     
     <div id="root"></div>
@@ -48,50 +42,8 @@
     -->
     <script>
       window.onload = function() {
-        document.body.style.backgroundColor = "#fff";
         document.getElementById("loading-page").style.display = "none";
       }
-
-      async function simulateRefreshAction() {
-        const sleep = (timeout) => new Promise(resolve => setTimeout(resolve, timeout));
-        const transitionEnd = function(propertyName, node) {
-          return new Promise(resolve => {
-            function callback(e) {
-              e.stopPropagation();
-              if (e.propertyName === propertyName) {
-                node.removeEventListener('transitionend', callback);
-                resolve(e);
-              }
-            }
-            node.addEventListener('transitionend', callback);
-          });
-        }
-        const refresher = document.querySelector('.refresher');
-        document.body.classList.add('refreshing');
-        await sleep(2000);
-        refresher.classList.add('shrink');
-        await transitionEnd('transform', refresher);
-        refresher.classList.add('done');
-        refresher.classList.remove('shrink');
-        document.body.classList.remove('refreshing');
-        await sleep(0); // let new styles settle.
-        refresher.classList.remove('done');
-      }
-
-      let _startY = 0;
-      const root = document.querySelector('#root');
-      root.addEventListener('touchstart', e => {
-        _startY = e.touches[0].pageY;
-      }, {passive: true});
-      root.addEventListener('touchmove', e => {
-        const y = e.touches[0].pageY;
-        // Activate custom pull-to-refresh effects when at the top fo the container
-        // and user is scrolling up.
-        if (document.scrollingElement.scrollTop === 0 && y > _startY &&
-            !document.body.classList.contains('refreshing')) {
-          simulateRefreshAction();
-        }
-      }, {passive: true});
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107328054-2"></script>

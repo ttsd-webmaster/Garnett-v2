@@ -48,6 +48,7 @@
     "react-dom": "^16.0.0",
     "react-lazyload": "^2.3.0",
     "react-loadable": "^5.3.1",
+    "react-pull-to-refresh": "^1.1.1",
     "react-router-dom": "^4.2.2",
     "react-swipeable-views": "^0.12.11"
   },

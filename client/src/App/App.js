@@ -6,6 +6,7 @@ import loadFirebase from '../helpers/loadFirebase.js';
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import ReactPullToRefresh from 'react-pull-to-refresh';
 
 function Loading() {
   return (
@@ -181,10 +182,21 @@ class App extends Component {
     });
   }
 
+  handleRefresh(resolve, reject) {
+    // do some async code here
+    if (true) {
+      resolve();
+    } else {
+      reject();
+    }
+  }
+
   render() {
     return (
       <Router >
-        <div>
+        <ReactPullToRefresh
+          onRefresh={this.handleRefresh}
+        >
           <Route exact path='/' render={() => (
             this.state.isAuthenticated ? (
               <Redirect to="/pledge-app"/>
@@ -207,7 +219,7 @@ class App extends Component {
               logoutCallBack={this.logoutCallBack}
             />
           }/>
-        </div>
+        </ReactPullToRefresh>
       </Router>
     );
   }
