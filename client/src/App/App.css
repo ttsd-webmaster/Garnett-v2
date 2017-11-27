@@ -25,6 +25,7 @@ body {
   background-color: #2e2f33;
   margin: 0;
   padding: 0;
+  overscroll-behavior-y: none;
   --primary-color: #960018;
   --primary-light: crimson;
   --primary-dark: #610301;
@@ -33,7 +34,6 @@ body {
   --secondary-dark: #2e2f33;
   --accent-color: #ccc;
   --accent-light: #eee;
-  overscroll-behavior-y: none;
 }
 
 @media(max-width: 410px) {
@@ -81,7 +81,6 @@ input:-webkit-autofill {
 
 /* Refresher */
 body.refreshing #root {
-  filter: blur(1px);
   touch-action: none; /* prevent scrolling */
 }
 body.refreshing .refresher {
