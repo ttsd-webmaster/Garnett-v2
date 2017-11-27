@@ -305,17 +305,7 @@ module.exports = {
       globPatterns: ['**\/*.{html,js,css}'],
       globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js'],
       swSrc: 'src/service-worker.js',
-      swDest: path.join('build', 'service-worker.js'),
-      runtimeCaching: [
-        {
-          urlPattern: new RegExp('https://firebasestorage.googleapis.com'),
-          handler: 'cacheFirst'
-        },
-        {
-          urlPattern: new RegExp('https://fonts.googleapis.com'),
-          handler: 'cacheFirst'
-        }
-      ]
+      swDest: path.join('build', 'service-worker.js')
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
