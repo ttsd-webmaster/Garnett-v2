@@ -255,12 +255,10 @@ export default class PledgeApp extends Component {
     }
     else if (value === 2) {
       title = 'Complaints';
-      console.log(this.state.scrollPosition3)
       scrolled = scrollPosition3;
     }
     else {
       title = 'Settings';
-      console.log(this.state.scrollPosition4)
       scrolled = scrollPosition4;
     }
 
