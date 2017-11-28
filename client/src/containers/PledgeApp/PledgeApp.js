@@ -152,11 +152,6 @@ export default class PledgeApp extends Component {
 
   // Changes view margin if view is pledge merit book
   componentDidUpdate() {
-    let pullToRefresh = document.querySelector('.ptr--ptr');
-    
-    if (pullToRefresh) {
-      pullToRefresh.style.marginTop = '100px';
-    }
     
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
       swipeableViewStyle.marginBottom = '50px';

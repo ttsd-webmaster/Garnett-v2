@@ -58,11 +58,6 @@ export default class Login extends Component {
 
   componentDidMount() {
     console.log("Login js mount")
-    let pullToRefresh = document.querySelector('.ptr--ptr');
-
-    if (pullToRefresh) {
-      pullToRefresh.style.marginTop = 0;
-    }
   }
 
   active = (event) => {
