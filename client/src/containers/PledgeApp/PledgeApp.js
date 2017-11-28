@@ -247,7 +247,7 @@ export default class PledgeApp extends Component {
       else {
         loadFirebase('database')
         .then(() => {
-          let fullName = user.displayName;
+          let fullName = user.firstName + user.lastName;
           let userRef = firebase.database().ref('/users/' + fullName);
           let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
           let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
