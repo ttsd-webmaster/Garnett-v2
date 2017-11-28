@@ -124,10 +124,7 @@ class App extends Component {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-      if (isSafari) {
-        this.checkPhoto(res, firebase);
-      }
-      else {
+      if (!isSafari && process.env.NODE_ENV === 'production') {
         navigator.serviceWorker.getRegistration(swUrl)
         .then((registration) => {
           loadFirebase('messaging')
@@ -164,6 +161,9 @@ class App extends Component {
             });
           });
         });
+      }
+      else {
+        this.checkPhoto(res, firebase);
       }
     });
   }
