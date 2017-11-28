@@ -95,7 +95,8 @@ app.post('/api/login', function(req, res) {
               apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
               authDomain: 'garnett-42475.firebaseapp.com',
               databaseURL: 'https://garnett-42475.firebaseio.com',
-              storageBucket: 'garnett-42475.appspot.com'
+              storageBucket: 'garnett-42475.appspot.com',
+              messagingSenderId: '741733387760'
             }
           };
           res.json(data);
@@ -458,6 +459,11 @@ app.post('/api/pledgedata', function(req, res) {
       res.json(data);
     });
   });
+});
+
+// Send message from server
+app.post('/api/message', function(req, res) {
+
 });
 
 app.listen(port, function () {

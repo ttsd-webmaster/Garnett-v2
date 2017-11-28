@@ -40,5 +40,8 @@ export default {
   },
   getPledgeData: function() {
     return axios.post('/api/pledgedata');
+  },
+  saveMessagingToken: function(token) {
+    return axios.post('/api/message');
   }
 };
