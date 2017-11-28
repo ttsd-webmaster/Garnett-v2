@@ -164,12 +164,6 @@ class App extends Component {
       photoURL: res.data.user.photoURL,
       isAuthenticated: true
     });
-
-    if (res.data.user.status === 'pledge') {
-      this.setState({
-        totalMerits: res.data.user.totalMerits
-      });
-    }
   }
 
   logoutCallBack = () => {

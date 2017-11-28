@@ -35,7 +35,6 @@ export default class ActiveMerit extends Component {
   }
 
   merit = (pledge) => {
-    let token = this.props.state.token;
     let pledgeName = pledge.firstName + pledge.lastName;
     let activeName = this.props.state.name;
     let description = this.state.description;
@@ -61,7 +60,7 @@ export default class ActiveMerit extends Component {
       if (this.state.remainingMerits - amount > 0) {
         let date = getDate();
 
-        API.merit(token, pledgeName, activeName, description, amount, photoURL, date)
+        API.merit(pledgeName, activeName, description, amount, photoURL, date)
         .then(res => {
           console.log(res);
           this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
@@ -82,7 +81,6 @@ export default class ActiveMerit extends Component {
   }
 
   demerit = (pledge) => {
-    let token = this.props.state.token;
     let pledgeName = pledge.firstName + pledge.lastName;
     let activeName = this.props.state.name;
     let description = this.state.description;
@@ -107,7 +105,7 @@ export default class ActiveMerit extends Component {
     else {
       let date = getDate();
 
-      API.merit(token, pledgeName, activeName, description, -amount, photoURL, date)
+      API.merit(pledgeName, activeName, description, -amount, photoURL, date)
       .then(res => {
         console.log(res);
         this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);

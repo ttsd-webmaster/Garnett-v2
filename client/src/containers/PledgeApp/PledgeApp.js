@@ -61,6 +61,8 @@ export default class PledgeApp extends Component {
       open: false,
       message: '',
       openMerit: false,
+      totalMerits: null,
+      activeArray: [],
       pledgeArray: [],
       meritArray: [],
       complaintsArray: []
@@ -243,38 +245,45 @@ export default class PledgeApp extends Component {
         loadFirebase('database')
         .then(() => {
           let fullName = user.firstName + user.lastName;
+          let userRef = firebase.database().ref('/users/' + fullName);
           let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
           let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
+          let totalMerits;
           let meritArray = [];
           let complaintsArray = [];
 
-          meritRef.on('value', (snapshot) => {
-            if (snapshot.val()) {
-              meritArray = Object.keys(snapshot.val()).map(function(key) {
-                return snapshot.val()[key];
-              });
-            }
-
-            complaintsRef.on('value', (snapshot) => {
+          userRef.on('value', (snapshot) => {
+            totalMerits = snapshot.val().totalMerits;
+            
+            meritRef.on('value', (snapshot) => {
               if (snapshot.val()) {
-                complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+                meritArray = Object.keys(snapshot.val()).map(function(key) {
                   return snapshot.val()[key];
                 });
               }
 
-              console.log('Merit array: ', meritArray);
-              console.log('Complaints array: ', complaintsArray);
-              console.log('Active array: ', response.data);
+              complaintsRef.on('value', (snapshot) => {
+                if (snapshot.val()) {
+                  complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+                    return snapshot.val()[key];
+                  });
+                }
 
-              localStorage.setItem('meritArray', JSON.stringify(meritArray));
-              localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
-              localStorage.setItem('activeArray', JSON.stringify(response.data));
+                console.log('Merit array: ', meritArray);
+                console.log('Complaints array: ', complaintsArray);
+                console.log('Active array: ', response.data);
 
-              this.setState({
-                loaded: true,
-                meritArray: meritArray.reverse(),
-                complaintsArray: complaintsArray.reverse(),
-                activeArray: response.data
+                localStorage.setItem('meritArray', JSON.stringify(meritArray));
+                localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
+                localStorage.setItem('activeArray', JSON.stringify(response.data));
+
+                this.setState({
+                  loaded: true,
+                  totalMerits: totalMerits,
+                  meritArray: meritArray.reverse(),
+                  complaintsArray: complaintsArray.reverse(),
+                  activeArray: response.data
+                });
               });
             });
           });
@@ -452,7 +461,7 @@ export default class PledgeApp extends Component {
           {this.state.slideIndex === 0 && (
             this.props.state.status === 'pledge' ? (
               <div className="total-merits"> 
-                Total Merits: {this.props.state.totalMerits} 
+                Total Merits: {this.state.totalMerits} 
               </div>
             ) : (
               <div>

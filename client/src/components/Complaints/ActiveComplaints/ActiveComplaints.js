@@ -34,7 +34,6 @@ export default class ActiveComplaints extends Component {
   }
 
   complain = (pledge) => {
-    let token = this.props.state.token;
     let activeName = this.props.state.name;
     let description = this.state.description;
     let descriptionValidation = true;
@@ -54,7 +53,7 @@ export default class ActiveComplaints extends Component {
       });
     }
     else {
-      API.complain(token, activeName, pledge.value, description)
+      API.complain(activeName, pledge.value, description)
       .then(res => {
         console.log(res);
         this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
