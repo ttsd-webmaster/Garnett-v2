@@ -15,15 +15,15 @@ export default {
   logout: function() {
     return axios.post('/api/logout');
   },
-  setPhoto: function(url, token) {
-    return axios.post('/api/photo', {url, token});
+  setPhoto: function(displayName, url, token) {
+    return axios.post('/api/photo', {displayName, url, token});
   },
-  merit: function(pledgeName, activeName, description, amount, photoURL, date) {
-    let body = {pledgeName, activeName, description, amount, photoURL, date};
+  merit: function(displayName, pledgeName, activeName, description, amount, photoURL, date) {
+    let body = {displayName, pledgeName, activeName, description, amount, photoURL, date};
     return axios.post('/api/merit', body);
   },
-  meritAll: function(activeName, description, amount, photoURL, date) {
-    let body = {activeName, description, amount, photoURL, date};
+  meritAll: function(displayName, activeName, description, amount, photoURL, date) {
+    let body = {displayName, activeName, description, amount, photoURL, date};
     return axios.post('/api/meritall', body);
   },
   complain: function(activeName, pledgeName, description) {
@@ -35,14 +35,14 @@ export default {
   getActives: function() {
     return axios.post('/api/actives');
   },
-  getActiveMerits: function(pledge) {
-    return axios.post('/api/activemerits', {pledge})
+  getActiveMerits: function(displayName, pledge) {
+    return axios.post('/api/activemerits', {displayName, pledge})
   },
-  getPledgeData: function() {
-    return axios.post('/api/pledgedata');
+  getPledgeData: function(displayName) {
+    return axios.post('/api/pledgedata', {displayName});
   },
-  saveMessagingToken: function(token) {
-    return axios.post('/api/savemessagetoken', {token});
+  saveMessagingToken: function(displayName, token) {
+    return axios.post('/api/savemessagetoken', {displayName, token});
   },
   sendMessage: function(pledgeName, activeName, amount) {
     return axios.post('/api/sendmessage', {pledgeName, activeName, amount});

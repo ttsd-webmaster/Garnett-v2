@@ -242,8 +242,8 @@ app.post('/api/logout', function(req, res) {
 
 // Sets the user photo
 app.post('/api/photo', function(req, res) {
-  let user = firebase.auth().currentUser.displayName;
-  let userRef = firebase.database().ref('/users/' + user);
+  let fullName = req.body.displayName;
+  let userRef = firebase.database().ref('/users/' + fullName);
 
   userRef.update({
     photoURL: req.body.url
@@ -295,7 +295,7 @@ app.post('/api/actives', function(req, res) {
 
 // Post merit data
 app.post('/api/merit', function(req, res) {
-  let fullName = firebase.auth().currentUser.displayName;
+  let fullName = req.body.displayName;
   let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + req.body.pledgeName);
   let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
   let meritRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Merits/');
@@ -327,7 +327,7 @@ app.post('/api/merit', function(req, res) {
 
 // Post merit data for all pledges
 app.post('/api/meritall', function(req, res) {
-  let fullName = firebase.auth().currentUser.displayName;
+  let fullName = req.body.displayName;
   let dbRef = firebase.database().ref('/users/');
   let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/');
 
@@ -407,10 +407,10 @@ app.post('/api/complain', function(req, res) {
 
 // Query for merit data on Active App
 app.post('/api/activemerits', function(req, res) {
-  let user = firebase.auth().currentUser;
+  let fullName = req.body.displayName;
   let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
   let meritRef = firebase.database().ref('/users/' + pledgeName + '/Merits/');
-  let userRef = firebase.database().ref('/users/' + user.displayName + '/Pledges/' + pledgeName);
+  let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
   let remainingMerits;
   let meritArray = [];
   
@@ -435,42 +435,49 @@ app.post('/api/activemerits', function(req, res) {
 
 // Query for merit data on Pledge App
 app.post('/api/pledgedata', function(req, res) {
-  let user = firebase.auth().currentUser;
-  let meritRef = firebase.database().ref('/users/' + user.displayName + '/Merits/');
-  let complaintsRef = firebase.database().ref('/users/' + user.displayName + '/Complaints/');
+  let fullName = req.body.displayName;
+  let userRef = firebase.database().ref('/users/' + fullName);
+  let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
+  let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
+  let totalMerits;
   let meritArray = [];
   let complaintsArray = [];
 
-  meritRef.once('value', (snapshot) => {
-    if (snapshot.val()) {
-      meritArray = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      });
-    }
+  userRef.on('value', (snapshot) => {
+    totalMerits = snapshot.val().totalMerits;
 
-    complaintsRef.once('value', (snapshot) => {
+    meritRef.once('value', (snapshot) => {
       if (snapshot.val()) {
-        complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+        meritArray = Object.keys(snapshot.val()).map(function(key) {
           return snapshot.val()[key];
         });
       }
 
-      console.log('Merit array: ', meritArray);
-      console.log('Complaints array: ', complaintsArray);
+      complaintsRef.once('value', (snapshot) => {
+        if (snapshot.val()) {
+          complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
+        }
 
-      const data = {
-        meritArray: meritArray,
-        complaintsArray: complaintsArray
-      };
+        console.log('Merit array: ', meritArray);
+        console.log('Complaints array: ', complaintsArray);
 
-      res.json(data);
+        const data = {
+          totalMerits: totalMerits,
+          meritArray: meritArray,
+          complaintsArray: complaintsArray
+        };
+
+        res.json(data);
+      });
     });
   });
 });
 
 // Save message token from server
 app.post('/api/savemessagetoken', function(req, res) {
-  let fullName = firebase.auth().currentUser.displayName;
+  let fullName = req.body.displayName;
   let userRef = firebase.database().ref('/users/' + fullName);
 
   userRef.update({

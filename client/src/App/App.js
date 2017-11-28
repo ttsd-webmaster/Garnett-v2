@@ -112,6 +112,7 @@ class App extends Component {
     .then(() => {
       let firebase = window.firebase;
       let token = localStorage.getItem('token');
+      let displayName = res.data.user.firstName + res.data.user.lastName;
       
       if (!firebase.apps.length) {
         firebase.initializeApp(res.data.firebaseData);
@@ -125,7 +126,7 @@ class App extends Component {
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
       if (isSafari || process.env.NODE_ENV === 'development') {
-        this.checkPhoto(res, firebase);
+        this.checkPhoto(res, firebase, displayName);
       }
       else {
         navigator.serviceWorker.getRegistration(swUrl)
@@ -143,10 +144,10 @@ class App extends Component {
               messaging.getToken()
               .then((currentToken) => {
                 if (currentToken) {
-                  API.saveMessagingToken(currentToken)
+                  API.saveMessagingToken(displayName, currentToken)
                   .then(messageRes => {
                     console.log(messageRes);
-                    this.checkPhoto(res, firebase);
+                    this.checkPhoto(res, firebase, displayName);
                   })
                   .catch(err => console.log(err));
                 } 
@@ -168,7 +169,7 @@ class App extends Component {
     });
   }
 
-  checkPhoto(res, firebase) {
+  checkPhoto(res, firebase, displayName) {
     let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
     if (res.data.user.photoURL === defaultPhoto) {
@@ -177,7 +178,7 @@ class App extends Component {
         let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
         storage.getDownloadURL()
         .then((url) => {
-          API.setPhoto(url, res.data.token)
+          API.setPhoto(displayName, url, res.data.token)
           .then((response) => {
             console.log(response)
 
@@ -201,8 +202,7 @@ class App extends Component {
     this.setState({
       token: res.data.token,
       name: `${res.data.user.firstName} ${res.data.user.lastName}`,
-      firstName: res.data.user.firstName,
-      lastName: res.data.user.lastName,
+      displayName: res.data.user.firstName + res.data.user.lastName,
       phone: res.data.user.phone,
       email: res.data.user.email,
       class: res.data.user.class,

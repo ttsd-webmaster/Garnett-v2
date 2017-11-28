@@ -35,6 +35,7 @@ export default class ActiveMerit extends Component {
   }
 
   merit = (pledge) => {
+    let displayName = this.props.state.displayName;
     let pledgeName = pledge.firstName + pledge.lastName;
     let activeName = this.props.state.name;
     let description = this.state.description;
@@ -60,7 +61,7 @@ export default class ActiveMerit extends Component {
       if (this.state.remainingMerits - amount > 0) {
         let date = getDate();
 
-        API.merit(pledgeName, activeName, description, amount, photoURL, date)
+        API.merit(displayName, pledgeName, activeName, description, amount, photoURL, date)
         .then(res => {
           const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
@@ -97,6 +98,7 @@ export default class ActiveMerit extends Component {
   }
 
   demerit = (pledge) => {
+    let displayName = this.props.state.displayName;
     let pledgeName = pledge.firstName + pledge.lastName;
     let activeName = this.props.state.name;
     let description = this.state.description;
@@ -121,7 +123,7 @@ export default class ActiveMerit extends Component {
     else {
       let date = getDate();
 
-      API.merit(pledgeName, activeName, description, -amount, photoURL, date)
+      API.merit(displayName, pledgeName, activeName, description, -amount, photoURL, date)
       .then(res => {
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
@@ -167,7 +169,9 @@ export default class ActiveMerit extends Component {
   }
 
   handleOpen = (pledge) => {
-    API.getActiveMerits(pledge)
+    let displayName = this.props.state.displayName;
+
+    API.getActiveMerits(displayName, pledge)
     .then(res => {
       this.setState({
         open: true,

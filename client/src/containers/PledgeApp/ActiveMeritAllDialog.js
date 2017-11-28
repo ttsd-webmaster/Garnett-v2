@@ -45,6 +45,7 @@ export default class ActiveMerit extends Component {
   }
 
   meritAll = () => {
+    let displayName = this.props.state.displayName;
     let activeName = this.props.state.name;
     let description = this.state.description;
     let amount = this.state.amount;
@@ -68,7 +69,7 @@ export default class ActiveMerit extends Component {
     else {
       let date = getDate();
 
-      API.meritAll(activeName, description, amount, photoURL, date)
+      API.meritAll(displayName, activeName, description, amount, photoURL, date)
       .then(res => {
         console.log(res);
         this.props.handleMeritClose();
@@ -89,6 +90,7 @@ export default class ActiveMerit extends Component {
   }
 
   demeritAll = () => {
+    let displayName = this.props.state.displayName;
     let activeName = this.props.state.name;
     let description = this.state.description;
     let amount = this.state.amount;
@@ -112,7 +114,7 @@ export default class ActiveMerit extends Component {
     else {
       let date = getDate();
 
-      API.meritAll(activeName, description, -amount, photoURL, date)
+      API.meritAll(displayName, activeName, description, -amount, photoURL, date)
       .then(res => {
         console.log(res);
         this.props.handleMeritClose();

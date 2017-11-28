@@ -180,9 +180,12 @@ export default class PledgeApp extends Component {
             .catch(err => console.log(err));
           }
           else {
-            API.getPledgeData()
+            let displayName = this.props.state.displayName;
+
+            API.getPledgeData(displayName)
             .then(res => {
               this.setState({
+                totalMerits: res.data.totalMerits,
                 meritArray: res.data.meritArray.reverse(),
                 complaintsArray: res.data.complaintsArray.reverse()
               });
