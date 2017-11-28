@@ -463,7 +463,7 @@ app.post('/api/pledgedata', function(req, res) {
 
 // Send message from server
 app.post('/api/message', function(req, res) {
-
+  res.sendStatus(200)
 });
 
 app.listen(port, function () {
