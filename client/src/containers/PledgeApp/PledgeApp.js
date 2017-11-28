@@ -7,7 +7,6 @@ import Complaints from '../../components/Complaints/Complaints';
 import Settings from '../../components/Settings/Settings';
 
 import React, {Component} from 'react';
-import { Route } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
