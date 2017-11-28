@@ -116,10 +116,7 @@ class App extends Component {
       
       if (!firebase.apps.length) {
         firebase.initializeApp(res.data.firebaseData);
-        loadFirebase('messaging')
-        .then(() => {
-          registerServiceWorker(firebase);
-        });
+        registerServiceWorker(firebase);
       }
       if (token === null) {
         localStorage.setItem('token', res.data.token);
