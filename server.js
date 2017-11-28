@@ -64,7 +64,14 @@ app.post('/api', function(req, res) {
     const userInfo = snapshot.val();
     const data = {
       token: req.body.token,
-      user: userInfo
+      user: userInfo,
+      firebaseData: {
+        apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
+        authDomain: 'garnett-42475.firebaseapp.com',
+        databaseURL: 'https://garnett-42475.firebaseio.com',
+        storageBucket: 'garnett-42475.appspot.com',
+        messagingSenderId: '741733387760'
+      }
     };
     res.json(data);
   });
