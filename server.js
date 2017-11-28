@@ -76,7 +76,7 @@ app.post('/api/login', function(req, res) {
   // Authenticate the credentials
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
   .then((user) => {
-    if (user) {
+    if (user && user.emailVerified) {
       const uid = user.uid;
       const fullName = user.displayName;
 

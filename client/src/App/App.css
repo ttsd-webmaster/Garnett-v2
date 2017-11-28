@@ -143,6 +143,10 @@ input:-webkit-autofill {
   background-color: #eee;
 }
 
+.ptr-margin {
+  margin-top: 100px;
+}
+
 .title {
   width: 55%;
   font-weight: 700;
