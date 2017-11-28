@@ -132,12 +132,12 @@ class App extends Component {
           messaging.useServiceWorker(registration);
 
           messaging.requestPermission()
-          .then(function() {
+          .then(() => {
             console.log('Notification permission granted.');
             // Get Instance ID token. Initially this makes a network call, once retrieved
             // subsequent calls to getToken will return from cache.
             messaging.getToken()
-            .then(function(currentToken) {
+            .then((currentToken) => {
               if (currentToken) {
                 API.saveMessagingToken(currentToken)
                 .then(res => {
