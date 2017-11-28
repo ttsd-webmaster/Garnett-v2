@@ -140,8 +140,8 @@ class App extends Component {
             .then((currentToken) => {
               if (currentToken) {
                 API.saveMessagingToken(currentToken)
-                .then(res => {
-                  console.log(res)
+                .then(messageRes => {
+                  console.log(messageRes)
                   if (res.data.user.photoURL === defaultPhoto) {
                     loadFirebase('storage')
                     .then(() => {
