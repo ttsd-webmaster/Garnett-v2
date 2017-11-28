@@ -40,6 +40,12 @@ const LoadableActiveMeritAllDialog = Loadable({
   }
 });
 
+let didScroll = false;
+
+function watchScroll() {
+  didScroll = true;
+}
+
 export default class PledgeApp extends Component {
   constructor(props) {
     super(props);
@@ -149,26 +155,47 @@ export default class PledgeApp extends Component {
       swipeableViewStyle.marginBottom = 0;
     }
 
-    window.onscroll = () => {
-      let view = document.querySelector('.react-swipeable-view-container');
-      let index = this.state.slideIndex;
+    window.onscroll = watchScroll;
 
-      if (view) {
-        if (window.pageYOffset >= 1) {
-          view.childNodes[index].style.touchAction = 'auto';
-        } 
-        else {
-          view.childNodes[index].style.touchAction = 'pan-down';
+    setInterval(() => {
+      if (didScroll) {
+        didScroll = false;
+        this.onScroll();
+      }
+    }, 100);
+
+    window.PullToRefresh.init({
+      mainElement: 'body',
+      onRefresh: () => {
+        if (navigator.onLine) {
+          if (this.state.status === 'active') {
+            API.getPledges()
+            .then(res => {
+              this.setState({
+                pledgeArray: res.data
+              });
+            })
+            .catch(err => console.log(err));
+          }
+          else {
+            API.getPledgeData()
+            .then(res => {
+              this.setState({
+                meritArray: res.data.meritArray.reverse(),
+                complaintsArray: res.data.complaintsArray.reverse()
+              });
+            })
+            .catch(err => console.log(err)); 
+          }
         }
       }
-    };
-
-    document.getElementById('root').click();
+    });
   }
 
   // Changes view margin if view is pledge merit book
   componentDidUpdate() {
     let pullToRefresh = document.querySelector('.ptr--ptr');
+    
     if (pullToRefresh) {
       pullToRefresh.style.marginTop = '100px';
     }
@@ -254,6 +281,20 @@ export default class PledgeApp extends Component {
         });
       }
     });
+  }
+
+  onScroll = () => {
+    let view = document.querySelector('.react-swipeable-view-container');
+    let index = this.state.slideIndex;
+
+    if (view) {
+      if (window.pageYOffset >= 1) {
+        view.childNodes[index].style.touchAction = 'auto';
+      } 
+      else {
+        view.childNodes[index].style.touchAction = 'pan-down';
+      }
+    }
   }
 
   handleChange = (value) => {
