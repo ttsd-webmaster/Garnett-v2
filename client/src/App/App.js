@@ -122,68 +122,79 @@ class App extends Component {
       }
 
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-      let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-      navigator.serviceWorker.getRegistration(swUrl)
-      .then((registration) => {
-        loadFirebase('messaging')
-        .then(() => {
-          let messaging = firebase.messaging();
-          messaging.useServiceWorker(registration);
-
-          messaging.requestPermission()
+      if (isSafari) {
+        this.checkPhoto(res, firebase);
+      }
+      else {
+        navigator.serviceWorker.getRegistration(swUrl)
+        .then((registration) => {
+          loadFirebase('messaging')
           .then(() => {
-            console.log('Notification permission granted.');
-            // Get Instance ID token. Initially this makes a network call, once retrieved
-            // subsequent calls to getToken will return from cache.
-            messaging.getToken()
-            .then((currentToken) => {
-              if (currentToken) {
-                API.saveMessagingToken(currentToken)
-                .then(messageRes => {
-                  console.log(messageRes)
-                  if (res.data.user.photoURL === defaultPhoto) {
-                    loadFirebase('storage')
-                    .then(() => {
-                      let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
-                      storage.getDownloadURL()
-                      .then((url) => {
-                        API.setPhoto(url, res.data.token)
-                        .then((response) => {
-                          console.log(response)
+            let messaging = firebase.messaging();
+            messaging.useServiceWorker(registration);
 
-                          this.setData(response);
-                        })
-                        .catch(err => console.log(err));
-                      })
-                      .catch((error) => {
-                        console.log(error);
-
-                        this.setData(res);
-                      });
-                    });
-                  }
-                  else {
-                    this.setData(res);
-                  }
-                })
-                .catch(err => console.log(err));
-              } 
-              else {
-                // Show permission request.
-                console.log('No Instance ID token available. Request permission to generate one.');
-              }
+            messaging.requestPermission()
+            .then(() => {
+              console.log('Notification permission granted.');
+              // Get Instance ID token. Initially this makes a network call, once retrieved
+              // subsequent calls to getToken will return from cache.
+              messaging.getToken()
+              .then((currentToken) => {
+                if (currentToken) {
+                  API.saveMessagingToken(currentToken)
+                  .then(messageRes => {
+                    console.log(messageRes);
+                    this.checkPhoto(res, firebase);
+                  })
+                  .catch(err => console.log(err));
+                } 
+                else {
+                  // Show permission request.
+                  console.log('No Instance ID token available. Request permission to generate one.');
+                }
+              })
+              .catch(function(err) {
+                console.log('An error occurred while retrieving token. ', err);
+              });
             })
             .catch(function(err) {
-              console.log('An error occurred while retrieving token. ', err);
+              console.log('Unable to get permission to notify.', err);
             });
-          })
-          .catch(function(err) {
-            console.log('Unable to get permission to notify.', err);
           });
         });
-      });
+      }
     });
+  }
+
+  checkPhoto(res, firebase) {
+    let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+
+    if (res.data.user.photoURL === defaultPhoto) {
+      loadFirebase('storage')
+      .then(() => {
+        let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
+        storage.getDownloadURL()
+        .then((url) => {
+          API.setPhoto(url, res.data.token)
+          .then((response) => {
+            console.log(response)
+
+            this.setData(response);
+          })
+          .catch(err => console.log(err));
+        })
+        .catch((error) => {
+          console.log(error);
+
+          this.setData(res);
+        });
+      });
+    }
+    else {
+      this.setData(res);
+    }
   }
 
   setData(res) {

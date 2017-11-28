@@ -62,14 +62,30 @@ export default class ActiveMerit extends Component {
 
         API.merit(pledgeName, activeName, description, amount, photoURL, date)
         .then(res => {
-          console.log(res);
-          this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-          this.setState({
-            open: false,
-            description: '',
-            amount: ''
-          });
+          if (isSafari) {
+            this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+
+            this.setState({
+              open: false,
+              description: '',
+              amount: ''
+            });
+          }
+          else {
+            API.sendMessage(pledgeName, activeName, amount)
+            .then(res => {
+              this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+
+              this.setState({
+                open: false,
+                description: '',
+                amount: ''
+              });
+            })
+            .catch(err => console.log(err));
+          }
         })
         .catch(err => console.log('err', err));
       }
@@ -107,14 +123,30 @@ export default class ActiveMerit extends Component {
 
       API.merit(pledgeName, activeName, description, -amount, photoURL, date)
       .then(res => {
-        console.log(res);
-        this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-        this.setState({
-          open: false,
-          description: '',
-          amount: ''
-        });
+        if (isSafari) {
+          this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+
+          this.setState({
+            open: false,
+            description: '',
+            amount: ''
+          });
+        }
+        else {
+          API.sendMessage(pledgeName, activeName, amount)
+          .then(res => {
+            this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+
+            this.setState({
+              open: false,
+              description: '',
+              amount: ''
+            });
+          })
+          .catch(err => console.log(err));
+        }
       })
       .catch(err => console.log('err', err));
     }

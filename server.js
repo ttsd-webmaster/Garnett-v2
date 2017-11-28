@@ -461,9 +461,51 @@ app.post('/api/pledgedata', function(req, res) {
   });
 });
 
+// Save message token from server
+app.post('/api/savemessagetoken', function(req, res) {
+  let fullName = firebase.auth().currentUser.displayName;
+  let userRef = firebase.database().ref('/users/' + fullName);
+
+  userRef.update({
+    registrationToken: req.body.token
+  });
+
+  res.sendStatus(200);
+});
+
 // Send message from server
-app.post('/api/message', function(req, res) {
-  res.sendStatus(200)
+app.post('/api/sendmessage', function(req, res) {
+  let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
+  let amount = Math.abs(req.body.amount);
+  let merits = '';
+
+  if (req.body.amount > 0) {
+    merits = 'merits';
+  }
+  else {
+    merits = 'demerits';
+  }
+
+  pledgeRef.once('value', (snapshot) => {
+    let registrationToken = snapshot.val().registrationToken;
+
+    let payload = {
+      notification: {
+        title: 'Garnett',
+        body: `You have received ${amount} ${merits} from ${req.body.activeName}`
+      }
+    };
+
+    admin.messaging().sendToDevice(registrationToken, payload)
+    .then(function(response) {
+      console.log("Successfully sent message:", response);
+      res.sendStatus(200);
+    })
+    .catch(function(error) {
+      console.log("Error sending message:", error);
+      res.sendStatus(400);
+    });
+  });
 });
 
 app.listen(port, function () {

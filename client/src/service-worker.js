@@ -5,16 +5,6 @@ importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
 importScripts('workbox-sw.prod.js');
 
-// Initialize the Firebase app in the service worker by passing in the
-// messagingSenderId.
-firebase.initializeApp({
-  'messagingSenderId': '741733387760'
-});
-
-// Retrieve an instance of Firebase Messaging so that it can handle background
-// messages.
-const messaging = firebase.messaging();
-
 // Create Workbox service worker instance
 const workboxSW = new WorkboxSW({ 
   clientsClaim: true,
@@ -105,3 +95,26 @@ workboxSW.router.registerRoute(
     },
   })
 );
+
+// Initialize the Firebase app in the service worker by passing in the
+// messagingSenderId.
+firebase.initializeApp({
+  'messagingSenderId': '741733387760'
+});
+
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
+const messaging = firebase.messaging();
+
+messaging.setBackgroundMessageHandler(function(payload) {
+  console.log(payload);
+  // Customize notification here
+  const title = 'Garnett';
+  const options = {
+    body: 'Background Message body.',
+    icon: '/images/garnett.png',
+    click_action: 'https://garnett-app.herokuapp.com'
+  };
+
+  return self.registration.showNotification(title, options);
+});
