@@ -128,7 +128,7 @@ export default class ActiveMerit extends Component {
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
         if (isSafari) {
-          this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+          this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
 
           this.setState({
             open: false,
@@ -139,7 +139,7 @@ export default class ActiveMerit extends Component {
         else {
           API.sendMessage(pledgeName, activeName, amount)
           .then(res => {
-            this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
+            this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
 
             this.setState({
               open: false,
