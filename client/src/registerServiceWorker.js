@@ -63,7 +63,7 @@ function registerValidSW(swUrl) {
           messaging.getToken()
           .then(function(currentToken) {
             if (currentToken) {
-              API.sendMessagingToken(currentToken)
+              API.saveMessagingToken(currentToken)
               .then(res => console.log(res))
               .catch(err => console.log(err));
             } 
