@@ -123,60 +123,30 @@ class App extends Component {
 
       let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
-      loadFirebase('messaging')
-      .then(() => {
-        let firebase = window.firebase;
-        let messaging = firebase.messaging();
+      if (res.data.user.photoURL === defaultPhoto) {
+        loadFirebase('storage')
+        .then(() => {
+          let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
+          storage.getDownloadURL()
+          .then((url) => {
+            API.setPhoto(url, res.data.token)
+            .then((response) => {
+              console.log(response)
 
-        messaging.requestPermission()
-        .then(function() {
-          console.log('Notification permission granted.');
-          // Get Instance ID token. Initially this makes a network call, once retrieved
-          // subsequent calls to getToken will return from cache.
-          messaging.getToken()
-          .then(function(currentToken) {
-            if (currentToken) {
-              API.sendMessagingToken(currentToken)
-              .then(res => console.log(res))
-              .catch(err => console.log(err));
-            } 
-            else {
-              console.log('No Instance ID token available. Request permission to generate one.');
-            }
-
-            if (res.data.user.photoURL === defaultPhoto) {
-              loadFirebase('storage')
-              .then(() => {
-                let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
-                storage.getDownloadURL()
-                .then((url) => {
-                  API.setPhoto(url, res.data.token)
-                  .then((response) => {
-                    console.log(response)
-
-                    this.setData(response);
-                  })
-                  .catch(err => console.log(err));
-                })
-                .catch((error) => {
-                  console.log(error);
-
-                  this.setData(res);
-                });
-              });
-            }
-            else {
-              this.setData(res);
-            }
+              this.setData(response);
+            })
+            .catch(err => console.log(err));
           })
-          .catch(function(err) {
-            console.log('An error occurred while retrieving token. ', err);
+          .catch((error) => {
+            console.log(error);
+
+            this.setData(res);
           });
-        })
-        .catch(function(err) {
-          console.log('Unable to get permission to notify.', err);
         });
-      });
+      }
+      else {
+        this.setData(res);
+      }
     });
   }
 
