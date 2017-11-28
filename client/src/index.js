@@ -1,5 +1,4 @@
 import './index.css';
-import registerServiceWorker from './registerServiceWorker.js';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -24,5 +23,4 @@ ReactDOM.render(
   <Index/>,
   document.getElementById('root')
 );
-registerServiceWorker();
   

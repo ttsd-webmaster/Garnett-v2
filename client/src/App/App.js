@@ -2,6 +2,7 @@ import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
 import loadFirebase from '../helpers/loadFirebase.js';
+import registerServiceWorker from '../registerServiceWorker.js';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
@@ -115,6 +116,10 @@ class App extends Component {
       
       if (!firebase.apps.length) {
         firebase.initializeApp(res.data.firebaseData);
+        loadFirebase('messaging')
+        .then(() => {
+          registerServiceWorker(firebase);
+        });
       }
       if (token === null) {
         localStorage.setItem('token', res.data.token);

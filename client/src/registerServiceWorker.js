@@ -20,7 +20,7 @@ const isLocalhost = Boolean(
     )
 );
 
-export default function register() {
+export default function register(firebase) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     // The URL constructor is available in all browsers that support SW.
     const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
@@ -36,7 +36,7 @@ export default function register() {
 
       if (isLocalhost) {
         // This is running on localhost. Lets check if a service worker still exists or not.
-        checkValidServiceWorker(swUrl);
+        checkValidServiceWorker(swUrl, firebase);
       } else {
         // Is not local host. Just register service worker
         registerValidSW(swUrl);
@@ -45,40 +45,36 @@ export default function register() {
   }
 }
 
-function registerValidSW(swUrl) {
+function registerValidSW(swUrl, firebase) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
-      loadFirebase('messaging')
-      .then(() => {
-        let firebase = window.firebase;
-        let messaging = firebase.messaging();
+      let messaging = firebase.messaging();
 
-        messaging.useServiceWorker(registration);
-        messaging.requestPermission()
-        .then(function() {
-          console.log('Notification permission granted.');
-          // Get Instance ID token. Initially this makes a network call, once retrieved
-          // subsequent calls to getToken will return from cache.
-          messaging.getToken()
-          .then(function(currentToken) {
-            if (currentToken) {
-              API.saveMessagingToken(currentToken)
-              .then(res => console.log(res))
-              .catch(err => console.log(err));
-            } 
-            else {
-              // Show permission request.
-              console.log('No Instance ID token available. Request permission to generate one.');
-            }
-          })
-          .catch(function(err) {
-            console.log('An error occurred while retrieving token. ', err);
-          });
+      messaging.useServiceWorker(registration);
+      messaging.requestPermission()
+      .then(function() {
+        console.log('Notification permission granted.');
+        // Get Instance ID token. Initially this makes a network call, once retrieved
+        // subsequent calls to getToken will return from cache.
+        messaging.getToken()
+        .then(function(currentToken) {
+          if (currentToken) {
+            API.saveMessagingToken(currentToken)
+            .then(res => console.log(res))
+            .catch(err => console.log(err));
+          } 
+          else {
+            // Show permission request.
+            console.log('No Instance ID token available. Request permission to generate one.');
+          }
         })
         .catch(function(err) {
-          console.log('Unable to get permission to notify.', err);
+          console.log('An error occurred while retrieving token. ', err);
         });
+      })
+      .catch(function(err) {
+        console.log('Unable to get permission to notify.', err);
       });
 
       registration.onupdatefound = () => {
