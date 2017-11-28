@@ -7,6 +7,8 @@
 
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
+import API from './api/API';
+import loadFirebase from './helpers/loadFirebase';
 
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
@@ -47,6 +49,41 @@ function registerValidSW(swUrl) {
   navigator.serviceWorker
     .register(swUrl)
     .then(registration => {
+      loadFirebase('app')
+      .then(() => {
+        loadFirebase('messaging')
+        .then(() => {
+          let firebase = window.firebase;
+          let messaging = firebase.messaging();
+
+          messaging.useServiceWorker(registration);
+          messaging.requestPermission()
+          .then(function() {
+            console.log('Notification permission granted.');
+            // Get Instance ID token. Initially this makes a network call, once retrieved
+            // subsequent calls to getToken will return from cache.
+            messaging.getToken()
+            .then(function(currentToken) {
+              if (currentToken) {
+                API.saveMessagingToken(currentToken)
+                .then(res => console.log(res))
+                .catch(err => console.log(err));
+              } 
+              else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+              }
+            })
+            .catch(function(err) {
+              console.log('An error occurred while retrieving token. ', err);
+            });
+          })
+          .catch(function(err) {
+            console.log('Unable to get permission to notify.', err);
+          });
+        });
+      });
+
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         installingWorker.onstatechange = () => {
