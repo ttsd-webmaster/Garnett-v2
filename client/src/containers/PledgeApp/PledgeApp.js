@@ -148,10 +148,30 @@ export default class PledgeApp extends Component {
     else {
       swipeableViewStyle.marginBottom = 0;
     }
+
+    window.onscroll = () => {
+      let view = document.querySelector('.react-swipeable-view-container');
+      let index = this.state.slideIndex;
+
+      if (view) {
+        if (window.pageYOffset >= 1) {
+          view.childNodes[index].style.touchAction = 'auto';
+        } 
+        else {
+          view.childNodes[index].style.touchAction = 'pan-down';
+        }
+      }
+    };
+
+    document.getElementById('root').click();
   }
 
   // Changes view margin if view is pledge merit book
   componentDidUpdate() {
+    let pullToRefresh = document.querySelector('.ptr--ptr');
+    if (pullToRefresh) {
+      pullToRefresh.style.marginTop = '100px';
+    }
     
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
       swipeableViewStyle.marginBottom = '50px';
