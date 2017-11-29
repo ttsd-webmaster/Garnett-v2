@@ -522,6 +522,9 @@ app.post('/api/sendmessage', function(req, res) {
         res.sendStatus(400);
       });
     }
+    else {
+      res.sendStatus(200);
+    }
   });
 });
 
