@@ -334,7 +334,7 @@ export default class PledgeApp extends Component {
       scrolled = scrollPosition3;
     }
     else {
-      title = 'Settings';
+      title = 'Account';
       scrolled = scrollPosition4;
     }
 
