@@ -80,13 +80,13 @@ input:-webkit-autofill {
 .loading-image.small {
   height: 50px;
   width: 50px;
-  top: calc(50% - 25px);
+  top: calc(50% - 50px);
   left: calc(50% - 25px);
 }
 
 .loader-container {
   background-color: #fafafa;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 150px);
   width: 100vw;
 }
 

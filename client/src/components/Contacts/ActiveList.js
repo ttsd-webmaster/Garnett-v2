@@ -29,7 +29,8 @@ export default class ActiveList extends Component {
         this.props.classLabel === active.class &&
           <LazyLoad
             height={88}
-            offset={300}
+            offset={500}
+            once
             unmountIfInvisible
             key={i}
             placeholder={

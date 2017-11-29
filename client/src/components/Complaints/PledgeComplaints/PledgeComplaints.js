@@ -80,7 +80,8 @@ export default class PledgeComplaints extends Component {
             {this.state.complaintsArray.map((complaint, i) => (
               <LazyLoad
                 height={88}
-                offset={300}
+                offset={500}
+                once
                 unmountIfInvisible
                 key={i}
                 placeholder={

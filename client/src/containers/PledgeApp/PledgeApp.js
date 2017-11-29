@@ -148,14 +148,6 @@ export default class PledgeApp extends Component {
       }
     }
 
-    // Changes view margin if view is pledge merit book
-    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      contentContainerStyle.marginBottom = '50px';
-    }
-    else {
-      contentContainerStyle.marginBottom = 0;
-    }
-
     window.onscroll = watchScroll;
 
     setInterval(() => {
@@ -203,6 +195,14 @@ export default class PledgeApp extends Component {
     if (pullToRefresh) {
       pullToRefresh.style.marginTop = '100px';
     }
+
+    // Changes view margin if view is pledge merit book
+    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
+      contentContainerStyle.marginBottom = '50px';
+    }
+    else {
+      contentContainerStyle.marginBottom = 0;
+    }
   }
 
   getData = (user, firebase) => {
@@ -233,15 +233,14 @@ export default class PledgeApp extends Component {
   }
 
   onScroll = () => {
-    let view = document.querySelector('.react-swipeable-view-container');
-    let index = this.state.slideIndex;
+    let view = document.getElementById('tabs-container');
 
     if (view) {
       if (window.pageYOffset >= 1) {
-        view.childNodes[index].style.touchAction = 'auto';
+        view.style.touchAction = 'auto';
       } 
       else {
-        view.childNodes[index].style.touchAction = 'pan-down';
+        view.style.touchAction = 'pan-down';
       }
     }
   }
@@ -350,6 +349,7 @@ export default class PledgeApp extends Component {
             {this.state.title}
           </div>
           <Tabs
+            id="tabs-container"
             contentContainerStyle={contentContainerStyle}
             inkBarStyle={inkBarStyle}
             tabItemContainerStyle={tabContainerStyle}
@@ -365,7 +365,6 @@ export default class PledgeApp extends Component {
                 pledgeArray={this.state.pledgeArray}
                 meritArray={this.state.meritArray}
                 handleRequestOpen={this.handleRequestOpen}
-                updateContainer={this.updateContainer}
               />
             </Tab>
             <Tab
@@ -375,7 +374,6 @@ export default class PledgeApp extends Component {
               <Contacts
                 state={this.props.state}
                 activeArray={this.state.activeArray}
-                updateContainer={this.updateContainer}
               />
             </Tab>
             <Tab
@@ -387,7 +385,6 @@ export default class PledgeApp extends Component {
                 pledgeArray={this.state.pledgeArray}
                 complaintsArray={this.state.complaintsArray}
                 handleRequestOpen={this.handleRequestOpen}
-                updateContainer={this.updateContainer}
               />
             </Tab>
             <Tab
@@ -398,7 +395,6 @@ export default class PledgeApp extends Component {
                 state={this.props.state} 
                 logoutCallBack={this.props.logoutCallBack} 
                 history={this.props.history}
-                updateContainer={this.updateContainer}
               />
             </Tab>
           </Tabs>
