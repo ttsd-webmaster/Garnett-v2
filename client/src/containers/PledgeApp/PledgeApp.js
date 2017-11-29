@@ -94,7 +94,7 @@ export default class PledgeApp extends Component {
                 if (user) {
                   API.getAuthStatus(user)
                   .then(res => {
-                    this.getData(firebase);
+                    this.getData(user, firebase);
                     this.props.loginCallBack(res);
                   });
                 }
@@ -111,7 +111,7 @@ export default class PledgeApp extends Component {
         }
       }
       else {
-        this.getData(firebase);
+        this.getData(this.props.state, firebase);
       }
     }
     else {
@@ -206,7 +206,7 @@ export default class PledgeApp extends Component {
   }
 
   getData = (firebase) => {
-    if (this.props.state.status === 'active') {
+    if (user.status === 'active') {
       this.setState({
         loaded: true
       });
@@ -214,7 +214,7 @@ export default class PledgeApp extends Component {
     else {
       loadFirebase('database')
       .then(() => {
-        let fullName = this.props.state.displayName;
+        let fullName = user.firstName + user.lastName;
         let userRef = firebase.database().ref('/users/' + fullName);
         let totalMerits;
 

@@ -202,6 +202,8 @@ class App extends Component {
     this.setState({
       token: res.data.token,
       name: `${res.data.user.firstName} ${res.data.user.lastName}`,
+      firstName: res.data.user.firstName,
+      lastName: res.data.user.lastName,
       displayName: res.data.user.firstName + res.data.user.lastName,
       phone: res.data.user.phone,
       email: res.data.user.email,
