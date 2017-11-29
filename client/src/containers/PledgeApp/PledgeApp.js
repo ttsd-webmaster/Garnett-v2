@@ -288,17 +288,14 @@ export default class PledgeApp extends Component {
       scrollPosition4 = scrollPosition;
     }
 
-    // Sets the window scroll position based on tab
-    setTimeout(function() {
-      window.scrollTo(0, scrolled);
-    }, 1);
-
     if (this.props.state.status === 'pledge' && value === 0) {
       contentContainerStyle.marginBottom = '50px';
     }
     else {
       contentContainerStyle.marginBottom = 0;
     }
+
+    window.scrollTo(0, scrolled);
 
     this.setState({
       title: title,
