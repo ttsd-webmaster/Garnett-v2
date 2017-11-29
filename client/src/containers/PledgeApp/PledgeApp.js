@@ -126,10 +126,6 @@ export default class PledgeApp extends Component {
             loaded: true,
             pledgeArray: pledgeArray,
             activeArray: activeArray
-          }, function() {
-            let swipeContainer = document.querySelector('.react-swipeable-view-container');
-
-            swipeContainer.classList.add('offline-height');
           });
         }
         else {
