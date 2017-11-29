@@ -22,21 +22,39 @@ export default class PledgeComplaints extends Component {
   }
 
   componentDidMount() {
-    let fullName = this.props.state.displayName;
-    let firebase = window.firebase;
-    let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
-    let complaintsArray = [];
+    if (navigator.onLine) {
+      loadFirebase('database')
+      .then(() => {
+        let fullName = this.props.state.displayName;
+        let firebase = window.firebase;
+        let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
+        let complaintsArray = [];
 
-    complaintsRef.on('value', (snapshot) => {
-      if (snapshot.val()) {
-        complaintsArray = Object.keys(snapshot.val()).map(function(key) {
-          return snapshot.val()[key];
+        complaintsRef.on('value', (snapshot) => {
+          if (snapshot.val()) {
+            complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+              return snapshot.val()[key];
+            });
+          }
+
+          console.log('Complaints Array: ', complaintsArray);
+          localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
+
+          this.setState({
+            loaded: true,
+            complaintsArray: complaintsArray.reverse()
+          }, function() {
+            let height = document.getElementById('pledge-complaints').offsetHeight;
+            let screenHeight = window.innerHeight - 100;
+
+            if (height < screenHeight) {
+              document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
+            }
+          });
         });
-      }
-
-      console.log('Complaints Array: ', complaintsArray);
-      localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
-
+      });
+    }
+    else {
       this.setState({
         loaded: true,
         complaintsArray: complaintsArray.reverse()
@@ -48,7 +66,7 @@ export default class PledgeComplaints extends Component {
           document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
         }
       });
-    });
+    }
   }
 
   render() {

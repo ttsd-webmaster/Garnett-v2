@@ -22,7 +22,7 @@ export default class Contacts extends Component {
     super(props);
     this.state = {
       classArray: ['Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'],
-      activeArray: [],
+      activeArray: this.props.activeArray,
       loaded: false,
       open: false,
       active: null
@@ -30,15 +30,23 @@ export default class Contacts extends Component {
   }
 
   componentDidMount() {
-    API.getActives()
-    .then(res => {
-      localStorage.setItem('activeArray', JSON.stringify(res.data));
+    if (navigator.onLine) {
+      API.getActives()
+      .then(res => {
+        localStorage.setItem('activeArray', JSON.stringify(res.data));
 
+        this.setState({
+          loaded: true,
+          activeArray: res.data
+        });
+      });
+    }
+    else {
       this.setState({
         loaded: true,
-        activeArray: res.data
+        activeArray: activeArray
       });
-    });
+    }
   }
 
   handleOpen = (active) => {

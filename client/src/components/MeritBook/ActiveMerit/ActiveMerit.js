@@ -24,8 +24,8 @@ export default class ActiveMerit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pledgeArray: this.props.pledgeArray,
       loaded: false,
+      pledgeArray: this.props.pledgeArray,
       open: false,
       pledge: null,
       description: '',
@@ -62,6 +62,12 @@ export default class ActiveMerit extends Component {
             pledgeArray: pledgeArray
           });
         });
+      });
+    }
+    else {
+      this.setState({
+        loaded: true,
+        pledgeArray: pledgeArray
       });
     }
   }
