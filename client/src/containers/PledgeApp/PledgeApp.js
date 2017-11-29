@@ -369,6 +369,7 @@ export default class PledgeApp extends Component {
             >
               <Contacts
                 state={this.props.state}
+                activeArray={this.state.activeArray}
                 updateContainer={this.updateContainer}
               />
             </Tab>
