@@ -205,7 +205,7 @@ export default class PledgeApp extends Component {
     }
   }
 
-  getData = (firebase) => {
+  getData = (user, firebase) => {
     if (user.status === 'active') {
       this.setState({
         loaded: true
