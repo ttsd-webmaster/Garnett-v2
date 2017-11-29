@@ -507,7 +507,9 @@ app.post('/api/sendmessage', function(req, res) {
     let payload = {
       notification: {
         title: 'Garnett',
-        body: `You have received ${amount} ${merits} from ${req.body.activeName}`
+        body: `You have received ${amount} ${merits} from ${req.body.activeName}`,
+        clickAction: 'https://garnett-app.herokuapp.com',
+        icon: './client/public/images/garnett.png'
       }
     };
 
