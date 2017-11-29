@@ -15,7 +15,8 @@ export default class MeritBook extends Component {
           handleRequestOpen={this.props.handleRequestOpen} 
         />
       ): (
-        <PledgeMerit 
+        <PledgeMerit
+          state={this.props.state}
           meritArray={this.props.meritArray} 
           totalMerits={this.props.state.totalMerits}
         />

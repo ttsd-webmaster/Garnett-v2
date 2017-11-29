@@ -1,4 +1,5 @@
 import '../MeritBook.css';
+import loadFirebase from '../../../helpers/loadFirebase';
 
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
@@ -25,63 +26,94 @@ export default class PledgeMerit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      loaded: false
     }
   }
 
   componentDidMount() {
-    let height = document.getElementById('pledge-merit').clientHeight;
-    let screenHeight = window.innerHeight - 166;
+    loadFirebase('database')
+    .then(() => {
+      let firebase = window.firebase;
+      let fullName = this.props.state.displayName;
+      let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
+      let meritArray = [];
 
-    if (height < screenHeight) {
-      document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
-    }
+      meritRef.on('value', (snapshot) => {
+        if (snapshot.val()) {
+          meritArray = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
+        }
+
+        console.log('Merit array: ', meritArray);
+
+        localStorage.setItem('meritArray', JSON.stringify(meritArray));
+
+        this.setState({
+          loaded: true,
+          meritArray: meritArray.reverse(),
+        }, function() {
+          let height = document.getElementById('pledge-merit').clientHeight;
+          let screenHeight = window.innerHeight - 166;
+
+          if (height < screenHeight) {
+            document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
+          }
+        });
+      });
+    });
   }
 
   render() {
     return (
-      <List id="pledge-merit">
-        {this.props.meritArray.map((merit, i) => (
-          <LazyLoad
-            height={88}
-            offset={300}
-            unmountIfInvisible
-            key={i}
-            placeholder={
-              <div className="placeholder-skeleton">
+      this.state.loaded ? (
+        <List id="pledge-merit">
+          {this.state.meritArray.map((merit, i) => (
+            <LazyLoad
+              height={88}
+              offset={300}
+              unmountIfInvisible
+              key={i}
+              placeholder={
+                <div className="placeholder-skeleton">
+                  <Divider style={dividerStyle} inset={true} />
+                  <div className="placeholder-avatar"></div>
+                  <div className="placeholder-name"></div>
+                  <div className="placeholder-year"></div>
+                  <div className="placeholder-date"></div>
+                  <div className="placeholder-merits"></div>
+                  <Divider style={dividerStyle} inset={true} />
+                </div>
+              }
+            >
+              <div>
                 <Divider style={dividerStyle} inset={true} />
-                <div className="placeholder-avatar"></div>
-                <div className="placeholder-name"></div>
-                <div className="placeholder-year"></div>
-                <div className="placeholder-date"></div>
-                <div className="placeholder-merits"></div>
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
+                  primaryText={
+                    <p className="merit-name"> {merit.name} </p>
+                  }
+                  secondaryText={
+                    <p> {merit.description} </p>
+                  }
+                  secondaryTextLines={2}
+                >
+                  <div className="merit-amount-container">
+                    <p className="merit-date"> {merit.date} </p>
+                    <p className="merit-amount"> {merit.amount} </p>
+                  </div>
+                </ListItem>
                 <Divider style={dividerStyle} inset={true} />
               </div>
-            }
-          >
-            <div>
-              <Divider style={dividerStyle} inset={true} />
-              <ListItem
-                innerDivStyle={listItemStyle}
-                leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
-                primaryText={
-                  <p className="merit-name"> {merit.name} </p>
-                }
-                secondaryText={
-                  <p> {merit.description} </p>
-                }
-                secondaryTextLines={2}
-              >
-                <div className="merit-amount-container">
-                  <p className="merit-date"> {merit.date} </p>
-                  <p className="merit-amount"> {merit.amount} </p>
-                </div>
-              </ListItem>
-              <Divider style={dividerStyle} inset={true} />
-            </div>
-          </LazyLoad>
-        ))}
-      </List>
+            </LazyLoad>
+          ))}
+        </List> 
+      ) : (
+        <div className="loader-container">
+          <div className="loading-image small"></div>
+        </div>
+      )
     )
   }
 }

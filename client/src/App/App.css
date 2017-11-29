@@ -77,6 +77,20 @@ input:-webkit-autofill {
     left: calc(50% - 75px);
   }
 }
+.loading-image.small {
+  height: 50px;
+  width: 50px;
+  top: calc(50% - 25px);
+  left: calc(50% - 25px);
+}
+
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 200px);
+  width: 100vw;
+}
 
 /* Placeholder skeleton for list items */
 .placeholder-skeleton {

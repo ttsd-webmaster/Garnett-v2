@@ -1,4 +1,5 @@
 import '../MeritBook.css';
+import loadFirebase from '../../../helpers/loadFirebase';
 import getDate from '../../../helpers/getDate';
 import API from '../../../api/API.js';
 
@@ -23,6 +24,8 @@ export default class ActiveMerit extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      pledgeArray: [],
+      loaded: false,
       open: false,
       pledge: null,
       description: '',
@@ -32,6 +35,33 @@ export default class ActiveMerit extends Component {
       descriptionValidation: true,
       amountValidation: true
     };
+  }
+
+  componentDidMount() {
+    loadFirebase('database')
+    .then(() => {
+      let firebase = window.firebase;
+      let dbRef = firebase.database().ref('/users/');
+      let pledgeArray = [];
+
+      dbRef.on('value', (snapshot) => {
+        pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+        pledgeArray = pledgeArray.filter(function(user) {
+          return user.status === 'pledge';
+        });
+
+        console.log('Pledge array: ', pledgeArray);
+
+        localStorage.setItem('pledgeArray', JSON.stringify(pledgeArray));
+        
+        this.setState({
+          loaded: true,
+          pledgeArray: pledgeArray
+        });
+      });
+    });
   }
 
   merit = (pledge) => {
@@ -195,50 +225,56 @@ export default class ActiveMerit extends Component {
 
   render() {
     return (
-      <div>
-        <List className="pledge-list">
-          {this.props.pledgeArray.map((pledge, i) => (
-            <div key={i}>
-              <Divider className="pledge-divider large" inset={true} />
-              <ListItem
-                className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image" size={70} src={pledge.photoURL} />}
-                primaryText={
-                  <p className="pledge-name"> {pledge.firstName} {pledge.lastName} </p>
-                }
-                secondaryText={
-                  <p>
-                    {pledge.year}
-                    <br />
-                    {pledge.major}
-                  </p>
-                }
-                secondaryTextLines={2}
-                onClick={() => this.handleOpen(pledge)}
-              >
-                <p className="pledge-merits"> {pledge.totalMerits} </p>
-              </ListItem>
-              <Divider className="pledge-divider large" inset={true} />
-            </div>
-          ))}
-        </List>
-        <div style={{height: '40px'}}></div>
-        
-        <LoadableActiveMeritDialog
-          open={this.state.open}
-          pledge={this.state.pledge}
-          description={this.state.description}
-          amount={this.state.amount}
-          descriptionValidation={this.state.descriptionValidation}
-          amountValidation={this.state.amountValidation}
-          remainingMerits={this.state.remainingMerits}
-          meritArray={this.state.meritArray}
-          merit={this.merit}
-          demerit={this.demerit}
-          handleClose={this.handleClose}
-          handleChange={this.handleChange}
-        />
-      </div>
+      this.state.loaded ? (
+        <div>
+          <List className="pledge-list">
+            {this.state.pledgeArray.map((pledge, i) => (
+              <div key={i}>
+                <Divider className="pledge-divider large" inset={true} />
+                <ListItem
+                  className="pledge-list-item large"
+                  leftAvatar={<Avatar className="pledge-image" size={70} src={pledge.photoURL} />}
+                  primaryText={
+                    <p className="pledge-name"> {pledge.firstName} {pledge.lastName} </p>
+                  }
+                  secondaryText={
+                    <p>
+                      {pledge.year}
+                      <br />
+                      {pledge.major}
+                    </p>
+                  }
+                  secondaryTextLines={2}
+                  onClick={() => this.handleOpen(pledge)}
+                >
+                  <p className="pledge-merits"> {pledge.totalMerits} </p>
+                </ListItem>
+                <Divider className="pledge-divider large" inset={true} />
+              </div>
+            ))}
+          </List>
+          <div style={{height: '40px'}}></div>
+          
+          <LoadableActiveMeritDialog
+            open={this.state.open}
+            pledge={this.state.pledge}
+            description={this.state.description}
+            amount={this.state.amount}
+            descriptionValidation={this.state.descriptionValidation}
+            amountValidation={this.state.amountValidation}
+            remainingMerits={this.state.remainingMerits}
+            meritArray={this.state.meritArray}
+            merit={this.merit}
+            demerit={this.demerit}
+            handleClose={this.handleClose}
+            handleChange={this.handleChange}
+          />
+        </div>
+      ) : (
+        <div className="loader-container">
+          <div className="loading-image small"></div>
+        </div>
+      )
     )
   }
 }

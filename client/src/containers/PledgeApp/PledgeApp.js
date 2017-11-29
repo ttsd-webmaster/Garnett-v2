@@ -10,7 +10,6 @@ import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
-import SwipeableViews from 'react-swipeable-views';
 
 const inkBarStyle = {
   position: 'fixed',
@@ -25,8 +24,10 @@ const tabContainerStyle = {
   zIndex: 1
 };
 
-let swipeableViewStyle = {
-  backgroundColor: '#fafafa'
+const contentContainerStyle = {
+  position: 'relative',
+  backgroundColor: '#fafafa',
+  zIndex: 0
 };
 
 const LoadableActiveMeritAllDialog = Loadable({
@@ -93,7 +94,7 @@ export default class PledgeApp extends Component {
                 if (user) {
                   API.getAuthStatus(user)
                   .then(res => {
-                    this.getData(res.data.user, firebase);
+                    this.getData(firebase);
                     this.props.loginCallBack(res);
                   });
                 }
@@ -110,7 +111,7 @@ export default class PledgeApp extends Component {
         }
       }
       else {
-        this.getData(this.props.state, firebase);
+        this.getData(firebase);
       }
     }
     else {
@@ -132,12 +133,14 @@ export default class PledgeApp extends Component {
           });
         }
         else {
+          let totalMerits = localStorage.getItem('totalMerits');
           let meritArray = JSON.parse(localStorage.getItem('meritArray'));
           let complaintsArray = JSON.parse(localStorage.getItem('complaintsArray'));
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
           this.setState({
             loaded: true,
+            totalMerits: totalMerits,
             meritArray: meritArray,
             complaintsArray: complaintsArray,
             activeArray: activeArray
@@ -151,10 +154,10 @@ export default class PledgeApp extends Component {
 
     // Changes view margin if view is pledge merit book
     if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      swipeableViewStyle.marginBottom = '50px';
+      contentContainerStyle.marginBottom = '50px';
     }
     else {
-      swipeableViewStyle.marginBottom = 0;
+      contentContainerStyle.marginBottom = 0;
     }
 
     window.onscroll = watchScroll;
@@ -170,7 +173,7 @@ export default class PledgeApp extends Component {
       mainElement: 'body',
       onRefresh: () => {
         if (navigator.onLine) {
-          if (this.state.status === 'active') {
+          if (this.props.state.status === 'active') {
             API.getPledges()
             .then(res => {
               this.setState({
@@ -204,95 +207,33 @@ export default class PledgeApp extends Component {
     if (pullToRefresh) {
       pullToRefresh.style.marginTop = '100px';
     }
-    
-    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      swipeableViewStyle.marginBottom = '50px';
-    }
-    else {
-      swipeableViewStyle.marginBottom = 0;
-    }
   }
 
-  getData = (user, firebase) => {
-    API.getActives()
-    .then(response => {
-      if (user.status === 'active') {
-        loadFirebase('database')
-        .then(() => {
-          let dbRef = firebase.database().ref('/users/');
-          let pledgeArray = [];
+  getData = (firebase) => {
+    if (this.props.state.status === 'active') {
+      this.setState({
+        loaded: true
+      });
+    }
+    else {
+      loadFirebase('database')
+      .then(() => {
+        let fullName = this.props.state.displayName;
+        let userRef = firebase.database().ref('/users/' + fullName);
+        let totalMerits;
 
-          dbRef.on('value', (snapshot) => {
-            pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
-            });
-            pledgeArray = pledgeArray.filter(function(user) {
-              return user.status === 'pledge';
-            });
+        userRef.on('value', (snapshot) => {
+          totalMerits = snapshot.val().totalMerits;
 
-            console.log('Pledge array: ', pledgeArray);
-            console.log('Active array: ', response.data);
+          localStorage.setItem('totalMerits', snapshot.val().totalMerits);
 
-            localStorage.setItem('pledgeArray', JSON.stringify(pledgeArray));
-            localStorage.setItem('activeArray', JSON.stringify(response.data));
-            
-            this.setState({
-              loaded: true,
-              pledgeArray: pledgeArray,
-              activeArray: response.data
-            });
+          this.setState({
+            loaded: true,
+            totalMerits: totalMerits,
           });
         });
-      }
-      else {
-        loadFirebase('database')
-        .then(() => {
-          let fullName = user.firstName + user.lastName;
-          let userRef = firebase.database().ref('/users/' + fullName);
-          let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
-          let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
-          let totalMerits;
-          let meritArray = [];
-          let complaintsArray = [];
-
-          userRef.on('value', (snapshot) => {
-            totalMerits = snapshot.val().totalMerits;
-            
-            meritRef.on('value', (snapshot) => {
-              if (snapshot.val()) {
-                meritArray = Object.keys(snapshot.val()).map(function(key) {
-                  return snapshot.val()[key];
-                });
-              }
-
-              complaintsRef.on('value', (snapshot) => {
-                if (snapshot.val()) {
-                  complaintsArray = Object.keys(snapshot.val()).map(function(key) {
-                    return snapshot.val()[key];
-                  });
-                }
-
-                console.log('Merit array: ', meritArray);
-                console.log('Complaints array: ', complaintsArray);
-                console.log('Active array: ', response.data);
-
-                localStorage.setItem('meritArray', JSON.stringify(meritArray));
-                localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
-                localStorage.setItem('activeArray', JSON.stringify(response.data));
-
-                this.setState({
-                  loaded: true,
-                  totalMerits: totalMerits,
-                  meritArray: meritArray.reverse(),
-                  complaintsArray: complaintsArray.reverse(),
-                  activeArray: response.data
-                });
-              });
-            });
-          });
-        });
-      }
-    });
+      });
+    }
   }
 
   onScroll = () => {
@@ -357,13 +298,11 @@ export default class PledgeApp extends Component {
       window.scrollTo(0, scrolled);
     }, 1);
 
-    if (!navigator.onLine) {
-      if (value === 0 && this.props.state.status === 'active') {
-        swipeContainer.classList.add('offline-height');
-      }
-      else {
-        swipeContainer.classList.remove('offline-height');
-      }
+    if (this.props.state.status === 'pledge' && value === 0) {
+      contentContainerStyle.marginBottom = '50px';
+    }
+    else {
+      contentContainerStyle.marginBottom = 0;
     }
 
     this.setState({
@@ -410,6 +349,7 @@ export default class PledgeApp extends Component {
             {this.state.title}
           </div>
           <Tabs
+            contentContainerStyle={contentContainerStyle}
             inkBarStyle={inkBarStyle}
             tabItemContainerStyle={tabContainerStyle}
             onChange={this.handleChange}
@@ -418,48 +358,48 @@ export default class PledgeApp extends Component {
             <Tab 
               icon={<i className="icon-star"></i>}
               value={0}
-            />
+            >
+              <MeritBook 
+                state={this.props.state} 
+                pledgeArray={this.state.pledgeArray}
+                meritArray={this.state.meritArray}
+                handleRequestOpen={this.handleRequestOpen}
+                updateContainer={this.updateContainer}
+              />
+            </Tab>
             <Tab
               icon={<i className="icon-address-book"></i>}
               value={1}
-            />
+            >
+              <Contacts
+                state={this.props.state}
+                updateContainer={this.updateContainer}
+              />
+            </Tab>
             <Tab
               icon={<i className="icon-thumbs-down-alt"></i>}
               value={2}
-            />
+            >
+              <Complaints
+                state={this.props.state}
+                pledgeArray={this.state.pledgeArray}
+                complaintsArray={this.state.complaintsArray}
+                handleRequestOpen={this.handleRequestOpen}
+                updateContainer={this.updateContainer}
+              />
+            </Tab>
             <Tab
               icon={<i className="icon-sliders"></i>}
               value={3} 
-            />
+            >
+              <Settings 
+                state={this.props.state} 
+                logoutCallBack={this.props.logoutCallBack} 
+                history={this.props.history}
+                updateContainer={this.updateContainer}
+              />
+            </Tab>
           </Tabs>
-          <SwipeableViews
-            style={swipeableViewStyle}
-            index={this.state.slideIndex}
-            onChangeIndex={this.handleChange}
-            animateHeight
-          >
-            <MeritBook 
-              state={this.props.state} 
-              pledgeArray={this.state.pledgeArray}
-              meritArray={this.state.meritArray}
-              handleRequestOpen={this.handleRequestOpen}
-            />
-            <Contacts
-              state={this.props.state}
-              activeArray={this.state.activeArray}
-            />
-            <Complaints
-              state={this.props.state}
-              pledgeArray={this.state.pledgeArray}
-              complaintsArray={this.state.complaintsArray}
-              handleRequestOpen={this.handleRequestOpen}
-            />
-            <Settings 
-              state={this.props.state} 
-              logoutCallBack={this.props.logoutCallBack} 
-              history={this.props.history}
-            />
-          </SwipeableViews>
 
           {this.state.slideIndex === 0 && (
             this.props.state.status === 'pledge' ? (

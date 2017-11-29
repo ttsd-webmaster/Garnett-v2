@@ -16,52 +16,80 @@ export default class PledgeComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      loaded: false,
+      complaintsArray: [],
     }
   }
 
   componentDidMount() {
-    let height = document.getElementById('pledge-complaints').offsetHeight;
-    let screenHeight = window.innerHeight - 100;
+    let fullName = this.props.state.displayName;
+    let firebase = window.firebase;
+    let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
+    let complaintsArray = [];
 
-    if (height < screenHeight) {
-      document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
-    }
+    complaintsRef.on('value', (snapshot) => {
+      if (snapshot.val()) {
+        complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+      }
+
+      console.log('Complaints Array: ', complaintsArray);
+      localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
+
+      this.setState({
+        loaded: true,
+        complaintsArray: complaintsArray.reverse()
+      }, function() {
+        let height = document.getElementById('pledge-complaints').offsetHeight;
+        let screenHeight = window.innerHeight - 100;
+
+        if (height < screenHeight) {
+          document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
+        }
+      });
+    });
   }
 
   render() {
     return (
-      <div id="pledge-complaints">
-        <List style={listStyle}>
-          {this.props.complaintsArray.map((complaint, i) => (
-            <LazyLoad
-              height={88}
-              offset={300}
-              unmountIfInvisible
-              key={i}
-              placeholder={
-                <div className="placeholder-skeleton">
+      this.state.loaded ? (
+        <div id="pledge-complaints">
+          <List style={listStyle}>
+            {this.state.complaintsArray.map((complaint, i) => (
+              <LazyLoad
+                height={88}
+                offset={300}
+                unmountIfInvisible
+                key={i}
+                placeholder={
+                  <div className="placeholder-skeleton">
+                    <Divider />
+                    <div className="placeholder-description"></div>
+                    <Divider />
+                  </div>
+                }
+              >
+                <div>
                   <Divider />
-                  <div className="placeholder-description"></div>
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    primaryText={
+                      <p> {complaint.description} </p>
+                    }
+                  >
+                  </ListItem>
                   <Divider />
                 </div>
-              }
-            >
-              <div>
-                <Divider />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  primaryText={
-                    <p> {complaint.description} </p>
-                  }
-                >
-                </ListItem>
-                <Divider />
-              </div>
-            </LazyLoad>
-          ))}
-        </List>
-      </div>
+              </LazyLoad>
+            ))}
+          </List>
+        </div>
+      ) : (
+        <div className="loader-container">
+          <div className="loading-image small"></div>
+        </div>
+      )
     )
   }
 }

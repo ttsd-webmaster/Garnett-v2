@@ -1,4 +1,5 @@
 import ActiveList from './ActiveList';
+import API from '../../api/API';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -21,9 +22,23 @@ export default class Contacts extends Component {
     super(props);
     this.state = {
       classArray: ['Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'],
+      activeArray: [],
+      loaded: false,
       open: false,
       active: null
     }
+  }
+
+  componentDidMount() {
+    API.getActives()
+    .then(res => {
+      localStorage.setItem('activeArray', JSON.stringify(res.data));
+
+      this.setState({
+        loaded: true,
+        activeArray: res.data
+      });
+    });
   }
 
   handleOpen = (active) => {
@@ -41,23 +56,29 @@ export default class Contacts extends Component {
 
   render() {
     return (
-      <List>
-        {this.state.classArray.map((classLabel, i) => (
-          <div key={i}>
-            <Subheader> {classLabel} </Subheader>
-            <ActiveList 
-              activeArray={this.props.activeArray} 
-              classLabel={classLabel}
-              handleOpen={this.handleOpen}
-            />
-          </div>
-        ))}
-        <LoadableContactsDialog
-          open={this.state.open}
-          active={this.state.active}
-          handleClose={this.handleClose}
-        />
-      </List>
+      this.state.loaded ? (
+        <List>
+          {this.state.classArray.map((classLabel, i) => (
+            <div key={i}>
+              <Subheader> {classLabel} </Subheader>
+              <ActiveList 
+                activeArray={this.state.activeArray} 
+                classLabel={classLabel}
+                handleOpen={this.handleOpen}
+              />
+            </div>
+          ))}
+          <LoadableContactsDialog
+            open={this.state.open}
+            active={this.state.active}
+            handleClose={this.handleClose}
+          />
+        </List>
+      ) : (
+        <div className="loader-container">
+          <div className="loading-image small"></div>
+        </div>
+      )
     )
   }
 }
