@@ -32,13 +32,14 @@ export default class PledgeMerit extends Component {
   }
 
   componentDidMount() {
+    let meritArray = this.state.meritArray;
+
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
         let firebase = window.firebase;
         let fullName = this.props.state.displayName;
         let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
-        let meritArray = [];
 
         meritRef.on('value', (snapshot) => {
           if (snapshot.val()) {

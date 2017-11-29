@@ -38,6 +38,8 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidMount() {
+    let pledgeArray = this.state.pledgeArray;
+
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
@@ -209,16 +211,21 @@ export default class ActiveMerit extends Component {
   handleOpen = (pledge) => {
     let displayName = this.props.state.displayName;
 
-    API.getActiveMerits(displayName, pledge)
-    .then(res => {
-      this.setState({
-        open: true,
-        pledge: pledge,
-        remainingMerits: res.data.remainingMerits,
-        meritArray: res.data.meritArray.reverse()
-      });
-    })
-    .catch(err => console.log('err', err));
+    if (navigator.onLine) {
+      API.getActiveMerits(displayName, pledge)
+      .then(res => {
+        this.setState({
+          open: true,
+          pledge: pledge,
+          remainingMerits: res.data.remainingMerits,
+          meritArray: res.data.meritArray.reverse()
+        });
+      })
+      .catch(err => console.log('err', err));
+    }
+    else {
+      this.props.handleRequestOpen('You are offline.');
+    }
   }
 
   handleClose = () => {

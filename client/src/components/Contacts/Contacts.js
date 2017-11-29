@@ -42,6 +42,8 @@ export default class Contacts extends Component {
       });
     }
     else {
+      let activeArray = this.state.activeArray;
+      
       this.setState({
         loaded: true,
         activeArray: activeArray

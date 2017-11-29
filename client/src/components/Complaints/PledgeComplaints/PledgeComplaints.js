@@ -1,3 +1,5 @@
+import loadFirebase from '../../../helpers/loadFirebase';
+
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
 import {List, ListItem} from 'material-ui/List';
@@ -17,18 +19,19 @@ export default class PledgeComplaints extends Component {
     super(props);
     this.state = {
       loaded: false,
-      complaintsArray: [],
+      complaintsArray: this.props.complaintsArray,
     }
   }
 
   componentDidMount() {
+    let complaintsArray = this.state.complaintsArray;
+
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
         let fullName = this.props.state.displayName;
         let firebase = window.firebase;
         let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
-        let complaintsArray = [];
 
         complaintsRef.on('value', (snapshot) => {
           if (snapshot.val()) {
