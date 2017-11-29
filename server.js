@@ -509,7 +509,7 @@ app.post('/api/sendmessage', function(req, res) {
         title: 'Garnett',
         body: `You have received ${amount} ${merits} from ${req.body.activeName}`,
         clickAction: 'https://garnett-app.herokuapp.com',
-        icon: '/images/garnett.png'
+        icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
       }
     };
 
