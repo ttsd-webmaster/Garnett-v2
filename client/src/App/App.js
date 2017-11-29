@@ -136,32 +136,34 @@ class App extends Component {
             let messaging = firebase.messaging();
             messaging.useServiceWorker(registration);
 
-            messaging.requestPermission()
-            .then(() => {
-              console.log('Notification permission granted.');
-              // Get Instance ID token. Initially this makes a network call, once retrieved
-              // subsequent calls to getToken will return from cache.
-              messaging.getToken()
-              .then((currentToken) => {
-                if (currentToken) {
-                  API.saveMessagingToken(displayName, currentToken)
-                  .then(messageRes => {
-                    console.log(messageRes);
-                    this.checkPhoto(res, firebase, displayName);
-                  })
-                  .catch(err => console.log(err));
-                } 
-                else {
-                  // Show permission request.
-                  console.log('No Instance ID token available. Request permission to generate one.');
-                }
+            messaging.onTokenRefresh(() => {
+              messaging.requestPermission()
+              .then(() => {
+                console.log('Notification permission granted.');
+                // Get Instance ID token. Initially this makes a network call, once retrieved
+                // subsequent calls to getToken will return from cache.
+                messaging.getToken()
+                .then((currentToken) => {
+                  if (currentToken) {
+                    API.saveMessagingToken(displayName, currentToken)
+                    .then(messageRes => {
+                      console.log(messageRes);
+                      this.checkPhoto(res, firebase, displayName);
+                    })
+                    .catch(err => console.log(err));
+                  } 
+                  else {
+                    // Show permission request.
+                    console.log('No Instance ID token available. Request permission to generate one.');
+                  }
+                })
+                .catch(function(err) {
+                  console.log('An error occurred while retrieving token. ', err);
+                });
               })
               .catch(function(err) {
-                console.log('An error occurred while retrieving token. ', err);
+                console.log('Unable to get permission to notify.', err);
               });
-            })
-            .catch(function(err) {
-              console.log('Unable to get permission to notify.', err);
             });
           });
         });
