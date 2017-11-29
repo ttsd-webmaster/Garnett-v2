@@ -85,9 +85,7 @@ input:-webkit-autofill {
 }
 
 .loader-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #fafafa;
   height: calc(100vh - 200px);
   width: 100vw;
 }
