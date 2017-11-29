@@ -94,7 +94,7 @@ export default class PledgeApp extends Component {
                 if (user) {
                   API.getAuthStatus(user)
                   .then(res => {
-                    this.getData(user, firebase);
+                    this.getData(res.data.user, firebase);
                     this.props.loginCallBack(res);
                   });
                 }
