@@ -24,7 +24,7 @@ export default class ActiveMerit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pledgeArray: [],
+      pledgeArray: this.props.pledgeArray,
       loaded: false,
       open: false,
       pledge: null,
@@ -38,30 +38,32 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidMount() {
-    loadFirebase('database')
-    .then(() => {
-      let firebase = window.firebase;
-      let dbRef = firebase.database().ref('/users/');
-      let pledgeArray = [];
+    if (navigator.onLine) {
+      loadFirebase('database')
+      .then(() => {
+        let firebase = window.firebase;
+        let dbRef = firebase.database().ref('/users/');
+        let pledgeArray = [];
 
-      dbRef.on('value', (snapshot) => {
-        pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-          return snapshot.val()[key];
-        });
-        pledgeArray = pledgeArray.filter(function(user) {
-          return user.status === 'pledge';
-        });
+        dbRef.on('value', (snapshot) => {
+          pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
+          pledgeArray = pledgeArray.filter(function(user) {
+            return user.status === 'pledge';
+          });
 
-        console.log('Pledge array: ', pledgeArray);
+          console.log('Pledge array: ', pledgeArray);
 
-        localStorage.setItem('pledgeArray', JSON.stringify(pledgeArray));
-        
-        this.setState({
-          loaded: true,
-          pledgeArray: pledgeArray
+          localStorage.setItem('pledgeArray', JSON.stringify(pledgeArray));
+          
+          this.setState({
+            loaded: true,
+            pledgeArray: pledgeArray
+          });
         });
       });
-    });
+    }
   }
 
   merit = (pledge) => {
