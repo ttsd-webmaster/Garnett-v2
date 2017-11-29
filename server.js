@@ -60,7 +60,7 @@ app.post('/api', function(req, res) {
   console.log(fullName)
 
   // Look for user's info in data base
-  let userRef = firebase.database().ref('/users/' + fullName);
+  let userRef = admin.database().ref('/users/' + fullName);
   userRef.once('value', (snapshot) => {
     const userInfo = snapshot.val();
     const data = {
@@ -92,7 +92,7 @@ app.post('/api/login', function(req, res) {
       admin.auth().createCustomToken(uid)
       .then(function(customToken) {
         // Look for user's info in data base
-        let userRef = firebase.database().ref('/users/' + fullName);
+        let userRef = admin.database().ref('/users/' + fullName);
 
         userRef.once('value', (snapshot) => {
           const userInfo = snapshot.val();
@@ -130,11 +130,11 @@ app.post('/api/login', function(req, res) {
 
 // Signup Route
 app.post('/api/signup', function(req, res) {
-  let dbRef = firebase.database().ref('/users/');
+  let dbRef = admin.database().ref('/users/');
   let firstName = req.body.firstName.replace(/ /g,'');
   let lastName = req.body.lastName.replace(/ /g,'');
   let fullName = firstName + lastName;
-  let checkRef = firebase.database().ref('/users/' + fullName);
+  let checkRef = admin.database().ref('/users/' + fullName);
 
   checkRef.once('value', (snapshot) => {
     if (snapshot.val()) {
@@ -152,7 +152,7 @@ app.post('/api/signup', function(req, res) {
             displayName: fullName
           })
           .then(function() {
-            let userRef = firebase.database().ref('/users/' + user.displayName);
+            let userRef = admin.database().ref('/users/' + user.displayName);
 
             userRef.set({
               firstName: req.body.firstName,
@@ -244,7 +244,7 @@ app.post('/api/logout', function(req, res) {
 // Sets the user photo
 app.post('/api/photo', function(req, res) {
   let fullName = req.body.displayName;
-  let userRef = firebase.database().ref('/users/' + fullName);
+  let userRef = admin.database().ref('/users/' + fullName);
 
   userRef.update({
     photoURL: req.body.url
@@ -262,7 +262,7 @@ app.post('/api/photo', function(req, res) {
 
 // Query for pledges data
 app.post('/api/pledges', function(req, res) {
-  let dbRef = firebase.database().ref('/users/');
+  let dbRef = admin.database().ref('/users/');
   let pledgeArray = [];
 
   dbRef.once('value', (snapshot) => {
@@ -279,7 +279,7 @@ app.post('/api/pledges', function(req, res) {
 
 // Query for active data
 app.post('/api/actives', function(req, res) {
-  let dbRef = firebase.database().ref('/users/');
+  let dbRef = admin.database().ref('/users/');
   let activeArray = [];
 
   dbRef.once('value', (snapshot) => {
@@ -297,9 +297,9 @@ app.post('/api/actives', function(req, res) {
 // Post merit data
 app.post('/api/merit', function(req, res) {
   let fullName = req.body.displayName;
-  let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + req.body.pledgeName);
-  let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
-  let meritRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Merits/');
+  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + req.body.pledgeName);
+  let pledgeRef = admin.database().ref('/users/' + req.body.pledgeName);
+  let meritRef = admin.database().ref('/users/' + req.body.pledgeName + '/Merits/');
 
   userRef.once('value', (snapshot) => {
     if (req.body.amount > 0) {
@@ -329,14 +329,14 @@ app.post('/api/merit', function(req, res) {
 // Post merit data for all pledges
 app.post('/api/meritall', function(req, res) {
   let fullName = req.body.displayName;
-  let dbRef = firebase.database().ref('/users/');
-  let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/');
+  let dbRef = admin.database().ref('/users/');
+  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/');
 
   userRef.once('value', (snapshot) => {
     snapshot.forEach((child) => {
-      let userPledgeRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + child.key);
-      let pledgeRef = firebase.database().ref('/users/' + child.key);
-      let meritRef = firebase.database().ref('/users/' + child.key + '/Merits/');
+      let userPledgeRef = admin.database().ref('/users/' + fullName + '/Pledges/' + child.key);
+      let pledgeRef = admin.database().ref('/users/' + child.key);
+      let meritRef = admin.database().ref('/users/' + child.key + '/Merits/');
       let remainingMerits = snapshot.val().merits - req.body.amount;
 
       if (req.body.amount > 0) {
@@ -396,7 +396,7 @@ app.post('/api/meritall', function(req, res) {
 
 // Post complaint data
 app.post('/api/complain', function(req, res) {
-  let complaintsRef = firebase.database().ref('/users/' + req.body.pledgeName + '/Complaints/');
+  let complaintsRef = admin.database().ref('/users/' + req.body.pledgeName + '/Complaints/');
 
   complaintsRef.push({
     description: req.body.description,
@@ -410,8 +410,8 @@ app.post('/api/complain', function(req, res) {
 app.post('/api/activemerits', function(req, res) {
   let fullName = req.body.displayName;
   let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
-  let meritRef = firebase.database().ref('/users/' + pledgeName + '/Merits/');
-  let userRef = firebase.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
+  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits/');
+  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
   let remainingMerits;
   let meritArray = [];
   
@@ -437,9 +437,9 @@ app.post('/api/activemerits', function(req, res) {
 // Query for merit data on Pledge App
 app.post('/api/pledgedata', function(req, res) {
   let fullName = req.body.displayName;
-  let userRef = firebase.database().ref('/users/' + fullName);
-  let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
-  let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
+  let userRef = admin.database().ref('/users/' + fullName);
+  let meritRef = admin.database().ref('/users/' + fullName + '/Merits/');
+  let complaintsRef = admin.database().ref('/users/' + fullName + '/Complaints/');
   let totalMerits;
   let meritArray = [];
   let complaintsArray = [];
@@ -479,7 +479,7 @@ app.post('/api/pledgedata', function(req, res) {
 // Save message token from server
 app.post('/api/savemessagetoken', function(req, res) {
   let fullName = req.body.displayName;
-  let userRef = firebase.database().ref('/users/' + fullName);
+  let userRef = admin.database().ref('/users/' + fullName);
 
   userRef.update({
     registrationToken: req.body.token
@@ -490,7 +490,7 @@ app.post('/api/savemessagetoken', function(req, res) {
 
 // Send message from server
 app.post('/api/sendmessage', function(req, res) {
-  let pledgeRef = firebase.database().ref('/users/' + req.body.pledgeName);
+  let pledgeRef = admin.database().ref('/users/' + req.body.pledgeName);
   let amount = Math.abs(req.body.amount);
   let merits = '';
 
