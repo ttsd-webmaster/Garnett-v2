@@ -10,8 +10,6 @@ const workboxSW = new WorkboxSW({
   clientsClaim: true,
   skipWaiting: true
 });
-const matcher = ({event}) => event.request.mode === 'navigate';
-const handler = () => fetch('/pledge-app').catch(() => caches.match('/index.html'));
 
 // Google analytics for workbox v3
 // workbox.googleAnalytics.initialize()
@@ -19,7 +17,7 @@ const handler = () => fetch('/pledge-app').catch(() => caches.match('/index.html
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
 workboxSW.precache([]);
 
-workboxSW.router.registerRoute(matcher, handler);
+workboxSW.router.registerNavigationRoute('index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workboxSW.router.registerRoute(
