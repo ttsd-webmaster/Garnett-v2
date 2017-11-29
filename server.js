@@ -7,6 +7,7 @@ const app = express();
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
 require('@firebase/database');
+require('@firebase/messaging');
 const admin = require("firebase-admin");
 var serviceAccount = require("./serviceAccountKey.json");
 var port = process.env.PORT || 4000;
@@ -83,7 +84,7 @@ app.post('/api/login', function(req, res) {
   // Authenticate the credentials
   firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
   .then((user) => {
-    if (user) {
+    if (user && user.emailVerified) {
       const uid = user.uid;
       const fullName = user.displayName;
 
