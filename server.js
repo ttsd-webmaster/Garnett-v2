@@ -511,15 +511,17 @@ app.post('/api/sendmessage', function(req, res) {
       }
     };
 
-    admin.messaging().sendToDevice(registrationToken, payload)
-    .then(function(response) {
-      console.log("Successfully sent message:", response);
-      res.sendStatus(200);
-    })
-    .catch(function(error) {
-      console.log("Error sending message:", error);
-      res.sendStatus(400);
-    });
+    if (registrationToken) {
+      admin.messaging().sendToDevice(registrationToken, payload)
+      .then(function(response) {
+        console.log("Successfully sent message:", response);
+        res.sendStatus(200);
+      })
+      .catch(function(error) {
+        console.log("Error sending message:", error);
+        res.sendStatus(400);
+      });
+    }
   });
 });
 
