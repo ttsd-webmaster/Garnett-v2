@@ -326,9 +326,14 @@ export default class PledgeApp extends Component {
   }
 
   handleMeritOpen = () => {
-    this.setState({
-      openMerit: true
-    });
+    if (navigator.onLine) {
+      this.setState({
+        openMerit: true
+      });
+    }
+    else {
+      this.handleRequestOpen('You are offline.');
+    }
   }
 
   handleMeritClose = () => {
