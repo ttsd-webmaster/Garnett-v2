@@ -491,7 +491,6 @@ app.post('/api/savemessagetoken', function(req, res) {
 // Send message from server
 app.post('/api/sendmessage', function(req, res) {
   let pledgeRef = admin.database().ref('/users/' + req.body.pledgeName);
-  let amount = Math.abs(req.body.amount);
   let merits = '';
 
   if (req.body.amount > 0) {
@@ -503,6 +502,7 @@ app.post('/api/sendmessage', function(req, res) {
 
   pledgeRef.once('value', (snapshot) => {
     let registrationToken = snapshot.val().registrationToken;
+    let amount = Math.abs(req.body.amount);
 
     let payload = {
       notification: {
