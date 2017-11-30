@@ -34,19 +34,7 @@ export default class SignIn extends Component {
               ev.preventDefault();
             }
           }}
-         />
-
-        {/*<div className="checkbox-container">
-          <input 
-            type="checkbox" 
-            id="checkbox"
-            checked={this.props.staySigned}
-            onChange={this.toggleSignState}
-          />
-          <label htmlFor="checkbox">
-            <span className="checkbox">stay signed in</span>
-          </label>
-        </div>*/}
+        />
 
         <div className="login-button" onClick={this.props.login}>
           Login

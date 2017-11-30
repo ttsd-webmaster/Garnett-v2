@@ -3,9 +3,10 @@ import {activeCode, pledgeCode} from './data.js';
 import loadFirebase from '../../helpers/loadFirebase';
 import validateEmail from '../../helpers/validateEmail';
 import API from '../../api/API.js';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 import React, {Component} from 'react';
-import Loadable from 'react-loadable';
 import Snackbar from 'material-ui/Snackbar';
 
 const snackbarBackground = {
@@ -15,28 +16,6 @@ const snackbarBackground = {
 const snackbarText = {
   color: 'var(--secondary-dark)'
 };
-
-const LoadableSignIn = Loadable({
-  loader: () => import('./SignIn'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>
-  }
-});
-
-const LoadableSignUp = Loadable({
-  loader: () => import('./SignUp'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>
-  }
-});
 
 export default class Login extends Component {
   constructor(props) {
@@ -327,7 +306,7 @@ export default class Login extends Component {
           </span>
         </div>
 
-        <LoadableSignIn
+        <SignIn
           signEmail={this.state.signEmail}
           signPassword={this.state.signPassword}
           signEmailValidation={this.state.signEmailValidation}
@@ -336,7 +315,7 @@ export default class Login extends Component {
           handleChange={this.handleChange}
           handleRequestOpen={this.handleRequestOpen} 
         />
-        <LoadableSignUp
+        <SignUp
           firstName={this.state.firstName}
           lastName={this.state.lastName}
           class={this.state.class}
