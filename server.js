@@ -115,7 +115,7 @@ app.post('/api/login', function(req, res) {
       });
     }
     else {
-      res.status(200).send('Email not verified.');
+      res.status(400).send('Email is not verified.');
     }
   })
   .catch(function(error) {
@@ -124,7 +124,7 @@ app.post('/api/login', function(req, res) {
     var errorMessage = error.message;
     // ...
     console.log(errorCode, errorMessage);
-    res.status(400).send(error);
+    res.status(400).send('Email or password is incorrect.');
   });
 });
 
@@ -226,7 +226,7 @@ app.post('/api/signup', function(req, res) {
 
             user.sendEmailVerification()
             .then(function() {
-              res.sendStatus(200);
+              res.status(200).send('Verification email has been sent.');
             });
           })
           .catch(function(error) {
@@ -248,6 +248,17 @@ app.post('/api/signup', function(req, res) {
         res.status(400).send('Email has already been taken.');
       });
     // }
+  });
+});
+
+// Forgot Password Route
+app.post('/api/forgotpassword', function(req, res) {
+  firebase.auth().sendPasswordResetEmail(req.body.email).then(function() {
+    res.status(200).send('Email to reset password has been sent.');
+  }).catch(function(error) {
+    console.log(error);
+
+    res.status(400).send('This email is not registered.');
   });
 });
 

@@ -39,6 +39,8 @@ export default class SignIn extends Component {
         <div className="login-button" onClick={this.props.login}>
           Login
         </div>
+
+        <div id="forgot-link" onClick={this.props.active}> Forgot Password? </div>
       </form>
     )
   }

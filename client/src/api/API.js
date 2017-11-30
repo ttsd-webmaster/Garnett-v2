@@ -12,6 +12,9 @@ export default {
     let body = {email, password, firstName, lastName, className, majorName, year, phone, code, activeCode};
     return axios.post('/api/signup', body);
   },
+  forgotPassword: function(email) {
+    return axios.post('/api/forgotpassword', {email});
+  },
   logout: function() {
     return axios.post('/api/logout');
   },

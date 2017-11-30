@@ -5,6 +5,7 @@ import validateEmail from '../../helpers/validateEmail';
 import API from '../../api/API.js';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
+import ForgotPassword from './ForgotPassword';
 
 import React, {Component} from 'react';
 import Snackbar from 'material-ui/Snackbar';
@@ -33,6 +34,7 @@ export default class Login extends Component {
       code: '',
       password: '',
       confirmation: '',
+      forgotEmail: '',
       signEmailValidation: true,
       signPasswordValidation: true,
       firstNameValidation: true,
@@ -45,6 +47,7 @@ export default class Login extends Component {
       codeValidation: true,
       passwordValidation: true,
       confirmationValidation: true,
+      forgotEmailValidation: true,
       open: false,
       message: '',
     };
@@ -61,18 +64,57 @@ export default class Login extends Component {
 
   active = (event) => {
     if (!event.target.classList.contains('underline')) {
-      document.getElementById('sign-in')
-        .classList
-        .toggle('underline');
-      document.getElementById('sign-up')
-        .classList
-        .toggle('underline');
-      document.getElementById('sign-in-form')
-        .classList
-        .toggle('active');
-      document.getElementById('sign-up-form')
-        .classList
-        .toggle('active');
+      if (event.target.id === 'sign-in') {
+        document.getElementById('sign-in')
+          .classList
+          .add('underline');
+        document.getElementById('sign-up')
+          .classList
+          .remove('underline');
+        document.getElementById('sign-in-form')
+          .classList
+          .add('active');
+        document.getElementById('sign-up-form')
+          .classList
+          .remove('active');
+        document.getElementById('forgot-password')
+          .classList
+          .remove('active');
+      }
+      else if (event.target.id === 'sign-up') {
+        document.getElementById('sign-in')
+          .classList
+          .remove('underline');
+        document.getElementById('sign-up')
+          .classList
+          .add('underline');
+        document.getElementById('sign-in-form')
+          .classList
+          .remove('active');
+        document.getElementById('sign-up-form')
+          .classList
+          .add('active');
+        document.getElementById('forgot-password')
+          .classList
+          .remove('active');
+      }
+      else if (event.target.id === 'forgot-link') {
+        document.getElementById('sign-in')
+          .classList
+          .remove('underline');
+        document.getElementById('sign-up')
+          .classList
+          .remove('underline');
+        document.getElementById('sign-in-form')
+          .classList
+          .remove('active');
+        document.getElementById('sign-up-form')
+          .classList
+          .remove('active');
+        document.getElementById('forgot-password')
+          .classList
+          .add('active');
+      }
     }
 
     this.setState({
@@ -88,6 +130,7 @@ export default class Login extends Component {
       codeValidation: true,
       passwordValidation: true,
       confirmationValidation: true,
+      forgotEmailValidation: true,
     });
   }
 
@@ -113,7 +156,7 @@ export default class Login extends Component {
     else {
       API.login(email, password)
       .then(res => {
-        if(res.data !== 'Email not verified.'){
+        if (res.status === 200) {
           console.log(res)
           localStorage.setItem('data', JSON.stringify(res));
 
@@ -134,17 +177,12 @@ export default class Login extends Component {
             });
           });
         }
-        else {
-          let message = 'Email is not verified';
-
-          this.props.handleRequestOpen(message);
-        }
       })
       .catch((error) => {
-        let message = 'Email or password is incorrect';
+        let message = error.response.data;
         console.log(error);
 
-        this.props.handleRequestOpen(message);
+        this.handleRequestOpen(message);
       });
     }
   }
@@ -222,8 +260,10 @@ export default class Login extends Component {
       API.signUp(email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode)
       .then(res => {
         if (res.status === 200) {
-          console.log(res)
+          let message = res.data;
+
           document.getElementById('sign-in').click();
+          this.handleRequestOpen(message);
 
           this.setState({
             firstName: '',
@@ -235,9 +275,7 @@ export default class Login extends Component {
             email: '',
             code: '',
             password: '',
-            confirmation: '',
-            open: true,
-            message: 'Verification email has been sent.'
+            confirmation: ''
           });
         }
       })
@@ -246,7 +284,31 @@ export default class Login extends Component {
 
         console.log(message);
 
-        this.props.handleRequestOpen(message);
+        this.handleRequestOpen(message);
+      });
+    }
+  }
+
+  forgotPassword = () => {
+    let email = this.state.forgotEmail;
+
+    if (!email || !validateEmail(email)) {
+      this.setState({
+        forgotEmailValidation: false
+      });
+    }
+    else {
+      API.forgotPassword(email)
+      .then(res => {
+        let message = res.data;
+
+        document.getElementById('sign-in').click();
+        this.handleRequestOpen(message);
+      })
+      .catch(error => {
+        let message = error.response.data;
+
+        this.handleRequestOpen(message);
       });
     }
   }
@@ -256,7 +318,7 @@ export default class Login extends Component {
 
     this.setState({
       [label]: newValue,
-      [validationLabel]: true,
+      [validationLabel]: true
     });
   }
 
@@ -270,12 +332,6 @@ export default class Login extends Component {
   handleRequestClose = () => {
     this.setState({
       open: false
-    });
-  }
-
-  toggleSignState = () => {
-    this.setState({
-      staySigned: !this.state.staySigned
     });
   }
 
@@ -313,7 +369,8 @@ export default class Login extends Component {
           signPasswordValidation={this.state.signPasswordValidation}
           login={this.login}
           handleChange={this.handleChange}
-          handleRequestOpen={this.handleRequestOpen} 
+          handleRequestOpen={this.handleRequestOpen}
+          active={this.active}
         />
         <SignUp
           firstName={this.state.firstName}
@@ -339,6 +396,13 @@ export default class Login extends Component {
           signUp={this.signUp}
           handleChange={this.handleChange}
           handleRequestOpen={this.handleRequestOpen} 
+        />
+        <ForgotPassword
+          forgotEmail={this.state.forgotEmail}
+          forgotEmailValidation={this.state.forgotEmailValidation}
+          forgotPassword={this.forgotPassword}
+          handleChange={this.handleChange}
+          handleRequestOpen={this.handleRequestOpen}
         />
 
         <Snackbar

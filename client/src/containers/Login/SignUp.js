@@ -8,7 +8,7 @@ import MenuItem from 'material-ui/MenuItem';
 export default class SignUp extends Component {
   render() {
     return (
-      <form className="login-form sign-up" id="sign-up-form">
+      <form className="login-form" id="sign-up-form">
         {formData1.map((form, i) => (
           <TextField
             className="login-input"
@@ -18,7 +18,7 @@ export default class SignUp extends Component {
             floatingLabelStyle={{color: '#888'}}
             floatingLabelFocusStyle={{color: 'var(--primary-color'}}
             value={this.props[`${form.value}`]}
-            onChange={(e, newValue) => this.handleChange(form.value, newValue)}
+            onChange={(e, newValue) => this.props.handleChange(form.value, newValue)}
             errorText={!this.props[`${form.value + 'Validation'}`] && form.errorText}
             key={i}
           />
