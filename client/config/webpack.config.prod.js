@@ -191,7 +191,6 @@ module.exports = {
                 [
                   'react-css-modules',
                   {
-                    context: common.context,
                     filetypes: {
                       '.scss': {
                         syntax: 'postcss-scss'
