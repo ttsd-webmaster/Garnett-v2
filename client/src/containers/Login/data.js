@@ -24,9 +24,9 @@ const selectData = [
     errorText: 'Please select a class.',
     options: [ 'Charter', 'Alpha', 'Beta', 'Gamma', 
                'Delta', 'Epsilon', 'Zeta', 'Eta', 
-               'Iota', 'Kappa', 'Lambda', 'Mu', 
-               'Nu', 'Xi', 'Omicron', 'Pi', 
-               'Rho'
+               'Theta', 'Iota', 'Kappa', 'Lambda', 
+               'Mu', 'Nu', 'Xi', 'Omicron', 
+               'Pi', 'Rho'
              ],
   },
   {

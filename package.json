@@ -24,7 +24,6 @@
     "firebase-admin": "^5.5.0",
     "http": "0.0.0",
     "path": "^0.12.7",
-    "react-swipeable-views": "^0.12.11",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
