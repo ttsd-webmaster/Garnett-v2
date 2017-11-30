@@ -5,10 +5,6 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-const avatarStyle = {
-  objectFit: 'cover'
-};
-
 export default class ActiveMerit extends Component {
   render() {
     return (
