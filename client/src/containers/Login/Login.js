@@ -1,12 +1,12 @@
 import './Login.css';
-import {activeCode, pledgeCode, formData1, selectData, formData2} from './data.js';
-import API from '../../api/API.js';
+import {activeCode, pledgeCode} from './data.js';
 import loadFirebase from '../../helpers/loadFirebase';
+import validateEmail from '../../helpers/validateEmail';
+import API from '../../api/API.js';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
 import React, {Component} from 'react';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
 import Snackbar from 'material-ui/Snackbar';
 
 const snackbarBackground = {
@@ -16,11 +16,6 @@ const snackbarBackground = {
 const snackbarText = {
   color: 'var(--secondary-dark)'
 };
-
-function validateEmail(email) {
-  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-}
 
 export default class Login extends Component {
   constructor(props) {
@@ -38,9 +33,6 @@ export default class Login extends Component {
       code: '',
       password: '',
       confirmation: '',
-      open: false,
-      message: '',
-      staySigned: false,
       signEmailValidation: true,
       signPasswordValidation: true,
       firstNameValidation: true,
@@ -53,6 +45,8 @@ export default class Login extends Component {
       codeValidation: true,
       passwordValidation: true,
       confirmationValidation: true,
+      open: false,
+      message: '',
     };
   }
 
@@ -94,27 +88,6 @@ export default class Login extends Component {
       codeValidation: true,
       passwordValidation: true,
       confirmationValidation: true,
-    });
-  }
-
-  handleChange(label, newValue) {
-    let validationLabel = [label] + 'Validation';
-
-    this.setState({
-      [label]: newValue,
-      [validationLabel]: true,
-    });
-  }
-
-  handleRequestClose = () => {
-    this.setState({
-      open: false
-    });
-  }
-
-  toggleSignState = () => {
-    this.setState({
-      staySigned: !this.state.staySigned
     });
   }
 
@@ -162,19 +135,16 @@ export default class Login extends Component {
           });
         }
         else {
-          this.setState({
-            open: true,
-            message: 'Email is not verified.'
-          });
+          let message = 'Email is not verified';
+
+          this.props.handleRequestOpen(message);
         }
       })
       .catch((error) => {
+        let message = 'Email or password is incorrect';
         console.log(error);
 
-        this.setState({
-          open: true,
-          message: 'Email or password is incorrect.'
-        });
+        this.props.handleRequestOpen(message);
       });
     }
   }
@@ -234,7 +204,7 @@ export default class Login extends Component {
       if (confirmation !== password) {
         confirmationValidation = false;
       }
-
+      
       this.setState({
         firstNameValidation: firstNameValidation,
         lastNameValidation: lastNameValidation,
@@ -276,12 +246,37 @@ export default class Login extends Component {
 
         console.log(message);
 
-        this.setState({
-          open: true,
-          message: message
-        });
+        this.props.handleRequestOpen(message);
       });
     }
+  }
+
+  handleChange = (label, newValue) => {
+    let validationLabel = [label] + 'Validation';
+
+    this.setState({
+      [label]: newValue,
+      [validationLabel]: true,
+    });
+  }
+
+  handleRequestOpen = (message) => {
+    this.setState({
+      open: true,
+      message: message
+    });
+  }
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false
+    });
+  }
+
+  toggleSignState = () => {
+    this.setState({
+      staySigned: !this.state.staySigned
+    });
   }
 
   render() {
@@ -311,112 +306,40 @@ export default class Login extends Component {
           </span>
         </div>
 
-        <form className="login-form active" id="sign-in-form">
-          <TextField
-            className="login-input"
-            type="email"
-            inputStyle={{color: '#fff'}}
-            floatingLabelText="Email"
-            floatingLabelStyle={{color: '#888'}}
-            floatingLabelFocusStyle={{color: 'var(--primary-color)'}}
-            value={this.state.signEmail}
-            onChange={(e, newValue) => this.handleChange('signEmail', newValue)}
-            errorText={!this.state.signEmailValidation && 'Please enter a valid email.'}
-           />
-
-          <TextField
-            className="login-input"
-            type="password"
-            inputStyle={{color: '#fff'}}
-            floatingLabelText="Password"
-            floatingLabelStyle={{color: '#888'}}
-            floatingLabelFocusStyle={{color: 'var(--primary-color'}}
-            value={this.state.signPassword}
-            onChange={(e, newValue) => this.handleChange('signPassword', newValue)}
-            errorText={!this.state.signPasswordValidation && 'Please enter a password.'}
-            onSubmit={this.login}
-            onKeyPress={(ev) => {
-              if (ev.key === 'Enter') {
-                this.login();
-                ev.preventDefault();
-              }
-            }}
-           />
-
-          {/*<div className="checkbox-container">
-            <input 
-              type="checkbox" 
-              id="checkbox"
-              checked={this.state.staySigned}
-              onChange={this.toggleSignState}
-            />
-            <label htmlFor="checkbox">
-              <span className="checkbox">stay signed in</span>
-            </label>
-          </div>*/}
-
-          <div className="login-button" onClick={this.login}>
-            Login
-          </div>
-        </form>
-        <form className="login-form sign-up" id="sign-up-form">
-          {formData1.map((form, i) => (
-            <TextField
-              className="login-input"
-              type={form.type}
-              inputStyle={{color: '#fff'}}
-              floatingLabelText={form.name}
-              floatingLabelStyle={{color: '#888'}}
-              floatingLabelFocusStyle={{color: 'var(--primary-color'}}
-              value={this.state[`${form.value}`]}
-              onChange={(e, newValue) => this.handleChange(form.value, newValue)}
-              errorText={!this.state[`${form.value + 'Validation'}`] && form.errorText}
-              key={i}
-            />
-          ))}
-
-          {selectData.map((select, i) => (
-            <SelectField
-              className="login-input"
-              value={this.state[`${select.value}`]}
-              floatingLabelText={select.name}
-              floatingLabelStyle={{color: '#888'}}
-              labelStyle={{color: '#fff'}}
-              onChange={(e, key, newValue) => this.handleChange(select.value, newValue)}
-              errorText={!this.state[`${select.value + 'Validation'}`] && select.errorText}
-              key={i}
-            >
-              {select.options.map((item, i) => (
-                <MenuItem key={i} value={item} primaryText={item} />
-              ))}
-            </SelectField>
-          ))}
-
-          {formData2.map((form, i) => (
-            <TextField
-              className="login-input"
-              type={form.type}
-              inputStyle={{color: '#fff'}}
-              floatingLabelText={form.name}
-              floatingLabelStyle={{color: '#888'}}
-              floatingLabelFocusStyle={{color: 'var(--primary-color'}}
-              value={this.state[`${form.value}`]}
-              onChange={(e, newValue) => this.handleChange(form.value, newValue)}
-              errorText={!this.state[`${form.value + 'Validation'}`] && form.errorText}
-              key={i}
-              onSubmit={this.signUp}
-              onKeyPress={(ev) => {
-                if (ev.key === 'Enter') {
-                  this.signUp();
-                  ev.preventDefault();
-                }
-              }}
-            />
-          ))}
-          <div className="login-button" onClick={this.signUp}>
-            Sign Up
-          </div>
-        </form>
+        <SignIn
+          signEmail={this.state.signEmail}
+          signPassword={this.state.signPassword}
+          signEmailValidation={this.state.signEmailValidation}
+          signPasswordValidation={this.state.signPasswordValidation}
+          login={this.login}
+          handleChange={this.handleChange}
+          handleRequestOpen={this.handleRequestOpen} 
+        />
+        <SignUp
+          firstName={this.state.firstName}
+          lastName={this.state.lastName}
+          class={this.state.class}
+          major={this.state.major}
+          year={this.state.year}
+          phone={this.state.phone}
+          email={this.state.email}
+          code={this.state.code}
+          password={this.state.password}
+          confirmation={this.state.confirmation}
+          firstNameValidation={this.state.firstNameValidation}
+          lastNameValidation={this.state.lastNameValidation}
+          classValidation={this.state.classValidation}
+          majorValidation={this.state.majorValidation}
+          yearValidation={this.state.yearValidation}
+          phoneValidation={this.state.phoneValidation}
+          emailValidation={this.state.emailValidation}
+          codeValidation={this.state.codeValidation}
+          passwordValidation={this.state.passwordValidation}
+          confirmationValidation={this.state.confirmationValidation}
+          signUp={this.signUp}
+          handleChange={this.handleChange}
+          handleRequestOpen={this.handleRequestOpen} 
+        />
 
         <Snackbar
           bodyStyle={snackbarBackground}

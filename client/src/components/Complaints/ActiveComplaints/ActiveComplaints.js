@@ -1,11 +1,11 @@
 import './ActiveComplaints.css';
 import loadFirebase from '../../../helpers/loadFirebase';
+import API from "../../../api/API.js";
 
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import API from "../../../api/API.js";
 
 export default class ActiveComplaints extends Component {
   constructor(props) {

@@ -284,6 +284,10 @@ module.exports = {
       },
       sourceMap: shouldUseSourceMap,
     }),
+    // Common Bundles
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common' // Specify the common bundle's name.
+    }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
       filename: cssFilename,
