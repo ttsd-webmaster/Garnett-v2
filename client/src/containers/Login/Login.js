@@ -249,7 +249,7 @@ export default class Login extends Component {
       });
     }
     else {
-      API.signUp(email, password, firstName, lastName, className, majorName, year, phone, code, activeCode)
+      API.signUp(email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode)
       .then(res => {
         if (res.status === 200) {
           console.log(res)
@@ -387,7 +387,7 @@ export default class Login extends Component {
               key={i}
             >
               {select.options.map((item, i) => (
-                <MenuItem key={i} value={item.value} primaryText={item.label} />
+                <MenuItem key={i} value={item} primaryText={item} />
               ))}
             </SelectField>
           ))}

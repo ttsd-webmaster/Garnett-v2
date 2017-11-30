@@ -5,20 +5,20 @@ import React, {Component} from 'react';
 
 export default class MeritBook extends Component {
   render() {
-    let isActive = this.props.state.status;
+    let isPledge = this.props.state.status;
     
     return (
-      isActive === 'active' ? (
-        <ActiveMerit 
-          state={this.props.state} 
-          pledgeArray={this.props.pledgeArray} 
-          handleRequestOpen={this.props.handleRequestOpen} 
-        />
-      ): (
+      isPledge === 'pledge' ? (
         <PledgeMerit
           state={this.props.state}
           meritArray={this.props.meritArray} 
           totalMerits={this.props.state.totalMerits}
+        />
+      ): (
+        <ActiveMerit 
+          state={this.props.state} 
+          pledgeArray={this.props.pledgeArray} 
+          handleRequestOpen={this.props.handleRequestOpen} 
         />
       )
     )

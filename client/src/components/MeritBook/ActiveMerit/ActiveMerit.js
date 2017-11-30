@@ -45,7 +45,6 @@ export default class ActiveMerit extends Component {
       .then(() => {
         let firebase = window.firebase;
         let dbRef = firebase.database().ref('/users/');
-        let pledgeArray = [];
 
         dbRef.on('value', (snapshot) => {
           pledgeArray = Object.keys(snapshot.val()).map(function(key) {
@@ -75,6 +74,8 @@ export default class ActiveMerit extends Component {
   }
 
   merit = (pledge) => {
+    let status = this.props.state.status;
+    let maxAmount;
     let displayName = this.props.state.displayName;
     let pledgeName = pledge.firstName + pledge.lastName;
     let activeName = this.props.state.name;
@@ -84,11 +85,18 @@ export default class ActiveMerit extends Component {
     let descriptionValidation = true;
     let amountValidation = true;
 
-    if (!description || !amount || amount > 30 || amount < 0) {
+    if (status === 'alumni') {
+      maxAmount = 50;
+    }
+    else {
+      maxAmount = 30;
+    }
+
+    if (!description || !amount || amount > maxAmount || amount < 0) {
       if (!description) {
         descriptionValidation = false;
       }
-      if (!amount || amount > 30 || amount < 0) {
+      if (!amount || amount > maxAmount || amount < 0) {
         amountValidation = false;
       }
 
@@ -287,7 +295,16 @@ export default class ActiveMerit extends Component {
         </div>
       ) : (
         <div className="loader-container">
-          <div className="loading-image small"></div>
+          <div className="ball-spin-fade-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       )
     )

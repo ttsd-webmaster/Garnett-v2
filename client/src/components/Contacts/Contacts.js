@@ -86,7 +86,16 @@ export default class Contacts extends Component {
         </List>
       ) : (
         <div className="loader-container">
-          <div className="loading-image small"></div>
+          <div className="ball-spin-fade-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       )
     )

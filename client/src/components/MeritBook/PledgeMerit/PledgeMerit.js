@@ -127,8 +127,17 @@ export default class PledgeMerit extends Component {
           ))}
         </List> 
       ) : (
-        <div className="loader-container">
-          <div className="loading-image small"></div>
+        <div className="loader-container pledge">
+          <div className="ball-spin-fade-loader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       )
     )

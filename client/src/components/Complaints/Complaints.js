@@ -5,18 +5,18 @@ import React, {Component} from 'react';
 
 export default class Complaints extends Component {
   render() {
-    let isActive = this.props.state.status
+    let isPledge = this.props.state.status
     return (
-      isActive === 'active' ? (
+      isPledge === 'pledge' ? (
+        <PledgeComplaints 
+          state={this.props.state}
+          complaintsArray={this.props.complaintsArray}
+        />
+      ): (
         <ActiveComplaints 
           state={this.props.state} 
           pledgeArray={this.props.pledgeArray}
           handleRequestOpen={this.props.handleRequestOpen}
-        />
-      ): (
-        <PledgeComplaints 
-          state={this.props.state}
-          complaintsArray={this.props.complaintsArray}
         />
       )
     )

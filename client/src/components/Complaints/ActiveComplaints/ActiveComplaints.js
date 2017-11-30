@@ -1,4 +1,5 @@
 import './ActiveComplaints.css';
+import loadFirebase from '../../../helpers/loadFirebase';
 
 import React, {Component} from 'react';
 import TextField from 'material-ui/TextField';
@@ -13,24 +14,50 @@ export default class ActiveComplaints extends Component {
       open: false,
       pledge: null,
       description: '',
-      pledgeArray: [],
-      complaintsArray: [],
+      pledgeArray: this.props.pledgeArray,
       pledgeValidation: true,
       descriptionValidation: true
     };
   }
 
   componentDidMount() {
-    let pledgeArray = [];
+    let pledgeArray = this.state.pledgeArray;
 
-    pledgeArray = this.props.pledgeArray.map(function(pledge) {
-      return {'value': pledge.firstName + pledge.lastName, 
-              'label': `${pledge.firstName} ${pledge.lastName}`};
-    });
+    if (navigator.onLine) {
+      loadFirebase('database')
+      .then(() => {
+        let firebase = window.firebase;
+        let dbRef = firebase.database().ref('/users/');
 
-    this.setState({
-      pledgeArray: pledgeArray
-    });
+        dbRef.on('value', (snapshot) => {
+          pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
+          pledgeArray = pledgeArray.filter(function(user) {
+            return user.status === 'pledge';
+          });
+          pledgeArray = pledgeArray.map(function(pledge) {
+            return {'value': pledge.firstName + pledge.lastName, 
+                    'label': `${pledge.firstName} ${pledge.lastName}`};
+          });
+
+          console.log('Pledge Complaints Array: ', pledgeArray);
+
+          localStorage.setItem('pledgeComplaintsArray', JSON.stringify(pledgeArray));
+          
+          this.setState({
+            pledgeArray: pledgeArray
+          });
+        });
+      });
+    }
+    else {
+      let pledgeArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
+
+      this.setState({
+        pledgeArray: pledgeArray
+      });
+    }
   }
 
   complain = (pledge) => {
@@ -53,7 +80,7 @@ export default class ActiveComplaints extends Component {
       });
     }
     else {
-      API.complain(activeName, pledge.value, description)
+      API.complain(activeName, pledge, description)
       .then(res => {
         console.log(res);
         this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
@@ -89,7 +116,7 @@ export default class ActiveComplaints extends Component {
           errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
         >
           {this.state.pledgeArray.map((pledge, i) => (
-            <MenuItem key={i} value={pledge} primaryText={pledge.label} />
+            <MenuItem key={i} value={pledge.value} primaryText={pledge.label} />
           ))}
         </SelectField>
         <TextField

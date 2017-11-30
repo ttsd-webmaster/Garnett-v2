@@ -22,114 +22,40 @@ const selectData = [
     name: 'Class',
     value: 'class',
     errorText: 'Please select a class.',
-    options: [
-      { 
-        value: 'Kappa', 
-        label: 'Kappa',
-      },
-      { 
-        value: 'Lambda', 
-        label: 'Lambda',
-      },
-      { 
-        value: 'Mu', 
-        label: 'Mu',
-      },
-      { 
-        value: 'Nu', 
-        label: 'Nu',
-      },
-      { 
-        value: 'Xi', 
-        label: 'Xi',
-      },
-      { 
-        value: 'Omicron', 
-        label: 'Omicron',
-      },
-      { 
-        value: 'Pi', 
-        label: 'Pi',
-      },
-      {
-        value: 'Rho',
-        label: 'Rho',
-      }
-    ]
+    options: [ 'Charter', 'Alpha', 'Beta', 'Gamma', 
+               'Delta', 'Epsilon', 'Zeta', 'Eta', 
+               'Iota', 'Kappa', 'Lambda', 'Mu', 
+               'Nu', 'Xi', 'Omicron', 'Pi', 
+               'Rho'
+             ],
   },
   {
     name: 'Major',
     value: 'major',
     errorText: 'Please select a major.',
-    options: [
-      { 
-        value: 'Aerospace Engineering', 
-        label: 'Aerospace Engineering',
-      },
-      { 
-        value: 'Bioengineering', 
-        label: 'Bioengineering',
-      },
-      { 
-        value: 'Chemical Engineering', 
-        label: 'Chemical Engineering',
-      },
-      { 
-        value: 'Computer Engineering', 
-        label: 'Computer Engineering',
-      },
-      { 
-        value: 'Computer Science', 
-        label: 'Computer Science', 
-      },
-      { 
-        value: 'Electrical Engineering', 
-        label: 'Electrical Engineering',
-      },
-      { 
-        value: 'Environmental Engineering', 
-        label: 'Environmental Engineering',
-      },
-      { 
-        value: 'Mechanical Engineering', 
-        label: 'Mechanical Engineering',
-      },
-      { 
-        value: 'Nanoengineering', 
-        label: 'Nanoengineering',
-      },
-      { 
-        value: 'Structural Engineering', 
-        label: 'Structural Engineering',
-      },
-    ]
+    options: [ 'Aerospace Engineering',
+               'Bioengineering',
+               'Chemical Engineering',
+               'Computer Engineering',
+               'Computer Science',
+               'Electrical Engineering',
+               'Environmental Engineering',
+               'Mechanical Engineering',
+               'Nanoengineering',
+               'Structural Engineering'
+             ]
   },
   {
     name: 'Year',
     value: 'year',
     errorText: 'Please select an year.',
-    options: [
-      {
-        value: '1st Year',
-        label: '1st Year'
-      },
-      {
-        value: '2nd Year',
-        label: '2nd Year'
-      },
-      {
-        value: '3rd Year',
-        label: '3rd Year'
-      },
-      {
-        value: '4th Year',
-        label: '4th Year'
-      },
-      {
-        value: '5th Year',
-        label: '5th Year'
-      },
-    ]
+    options: [ '1st Year',
+               '2nd Year',
+               '3rd Year',
+               '4th Year',
+               '5th Year',
+               'Alumni'
+             ]
   }
 ];
 

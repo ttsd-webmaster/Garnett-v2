@@ -247,7 +247,6 @@ export default class PledgeApp extends Component {
 
   handleChange = (value) => {
     let title;
-    let swipeContainer = document.querySelector('.react-swipeable-view-container');
     let previousIndex = this.state.previousIndex;
     let scrollPosition1 = this.state.scrollPosition1;
     let scrollPosition2 = this.state.scrollPosition2;
@@ -295,7 +294,10 @@ export default class PledgeApp extends Component {
       contentContainerStyle.marginBottom = 0;
     }
 
-    window.scrollTo(0, scrolled);
+    // Sets the window scroll position based on tab
+    setTimeout(function() {
+      window.scrollTo(0, scrolled);
+    }, 1);
 
     this.setState({
       title: title,

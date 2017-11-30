@@ -137,10 +137,10 @@ app.post('/api/signup', function(req, res) {
   let checkRef = admin.database().ref('/users/' + fullName);
 
   checkRef.once('value', (snapshot) => {
-    if (snapshot.val()) {
-      res.status(400).send('This active is already signed up.');
-    }
-    else {
+    // if (snapshot.val()) {
+    //   res.status(400).send('This active is already signed up.');
+    // }
+    // else {
       // Create user with email and password
       firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
       .then((user) => {
@@ -165,7 +165,48 @@ app.post('/api/signup', function(req, res) {
               photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
             });
 
-            if (req.body.code === req.body.activeCode) {
+            if (req.body.code === req.body.pledgeCode) {
+              userRef.update({
+                status: 'pledge',
+                totalMerits: 0
+              });
+
+              dbRef.once('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                  let activeRef = firebase.database().ref('/users/' + child.key);
+                  let pledgeName = user.displayName;
+                  
+                  if (child.val().status === 'active') {
+                    activeRef.child('/Pledges/' + pledgeName).set({
+                      merits: 100
+                    });
+                  }
+                  else if (child.val().status === 'alumni') {
+                    activeRef.child('/Pledges/' + pledgeName).set({
+                      merits: 200
+                    });
+                  }
+                });
+              });
+            }
+            else if (req.body.year === 'Alumni') {
+              userRef.update({
+                status: 'alumni',
+              });
+
+              dbRef.once('value', (snapshot) => {
+                snapshot.forEach((child) => {
+                  if (child.val().status === 'pledge') {
+                    let pledgeName = child.key;
+
+                    userRef.child('/Pledges/' + pledgeName).set({
+                      merits: 200
+                    });
+                  }
+                });
+              });
+            }
+            else {
               userRef.update({
                 status: 'active',
               });
@@ -176,25 +217,6 @@ app.post('/api/signup', function(req, res) {
                     let pledgeName = child.key;
 
                     userRef.child('/Pledges/' + pledgeName).set({
-                      merits: 100
-                    });
-                  }
-                });
-              });
-            }
-            else {
-              userRef.update({
-                status: 'pledge',
-                totalMerits: 0
-              });
-
-              dbRef.once('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                  if (child.val().status === 'active') {
-                    let activeRef = firebase.database().ref('/users/' + child.key);
-                    let pledgeName = user.displayName;
-
-                    activeRef.child('/Pledges/' + pledgeName).set({
                       merits: 100
                     });
                   }
@@ -225,7 +247,7 @@ app.post('/api/signup', function(req, res) {
         console.log(errorCode, errorMessage);
         res.status(400).send('Email has already been taken.');
       });
-    }
+    // }
   });
 });
 

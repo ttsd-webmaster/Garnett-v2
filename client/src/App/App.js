@@ -172,7 +172,7 @@ class App extends Component {
   checkPhoto(res, firebase, displayName) {
     let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
-    if (res.data.user.photoURL === defaultPhoto && navigator.onLine) {
+    if (res.data.user.photoURL === defaultPhoto && navigator.onLine && res.data.user.status !== 'alumni') {
       loadFirebase('storage')
       .then(() => {
         let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
