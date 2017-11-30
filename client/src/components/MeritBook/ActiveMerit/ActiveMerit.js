@@ -256,7 +256,7 @@ export default class ActiveMerit extends Component {
                 <Divider className="pledge-divider large" inset={true} />
                 <ListItem
                   className="pledge-list-item large"
-                  leftAvatar={<Avatar className="pledge-image" size={70} src={pledge.photoURL} />}
+                  leftAvatar={<Avatar className="pledge-image large" size={70} src={pledge.photoURL} />}
                   primaryText={
                     <p className="pledge-name"> {pledge.firstName} {pledge.lastName} </p>
                   }

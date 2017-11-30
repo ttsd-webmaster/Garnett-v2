@@ -5,6 +5,10 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
+const avatarStyle = {
+  objectFit: 'cover'
+};
+
 export default class ActiveMerit extends Component {
   render() {
     return (
@@ -14,7 +18,7 @@ export default class ActiveMerit extends Component {
             <div>
               <ListItem
                 className="pledge-list-item"
-                leftAvatar={<Avatar src={merit.photoURL} />}
+                leftAvatar={<Avatar className="pledge-image" src={merit.photoURL} />}
                 primaryText={
                   <p className="merit-name"> {merit.name} </p>
                 }

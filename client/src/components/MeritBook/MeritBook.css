@@ -23,8 +23,11 @@
 }
 
 .pledge-image {
-  top: 9px !important;
   object-fit: cover;
+}
+
+.pledge-image.large {
+  top: 9px !important;
 }
 
 .pledge-divider {

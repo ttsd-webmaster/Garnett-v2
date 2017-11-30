@@ -303,7 +303,8 @@ module.exports = {
     new workboxPlugin({
       globDirectory: 'build',
       globPatterns: ['**\/*.{html,js,css}'],
-      globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
+      globIgnores: ['/.map', '/asset-manifest.json', '**/service-worker.js', 'workbox-sw.prod.js'],
+      staticFileGlobs: ['**/!(*map*)'],
       swSrc: 'src/service-worker.js',
       swDest: path.join('build', 'service-worker.js'),
       runtimeCaching: [
