@@ -84,7 +84,7 @@ export default class PledgeMerit extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <List id="pledge-merit">
+        <List className="animate-in" id="pledge-merit">
           {this.state.meritArray.map((merit, i) => (
             <LazyLoad
               height={88}

@@ -80,6 +80,12 @@ input:-webkit-autofill {
   }
 }
 
+/* Animates the component in */
+.animate-in {
+  -webkit-animation: fadeIn 0.25s ease-in;
+  animation: fadeIn 0.25s ease-in;
+}
+
 /* Placeholder skeleton for list items */
 .placeholder-skeleton {
   position: relative;

@@ -249,7 +249,7 @@ export default class ActiveMerit extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <div>
+        <div className="animate-in">
           <List className="pledge-list">
             {this.state.pledgeArray.map((pledge, i) => (
               <div key={i}>
