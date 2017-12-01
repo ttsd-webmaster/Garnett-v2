@@ -124,6 +124,8 @@ class App extends Component {
               messaging.getToken()
               .then((currentToken) => {
                 if (currentToken) {
+                  localStorage.setItem('registrationToken', currentToken);
+
                   API.saveMessagingToken(displayName, currentToken)
                   .then(messageRes => {
                     console.log(messageRes);

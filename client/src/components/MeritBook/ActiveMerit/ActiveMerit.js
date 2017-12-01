@@ -111,8 +111,9 @@ export default class ActiveMerit extends Component {
         API.merit(displayName, pledgeName, activeName, description, amount, photoURL, date)
         .then(res => {
           const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+          let registrationToken = localStorage.getItem('registrationToken');
 
-          if (isSafari) {
+          if (isSafari || !registrationToken) {
             this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
 
             this.setState({
@@ -173,8 +174,9 @@ export default class ActiveMerit extends Component {
       API.merit(displayName, pledgeName, activeName, description, -amount, photoURL, date)
       .then(res => {
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        let registrationToken = localStorage.getItem('registrationToken');
 
-        if (isSafari) {
+        if (isSafari || !registrationToken) {
           this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
 
           this.setState({
