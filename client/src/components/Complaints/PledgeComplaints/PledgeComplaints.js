@@ -18,7 +18,6 @@ export default class PledgeComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loaded: false,
       complaintsArray: this.props.complaintsArray,
     }
   }
@@ -44,81 +43,59 @@ export default class PledgeComplaints extends Component {
           localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
 
           this.setState({
-            loaded: true,
             complaintsArray: complaintsArray.reverse()
-          }, function() {
-            let height = document.getElementById('pledge-complaints').offsetHeight;
-            let screenHeight = window.innerHeight - 100;
-
-            if (height < screenHeight) {
-              document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
-            }
           });
         });
       });
     }
-    else {
-      this.setState({
-        loaded: true
-      }, function() {
-        let height = document.getElementById('pledge-complaints').offsetHeight;
-        let screenHeight = window.innerHeight - 100;
+  }
 
-        if (height < screenHeight) {
-          document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
-        }
-      });
+  componentDidUpdate() {
+    let height = document.getElementById('pledge-complaints').offsetHeight;
+    let screenHeight = window.innerHeight - 100;
+
+    if (height < screenHeight) {
+      document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
+    }
+    else {
+      document.getElementById('pledge-complaints').style.height = '';
     }
   }
 
   render() {
     return (
-      this.state.loaded ? (
-        <div id="pledge-complaints">
-          <List style={listStyle}>
-            {this.state.complaintsArray.map((complaint, i) => (
-              <LazyLoad
-                height={88}
-                offset={500}
-                once
-                unmountIfInvisible
-                key={i}
-                placeholder={
-                  <div className="placeholder-skeleton">
-                    <Divider />
-                    <div className="placeholder-description"></div>
-                    <Divider />
-                  </div>
-                }
-              >
-                <div>
+      <div id="pledge-complaints">
+        <List style={listStyle}>
+          {this.state.complaintsArray.map((complaint, i) => (
+            <LazyLoad
+              height={88}
+              offset={500}
+              once
+              unmountIfInvisible
+              key={i}
+              placeholder={
+                <div className="placeholder-skeleton">
                   <Divider />
-                  <ListItem
-                    innerDivStyle={listItemStyle}
-                    primaryText={
-                      <p> {complaint.description} </p>
-                    }
-                  >
-                  </ListItem>
+                  <div className="placeholder-description"></div>
                   <Divider />
                 </div>
-              </LazyLoad>
-            ))}
-          </List>
-        </div>
-      ) : (
-        <div className="loader-container">
-          <div className="line-scale-container">
-            <div className="line-scale">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        </div>
-      )
+              }
+            >
+              <div>
+                <Divider />
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  primaryText={
+                    <p> {complaint.description} </p>
+                  }
+                >
+                </ListItem>
+                <Divider />
+              </div>
+            </LazyLoad>
+          ))}
+        </List>
+      </div>
     )
   }
 }

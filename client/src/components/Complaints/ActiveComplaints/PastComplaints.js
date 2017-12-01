@@ -4,12 +4,16 @@ import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 export default class ActiveList extends Component {
-  componentDidMount() {
+  componentDidUpdate() {
     let height = document.getElementById('past-complaints').clientHeight;
     let screenHeight = window.innerHeight - 157;
 
     if (height < screenHeight) {
       document.getElementById('past-complaints').style.height = 'calc(100vh - 157px)';
+    }
+    else {
+      document.getElementById('past-complaints').style.height = '';
+      document.getElementById('past-complaints').style.marginBottom = '57px';
     }
   }
 

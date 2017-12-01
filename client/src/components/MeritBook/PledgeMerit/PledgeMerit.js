@@ -23,6 +23,18 @@ const dividerStyle = {
   marginLeft: '102px'
 };
 
+function checkHeight() {
+  let height = document.getElementById('pledge-merit').offsetHeight;
+  let screenHeight = window.innerHeight - 166;
+
+  if (height < screenHeight) {
+    document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
+  }
+  else {
+    document.getElementById('pledge-merit').style.height = '';
+  }
+}
+
 export default class PledgeMerit extends Component {
   constructor(props) {
     super(props);
@@ -56,29 +68,19 @@ export default class PledgeMerit extends Component {
           this.setState({
             loaded: true,
             meritArray: meritArray,
-          }, function() {
-            let height = document.getElementById('pledge-merit').clientHeight;
-            let screenHeight = window.innerHeight - 166;
-
-            if (height < screenHeight) {
-              document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
-            }
-          });
+          }, checkHeight());
         });
       });
     }
     else {
       this.setState({
         loaded: true
-      }, function() {
-        let height = document.getElementById('pledge-merit').clientHeight;
-        let screenHeight = window.innerHeight - 166;
-
-        if (height < screenHeight) {
-          document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
-        }
-      });
+      }, checkHeight());
     }
+  }
+
+  componentDidUpdate() {
+    checkHeight();
   }
 
   render() {
