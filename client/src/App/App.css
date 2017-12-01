@@ -47,21 +47,6 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #fff;
 }
 
-.app-header {
-  position: fixed;
-  top: 0;
-  background-color: var(--primary-color);
-  color: #fff;
-  height: 60px;
-  width: 100%;
-  font-weight: 500;
-  font-size: 20px;
-  padding-left: 20px;
-  padding-top: 20px;
-  text-align: left;
-  z-index: 1;
-}
-
 /* Main Loading Screen */
 .loading {
   display: block;
@@ -99,6 +84,23 @@ input:-webkit-autofill {
   background-color: #fafafa;
   height: 100vh;
   width: 100vw;
+}
+.app-header {
+  position: fixed;
+  top: 0;
+  background-color: var(--primary-color);
+  color: #fff;
+  height: 60px;
+  width: 100%;
+  font-weight: 500;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-top: 20px;
+  text-align: left;
+  z-index: 1;
+}
+.app-header.loading {
+  height: 80px;
 }
 
 /* Animates the component in */

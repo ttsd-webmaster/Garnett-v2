@@ -1,5 +1,5 @@
 import './ActiveComplaints.css';
-import loadFirebase from '../../../helpers/loadFirebase';
+import {loadFirebase} from '../../../helpers/functions.js';
 import API from "../../../api/API.js";
 
 import React, {Component} from 'react';

@@ -1,4 +1,4 @@
-import loadFirebase from '../../../helpers/loadFirebase';
+import {loadFirebase} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';

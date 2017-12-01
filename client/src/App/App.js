@@ -1,71 +1,12 @@
 import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
-import loadFirebase from '../helpers/loadFirebase.js';
+import {loadFirebase} from '../helpers/functions.js';
+import {LoadingLogin, LoadingPledgeApp} from '../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import {Tabs, Tab} from 'material-ui/Tabs';
-
-const inkBarStyle = {
-  position: 'fixed',
-  top: 100,
-  backgroundColor: '#fff',
-  zIndex: 1
-};
-
-const tabContainerStyle = {
-  position: 'fixed',
-  top: 52,
-  zIndex: 1
-};
-
-const contentContainerStyle = {
-  position: 'relative',
-  backgroundColor: '#fafafa',
-  zIndex: 0
-};
-
-function Loading(props) {
-  if (props.error) {
-    return <div>Error!</div>;
-  } 
-  else if (props.pastDelay) {
-    return (
-      <div className="loading">
-        <div className="loading-image"></div>
-      </div>
-    )
-  } 
-  else {
-    return (
-      <div className="loading-container">
-        <div className="app-header">
-          Merit Book
-        </div>
-        <Tabs
-          contentContainerStyle={contentContainerStyle}
-          inkBarStyle={inkBarStyle}
-          tabItemContainerStyle={tabContainerStyle}
-        >
-          <Tab 
-            icon={<i className="icon-star"></i>}
-          />
-          <Tab
-            icon={<i className="icon-address-book"></i>}
-          />
-          <Tab
-            icon={<i className="icon-thumbs-down-alt"></i>}
-          />
-          <Tab
-            icon={<i className="icon-sliders"></i>}
-          />
-        </Tabs>
-      </div>
-    )
-  }
-}
 
 const LoadableLogin = Loadable({
   loader: () => import('../containers/Login/Login'),
@@ -73,7 +14,7 @@ const LoadableLogin = Loadable({
     let Component = loaded.default;
     return <Component {...props}/>;
   },
-  loading: Loading
+  loading: LoadingLogin
 });
 
 const LoadablePledgeApp = Loadable({
@@ -82,7 +23,7 @@ const LoadablePledgeApp = Loadable({
     let Component = loaded.default;
     return <Component {...props}/>;
   },
-  loading: Loading
+  loading: LoadingPledgeApp
 });
 
 class App extends Component {
@@ -276,7 +217,7 @@ class App extends Component {
                   loginCallBack={this.loginCallBack}
                 />
               ) : (
-                <Loading />
+                <LoadingLogin />
               )
             )
           )}/>

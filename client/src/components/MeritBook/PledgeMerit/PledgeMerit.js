@@ -1,5 +1,6 @@
 import '../MeritBook.css';
-import loadFirebase from '../../../helpers/loadFirebase';
+import {loadFirebase} from '../../../helpers/functions.js';
+import {LoadingMeritBook} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
@@ -127,17 +128,7 @@ export default class PledgeMerit extends Component {
           ))}
         </List> 
       ) : (
-        <div className="loader-container">
-          <div className="line-scale-container">
-            <div className="line-scale">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        </div>
+        <LoadingMeritBook />
       )
     )
   }

@@ -1,6 +1,7 @@
 import './PledgeApp.css';
 import API from '../../api/API.js';
-import loadFirebase from '../../helpers/loadFirebase.js';
+import {loadFirebase} from '../../helpers/functions.js';
+import {LoadingPledgeApp} from '../../helpers/loaders.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 import Contacts from '../../components/Contacts/Contacts';
 import Complaints from '../../components/Complaints/Complaints';
@@ -424,29 +425,7 @@ export default class PledgeApp extends Component {
           />
         </div>
       ) : (
-        <div className="loading-container">
-          <div className="app-header">
-            Merit Book
-          </div>
-          <Tabs
-            contentContainerStyle={contentContainerStyle}
-            inkBarStyle={inkBarStyle}
-            tabItemContainerStyle={tabContainerStyle}
-          >
-            <Tab 
-              icon={<i className="icon-star"></i>}
-            />
-            <Tab
-              icon={<i className="icon-address-book"></i>}
-            />
-            <Tab
-              icon={<i className="icon-thumbs-down-alt"></i>}
-            />
-            <Tab
-              icon={<i className="icon-sliders"></i>}
-            />
-          </Tabs>
-        </div>
+        <LoadingPledgeApp />
       )
     )
   }

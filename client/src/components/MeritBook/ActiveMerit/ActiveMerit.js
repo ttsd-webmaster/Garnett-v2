@@ -1,6 +1,6 @@
 import '../MeritBook.css';
-import loadFirebase from '../../../helpers/loadFirebase';
-import getDate from '../../../helpers/getDate';
+import {loadFirebase, getDate} from '../../../helpers/functions.js';
+import {LoadingMeritBook} from '../../../helpers/loaders.js';
 import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
@@ -294,17 +294,7 @@ export default class ActiveMerit extends Component {
           />
         </div>
       ) : (
-        <div className="loader-container">
-          <div className="line-scale-container">
-            <div className="line-scale">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        </div>
+        <LoadingMeritBook />
       )
     )
   }
