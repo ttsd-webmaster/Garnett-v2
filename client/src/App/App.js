@@ -138,10 +138,12 @@ class App extends Component {
               })
               .catch(function(err) {
                 console.log('An error occurred while retrieving token. ', err);
+                this.checkPhoto(res, firebase, displayName);
               });
             })
             .catch(function(err) {
               console.log('Unable to get permission to notify.', err);
+              this.checkPhoto(res, firebase, displayName);
             });
           });
         });
