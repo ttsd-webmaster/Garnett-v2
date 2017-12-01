@@ -1,22 +1,24 @@
 import './ActiveComplaints.css';
-import {loadFirebase} from '../../../helpers/functions.js';
+import {loadFirebase, getDate} from '../../../helpers/functions.js';
 import API from "../../../api/API.js";
+import SubmitComplaints from './SubmitComplaints';
+import PastComplaints from './PastComplaints';
 
 import React, {Component} from 'react';
-import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 export default class ActiveComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedIndex: 0,
       open: false,
       pledge: null,
       description: '',
       pledgeArray: this.props.pledgeArray,
       pledgeValidation: true,
-      descriptionValidation: true
+      descriptionValidation: true,
+      complaintsArray: this.props.complaintsArray
     };
   }
 
@@ -27,37 +29,46 @@ export default class ActiveComplaints extends Component {
       loadFirebase('database')
       .then(() => {
         let firebase = window.firebase;
-        let dbRef = firebase.database().ref('/users/');
+        let complaintsRef = firebase.database().ref('/complaints/');
 
-        dbRef.on('value', (snapshot) => {
-          pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-            return snapshot.val()[key];
-          });
-          pledgeArray = pledgeArray.filter(function(user) {
-            return user.status === 'pledge';
-          });
-          pledgeArray = pledgeArray.map(function(pledge) {
-            return {'value': pledge.firstName + pledge.lastName, 
-                    'label': `${pledge.firstName} ${pledge.lastName}`};
-          });
+        API.getPledgesForComplaints()
+        .then((res) => {
+          let pledgeArray = res.data.reverse();
+          console.log(pledgeArray)
 
-          console.log('Pledge Complaints Array: ', pledgeArray);
+          complaintsRef.on('value', (snapshot) => {
+            let complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+              return snapshot.val()[key];
+            }).reverse();
 
-          localStorage.setItem('pledgeComplaintsArray', JSON.stringify(pledgeArray));
-          
-          this.setState({
-            pledgeArray: pledgeArray
+            console.log('Pledge Complaints Array: ', pledgeArray);
+            console.log('Complaints Array: ', complaintsArray);
+
+            localStorage.setItem('pledgeComplaintsArray', JSON.stringify(pledgeArray));
+            localStorage.setItem('activeComplaintsArray', JSON.stringify(complaintsArray));
+            
+            this.setState({
+              pledgeArray: pledgeArray,
+              complaintsArray: complaintsArray
+            });
           });
-        });
+        })
+        .catch(err => console.log(err));
       });
     }
-    else {
-      let pledgeArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
+  }
 
-      this.setState({
-        pledgeArray: pledgeArray
-      });
+  select = (index) => {
+    let previousIndex = this.state.selectedIndex;
+    let submitComplaints = document.getElementById('submit-complaints');
+    let pastComplaints = document.getElementById('past-complaints');
+
+    if (previousIndex !== index) {
+      submitComplaints.classList.toggle('active');
+      pastComplaints.classList.toggle('active');
     }
+
+    this.setState({selectedIndex: index});
   }
 
   complain = (pledge) => {
@@ -80,7 +91,9 @@ export default class ActiveComplaints extends Component {
       });
     }
     else {
-      API.complain(activeName, pledge, description)
+      let date = getDate();
+      
+      API.complain(activeName, pledge, description, date)
       .then(res => {
         console.log(res);
         this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
@@ -95,7 +108,7 @@ export default class ActiveComplaints extends Component {
     }
   }
 
-  handleChange(label, newValue) {
+  handleChange = (label, newValue) => {
     let validationLabel = [label] + 'Validation';
     let value = newValue;
 
@@ -107,32 +120,32 @@ export default class ActiveComplaints extends Component {
 
   render() {
     return (
-      <div id="complaints-container">
-        <SelectField
-          className="complaints-input"
-          value={this.state.pledge}
-          floatingLabelText="Pledge Name"
-          onChange={(e, key, newValue) => this.handleChange('pledge', newValue)}
-          errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
-        >
-          {this.state.pledgeArray.map((pledge, i) => (
-            <MenuItem key={i} value={pledge.value} primaryText={pledge.label} />
-          ))}
-        </SelectField>
-        <TextField
-          className="complaints-input"
-          type="text"
-          floatingLabelText="Description"
-          multiLine={true}
-          rowsMax={3}
-          value={this.state.description}
-          onChange={(e, newValue) => this.handleChange('description', newValue)}
-          errorText={!this.state.descriptionValidation && 'Enter a description.'}
+      <div>
+        <SubmitComplaints
+          pledge={this.state.pledge}
+          pledgeArray={this.state.pledgeArray}
+          pledgeValidation={this.state.pledgeValidation}
+          description={this.state.description}
+          descriptionValidation={this.state.descriptionValidation}
+          complain={this.complain}
+          handleChange={this.handleChange}
         />
-        <div style={{height: '60px'}}></div>
-        <div className="complain-button" onClick={() => this.complain(this.state.pledge)}> 
-          Submit Complaint
-        </div>
+        <PastComplaints
+          complaintsArray={this.state.complaintsArray}
+        />
+
+        <BottomNavigation id="complaints-tabs" selectedIndex={this.state.selectedIndex}>
+          <BottomNavigationItem
+            label="Submit Complaint"
+            icon={<div></div>}
+            onClick={() => this.select(0)}
+          />
+          <BottomNavigationItem
+            label="Past Complaints"
+            icon={<div></div>}
+            onClick={() => this.select(1)}
+          />
+        </BottomNavigation>
       </div>
     )
   }

@@ -425,13 +425,44 @@ app.post('/api/meritall', function(req, res) {
   });
 });
 
+app.post('/api/pledgecomplaints', function(req, res) {
+  let dbRef = admin.database().ref('/users/');
+
+  dbRef.once('value', (snapshot) => {
+    pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+      return snapshot.val()[key];
+    });
+    pledgeArray = pledgeArray.filter(function(user) {
+      return user.status === 'pledge';
+    });
+    pledgeArray = pledgeArray.map(function(pledge) {
+      return {'value': pledge.firstName + pledge.lastName, 
+              'label': `${pledge.firstName} ${pledge.lastName}`,
+              'photoURL': pledge.photoURL
+             };
+    });
+
+    res.json(pledgeArray);
+  });
+});
+
 // Post complaint data
 app.post('/api/complain', function(req, res) {
-  let complaintsRef = admin.database().ref('/users/' + req.body.pledgeName + '/Complaints/');
+  let complaintsRef = admin.database().ref('/complaints/');
+  let pledgeComplaintsRef = admin.database().ref('/users/' + req.body.pledge.value + '/Complaints/');
 
   complaintsRef.push({
+    name: req.body.activeName,
+    pledgeName: req.body.pledge.label,
     description: req.body.description,
-    name: req.body.activeName
+    photoURL: req.body.pledge.photoURL,
+    date: req.body.date
+  });
+
+  pledgeComplaintsRef.push({
+    name: req.body.activeName,
+    description: req.body.description,
+    date: req.body.date
   });
 
   res.sendStatus(200);

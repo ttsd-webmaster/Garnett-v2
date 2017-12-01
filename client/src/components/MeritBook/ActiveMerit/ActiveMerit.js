@@ -67,8 +67,7 @@ export default class ActiveMerit extends Component {
     }
     else {
       this.setState({
-        loaded: true,
-        pledgeArray: pledgeArray
+        loaded: true
       });
     }
   }

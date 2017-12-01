@@ -67,7 +67,9 @@ export default class PledgeApp extends Component {
       activeArray: [],
       pledgeArray: [],
       meritArray: [],
-      complaintsArray: []
+      complaintsArray: [],
+      pledgeComplaintsArray: [],
+      activeComplaintsArray: []
     };
   }
 
@@ -119,11 +121,15 @@ export default class PledgeApp extends Component {
         if (data.data.user.status === 'active') {
           let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
+          let pledgeComplaintsArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
+          let activeComplaintsArray = JSON.parse(localStorage.getItem('activeComplaintsArray'));
 
           this.setState({
             loaded: true,
             pledgeArray: pledgeArray,
-            activeArray: activeArray
+            activeArray: activeArray,
+            pledgeComplaintsArray: pledgeComplaintsArray,
+            activeComplaintsArray: activeComplaintsArray
           });
         }
         else {
@@ -189,6 +195,7 @@ export default class PledgeApp extends Component {
   // Changes view margin if view is pledge merit book
   componentDidUpdate() {
     let pullToRefresh = document.querySelector('.ptr--ptr');
+    let complaintsTabs = document.getElementById('complaints-tabs');
     
     if (pullToRefresh) {
       pullToRefresh.style.marginTop = '100px';
@@ -200,6 +207,15 @@ export default class PledgeApp extends Component {
     }
     else {
       contentContainerStyle.marginBottom = 0;
+    }
+
+    if (complaintsTabs) {
+      if (this.props.state.status === 'active' && this.state.slideIndex === 2) {
+        complaintsTabs.style.display = 'flex';
+      }
+      else {
+        complaintsTabs.style.display = 'none';
+      }
     }
   }
 
@@ -379,7 +395,8 @@ export default class PledgeApp extends Component {
             >
               <Complaints
                 state={this.props.state}
-                pledgeArray={this.state.pledgeArray}
+                pledgeComplaintsArray={this.state.pledgeComplaintsArray}
+                activeComplaintsArray={this.state.activeComplaintsArray}
                 complaintsArray={this.state.complaintsArray}
                 handleRequestOpen={this.handleRequestOpen}
               />

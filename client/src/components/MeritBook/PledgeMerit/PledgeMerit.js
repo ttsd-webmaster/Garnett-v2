@@ -46,7 +46,7 @@ export default class PledgeMerit extends Component {
           if (snapshot.val()) {
             meritArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
-            });
+            }).reverse();
           }
 
           console.log('Merit array: ', meritArray);
@@ -55,7 +55,7 @@ export default class PledgeMerit extends Component {
 
           this.setState({
             loaded: true,
-            meritArray: meritArray.reverse(),
+            meritArray: meritArray,
           }, function() {
             let height = document.getElementById('pledge-merit').clientHeight;
             let screenHeight = window.innerHeight - 166;
@@ -69,8 +69,7 @@ export default class PledgeMerit extends Component {
     }
     else {
       this.setState({
-        loaded: true,
-        meritArray: meritArray.reverse(),
+        loaded: true
       }, function() {
         let height = document.getElementById('pledge-merit').clientHeight;
         let screenHeight = window.innerHeight - 166;

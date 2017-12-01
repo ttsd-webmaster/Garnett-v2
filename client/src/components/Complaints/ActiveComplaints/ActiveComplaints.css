@@ -1,9 +1,12 @@
-/* Active Complaints */
-#complaints-container {
-  display: flex;
+/* Submit Complaints */
+#submit-complaints {
+  display: none;
   flex-direction: column;
   height: calc(100vh - 100px);
-  margin-left: 20px;
+}
+#submit-complaints.active {
+  display: flex;
+  animation: fadeIn .25s ease-in forwards;
 }
 
 .complaints-input {
@@ -40,4 +43,29 @@
 }
 .complain-button:hover {
   background-color: var(--primary-dark);
+}
+
+/* Past Complaints */
+#past-complaints {
+  display: none;
+}
+#past-complaints.active {
+  display: block;
+  animation: fadeIn .25s ease-in forwards;
+}
+
+/* Bottom Navigation */
+#complaints-tabs {
+  position: fixed !important;
+  bottom: 0;
+  border-top: 1px solid #ccc;
+}
+
+.complaints-description {
+  word-wrap: break-word;
+}
+
+.complaints-date {
+  float: right;
+  margin-left: 20px;
 }

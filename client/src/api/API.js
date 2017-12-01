@@ -29,11 +29,14 @@ export default {
     let body = {displayName, activeName, description, amount, photoURL, date};
     return axios.post('/api/meritall', body);
   },
-  complain: function(activeName, pledgeName, description) {
-    return axios.post('/api/complain', {activeName, pledgeName, description});
+  complain: function(activeName, pledge, description, date) {
+    return axios.post('/api/complain', {activeName, pledge, description, date});
   },
   getPledges: function() {
     return axios.post('/api/pledges');
+  },
+  getPledgesForComplaints: function() {
+    return axios.post('/api/pledgecomplaints');
   },
   getActives: function() {
     return axios.post('/api/actives');

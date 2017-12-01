@@ -14,8 +14,9 @@ export default class Complaints extends Component {
         />
       ): (
         <ActiveComplaints 
-          state={this.props.state} 
-          pledgeArray={this.props.pledgeArray}
+          state={this.props.state}
+          pledgeArray={this.props.pledgeComplaintsArray}
+          complaintsArray={this.props.activeComplaintsArray}
           handleRequestOpen={this.props.handleRequestOpen}
         />
       )

@@ -37,7 +37,7 @@ export default class PledgeComplaints extends Component {
           if (snapshot.val()) {
             complaintsArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
-            });
+            }).reverse();
           }
 
           console.log('Complaints Array: ', complaintsArray);
@@ -59,8 +59,7 @@ export default class PledgeComplaints extends Component {
     }
     else {
       this.setState({
-        loaded: true,
-        complaintsArray: complaintsArray.reverse()
+        loaded: true
       }, function() {
         let height = document.getElementById('pledge-complaints').offsetHeight;
         let screenHeight = window.innerHeight - 100;
