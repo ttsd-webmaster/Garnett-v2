@@ -6,13 +6,65 @@ import loadFirebase from '../helpers/loadFirebase.js';
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import {Tabs, Tab} from 'material-ui/Tabs';
 
-function Loading() {
-  return (
-    <div className="loading">
-      <div className="loading-image"></div>
-    </div>
-  )
+const inkBarStyle = {
+  position: 'fixed',
+  top: 100,
+  backgroundColor: '#fff',
+  zIndex: 1
+};
+
+const tabContainerStyle = {
+  position: 'fixed',
+  top: 52,
+  zIndex: 1
+};
+
+const contentContainerStyle = {
+  position: 'relative',
+  backgroundColor: '#fafafa',
+  zIndex: 0
+};
+
+function Loading(props) {
+  if (props.error) {
+    return <div>Error!</div>;
+  } 
+  else if (props.pastDelay) {
+    return (
+      <div className="loading">
+        <div className="loading-image"></div>
+      </div>
+    )
+  } 
+  else {
+    return (
+      <div className="loading-container">
+        <div className="app-header">
+          Merit Book
+        </div>
+        <Tabs
+          contentContainerStyle={contentContainerStyle}
+          inkBarStyle={inkBarStyle}
+          tabItemContainerStyle={tabContainerStyle}
+        >
+          <Tab 
+            icon={<i className="icon-star"></i>}
+          />
+          <Tab
+            icon={<i className="icon-address-book"></i>}
+          />
+          <Tab
+            icon={<i className="icon-thumbs-down-alt"></i>}
+          />
+          <Tab
+            icon={<i className="icon-sliders"></i>}
+          />
+        </Tabs>
+      </div>
+    )
+  }
 }
 
 const LoadableLogin = Loadable({
@@ -37,19 +89,18 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: '',
       isAuthenticated: false,
       loaded: false
     };
   }
 
   componentDidMount() {
-    let token = localStorage.getItem('token');
+    let data = localStorage.getItem('data');
     let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
     let firebase;
 
     if (navigator.onLine) {
-      if (token !== null) {
+      if (data !== null) {
         loadFirebase('app')
         .then(() => {
           firebase = window.firebase;
@@ -88,9 +139,7 @@ class App extends Component {
       }
     }
     else {
-      let data = JSON.parse(localStorage.getItem('data'));
-
-      if (token !== null) {
+      if (data !== null) {
         this.loginCallBack(data);
       }
       else {
@@ -101,24 +150,14 @@ class App extends Component {
     }
   }
 
-  toggleSignState = () => {
-    this.setState({
-      staySigned: !this.state.staySigned
-    });
-  }
-
   loginCallBack = (res) => {
     loadFirebase('app')
     .then(() => {
       let firebase = window.firebase;
-      let token = localStorage.getItem('token');
       let displayName = res.data.user.firstName + res.data.user.lastName;
       
       if (!firebase.apps.length) {
         firebase.initializeApp(res.data.firebaseData);
-      }
-      if (token === null) {
-        localStorage.setItem('token', res.data.token);
         localStorage.setItem('firebaseData', JSON.stringify(res.data.firebaseData));
       }
 
@@ -178,7 +217,7 @@ class App extends Component {
         let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
         storage.getDownloadURL()
         .then((url) => {
-          API.setPhoto(displayName, url, res.data.token)
+          API.setPhoto(displayName, url)
           .then((response) => {
             console.log(response)
 
@@ -200,7 +239,6 @@ class App extends Component {
 
   setData(res) {
     this.setState({
-      token: res.data.token,
       name: `${res.data.user.firstName} ${res.data.user.lastName}`,
       firstName: res.data.user.firstName,
       lastName: res.data.user.lastName,

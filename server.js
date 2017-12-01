@@ -64,7 +64,6 @@ app.post('/api', function(req, res) {
   userRef.once('value', (snapshot) => {
     const userInfo = snapshot.val();
     const data = {
-      token: req.body.token,
       user: userInfo,
       firebaseData: {
         apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
@@ -286,7 +285,6 @@ app.post('/api/photo', function(req, res) {
   userRef.once('value', (snapshot) => {
     const userInfo = snapshot.val();
     const data = {
-      token: req.body.token,
       user: userInfo
     };
     res.json(data);

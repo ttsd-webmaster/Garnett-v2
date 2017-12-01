@@ -47,6 +47,21 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #fff;
 }
 
+.app-header {
+  position: fixed;
+  top: 0;
+  background-color: var(--primary-color);
+  color: #fff;
+  height: 60px;
+  width: 100%;
+  font-weight: 500;
+  font-size: 20px;
+  padding-left: 20px;
+  padding-top: 20px;
+  text-align: left;
+  z-index: 1;
+}
+
 /* Main Loading Screen */
 .loading {
   display: block;
@@ -78,6 +93,12 @@ input:-webkit-autofill {
     top: calc(50% - 75px);
     left: calc(50% - 75px);
   }
+}
+
+.loading-container {
+  background-color: #fafafa;
+  height: 100vh;
+  width: 100vw;
 }
 
 /* Animates the component in */

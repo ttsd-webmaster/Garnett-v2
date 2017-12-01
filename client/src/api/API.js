@@ -18,8 +18,8 @@ export default {
   logout: function() {
     return axios.post('/api/logout');
   },
-  setPhoto: function(displayName, url, token) {
-    return axios.post('/api/photo', {displayName, url, token});
+  setPhoto: function(displayName, url) {
+    return axios.post('/api/photo', {displayName, url});
   },
   merit: function(displayName, pledgeName, activeName, description, amount, photoURL, date) {
     let body = {displayName, pledgeName, activeName, description, amount, photoURL, date};

@@ -71,15 +71,15 @@ export default class PledgeApp extends Component {
   }
 
   componentDidMount() {
-    console.log('Pledge app mount: ', this.props.state.token)
+    console.log('Pledge app mount: ', this.props.state.name)
 
-    let token = localStorage.getItem('token');
+    let data = localStorage.getItem('data');
     let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
     let firebase = window.firebase;
 
     if (navigator.onLine) {
-      if (!this.props.state.token) {
-        if (token !== null) {
+      if (!this.props.state.name) {
+        if (data !== null) {
           loadFirebase('app')
           .then(() => {
             firebase = window.firebase;
@@ -95,7 +95,6 @@ export default class PledgeApp extends Component {
                   API.getAuthStatus(user)
                   .then(res => {
                     this.getData(res.data.user, firebase);
-                    this.props.loginCallBack(res);
                   });
                 }
                 else {
@@ -115,9 +114,7 @@ export default class PledgeApp extends Component {
       }
     }
     else {
-      let data = JSON.parse(localStorage.getItem('data'));
-
-      if (token !== null) {
+      if (data !== null) {
         if (data.data.user.status === 'active') {
           let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
@@ -427,8 +424,28 @@ export default class PledgeApp extends Component {
           />
         </div>
       ) : (
-        <div className="loading">
-          <div className="loading-image"></div>
+        <div className="loading-container">
+          <div className="app-header">
+            Merit Book
+          </div>
+          <Tabs
+            contentContainerStyle={contentContainerStyle}
+            inkBarStyle={inkBarStyle}
+            tabItemContainerStyle={tabContainerStyle}
+          >
+            <Tab 
+              icon={<i className="icon-star"></i>}
+            />
+            <Tab
+              icon={<i className="icon-address-book"></i>}
+            />
+            <Tab
+              icon={<i className="icon-thumbs-down-alt"></i>}
+            />
+            <Tab
+              icon={<i className="icon-sliders"></i>}
+            />
+          </Tabs>
         </div>
       )
     )
