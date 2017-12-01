@@ -109,15 +109,14 @@ export default class PledgeComplaints extends Component {
         </div>
       ) : (
         <div className="loader-container">
-          <div className="ball-spin-fade-loader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+          <div className="line-scale-container">
+            <div className="line-scale">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
         </div>
       )

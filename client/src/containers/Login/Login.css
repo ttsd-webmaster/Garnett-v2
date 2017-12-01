@@ -142,4 +142,5 @@
   justify-content: center;
   width: max-content;
   margin: auto;
+  cursor: pointer;
 }
