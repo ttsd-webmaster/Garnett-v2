@@ -8,7 +8,7 @@ export default class ActiveList extends Component {
     let height = document.getElementById('past-complaints').clientHeight;
     let screenHeight = window.innerHeight - 157;
 
-    if (height < screenHeight) {
+    if (height <= screenHeight) {
       document.getElementById('past-complaints').style.height = 'calc(100vh - 157px)';
     }
     else {

@@ -1,4 +1,4 @@
-import './ActiveComplaints.css';
+import '../Complaints.css';
 import {loadFirebase, getDate} from '../../../helpers/functions.js';
 import API from "../../../api/API.js";
 import SubmitComplaints from './SubmitComplaints';

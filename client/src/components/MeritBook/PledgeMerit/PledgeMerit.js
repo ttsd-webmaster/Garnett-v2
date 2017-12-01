@@ -24,14 +24,18 @@ const dividerStyle = {
 };
 
 function checkHeight() {
-  let height = document.getElementById('pledge-merit').offsetHeight;
-  let screenHeight = window.innerHeight - 166;
+  let view = document.getElementById('pledge-merit');
 
-  if (height < screenHeight) {
-    document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
-  }
-  else {
-    document.getElementById('pledge-merit').style.height = '';
+  if (view) {
+    let height = view.clientHeight;
+    let screenHeight = window.innerHeight - 166;
+
+    if (height <= screenHeight) {
+      document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
+    }
+    else {
+      document.getElementById('pledge-merit').style.height = '';
+    }
   }
 }
 

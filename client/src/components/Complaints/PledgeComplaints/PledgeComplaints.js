@@ -1,3 +1,4 @@
+import '../Complaints.css';
 import {loadFirebase} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
@@ -18,7 +19,7 @@ export default class PledgeComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      complaintsArray: this.props.complaintsArray,
+      complaintsArray: this.props.complaintsArray
     }
   }
 
@@ -43,7 +44,7 @@ export default class PledgeComplaints extends Component {
           localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
 
           this.setState({
-            complaintsArray: complaintsArray.reverse()
+            complaintsArray: complaintsArray
           });
         });
       });
@@ -51,10 +52,10 @@ export default class PledgeComplaints extends Component {
   }
 
   componentDidUpdate() {
-    let height = document.getElementById('pledge-complaints').offsetHeight;
+    let height = document.getElementById('pledge-complaints').clientHeight;
     let screenHeight = window.innerHeight - 100;
 
-    if (height < screenHeight) {
+    if (height <= screenHeight) {
       document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
     }
     else {
@@ -89,6 +90,7 @@ export default class PledgeComplaints extends Component {
                     <p> {complaint.description} </p>
                   }
                 >
+                  <p className="complaints-date"> {complaint.date} </p>
                 </ListItem>
                 <Divider />
               </div>
