@@ -33,7 +33,7 @@ export default class ActiveComplaints extends Component {
 
         API.getPledgesForComplaints()
         .then((res) => {
-          let pledgeArray = res.data.reverse();
+          let pledgeArray = res.data;
           console.log(pledgeArray)
 
           complaintsRef.on('value', (snapshot) => {
