@@ -1,5 +1,5 @@
 import '../../components/MeritBook/MeritBook.css';
-import getDate from '../../helpers/getDate';
+import {getDate} from '../../helpers/functions.js';
 import API from '../../api/API.js';
 
 import React, {Component} from 'react';

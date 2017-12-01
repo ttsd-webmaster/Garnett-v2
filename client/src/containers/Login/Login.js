@@ -1,7 +1,6 @@
 import './Login.css';
 import {activeCode, pledgeCode} from './data.js';
-import loadFirebase from '../../helpers/loadFirebase';
-import validateEmail from '../../helpers/validateEmail';
+import {loadFirebase, validateEmail} from '../../helpers/functions.js';
 import API from '../../api/API.js';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
