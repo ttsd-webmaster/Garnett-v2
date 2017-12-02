@@ -5,15 +5,19 @@ import Divider from 'material-ui/Divider';
 
 export default class ActiveList extends Component {
   componentDidUpdate() {
-    let height = document.getElementById('past-complaints').clientHeight;
-    let screenHeight = window.innerHeight - 157;
+    let view = document.getElementById('past-complaints');
 
-    if (height <= screenHeight) {
-      document.getElementById('past-complaints').style.height = 'calc(100vh - 157px)';
-    }
-    else {
-      document.getElementById('past-complaints').style.height = '';
-      document.getElementById('past-complaints').style.marginBottom = '57px';
+    if (view) {
+      let height = view.clientHeight;
+      let screenHeight = window.innerHeight - 157;
+
+      if (height <= screenHeight) {
+        view.style.height = 'calc(100vh - 157px)';
+      }
+      else {
+        view.style.height = '';
+        view.style.marginBottom = '57px';
+      }
     }
   }
 

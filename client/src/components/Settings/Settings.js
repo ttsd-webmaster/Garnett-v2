@@ -1,4 +1,5 @@
 import './Settings.css';
+import {LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
@@ -33,60 +34,64 @@ export default class Settings extends Component {
 
   render() {
     return (
-      <div>
-        <img className="user-photo" src={this.props.state.photoURL} alt="User" />
-        <List>
-          <Divider />
-          <ListItem
-            innerDivStyle={listItemStyle}
-            primaryText="Name"
-            secondaryText={this.props.state.name}
-            leftIcon={
-              <i className="icon-user settings-icon"></i>
-            }
-          />
-          <Divider inset={true} />
-          <ListItem
-            innerDivStyle={listItemStyle}
-            primaryText="Phone Number"
-            secondaryText={this.props.state.phone}
-            leftIcon={
-              <i className="icon-phone settings-icon"></i>
-            }
-          />
-          <Divider inset={true} />
-          <ListItem
-            innerDivStyle={listItemStyle}
-            primaryText="Email Address"
-            secondaryText={this.props.state.email}
-            leftIcon={
-              <i className="icon-mail-alt settings-icon"></i>
-            }
-          />
-          <Divider inset={true} />
-          <ListItem
-            innerDivStyle={listItemStyle}
-            primaryText="Class"
-            secondaryText={this.props.state.class}
-            leftIcon={
-              <i className="icon-users settings-icon"></i>
-            }
-          />
-          <Divider inset={true} />
-          <ListItem
-            innerDivStyle={listItemStyle}
-            primaryText="Major"
-            secondaryText={this.props.state.major}
-            leftIcon={
-              <i className="icon-briefcase settings-icon"></i>
-            }
-          />
-          <Divider style={dividerStyle} />
-        </List>
-        <br />
-        <div className="logout-button" onClick={this.logout}> Log Out </div>
-        <br />
-      </div>
+      this.props.state.photoURL ? (
+        <div>
+          <img className="user-photo" src={this.props.state.photoURL} alt="User" />
+          <List>
+            <Divider />
+            <ListItem
+              innerDivStyle={listItemStyle}
+              primaryText="Name"
+              secondaryText={this.props.state.name}
+              leftIcon={
+                <i className="icon-user settings-icon"></i>
+              }
+            />
+            <Divider inset={true} />
+            <ListItem
+              innerDivStyle={listItemStyle}
+              primaryText="Phone Number"
+              secondaryText={this.props.state.phone}
+              leftIcon={
+                <i className="icon-phone settings-icon"></i>
+              }
+            />
+            <Divider inset={true} />
+            <ListItem
+              innerDivStyle={listItemStyle}
+              primaryText="Email Address"
+              secondaryText={this.props.state.email}
+              leftIcon={
+                <i className="icon-mail-alt settings-icon"></i>
+              }
+            />
+            <Divider inset={true} />
+            <ListItem
+              innerDivStyle={listItemStyle}
+              primaryText="Class"
+              secondaryText={this.props.state.class}
+              leftIcon={
+                <i className="icon-users settings-icon"></i>
+              }
+            />
+            <Divider inset={true} />
+            <ListItem
+              innerDivStyle={listItemStyle}
+              primaryText="Major"
+              secondaryText={this.props.state.major}
+              leftIcon={
+                <i className="icon-briefcase settings-icon"></i>
+              }
+            />
+            <Divider style={dividerStyle} />
+          </List>
+          <br />
+          <div className="logout-button" onClick={this.logout}> Log Out </div>
+          <br />
+        </div>
+      ) : (
+        <LoadingComponent />
+      )
     )
   }
 }

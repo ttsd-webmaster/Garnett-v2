@@ -18,7 +18,7 @@ function LoadingPledgeApp() {
   )
 }
 
-function LoadingMeritBook() {
+function LoadingComponent() {
   return (
     <div className="loader-container">
       <div className="line-scale-container">
@@ -34,4 +34,4 @@ function LoadingMeritBook() {
   )
 }
 
-export {LoadingLogin, LoadingPledgeApp, LoadingMeritBook};
+export {LoadingLogin, LoadingPledgeApp, LoadingComponent};

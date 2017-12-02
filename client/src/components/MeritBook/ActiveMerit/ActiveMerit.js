@@ -1,6 +1,6 @@
 import '../MeritBook.css';
 import {loadFirebase, getDate} from '../../../helpers/functions.js';
-import {LoadingMeritBook} from '../../../helpers/loaders.js';
+import {LoadingComponent} from '../../../helpers/loaders.js';
 import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
@@ -295,7 +295,7 @@ export default class ActiveMerit extends Component {
           />
         </div>
       ) : (
-        <LoadingMeritBook />
+        <LoadingComponent />
       )
     )
   }

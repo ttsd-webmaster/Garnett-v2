@@ -1,5 +1,6 @@
 import ActiveList from './ActiveList';
 import API from '../../api/API';
+import {LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -82,17 +83,7 @@ export default class Contacts extends Component {
           />
         </List>
       ) : (
-        <div className="loader-container">
-          <div className="line-scale-container">
-            <div className="line-scale">
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        </div>
+        <LoadingComponent />
       )
     )
   }

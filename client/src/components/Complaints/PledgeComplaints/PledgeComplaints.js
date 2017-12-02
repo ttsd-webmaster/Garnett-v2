@@ -1,5 +1,6 @@
 import '../Complaints.css';
 import {loadFirebase} from '../../../helpers/functions.js';
+import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
@@ -19,6 +20,7 @@ export default class PledgeComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loaded: false,
       complaintsArray: this.props.complaintsArray
     }
   }
@@ -44,60 +46,74 @@ export default class PledgeComplaints extends Component {
           localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
 
           this.setState({
+            loaded: true,
             complaintsArray: complaintsArray
           });
         });
       });
     }
+    else {
+      this.setState({
+        loaded: true
+      });
+    }
   }
 
   componentDidUpdate() {
-    let height = document.getElementById('pledge-complaints').clientHeight;
-    let screenHeight = window.innerHeight - 100;
+    let view = document.getElementById('pledge-complaints')
 
-    if (height <= screenHeight) {
-      document.getElementById('pledge-complaints').style.height = 'calc(100vh - 100px)';
-    }
-    else {
-      document.getElementById('pledge-complaints').style.height = '';
+    if (view) {
+      let height = view.clientHeight;
+      let screenHeight = window.innerHeight - 100;
+
+      if (height <= screenHeight) {
+        view.style.height = 'calc(100vh - 100px)';
+      }
+      else {
+        view.style.height = '';
+      }
     }
   }
 
   render() {
     return (
-      <div id="pledge-complaints">
-        <List style={listStyle}>
-          {this.state.complaintsArray.map((complaint, i) => (
-            <LazyLoad
-              height={88}
-              offset={500}
-              once
-              unmountIfInvisible
-              key={i}
-              placeholder={
-                <div className="placeholder-skeleton">
+      this.state.loaded ? (
+        <div id="pledge-complaints">
+          <List style={listStyle}>
+            {this.state.complaintsArray.map((complaint, i) => (
+              <LazyLoad
+                height={88}
+                offset={500}
+                once
+                unmountIfInvisible
+                key={i}
+                placeholder={
+                  <div className="placeholder-skeleton">
+                    <Divider />
+                    <div className="placeholder-description"></div>
+                    <Divider />
+                  </div>
+                }
+              >
+                <div>
                   <Divider />
-                  <div className="placeholder-description"></div>
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    primaryText={
+                      <p> {complaint.description} </p>
+                    }
+                  >
+                    <p className="complaints-date"> {complaint.date} </p>
+                  </ListItem>
                   <Divider />
                 </div>
-              }
-            >
-              <div>
-                <Divider />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  primaryText={
-                    <p> {complaint.description} </p>
-                  }
-                >
-                  <p className="complaints-date"> {complaint.date} </p>
-                </ListItem>
-                <Divider />
-              </div>
-            </LazyLoad>
-          ))}
-        </List>
-      </div>
+              </LazyLoad>
+            ))}
+          </List>
+        </div>
+      ) : (
+        <LoadingComponent />
+      )
     )
   }
 }
