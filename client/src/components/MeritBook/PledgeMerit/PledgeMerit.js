@@ -31,10 +31,10 @@ function checkHeight() {
     let screenHeight = window.innerHeight - 166;
 
     if (height <= screenHeight) {
-      document.getElementById('pledge-merit').style.height = 'calc(100vh - 166px)';
+      view.style.height = 'calc(100vh - 166px)';
     }
     else {
-      document.getElementById('pledge-merit').style.height = '';
+      view.parentNode.scrollTop = height;
     }
   }
 }
@@ -62,7 +62,7 @@ export default class PledgeMerit extends Component {
           if (snapshot.val()) {
             meritArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
-            }).reverse();
+            });
           }
 
           console.log('Merit array: ', meritArray);
@@ -94,8 +94,10 @@ export default class PledgeMerit extends Component {
           {this.state.meritArray.map((merit, i) => (
             <LazyLoad
               height={88}
-              offset={300}
+              offset={500}
+              once
               unmountIfInvisible
+              overflow
               key={i}
               placeholder={
                 <div className="placeholder-skeleton">

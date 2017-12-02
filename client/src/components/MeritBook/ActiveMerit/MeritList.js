@@ -8,7 +8,7 @@ import Divider from 'material-ui/Divider';
 export default class ActiveMerit extends Component {
   render() {
     return (
-      <List className="pledge-list">
+      <List className="pledge-list" id="pledge-list">
         {this.props.meritArray.map((merit, i) => (
           <div key={i}>
             <div>

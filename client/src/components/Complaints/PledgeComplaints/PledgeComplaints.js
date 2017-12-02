@@ -39,7 +39,7 @@ export default class PledgeComplaints extends Component {
           if (snapshot.val()) {
             complaintsArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
-            }).reverse();
+            });
           }
 
           console.log('Complaints Array: ', complaintsArray);
@@ -86,6 +86,7 @@ export default class PledgeComplaints extends Component {
                 offset={500}
                 once
                 unmountIfInvisible
+                overflow
                 key={i}
                 placeholder={
                   <div className="placeholder-skeleton">

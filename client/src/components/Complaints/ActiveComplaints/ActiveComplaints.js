@@ -39,7 +39,7 @@ export default class ActiveComplaints extends Component {
           complaintsRef.on('value', (snapshot) => {
             let complaintsArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
-            }).reverse();
+            });
 
             console.log('Pledge Complaints Array: ', pledgeArray);
             console.log('Complaints Array: ', complaintsArray);

@@ -32,6 +32,7 @@ export default class ActiveList extends Component {
             offset={500}
             once
             unmountIfInvisible
+            overflow
             key={i}
             placeholder={
               <div className="placeholder-skeleton">

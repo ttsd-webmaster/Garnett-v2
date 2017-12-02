@@ -25,12 +25,6 @@ const tabContainerStyle = {
   zIndex: 1
 };
 
-const contentContainerStyle = {
-  position: 'relative',
-  backgroundColor: '#fafafa',
-  zIndex: 0
-};
-
 const LoadableActiveMeritAllDialog = Loadable({
   loader: () => import('./ActiveMeritAllDialog'),
   render(loaded, props) {
@@ -181,8 +175,8 @@ export default class PledgeApp extends Component {
             .then(res => {
               this.setState({
                 totalMerits: res.data.totalMerits,
-                meritArray: res.data.meritArray.reverse(),
-                complaintsArray: res.data.complaintsArray.reverse()
+                meritArray: res.data.meritArray,
+                complaintsArray: res.data.complaintsArray
               });
             })
             .catch(err => console.log(err)); 
@@ -194,7 +188,9 @@ export default class PledgeApp extends Component {
 
   // Changes view margin if view is pledge merit book
   componentDidUpdate() {
+    let index = this.state.slideIndex;
     let pullToRefresh = document.querySelector('.ptr--ptr');
+    let contentContainer = document.querySelector('.content-container');
     let complaintsTabs = document.getElementById('complaints-tabs');
     
     if (pullToRefresh) {
@@ -202,11 +198,22 @@ export default class PledgeApp extends Component {
     }
 
     // Changes view margin if view is pledge merit book
-    if (this.props.state.status === 'pledge' && this.state.slideIndex === 0) {
-      contentContainerStyle.marginBottom = '50px';
-    }
-    else {
-      contentContainerStyle.marginBottom = 0;
+    if (contentContainer) {
+      contentContainer.childNodes[index].style.position = 'fixed';
+      contentContainer.childNodes[index].style.height = 'calc(100% - 100px)';
+
+      for (let i = 0; i < 4; i++) {
+        if (index !== i) {
+          contentContainer.childNodes[i].style.position = 'relative';
+          contentContainer.childNodes[i].style.height = 0;
+          contentContainer.childNodes[i].style.marginBottom = 0;
+        }
+      }
+
+      if (this.props.state.status === 'pledge' && index === 0) {
+        contentContainer.childNodes[index].style.marginBottom = '50px';
+        contentContainer.childNodes[index].style.height = 'calc(100% - 150px)';
+      }
     }
 
     if (complaintsTabs) {
@@ -266,7 +273,8 @@ export default class PledgeApp extends Component {
     let scrollPosition2 = this.state.scrollPosition2;
     let scrollPosition3 = this.state.scrollPosition3;
     let scrollPosition4 = this.state.scrollPosition4;
-    let scrollPosition = window.pageYOffset;
+    let contentContainer = document.querySelector('.content-container');
+    let scrollPosition = contentContainer.childNodes[previousIndex].scrollTop;
     let scrolled;
 
     // Sets the title and marks scroll position based on the tab index
@@ -301,17 +309,26 @@ export default class PledgeApp extends Component {
       scrollPosition4 = scrollPosition;
     }
 
-    if (this.props.state.status === 'pledge' && value === 0) {
-      contentContainerStyle.marginBottom = '50px';
-    }
-    else {
-      contentContainerStyle.marginBottom = 0;
+    if (contentContainer) {
+      contentContainer.childNodes[value].style.position = 'fixed';
+      contentContainer.childNodes[value].style.height = 'calc(100% - 100px)';
+
+      for (let i = 0; i < 4; i++) {
+        if (value !== i) {
+          contentContainer.childNodes[i].style.position = 'relative';
+          contentContainer.childNodes[i].style.height = 0;
+          contentContainer.childNodes[i].style.marginBottom = 0;
+        }
+      }
+
+      if (this.props.state.status === 'pledge' && value === 0) {
+        contentContainer.childNodes[value].style.marginBottom = '50px';
+        contentContainer.childNodes[value].style.height = 'calc(100% - 150px)';
+      }
     }
 
     // Sets the window scroll position based on tab
-    setTimeout(function() {
-      window.scrollTo(0, scrolled);
-    }, 1);
+    contentContainer.childNodes[value].scrollTop = scrolled;
 
     this.setState({
       title: title,
@@ -363,7 +380,7 @@ export default class PledgeApp extends Component {
           </div>
           <Tabs
             id="tabs-container"
-            contentContainerStyle={contentContainerStyle}
+            contentContainerClassName="content-container"
             inkBarStyle={inkBarStyle}
             tabItemContainerStyle={tabContainerStyle}
             onChange={this.handleChange}

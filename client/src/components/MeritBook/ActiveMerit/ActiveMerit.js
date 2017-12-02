@@ -227,7 +227,7 @@ export default class ActiveMerit extends Component {
           open: true,
           pledge: pledge,
           remainingMerits: res.data.remainingMerits,
-          meritArray: res.data.meritArray.reverse()
+          meritArray: res.data.meritArray
         });
       })
       .catch(err => console.log('err', err));
