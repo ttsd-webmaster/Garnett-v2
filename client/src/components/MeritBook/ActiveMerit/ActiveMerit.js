@@ -7,6 +7,7 @@ import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 const LoadableActiveMeritDialog = Loadable({
@@ -252,6 +253,7 @@ export default class ActiveMerit extends Component {
       this.state.loaded ? (
         <div className="animate-in">
           <List className="pledge-list">
+            <Subheader> Pledges </Subheader>
             {this.state.pledgeArray.map((pledge, i) => (
               <div key={i}>
                 <Divider className="pledge-divider large" inset={true} />
