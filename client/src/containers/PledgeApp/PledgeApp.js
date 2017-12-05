@@ -4,6 +4,7 @@ import {loadFirebase} from '../../helpers/functions.js';
 import {LoadingPledgeApp} from '../../helpers/loaders.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 import Contacts from '../../components/Contacts/Contacts';
+import Chalkboards from '../../components/Chalkboards/Chalkboards';
 import Complaints from '../../components/Complaints/Complaints';
 import Settings from '../../components/Settings/Settings';
 
@@ -53,6 +54,7 @@ export default class PledgeApp extends Component {
       scrollPosition2: 0,
       scrollPosition3: 0,
       scrollPosition4: 0,
+      scrollPosition5: 0,
       loaded: false,
       open: false,
       message: '',
@@ -208,7 +210,7 @@ export default class PledgeApp extends Component {
       contentContainer.childNodes[index].style.position = 'fixed';
       contentContainer.childNodes[index].style.height = 'calc(100% - 100px)';
 
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 5; i++) {
         if (index !== i) {
           contentContainer.childNodes[i].style.position = 'relative';
           contentContainer.childNodes[i].style.height = 0;
@@ -221,13 +223,14 @@ export default class PledgeApp extends Component {
         contentContainer.childNodes[index].style.height = 'calc(100% - 150px)';
       }
 
-      if (this.props.state.status !== 'pledge' && index === 2) {
+      if (this.props.state.status !== 'pledge' && index === 3) {
         contentContainer.childNodes[index].style.height = 'calc(100vh - 157px)';
       }
     }
 
+    // Changes complaints tabs to be viewable if slide is on complaints
     if (complaintsTabs) {
-      if (this.props.state.status === 'active' && this.state.slideIndex === 2) {
+      if (this.props.state.status !== 'pledge' && index === 3) {
         complaintsTabs.style.display = 'flex';
       }
       else {
@@ -236,6 +239,7 @@ export default class PledgeApp extends Component {
     }
   }
 
+  // Gets the merit data if user is a pledge
   getData = (user, firebase) => {
     if (user.status === 'active') {
       this.setState({
@@ -263,18 +267,17 @@ export default class PledgeApp extends Component {
     }
   }
 
+  // Changes touch action of view if scroll is at top of view
   onScroll = () => {
     let contentContainer = document.querySelector('.content-container');
     let index = this.state.slideIndex;
     let view = contentContainer.childNodes[index];
 
-    if (view) {
-      if (view.scrollTop >= 1) {
-        view.style.touchAction = 'auto';
-      } 
-      else {
-        view.style.touchAction = 'pan-down';
-      }
+    if (view.scrollTop >= 1) {
+      view.style.touchAction = 'auto';
+    } 
+    else {
+      view.style.touchAction = 'pan-down';
     }
   }
 
@@ -285,6 +288,7 @@ export default class PledgeApp extends Component {
     let scrollPosition2 = this.state.scrollPosition2;
     let scrollPosition3 = this.state.scrollPosition3;
     let scrollPosition4 = this.state.scrollPosition4;
+    let scrollPosition5 = this.state.scrollPosition5;
     let contentContainer = document.querySelector('.content-container');
     let scrollPosition = contentContainer.childNodes[previousIndex].scrollTop;
     let scrolled;
@@ -299,12 +303,16 @@ export default class PledgeApp extends Component {
       scrolled = scrollPosition2;
     }
     else if (value === 2) {
-      title = 'Complaints';
+      title = 'Chalkboards';
       scrolled = scrollPosition3;
     }
-    else {
-      title = 'Account';
+    else if (value === 3) {
+      title = 'Complaints';
       scrolled = scrollPosition4;
+    }
+    else {
+      title = 'Settings';
+      scrolled = scrollPosition5;
     }
 
     // Updates the previous scroll position based on the previous index
@@ -317,8 +325,11 @@ export default class PledgeApp extends Component {
     else if (previousIndex === 2) {
       scrollPosition3 = scrollPosition;
     }
-    else {
+    else if (previousIndex === 3) {
       scrollPosition4 = scrollPosition;
+    }
+    else {
+      scrollPosition5 = scrollPosition;
     }
 
     if (contentContainer) {
@@ -349,7 +360,8 @@ export default class PledgeApp extends Component {
       scrollPosition1: scrollPosition1,
       scrollPosition2: scrollPosition2,
       scrollPosition3: scrollPosition3,
-      scrollPosition4: scrollPosition4
+      scrollPosition4: scrollPosition4,
+      scrollPosition5: scrollPosition5,
     });
   };
 
@@ -418,8 +430,17 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i className="icon-thumbs-down-alt"></i>}
+              icon={<i className="icon-calendar-empty"></i>}
               value={2}
+            >
+              <Chalkboards 
+                state={this.props.state}
+                index={this.state.slideIndex}
+              />
+            </Tab>
+            <Tab
+              icon={<i className="icon-thumbs-down-alt"></i>}
+              value={3}
             >
               <Complaints
                 state={this.props.state}
@@ -430,8 +451,8 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i className="icon-sliders"></i>}
-              value={3} 
+              icon={<i className="icon-cog"></i>}
+              value={4} 
             >
               <Settings 
                 state={this.props.state} 
@@ -447,10 +468,8 @@ export default class PledgeApp extends Component {
                 Total Merits: {this.state.totalMerits} 
               </div>
             ) : (
-              <div>
-                <div className="merit-button" onClick={this.handleMeritOpen}>
-                  <i className="icon-pencil"></i>
-                </div>
+              <div className="merit-button" onClick={this.handleMeritOpen}>
+                <i className="icon-pencil"></i>
               </div>
             )
           )}

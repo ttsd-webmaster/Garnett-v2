@@ -277,7 +277,6 @@ export default class ActiveMerit extends Component {
               </div>
             ))}
           </List>
-          <div style={{height: '40px'}}></div>
           
           <LoadableActiveMeritDialog
             open={this.state.open}

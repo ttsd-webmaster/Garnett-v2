@@ -12,7 +12,7 @@ export default class ActiveList extends Component {
   componentDidUpdate() {
     let contentContainer = document.querySelector('.content-container');
     let view = document.getElementById('past-complaints');
-    let index = 2;
+    let index = 3;
 
     if (view.classList.contains('active')) {
       let height = view.clientHeight;

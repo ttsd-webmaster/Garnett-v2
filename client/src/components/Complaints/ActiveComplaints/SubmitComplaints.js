@@ -7,7 +7,7 @@ export default class ActiveList extends Component {
   componentDidUpdate() {
     let contentContainer = document.querySelector('.content-container');
     let view = document.getElementById('submit-complaints');
-    let index = 2;
+    let index = 3;
 
     if (view.classList.contains('active')) {
       contentContainer.childNodes[index].style.marginBottom = 0;

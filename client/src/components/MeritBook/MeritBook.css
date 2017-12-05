@@ -12,7 +12,7 @@
 }
 
 .pledge-list {
-  text-align: left;
+  padding: 56px 0 !important;
 }
 
 .pledge-list-item > div > div {
@@ -63,6 +63,10 @@
 
 .merit-dialog-content {
   width: 90% !important;
+}
+
+#merit-dialog-list {
+  background-color: #fafafa;
 }
 
 .merit-all-dialog {

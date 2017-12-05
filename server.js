@@ -368,7 +368,7 @@ app.post('/api/meritall', function(req, res) {
       let userPledgeRef = admin.database().ref('/users/' + fullName + '/Pledges/' + child.key);
       let pledgeRef = admin.database().ref('/users/' + child.key);
       let meritRef = admin.database().ref('/users/' + child.key + '/Merits/');
-      let remainingMerits = snapshot.val().merits - req.body.amount;
+      let remainingMerits = child.val().merits - req.body.amount;
 
       if (req.body.amount > 0) {
         if (remainingMerits > 0) {
@@ -378,7 +378,7 @@ app.post('/api/meritall', function(req, res) {
             });
 
             userPledgeRef.update({
-              merits: snapshot.val().merits - req.body.amount
+              merits: remainingMerits
             });
 
             meritRef.push({

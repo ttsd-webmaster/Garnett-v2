@@ -8,10 +8,11 @@ import Divider from 'material-ui/Divider';
 export default class ActiveMerit extends Component {
   render() {
     return (
-      <List className="pledge-list" id="pledge-list">
+      <List id="merit-dialog-list">
         {this.props.meritArray.map((merit, i) => (
           <div key={i}>
             <div>
+              <Divider className="pledge-divider" inset={true} />
               <ListItem
                 className="pledge-list-item"
                 leftAvatar={<Avatar className="pledge-image" src={merit.photoURL} />}

@@ -80,7 +80,7 @@ export default class Settings extends Component {
               primaryText="Major"
               secondaryText={this.props.state.major}
               leftIcon={
-                <i className="icon-briefcase settings-icon"></i>
+                <i className="icon-graduation-cap settings-icon"></i>
               }
             />
             <Divider style={dividerStyle} />

@@ -29,14 +29,12 @@ export default class ActiveMerit extends Component {
   handleChange = (value) => {
     if (value === 1) {
       let meritDialog = document.querySelector('.merit-dialog-body');
-      let view = document.getElementById('pledge-list');
-
-      if (view) {
-        let height = view.clientHeight;
-        setTimeout(() => {
-          meritDialog.scrollTop = height;
-        }, 1);
-      }
+      let view = document.getElementById('merit-dialog-list');
+      let height = view.clientHeight;
+      
+      setTimeout(() => {
+        meritDialog.scrollTop = height;
+      }, 1);
     }
   }
 
