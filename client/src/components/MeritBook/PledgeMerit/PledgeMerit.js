@@ -23,22 +23,6 @@ const dividerStyle = {
   marginLeft: '102px'
 };
 
-function checkHeight() {
-  let view = document.getElementById('pledge-merit');
-
-  if (view) {
-    let height = view.clientHeight;
-    let screenHeight = window.innerHeight - 166;
-
-    if (height <= screenHeight) {
-      view.style.height = 'calc(100vh - 166px)';
-    }
-    else {
-      view.parentNode.scrollTop = height;
-    }
-  }
-}
-
 export default class PledgeMerit extends Component {
   constructor(props) {
     super(props);
@@ -72,25 +56,36 @@ export default class PledgeMerit extends Component {
           this.setState({
             loaded: true,
             meritArray: meritArray,
-          }, checkHeight());
+          });
         });
       });
     }
     else {
       this.setState({
         loaded: true
-      }, checkHeight());
+      });
     }
   }
 
   componentDidUpdate() {
-    checkHeight();
+    let view = document.getElementById('pledge-merit');
+
+    if (view) {
+      let height = view.clientHeight;
+
+      if (this.props.scrollPosition) {
+        view.parentNode.scrollTop = this.props.scrollPosition;
+      }
+      else {
+        view.parentNode.scrollTop = height;
+      }
+    }
   }
 
   render() {
     return (
       this.state.loaded ? (
-        <List className="animate-in" id="pledge-merit">
+        <List className="animate-in pledge-list no-header" id="pledge-merit">
           {this.state.meritArray.map((merit, i) => (
             <LazyLoad
               height={88}

@@ -14,6 +14,9 @@
 .pledge-list {
   padding: 8px 0 56px !important;
 }
+.pledge-list.no-header {
+  padding: 56px 0 56px !important;
+}
 
 .pledge-list-item > div > div {
   background-color: #fff;

@@ -17,15 +17,19 @@ export default class ActiveList extends Component {
     if (view.classList.contains('active')) {
       let height = view.clientHeight;
       
-      contentContainer.childNodes[index].style.marginBottom = '57px';
-      contentContainer.childNodes[index].scrollTop = height;
+      if (this.props.scrollPosition) {
+        contentContainer.childNodes[index].scrollTop = this.props.scrollPosition;
+      }
+      else {
+        contentContainer.childNodes[index].scrollTop = height;
+      }
     }
   }
 
   render() {
     return (
       <div id="past-complaints">
-        <List className="pledge-list">
+        <List className="pledge-list no-header">
           {this.props.complaintsArray.map((complaint, i) => (
             <LazyLoad
               height={88}

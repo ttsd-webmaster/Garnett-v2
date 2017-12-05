@@ -130,6 +130,7 @@ export default class ActiveComplaints extends Component {
         />
         <PastComplaints
           complaintsArray={this.state.complaintsArray}
+          scrollPosition={this.props.scrollPosition}
         />
 
         <BottomNavigation id="complaints-tabs" selectedIndex={this.state.selectedIndex}>

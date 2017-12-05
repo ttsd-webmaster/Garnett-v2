@@ -7,10 +7,6 @@ import LazyLoad from 'react-lazyload';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-const listStyle = {
-  textAlign: 'left'
-};
-
 const listItemStyle = {
   backgroundColor: '#fff',
   zIndex: -1
@@ -64,13 +60,12 @@ export default class PledgeComplaints extends Component {
 
     if (view) {
       let height = view.clientHeight;
-      let screenHeight = window.innerHeight - 100;
 
-      if (height <= screenHeight) {
-        view.style.height = 'calc(100vh - 100px)';
+      if (this.props.scrollPosition) {
+        view.parentNode.scrollTop = this.props.scrollPosition;
       }
       else {
-        view.style.height = '';
+        view.parentNode.scrollTop = height;
       }
     }
   }
@@ -79,7 +74,7 @@ export default class PledgeComplaints extends Component {
     return (
       this.state.loaded ? (
         <div id="pledge-complaints">
-          <List style={listStyle}>
+          <List className="pledge-list no-header">
             {this.state.complaintsArray.map((complaint, i) => (
               <LazyLoad
                 height={88}

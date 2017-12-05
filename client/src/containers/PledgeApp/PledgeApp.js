@@ -187,7 +187,9 @@ export default class PledgeApp extends Component {
         let contentContainer = document.querySelector('.content-container');
         let index = this.state.slideIndex;
 
-        return contentContainer.childNodes[index].scrollTop === 0;
+        if (contentContainer) {
+          return contentContainer.childNodes[index].scrollTop === 0;
+        }
       }
     });
   }
@@ -336,22 +338,9 @@ export default class PledgeApp extends Component {
       contentContainer.childNodes[value].style.position = 'fixed';
       contentContainer.childNodes[value].style.height = 'calc(100% - 100px)';
 
-      for (let i = 0; i < 4; i++) {
-        if (value !== i) {
-          contentContainer.childNodes[i].style.position = 'relative';
-          contentContainer.childNodes[i].style.height = 0;
-          contentContainer.childNodes[i].style.marginBottom = 0;
-        }
-      }
-
-      if (this.props.state.status === 'pledge' && value === 0) {
-        contentContainer.childNodes[value].style.marginBottom = '50px';
-        contentContainer.childNodes[value].style.height = 'calc(100% - 150px)';
-      }
+      // Sets the window scroll position based on tab
+      contentContainer.childNodes[value].scrollTop = scrolled;
     }
-
-    // Sets the window scroll position based on tab
-    contentContainer.childNodes[value].scrollTop = scrolled;
 
     this.setState({
       title: title,
@@ -417,6 +406,7 @@ export default class PledgeApp extends Component {
                 state={this.props.state} 
                 pledgeArray={this.state.pledgeArray}
                 meritArray={this.state.meritArray}
+                scrollPosition={this.state.scrollPosition1}
                 handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>
@@ -447,6 +437,7 @@ export default class PledgeApp extends Component {
                 pledgeComplaintsArray={this.state.pledgeComplaintsArray}
                 activeComplaintsArray={this.state.activeComplaintsArray}
                 complaintsArray={this.state.complaintsArray}
+                scrollPosition={this.state.scrollPosition4}
                 handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>
