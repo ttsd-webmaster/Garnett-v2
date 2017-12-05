@@ -1,3 +1,5 @@
+import '../Chalkboards.css';
+
 import React, {Component} from 'react';
 
 export default class ActiveChalkboards extends Component {
@@ -15,6 +17,8 @@ export default class ActiveChalkboards extends Component {
   render() {
     return (
       <div>
+        <img className="coming-soon" src={require('../images/coming-soon.png')} />
+        
         <div id="add-chalkboard" className="merit-button">
           <i className="icon-calendar-plus-o"></i>
         </div>
