@@ -8,6 +8,7 @@
   background-color: #fafafa;
   height: calc(100% - 100px);
   overflow: scroll !important;
+  touch-action: pan-down;
   z-index: 0;
 }
 
