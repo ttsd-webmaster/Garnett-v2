@@ -264,12 +264,12 @@ export default class PledgeApp extends Component {
   }
 
   onScroll = () => {
-    let view = document.getElementById('tabs-container');
     let contentContainer = document.querySelector('.content-container');
     let index = this.state.slideIndex;
+    let view = contentContainer.childNodes[index];
 
     if (view) {
-      if (contentContainer.childNodes[index].scrollTop >= 1) {
+      if (view.scrollTop >= 1) {
         view.style.touchAction = 'auto';
       } 
       else {
@@ -391,7 +391,6 @@ export default class PledgeApp extends Component {
             {this.state.title}
           </div>
           <Tabs
-            id="tabs-container"
             contentContainerClassName="content-container"
             inkBarStyle={inkBarStyle}
             tabItemContainerStyle={tabContainerStyle}
