@@ -146,8 +146,6 @@ export default class PledgeApp extends Component {
       }
     }
 
-    window.onscroll = watchScroll;
-
     setInterval(() => {
       if (didScroll) {
         didScroll = false;
@@ -182,6 +180,12 @@ export default class PledgeApp extends Component {
             .catch(err => console.log(err)); 
           }
         }
+      },
+      shouldPullToRefresh: () => {
+        let contentContainer = document.querySelector('.content-container');
+        let index = this.state.slideIndex;
+
+        return contentContainer.childNodes[index].scrollTop === 0;
       }
     });
   }
@@ -199,6 +203,8 @@ export default class PledgeApp extends Component {
 
     // Changes view margin if view is pledge merit book
     if (contentContainer) {
+      contentContainer.childNodes[index].onscroll = watchScroll;
+
       contentContainer.childNodes[index].style.position = 'fixed';
       contentContainer.childNodes[index].style.height = 'calc(100% - 100px)';
 
@@ -213,6 +219,10 @@ export default class PledgeApp extends Component {
       if (this.props.state.status === 'pledge' && index === 0) {
         contentContainer.childNodes[index].style.marginBottom = '50px';
         contentContainer.childNodes[index].style.height = 'calc(100% - 150px)';
+      }
+
+      if (this.props.state.status !== 'pledge' && index === 2) {
+        contentContainer.childNodes[index].style.height = 'calc(100vh - 157px)';
       }
     }
 
@@ -255,9 +265,11 @@ export default class PledgeApp extends Component {
 
   onScroll = () => {
     let view = document.getElementById('tabs-container');
+    let contentContainer = document.querySelector('.content-container');
+    let index = this.state.slideIndex;
 
     if (view) {
-      if (window.pageYOffset >= 1) {
+      if (contentContainer.childNodes[index].scrollTop >= 1) {
         view.style.touchAction = 'auto';
       } 
       else {

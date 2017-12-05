@@ -208,7 +208,7 @@ export default class ActiveMerit extends Component {
     let value = newValue;
 
     if (label === 'amount') {
-      value = parseInt(newValue)
+      value = parseInt(newValue, 10)
     }
 
     this.setState({

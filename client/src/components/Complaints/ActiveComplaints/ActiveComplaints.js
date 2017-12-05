@@ -23,8 +23,6 @@ export default class ActiveComplaints extends Component {
   }
 
   componentDidMount() {
-    let pledgeArray = this.state.pledgeArray;
-
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

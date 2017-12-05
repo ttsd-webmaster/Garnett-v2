@@ -17,7 +17,6 @@ export default class ActiveList extends Component {
     if (view.classList.contains('active')) {
       let height = view.clientHeight;
       
-      contentContainer.childNodes[index].style.height = 'calc(100vh - 157px)';
       contentContainer.childNodes[index].style.marginBottom = '57px';
       contentContainer.childNodes[index].scrollTop = height;
     }

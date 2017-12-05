@@ -4,6 +4,16 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 export default class ActiveList extends Component {
+  componentDidUpdate() {
+    let contentContainer = document.querySelector('.content-container');
+    let view = document.getElementById('submit-complaints');
+    let index = 2;
+
+    if (view.classList.contains('active')) {
+      contentContainer.childNodes[index].style.marginBottom = 0;
+    }
+  }
+
   render() {
     return (
       <div id="submit-complaints" className="active">
