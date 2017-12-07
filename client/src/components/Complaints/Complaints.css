@@ -1,12 +1,17 @@
 /* Submit Complaints */
 #submit-complaints {
   display: none;
-  flex-direction: column;
   height: calc(100vh - 157px);
 }
 #submit-complaints.active {
-  display: flex;
+  display: block;
   animation: fadeIn .25s ease-in forwards;
+}
+
+#active-complaints-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 30px;
 }
 
 .complaints-input {

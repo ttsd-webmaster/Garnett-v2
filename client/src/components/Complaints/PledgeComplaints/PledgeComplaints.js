@@ -96,7 +96,9 @@ export default class PledgeComplaints extends Component {
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText={
-                      <p> {complaint.description} </p>
+                      <p className="complaints-description">
+                        {complaint.description}
+                      </p>
                     }
                   >
                     <p className="complaints-date"> {complaint.date} </p>
