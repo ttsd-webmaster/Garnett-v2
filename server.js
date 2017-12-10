@@ -385,7 +385,8 @@ app.post('/api/meritall', function(req, res) {
               name: req.body.activeName,
               description: req.body.description,
               amount: req.body.amount,
-              photoURL: req.body.photoURL
+              photoURL: req.body.photoURL,
+              date: req.body.date
             });
 
             if (!res.headersSent) {
