@@ -1,7 +1,6 @@
 import '../Complaints.css';
-import {loadFirebase, getDate} from '../../../helpers/functions.js';
-import API from "../../../api/API.js";
-import SubmitComplaints from './SubmitComplaints';
+import {loadFirebase} from '../../../helpers/functions.js';
+import MyComplaints from './MyComplaints';
 import PastComplaints from './PastComplaints';
 
 import React, {Component} from 'react';
@@ -12,13 +11,12 @@ export default class ActiveComplaints extends Component {
     super(props);
     this.state = {
       selectedIndex: 0,
-      open: false,
       pledge: null,
       description: '',
       pledgeArray: this.props.pledgeArray,
-      pledgeValidation: true,
-      descriptionValidation: true,
-      complaintsArray: this.props.complaintsArray
+      complaintsArray: this.props.complaintsArray,
+      approvedComplaintsArray: [],
+      pendingComplaintsArray: []
     };
   }
 
@@ -27,106 +25,96 @@ export default class ActiveComplaints extends Component {
       loadFirebase('database')
       .then(() => {
         let firebase = window.firebase;
-        let complaintsRef = firebase.database().ref('/complaints/');
+        let complaintsRef = firebase.database().ref('/approvedComplaints/');
 
-        API.getPledgesForComplaints()
-        .then((res) => {
-          let pledgeArray = res.data;
-          console.log(pledgeArray)
-
-          complaintsRef.on('value', (snapshot) => {
-            let complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+        complaintsRef.on('value', (snapshot) => {
+          let complaintsArray = [];
+          if (snapshot.val()) {
+            complaintsArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             });
+          }
 
-            console.log('Pledge Complaints Array: ', pledgeArray);
-            console.log('Complaints Array: ', complaintsArray);
+          console.log('Complaints Array: ', complaintsArray);
 
-            localStorage.setItem('pledgeComplaintsArray', JSON.stringify(pledgeArray));
-            localStorage.setItem('activeComplaintsArray', JSON.stringify(complaintsArray));
-            
-            this.setState({
-              pledgeArray: pledgeArray,
-              complaintsArray: complaintsArray
+          localStorage.setItem('activeComplaintsArray', JSON.stringify(complaintsArray));
+
+          if (this.props.state.status === 'active') {
+            let fullName = this.props.state.displayName;
+            let userRef = firebase.database().ref('/users/' + fullName);
+
+            userRef.on('value', (snapshot) => {
+              let approvedComplaintsArray = [];
+              let pendingComplaintsArray = [];
+
+              if (snapshot.val().pendingComplaints) {
+                pendingComplaintsArray = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
+                  return snapshot.val().pendingComplaints[key];
+                });
+              }
+              if (snapshot.val().approvedComplaints) {
+                approvedComplaintsArray = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
+                  return snapshot.val().approvedComplaints[key];
+                });
+              }
+
+              this.setState({
+                complaintsArray: complaintsArray,
+                pendingComplaintsArray: pendingComplaintsArray,
+                approvedComplaintsArray: approvedComplaintsArray
+              });
             });
-          });
-        })
-        .catch(err => console.log(err));
-      });
+          }
+          else {
+            let pendingComplaintsRef = firebase.database().ref('/pendingComplaints/');
+
+            pendingComplaintsRef.on('value', (snapshot) => {
+              let pendingComplaintsArray = [];
+
+              if (snapshot.val()) {
+                pendingComplaintsArray = Object.keys(snapshot.val()).map(function(key) {
+                  return snapshot.val()[key];
+                });
+              }
+
+              this.setState({
+                complaintsArray: complaintsArray,
+                pendingComplaintsArray: pendingComplaintsArray,
+                approvedComplaintsArray: complaintsArray
+              });
+            });
+          }
+        });
+      })
+      .catch(err => console.log(err));
     }
   }
 
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
-    let submitComplaints = document.getElementById('submit-complaints');
+    let myComplaints = document.getElementById('my-complaints');
     let pastComplaints = document.getElementById('past-complaints');
 
     if (previousIndex !== index) {
-      submitComplaints.classList.toggle('active');
+      myComplaints.classList.toggle('active');
       pastComplaints.classList.toggle('active');
     }
 
     this.setState({selectedIndex: index});
   }
 
-  complain = (pledge) => {
-    let activeName = this.props.state.name;
-    let description = this.state.description;
-    let descriptionValidation = true;
-    let pledgeValidation = true;
-
-    if (!pledge || !description) {
-      if (!pledge) {
-        pledgeValidation = false;
-      }
-      if (!description) {
-        descriptionValidation = false;
-      }
-
-      this.setState({
-        pledgeValidation: pledgeValidation,
-        descriptionValidation: descriptionValidation
-      });
-    }
-    else {
-      let date = getDate();
-      
-      API.complain(activeName, pledge, description, date)
-      .then(res => {
-        console.log(res);
-        this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
-
-        this.setState({
-          open: false,
-          description: '',
-          pledge: null
-        });
-      })
-      .catch(err => console.log('err', err));
-    }
-  }
-
-  handleChange = (label, newValue) => {
-    let validationLabel = [label] + 'Validation';
-    let value = newValue;
-
-    this.setState({
-      [label]: value,
-      [validationLabel]: true
-    });
-  }
-
   render() {
     return (
       <div>
-        <SubmitComplaints
-          pledge={this.state.pledge}
-          pledgeArray={this.state.pledgeArray}
-          pledgeValidation={this.state.pledgeValidation}
-          description={this.state.description}
-          descriptionValidation={this.state.descriptionValidation}
+        <MyComplaints
+          state={this.props.state}
+          index={this.props.index}
+          selectedIndex={this.state.selectedIndex}
+          approvedComplaintsArray={this.state.approvedComplaintsArray}
+          pendingComplaintsArray={this.state.pendingComplaintsArray}
+          pledgeArray={this.props.pledgeArray}
           complain={this.complain}
-          handleChange={this.handleChange}
+          handleRequestOpen={this.props.handleRequestOpen}
         />
         <PastComplaints
           complaintsArray={this.state.complaintsArray}
@@ -135,7 +123,7 @@ export default class ActiveComplaints extends Component {
 
         <BottomNavigation id="complaints-tabs" selectedIndex={this.state.selectedIndex}>
           <BottomNavigationItem
-            label="Submit Complaint"
+            label="My Complaints"
             icon={<div></div>}
             onClick={() => this.select(0)}
           />

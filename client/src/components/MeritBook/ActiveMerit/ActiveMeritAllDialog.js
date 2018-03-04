@@ -1,6 +1,6 @@
-import '../../components/MeritBook/MeritBook.css';
-import {getDate} from '../../helpers/functions.js';
-import API from '../../api/API.js';
+import '../MeritBook.css';
+import {getDate} from '../../../helpers/functions.js';
+import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -34,7 +34,7 @@ export default class ActiveMerit extends Component {
   }
 
   handleClose = () => {
-    this.props.handleMeritClose();
+    this.props.handleMeritAllClose();
 
     this.setState({
       description: '',
@@ -72,7 +72,7 @@ export default class ActiveMerit extends Component {
       API.meritAll(displayName, activeName, description, amount, photoURL, date)
       .then(res => {
         console.log(res);
-        this.props.handleMeritClose();
+        this.props.handleMeritAllClose();
         this.props.handleRequestOpen(`Merited all pledges: ${amount} merits`);
 
         this.setState({
@@ -81,6 +81,7 @@ export default class ActiveMerit extends Component {
         });
       })
       .catch((error) => {
+        console.log(error)
         let pledge = error.response.data;
 
         console.log('Not enough merits for ', pledge);
@@ -117,7 +118,7 @@ export default class ActiveMerit extends Component {
       API.meritAll(displayName, activeName, description, -amount, photoURL, date)
       .then(res => {
         console.log(res);
-        this.props.handleMeritClose();
+        this.props.handleMeritAllClose();
         this.props.handleRequestOpen(`Demerited all pledges: ${amount} merits`);
 
         this.setState({
@@ -146,17 +147,17 @@ export default class ActiveMerit extends Component {
     return (
       <Dialog
         title="Merit All"
-        titleClassName="merit-all-dialog"
+        titleClassName="garnett-all-dialog"
         actions={actions}
         modal={false}
-        className="merit-dialog"
-        bodyClassName="merit-dialog-body"
-        contentClassName="merit-dialog-content"
+        className="garnett-dialog"
+        bodyClassName="garnett-dialog-body no-tabs"
+        contentClassName="garnett-dialog-content"
         open={this.props.open}
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
-        <div className="merit-container">
+        <div className="garnett-container">
           <TextField 
             type="text"
             floatingLabelText="Description"

@@ -11,29 +11,36 @@ let dbRef = admin.database().ref('/users/');
 dbRef.once('value', (snapshot) => {
   snapshot.forEach((child) => {
     let childRef = admin.database().ref('/users/' + child.key);
+
     if (child.val().status === 'pledge') {
       childRef.update({
         Complaints: null,
         Merits: null,
-        totalMerits: 0,
+        totalMerits: 0
       });
     }
-    else if (child.val().status === 'active') {
-      let activePledgeRef = childRef.child('/Pledges/');
-      let pledgeArray = [];
+    else {
+      childRef.update({
+        Pledges: null
+      });
 
-      activePledgeRef.once('value', (pledges) => {
-        if (pledges.val()) {
-          pledgeArray = Object.keys(pledges.val()).map(function(key) {
-            return key;
-          });
-          pledgeArray.forEach((pledge) => {
-            let pledgeRef = admin.database().ref('/users/' + child.key + '/Pledges/' + pledge);
-            pledgeRef.update({
-              merits: 100
-            });
-          });
-        }
+      dbRef.once('value', (snapshot) => {
+        snapshot.forEach((child) => {
+          if (child.val().status === 'pledge') {
+            let pledgeName = child.key;
+
+            if (child.val().status === 'alumni') {
+              childRef.child('/Pledges/' + pledgeName).update({
+                merits: 200
+              });
+            }
+            else {
+              childRef.child('/Pledges/' + pledgeName).update({
+                merits: 100
+              });
+            }
+          }
+        });
       });
     }
   });

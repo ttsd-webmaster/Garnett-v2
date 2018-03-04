@@ -36,7 +36,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let data = localStorage.getItem('data');
+    let data = JSON.parse(localStorage.getItem('data'));
     let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
     let firebase;
 
@@ -81,7 +81,7 @@ class App extends Component {
     }
     else {
       if (data !== null) {
-        this.loginCallBack(data);
+        this.setData(data);
       }
       else {
         this.setState({
@@ -105,7 +105,7 @@ class App extends Component {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
       const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-      if (isSafari || process.env.NODE_ENV === 'development' || !navigator.onLine) {
+      if (isSafari || process.env.NODE_ENV === 'development') {
         this.checkPhoto(res, firebase, displayName);
       }
       else {
@@ -156,7 +156,7 @@ class App extends Component {
   checkPhoto(res, firebase, displayName) {
     let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
-    if (res.data.user.photoURL === defaultPhoto && navigator.onLine && res.data.user.status !== 'alumni') {
+    if (res.data.user.photoURL === defaultPhoto && res.data.user.status !== 'alumni') {
       loadFirebase('storage')
       .then(() => {
         let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);

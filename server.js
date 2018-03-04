@@ -4,6 +4,7 @@ const http = require('http');
 const path = require('path');
 const compression = require('compression');
 const app = express();
+const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
 require('@firebase/database');
@@ -32,7 +33,7 @@ admin.initializeApp({
 
 // Redirect all HTTP traffic to HTTPS
 function ensureSecure(req, res, next){
-  if(req.headers["x-forwarded-proto"] === "https"){
+  if (req.headers["x-forwarded-proto"] === "https") {
     // OK, continue
     return next();
   };
@@ -151,7 +152,7 @@ app.post('/api/signup', function(req, res) {
             displayName: fullName
           })
           .then(function() {
-            let userRef = admin.database().ref('/users/' + user.displayName);
+            let userRef = dbRef.child(user.displayName);
 
             userRef.set({
               firstName: req.body.firstName,
@@ -171,34 +172,16 @@ app.post('/api/signup', function(req, res) {
               });
 
               dbRef.once('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                  let activeRef = firebase.database().ref('/users/' + child.key);
+                snapshot.forEach((brother) => {
                   let pledgeName = user.displayName;
                   
                   if (child.val().status === 'active') {
-                    activeRef.child('/Pledges/' + pledgeName).set({
+                    brother.ref.child('/Pledges/' + pledgeName).set({
                       merits: 100
                     });
                   }
                   else if (child.val().status === 'alumni') {
-                    activeRef.child('/Pledges/' + pledgeName).set({
-                      merits: 200
-                    });
-                  }
-                });
-              });
-            }
-            else if (req.body.year === 'Alumni') {
-              userRef.update({
-                status: 'alumni',
-              });
-
-              dbRef.once('value', (snapshot) => {
-                snapshot.forEach((child) => {
-                  if (child.val().status === 'pledge') {
-                    let pledgeName = child.key;
-
-                    userRef.child('/Pledges/' + pledgeName).set({
+                    brother.ref.child('/Pledges/' + pledgeName).set({
                       merits: 200
                     });
                   }
@@ -206,18 +189,32 @@ app.post('/api/signup', function(req, res) {
               });
             }
             else {
-              userRef.update({
-                status: 'active',
-              });
+              if (req.body.year === 'Alumni') {
+                userRef.update({
+                  status: 'alumni'
+                });
+              }
+              else {
+                userRef.update({
+                  status: 'active'
+                });
+              }
 
               dbRef.once('value', (snapshot) => {
                 snapshot.forEach((child) => {
                   if (child.val().status === 'pledge') {
                     let pledgeName = child.key;
 
-                    userRef.child('/Pledges/' + pledgeName).set({
-                      merits: 100
-                    });
+                    if (req.body.year === 'Alumni') {
+                      userRef.child('/Pledges/' + pledgeName).set({
+                        merits: 200
+                      });
+                    }
+                    else {
+                      userRef.child('/Pledges/' + pledgeName).set({
+                        merits: 100
+                      });
+                    }
                   }
                 });
               });
@@ -330,7 +327,7 @@ app.post('/api/merit', function(req, res) {
   let fullName = req.body.displayName;
   let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + req.body.pledgeName);
   let pledgeRef = admin.database().ref('/users/' + req.body.pledgeName);
-  let meritRef = admin.database().ref('/users/' + req.body.pledgeName + '/Merits/');
+  let meritRef = pledgeRef.child('/Merits/');
 
   userRef.once('value', (snapshot) => {
     if (req.body.amount > 0) {
@@ -360,15 +357,16 @@ app.post('/api/merit', function(req, res) {
 // Post merit data for all pledges
 app.post('/api/meritall', function(req, res) {
   let fullName = req.body.displayName;
-  let dbRef = admin.database().ref('/users/');
   let userRef = admin.database().ref('/users/' + fullName + '/Pledges/');
+  let counter = 0;
 
   userRef.once('value', (snapshot) => {
     snapshot.forEach((child) => {
-      let userPledgeRef = admin.database().ref('/users/' + fullName + '/Pledges/' + child.key);
+      let userPledgeRef = child.ref;
       let pledgeRef = admin.database().ref('/users/' + child.key);
-      let meritRef = admin.database().ref('/users/' + child.key + '/Merits/');
+      let meritRef = pledgeRef.child('/Merits/');
       let remainingMerits = child.val().merits - req.body.amount;
+      counter++;
 
       if (req.body.amount > 0) {
         if (remainingMerits > 0) {
@@ -389,7 +387,7 @@ app.post('/api/meritall', function(req, res) {
               date: req.body.date
             });
 
-            if (!res.headersSent) {
+            if (!res.headersSent && counter === snapshot.numChildren()) {
               res.sendStatus(200);
             }
           });
@@ -417,7 +415,7 @@ app.post('/api/meritall', function(req, res) {
             date: req.body.date
           });
 
-          if (!res.headersSent) {
+          if (!res.headersSent && counter === snapshot.numChildren()) {
             res.sendStatus(200);
           }
         });
@@ -429,13 +427,16 @@ app.post('/api/meritall', function(req, res) {
 app.post('/api/pledgecomplaints', function(req, res) {
   let dbRef = admin.database().ref('/users/');
 
+  // Loop through all users for pledges
   dbRef.once('value', (snapshot) => {
-    pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+    let pledgeArray = Object.keys(snapshot.val()).map(function(key) {
       return snapshot.val()[key];
     });
+    // Filter pledges
     pledgeArray = pledgeArray.filter(function(user) {
       return user.status === 'pledge';
     });
+    // Save the value, label, and photoURL for each pledge
     pledgeArray = pledgeArray.map(function(pledge) {
       return {'value': pledge.firstName + pledge.lastName, 
               'label': `${pledge.firstName} ${pledge.lastName}`,
@@ -449,24 +450,82 @@ app.post('/api/pledgecomplaints', function(req, res) {
 
 // Post complaint data
 app.post('/api/complain', function(req, res) {
-  let complaintsRef = admin.database().ref('/complaints/');
-  let pledgeComplaintsRef = admin.database().ref('/users/' + req.body.pledge.value + '/Complaints/');
-
-  complaintsRef.push({
-    name: req.body.activeName,
+  let fullName = req.body.displayName;
+  let complaintInfo = {
+    activeDisplayName: req.body.displayName,
+    activeName: req.body.activeName,
+    pledgeDisplayName: req.body.pledge.value,
     pledgeName: req.body.pledge.label,
     description: req.body.description,
     photoURL: req.body.pledge.photoURL,
     date: req.body.date
-  });
+  };
 
-  pledgeComplaintsRef.push({
-    name: req.body.activeName,
-    description: req.body.description,
-    date: req.body.date
-  });
+  // Check if active is PI/PM or not
+  if (req.body.status === 'active') {
+    let complaintsRef = admin.database().ref('/pendingComplaints/');
+    let pendingComplaintsRef = admin.database().ref('/users/' + fullName + '/pendingComplaints/');
+
+    // Add complaints to active's pending complaints list and the pending complaints list
+    complaintsRef.push(complaintInfo);
+    pendingComplaintsRef.push(complaintInfo);
+  }
+  else {
+    let complaintsRef = admin.database().ref('/approvedComplaints/');
+    let pledgeComplaintsRef = admin.database().ref('/users/' + req.body.pledge.value + '/Complaints/');
+
+    // Add complaints to the approved complaints list and the specified pledge's complaints list
+    complaintsRef.push(complaintInfo);
+
+    pledgeComplaintsRef.push({
+      activeName: req.body.activeName,
+      description: req.body.description,
+      date: req.body.date
+    });
+  }
 
   res.sendStatus(200);
+});
+
+// Approves complaint for PI/PM
+app.post('/api/approvecomplaint', function(req, res) {
+  let activeName = req.body.complaint.activeDisplayName;
+  let pledgeName = req.body.complaint.pledgeDisplayName;
+  let activeRef = admin.database().ref('/users/' + activeName);
+  let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints/');
+  let approvedComplaintsRef = admin.database().ref('/approvedComplaints/');
+  let pendingComplaintsRef = admin.database().ref('/pendingComplaints/');
+
+  pendingComplaintsRef.once('value', (snapshot) => {
+    snapshot.forEach((complaint) => {
+      // Removes complaint from the pending complaints list
+      if (equal(req.body.complaint, complaint.val())) {
+        complaint.ref.remove(() => {
+          // Adds complaint to the approved complaints list
+          approvedComplaintsRef.push(req.body.complaint);
+          activeRef.child('/pendingComplaints/').once('value', (snapshot) => {
+            snapshot.forEach((complaint) => {
+              // Removes complaint from the active's pending complaints list
+              if (equal(req.body.complaint, complaint.val())) {
+                complaint.ref.remove(() => {
+                  // Adds complaint to the active's approved complaints list
+                  activeRef.child('/approvedComplaints/').push(req.body.complaint);
+                  // Adds complaint to the pledge's complaints list
+                  pledgeComplaintsRef.push({
+                    activeName: req.body.complaint.activeName,
+                    description: req.body.complaint.description,
+                    date: req.body.complaint.date
+                  });
+
+                  res.sendStatus(200);
+                });
+              }
+            });
+          });
+        });
+      }
+    });
+  });
 });
 
 // Query for merit data on Active App
@@ -501,8 +560,8 @@ app.post('/api/activemerits', function(req, res) {
 app.post('/api/pledgedata', function(req, res) {
   let fullName = req.body.displayName;
   let userRef = admin.database().ref('/users/' + fullName);
-  let meritRef = admin.database().ref('/users/' + fullName + '/Merits/');
-  let complaintsRef = admin.database().ref('/users/' + fullName + '/Complaints/');
+  let meritRef = userRef.child('/Merits/');
+  let complaintsRef = userRef.child('/Complaints/');
   let totalMerits;
   let meritArray = [];
   let complaintsArray = [];

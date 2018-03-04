@@ -40,45 +40,11 @@
   margin-left: 102px !important;
 }
 
-/* Merit Dialog */
-.merit-dialog-tabs > div:first-child {
-  position: fixed;
-  z-index: 2;
-}
-.merit-dialog-tabs > div:last-child > div {
-  top: 48px;
-}
-
-.merit-container {
-  margin-left: 20px;
-}
-
-.merit-dialog {
-  padding-top: 90px !important;
-}
-
-.merit-dialog-body {
-  min-height: 285px;
-  max-height: 352px !important;
-  padding: 0 !important;
-  border-bottom: 1px solid rgb(224, 224, 224) !important;
-}
-
-.merit-dialog-content {
-  width: 90% !important;
-}
-
+/* Merit List */
 #merit-dialog-list {
   background-color: #fafafa;
 }
 
-.merit-all-dialog {
-  background-color: var(--primary-color);
-  color: #fff !important;
-  font-size: 20px !important;
-}
-
-/* Merit List */
 .merit-name {
   font-weight: 700;
   margin: 0;
@@ -111,3 +77,16 @@
 .merit-date.small {
   font-size: 12px;
 }
+
+.total-merits {
+  position: fixed;
+  background-color: var(--primary-color);
+  color: #fff;
+  bottom: 0;
+  height: 50px;
+  line-height: 50px;
+  width: 100%;
+  font-size: 20px;
+  text-align: center;
+}
+

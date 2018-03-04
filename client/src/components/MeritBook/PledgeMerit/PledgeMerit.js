@@ -28,7 +28,8 @@ export default class PledgeMerit extends Component {
     super(props);
     this.state = {
       loaded: false,
-      meritArray: this.props.meritArray
+      meritArray: this.props.meritArray,
+      totalMerits: 0
     }
   }
 
@@ -40,22 +41,30 @@ export default class PledgeMerit extends Component {
       .then(() => {
         let firebase = window.firebase;
         let fullName = this.props.state.displayName;
+        let userRef = firebase.database().ref('/users/' + fullName);
         let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
 
-        meritRef.on('value', (snapshot) => {
-          if (snapshot.val()) {
-            meritArray = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
+        userRef.on('value', (user) => {
+          let totalMerits = user.val().totalMerits;
+
+          console.log('Total Merits: ', totalMerits);
+          localStorage.setItem('totalMerits', totalMerits);
+
+          meritRef.on('value', (merits) => {
+            if (merits.val()) {
+              meritArray = Object.keys(merits.val()).map(function(key) {
+                return merits.val()[key];
+              });
+            }
+
+            console.log('Merit array: ', meritArray);
+            localStorage.setItem('meritArray', JSON.stringify(meritArray));
+
+            this.setState({
+              loaded: true,
+              totalMerits: totalMerits,
+              meritArray: meritArray,
             });
-          }
-
-          console.log('Merit array: ', meritArray);
-
-          localStorage.setItem('meritArray', JSON.stringify(meritArray));
-
-          this.setState({
-            loaded: true,
-            meritArray: meritArray,
           });
         });
       });
@@ -85,50 +94,56 @@ export default class PledgeMerit extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <List className="animate-in pledge-list no-header" id="pledge-merit">
-          {this.state.meritArray.map((merit, i) => (
-            <LazyLoad
-              height={88}
-              offset={500}
-              once
-              unmountIfInvisible
-              overflow
-              key={i}
-              placeholder={
-                <div className="placeholder-skeleton">
+        <div className="animate-in">
+          <List className="animate-in pledge-list no-header" id="pledge-merit">
+            {this.state.meritArray.map((merit, i) => (
+              <LazyLoad
+                height={88}
+                offset={500}
+                once
+                unmountIfInvisible
+                overflow
+                key={i}
+                placeholder={
+                  <div className="placeholder-skeleton">
+                    <Divider style={dividerStyle} inset={true} />
+                    <div className="placeholder-avatar"></div>
+                    <div className="placeholder-name"></div>
+                    <div className="placeholder-year"></div>
+                    <div className="placeholder-date"></div>
+                    <div className="placeholder-merits"></div>
+                    <Divider style={dividerStyle} inset={true} />
+                  </div>
+                }
+              >
+                <div>
                   <Divider style={dividerStyle} inset={true} />
-                  <div className="placeholder-avatar"></div>
-                  <div className="placeholder-name"></div>
-                  <div className="placeholder-year"></div>
-                  <div className="placeholder-date"></div>
-                  <div className="placeholder-merits"></div>
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
+                    primaryText={
+                      <p className="merit-name"> {merit.name} </p>
+                    }
+                    secondaryText={
+                      <p> {merit.description} </p>
+                    }
+                    secondaryTextLines={2}
+                  >
+                    <div className="merit-amount-container">
+                      <p className="merit-date"> {merit.date} </p>
+                      <p className="merit-amount"> {merit.amount} </p>
+                    </div>
+                  </ListItem>
                   <Divider style={dividerStyle} inset={true} />
                 </div>
-              }
-            >
-              <div>
-                <Divider style={dividerStyle} inset={true} />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
-                  primaryText={
-                    <p className="merit-name"> {merit.name} </p>
-                  }
-                  secondaryText={
-                    <p> {merit.description} </p>
-                  }
-                  secondaryTextLines={2}
-                >
-                  <div className="merit-amount-container">
-                    <p className="merit-date"> {merit.date} </p>
-                    <p className="merit-amount"> {merit.amount} </p>
-                  </div>
-                </ListItem>
-                <Divider style={dividerStyle} inset={true} />
-              </div>
-            </LazyLoad>
-          ))}
-        </List> 
+              </LazyLoad>
+            ))}
+          </List>
+
+          <div className="total-merits"> 
+            Total Merits: {this.state.totalMerits} 
+          </div>
+        </div>
       ) : (
         <LoadingComponent />
       )

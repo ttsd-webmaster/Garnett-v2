@@ -159,7 +159,7 @@ export default class Login extends Component {
           console.log(res)
           localStorage.setItem('data', JSON.stringify(res));
 
-          this.props.loginCallBack(res)
+          this.props.loginCallBack(res);
           loadFirebase('auth')
           .then(() => {
             let firebase = window.firebase;

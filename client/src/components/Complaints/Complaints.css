@@ -1,9 +1,9 @@
 /* Submit Complaints */
-#submit-complaints {
+#my-complaints {
   display: none;
   height: calc(100vh - 157px);
 }
-#submit-complaints.active {
+#my-complaints.active {
   display: block;
   animation: fadeIn .25s ease-in forwards;
 }
@@ -11,7 +11,6 @@
 #active-complaints-container {
   display: flex;
   flex-direction: column;
-  padding-top: 30px;
 }
 
 .complaints-input {

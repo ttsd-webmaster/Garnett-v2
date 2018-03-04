@@ -8,8 +8,8 @@ export default {
   login: function(email, password) {
     return axios.post('/api/login', {email, password});
   },
-  signUp: function(email, password, firstName, lastName, className, majorName, year, phone, code, activeCode) {
-    let body = {email, password, firstName, lastName, className, majorName, year, phone, code, activeCode};
+  signUp: function(email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode) {
+    let body = {email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode};
     return axios.post('/api/signup', body);
   },
   forgotPassword: function(email) {
@@ -29,8 +29,11 @@ export default {
     let body = {displayName, activeName, description, amount, photoURL, date};
     return axios.post('/api/meritall', body);
   },
-  complain: function(activeName, pledge, description, date) {
-    return axios.post('/api/complain', {activeName, pledge, description, date});
+  complain: function(status, displayName, activeName, pledge, description, date) {
+    return axios.post('/api/complain', {status, displayName, activeName, pledge, description, date});
+  },
+  approveComplaint: function(complaint) {
+    return axios.post('/api/approvecomplaint', {complaint});
   },
   getPledges: function() {
     return axios.post('/api/pledges');

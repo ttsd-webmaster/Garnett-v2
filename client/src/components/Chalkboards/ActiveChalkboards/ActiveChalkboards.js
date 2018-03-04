@@ -6,7 +6,7 @@ export default class ActiveChalkboards extends Component {
   componentDidUpdate() {
     let addChalkboard = document.getElementById('add-chalkboard');
 
-    if (this.props.state.status === 'active' && this.props.index === 2) {
+    if (this.props.index === 2) {
       addChalkboard.style.display = 'flex';
     }
     else {
@@ -19,7 +19,7 @@ export default class ActiveChalkboards extends Component {
       <div>
         <img className="coming-soon" src={require('../images/coming-soon.png')} />
         
-        <div id="add-chalkboard" className="merit-button">
+        <div id="add-chalkboard" className="fixed-button hidden">
           <i className="icon-calendar-plus-o"></i>
         </div>
       </div>

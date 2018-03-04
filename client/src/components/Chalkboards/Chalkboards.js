@@ -5,10 +5,10 @@ import React, {Component} from 'react';
 
 export default class Chalkboards extends Component {
   render() {
-    let isPledge = this.props.state.status;
+    let status = this.props.state.status;
     
     return (
-      isPledge === 'pledge' ? (
+      status === 'pledge' ? (
         <PledgeChalkboards
           state={this.props.state}
         />

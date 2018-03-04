@@ -9,33 +9,32 @@ import Complaints from '../../components/Complaints/Complaints';
 import Settings from '../../components/Settings/Settings';
 
 import React, {Component} from 'react';
-import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 
 const inkBarStyle = {
   position: 'fixed',
   top: 100,
-  backgroundColor: '#fff',
+  backgroundColor: 'var(--primary-color)',
   zIndex: 1
 };
 
 const tabContainerStyle = {
   position: 'fixed',
   top: 52,
+  backgroundColor: 'white',
+  borderBottom: '1px solid #e0e0e0',
   zIndex: 1
 };
 
-const LoadableActiveMeritAllDialog = Loadable({
-  loader: () => import('./ActiveMeritAllDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
+const tabStyle = {
+  default: {
+    color: 'var(--secondary-light)'
   },
-  loading() {
-    return <div> Loading... </div>
+  active: {
+    color: 'var(--primary-color)'
   }
-});
+};
 
 let didScroll = false;
 
@@ -58,8 +57,6 @@ export default class PledgeApp extends Component {
       loaded: false,
       open: false,
       message: '',
-      openMerit: false,
-      totalMerits: null,
       activeArray: [],
       pledgeArray: [],
       meritArray: [],
@@ -72,7 +69,7 @@ export default class PledgeApp extends Component {
   componentDidMount() {
     console.log('Pledge app mount: ', this.props.state.name)
 
-    let data = localStorage.getItem('data');
+    let data = JSON.parse(localStorage.getItem('data'));
     let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
     let firebase = window.firebase;
 
@@ -91,9 +88,8 @@ export default class PledgeApp extends Component {
             .then(() => {
               firebase.auth().onAuthStateChanged((user) => {
                 if (user) {
-                  API.getAuthStatus(user)
-                  .then(res => {
-                    this.getData(res.data.user, firebase);
+                  this.setState({
+                    loaded: true
                   });
                 }
                 else {
@@ -109,7 +105,9 @@ export default class PledgeApp extends Component {
         }
       }
       else {
-        this.getData(this.props.state, firebase);
+        this.setState({
+          loaded: true
+        });
       }
     }
     else {
@@ -129,14 +127,12 @@ export default class PledgeApp extends Component {
           });
         }
         else {
-          let totalMerits = localStorage.getItem('totalMerits');
           let meritArray = JSON.parse(localStorage.getItem('meritArray'));
           let complaintsArray = JSON.parse(localStorage.getItem('complaintsArray'));
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
           this.setState({
             loaded: true,
-            totalMerits: totalMerits,
             meritArray: meritArray,
             complaintsArray: complaintsArray,
             activeArray: activeArray
@@ -174,7 +170,6 @@ export default class PledgeApp extends Component {
             API.getPledgeData(displayName)
             .then(res => {
               this.setState({
-                totalMerits: res.data.totalMerits,
                 meritArray: res.data.meritArray,
                 complaintsArray: res.data.complaintsArray
               });
@@ -238,34 +233,6 @@ export default class PledgeApp extends Component {
       else {
         complaintsTabs.style.display = 'none';
       }
-    }
-  }
-
-  // Gets the merit data if user is a pledge
-  getData = (user, firebase) => {
-    if (user.status === 'active') {
-      this.setState({
-        loaded: true
-      });
-    }
-    else {
-      loadFirebase('database')
-      .then(() => {
-        let fullName = user.firstName + user.lastName;
-        let userRef = firebase.database().ref('/users/' + fullName);
-        let totalMerits;
-
-        userRef.on('value', (snapshot) => {
-          totalMerits = snapshot.val().totalMerits;
-
-          localStorage.setItem('totalMerits', snapshot.val().totalMerits);
-
-          this.setState({
-            loaded: true,
-            totalMerits: totalMerits,
-          });
-        });
-      });
     }
   }
 
@@ -354,6 +321,10 @@ export default class PledgeApp extends Component {
     });
   };
 
+  getStyle (isActive) {
+    return isActive ? tabStyle.active : tabStyle.default
+  }
+
   handleRequestOpen = (message) => {
     this.setState({
       open: true,
@@ -364,23 +335,6 @@ export default class PledgeApp extends Component {
   handleRequestClose = () => {
     this.setState({
       open: false
-    });
-  }
-
-  handleMeritOpen = () => {
-    if (navigator.onLine) {
-      this.setState({
-        openMerit: true
-      });
-    }
-    else {
-      this.handleRequestOpen('You are offline.');
-    }
-  }
-
-  handleMeritClose = () => {
-    this.setState({
-      openMerit: false
     });
   }
 
@@ -399,11 +353,12 @@ export default class PledgeApp extends Component {
             value={this.state.slideIndex}
           >
             <Tab 
-              icon={<i className="icon-star"></i>}
+              icon={<i style={this.getStyle(this.state.slideIndex === 0)} className="icon-star"></i>}
               value={0}
             >
               <MeritBook 
-                state={this.props.state} 
+                state={this.props.state}
+                index={this.state.slideIndex}
                 pledgeArray={this.state.pledgeArray}
                 meritArray={this.state.meritArray}
                 scrollPosition={this.state.scrollPosition1}
@@ -411,7 +366,7 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i className="icon-address-book"></i>}
+              icon={<i style={this.getStyle(this.state.slideIndex === 1)} className="icon-address-book"></i>}
               value={1}
             >
               <Contacts
@@ -420,7 +375,7 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i className="icon-calendar-empty"></i>}
+              icon={<i style={this.getStyle(this.state.slideIndex === 2)} className="icon-calendar-empty"></i>}
               value={2}
             >
               <Chalkboards 
@@ -429,11 +384,12 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i className="icon-thumbs-down-alt"></i>}
+              icon={<i style={this.getStyle(this.state.slideIndex === 3)} className="icon-thumbs-down-alt"></i>}
               value={3}
             >
               <Complaints
                 state={this.props.state}
+                index={this.state.slideIndex}
                 pledgeComplaintsArray={this.state.pledgeComplaintsArray}
                 activeComplaintsArray={this.state.activeComplaintsArray}
                 complaintsArray={this.state.complaintsArray}
@@ -442,8 +398,8 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i className="icon-cog"></i>}
-              value={4} 
+              icon={<i style={this.getStyle(this.state.slideIndex === 4)} className="icon-cog"></i>}
+              value={4}
             >
               <Settings 
                 state={this.props.state} 
@@ -453,30 +409,11 @@ export default class PledgeApp extends Component {
             </Tab>
           </Tabs>
 
-          {this.state.slideIndex === 0 && (
-            this.props.state.status === 'pledge' ? (
-              <div className="total-merits"> 
-                Total Merits: {this.state.totalMerits} 
-              </div>
-            ) : (
-              <div className="merit-button" onClick={this.handleMeritOpen}>
-                <i className="icon-pencil"></i>
-              </div>
-            )
-          )}
-
           <Snackbar
             open={this.state.open}
             message={this.state.message}
             autoHideDuration={4000}
             onRequestClose={this.handleRequestClose}
-          />
-          <LoadableActiveMeritAllDialog
-            open={this.state.openMerit}
-            state={this.props.state}
-            handleMeritOpen={this.handleMeritOpen}
-            handleMeritClose={this.handleMeritClose}
-            handleRequestOpen={this.handleRequestOpen}
           />
         </div>
       ) : (

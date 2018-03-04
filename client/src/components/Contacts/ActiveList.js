@@ -29,7 +29,7 @@ export default class ActiveList extends Component {
         this.props.classLabel === active.class &&
           <LazyLoad
             height={88}
-            offset={500}
+            offset={700}
             once
             unmountIfInvisible
             overflow

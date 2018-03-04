@@ -2,13 +2,10 @@ import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
-const dividerStyle = {
-  marginLeft: '102px'
-};
-
-export default class ActiveList extends Component {
+export default class PastComplaints extends Component {
   componentDidUpdate() {
     let contentContainer = document.querySelector('.content-container');
     let view = document.getElementById('past-complaints');
@@ -29,7 +26,8 @@ export default class ActiveList extends Component {
   render() {
     return (
       <div id="past-complaints">
-        <List className="pledge-list no-header">
+        <List className="pledge-list">
+          <Subheader> General </Subheader>
           {this.props.complaintsArray.map((complaint, i) => (
             <LazyLoad
               height={88}
@@ -40,12 +38,12 @@ export default class ActiveList extends Component {
               key={i}
               placeholder={
                 <div className="placeholder-skeleton">
-                  <Divider style={dividerStyle} inset={true} />
+                  <Divider className="pledge-divider large" inset={true} />
                   <div className="placeholder-avatar"></div>
                   <div className="placeholder-name"></div>
                   <div className="placeholder-year"></div>
                   <div className="placeholder-merits"></div>
-                  <Divider style={dividerStyle} inset={true} />
+                  <Divider className="pledge-divider large" inset={true} />
                 </div>
               }
             >

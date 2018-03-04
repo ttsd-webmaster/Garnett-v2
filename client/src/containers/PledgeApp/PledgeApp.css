@@ -12,26 +12,14 @@
   z-index: 0;
 }
 
-.total-merits {
-  position: fixed;
-  background-color: var(--primary-color);
-  color: #fff;
-  bottom: 0;
-  height: 50px;
-  line-height: 50px;
-  width: 100%;
-  font-size: 20px;
-  text-align: center;
-}
-
-.merit-button {
+.fixed-button {
   position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: var(--primary-color);
   color: #fff;
-  bottom: 20px;
+  bottom: 70px;
   right: 20px;
   height: 60px;
   width: 60px;
@@ -39,4 +27,41 @@
   border-radius: 50%;
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
+}
+.fixed-button#merit-all {
+  bottom: 20px;
+}
+.fixed-button.hidden {
+  display: none;
+}
+
+/* Garnett Dialog */
+.garnett-dialog-tabs > div:first-child {
+  position: fixed;
+  z-index: 2;
+}
+.garnett-dialog-tabs > div:last-child > div {
+  top: 48px;
+}
+.garnett-dialog-tabs > div:last-child > div:first-child,
+.garnett-dialog-body.no-tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.garnett-dialog-body {
+  min-height: 285px;
+  max-height: 352px !important;
+  padding: 0 !important;
+  border-bottom: 1px solid rgb(224, 224, 224) !important;
+}
+
+.garnett-dialog-content {
+  width: 90% !important;
+}
+
+.garnett-all-dialog {
+  background-color: var(--primary-color);
+  color: #fff !important;
+  font-size: 20px !important;
 }
