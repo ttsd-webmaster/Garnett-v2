@@ -35,25 +35,36 @@ export default class ApproveComplaintDialog extends Component {
   }
 
   render() {
+    let message;
+    let label;
+
+    if (this.props.state.status === 'active') {
+      label = 'Remove';
+      message = 'Remove Complaint?';
+    }
+    else {
+      label = 'Approve';
+      message = 'Approve Complaint?';
+    }
+
     const actions = [
       <FlatButton
         label="Close"
         primary={true}
         onClick={this.props.handleClose}
       />,
-      this.props.state.status === 'active' ? (
-        <RaisedButton
-          label="Remove"
-          primary={true}
-          onClick={() => this.remove(this.props.complaint)}
-        />
-      ) : (
-        <RaisedButton
-          label="Approve"
-          primary={true}
-          onClick={() => this.approve(this.props.complaint)}
-        />
-      ),
+      <RaisedButton
+        label={label}
+        primary={true}
+        onClick={() => {
+          if (this.props.state.status === 'active') {
+            this.remove(this.props.complaint);
+          }
+          else {
+            this.approve(this.props.complaint);
+          }
+        }}
+      />,
     ];
 
     return (
@@ -64,7 +75,7 @@ export default class ApproveComplaintDialog extends Component {
         onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
       >
-        Approve Complaint?
+        {message}
       </Dialog>
     )
   }

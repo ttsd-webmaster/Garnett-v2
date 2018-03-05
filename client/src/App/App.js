@@ -138,12 +138,12 @@ class App extends Component {
                   console.log('No Instance ID token available. Request permission to generate one.');
                 }
               })
-              .catch(function(err) {
+              .catch((err) => {
                 console.log('An error occurred while retrieving token. ', err);
                 this.checkPhoto(res, firebase, displayName);
               });
             })
-            .catch(function(err) {
+            .catch((err) => {
               console.log('Unable to get permission to notify.', err);
               this.checkPhoto(res, firebase, displayName);
             });
