@@ -487,6 +487,33 @@ app.post('/api/complain', function(req, res) {
   res.sendStatus(200);
 });
 
+// Removes complaint for active
+app.post('/api/removecomplaint', function(req, res) {
+  let activeName = req.body.complaint.activeDisplayName;
+  let activeRef = admin.database().ref('/users/' + activeName);
+  let pendingComplaintsRef = admin.database().ref('/pendingComplaints/');
+
+  pendingComplaintsRef.once('value', (snapshot) => {
+    snapshot.forEach((complaint) => {
+      // Removes complaint from the pending complaints list
+      if (equal(req.body.complaint, complaint.val())) {
+        complaint.ref.remove(() => {
+          activeRef.child('/pendingComplaints/').once('value', (snapshot) => {
+            snapshot.forEach((complaint) => {
+              // Removes complaint from the active's pending complaints list
+              if (equal(req.body.complaint, complaint.val())) {
+                complaint.ref.remove(() => {
+                  res.sendStatus(200);
+                });
+              }
+            });
+          });
+        });
+      }
+    });
+  });
+});
+
 // Approves complaint for PI/PM
 app.post('/api/approvecomplaint', function(req, res) {
   let activeName = req.body.complaint.activeDisplayName;

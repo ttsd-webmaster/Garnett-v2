@@ -60,9 +60,11 @@ export default class PledgeApp extends Component {
       activeArray: [],
       pledgeArray: [],
       meritArray: [],
-      complaintsArray: [],
       pledgeComplaintsArray: [],
-      activeComplaintsArray: []
+      complaintsPledgeArray: [],
+      activeComplaintsArray: [],
+      pendingComplaintsArray: [],
+      approvedComplaintsArray: []
     };
   }
 
@@ -115,26 +117,28 @@ export default class PledgeApp extends Component {
         if (data.data.user.status === 'active') {
           let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
-          let pledgeComplaintsArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
+          let complaintsPledgeArray = JSON.parse(localStorage.getItem('complaintsPledgeArray'));
           let activeComplaintsArray = JSON.parse(localStorage.getItem('activeComplaintsArray'));
+          let pendingComplaintsArray = JSON.parse(localStorage.getItem('pendingComplaintsArray'));
+          let approvedComplaintsArray = JSON.parse(localStorage.getItem('approvedComplaintsArray'));
 
           this.setState({
             loaded: true,
             pledgeArray: pledgeArray,
             activeArray: activeArray,
-            pledgeComplaintsArray: pledgeComplaintsArray,
+            complaintsPledgeArray: complaintsPledgeArray,
             activeComplaintsArray: activeComplaintsArray
           });
         }
         else {
           let meritArray = JSON.parse(localStorage.getItem('meritArray'));
-          let complaintsArray = JSON.parse(localStorage.getItem('complaintsArray'));
+          let pledgeComplaintsArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
 
           this.setState({
             loaded: true,
             meritArray: meritArray,
-            complaintsArray: complaintsArray,
+            pledgeComplaintsArray: pledgeComplaintsArray,
             activeArray: activeArray
           });
         }
@@ -144,49 +148,53 @@ export default class PledgeApp extends Component {
       }
     }
 
-    setInterval(() => {
-      if (didScroll) {
-        didScroll = false;
-        this.onScroll();
-      }
-    }, 100);
+    // Checks if page has scrolled
 
-    window.PullToRefresh.init({
-      mainElement: 'body',
-      onRefresh: () => {
-        if (navigator.onLine) {
-          if (this.props.state.status === 'active') {
-            API.getPledges()
-            .then(res => {
-              this.setState({
-                pledgeArray: res.data
-              });
-            })
-            .catch(err => console.log(err));
-          }
-          else {
-            let displayName = this.props.state.displayName;
+    // setInterval(() => {
+    //   if (didScroll) {
+    //     didScroll = false;
+    //     this.onScroll();
+    //   }
+    // }, 100);
 
-            API.getPledgeData(displayName)
-            .then(res => {
-              this.setState({
-                meritArray: res.data.meritArray,
-                complaintsArray: res.data.complaintsArray
-              });
-            })
-            .catch(err => console.log(err)); 
-          }
-        }
-      },
-      shouldPullToRefresh: () => {
-        let contentContainer = document.querySelector('.content-container');
-        let index = this.state.slideIndex;
+    // Initializes Pull To Refresh
+    
+    // window.PullToRefresh.init({
+    //   mainElement: 'body',
+    //   onRefresh: () => {
+    //     if (navigator.onLine) {
+    //       if (this.props.state.status === 'active') {
+    //         API.getPledges()
+    //         .then(res => {
+    //           this.setState({
+    //             pledgeArray: res.data
+    //           });
+    //         })
+    //         .catch(err => console.log(err));
+    //       }
+    //       else {
+    //         let displayName = this.props.state.displayName;
 
-        if (contentContainer) {
-          return contentContainer.childNodes[index].scrollTop === 0;
-        }
-      }
-    });
+    //         API.getPledgeData(displayName)
+    //         .then(res => {
+    //           this.setState({
+    //             meritArray: res.data.meritArray,
+    //             complaintsArray: res.data.complaintsArray
+    //           });
+    //         })
+    //         .catch(err => console.log(err)); 
+    //       }
+    //     }
+    //   },
+    //   shouldPullToRefresh: () => {
+    //     let contentContainer = document.querySelector('.content-container');
+    //     let index = this.state.slideIndex;
+
+    //     if (contentContainer) {
+    //       return contentContainer.childNodes[index].scrollTop === 0;
+    //     }
+    //   }
+    // });
   }
 
   // Changes view margin if view is pledge merit book
@@ -194,6 +202,9 @@ export default class PledgeApp extends Component {
     let index = this.state.slideIndex;
     let pullToRefresh = document.querySelector('.ptr--ptr');
     let contentContainer = document.querySelector('.content-container');
+    let addChalkboard = document.getElementById('add-chalkboard');
+    let chalkboardsTabs = document.getElementById('chalkboards-tabs');
+    let addComplaint = document.getElementById('add-complaint');
     let complaintsTabs = document.getElementById('complaints-tabs');
     
     if (pullToRefresh) {
@@ -211,7 +222,6 @@ export default class PledgeApp extends Component {
         if (index !== i) {
           contentContainer.childNodes[i].style.position = 'relative';
           contentContainer.childNodes[i].style.height = 0;
-          contentContainer.childNodes[i].style.marginBottom = 0;
         }
       }
 
@@ -225,12 +235,30 @@ export default class PledgeApp extends Component {
       }
     }
 
-    // Changes complaints tabs to be viewable if slide is on complaints
-    if (complaintsTabs) {
+    // Changes chalkboards tabs and add button to be viewable if slide is on chalkboards
+    if (chalkboardsTabs) {
+      if (index === 2) {
+        chalkboardsTabs.style.display = 'flex';
+        if (this.props.state.status !== 'pledge') {
+          addChalkboard.style.display = 'flex';
+        }
+      }
+      else {
+        chalkboardsTabs.style.display = 'none';
+        if (this.props.state.status !== 'pledge') {
+          addChalkboard.style.display = 'none';
+        }
+      }
+    }
+
+    // Changes complaints tabs and add button to be viewable if slide is on complaints
+    if (addComplaint && complaintsTabs) {
       if (this.props.state.status !== 'pledge' && index === 3) {
+        addComplaint.style.display = 'flex';
         complaintsTabs.style.display = 'flex';
       }
       else {
+        addComplaint.style.display = 'none';
         complaintsTabs.style.display = 'none';
       }
     }
@@ -391,8 +419,10 @@ export default class PledgeApp extends Component {
                 state={this.props.state}
                 index={this.state.slideIndex}
                 pledgeComplaintsArray={this.state.pledgeComplaintsArray}
+                complaintsPledgeArray={this.state.complaintsPledgeArray}
                 activeComplaintsArray={this.state.activeComplaintsArray}
-                complaintsArray={this.state.complaintsArray}
+                pendingComplaintsArray={this.state.pendingComplaintsArray}
+                approvedComplaintsArray={this.state.approvedComplaintsArray}
                 scrollPosition={this.state.scrollPosition4}
                 handleRequestOpen={this.handleRequestOpen}
               />

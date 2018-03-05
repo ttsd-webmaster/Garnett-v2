@@ -16,7 +16,7 @@ export default class MeritBook extends Component {
           scrollPosition={this.props.scrollPosition}
           handleRequestOpen={this.props.handleRequestOpen} 
         />
-      ): (
+      ) : (
         <ActiveMerit 
           state={this.props.state}
           index={this.props.index}

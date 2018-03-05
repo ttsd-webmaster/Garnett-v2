@@ -5,28 +5,27 @@ import React, {Component} from 'react';
 
 export default class Complaints extends Component {
   render() {
-    let status = this.props.state.status
+    let status = this.props.state.status;
     
-    if (status === 'pledge') {
-      return (
+    return (
+      status === 'pledge' ? (
         <PledgeComplaints 
           state={this.props.state}
-          complaintsArray={this.props.complaintsArray}
+          complaintsArray={this.props.pledgeComplaintsArray}
           scrollPosition={this.props.scrollPosition}
         />
-      )
-    }
-    else {
-      return (
+      ) : (
         <ActiveComplaints 
           state={this.props.state}
           index={this.props.index}
-          pledgeArray={this.props.pledgeComplaintsArray}
+          pledgeArray={this.props.complaintsPledgeArray}
           complaintsArray={this.props.activeComplaintsArray}
+          pendingComplaintsArray={this.props.pendingComplaintsArray}
+          approvedComplaintsArray={this.props.approvedComplaintsArray}
           scrollPosition={this.props.scrollPosition}
           handleRequestOpen={this.props.handleRequestOpen}
         />
       )
-    }
+    )
   }
 }

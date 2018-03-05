@@ -22,8 +22,6 @@ export default class PledgeComplaints extends Component {
   }
 
   componentDidMount() {
-    let complaintsArray = this.state.complaintsArray;
-
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
@@ -32,6 +30,8 @@ export default class PledgeComplaints extends Component {
         let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
 
         complaintsRef.on('value', (snapshot) => {
+          let complaintsArray = this.state.complaintsArray;
+
           if (snapshot.val()) {
             complaintsArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
@@ -39,7 +39,7 @@ export default class PledgeComplaints extends Component {
           }
 
           console.log('Complaints Array: ', complaintsArray);
-          localStorage.setItem('complaintsArray', JSON.stringify(complaintsArray));
+          localStorage.setItem('pledgeComplaintsArray', JSON.stringify(complaintsArray));
 
           this.setState({
             loaded: true,

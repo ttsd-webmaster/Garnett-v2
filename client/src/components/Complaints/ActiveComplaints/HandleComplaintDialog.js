@@ -9,14 +9,28 @@ export default class ApproveComplaintDialog extends Component {
   approve = (complaint) => {
     API.approveComplaint(complaint)
     .then((res) => {
-      console.log('Approved Complaint');
+      console.log('Approved complaint');
       this.props.handleClose();
       this.props.handleRequestOpen(`Approved complaint for ${complaint.pledgeName}`);
     })
     .catch((error) => {
-      console.log('Error: ', error)
+      console.log('Error: ', error);
       this.props.handleClose();
       this.props.handleRequestOpen('Error approving complaint');
+    });
+  }
+
+  remove = (complaint) => {
+    API.removeComplaint(complaint)
+    .then((res) => {
+      console.log('Removed complaint');
+      this.props.handleClose();
+      this.props.handleRequestOpen(`Removed complaint for ${complaint.pledgeName}`);
+    })
+    .catch((error) => {
+      console.log('Error: ', error);
+      this.props.handleClose();
+      this.props.handleRequestOpen('Error removing complaint');
     });
   }
 
@@ -27,11 +41,19 @@ export default class ApproveComplaintDialog extends Component {
         primary={true}
         onClick={this.props.handleClose}
       />,
-      <RaisedButton
-        label="Approve"
-        primary={true}
-        onClick={() => this.approve(this.props.complaint)}
-      />,
+      this.props.state.status === 'active' ? (
+        <RaisedButton
+          label="Remove"
+          primary={true}
+          onClick={() => this.remove(this.props.complaint)}
+        />
+      ) : (
+        <RaisedButton
+          label="Approve"
+          primary={true}
+          onClick={() => this.approve(this.props.complaint)}
+        />
+      ),
     ];
 
     return (

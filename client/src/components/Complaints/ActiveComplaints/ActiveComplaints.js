@@ -4,19 +4,31 @@ import MyComplaints from './MyComplaints';
 import PastComplaints from './PastComplaints';
 
 import React, {Component} from 'react';
+import Loadable from 'react-loadable';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+
+const LoadableAddComplaintDialog = Loadable({
+  loader: () => import('./AddComplaintDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>;
+  }
+});
 
 export default class ActiveComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      open: false,
       selectedIndex: 0,
       pledge: null,
       description: '',
-      pledgeArray: this.props.pledgeArray,
       complaintsArray: this.props.complaintsArray,
-      approvedComplaintsArray: [],
-      pendingComplaintsArray: []
+      pendingComplaintsArray: this.props.pendingComplaintsArray,
+      approvedComplaintsArray: this.props.approvedComplaintsArray
     };
   }
 
@@ -28,7 +40,8 @@ export default class ActiveComplaints extends Component {
         let complaintsRef = firebase.database().ref('/approvedComplaints/');
 
         complaintsRef.on('value', (snapshot) => {
-          let complaintsArray = [];
+          let complaintsArray = this.props.complaintsArray;
+          
           if (snapshot.val()) {
             complaintsArray = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
@@ -58,6 +71,9 @@ export default class ActiveComplaints extends Component {
                 });
               }
 
+              localStorage.setItem('pendingComplaintsArray', JSON.stringify(pendingComplaintsArray));
+              localStorage.setItem('approvedComplaintsArray', JSON.stringify(approvedComplaintsArray));
+
               this.setState({
                 complaintsArray: complaintsArray,
                 pendingComplaintsArray: pendingComplaintsArray,
@@ -76,6 +92,9 @@ export default class ActiveComplaints extends Component {
                   return snapshot.val()[key];
                 });
               }
+
+              localStorage.setItem('pendingComplaintsArray', JSON.stringify(pendingComplaintsArray));
+              localStorage.setItem('approvedComplaintsArray', JSON.stringify(complaintsArray));
 
               this.setState({
                 complaintsArray: complaintsArray,
@@ -103,17 +122,30 @@ export default class ActiveComplaints extends Component {
     this.setState({selectedIndex: index});
   }
 
+  handleOpen = () => {
+    if (navigator.onLine) {
+      this.setState({
+        open: true
+      });
+    }
+    else {
+      this.handleRequestOpen('You are offline.');
+    }
+  }
+
+  handleClose = () => {
+    this.setState({
+      open: false
+    });
+  }
+
   render() {
     return (
       <div>
         <MyComplaints
           state={this.props.state}
-          index={this.props.index}
-          selectedIndex={this.state.selectedIndex}
           approvedComplaintsArray={this.state.approvedComplaintsArray}
           pendingComplaintsArray={this.state.pendingComplaintsArray}
-          pledgeArray={this.props.pledgeArray}
-          complain={this.complain}
           handleRequestOpen={this.props.handleRequestOpen}
         />
         <PastComplaints
@@ -121,7 +153,11 @@ export default class ActiveComplaints extends Component {
           scrollPosition={this.props.scrollPosition}
         />
 
-        <BottomNavigation id="complaints-tabs" selectedIndex={this.state.selectedIndex}>
+        <BottomNavigation 
+          id="complaints-tabs" 
+          className="bottom-tabs" 
+          selectedIndex={this.state.selectedIndex}
+        >
           <BottomNavigationItem
             label="My Complaints"
             icon={<div></div>}
@@ -133,6 +169,18 @@ export default class ActiveComplaints extends Component {
             onClick={() => this.select(1)}
           />
         </BottomNavigation>
+
+        <div id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
+          <i className="icon-pencil"></i>
+        </div>
+
+        <LoadableAddComplaintDialog
+          open={this.state.open}
+          state={this.props.state}
+          pledgeArray={this.props.pledgeArray}
+          handleClose={this.handleClose}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
       </div>
     )
   }

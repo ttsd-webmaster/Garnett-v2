@@ -23,7 +23,7 @@ const LoadableMeritList = Loadable({
     return <Component {...props}/>;
   },
   loading() {
-    return <div> Loading... </div>
+    return <div> Loading... </div>;
   }
 });
 

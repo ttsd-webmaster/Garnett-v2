@@ -5,10 +5,10 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
-export default class PastComplaints extends Component {
+export default class AllChalkboards extends Component {
   componentDidUpdate() {
     let contentContainer = document.querySelector('.content-container');
-    let view = document.getElementById('past-complaints');
+    let view = document.getElementById('all-chalkboards');
     let index = 3;
 
     if (view.classList.contains('active')) {
@@ -25,10 +25,10 @@ export default class PastComplaints extends Component {
 
   render() {
     return (
-      <div id="past-complaints">
+      <div id="all-chalkboards">
         <List className="pledge-list">
           <Subheader> General </Subheader>
-          {this.props.complaintsArray.map((complaint, i) => (
+          {this.props.chalkboardsArray.map((complaint, i) => (
             <LazyLoad
               height={88}
               offset={500}

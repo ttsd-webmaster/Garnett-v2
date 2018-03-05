@@ -27,8 +27,8 @@ export default class AddComplaintDialog extends Component {
       .then((res) => {
         let pledgeArray = res.data;
 
-        console.log('Pledge Complaints Array: ', pledgeArray);
-        localStorage.setItem('pledgeComplaintsArray', JSON.stringify(pledgeArray));
+        console.log('Complaints Pledge Array: ', pledgeArray);
+        localStorage.setItem('complaintsPledgeArray', JSON.stringify(pledgeArray));
 
         this.setState({
           pledgeArray: pledgeArray
@@ -116,7 +116,7 @@ export default class AddComplaintDialog extends Component {
         onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
       >
-        <div id="active-complaints-container">
+        <div id="add-complaint-container">
           <SelectField
             className="complaints-input"
             value={this.state.pledge}

@@ -32,6 +32,9 @@ export default {
   complain: function(status, displayName, activeName, pledge, description, date) {
     return axios.post('/api/complain', {status, displayName, activeName, pledge, description, date});
   },
+  removeComplaint: function(complaint) {
+    return axios.post('/api/removecomplaint', {complaint});
+  },
   approveComplaint: function(complaint) {
     return axios.post('/api/approvecomplaint', {complaint});
   },

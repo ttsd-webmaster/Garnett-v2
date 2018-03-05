@@ -5,18 +5,18 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
-const LoadableHandleComplaintDialog = Loadable({
-  loader: () => import('./HandleComplaintDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>;
-  }
-});
+// const LoadableApproveComplaintDialog = Loadable({
+//   loader: () => import('./ApproveComplaintDialog'),
+//   render(loaded, props) {
+//     let Component = loaded.default;
+//     return <Component {...props}/>;
+//   },
+//   loading() {
+//     return <div> Loading... </div>;
+//   }
+// });
 
-export default class MyComplaints extends Component {
+export default class MyChalkboards extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -45,10 +45,10 @@ export default class MyComplaints extends Component {
 
   render() {
     return (
-      <div id="my-complaints" className="active">
+      <div id="my-chalkboards" className="active">
         <List className="pledge-list">
-          <Subheader> Approved </Subheader>
-          {this.props.approvedComplaintsArray.map((complaint, i) => (
+          <Subheader> Ongoing </Subheader>
+          {this.props.ongoingChalkboardsArray.map((complaint, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem
@@ -72,8 +72,8 @@ export default class MyComplaints extends Component {
 
           <Divider />
 
-          <Subheader> Pending </Subheader>
-          {this.props.pendingComplaintsArray.map((complaint, i) => (
+          <Subheader> Completed </Subheader>
+          {this.props.completedChalkboardsArray.map((complaint, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem
@@ -88,7 +88,11 @@ export default class MyComplaints extends Component {
                   </p>
                 }
                 secondaryTextLines={2}
-                onClick={() => this.handleOpen(complaint)}
+                onClick={() => {
+                  if (this.props.state.status !== 'active') {
+                    this.handleApproveOpen(complaint)
+                  }
+                }}
               >
                 <p className="complaints-date"> {complaint.date} </p>
               </ListItem>
@@ -96,14 +100,6 @@ export default class MyComplaints extends Component {
             </div>
           ))}
         </List>
-
-        <LoadableHandleComplaintDialog
-          open={this.state.open}
-          state={this.props.state}
-          complaint={this.state.selectedComplaint}
-          handleClose={this.handleClose}
-          handleRequestOpen={this.props.handleRequestOpen}
-        />
       </div>
     )
   }

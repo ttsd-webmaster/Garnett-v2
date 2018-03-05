@@ -1,14 +1,16 @@
-/* Submit Complaints */
-#my-complaints {
+/* Complaints View */
+#my-complaints,
+#past-complaints {
   display: none;
-  height: calc(100vh - 157px);
 }
-#my-complaints.active {
+#my-complaints.active,
+#past-complaints.active {
   display: block;
   animation: fadeIn .25s ease-in forwards;
 }
 
-#active-complaints-container {
+/* Add complaints dialog */
+#add-complaint-container {
   display: flex;
   flex-direction: column;
 }
@@ -22,47 +24,6 @@
   .complaints-input {
     width: 80% !important;
   }
-}
-
-.complain-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--primary-color);
-  color: #fff;
-  height: 40px;
-  width: 40%;
-  max-width: 576px;
-  font-size: 16px;
-  margin: 60px auto 20px;
-  border-radius: 20px;
-  text-transform: uppercase;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
-  cursor: pointer;
-}
-@media(max-width: 768px) {
-  .complain-button {
-    width: 80%;
-  }
-}
-.complain-button:hover {
-  background-color: var(--primary-dark);
-}
-
-/* Past Complaints */
-#past-complaints {
-  display: none;
-}
-#past-complaints.active {
-  display: block;
-  animation: fadeIn .25s ease-in forwards;
-}
-
-/* Bottom Navigation */
-#complaints-tabs {
-  position: fixed !important;
-  bottom: 0;
-  border-top: 1px solid #ccc;
 }
 
 .complaints-description {

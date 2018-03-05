@@ -303,7 +303,7 @@ input:-webkit-autofill {
 
 .line-scale-container {
   position: relative;
-  top: calc(50% - 50px);
+  top: calc(50% - 75px);
   left: calc(50% - 20px);
 }
 
