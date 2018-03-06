@@ -49,7 +49,7 @@ export default class AddComplaintDialog extends Component {
       if (!pledge) {
         pledgeValidation = false;
       }
-      if (!description) {
+      if (!description || description.length > 45) {
         descriptionValidation = false;
       }
 
@@ -146,7 +146,7 @@ export default class AddComplaintDialog extends Component {
           rowsMax={3}
           value={this.state.description}
           onChange={(e, newValue) => this.handleChange('description', newValue)}
-          errorText={!this.state.descriptionValidation && 'Enter a description.'}
+          errorText={(!this.state.descriptionValidation && 'Enter a description less than two lines.')}
         />
       </Dialog>
     )

@@ -1,3 +1,5 @@
+import {getDate} from '../../helpers/functions.js';
+
 import './Chalkboards.css';
 import {loadFirebase} from '../../helpers/functions.js';
 import MyChalkboards from './MyChalkboards';
@@ -24,7 +26,8 @@ export default class Chalkboards extends Component {
     this.state = {
       open: false,
       selectedIndex: 0,
-      myUpcomingChalkboards: [],
+      myHostingChalkboards: [],
+      myAttendingChalkboards: [],
       myCompletedChalkboards: [],
       upcomingChalkboards: [],
       completedChalkboards: []
@@ -36,34 +39,90 @@ export default class Chalkboards extends Component {
       loadFirebase('database')
       .then(() => {
         let firebase = window.firebase;
-        let upcomingChalkboardsRef = firebase.database().ref('/upcomingChalkboards/');
+        let userChalkboardsRef = firebase.database().ref('/users/' + this.props.state.displayName + '/chalkboards');
 
-        upcomingChalkboardsRef.on('value', (snapshot) => {
-          let upcomingChalkboards = this.state.upcomingChalkboards;
-          let userRef = firebase.database().ref('/users/' + this.props.state.displayName);
-          
+        userChalkboardsRef.on('value', (snapshot) => {
+          let myChalkboards = [];
+          let chalkboardsRef = firebase.database().ref('/chalkboards/');
+
           if (snapshot.val()) {
-            upcomingChalkboards = Object.keys(snapshot.val()).map(function(key) {
+            myChalkboards = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             });
+
+            myChalkboards.sort(function(a, b) {
+              return b.date < a.date;
+            });
           }
+          
+          chalkboardsRef.on('value', (snapshot) => {
+            let chalkboards = [];
+            let upcomingChalkboards = [];
+            let completedChalkboards = [];
+            let myHostingChalkboards = [];
+            let myAttendingChalkboards = [];
+            let myCompletedChalkboards = [];
+            let today = getDate();
+            
+            if (snapshot.val()) {
+              chalkboards = Object.keys(snapshot.val()).map(function(key) {
+                return snapshot.val()[key];
+              });
 
-          localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
+              chalkboards = chalkboards.filter(chalkboard => myChalkboards.includes(chalkboard));
 
-          userRef.on('value', (snapshot) => {
-            let myUpcomingChalkboards = this.state.myUpcomingChalkboards;
+              chalkboards.sort(function(a, b) {
+                return b.date < a.date;
+              });
 
-            if (snapshot.val().upcomingChalkboards) {
-              myUpcomingChalkboards = Object.keys(snapshot.val().upcomingChalkboards).map(function(key) {
-                return snapshot.val().upcomingChalkboards[key];
+              chalkboards.forEach(function(chalkboard) {
+                let attendees = Object.keys(chalkboard.attendees).map(function(key) {
+                  return chalkboard.attendees[key];
+                });
+
+                attendees.forEach(function(attendee) {
+                  if (this.props.state.name === attendee.name) {
+                    myAttendingChalkboards.push(chalkboard);
+                  }
+                });
+
+                if (chalkboard.date >= today) {
+                  upcomingChalkboards.push(chalkboard);
+                }
+                else {
+                  completedChalkboards.push(chalkboard);
+                }
+              });
+
+              myChalkboards = myChalkboards.concat(myAttendingChalkboards);
+
+              myChalkboards.forEach((chalkboard) => {
+                if (chalkboard.date >= today) {
+                  if (this.props.state.displayName === chalkboard.displayName) {
+                    myHostingChalkboards.push(chalkboard);
+                  }
+                  else {
+                    myAttendingChalkboards.push(chalkboard);
+                  }
+                }
+                else {
+                  myCompletedChalkboards.push(chalkboard);
+                }
               });
             }
 
-            localStorage.setItem('myUpcomingChalkboards', JSON.stringify(myUpcomingChalkboards));
+            localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
+            localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
+            localStorage.setItem('myHostingChalkboards', JSON.stringify(myHostingChalkboards));
+            localStorage.setItem('myAttendingChalkboards', JSON.stringify(myAttendingChalkboards));
+            localStorage.setItem('myCompletedChalkboards', JSON.stringify(myCompletedChalkboards));
 
             this.setState({
               upcomingChalkboards: upcomingChalkboards,
-              myUpcomingChalkboards: myUpcomingChalkboards
+              completedChalkboards: completedChalkboards,
+              myHostingChalkboards: myHostingChalkboards,
+              myAttendingChalkboards: myAttendingChalkboards,
+              myCompletedChalkboards: myCompletedChalkboards
             });
           });
         });
@@ -106,7 +165,8 @@ export default class Chalkboards extends Component {
       <div>
         <MyChalkboards
           state={this.props.state}
-          myUpcomingChalkboards={this.state.myUpcomingChalkboards}
+          myHostingChalkboards={this.state.myHostingChalkboards}
+          myAttendingChalkboards={this.state.myAttendingChalkboards}
           myCompletedChalkboards={this.state.myCompletedChalkboards}
           handleRequestOpen={this.props.handleRequestOpen}
         />

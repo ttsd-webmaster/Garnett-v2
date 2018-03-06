@@ -70,6 +70,11 @@ export default class AddChalkboardDialog extends Component {
     }
   }
 
+  disableDates(date) {
+    let today = new Date();
+    return today > date;
+  }
+
   handleChange = (label, value) => {
     let validationLabel = [label] + 'Validation';
 
@@ -145,6 +150,8 @@ export default class AddChalkboardDialog extends Component {
           hintText="Date"
           value={this.state.date}
           disableYearSelection
+          firstDayOfWeek={0}
+          shouldDisableDate={this.disableDates}
           onChange={(e, newValue) => this.handleChange('date', newValue)}
           errorText={!this.state.dateValidation && 'Select a date.'}
         />

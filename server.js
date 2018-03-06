@@ -329,21 +329,21 @@ app.post('/api/activemerits', function(req, res) {
   let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits/');
   let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
   let remainingMerits;
-  let meritArray = [];
+  let merits = [];
   
   userRef.once('value', (snapshot) => {
     remainingMerits = snapshot.val().merits;
 
     meritRef.once('value', (snapshot) => {
       if (snapshot.val()) {
-        meritArray = Object.keys(snapshot.val()).map(function(key) {
+        merits = Object.keys(snapshot.val()).map(function(key) {
           return snapshot.val()[key];
         });
       }
 
       const data = {
         remainingMerits: remainingMerits,
-        meritArray: meritArray
+        merits: merits
       };
       res.json(data);
     });
@@ -505,8 +505,8 @@ app.post('/api/createchalkboard', function(req, res) {
     description: req.body.description,
     date: req.body.date
   };
-  let upcomingChalkboardsRef = admin.database().ref('/upcomingChalkboards');
-  let userUpcomingChalkboardsRef = admin.database().ref('/users/' + fullName + '/upcomingChalkboards');
+  let upcomingChalkboardsRef = admin.database().ref('/chalkboards');
+  let userUpcomingChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
 
   upcomingChalkboardsRef.push(chalkboardInfo);
   userUpcomingChalkboardsRef.push(chalkboardInfo);

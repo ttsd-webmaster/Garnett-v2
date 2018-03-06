@@ -8,3 +8,12 @@
   display: block;
   animation: fadeIn .25s ease-in forwards;
 }
+
+.chalkboards-description {
+  word-wrap: break-word;
+}
+
+.chalkboards-date {
+  float: right;
+  margin-left: 20px;
+}

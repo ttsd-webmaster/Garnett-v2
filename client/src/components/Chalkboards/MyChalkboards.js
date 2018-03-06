@@ -5,8 +5,8 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
-// const LoadableApproveComplaintDialog = Loadable({
-//   loader: () => import('./ApproveComplaintDialog'),
+// const LoadableApprovechalkboardDialog = Loadable({
+//   loader: () => import('./ApprovechalkboardDialog'),
 //   render(loaded, props) {
 //     let Component = loaded.default;
 //     return <Component {...props}/>;
@@ -21,15 +21,15 @@ export default class MyChalkboards extends Component {
     super(props);
     this.state = {
       open: false,
-      selectedComplaint: null
+      selectedchalkboard: null
     };
   }
 
-  handleOpen = (complaint) => {
+  handleOpen = (chalkboard) => {
     if (navigator.onLine) {
       this.setState({
         open: true,
-        selectedComplaint: complaint
+        selectedchalkboard: chalkboard
       });
     }
     else {
@@ -47,24 +47,49 @@ export default class MyChalkboards extends Component {
     return (
       <div id="my-chalkboards" className="active">
         <List className="pledge-list">
-          <Subheader> Upcoming </Subheader>
-          {this.props.myUpcomingChalkboards.map((complaint, i) => (
+          <Subheader> Hosting </Subheader>
+          {this.props.myHostingChalkboards.map((chalkboard, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem
                 className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image large" size={70} src={complaint.photoURL} />}
+                leftAvatar={<Avatar className="pledge-image large" size={70} src={chalkboard.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {complaint.title} </p>
+                  <p className="pledge-name"> {chalkboard.title} </p>
                 }
                 secondaryText={
-                  <p className="complaints-description">
-                    {complaint.description}
+                  <p className="chalkboards-description">
+                    {chalkboard.description}
                   </p>
                 }
                 secondaryTextLines={2}
               >
-                <p className="complaints-date"> {complaint.date} </p>
+                <p className="chalkboards-date"> {chalkboard.date} </p>
+              </ListItem>
+              <Divider className="pledge-divider large" inset={true} />
+            </div>
+          ))}
+
+          <Divider />
+
+          <Subheader> Attending </Subheader>
+          {this.props.myAttendingChalkboards.map((chalkboard, i) => (
+            <div key={i}>
+              <Divider className="pledge-divider large" inset={true} />
+              <ListItem
+                className="pledge-list-item large"
+                leftAvatar={<Avatar className="pledge-image large" size={70} src={chalkboard.photoURL} />}
+                primaryText={
+                  <p className="pledge-name"> {chalkboard.title} </p>
+                }
+                secondaryText={
+                  <p className="chalkboards-description">
+                    {chalkboard.description}
+                  </p>
+                }
+                secondaryTextLines={2}
+              >
+                <p className="chalkboards-date"> {chalkboard.date} </p>
               </ListItem>
               <Divider className="pledge-divider large" inset={true} />
             </div>
@@ -73,28 +98,28 @@ export default class MyChalkboards extends Component {
           <Divider />
 
           <Subheader> Completed </Subheader>
-          {this.props.myCompletedChalkboards.map((complaint, i) => (
+          {this.props.myCompletedChalkboards.map((chalkboard, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem
                 className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image large" size={70} src={complaint.photoURL} />}
+                leftAvatar={<Avatar className="pledge-image large" size={70} src={chalkboard.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {complaint.title} </p>
+                  <p className="pledge-name"> {chalkboard.title} </p>
                 }
                 secondaryText={
-                  <p className="complaints-description">
-                    {complaint.description}
+                  <p className="chalkboards-description">
+                    {chalkboard.description}
                   </p>
                 }
                 secondaryTextLines={2}
                 onClick={() => {
                   if (this.props.state.status !== 'active') {
-                    this.handleApproveOpen(complaint)
+                    this.handleApproveOpen(chalkboard)
                   }
                 }}
               >
-                <p className="complaints-date"> {complaint.date} </p>
+                <p className="chalkboards-date"> {chalkboard.date} </p>
               </ListItem>
               <Divider className="pledge-divider large" inset={true} />
             </div>
