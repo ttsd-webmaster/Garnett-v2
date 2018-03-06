@@ -1,20 +1,8 @@
 import React, {Component} from 'react';
-import Loadable from 'react-loadable';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-
-// const LoadableApprovechalkboardDialog = Loadable({
-//   loader: () => import('./ApprovechalkboardDialog'),
-//   render(loaded, props) {
-//     let Component = loaded.default;
-//     return <Component {...props}/>;
-//   },
-//   loading() {
-//     return <div> Loading... </div>;
-//   }
-// });
 
 export default class MyChalkboards extends Component {
   constructor(props) {
@@ -55,7 +43,7 @@ export default class MyChalkboards extends Component {
                   <Divider className="pledge-divider large" inset={true} />
                   <ListItem
                     className="pledge-list-item large"
-                    leftAvatar={<Avatar className="pledge-image" size={70} src={chalkboard.photoURL} />}
+                    leftAvatar={<Avatar className="pledge-image large" size={70} src={chalkboard.photoURL} />}
                     primaryText={
                       <p className="pledge-name"> {chalkboard.title} </p>
                     }
@@ -65,6 +53,7 @@ export default class MyChalkboards extends Component {
                       </p>
                     }
                     secondaryTextLines={2}
+                    onClick={() => this.props.handleOpen(chalkboard, 'hosting')}
                   >
                     <p className="chalkboards-date"> {chalkboard.date} </p>
                   </ListItem>
@@ -92,6 +81,7 @@ export default class MyChalkboards extends Component {
                   </p>
                 }
                 secondaryTextLines={2}
+                onClick={() => this.props.handleOpen(chalkboard, 'attending')}
               >
                 <p className="chalkboards-date"> {chalkboard.date} </p>
               </ListItem>
@@ -117,11 +107,7 @@ export default class MyChalkboards extends Component {
                   </p>
                 }
                 secondaryTextLines={2}
-                onClick={() => {
-                  if (this.props.state.status !== 'active') {
-                    this.handleApproveOpen(chalkboard)
-                  }
-                }}
+                onClick={() => this.props.handleOpen(chalkboard, 'completed')}
               >
                 <p className="chalkboards-date"> {chalkboard.date} </p>
               </ListItem>

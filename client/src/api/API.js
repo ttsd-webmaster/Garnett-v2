@@ -41,9 +41,18 @@ export default {
     let body = {displayName, activeName, description, amount, photoURL, date};
     return axios.post('/api/meritall', body);
   },
-  createChalkboard: function(displayName, activeName, photoURL, title, description, date) {
-    let body = {displayName, activeName, photoURL, title, description, date};
+  createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location) {
+    let body = {displayName, activeName, photoURL, title, description, date, time, location};
     return axios.post('/api/createchalkboard', body);
+  },
+  joinChalkboard: function(name, photoURL, chalkboard) {
+    return axios.post('/api/joinchalkboard', {name, photoURL, chalkboard});
+  },
+  removeChalkboard: function(displayName, chalkboard) {
+    return axios.post('/api/removechalkboard', {displayName, chalkboard});
+  },
+  leaveChalkboard: function(name, chalkboard) {
+    return axios.post('/api/leavechalkboard', {name, chalkboard});
   },
   complain: function(status, displayName, activeName, pledge, description, date) {
     let body = {status, displayName, activeName, pledge, description, date};

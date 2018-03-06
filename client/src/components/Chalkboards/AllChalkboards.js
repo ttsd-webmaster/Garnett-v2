@@ -61,6 +61,7 @@ export default class AllChalkboards extends Component {
                     </p>
                   }
                   secondaryTextLines={2}
+                  onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
                 >
                   <p className="chalkboards-date"> {chalkboard.date} </p>
                 </ListItem>
@@ -105,6 +106,7 @@ export default class AllChalkboards extends Component {
                     </p>
                   }
                   secondaryTextLines={2}
+                  onClick={() => this.props.handleOpen(chalkboard, 'completed')}
                 >
                   <p className="chalkboards-date"> {chalkboard.date} </p>
                 </ListItem>

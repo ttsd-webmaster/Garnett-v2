@@ -15,9 +15,13 @@ export default class AddChalkboardDialog extends Component {
       title: '',
       description: '',
       date: null,
+      time: 'TBD',
+      location: 'TBD',
       titleValidation: true,
       descriptionValidation: true,
-      dateValidation: true
+      dateValidation: true,
+      timeValidation: true,
+      locationValidation: true
     };
   }
 
@@ -27,10 +31,14 @@ export default class AddChalkboardDialog extends Component {
     let photoURL = this.props.state.photoURL;
     let title = this.state.title;
     let description = this.state.description;
+    let time = this.state.time;
+    let location = this.state.location;
     let date = getDate(this.state.date);
     let titleValidation = true;
     let descriptionValidation = true;
     let dateValidation = true;
+    let timeValidation = true;
+    let locationValidation = true;
 
     if (!title || !description) {
       if (!title) {
@@ -42,15 +50,23 @@ export default class AddChalkboardDialog extends Component {
       if (!date) {
         dateValidation = false;
       }
+      if (!time) {
+        timeValidation = false;
+      }
+      if (!location) {
+        locationValidation = false;
+      }
 
       this.setState({
         titleValidation: titleValidation,
         descriptionValidation: descriptionValidation,
-        dateValidation: dateValidation
+        dateValidation: dateValidation,
+        timeValidation: timeValidation,
+        locationValidation: locationValidation
       });
     }
     else {
-      API.createChalkboard(displayName, activeName, photoURL, title, description, date)
+      API.createChalkboard(displayName, activeName, photoURL, title, description, date, time, location)
       .then((res) => {
         console.log(res);
         this.handleClose();
@@ -59,7 +75,9 @@ export default class AddChalkboardDialog extends Component {
         this.setState({
           title: '',
           description: '',
-          date: null
+          date: null,
+          time: 'TBD',
+          location: 'TBD'
         });
       })
       .catch((error) => {
@@ -91,9 +109,13 @@ export default class AddChalkboardDialog extends Component {
       title: '',
       description: '',
       date: null,
+      time: 'TBD',
+      location: 'TBD',
       titleValidation: true,
       descriptionValidation: true,
-      dateValidation: true
+      dateValidation: true,
+      timeValidation: true,
+      locationValidation: true
     });
   }
 
@@ -154,6 +176,26 @@ export default class AddChalkboardDialog extends Component {
           shouldDisableDate={this.disableDates}
           onChange={(e, newValue) => this.handleChange('date', newValue)}
           errorText={!this.state.dateValidation && 'Select a date.'}
+        />
+        <TextField
+          className="garnett-input"
+          type="text"
+          floatingLabelText="Time"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.time}
+          onChange={(e, newValue) => this.handleChange('time', newValue)}
+          errorText={!this.state.timeValidation && 'Enter a time.'}
+        />
+        <TextField
+          className="garnett-input"
+          type="text"
+          floatingLabelText="Location"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.location}
+          onChange={(e, newValue) => this.handleChange('location', newValue)}
+          errorText={!this.state.locationValidation && 'Enter a location.'}
         />
       </Dialog>
     )

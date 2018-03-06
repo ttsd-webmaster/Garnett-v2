@@ -65,7 +65,12 @@ export default class PledgeApp extends Component {
       complaintsPledgeArray: [],
       activeComplaintsArray: [],
       pendingComplaintsArray: [],
-      approvedComplaintsArray: []
+      approvedComplaintsArray: [],
+      myHostingChalkboards: [],
+      myAttendingChalkboards: [],
+      myCompletedChalkboards: [],
+      upcomingChalkboards: [],
+      completedChalkboards: [],
     };
   }
 
@@ -115,6 +120,12 @@ export default class PledgeApp extends Component {
     }
     else {
       if (data !== null) {
+        let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
+        let myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards'));
+        let myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards'));
+        let upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards'));
+        let completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards'));
+
         if (data.data.user.status === 'active') {
           let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
           let activeArray = JSON.parse(localStorage.getItem('activeArray'));
@@ -130,7 +141,12 @@ export default class PledgeApp extends Component {
             complaintsPledgeArray: complaintsPledgeArray,
             activeComplaintsArray: activeComplaintsArray,
             pendingComplaintsArray: pendingComplaintsArray,
-            approvedComplaintsArray: approvedComplaintsArray
+            approvedComplaintsArray: approvedComplaintsArray,
+            myHostingChalkboards: myHostingChalkboards,
+            myAttendingChalkboards: myAttendingChalkboards,
+            myCompletedChalkboards: myCompletedChalkboards,
+            upcomingChalkboards: upcomingChalkboards,
+            completedChalkboards: completedChalkboards
           });
         }
         else {
@@ -142,7 +158,11 @@ export default class PledgeApp extends Component {
             loaded: true,
             meritArray: meritArray,
             pledgeComplaintsArray: pledgeComplaintsArray,
-            activeArray: activeArray
+            activeArray: activeArray,
+            myAttendingChalkboards: myAttendingChalkboards,
+            myCompletedChalkboards: myCompletedChalkboards,
+            upcomingChalkboards: upcomingChalkboards,
+            completedChalkboards: completedChalkboards
           });
         }
       }
@@ -205,10 +225,6 @@ export default class PledgeApp extends Component {
     let index = this.state.slideIndex;
     let pullToRefresh = document.querySelector('.ptr--ptr');
     let contentContainer = document.querySelector('.content-container');
-    let addChalkboard = document.getElementById('add-chalkboard');
-    let chalkboardsTabs = document.getElementById('chalkboards-tabs');
-    let addComplaint = document.getElementById('add-complaint');
-    let complaintsTabs = document.getElementById('complaints-tabs');
     
     if (pullToRefresh) {
       pullToRefresh.style.marginTop = '100px';
@@ -235,34 +251,6 @@ export default class PledgeApp extends Component {
 
       if (this.props.state.status !== 'pledge' && index === 3) {
         contentContainer.childNodes[index].style.height = 'calc(100vh - 157px)';
-      }
-    }
-
-    // Changes chalkboards tabs and add button to be viewable if slide is on chalkboards
-    if (chalkboardsTabs) {
-      if (index === 2) {
-        chalkboardsTabs.style.display = 'flex';
-        if (this.props.state.status !== 'pledge') {
-          addChalkboard.style.display = 'flex';
-        }
-      }
-      else {
-        chalkboardsTabs.style.display = 'none';
-        if (this.props.state.status !== 'pledge') {
-          addChalkboard.style.display = 'none';
-        }
-      }
-    }
-
-    // Changes complaints tabs and add button to be viewable if slide is on complaints
-    if (addComplaint && complaintsTabs) {
-      if (this.props.state.status !== 'pledge' && index === 3) {
-        addComplaint.style.display = 'flex';
-        complaintsTabs.style.display = 'flex';
-      }
-      else {
-        addComplaint.style.display = 'none';
-        complaintsTabs.style.display = 'none';
       }
     }
   }
@@ -412,6 +400,11 @@ export default class PledgeApp extends Component {
               <Chalkboards 
                 state={this.props.state}
                 index={this.state.slideIndex}
+                myHostingChalkboards={this.state.myHostingChalkboards}
+                myAttendingChalkboards={this.state.myAttendingChalkboards}
+                myCompletedChalkboards={this.state.myCompletedChalkboards}
+                upcomingChalkboards={this.state.upcomingChalkboards}
+                completedChalkboards={this.state.completedChalkboard}
                 handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>

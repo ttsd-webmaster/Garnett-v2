@@ -130,7 +130,7 @@ app.post('/api/login', function(req, res) {
 
 // Signup Route
 app.post('/api/signup', function(req, res) {
-  let dbRef = admin.database().ref('/users/');
+  let dbRef = admin.database().ref('/users');
   let firstName = req.body.firstName.replace(/ /g,'');
   let lastName = req.body.lastName.replace(/ /g,'');
   let fullName = firstName + lastName;
@@ -290,7 +290,7 @@ app.post('/api/photo', function(req, res) {
 
 // Query for pledges data
 app.post('/api/pledges', function(req, res) {
-  let dbRef = admin.database().ref('/users/');
+  let dbRef = admin.database().ref('/users');
   let pledgeArray = [];
 
   dbRef.once('value', (snapshot) => {
@@ -307,7 +307,7 @@ app.post('/api/pledges', function(req, res) {
 
 // Query for active data
 app.post('/api/actives', function(req, res) {
-  let dbRef = admin.database().ref('/users/');
+  let dbRef = admin.database().ref('/users');
   let activeArray = [];
 
   dbRef.once('value', (snapshot) => {
@@ -326,7 +326,7 @@ app.post('/api/actives', function(req, res) {
 app.post('/api/activemerits', function(req, res) {
   let fullName = req.body.displayName;
   let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
-  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits/');
+  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits');
   let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
   let remainingMerits;
   let merits = [];
@@ -354,8 +354,8 @@ app.post('/api/activemerits', function(req, res) {
 app.post('/api/pledgedata', function(req, res) {
   let fullName = req.body.displayName;
   let userRef = admin.database().ref('/users/' + fullName);
-  let meritRef = userRef.child('/Merits/');
-  let complaintsRef = userRef.child('/Complaints/');
+  let meritRef = userRef.child('/Merits');
+  let complaintsRef = userRef.child('/Complaints');
   let totalMerits;
   let meritArray = [];
   let complaintsArray = [];
@@ -397,7 +397,7 @@ app.post('/api/merit', function(req, res) {
   let fullName = req.body.displayName;
   let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + req.body.pledgeName);
   let pledgeRef = admin.database().ref('/users/' + req.body.pledgeName);
-  let meritRef = pledgeRef.child('/Merits/');
+  let meritRef = pledgeRef.child('/Merits');
 
   userRef.once('value', (snapshot) => {
     if (req.body.amount > 0) {
@@ -427,7 +427,7 @@ app.post('/api/merit', function(req, res) {
 // Post merit data for all pledges
 app.post('/api/meritall', function(req, res) {
   let fullName = req.body.displayName;
-  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/');
+  let userRef = admin.database().ref('/users/' + fullName + '/Pledges');
   let counter = 0;
 
   userRef.once('value', (snapshot) => {
@@ -503,15 +503,87 @@ app.post('/api/createchalkboard', function(req, res) {
     photoURL: req.body.photoURL,
     title: req.body.title,
     description: req.body.description,
-    date: req.body.date
+    date: req.body.date,
+    time: req.body.time,
+    location: req.body.location
   };
-  let upcomingChalkboardsRef = admin.database().ref('/chalkboards');
-  let userUpcomingChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+  let userChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
 
-  upcomingChalkboardsRef.push(chalkboardInfo);
-  userUpcomingChalkboardsRef.push(chalkboardInfo);
+  // Adds chalkboards to general chalkboards and user's chalkboards
+  chalkboardsRef.push(chalkboardInfo);
+  userChalkboardsRef.push(chalkboardInfo);
 
   res.sendStatus(200);
+});
+
+// Joins chalkboard as an attendee
+app.post('/api/joinchalkboard', function(req, res) {
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      // Looks for the chalkboard in the chalkboards ref
+      if (equal(req.body.chalkboard, chalkboard.val())) {
+        // Adds the user to the Attendees ref
+        chalkboard.ref.child('attendees').push({
+          name: req.body.name,
+          photoURL: req.body.photoURL
+        });
+        res.sendStatus(200);
+      }
+    });
+  });
+});
+
+// Removes chalkboard from both user's list and general list
+app.post('/api/removechalkboard', function(req, res) {
+  let fullName = req.body.displayName;
+  let userChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      if (equal(req.body.chalkboard, chalkboard.val())) {
+        chalkboard.ref.remove(() => {
+          userChalkboardsRef.once('value', (snapshot) => {
+            snapshot.forEach((chalkboard) => {
+              if (equal(req.body.chalkboard, chalkboard.val())) {
+                chalkboard.ref.remove(() => {
+                  res.sendStatus(200);
+                });
+              }
+            });
+          });
+        });
+      }
+    });
+  });
+});
+
+// Leaves chalkboard as an attendee
+app.post('/api/leavechalkboard', function(req, res) {
+  let name = req.body.name;
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      // Looks for the chalkboard in the chalkboards ref
+      if (equal(req.body.chalkboard, chalkboard.val())) {
+        chalkboard.ref.child('attendees').once('value', (snapshot) => {
+          snapshot.forEach((attendee) => {
+            // Checks if the user is an attendee
+            if (equal(name, attendee.val().name)) {
+              // Removes user from the Attendees list
+              attendee.ref.remove(() => {
+                res.sendStatus(200);
+              });
+            }
+          });
+        });
+      }
+    });
+  });
 });
 
 // Post complaint data
@@ -529,16 +601,16 @@ app.post('/api/complain', function(req, res) {
 
   // Check if active is PI/PM or not
   if (req.body.status === 'active') {
-    let complaintsRef = admin.database().ref('/pendingComplaints/');
-    let pendingComplaintsRef = admin.database().ref('/users/' + fullName + '/pendingComplaints/');
+    let complaintsRef = admin.database().ref('/pendingComplaints');
+    let pendingComplaintsRef = admin.database().ref('/users/' + fullName + '/pendingComplaints');
 
     // Add complaints to active's pending complaints list and the pending complaints list
     complaintsRef.push(complaintInfo);
     pendingComplaintsRef.push(complaintInfo);
   }
   else {
-    let complaintsRef = admin.database().ref('/approvedComplaints/');
-    let pledgeComplaintsRef = admin.database().ref('/users/' + req.body.pledge.value + '/Complaints/');
+    let complaintsRef = admin.database().ref('/approvedComplaints');
+    let pledgeComplaintsRef = admin.database().ref('/users/' + req.body.pledge.value + '/Complaints');
 
     // Add complaints to the approved complaints list and the specified pledge's complaints list
     complaintsRef.push(complaintInfo);
@@ -556,15 +628,15 @@ app.post('/api/complain', function(req, res) {
 // Removes complaint for active
 app.post('/api/removecomplaint', function(req, res) {
   let activeName = req.body.complaint.activeDisplayName;
-  let activeRef = admin.database().ref('/users/' + activeName);
-  let pendingComplaintsRef = admin.database().ref('/pendingComplaints/');
+  let userPendingComplaintsRef = admin.database().ref('/users/' + activeName + '/pendingComplaints');
+  let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
   pendingComplaintsRef.once('value', (snapshot) => {
     snapshot.forEach((complaint) => {
       // Removes complaint from the pending complaints list
       if (equal(req.body.complaint, complaint.val())) {
         complaint.ref.remove(() => {
-          activeRef.child('/pendingComplaints/').once('value', (snapshot) => {
+          userPendingComplaintsRef.once('value', (snapshot) => {
             snapshot.forEach((complaint) => {
               // Removes complaint from the active's pending complaints list
               if (equal(req.body.complaint, complaint.val())) {
@@ -585,9 +657,9 @@ app.post('/api/approvecomplaint', function(req, res) {
   let activeName = req.body.complaint.activeDisplayName;
   let pledgeName = req.body.complaint.pledgeDisplayName;
   let activeRef = admin.database().ref('/users/' + activeName);
-  let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints/');
-  let approvedComplaintsRef = admin.database().ref('/approvedComplaints/');
-  let pendingComplaintsRef = admin.database().ref('/pendingComplaints/');
+  let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+  let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
+  let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
   pendingComplaintsRef.once('value', (snapshot) => {
     snapshot.forEach((complaint) => {
@@ -596,13 +668,13 @@ app.post('/api/approvecomplaint', function(req, res) {
         complaint.ref.remove(() => {
           // Adds complaint to the approved complaints list
           approvedComplaintsRef.push(req.body.complaint);
-          activeRef.child('/pendingComplaints/').once('value', (snapshot) => {
+          activeRef.child('/pendingComplaints').once('value', (snapshot) => {
             snapshot.forEach((complaint) => {
               // Removes complaint from the active's pending complaints list
               if (equal(req.body.complaint, complaint.val())) {
                 complaint.ref.remove(() => {
                   // Adds complaint to the active's approved complaints list
-                  activeRef.child('/approvedComplaints/').push(req.body.complaint);
+                  activeRef.child('/approvedComplaints').push(req.body.complaint);
                   // Adds complaint to the pledge's complaints list
                   pledgeComplaintsRef.push({
                     activeName: req.body.complaint.activeName,
@@ -622,7 +694,7 @@ app.post('/api/approvecomplaint', function(req, res) {
 });
 
 app.post('/api/pledgecomplaints', function(req, res) {
-  let dbRef = admin.database().ref('/users/');
+  let dbRef = admin.database().ref('/users');
 
   // Loop through all users for pledges
   dbRef.once('value', (snapshot) => {

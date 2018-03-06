@@ -118,6 +118,23 @@ export default class ActiveComplaints extends Component {
     }
   }
 
+  componentDidUpdate() {
+    let addComplaint = document.getElementById('add-complaint');
+    let complaintsTabs = document.getElementById('complaints-tabs');
+    
+    // Changes complaints tabs and add button to be viewable if slide is on complaints
+    if (addComplaint && complaintsTabs) {
+      if (this.props.state.status !== 'pledge' && this.props.index === 3) {
+        addComplaint.style.display = 'flex';
+        complaintsTabs.style.display = 'flex';
+      }
+      else {
+        addComplaint.style.display = 'none';
+        complaintsTabs.style.display = 'none';
+      }
+    }
+  }
+
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
     let myComplaints = document.getElementById('my-complaints');
@@ -165,7 +182,8 @@ export default class ActiveComplaints extends Component {
 
           <BottomNavigation 
             id="complaints-tabs" 
-            className="bottom-tabs" 
+            className="bottom-tabs"
+            style={{'display': 'none'}}
             selectedIndex={this.state.selectedIndex}
           >
             <BottomNavigationItem
