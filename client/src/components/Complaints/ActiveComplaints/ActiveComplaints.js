@@ -1,7 +1,8 @@
 import '../Complaints.css';
-import {loadFirebase} from '../../../helpers/functions.js';
 import MyComplaints from './MyComplaints';
 import PastComplaints from './PastComplaints';
+import {loadFirebase} from '../../../helpers/functions.js';
+import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -22,6 +23,7 @@ export default class ActiveComplaints extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loaded: false,
       open: false,
       selectedIndex: 0,
       pledge: null,
@@ -75,6 +77,7 @@ export default class ActiveComplaints extends Component {
               localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
 
               this.setState({
+                loaded: true,
                 complaints: complaints,
                 pendingComplaints: pendingComplaints,
                 approvedComplaints: approvedComplaints
@@ -97,6 +100,7 @@ export default class ActiveComplaints extends Component {
               localStorage.setItem('approvedComplaints', JSON.stringify(complaints));
 
               this.setState({
+                loaded: true,
                 complaints: complaints,
                 pendingComplaints: pendingComplaints,
                 approvedComplaints: complaints
@@ -106,6 +110,11 @@ export default class ActiveComplaints extends Component {
         });
       })
       .catch(err => console.log(err));
+    }
+    else {
+      this.setState({
+        loaded: true
+      });
     }
   }
 
@@ -141,47 +150,51 @@ export default class ActiveComplaints extends Component {
 
   render() {
     return (
-      <div>
-        <MyComplaints
-          state={this.props.state}
-          approvedComplaints={this.state.approvedComplaints}
-          pendingComplaints={this.state.pendingComplaints}
-          handleRequestOpen={this.props.handleRequestOpen}
-        />
-        <PastComplaints
-          complaints={this.state.complaints}
-          scrollPosition={this.props.scrollPosition}
-        />
-
-        <BottomNavigation 
-          id="complaints-tabs" 
-          className="bottom-tabs" 
-          selectedIndex={this.state.selectedIndex}
-        >
-          <BottomNavigationItem
-            label="My Complaints"
-            icon={<div></div>}
-            onClick={() => this.select(0)}
+      this.state.loaded ? (
+        <div>
+          <MyComplaints
+            state={this.props.state}
+            approvedComplaints={this.state.approvedComplaints}
+            pendingComplaints={this.state.pendingComplaints}
+            handleRequestOpen={this.props.handleRequestOpen}
           />
-          <BottomNavigationItem
-            label="Past Complaints"
-            icon={<div></div>}
-            onClick={() => this.select(1)}
+          <PastComplaints
+            complaints={this.state.complaints}
+            scrollPosition={this.props.scrollPosition}
           />
-        </BottomNavigation>
 
-        <div id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
-          <i className="icon-pencil"></i>
+          <BottomNavigation 
+            id="complaints-tabs" 
+            className="bottom-tabs" 
+            selectedIndex={this.state.selectedIndex}
+          >
+            <BottomNavigationItem
+              label="My Complaints"
+              icon={<div></div>}
+              onClick={() => this.select(0)}
+            />
+            <BottomNavigationItem
+              label="Past Complaints"
+              icon={<div></div>}
+              onClick={() => this.select(1)}
+            />
+          </BottomNavigation>
+
+          <div id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
+            <i className="icon-pencil"></i>
+          </div>
+
+          <LoadableAddComplaintDialog
+            open={this.state.open}
+            state={this.props.state}
+            pledges={this.props.pledges}
+            handleClose={this.handleClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
         </div>
-
-        <LoadableAddComplaintDialog
-          open={this.state.open}
-          state={this.props.state}
-          pledges={this.props.pledges}
-          handleClose={this.handleClose}
-          handleRequestOpen={this.props.handleRequestOpen}
-        />
-      </div>
+      ) : (
+        <LoadingComponent />
+      )
     )
   }
 }

@@ -1,9 +1,8 @@
-import {getDate} from '../../helpers/functions.js';
-
 import './Chalkboards.css';
-import {loadFirebase} from '../../helpers/functions.js';
 import MyChalkboards from './MyChalkboards';
 import AllChalkboards from './AllChalkboards';
+import {loadFirebase, getDate} from '../../helpers/functions.js';
+import {LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -16,7 +15,7 @@ const LoadableAddChalkboardDialog = Loadable({
     return <Component {...props}/>;
   },
   loading() {
-    return <div> Loading... </div>;
+    return <div></div>;
   }
 });
 
@@ -24,6 +23,7 @@ export default class Chalkboards extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loaded: false,
       open: false,
       selectedIndex: 0,
       myHostingChalkboards: [],
@@ -69,22 +69,24 @@ export default class Chalkboards extends Component {
                 return snapshot.val()[key];
               });
 
-              chalkboards = chalkboards.filter(chalkboard => myChalkboards.includes(chalkboard));
+              chalkboards = chalkboards.filter(chalkboard => !myChalkboards.includes(chalkboard));
 
               chalkboards.sort(function(a, b) {
                 return b.date < a.date;
               });
 
               chalkboards.forEach(function(chalkboard) {
-                let attendees = Object.keys(chalkboard.attendees).map(function(key) {
-                  return chalkboard.attendees[key];
-                });
+                if (chalkboard.attendees) {
+                  let attendees = Object.keys(chalkboard.attendees).map(function(key) {
+                    return chalkboard.attendees[key];
+                  });
 
-                attendees.forEach(function(attendee) {
-                  if (this.props.state.name === attendee.name) {
-                    myAttendingChalkboards.push(chalkboard);
-                  }
-                });
+                  attendees.forEach(function(attendee) {
+                    if (this.props.state.name === attendee.name) {
+                      myAttendingChalkboards.push(chalkboard);
+                    }
+                  });
+                }
 
                 if (chalkboard.date >= today) {
                   upcomingChalkboards.push(chalkboard);
@@ -118,6 +120,7 @@ export default class Chalkboards extends Component {
             localStorage.setItem('myCompletedChalkboards', JSON.stringify(myCompletedChalkboards));
 
             this.setState({
+              loaded: true,
               upcomingChalkboards: upcomingChalkboards,
               completedChalkboards: completedChalkboards,
               myHostingChalkboards: myHostingChalkboards,
@@ -126,6 +129,11 @@ export default class Chalkboards extends Component {
             });
           });
         });
+      });
+    }
+    else {
+      this.setState({
+        loaded: true
       });
     }
   }
@@ -162,53 +170,55 @@ export default class Chalkboards extends Component {
 
   render() {
     return (
-      <div>
-        <MyChalkboards
-          state={this.props.state}
-          myHostingChalkboards={this.state.myHostingChalkboards}
-          myAttendingChalkboards={this.state.myAttendingChalkboards}
-          myCompletedChalkboards={this.state.myCompletedChalkboards}
-          handleRequestOpen={this.props.handleRequestOpen}
-        />
-        <AllChalkboards
-          upcomingChalkboards={this.state.upcomingChalkboards}
-          completedChalkboards={this.state.completedChalkboards}
-        />
-
-        <BottomNavigation 
-          id="chalkboards-tabs" 
-          className="bottom-tabs" 
-          selectedIndex={this.state.selectedIndex}
-        >
-          <BottomNavigationItem
-            label="My Chalkboards"
-            icon={<div></div>}
-            onClick={() => this.select(0)}
+      this.state.loaded ? (
+        <div>
+          <MyChalkboards
+            state={this.props.state}
+            myHostingChalkboards={this.state.myHostingChalkboards}
+            myAttendingChalkboards={this.state.myAttendingChalkboards}
+            myCompletedChalkboards={this.state.myCompletedChalkboards}
+            handleRequestOpen={this.props.handleRequestOpen}
           />
-          <BottomNavigationItem
-            label="All Chalkboards"
-            icon={<div></div>}
-            onClick={() => this.select(1)}
+          <AllChalkboards
+            upcomingChalkboards={this.state.upcomingChalkboards}
+            completedChalkboards={this.state.completedChalkboards}
           />
-        </BottomNavigation>
 
-        {this.props.state.status === 'pledge' ? (
-          null
-        ) : (
-          <div>
-            <div id="add-chalkboard" className="fixed-button hidden" onClick={this.handleOpen}>
-              <i className="icon-calendar-plus-o"></i>
-            </div>
-
-            <LoadableAddChalkboardDialog
-              open={this.state.open}
-              state={this.props.state}
-              handleClose={this.handleClose}
-              handleRequestOpen={this.props.handleRequestOpen}
+          <BottomNavigation 
+            id="chalkboards-tabs" 
+            className="bottom-tabs" 
+            selectedIndex={this.state.selectedIndex}
+          >
+            <BottomNavigationItem
+              label="My Chalkboards"
+              icon={<div></div>}
+              onClick={() => this.select(0)}
             />
-          </div>
-        )}
-      </div>
+            <BottomNavigationItem
+              label="All Chalkboards"
+              icon={<div></div>}
+              onClick={() => this.select(1)}
+            />
+          </BottomNavigation>
+
+          {this.props.state.status !== 'pledge' && (
+            <div>
+              <div id="add-chalkboard" className="fixed-button hidden" onClick={this.handleOpen}>
+                <i className="icon-calendar-plus-o"></i>
+              </div>
+
+              <LoadableAddChalkboardDialog
+                open={this.state.open}
+                state={this.props.state}
+                handleClose={this.handleClose}
+                handleRequestOpen={this.props.handleRequestOpen}
+              />
+            </div>
+          )}
+        </div>
+      ) : (
+        <LoadingComponent />
+      )
     )
   }
 }
