@@ -26,9 +26,9 @@ export default class ActiveComplaints extends Component {
       selectedIndex: 0,
       pledge: null,
       description: '',
-      complaintsArray: this.props.complaintsArray,
-      pendingComplaintsArray: this.props.pendingComplaintsArray,
-      approvedComplaintsArray: this.props.approvedComplaintsArray
+      complaints: this.props.complaints,
+      pendingComplaints: this.props.pendingComplaints,
+      approvedComplaints: this.props.approvedComplaints
     };
   }
 
@@ -40,44 +40,44 @@ export default class ActiveComplaints extends Component {
         let complaintsRef = firebase.database().ref('/approvedComplaints/');
 
         complaintsRef.on('value', (snapshot) => {
-          let complaintsArray = this.props.complaintsArray;
+          let complaints = this.state.complaints;
           
           if (snapshot.val()) {
-            complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+            complaints = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             });
           }
 
-          console.log('Complaints Array: ', complaintsArray);
+          console.log('Complaints Array: ', complaints);
 
-          localStorage.setItem('activeComplaintsArray', JSON.stringify(complaintsArray));
+          localStorage.setItem('activeComplaints', JSON.stringify(complaints));
 
           if (this.props.state.status === 'active') {
             let fullName = this.props.state.displayName;
             let userRef = firebase.database().ref('/users/' + fullName);
 
             userRef.on('value', (snapshot) => {
-              let approvedComplaintsArray = [];
-              let pendingComplaintsArray = [];
+              let approvedComplaints = this.state.approvedComplaints;
+              let pendingComplaints = this.state.pendingComplaints;
 
               if (snapshot.val().pendingComplaints) {
-                pendingComplaintsArray = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
+                pendingComplaints = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
                   return snapshot.val().pendingComplaints[key];
                 });
               }
               if (snapshot.val().approvedComplaints) {
-                approvedComplaintsArray = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
+                approvedComplaints = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
                   return snapshot.val().approvedComplaints[key];
                 });
               }
 
-              localStorage.setItem('pendingComplaintsArray', JSON.stringify(pendingComplaintsArray));
-              localStorage.setItem('approvedComplaintsArray', JSON.stringify(approvedComplaintsArray));
+              localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
+              localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
 
               this.setState({
-                complaintsArray: complaintsArray,
-                pendingComplaintsArray: pendingComplaintsArray,
-                approvedComplaintsArray: approvedComplaintsArray
+                complaints: complaints,
+                pendingComplaints: pendingComplaints,
+                approvedComplaints: approvedComplaints
               });
             });
           }
@@ -85,21 +85,21 @@ export default class ActiveComplaints extends Component {
             let pendingComplaintsRef = firebase.database().ref('/pendingComplaints/');
 
             pendingComplaintsRef.on('value', (snapshot) => {
-              let pendingComplaintsArray = [];
+              let pendingComplaints = [];
 
               if (snapshot.val()) {
-                pendingComplaintsArray = Object.keys(snapshot.val()).map(function(key) {
+                pendingComplaints = Object.keys(snapshot.val()).map(function(key) {
                   return snapshot.val()[key];
                 });
               }
 
-              localStorage.setItem('pendingComplaintsArray', JSON.stringify(pendingComplaintsArray));
-              localStorage.setItem('approvedComplaintsArray', JSON.stringify(complaintsArray));
+              localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
+              localStorage.setItem('approvedComplaints', JSON.stringify(complaints));
 
               this.setState({
-                complaintsArray: complaintsArray,
-                pendingComplaintsArray: pendingComplaintsArray,
-                approvedComplaintsArray: complaintsArray
+                complaints: complaints,
+                pendingComplaints: pendingComplaints,
+                approvedComplaints: complaints
               });
             });
           }
@@ -144,12 +144,12 @@ export default class ActiveComplaints extends Component {
       <div>
         <MyComplaints
           state={this.props.state}
-          approvedComplaintsArray={this.state.approvedComplaintsArray}
-          pendingComplaintsArray={this.state.pendingComplaintsArray}
+          approvedComplaints={this.state.approvedComplaints}
+          pendingComplaints={this.state.pendingComplaints}
           handleRequestOpen={this.props.handleRequestOpen}
         />
         <PastComplaints
-          complaintsArray={this.state.complaintsArray}
+          complaints={this.state.complaints}
           scrollPosition={this.props.scrollPosition}
         />
 
@@ -177,7 +177,7 @@ export default class ActiveComplaints extends Component {
         <LoadableAddComplaintDialog
           open={this.state.open}
           state={this.props.state}
-          pledgeArray={this.props.pledgeArray}
+          pledges={this.props.pledges}
           handleClose={this.handleClose}
           handleRequestOpen={this.props.handleRequestOpen}
         />

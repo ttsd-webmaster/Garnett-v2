@@ -128,7 +128,9 @@ export default class PledgeApp extends Component {
             pledgeArray: pledgeArray,
             activeArray: activeArray,
             complaintsPledgeArray: complaintsPledgeArray,
-            activeComplaintsArray: activeComplaintsArray
+            activeComplaintsArray: activeComplaintsArray,
+            pendingComplaintsArray: pendingComplaintsArray,
+            approvedComplaintsArray: approvedComplaintsArray
           });
         }
         else {
@@ -410,6 +412,7 @@ export default class PledgeApp extends Component {
               <Chalkboards 
                 state={this.props.state}
                 index={this.state.slideIndex}
+                handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>
             <Tab

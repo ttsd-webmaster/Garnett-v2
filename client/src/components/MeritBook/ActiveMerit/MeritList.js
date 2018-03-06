@@ -9,7 +9,7 @@ export default class ActiveMerit extends Component {
   render() {
     return (
       <List id="merit-dialog-list">
-        {this.props.meritArray.map((merit, i) => (
+        {this.props.merits.map((merit, i) => (
           <div key={i}>
             <div>
               <Divider className="pledge-divider" inset={true} />

@@ -25,7 +25,7 @@ const dividerStyle = {
 export default class ActiveList extends Component {
   render() {
     return (
-      this.props.activeArray.map((active, i) => (
+      this.props.actives.map((active, i) => (
         this.props.classLabel === active.class &&
           <LazyLoad
             height={88}

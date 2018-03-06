@@ -1,81 +1,71 @@
-import {getDate} from '../../../helpers/functions.js';
-import API from '../../../api/API.js';
+import {getDate} from '../../helpers/functions.js';
+import API from '../../api/API.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
-import SelectField from 'material-ui/SelectField';
-import MenuItem from 'material-ui/MenuItem';
+import DatePicker from 'material-ui/DatePicker';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class AddComplaintDialog extends Component {
+export default class AddChalkboardDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pledges: this.props.pledges,
-      pledge: null,
+      title: '',
       description: '',
-      pledgeValidation: true,
-      descriptionValidation: true
+      date: null,
+      titleValidation: true,
+      descriptionValidation: true,
+      dateValidation: true
     };
   }
 
-  componentDidMount() {
-    if (navigator.onLine) {
-      API.getPledgesForComplaints()
-      .then((res) => {
-        let pledges = res.data;
-
-        console.log('Complaints Pledge Array: ', pledges);
-        localStorage.setItem('complaintsPledgeArray', JSON.stringify(pledges));
-
-        this.setState({
-          pledges: pledges
-        });
-      });
-    }
-  }
-
-  complain = (pledge) => {
-    let status = this.props.state.status;
+  addChalkboard = () => {
     let displayName = this.props.state.displayName;
     let activeName = this.props.state.name;
+    let photoURL = this.props.state.photoURL;
+    let title = this.state.title;
     let description = this.state.description;
+    let date = getDate(this.state.date);
+    let titleValidation = true;
     let descriptionValidation = true;
-    let pledgeValidation = true;
+    let dateValidation = true;
 
-    if (!pledge || !description) {
-      if (!pledge) {
-        pledgeValidation = false;
+    if (!title || !description) {
+      if (!title) {
+        titleValidation = false;
       }
       if (!description) {
         descriptionValidation = false;
       }
+      if (!date) {
+        dateValidation = false;
+      }
 
       this.setState({
-        pledgeValidation: pledgeValidation,
-        descriptionValidation: descriptionValidation
+        titleValidation: titleValidation,
+        descriptionValidation: descriptionValidation,
+        dateValidation: dateValidation
       });
     }
     else {
-      let date = getDate();
-      
-      API.complain(status, displayName, activeName, pledge, description, date)
+      API.createChalkboard(displayName, activeName, photoURL, title, description, date)
       .then((res) => {
         console.log(res);
-        this.props.handleClose();
-        this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
+        this.handleClose();
+        this.props.handleRequestOpen('Created a chalkboard!');
 
         this.setState({
-          pledge: null,
-          description: ''
+          title: '',
+          description: '',
+          date: null
         });
       })
       .catch((error) => {
         console.log('Error: ', error);
-        this.props.handleClose();
-        this.props.handleRequestOpen('Error creating complaint');
+        this.handleClose();
+        this.props.handleRequestOpen('Error creating chalkboard');
       });
     }
   }
@@ -93,10 +83,12 @@ export default class AddComplaintDialog extends Component {
     this.props.handleClose();
 
     this.setState({
-      pledge: null,
+      title: '',
       description: '',
-      pledgeValidation: true,
-      descriptionValidation: true
+      date: null,
+      titleValidation: true,
+      descriptionValidation: true,
+      dateValidation: true
     });
   }
 
@@ -110,13 +102,13 @@ export default class AddComplaintDialog extends Component {
       <RaisedButton
         label="Submit"
         primary={true}
-        onClick={() => this.complain(this.state.pledge)}
+        onClick={this.addChalkboard}
       />,
     ];
 
     return (
       <Dialog
-        title="Submit Complaint"
+        title="Submit Chalkboard"
         titleClassName="garnett-dialog-title"
         actions={actions}
         modal={false}
@@ -127,17 +119,16 @@ export default class AddComplaintDialog extends Component {
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
-        <SelectField
+        <TextField
           className="garnett-input"
-          value={this.state.pledge}
-          floatingLabelText="Pledge Name"
-          onChange={(e, key, newValue) => this.handleChange('pledge', newValue)}
-          errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
-        >
-          {this.state.pledges.map((pledge, i) => (
-            <MenuItem key={i} value={pledge} primaryText={pledge.label} />
-          ))}
-        </SelectField>
+          type="text"
+          floatingLabelText="Title"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.title}
+          onChange={(e, newValue) => this.handleChange('title', newValue)}
+          errorText={!this.state.descriptionValidation && 'Enter a title.'}
+        />
         <TextField
           className="garnett-input"
           type="text"
@@ -147,6 +138,15 @@ export default class AddComplaintDialog extends Component {
           value={this.state.description}
           onChange={(e, newValue) => this.handleChange('description', newValue)}
           errorText={!this.state.descriptionValidation && 'Enter a description.'}
+        />
+        <DatePicker
+          className="garnett-input"
+          style={{'marginTop': '20px'}}
+          hintText="Date"
+          value={this.state.date}
+          disableYearSelection
+          onChange={(e, newValue) => this.handleChange('date', newValue)}
+          errorText={!this.state.dateValidation && 'Select a date.'}
         />
       </Dialog>
     )

@@ -11,17 +11,17 @@ export default class Complaints extends Component {
       status === 'pledge' ? (
         <PledgeComplaints 
           state={this.props.state}
-          complaintsArray={this.props.pledgeComplaintsArray}
+          complaints={this.props.pledgeComplaintsArray}
           scrollPosition={this.props.scrollPosition}
         />
       ) : (
         <ActiveComplaints 
           state={this.props.state}
           index={this.props.index}
-          pledgeArray={this.props.complaintsPledgeArray}
-          complaintsArray={this.props.activeComplaintsArray}
-          pendingComplaintsArray={this.props.pendingComplaintsArray}
-          approvedComplaintsArray={this.props.approvedComplaintsArray}
+          pledges={this.props.complaintsPledgeArray}
+          complaints={this.props.activeComplaintsArray}
+          pendingComplaints={this.props.pendingComplaintsArray}
+          approvedComplaints={this.props.approvedComplaintsArray}
           scrollPosition={this.props.scrollPosition}
           handleRequestOpen={this.props.handleRequestOpen}
         />

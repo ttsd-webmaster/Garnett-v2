@@ -11,7 +11,7 @@ export default class MeritBook extends Component {
       status === 'pledge' ? (
         <PledgeMerit
           state={this.props.state}
-          meritArray={this.props.meritArray} 
+          merits={this.props.meritArray} 
           totalMerits={this.props.state.totalMerits}
           scrollPosition={this.props.scrollPosition}
           handleRequestOpen={this.props.handleRequestOpen} 
@@ -20,7 +20,7 @@ export default class MeritBook extends Component {
         <ActiveMerit 
           state={this.props.state}
           index={this.props.index}
-          pledgeArray={this.props.pledgeArray} 
+          pledges={this.props.pledgeArray} 
           handleRequestOpen={this.props.handleRequestOpen} 
         />
       )

@@ -205,6 +205,17 @@ export default class ActiveMerit extends Component {
     }
   }
 
+  handleClose = () => {
+    this.props.handleClose();
+
+    this.setState({
+      description: '',
+      amount: '',
+      descriptionValidation: true,
+      amountValidation: true
+    });
+  }
+
   render() {
     const actions = [
       <FlatButton
@@ -227,7 +238,7 @@ export default class ActiveMerit extends Component {
         bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}
-        onRequestClose={this.props.handleClose}
+        onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
         <Tabs 
@@ -236,7 +247,7 @@ export default class ActiveMerit extends Component {
           onChange={this.adjustScrollTop}
         >
           <Tab label="Merits" value={0}>
-            <div className="garnett-container">
+            <div>
               <TextField 
                 type="text"
                 floatingLabelText="Description"
@@ -258,7 +269,7 @@ export default class ActiveMerit extends Component {
             </div>
           </Tab>
           <Tab label="Past Merits" value={1}>
-            <LoadableMeritList meritArray={this.props.meritArray} />
+            <LoadableMeritList merits={this.props.merits} />
           </Tab>
         </Tabs>
       </Dialog>

@@ -18,7 +18,6 @@
   height: 100%;
   top: 100px;
   overflow: scroll !important;
-  touch-action: pan-down;
   z-index: 0;
 }
 
@@ -53,13 +52,14 @@
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
 }
-.garnett-dialog-tabs > div:last-child > div:first-child,
-.garnett-dialog-body.no-tabs {
+.garnett-dialog-tabs > div:last-child > div:first-child {
   display: flex;
   justify-content: center;
 }
 
 .garnett-dialog-body {
+  display: flex;
+  flex-direction: column;
   min-height: 285px;
   max-height: 352px !important;
   padding: 0 !important;
@@ -70,10 +70,21 @@
   width: 90% !important;
 }
 
-.garnett-all-dialog {
+.garnett-dialog-title {
   background-color: var(--primary-color);
   color: #fff !important;
   font-size: 20px !important;
+}
+
+.garnett-input {
+  width: 40% !important;
+  max-width: 576px;
+  margin: 0 auto;
+}
+@media(max-width: 768px) {
+  .garnett-input {
+    width: 80% !important;
+  }
 }
 
 /* Bottom Navigation */

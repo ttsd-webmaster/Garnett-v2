@@ -14,8 +14,8 @@ function validateEmail(email) {
   return re.test(email);
 }
 
-function getDate() {
-  let today = new Date();
+function getDate(date) {
+  let today = date ? date : new Date();
   let day = today.getDate();
   let month = today.getMonth() + 1;
 

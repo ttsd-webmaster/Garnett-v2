@@ -47,15 +47,15 @@ export default class MyChalkboards extends Component {
     return (
       <div id="my-chalkboards" className="active">
         <List className="pledge-list">
-          <Subheader> Ongoing </Subheader>
-          {this.props.ongoingChalkboardsArray.map((complaint, i) => (
+          <Subheader> Upcoming </Subheader>
+          {this.props.myUpcomingChalkboards.map((complaint, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem
                 className="pledge-list-item large"
                 leftAvatar={<Avatar className="pledge-image large" size={70} src={complaint.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {complaint.pledgeName} </p>
+                  <p className="pledge-name"> {complaint.title} </p>
                 }
                 secondaryText={
                   <p className="complaints-description">
@@ -73,14 +73,14 @@ export default class MyChalkboards extends Component {
           <Divider />
 
           <Subheader> Completed </Subheader>
-          {this.props.completedChalkboardsArray.map((complaint, i) => (
+          {this.props.myCompletedChalkboards.map((complaint, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem
                 className="pledge-list-item large"
                 leftAvatar={<Avatar className="pledge-image large" size={70} src={complaint.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {complaint.pledgeName} </p>
+                  <p className="pledge-name"> {complaint.title} </p>
                 }
                 secondaryText={
                   <p className="complaints-description">

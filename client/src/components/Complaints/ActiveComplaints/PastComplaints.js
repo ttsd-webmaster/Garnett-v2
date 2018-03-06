@@ -28,7 +28,7 @@ export default class PastComplaints extends Component {
       <div id="past-complaints">
         <List className="pledge-list">
           <Subheader> General </Subheader>
-          {this.props.complaintsArray.map((complaint, i) => (
+          {this.props.complaints.map((complaint, i) => (
             <LazyLoad
               height={88}
               offset={500}

@@ -22,8 +22,8 @@ export default class Contacts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      classArray: ['Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'],
-      activeArray: this.props.activeArray,
+      classes: ['Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'],
+      actives: this.props.actives,
       loaded: false,
       open: false,
       active: null
@@ -38,7 +38,7 @@ export default class Contacts extends Component {
 
         this.setState({
           loaded: true,
-          activeArray: res.data
+          actives: res.data
         });
       });
     }
@@ -66,11 +66,11 @@ export default class Contacts extends Component {
     return (
       this.state.loaded ? (
         <List>
-          {this.state.classArray.map((classLabel, i) => (
+          {this.state.classes.map((classLabel, i) => (
             <div key={i}>
               <Subheader> {classLabel} </Subheader>
               <ActiveList 
-                activeArray={this.state.activeArray} 
+                actives={this.state.actives} 
                 classLabel={classLabel}
                 handleOpen={this.handleOpen}
               />

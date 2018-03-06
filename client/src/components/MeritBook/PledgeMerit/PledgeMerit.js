@@ -28,14 +28,12 @@ export default class PledgeMerit extends Component {
     super(props);
     this.state = {
       loaded: false,
-      meritArray: this.props.meritArray,
+      merits: this.props.merits,
       totalMerits: 0
     }
   }
 
   componentDidMount() {
-    let meritArray = this.state.meritArray;
-
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
@@ -50,20 +48,22 @@ export default class PledgeMerit extends Component {
           console.log('Total Merits: ', totalMerits);
           localStorage.setItem('totalMerits', totalMerits);
 
-          meritRef.on('value', (merits) => {
-            if (merits.val()) {
-              meritArray = Object.keys(merits.val()).map(function(key) {
-                return merits.val()[key];
+          meritRef.on('value', (snapshot) => {
+            let merits = this.state.merits;
+
+            if (snapshot.val()) {
+              merits = Object.keys(snapshot.val()).map(function(key) {
+                return snapshot.val()[key];
               });
             }
 
-            console.log('Merit array: ', meritArray);
-            localStorage.setItem('meritArray', JSON.stringify(meritArray));
+            console.log('Merit array: ', merits);
+            localStorage.setItem('meritArray', JSON.stringify(merits));
 
             this.setState({
               loaded: true,
               totalMerits: totalMerits,
-              meritArray: meritArray,
+              merits: merits,
             });
           });
         });
@@ -96,7 +96,7 @@ export default class PledgeMerit extends Component {
       this.state.loaded ? (
         <div className="animate-in">
           <List className="animate-in pledge-list no-header" id="pledge-merit">
-            {this.state.meritArray.map((merit, i) => (
+            {this.state.merits.map((merit, i) => (
               <LazyLoad
                 height={88}
                 offset={500}

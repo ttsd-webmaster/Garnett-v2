@@ -322,6 +322,76 @@ app.post('/api/actives', function(req, res) {
   });
 });
 
+// Query for merit data on Active App
+app.post('/api/activemerits', function(req, res) {
+  let fullName = req.body.displayName;
+  let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
+  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits/');
+  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
+  let remainingMerits;
+  let meritArray = [];
+  
+  userRef.once('value', (snapshot) => {
+    remainingMerits = snapshot.val().merits;
+
+    meritRef.once('value', (snapshot) => {
+      if (snapshot.val()) {
+        meritArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+      }
+
+      const data = {
+        remainingMerits: remainingMerits,
+        meritArray: meritArray
+      };
+      res.json(data);
+    });
+  });
+});
+
+// Query for merit data on Pledge App
+app.post('/api/pledgedata', function(req, res) {
+  let fullName = req.body.displayName;
+  let userRef = admin.database().ref('/users/' + fullName);
+  let meritRef = userRef.child('/Merits/');
+  let complaintsRef = userRef.child('/Complaints/');
+  let totalMerits;
+  let meritArray = [];
+  let complaintsArray = [];
+
+  userRef.on('value', (snapshot) => {
+    totalMerits = snapshot.val().totalMerits;
+
+    meritRef.once('value', (snapshot) => {
+      if (snapshot.val()) {
+        meritArray = Object.keys(snapshot.val()).map(function(key) {
+          return snapshot.val()[key];
+        });
+      }
+
+      complaintsRef.once('value', (snapshot) => {
+        if (snapshot.val()) {
+          complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
+        }
+
+        console.log('Merit array: ', meritArray);
+        console.log('Complaints array: ', complaintsArray);
+
+        const data = {
+          totalMerits: totalMerits,
+          meritArray: meritArray,
+          complaintsArray: complaintsArray
+        };
+
+        res.json(data);
+      });
+    });
+  });
+});
+
 // Post merit data
 app.post('/api/merit', function(req, res) {
   let fullName = req.body.displayName;
@@ -424,28 +494,24 @@ app.post('/api/meritall', function(req, res) {
   });
 });
 
-app.post('/api/pledgecomplaints', function(req, res) {
-  let dbRef = admin.database().ref('/users/');
+// Creates a chalkboard
+app.post('/api/createchalkboard', function(req, res) {
+  let fullName = req.body.displayName;
+  let chalkboardInfo = {
+    displayName: req.body.displayName,
+    activeName: req.body.activeName,
+    photoURL: req.body.photoURL,
+    title: req.body.title,
+    description: req.body.description,
+    date: req.body.date
+  };
+  let upcomingChalkboardsRef = admin.database().ref('/upcomingChalkboards');
+  let userUpcomingChalkboardsRef = admin.database().ref('/users/' + fullName + '/upcomingChalkboards');
 
-  // Loop through all users for pledges
-  dbRef.once('value', (snapshot) => {
-    let pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-      return snapshot.val()[key];
-    });
-    // Filter pledges
-    pledgeArray = pledgeArray.filter(function(user) {
-      return user.status === 'pledge';
-    });
-    // Save the value, label, and photoURL for each pledge
-    pledgeArray = pledgeArray.map(function(pledge) {
-      return {'value': pledge.firstName + pledge.lastName, 
-              'label': `${pledge.firstName} ${pledge.lastName}`,
-              'photoURL': pledge.photoURL
-             };
-    });
+  upcomingChalkboardsRef.push(chalkboardInfo);
+  userUpcomingChalkboardsRef.push(chalkboardInfo);
 
-    res.json(pledgeArray);
-  });
+  res.sendStatus(200);
 });
 
 // Post complaint data
@@ -555,73 +621,27 @@ app.post('/api/approvecomplaint', function(req, res) {
   });
 });
 
-// Query for merit data on Active App
-app.post('/api/activemerits', function(req, res) {
-  let fullName = req.body.displayName;
-  let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
-  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits/');
-  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
-  let remainingMerits;
-  let meritArray = [];
-  
-  userRef.once('value', (snapshot) => {
-    remainingMerits = snapshot.val().merits;
+app.post('/api/pledgecomplaints', function(req, res) {
+  let dbRef = admin.database().ref('/users/');
 
-    meritRef.once('value', (snapshot) => {
-      if (snapshot.val()) {
-        meritArray = Object.keys(snapshot.val()).map(function(key) {
-          return snapshot.val()[key];
-        });
-      }
-
-      const data = {
-        remainingMerits: remainingMerits,
-        meritArray: meritArray
-      };
-      res.json(data);
+  // Loop through all users for pledges
+  dbRef.once('value', (snapshot) => {
+    let pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+      return snapshot.val()[key];
     });
-  });
-});
-
-// Query for merit data on Pledge App
-app.post('/api/pledgedata', function(req, res) {
-  let fullName = req.body.displayName;
-  let userRef = admin.database().ref('/users/' + fullName);
-  let meritRef = userRef.child('/Merits/');
-  let complaintsRef = userRef.child('/Complaints/');
-  let totalMerits;
-  let meritArray = [];
-  let complaintsArray = [];
-
-  userRef.on('value', (snapshot) => {
-    totalMerits = snapshot.val().totalMerits;
-
-    meritRef.once('value', (snapshot) => {
-      if (snapshot.val()) {
-        meritArray = Object.keys(snapshot.val()).map(function(key) {
-          return snapshot.val()[key];
-        });
-      }
-
-      complaintsRef.once('value', (snapshot) => {
-        if (snapshot.val()) {
-          complaintsArray = Object.keys(snapshot.val()).map(function(key) {
-            return snapshot.val()[key];
-          });
-        }
-
-        console.log('Merit array: ', meritArray);
-        console.log('Complaints array: ', complaintsArray);
-
-        const data = {
-          totalMerits: totalMerits,
-          meritArray: meritArray,
-          complaintsArray: complaintsArray
-        };
-
-        res.json(data);
-      });
+    // Filter pledges
+    pledgeArray = pledgeArray.filter(function(user) {
+      return user.status === 'pledge';
     });
+    // Save the value, label, and photoURL for each pledge
+    pledgeArray = pledgeArray.map(function(pledge) {
+      return {'value': pledge.firstName + pledge.lastName, 
+              'label': `${pledge.firstName} ${pledge.lastName}`,
+              'photoURL': pledge.photoURL
+             };
+    });
+
+    res.json(pledgeArray);
   });
 });
 

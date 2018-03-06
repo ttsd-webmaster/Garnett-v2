@@ -37,17 +37,17 @@ export default class ActiveMerit extends Component {
     super(props);
     this.state = {
       loaded: false,
-      pledgeArray: this.props.pledgeArray,
+      pledges: this.props.pledges,
       open: false,
       openMeritAll: false,
       pledge: null,
-      meritArray: [],
+      merits: [],
       remainingMerits: ''
     };
   }
 
   componentDidMount() {
-    let pledgeArray = this.state.pledgeArray;
+    let pledges = this.state.pledges;
 
     if (navigator.onLine) {
       loadFirebase('database')
@@ -56,20 +56,20 @@ export default class ActiveMerit extends Component {
         let dbRef = firebase.database().ref('/users/');
 
         dbRef.on('value', (snapshot) => {
-          pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+          pledges = Object.keys(snapshot.val()).map(function(key) {
             return snapshot.val()[key];
           });
-          pledgeArray = pledgeArray.filter(function(user) {
+          pledges = pledges.filter(function(user) {
             return user.status === 'pledge';
           });
 
-          console.log('Pledge array: ', pledgeArray);
+          console.log('Pledge array: ', pledges);
 
-          localStorage.setItem('pledgeArray', JSON.stringify(pledgeArray));
+          localStorage.setItem('pledgeArray', JSON.stringify(pledges));
           
           this.setState({
             loaded: true,
-            pledgeArray: pledgeArray
+            pledges: pledges
           });
         });
       });
@@ -104,7 +104,7 @@ export default class ActiveMerit extends Component {
           open: true,
           pledge: pledge,
           remainingMerits: res.data.remainingMerits,
-          meritArray: res.data.meritArray
+          merits: res.data.merits
         });
       })
       .catch(err => console.log('err', err));
@@ -143,7 +143,7 @@ export default class ActiveMerit extends Component {
         <div className="animate-in">
           <List className="pledge-list">
             <Subheader> Pledges </Subheader>
-            {this.state.pledgeArray.map((pledge, i) => (
+            {this.state.pledges.map((pledge, i) => (
               <div key={i}>
                 <Divider className="pledge-divider large" inset={true} />
                 <ListItem
@@ -178,7 +178,7 @@ export default class ActiveMerit extends Component {
             state={this.props.state}
             pledge={this.state.pledge}
             remainingMerits={this.state.remainingMerits}
-            meritArray={this.state.meritArray}
+            merits={this.state.merits}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

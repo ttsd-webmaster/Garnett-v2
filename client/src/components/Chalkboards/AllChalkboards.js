@@ -28,7 +28,7 @@ export default class AllChalkboards extends Component {
       <div id="all-chalkboards">
         <List className="pledge-list">
           <Subheader> General </Subheader>
-          {this.props.chalkboardsArray.map((complaint, i) => (
+          {this.props.upcomingChalkboards.map((complaint, i) => (
             <LazyLoad
               height={88}
               offset={500}
@@ -53,7 +53,7 @@ export default class AllChalkboards extends Component {
                   className="pledge-list-item large"
                   leftAvatar={<Avatar className="pledge-image large" size={70} src={complaint.photoURL} />}
                   primaryText={
-                    <p className="pledge-name"> {complaint.pledgeName} </p>
+                    <p className="pledge-name"> {complaint.title} </p>
                   }
                   secondaryText={
                     <p className="complaints-description">

@@ -17,7 +17,7 @@ export default class PledgeComplaints extends Component {
     super(props);
     this.state = {
       loaded: false,
-      complaintsArray: this.props.complaintsArray
+      complaints: this.props.complaints
     }
   }
 
@@ -30,20 +30,20 @@ export default class PledgeComplaints extends Component {
         let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
 
         complaintsRef.on('value', (snapshot) => {
-          let complaintsArray = this.state.complaintsArray;
+          let complaints = this.state.complaints;
 
           if (snapshot.val()) {
-            complaintsArray = Object.keys(snapshot.val()).map(function(key) {
+            complaints = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             });
           }
 
-          console.log('Complaints Array: ', complaintsArray);
-          localStorage.setItem('pledgeComplaintsArray', JSON.stringify(complaintsArray));
+          console.log('Complaints Array: ', complaints);
+          localStorage.setItem('pledgeComplaintsArray', JSON.stringify(complaints));
 
           this.setState({
             loaded: true,
-            complaintsArray: complaintsArray
+            complaints: complaints
           });
         });
       });
@@ -75,7 +75,7 @@ export default class PledgeComplaints extends Component {
       this.state.loaded ? (
         <div id="pledge-complaints">
           <List className="pledge-list no-header">
-            {this.state.complaintsArray.map((complaint, i) => (
+            {this.state.complaints.map((complaint, i) => (
               <LazyLoad
                 height={88}
                 offset={500}

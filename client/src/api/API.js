@@ -21,28 +21,8 @@ export default {
   setPhoto: function(displayName, url) {
     return axios.post('/api/photo', {displayName, url});
   },
-  merit: function(displayName, pledgeName, activeName, description, amount, photoURL, date) {
-    let body = {displayName, pledgeName, activeName, description, amount, photoURL, date};
-    return axios.post('/api/merit', body);
-  },
-  meritAll: function(displayName, activeName, description, amount, photoURL, date) {
-    let body = {displayName, activeName, description, amount, photoURL, date};
-    return axios.post('/api/meritall', body);
-  },
-  complain: function(status, displayName, activeName, pledge, description, date) {
-    return axios.post('/api/complain', {status, displayName, activeName, pledge, description, date});
-  },
-  removeComplaint: function(complaint) {
-    return axios.post('/api/removecomplaint', {complaint});
-  },
-  approveComplaint: function(complaint) {
-    return axios.post('/api/approvecomplaint', {complaint});
-  },
   getPledges: function() {
     return axios.post('/api/pledges');
-  },
-  getPledgesForComplaints: function() {
-    return axios.post('/api/pledgecomplaints');
   },
   getActives: function() {
     return axios.post('/api/actives');
@@ -52,6 +32,31 @@ export default {
   },
   getPledgeData: function(displayName) {
     return axios.post('/api/pledgedata', {displayName});
+  },
+  merit: function(displayName, pledgeName, activeName, description, amount, photoURL, date) {
+    let body = {displayName, pledgeName, activeName, description, amount, photoURL, date};
+    return axios.post('/api/merit', body);
+  },
+  meritAll: function(displayName, activeName, description, amount, photoURL, date) {
+    let body = {displayName, activeName, description, amount, photoURL, date};
+    return axios.post('/api/meritall', body);
+  },
+  createChalkboard: function(displayName, activeName, photoURL, title, description, date) {
+    let body = {displayName, activeName, photoURL, title, description, date};
+    return axios.post('/api/createchalkboard', body);
+  },
+  complain: function(status, displayName, activeName, pledge, description, date) {
+    let body = {status, displayName, activeName, pledge, description, date};
+    return axios.post('/api/complain', body);
+  },
+  removeComplaint: function(complaint) {
+    return axios.post('/api/removecomplaint', {complaint});
+  },
+  approveComplaint: function(complaint) {
+    return axios.post('/api/approvecomplaint', {complaint});
+  },
+  getPledgesForComplaints: function() {
+    return axios.post('/api/pledgecomplaints');
   },
   saveMessagingToken: function(displayName, token) {
     return axios.post('/api/savemessagetoken', {displayName, token});

@@ -9,23 +9,6 @@
   animation: fadeIn .25s ease-in forwards;
 }
 
-/* Add complaints dialog */
-#add-complaint-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.complaints-input {
-  width: 40% !important;
-  max-width: 576px;
-  margin: 0 auto;
-}
-@media(max-width: 768px) {
-  .complaints-input {
-    width: 80% !important;
-  }
-}
-
 .complaints-description {
   word-wrap: break-word;
 }

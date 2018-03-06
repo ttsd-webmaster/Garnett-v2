@@ -48,7 +48,7 @@ export default class MyComplaints extends Component {
       <div id="my-complaints" className="active">
         <List className="pledge-list">
           <Subheader> Approved </Subheader>
-          {this.props.approvedComplaintsArray.map((complaint, i) => (
+          {this.props.approvedComplaints.map((complaint, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem
@@ -73,7 +73,7 @@ export default class MyComplaints extends Component {
           <Divider />
 
           <Subheader> Pending </Subheader>
-          {this.props.pendingComplaintsArray.map((complaint, i) => (
+          {this.props.pendingComplaints.map((complaint, i) => (
             <div key={i}>
               <Divider className="pledge-divider large" inset={true} />
               <ListItem

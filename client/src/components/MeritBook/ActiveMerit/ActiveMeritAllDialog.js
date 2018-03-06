@@ -19,31 +19,6 @@ export default class ActiveMerit extends Component {
     };
   }
 
-  handleChange = (label, newValue) => {
-    let validationLabel = [label] + 'Validation';
-    let value = newValue;
-
-    if (label === 'amount') {
-      value = parseInt(newValue, 10)
-    }
-
-    this.setState({
-      [label]: value,
-      [validationLabel]: true
-    });
-  }
-
-  handleClose = () => {
-    this.props.handleMeritAllClose();
-
-    this.setState({
-      description: '',
-      amount: '',
-      descriptionValidation: true,
-      amountValidation: true
-    });
-  }
-
   meritAll = () => {
     let displayName = this.props.state.displayName;
     let activeName = this.props.state.name;
@@ -130,6 +105,31 @@ export default class ActiveMerit extends Component {
     }
   }
 
+  handleChange = (label, newValue) => {
+    let validationLabel = [label] + 'Validation';
+    let value = newValue;
+
+    if (label === 'amount') {
+      value = parseInt(newValue, 10)
+    }
+
+    this.setState({
+      [label]: value,
+      [validationLabel]: true
+    });
+  }
+
+  handleClose = () => {
+    this.props.handleMeritAllClose();
+
+    this.setState({
+      description: '',
+      amount: '',
+      descriptionValidation: true,
+      amountValidation: true
+    });
+  }
+
   render(){
     const actions = [
       <FlatButton
@@ -147,35 +147,35 @@ export default class ActiveMerit extends Component {
     return (
       <Dialog
         title="Merit All"
-        titleClassName="garnett-all-dialog"
+        titleClassName="garnett-dialog-title"
         actions={actions}
         modal={false}
         className="garnett-dialog"
-        bodyClassName="garnett-dialog-body no-tabs"
+        bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
-        <div className="garnett-container">
-          <TextField 
-            type="text"
-            floatingLabelText="Description"
-            value={this.state.description}
-            onChange={(e, newValue) => this.handleChange('description', newValue)}
-            errorText={!this.state.descriptionValidation && 'Enter a description.'}
-          />
-          <br />
-          <TextField 
-            type="number"
-            step={5}
-            max={30}
-            floatingLabelText="Amount"
-            value={this.state.amount}
-            onChange={(e, newValue) => this.handleChange('amount', newValue)}
-            errorText={!this.state.amountValidation && 'Enter a valid amount.'}
-          />
-        </div>
+        <TextField
+          className="garnett-input"
+          type="text"
+          floatingLabelText="Description"
+          value={this.state.description}
+          onChange={(e, newValue) => this.handleChange('description', newValue)}
+          errorText={!this.state.descriptionValidation && 'Enter a description.'}
+        />
+        <br />
+        <TextField
+          className="garnett-input"
+          type="number"
+          step={5}
+          max={30}
+          floatingLabelText="Amount"
+          value={this.state.amount}
+          onChange={(e, newValue) => this.handleChange('amount', newValue)}
+          errorText={!this.state.amountValidation && 'Enter a valid amount.'}
+        />
       </Dialog>
     )
   }
