@@ -517,6 +517,40 @@ app.post('/api/createchalkboard', function(req, res) {
   res.sendStatus(200);
 });
 
+// Edits chalkboard
+app.post('/api/editchalkboard', function(req, res) {
+  let editedField = req.body.field;
+  let fullName = req.body.displayName;
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+  let userChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      // Looks for the chalkboard in the chalkboards ref
+      if (req.body.chalkboard.title === chalkboard.val().title) {
+        // Updates the chalkboard
+        chalkboard.ref.update({
+          [editedField]: req.body.newValue
+        });
+
+        userChalkboardsRef.once('value', (snapshot) => {
+          snapshot.forEach((chalkboard) => {
+            // Looks for the chalkboard in the user's chalkboards ref
+            if (req.body.chalkboard.title === chalkboard.val().title) {
+              // Updates the chalkboard
+              chalkboard.ref.update({
+                [editedField]: req.body.newValue
+              });
+
+              res.sendStatus(200);
+            }
+          });
+        });
+      }
+    });
+  });
+});
+
 // Joins chalkboard as an attendee
 app.post('/api/joinchalkboard', function(req, res) {
   let chalkboardsRef = admin.database().ref('/chalkboards');
@@ -524,12 +558,13 @@ app.post('/api/joinchalkboard', function(req, res) {
   chalkboardsRef.once('value', (snapshot) => {
     snapshot.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
-      if (equal(req.body.chalkboard, chalkboard.val())) {
+      if (req.body.chalkboard.title === chalkboard.val().title) {
         // Adds the user to the Attendees ref
         chalkboard.ref.child('attendees').push({
           name: req.body.name,
           photoURL: req.body.photoURL
         });
+        
         res.sendStatus(200);
       }
     });
@@ -545,12 +580,12 @@ app.post('/api/removechalkboard', function(req, res) {
   chalkboardsRef.once('value', (snapshot) => {
     snapshot.forEach((chalkboard) => {
       // Removes chalkboard in the chalkboards ref
-      if (equal(req.body.chalkboard, chalkboard.val())) {
+      if (req.body.chalkboard.title === chalkboard.val().title) {
         chalkboard.ref.remove(() => {
           userChalkboardsRef.once('value', (snapshot) => {
             snapshot.forEach((chalkboard) => {
               // Removes chalkbaord in the user's chalkbaords ref
-              if (equal(req.body.chalkboard, chalkboard.val())) {
+              if (req.body.chalkboard.title === chalkboard.val().title) {
                 chalkboard.ref.remove(() => {
                   res.sendStatus(200);
                 });
@@ -571,7 +606,7 @@ app.post('/api/leavechalkboard', function(req, res) {
   chalkboardsRef.once('value', (snapshot) => {
     snapshot.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
-      if (equal(req.body.chalkboard, chalkboard.val())) {
+      if (req.body.chalkboard.title === chalkboard.val().title) {
         chalkboard.ref.child('attendees').once('value', (snapshot) => {
           snapshot.forEach((attendee) => {
             // Checks if the user is an attendee
@@ -595,7 +630,7 @@ app.post('/api/getattendees', function(req, res) {
   chalkboardsRef.once('value', (snapshot) => {
     snapshot.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
-      if (equal(req.body.chalkboard, chalkboard.val())) {
+      if (req.body.chalkboard.title === chalkboard.val().title) {
         chalkboard.ref.child('attendees').once('value', (snapshot) => {
           // Finds the attendees if there are any
           if (snapshot.val()) {
