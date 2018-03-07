@@ -47,14 +47,19 @@
 /* Garnett Dialog */
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: rgba(12, 42, 51, 0.3) 0px 1px 8px;
   z-index: 2;
 }
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
 }
-.garnett-dialog-tabs > div:last-child > div:first-child {
+.garnett-dialog-tabs.merit > div:last-child > div:first-child {
   display: flex;
   justify-content: center;
+}
+.garnett-dialog-tabs.chalkboard > div:first-child {
+  background-color: #fff !important;
 }
 
 .garnett-dialog-body {
@@ -62,6 +67,7 @@
   flex-direction: column;
   min-height: 285px;
   max-height: 352px !important;
+  background-color: #fafafa;
   padding: 0 !important;
   border-bottom: 1px solid rgb(224, 224, 224) !important;
 }

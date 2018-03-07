@@ -54,6 +54,9 @@ export default {
   leaveChalkboard: function(name, chalkboard) {
     return axios.post('/api/leavechalkboard', {name, chalkboard});
   },
+  getAttendees: function(chalkboard) {
+    return axios.post('/api/getattendees', {chalkboard});
+  },
   complain: function(status, displayName, activeName, pledge, description, date) {
     let body = {status, displayName, activeName, pledge, description, date};
     return axios.post('/api/complain', body);

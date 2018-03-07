@@ -544,10 +544,12 @@ app.post('/api/removechalkboard', function(req, res) {
 
   chalkboardsRef.once('value', (snapshot) => {
     snapshot.forEach((chalkboard) => {
+      // Removes chalkboard in the chalkboards ref
       if (equal(req.body.chalkboard, chalkboard.val())) {
         chalkboard.ref.remove(() => {
           userChalkboardsRef.once('value', (snapshot) => {
             snapshot.forEach((chalkboard) => {
+              // Removes chalkbaord in the user's chalkbaords ref
               if (equal(req.body.chalkboard, chalkboard.val())) {
                 chalkboard.ref.remove(() => {
                   res.sendStatus(200);
@@ -580,6 +582,29 @@ app.post('/api/leavechalkboard', function(req, res) {
               });
             }
           });
+        });
+      }
+    });
+  });
+});
+
+app.post('/api/getattendees', function(req, res) {
+  let attendeesArray = [];
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      // Looks for the chalkboard in the chalkboards ref
+      if (equal(req.body.chalkboard, chalkboard.val())) {
+        chalkboard.ref.child('attendees').once('value', (snapshot) => {
+          // Finds the attendees if there are any
+          if (snapshot.val()) {
+            attendeesArray = Object.keys(snapshot.val()).map(function(key) {
+              return snapshot.val()[key];
+            });
+          }
+
+          res.json(attendeesArray);
         });
       }
     });

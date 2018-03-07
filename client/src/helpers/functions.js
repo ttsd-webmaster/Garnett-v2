@@ -1,3 +1,16 @@
+const tabStyle = {
+  default: {
+    color: 'var(--secondary-light)'
+  },
+  active: {
+    color: 'var(--primary-color)'
+  }
+};
+
+function getTabStyle(isActive) {
+  return isActive ? tabStyle.active : tabStyle.default
+}
+
 function loadFirebase(module) {
   return new Promise(resolve => {
     const script = document.createElement('script');
@@ -32,4 +45,4 @@ function getDate(date) {
   return today;
 }
 
-export {loadFirebase, validateEmail, getDate};
+export {loadFirebase, validateEmail, getDate, getTabStyle};

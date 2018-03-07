@@ -241,8 +241,8 @@ export default class ActiveMerit extends Component {
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
-        <Tabs 
-          className="garnett-dialog-tabs"
+        <Tabs
+          className="garnett-dialog-tabs merit"
           inkBarStyle={inkBarStyle}
           onChange={this.adjustScrollTop}
         >

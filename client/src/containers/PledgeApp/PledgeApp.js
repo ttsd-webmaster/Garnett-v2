@@ -1,6 +1,6 @@
 import './PledgeApp.css';
 import API from '../../api/API.js';
-import {loadFirebase} from '../../helpers/functions.js';
+import {loadFirebase, getTabStyle} from '../../helpers/functions.js';
 import {LoadingPledgeApp} from '../../helpers/loaders.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 import Contacts from '../../components/Contacts/Contacts';
@@ -26,15 +26,6 @@ const tabContainerStyle = {
   borderBottom: '1px solid #e0e0e0',
   boxShadow: 'rgba(12, 42, 51, 0.3) 0px 1px 8px',
   zIndex: 1
-};
-
-const tabStyle = {
-  default: {
-    color: 'var(--secondary-light)'
-  },
-  active: {
-    color: 'var(--primary-color)'
-  }
 };
 
 let didScroll = false;
@@ -340,10 +331,6 @@ export default class PledgeApp extends Component {
     });
   };
 
-  getStyle (isActive) {
-    return isActive ? tabStyle.active : tabStyle.default
-  }
-
   handleRequestOpen = (message) => {
     this.setState({
       open: true,
@@ -372,7 +359,7 @@ export default class PledgeApp extends Component {
             value={this.state.slideIndex}
           >
             <Tab 
-              icon={<i style={this.getStyle(this.state.slideIndex === 0)} className="icon-star"></i>}
+              icon={<i style={getTabStyle(this.state.slideIndex === 0)} className="icon-star"></i>}
               value={0}
             >
               <MeritBook 
@@ -385,7 +372,7 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i style={this.getStyle(this.state.slideIndex === 1)} className="icon-address-book"></i>}
+              icon={<i style={getTabStyle(this.state.slideIndex === 1)} className="icon-address-book"></i>}
               value={1}
             >
               <Contacts
@@ -394,7 +381,7 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i style={this.getStyle(this.state.slideIndex === 2)} className="icon-calendar-empty"></i>}
+              icon={<i style={getTabStyle(this.state.slideIndex === 2)} className="icon-calendar-empty"></i>}
               value={2}
             >
               <Chalkboards 
@@ -409,7 +396,7 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i style={this.getStyle(this.state.slideIndex === 3)} className="icon-thumbs-down-alt"></i>}
+              icon={<i style={getTabStyle(this.state.slideIndex === 3)} className="icon-thumbs-down-alt"></i>}
               value={3}
             >
               <Complaints
@@ -425,7 +412,7 @@ export default class PledgeApp extends Component {
               />
             </Tab>
             <Tab
-              icon={<i style={this.getStyle(this.state.slideIndex === 4)} className="icon-cog"></i>}
+              icon={<i style={getTabStyle(this.state.slideIndex === 4)} className="icon-cog"></i>}
               value={4}
             >
               <Settings 

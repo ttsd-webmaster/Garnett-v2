@@ -17,3 +17,10 @@
   float: right;
   margin-left: 20px;
 }
+
+.attendee-name {
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0;
+  margin-left: 5px;
+}

@@ -41,7 +41,7 @@ export default class AddChalkboardDialog extends Component {
     let locationValidation = true;
 
     if (!title || !description) {
-      if (!title) {
+      if (!title || title.length > 25) {
         titleValidation = false;
       }
       if (!description) {
@@ -154,7 +154,7 @@ export default class AddChalkboardDialog extends Component {
           rowsMax={3}
           value={this.state.title}
           onChange={(e, newValue) => this.handleChange('title', newValue)}
-          errorText={!this.state.descriptionValidation && 'Enter a title.'}
+          errorText={!this.state.descriptionValidation && 'Enter a title that has less than two lines.'}
         />
         <TextField
           className="garnett-input"

@@ -1,6 +1,7 @@
 import './Chalkboards.css';
 import MyChalkboards from './MyChalkboards';
 import AllChalkboards from './AllChalkboards';
+import API from "../../api/API.js";
 import {loadFirebase, getDate} from '../../helpers/functions.js';
 import {LoadingComponent} from '../../helpers/loaders.js';
 
@@ -45,7 +46,8 @@ export default class Chalkboards extends Component {
       upcomingChalkboards: this.props.upcomingChalkboards,
       completedChalkboards: this.props.completedChalkboards,
       selectedChalkboard: null,
-      chalkboardType: ''
+      chalkboardType: '',
+      attendees: []
     };
   }
 
@@ -59,11 +61,8 @@ export default class Chalkboards extends Component {
         chalkboardsRef.on('value', (snapshot) => {
           let chalkboards = [];
           let myChalkboards = [];
-          let myHostingChalkboards = [];
           let myAttendingChalkboards = [];
           let myCompletedChalkboards = [];
-          let upcomingChalkboards = [];
-          let completedChalkboards = [];
           let today = getDate();
           let userChalkboardsRef = firebase.database().ref('/users/' + this.props.state.displayName + '/chalkboards');
           
@@ -220,7 +219,7 @@ export default class Chalkboards extends Component {
       });
     }
     else {
-      this.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline.');
     }
   }
 
@@ -232,14 +231,22 @@ export default class Chalkboards extends Component {
 
   handleOpen = (chalkboard, type) => {
     if (navigator.onLine) {
-      this.setState({
-        open: true,
-        selectedChalkboard: chalkboard,
-        chalkboardType: type
+      API.getAttendees(chalkboard)
+      .then((res) => {
+        this.setState({
+          open: true,
+          selectedChalkboard: chalkboard,
+          chalkboardType: type,
+          attendees: res.data
+        });
+      })
+      .catch((error) => {
+        console.log('Error: ', error);
+        this.props.handleRequestOpen('There was an error retrieving the attendees');
       });
     }
     else {
-      this.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline.');
     }
   }
 
@@ -306,6 +313,7 @@ export default class Chalkboards extends Component {
             state={this.props.state}
             type={this.state.chalkboardType}
             chalkboard={this.state.selectedChalkboard}
+            attendees={this.state.attendees}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

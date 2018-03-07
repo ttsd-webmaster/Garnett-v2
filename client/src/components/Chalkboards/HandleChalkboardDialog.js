@@ -1,11 +1,50 @@
-import API from "../../api/API.js";
+import './Chalkboards.css';
+import API from '../../api/API.js';
+import {getTabStyle} from '../../helpers/functions.js';
 
 import React, {Component} from 'react';
+import Loadable from 'react-loadable';
 import Dialog from 'material-ui/Dialog';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import {List, ListItem} from 'material-ui/List';
+import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
+const listItemStyle = {
+  backgroundColor: '#fff'
+};
+
+const dividerStyle = {
+  boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px'
+};
+
+const inkBarStyle = {
+  position: 'fixed',
+  top: '124px',
+  backgroundColor: 'var(--primary-color)',
+  zIndex: 2
+};
+
+const LoadableAttendeeList = Loadable({
+  loader: () => import('./AttendeeList'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>;
+  }
+});
+
 export default class HandleChalkboardDialog extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      index: 0
+    };
+  }
+
   join = (chalkboard) => {
     let name = this.props.state.name;
     let photoURL = this.props.state.photoURL;
@@ -55,8 +94,13 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  handleChange = (value) => {
+    this.setState({
+      index: value
+    });
+  }
+
   render() {
-    let message;
     let label;
 
     if (this.props.type === 'upcoming') {
@@ -95,15 +139,65 @@ export default class HandleChalkboardDialog extends Component {
     ];
 
     return (
-      <Dialog
-        actions={actions}
-        modal={false}
-        open={this.props.open}
-        onRequestClose={this.props.handleClose}
-        autoScrollBodyContent={true}
-      >
-        Hello
-      </Dialog>
+      this.props.chalkboard && (
+        <Dialog
+          title={this.props.chalkboard.title}
+          titleClassName="garnett-dialog-title"
+          actions={actions}
+          modal={false}
+          className="garnett-dialog"
+          bodyClassName="garnett-dialog-body"
+          contentClassName="garnett-dialog-content"
+          open={this.props.open}
+          onRequestClose={this.props.handleClose}
+          autoScrollBodyContent={true}
+        >
+          <Tabs 
+            className="garnett-dialog-tabs chalkboard"
+            inkBarStyle={inkBarStyle}
+            onChange={this.handleChange}
+          >
+            <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
+              <List>
+                <Divider />
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  primaryText="Active Name"
+                  secondaryText={this.props.chalkboard.activeName}
+                />
+                <Divider className="pledge-divider" />
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  primaryText="Description"
+                  secondaryText={this.props.chalkboard.description}
+                />
+                <Divider className="pledge-divider" />
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  primaryText="Date"
+                  secondaryText={this.props.chalkboard.date}
+                />
+                <Divider className="pledge-divider" />
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  primaryText="Time"
+                  secondaryText={this.props.chalkboard.time}
+                />
+                <Divider className="pledge-divider" />
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  primaryText="Location"
+                  secondaryText={this.props.chalkboard.location}
+                />
+                <Divider style={dividerStyle} />
+              </List>
+            </Tab>
+            <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
+              <LoadableAttendeeList attendees={this.props.attendees} />
+            </Tab>
+          </Tabs>
+        </Dialog>
+      )
     )
   }
 }
