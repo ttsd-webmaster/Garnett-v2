@@ -45,6 +45,9 @@ export default {
     let body = {displayName, activeName, photoURL, title, description, date, time, location};
     return axios.post('/api/createchalkboard', body);
   },
+  editChalkboard: function(displayName, chalkboard, field, newValue) {
+    return axios.post('/api/editchalkboard', {displayName, chalkboard, field, newValue});
+  },
   joinChalkboard: function(name, photoURL, chalkboard) {
     return axios.post('/api/joinchalkboard', {name, photoURL, chalkboard});
   },

@@ -7,7 +7,6 @@ import {LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
-import equal from 'deep-equal';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 const LoadableAddChalkboardDialog = Loadable({
@@ -66,7 +65,9 @@ export default class Chalkboards extends Component {
           let today = getDate();
           let userChalkboardsRef = firebase.database().ref('/users/' + this.props.state.displayName + '/chalkboards');
           
+          // Checks if there are any chalkboards
           if (snapshot.val()) {
+            // Converts object to array
             chalkboards = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             });
@@ -100,7 +101,9 @@ export default class Chalkboards extends Component {
               let upcomingChalkboards = [];
               let completedChalkboards = [];
 
+              // Checks if user has any chalkboards
               if (snapshot.val()) {
+                // Converts object to array
                 myChalkboards = Object.keys(snapshot.val()).map(function(key) {
                   return snapshot.val()[key];
                 });
@@ -119,7 +122,6 @@ export default class Chalkboards extends Component {
                   }
                 });
               }
-        
 
               // Combines my chalkboards I am hosting with the ones I am attending
               myChalkboards = myChalkboards.concat(myAttendingChalkboards);
@@ -127,7 +129,7 @@ export default class Chalkboards extends Component {
               // Filters chalkboards so it does not include ones in my chalkboards
               for (let i = 0, len = myChalkboards.length; i < len; i++) { 
                 for (let j = 0, len2 = chalkboards.length; j < len2; j++) {
-                    if (equal(myChalkboards[i], chalkboards[j])) {
+                    if (myChalkboards[i].title === chalkboards[j].title) {
                       chalkboards.splice(j, 1);
                       len2 = chalkboards.length
                     }

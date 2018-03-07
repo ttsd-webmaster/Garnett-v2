@@ -37,10 +37,22 @@ const LoadableAttendeeList = Loadable({
   }
 });
 
+const LoadableEditChalkboardDialog = Loadable({
+  loader: () => import('./EditChalkboardDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>;
+  }
+});
+
 export default class HandleChalkboardDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      open: false,
       index: 0
     };
   }
@@ -100,6 +112,21 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  handleOpen = (field) => {
+    if (this.props.type === 'hosting') {
+      this.setState({
+        open: true,
+        field: field
+      });
+    }
+  }
+
+  handleClose = () => {
+    this.setState({
+      open: false
+    });
+  }
+
   render() {
     let label;
 
@@ -140,63 +167,77 @@ export default class HandleChalkboardDialog extends Component {
 
     return (
       this.props.chalkboard && (
-        <Dialog
-          title={this.props.chalkboard.title}
-          titleClassName="garnett-dialog-title"
-          actions={actions}
-          modal={false}
-          className="garnett-dialog"
-          bodyClassName="garnett-dialog-body"
-          contentClassName="garnett-dialog-content"
-          open={this.props.open}
-          onRequestClose={this.props.handleClose}
-          autoScrollBodyContent={true}
-        >
-          <Tabs 
-            className="garnett-dialog-tabs chalkboard"
-            inkBarStyle={inkBarStyle}
-            onChange={this.handleChange}
+        <div>
+          <Dialog
+            title={this.props.chalkboard.title}
+            titleClassName="garnett-dialog-title"
+            actions={actions}
+            modal={false}
+            className="garnett-dialog"
+            bodyClassName="garnett-dialog-body"
+            contentClassName="garnett-dialog-content"
+            open={this.props.open}
+            onRequestClose={this.props.handleClose}
+            autoScrollBodyContent={true}
           >
-            <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
-              <List>
-                <Divider />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  primaryText="Active Name"
-                  secondaryText={this.props.chalkboard.activeName}
-                />
-                <Divider className="pledge-divider" />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  primaryText="Description"
-                  secondaryText={this.props.chalkboard.description}
-                />
-                <Divider className="pledge-divider" />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  primaryText="Date"
-                  secondaryText={this.props.chalkboard.date}
-                />
-                <Divider className="pledge-divider" />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  primaryText="Time"
-                  secondaryText={this.props.chalkboard.time}
-                />
-                <Divider className="pledge-divider" />
-                <ListItem
-                  innerDivStyle={listItemStyle}
-                  primaryText="Location"
-                  secondaryText={this.props.chalkboard.location}
-                />
-                <Divider style={dividerStyle} />
-              </List>
-            </Tab>
-            <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
-              <LoadableAttendeeList attendees={this.props.attendees} />
-            </Tab>
-          </Tabs>
-        </Dialog>
+            <Tabs 
+              className="garnett-dialog-tabs chalkboard"
+              inkBarStyle={inkBarStyle}
+              onChange={this.handleChange}
+            >
+              <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
+                <List>
+                  <Divider />
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    primaryText="Active Name"
+                    secondaryText={this.props.chalkboard.activeName}
+                  />
+                  <Divider className="pledge-divider" />
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    primaryText="Description"
+                    secondaryText={this.props.chalkboard.description}
+                    onClick={() => this.handleOpen('description')}
+                  />
+                  <Divider className="pledge-divider" />
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    primaryText="Date"
+                    secondaryText={this.props.chalkboard.date}
+                  />
+                  <Divider className="pledge-divider" />
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    primaryText="Time"
+                    secondaryText={this.props.chalkboard.time}
+                    onClick={() => this.handleOpen('time')}
+                  />
+                  <Divider className="pledge-divider" />
+                  <ListItem
+                    innerDivStyle={listItemStyle}
+                    primaryText="Location"
+                    secondaryText={this.props.chalkboard.location}
+                    onClick={() => this.handleOpen('location')}
+                  />
+                  <Divider style={dividerStyle} />
+                </List>
+              </Tab>
+              <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
+                <LoadableAttendeeList attendees={this.props.attendees} />
+              </Tab>
+            </Tabs>
+          </Dialog>
+
+          <LoadableEditChalkboardDialog
+            open={this.state.open}
+            state={this.props.state}
+            chalkboard={this.props.chalkboard}
+            field={this.state.field}
+            handleClose={this.handleClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+        </div>
       )
     )
   }
