@@ -59,15 +59,7 @@ class App extends Component {
                 API.getAuthStatus(user)
                 .then(res => {
                   this.loginCallBack(res);
-                  this.setState({
-                    isAuthenticated: true
-                  });
                 });
-              }
-              else {
-                this.setState({
-                  loaded: true
-                })
               }
             });
           });
@@ -209,11 +201,11 @@ class App extends Component {
 
   render() {
     return (
-      <Router >
+      <Router>
         <div>
           <Route exact path='/' render={() => (
             this.state.isAuthenticated ? (
-              <Redirect to="/pledge-app"/>
+              <Redirect to="/pledge-app" />
             ) : (
               this.state.loaded ? (
                 <LoadableLogin 
@@ -225,14 +217,17 @@ class App extends Component {
               )
             )
           )}/>
-          <Route exact path='/pledge-app' render={({history}) =>
-            <LoadablePledgeApp 
-              state={this.state} 
-              history={history}
-              loginCallBack={this.loginCallBack}
-              logoutCallBack={this.logoutCallBack}
-            />
-          }/>
+          <Route exact path='/pledge-app' render={({history}) => (
+            this.state.isAuthenticated ? (
+              <LoadablePledgeApp 
+                state={this.state} 
+                history={history}
+                logoutCallBack={this.logoutCallBack}
+              />
+            ) : (
+              <Redirect to="/" />
+            )
+          )}/>
         </div>
       </Router>
     );

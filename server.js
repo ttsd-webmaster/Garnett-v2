@@ -360,7 +360,7 @@ app.post('/api/pledgedata', function(req, res) {
   let meritArray = [];
   let complaintsArray = [];
 
-  userRef.on('value', (snapshot) => {
+  userRef.once('value', (snapshot) => {
     totalMerits = snapshot.val().totalMerits;
 
     meritRef.once('value', (snapshot) => {

@@ -1,6 +1,6 @@
 import './PledgeApp.css';
 import API from '../../api/API.js';
-import {loadFirebase, getTabStyle} from '../../helpers/functions.js';
+import {getTabStyle} from '../../helpers/functions.js';
 import {LoadingPledgeApp} from '../../helpers/loaders.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 import Contacts from '../../components/Contacts/Contacts';
@@ -61,7 +61,7 @@ export default class PledgeApp extends Component {
       myAttendingChalkboards: [],
       myCompletedChalkboards: [],
       upcomingChalkboards: [],
-      completedChalkboards: [],
+      completedChalkboards: []
     };
   }
 
@@ -69,96 +69,57 @@ export default class PledgeApp extends Component {
     console.log('Pledge app mount: ', this.props.state.name)
 
     let data = JSON.parse(localStorage.getItem('data'));
-    let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
-    let firebase = window.firebase;
 
     if (navigator.onLine) {
-      if (!this.props.state.name) {
-        if (data !== null) {
-          loadFirebase('app')
-          .then(() => {
-            firebase = window.firebase;
-
-            if (!firebase.apps.length) {
-              firebase.initializeApp(firebaseData);
-            }
-
-            loadFirebase('auth')
-            .then(() => {
-              firebase.auth().onAuthStateChanged((user) => {
-                if (user) {
-                  this.setState({
-                    loaded: true
-                  });
-                }
-                else {
-                  this.props.logoutCallBack();
-                  this.props.history.push('/');
-                }
-              });
-            });
-          });
-        }
-        else {
-          this.props.history.push('/');
-        }
-      }
-      else {
-        this.setState({
-          loaded: true
-        });
-      }
+      this.setState({
+        loaded: true
+      });
     }
     else {
-      if (data !== null) {
-        let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
-        let myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards'));
-        let myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards'));
-        let upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards'));
-        let completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards'));
+      let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
+      let myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards'));
+      let myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards'));
+      let upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards'));
+      let completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards'));
 
-        if (data.data.user.status === 'active') {
-          let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
-          let activeArray = JSON.parse(localStorage.getItem('activeArray'));
-          let complaintsPledgeArray = JSON.parse(localStorage.getItem('complaintsPledgeArray'));
-          let activeComplaintsArray = JSON.parse(localStorage.getItem('activeComplaintsArray'));
-          let pendingComplaintsArray = JSON.parse(localStorage.getItem('pendingComplaintsArray'));
-          let approvedComplaintsArray = JSON.parse(localStorage.getItem('approvedComplaintsArray'));
+      if (data.data.user.status !== 'pledge') {
+        let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
+        let activeArray = JSON.parse(localStorage.getItem('activeArray'));
+        let complaintsPledgeArray = JSON.parse(localStorage.getItem('complaintsPledgeArray'));
+        let activeComplaintsArray = JSON.parse(localStorage.getItem('activeComplaintsArray'));
+        let pendingComplaintsArray = JSON.parse(localStorage.getItem('pendingComplaintsArray'));
+        let approvedComplaintsArray = JSON.parse(localStorage.getItem('approvedComplaintsArray'));
 
-          this.setState({
-            loaded: true,
-            pledgeArray: pledgeArray,
-            activeArray: activeArray,
-            complaintsPledgeArray: complaintsPledgeArray,
-            activeComplaintsArray: activeComplaintsArray,
-            pendingComplaintsArray: pendingComplaintsArray,
-            approvedComplaintsArray: approvedComplaintsArray,
-            myHostingChalkboards: myHostingChalkboards,
-            myAttendingChalkboards: myAttendingChalkboards,
-            myCompletedChalkboards: myCompletedChalkboards,
-            upcomingChalkboards: upcomingChalkboards,
-            completedChalkboards: completedChalkboards
-          });
-        }
-        else {
-          let meritArray = JSON.parse(localStorage.getItem('meritArray'));
-          let pledgeComplaintsArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
-          let activeArray = JSON.parse(localStorage.getItem('activeArray'));
-
-          this.setState({
-            loaded: true,
-            meritArray: meritArray,
-            pledgeComplaintsArray: pledgeComplaintsArray,
-            activeArray: activeArray,
-            myAttendingChalkboards: myAttendingChalkboards,
-            myCompletedChalkboards: myCompletedChalkboards,
-            upcomingChalkboards: upcomingChalkboards,
-            completedChalkboards: completedChalkboards
-          });
-        }
+        this.setState({
+          loaded: true,
+          pledgeArray: pledgeArray,
+          activeArray: activeArray,
+          complaintsPledgeArray: complaintsPledgeArray,
+          activeComplaintsArray: activeComplaintsArray,
+          pendingComplaintsArray: pendingComplaintsArray,
+          approvedComplaintsArray: approvedComplaintsArray,
+          myHostingChalkboards: myHostingChalkboards,
+          myAttendingChalkboards: myAttendingChalkboards,
+          myCompletedChalkboards: myCompletedChalkboards,
+          upcomingChalkboards: upcomingChalkboards,
+          completedChalkboards: completedChalkboards
+        });
       }
       else {
-        this.props.history.push('/');
+        let meritArray = JSON.parse(localStorage.getItem('meritArray'));
+        let pledgeComplaintsArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
+        let activeArray = JSON.parse(localStorage.getItem('activeArray'));
+
+        this.setState({
+          loaded: true,
+          meritArray: meritArray,
+          pledgeComplaintsArray: pledgeComplaintsArray,
+          activeArray: activeArray,
+          myAttendingChalkboards: myAttendingChalkboards,
+          myCompletedChalkboards: myCompletedChalkboards,
+          upcomingChalkboards: upcomingChalkboards,
+          completedChalkboards: completedChalkboards
+        });
       }
     }
 
@@ -177,7 +138,7 @@ export default class PledgeApp extends Component {
     //   mainElement: 'body',
     //   onRefresh: () => {
     //     if (navigator.onLine) {
-    //       if (this.props.state.status === 'active') {
+    //       if (this.props.state.status !== 'pledge') {
     //         API.getPledges()
     //         .then(res => {
     //           this.setState({
@@ -377,7 +338,7 @@ export default class PledgeApp extends Component {
             >
               <Contacts
                 state={this.props.state}
-                activeArray={this.state.activeArray}
+                actives={this.state.activeArray}
               />
             </Tab>
             <Tab

@@ -16,11 +16,7 @@ export default class EditChalkboardDialog extends Component {
   }
 
   edit = (newValue) => {
-    let newValueValidation = true;
-
     if (!newValue) {
-      newValueValidation = false;
-
       this.setState({
         newValueValidation: false
       });
@@ -51,12 +47,21 @@ export default class EditChalkboardDialog extends Component {
     });
   }
 
+  handleClose = () => {
+    this.props.handleClose();
+
+    this.setState({
+      newValue: '',
+      newValueValidation: true
+    });
+  }
+
   render() {
     const actions = [
       <FlatButton
         label="Close"
         primary={true}
-        onClick={this.props.handleClose}
+        onClick={this.handleClose}
       />,
       <RaisedButton
         label="Edit"
@@ -72,7 +77,7 @@ export default class EditChalkboardDialog extends Component {
         actions={actions}
         modal={false}
         open={this.props.open}
-        onRequestClose={this.props.handleClose}
+        onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
         <TextField

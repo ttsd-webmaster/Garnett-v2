@@ -55,7 +55,7 @@ export default class Chalkboards extends Component {
       loadFirebase('database')
       .then(() => {
         let firebase = window.firebase;
-        let chalkboardsRef = firebase.database().ref('/chalkboards/');
+        let chalkboardsRef = firebase.database().ref('/chalkboards');
 
         chalkboardsRef.on('value', (snapshot) => {
           let chalkboards = [];
