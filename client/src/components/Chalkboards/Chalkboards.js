@@ -39,6 +39,8 @@ export default class Chalkboards extends Component {
       open: false,
       openAdd: false,
       selectedIndex: 0,
+      scrollPosition1: 0,
+      scrollPosition2: 0,
       myHostingChalkboards: this.props.myHostingChalkboards,
       myAttendingChalkboards: this.props.myAttendingChalkboards,
       myCompletedChalkboards: this.props.myCompletedChalkboards,
@@ -151,8 +153,9 @@ export default class Chalkboards extends Component {
               });
 
               console.log('Upcoming Chalkboards: ', upcomingChalkboards);
-              console.log('Hosting Chalkboards: ', myHostingChalkboards);
-              console.log('Attending Chalkboards: ', myAttendingChalkboards);
+              console.log('My Hosting Chalkboards: ', myHostingChalkboards);
+              console.log('My Attending Chalkboards: ', myAttendingChalkboards);
+              console.log('My Completed Chalkboards: ', myCompletedChalkboards);
 
               localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
               localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
@@ -203,15 +206,41 @@ export default class Chalkboards extends Component {
 
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
+    let scrollPosition1 = this.state.scrollPosition1;
+    let scrollPosition2 = this.state.scrollPosition2;
+    let contentContainer = document.querySelector('.content-container');
+    let scrollPosition = contentContainer.childNodes[2].scrollTop;
     let myChalkboards = document.getElementById('my-chalkboards');
     let allChalkboards = document.getElementById('all-chalkboards');
+    let scrolled;
 
     if (previousIndex !== index) {
       myChalkboards.classList.toggle('active');
       allChalkboards.classList.toggle('active');
     }
 
-    this.setState({selectedIndex: index});
+    if (index === 0) {
+      scrolled = scrollPosition1;
+    }
+    else {
+      scrolled = scrollPosition2;
+    }
+
+    if (previousIndex === 0) {
+      scrollPosition1 = scrollPosition;
+    }
+    else {
+      scrollPosition2 = scrollPosition;
+    }
+
+    // Sets the window scroll position based on tab
+    contentContainer.childNodes[2].scrollTop = scrolled;
+
+    this.setState({
+      selectedIndex: index,
+      scrollPosition1: scrollPosition1,
+      scrollPosition2: scrollPosition2
+    });
   }
 
   addOpen = () => {

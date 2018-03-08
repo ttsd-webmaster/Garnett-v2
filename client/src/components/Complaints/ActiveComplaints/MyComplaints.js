@@ -46,16 +46,16 @@ export default class MyComplaints extends Component {
   render() {
     return (
       <div id="my-complaints" className="active">
-        <List className="pledge-list">
+        <List className="garnett-list">
           <Subheader> Approved </Subheader>
           {this.props.approvedComplaints.map((complaint, i) => (
             <div key={i}>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
               <ListItem
-                className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image large" size={70} src={complaint.photoURL} />}
+                className="garnett-list-item large"
+                leftAvatar={<Avatar className="garnett-image large" size={70} src={complaint.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {complaint.pledgeName} </p>
+                  <p className="garnett-name"> {complaint.pledgeName} </p>
                 }
                 secondaryText={
                   <p className="complaints-description">
@@ -66,7 +66,7 @@ export default class MyComplaints extends Component {
               >
                 <p className="complaints-date"> {complaint.date} </p>
               </ListItem>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
             </div>
           ))}
 
@@ -75,12 +75,12 @@ export default class MyComplaints extends Component {
           <Subheader> Pending </Subheader>
           {this.props.pendingComplaints.map((complaint, i) => (
             <div key={i}>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
               <ListItem
-                className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image large" size={70} src={complaint.photoURL} />}
+                className="garnett-list-item large"
+                leftAvatar={<Avatar className="garnett-image large" size={70} src={complaint.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {complaint.pledgeName} </p>
+                  <p className="garnett-name"> {complaint.pledgeName} </p>
                 }
                 secondaryText={
                   <p className="complaints-description">
@@ -92,7 +92,7 @@ export default class MyComplaints extends Component {
               >
                 <p className="complaints-date"> {complaint.date} </p>
               </ListItem>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
             </div>
           ))}
         </List>

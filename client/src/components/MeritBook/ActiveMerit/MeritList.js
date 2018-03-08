@@ -12,12 +12,12 @@ export default class ActiveMerit extends Component {
         {this.props.merits.map((merit, i) => (
           <div key={i}>
             <div>
-              <Divider className="pledge-divider" inset={true} />
+              <Divider className="garnett-divider" inset={true} />
               <ListItem
-                className="pledge-list-item"
-                leftAvatar={<Avatar className="pledge-image" src={merit.photoURL} />}
+                className="garnett-list-item"
+                leftAvatar={<Avatar className="garnett-image" src={merit.photoURL} />}
                 primaryText={
-                  <p className="merit-name"> {merit.name} </p>
+                  <p className="garnett-name"> {merit.name} </p>
                 }
                 secondaryText={
                   <p> {merit.description} </p>
@@ -28,7 +28,7 @@ export default class ActiveMerit extends Component {
                   <p className="merit-amount small"> {merit.amount} </p>
                 </div>
               </ListItem>
-              <Divider className="pledge-divider" inset={true} />
+              <Divider className="garnett-divider" inset={true} />
             </div>
           </div>
         ))}

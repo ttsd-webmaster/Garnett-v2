@@ -26,6 +26,8 @@ export default class ActiveComplaints extends Component {
       loaded: false,
       open: false,
       selectedIndex: 0,
+      scrollPosition1: 0,
+      scrollPosition2: 0,
       pledge: null,
       description: '',
       complaints: this.props.complaints,
@@ -137,15 +139,41 @@ export default class ActiveComplaints extends Component {
 
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
+    let scrollPosition1 = this.state.scrollPosition1;
+    let scrollPosition2 = this.state.scrollPosition2;
+    let contentContainer = document.querySelector('.content-container');
+    let scrollPosition = contentContainer.childNodes[3].scrollTop;
     let myComplaints = document.getElementById('my-complaints');
     let pastComplaints = document.getElementById('past-complaints');
+    let scrolled;
 
     if (previousIndex !== index) {
       myComplaints.classList.toggle('active');
       pastComplaints.classList.toggle('active');
     }
 
-    this.setState({selectedIndex: index});
+    if (index === 0) {
+      scrolled = scrollPosition1;
+    }
+    else {
+      scrolled = scrollPosition2;
+    }
+
+    if (previousIndex === 0) {
+      scrollPosition1 = scrollPosition;
+    }
+    else {
+      scrollPosition2 = scrollPosition;
+    }
+
+    // Sets the window scroll position based on tab
+    contentContainer.childNodes[3].scrollTop = scrolled;
+
+    this.setState({
+      selectedIndex: index,
+      scrollPosition1: scrollPosition1,
+      scrollPosition2: scrollPosition2
+    });
   }
 
   handleOpen = () => {

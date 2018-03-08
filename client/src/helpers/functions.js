@@ -11,6 +11,22 @@ function getTabStyle(isActive) {
   return isActive ? tabStyle.active : tabStyle.default
 }
 
+function initializeFirebase(data) {
+  loadFirebase('app')
+  .then(() => {
+    let firebase = window.firebase;
+    let firebaseData = localStorage.getItem('firebaseData');
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(data);
+
+      if (!firebaseData) {
+        localStorage.setItem('firebaseData', JSON.stringify(data));
+      }
+    }
+  });
+}
+
 function loadFirebase(module) {
   return new Promise(resolve => {
     const script = document.createElement('script');
@@ -45,4 +61,4 @@ function getDate(date) {
   return today;
 }
 
-export {loadFirebase, validateEmail, getDate, getTabStyle};
+export {initializeFirebase, loadFirebase, validateEmail, getDate, getTabStyle};

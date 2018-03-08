@@ -141,16 +141,16 @@ export default class ActiveMerit extends Component {
     return (
       this.state.loaded ? (
         <div className="animate-in">
-          <List className="pledge-list">
+          <List className="garnett-list">
             <Subheader> Pledges </Subheader>
             {this.state.pledges.map((pledge, i) => (
               <div key={i}>
-                <Divider className="pledge-divider large" inset={true} />
+                <Divider className="garnett-divider large" inset={true} />
                 <ListItem
-                  className="pledge-list-item large"
-                  leftAvatar={<Avatar className="pledge-image large" size={70} src={pledge.photoURL} />}
+                  className="garnett-list-item large"
+                  leftAvatar={<Avatar className="garnett-image large" size={70} src={pledge.photoURL} />}
                   primaryText={
-                    <p className="pledge-name"> {pledge.firstName} {pledge.lastName} </p>
+                    <p className="garnett-name"> {pledge.firstName} {pledge.lastName} </p>
                   }
                   secondaryText={
                     <p>
@@ -164,7 +164,7 @@ export default class ActiveMerit extends Component {
                 >
                   <p className="pledge-merits"> {pledge.totalMerits} </p>
                 </ListItem>
-                <Divider className="pledge-divider large" inset={true} />
+                <Divider className="garnett-divider large" inset={true} />
               </div>
             ))}
           </List>

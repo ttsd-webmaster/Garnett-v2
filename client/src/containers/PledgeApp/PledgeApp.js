@@ -34,6 +34,20 @@ function watchScroll() {
   didScroll = true;
 }
 
+// Changes touch action of view if scroll is at top of view
+// function onScroll = () => {
+//   let contentContainer = document.querySelector('.content-container');
+//   let index = this.state.slideIndex;
+//   let view = contentContainer.childNodes[index];
+
+//   if (view.scrollTop >= 1) {
+//     view.style.touchAction = 'auto';
+//   } 
+//   else {
+//     view.style.touchAction = 'pan-down';
+//   }
+// }
+
 export default class PledgeApp extends Component {
   constructor(props) {
     super(props);
@@ -128,7 +142,7 @@ export default class PledgeApp extends Component {
     // setInterval(() => {
     //   if (didScroll) {
     //     didScroll = false;
-    //     this.onScroll();
+    //     onScroll();
     //   }
     // }, 100);
 
@@ -201,27 +215,13 @@ export default class PledgeApp extends Component {
         contentContainer.childNodes[index].style.height = 'calc(100% - 150px)';
       }
 
-      if (this.props.state.status !== 'pledge' && index === 3) {
+      if ((this.props.state.status !== 'pledge' && index === 3) || (index === 2)) {
         contentContainer.childNodes[index].style.height = 'calc(100vh - 157px)';
       }
     }
   }
 
-  // Changes touch action of view if scroll is at top of view
-  onScroll = () => {
-    let contentContainer = document.querySelector('.content-container');
-    let index = this.state.slideIndex;
-    let view = contentContainer.childNodes[index];
-
-    if (view.scrollTop >= 1) {
-      view.style.touchAction = 'auto';
-    } 
-    else {
-      view.style.touchAction = 'pan-down';
-    }
-  }
-
-  handleChange = (value) => {
+  handleChange = (index) => {
     let title;
     let previousIndex = this.state.previousIndex;
     let scrollPosition1 = this.state.scrollPosition1;
@@ -234,19 +234,19 @@ export default class PledgeApp extends Component {
     let scrolled;
 
     // Sets the title and marks scroll position based on the tab index
-    if (value === 0) {
+    if (index === 0) {
       title = 'Merit Book';
       scrolled = scrollPosition1;
     }
-    else if (value === 1) {
+    else if (index === 1) {
       title = 'Contacts';
       scrolled = scrollPosition2;
     }
-    else if (value === 2) {
+    else if (index === 2) {
       title = 'Chalkboards';
       scrolled = scrollPosition3;
     }
-    else if (value === 3) {
+    else if (index === 3) {
       title = 'Complaints';
       scrolled = scrollPosition4;
     }
@@ -273,17 +273,17 @@ export default class PledgeApp extends Component {
     }
 
     if (contentContainer) {
-      contentContainer.childNodes[value].style.position = 'fixed';
-      contentContainer.childNodes[value].style.height = 'calc(100% - 100px)';
+      contentContainer.childNodes[index].style.position = 'fixed';
+      contentContainer.childNodes[index].style.height = 'calc(100% - 157px)';
 
       // Sets the window scroll position based on tab
-      contentContainer.childNodes[value].scrollTop = scrolled;
+      contentContainer.childNodes[index].scrollTop = scrolled;
     }
 
     this.setState({
       title: title,
-      slideIndex: value,
-      previousIndex: value,
+      slideIndex: index,
+      previousIndex: index,
       scrollPosition1: scrollPosition1,
       scrollPosition2: scrollPosition2,
       scrollPosition3: scrollPosition3,
@@ -353,6 +353,7 @@ export default class PledgeApp extends Component {
                 myCompletedChalkboards={this.state.myCompletedChalkboards}
                 upcomingChalkboards={this.state.upcomingChalkboards}
                 completedChalkboards={this.state.completedChalkboard}
+                scrollPosition={this.state.scrollPosition3}
                 handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>

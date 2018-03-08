@@ -56,7 +56,7 @@ export default class PledgeComplaints extends Component {
   }
 
   componentDidUpdate() {
-    let view = document.getElementById('pledge-complaints')
+    let view = document.getElementById('pledge-complaints');
 
     if (view) {
       let height = view.clientHeight;
@@ -74,7 +74,7 @@ export default class PledgeComplaints extends Component {
     return (
       this.state.loaded ? (
         <div id="pledge-complaints">
-          <List className="pledge-list no-header">
+          <List className="garnett-list no-header">
             {this.state.complaints.map((complaint, i) => (
               <LazyLoad
                 height={88}

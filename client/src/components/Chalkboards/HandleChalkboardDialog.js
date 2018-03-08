@@ -193,27 +193,27 @@ export default class HandleChalkboardDialog extends Component {
                     primaryText="Active Name"
                     secondaryText={this.props.chalkboard.activeName}
                   />
-                  <Divider className="pledge-divider" />
+                  <Divider className="garnett-divider" />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Description"
                     secondaryText={this.props.chalkboard.description}
                     onClick={() => this.handleOpen('description')}
                   />
-                  <Divider className="pledge-divider" />
+                  <Divider className="garnett-divider" />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Date"
                     secondaryText={this.props.chalkboard.date}
                   />
-                  <Divider className="pledge-divider" />
+                  <Divider className="garnett-divider" />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Time"
                     secondaryText={this.props.chalkboard.time}
                     onClick={() => this.handleOpen('time')}
                   />
-                  <Divider className="pledge-divider" />
+                  <Divider className="garnett-divider" />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Location"

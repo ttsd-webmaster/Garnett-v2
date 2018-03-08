@@ -11,43 +11,9 @@
   margin-right: 10px;
 }
 
-.pledge-list {
-  padding: 8px 0 56px !important;
-}
-.pledge-list.no-header {
-  padding: 56px 0 56px !important;
-}
-
-.pledge-list-item > div > div {
-  background-color: #fff;
-}
-.pledge-list-item.large > div > div {
-  padding-left: 102px !important;
-}
-
-.pledge-image {
-  object-fit: cover;
-}
-
-.pledge-image.large {
-  top: 9px !important;
-}
-
-.pledge-divider {
-  position: relative;
-}
-.pledge-divider.large {
-  margin-left: 102px !important;
-}
-
 /* Merit List */
 #merit-dialog-list {
   background-color: #fafafa;
-}
-
-.merit-name {
-  font-weight: 700;
-  margin: 0;
 }
 
 .merit-amount-container {

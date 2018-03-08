@@ -95,7 +95,7 @@ export default class PledgeMerit extends Component {
     return (
       this.state.loaded ? (
         <div className="animate-in">
-          <List className="animate-in pledge-list no-header" id="pledge-merit">
+          <List className="animate-in garnett-list no-header" id="pledge-merit">
             {this.state.merits.map((merit, i) => (
               <LazyLoad
                 height={88}
@@ -122,7 +122,7 @@ export default class PledgeMerit extends Component {
                     innerDivStyle={listItemStyle}
                     leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
                     primaryText={
-                      <p className="merit-name"> {merit.name} </p>
+                      <p className="garnett-name"> {merit.name} </p>
                     }
                     secondaryText={
                       <p> {merit.description} </p>

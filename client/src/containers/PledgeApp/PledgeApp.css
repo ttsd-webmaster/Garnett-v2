@@ -44,6 +44,41 @@
   display: none;
 }
 
+/* Garnett List, List Items, and Dividers */
+.garnett-list {
+  padding: 0px 0 48px !important;
+}
+.garnett-list.no-header {
+  padding: 48px 0 48px !important;
+}
+
+.garnett-list-item > div > div {
+  background-color: #fff;
+}
+.garnett-list-item.large > div > div {
+  padding-left: 102px !important;
+}
+
+.garnett-image {
+  object-fit: cover;
+}
+
+.garnett-image.large {
+  top: 9px !important;
+}
+
+.garnett-name {
+  font-weight: 700;
+  margin: 0;
+}
+
+.garnett-divider {
+  position: relative;
+}
+.garnett-divider.large {
+  margin-left: 102px !important;
+}
+
 /* Garnett Dialog */
 .garnett-dialog-tabs > div:first-child {
   position: fixed;

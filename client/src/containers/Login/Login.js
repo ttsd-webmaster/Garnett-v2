@@ -1,6 +1,6 @@
 import './Login.css';
 import {activeCode, pledgeCode} from './data.js';
-import {loadFirebase, validateEmail} from '../../helpers/functions.js';
+import {initializeFirebase, loadFirebase, validateEmail} from '../../helpers/functions.js';
 import API from '../../api/API.js';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
@@ -156,10 +156,10 @@ export default class Login extends Component {
       API.login(email, password)
       .then(res => {
         if (res.status === 200) {
-          console.log(res)
           localStorage.setItem('data', JSON.stringify(res));
 
-          this.props.loginCallBack(res);
+          initializeFirebase(res.data.firebaseData);
+
           loadFirebase('auth')
           .then(() => {
             let firebase = window.firebase;
@@ -170,6 +170,8 @@ export default class Login extends Component {
                 signEmail: '',
                 signPassword: '',
               });
+
+              this.props.loginCallBack(res);
             })
             .catch((error) => {
               console.log(error);

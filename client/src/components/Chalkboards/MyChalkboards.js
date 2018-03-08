@@ -34,18 +34,18 @@ export default class MyChalkboards extends Component {
   render() {
     return (
       <div id="my-chalkboards" className="active">
-        <List className="pledge-list">
+        <List className="garnett-list">
           {this.props.state.status !== 'pledge' && (
             <div>
               <Subheader> Hosting </Subheader>
               {this.props.myHostingChalkboards.map((chalkboard, i) => (
                 <div key={i}>
-                  <Divider className="pledge-divider large" inset={true} />
+                  <Divider className="garnett-divider large" inset={true} />
                   <ListItem
-                    className="pledge-list-item large"
-                    leftAvatar={<Avatar className="pledge-image large" size={70} src={chalkboard.photoURL} />}
+                    className="garnett-list-item large"
+                    leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
                     primaryText={
-                      <p className="pledge-name"> {chalkboard.title} </p>
+                      <p className="garnett-name"> {chalkboard.title} </p>
                     }
                     secondaryText={
                       <p className="chalkboards-description">
@@ -57,7 +57,7 @@ export default class MyChalkboards extends Component {
                   >
                     <p className="chalkboards-date"> {chalkboard.date} </p>
                   </ListItem>
-                  <Divider className="pledge-divider large" inset={true} />
+                  <Divider className="garnett-divider large" inset={true} />
                 </div>
               ))}
 
@@ -68,12 +68,12 @@ export default class MyChalkboards extends Component {
           <Subheader> Attending </Subheader>
           {this.props.myAttendingChalkboards.map((chalkboard, i) => (
             <div key={i}>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
               <ListItem
-                className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image large" size={70} src={chalkboard.photoURL} />}
+                className="garnett-list-item large"
+                leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {chalkboard.title} </p>
+                  <p className="garnett-name"> {chalkboard.title} </p>
                 }
                 secondaryText={
                   <p className="chalkboards-description">
@@ -85,7 +85,7 @@ export default class MyChalkboards extends Component {
               >
                 <p className="chalkboards-date"> {chalkboard.date} </p>
               </ListItem>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
             </div>
           ))}
 
@@ -94,12 +94,12 @@ export default class MyChalkboards extends Component {
           <Subheader> Completed </Subheader>
           {this.props.myCompletedChalkboards.map((chalkboard, i) => (
             <div key={i}>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
               <ListItem
-                className="pledge-list-item large"
-                leftAvatar={<Avatar className="pledge-image large" size={70} src={chalkboard.photoURL} />}
+                className="garnett-list-item large"
+                leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
                 primaryText={
-                  <p className="pledge-name"> {chalkboard.title} </p>
+                  <p className="garnett-name"> {chalkboard.title} </p>
                 }
                 secondaryText={
                   <p className="chalkboards-description">
@@ -111,7 +111,7 @@ export default class MyChalkboards extends Component {
               >
                 <p className="chalkboards-date"> {chalkboard.date} </p>
               </ListItem>
-              <Divider className="pledge-divider large" inset={true} />
+              <Divider className="garnett-divider large" inset={true} />
             </div>
           ))}
         </List>

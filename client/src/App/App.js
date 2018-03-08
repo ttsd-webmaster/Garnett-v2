@@ -1,7 +1,7 @@
 import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
-import {loadFirebase} from '../helpers/functions.js';
+import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
 import {LoadingLogin, LoadingPledgeApp} from '../helpers/loaders.js';
 
 import React, {Component} from 'react';
@@ -38,30 +38,22 @@ class App extends Component {
   componentDidMount() {
     let data = JSON.parse(localStorage.getItem('data'));
     let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
-    let firebase;
 
     if (navigator.onLine) {
       if (data !== null) {
-        loadFirebase('app')
+        initializeFirebase(firebaseData);
+
+        loadFirebase('auth')
         .then(() => {
-          firebase = window.firebase;
+          let firebase = window.firebase;
 
-          if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseData);
-          }
-
-          loadFirebase('auth')
-          .then(() => {
-            firebase = window.firebase;
-
-            firebase.auth().onAuthStateChanged((user) => {
-              if (user) {
-                API.getAuthStatus(user)
-                .then(res => {
-                  this.loginCallBack(res);
-                });
-              }
-            });
+          firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+              API.getAuthStatus(user)
+              .then(res => {
+                this.loginCallBack(res);
+              });
+            }
           });
         });
       }
@@ -84,65 +76,57 @@ class App extends Component {
   }
 
   loginCallBack = (res) => {
-    loadFirebase('app')
-    .then(() => {
-      let firebase = window.firebase;
-      let displayName = res.data.user.firstName + res.data.user.lastName;
-      
-      if (!firebase.apps.length) {
-        firebase.initializeApp(res.data.firebaseData);
-        localStorage.setItem('firebaseData', JSON.stringify(res.data.firebaseData));
-      }
+    let firebase = window.firebase;
+    let displayName = res.data.user.firstName + res.data.user.lastName;
 
-      const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-      if (isSafari || process.env.NODE_ENV === 'development') {
-        this.checkPhoto(res, firebase, displayName);
-      }
-      else {
-        navigator.serviceWorker.getRegistration(swUrl)
-        .then((registration) => {
-          loadFirebase('messaging')
+    if (isSafari || process.env.NODE_ENV === 'development') {
+      this.checkPhoto(res, firebase, displayName);
+    }
+    else {
+      navigator.serviceWorker.getRegistration(swUrl)
+      .then((registration) => {
+        loadFirebase('messaging')
+        .then(() => {
+          let messaging = firebase.messaging();
+          messaging.useServiceWorker(registration);
+
+          messaging.requestPermission()
           .then(() => {
-            let messaging = firebase.messaging();
-            messaging.useServiceWorker(registration);
+            console.log('Notification permission granted.');
+            // Get Instance ID token. Initially this makes a network call, once retrieved
+            // subsequent calls to getToken will return from cache.
+            messaging.getToken()
+            .then((currentToken) => {
+              if (currentToken) {
+                localStorage.setItem('registrationToken', currentToken);
 
-            messaging.requestPermission()
-            .then(() => {
-              console.log('Notification permission granted.');
-              // Get Instance ID token. Initially this makes a network call, once retrieved
-              // subsequent calls to getToken will return from cache.
-              messaging.getToken()
-              .then((currentToken) => {
-                if (currentToken) {
-                  localStorage.setItem('registrationToken', currentToken);
-
-                  API.saveMessagingToken(displayName, currentToken)
-                  .then(messageRes => {
-                    console.log(messageRes);
-                    this.checkPhoto(res, firebase, displayName);
-                  })
-                  .catch(err => console.log(err));
-                } 
-                else {
-                  // Show permission request.
-                  console.log('No Instance ID token available. Request permission to generate one.');
-                }
-              })
-              .catch((err) => {
-                console.log('An error occurred while retrieving token. ', err);
-                this.checkPhoto(res, firebase, displayName);
-              });
+                API.saveMessagingToken(displayName, currentToken)
+                .then(messageRes => {
+                  console.log(messageRes);
+                  this.checkPhoto(res, firebase, displayName);
+                })
+                .catch(err => console.log(err));
+              } 
+              else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+              }
             })
             .catch((err) => {
-              console.log('Unable to get permission to notify.', err);
+              console.log('An error occurred while retrieving token. ', err);
               this.checkPhoto(res, firebase, displayName);
             });
+          })
+          .catch((err) => {
+            console.log('Unable to get permission to notify.', err);
+            this.checkPhoto(res, firebase, displayName);
           });
         });
-      }
-    });
+      });
+    }
   }
 
   checkPhoto(res, firebase, displayName) {

@@ -65,7 +65,7 @@ export default class Contacts extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <List>
+        <List className="garnett-list">
           {this.state.classes.map((classLabel, i) => (
             <div key={i}>
               <Subheader> {classLabel} </Subheader>
