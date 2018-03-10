@@ -59,49 +59,49 @@ export default class Chalkboards extends Component {
         let firebase = window.firebase;
         let chalkboardsRef = firebase.database().ref('/chalkboards');
 
-        chalkboardsRef.on('value', (snapshot) => {
+        chalkboardsRef.on('value', (snap) => {
           let chalkboards = [];
-          let myChalkboards = [];
-          let myAttendingChalkboards = [];
-          let myCompletedChalkboards = [];
           let today = getDate();
-          let userChalkboardsRef = firebase.database().ref('/users/' + this.props.state.displayName + '/chalkboards');
+          let myChalkboardsRef = firebase.database().ref('/users/' + this.props.state.displayName + '/chalkboards');
           
           // Checks if there are any chalkboards
-          if (snapshot.val()) {
-            // Converts object to array
-            chalkboards = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
-            });
-
-            chalkboards.sort(function(a, b) {
-              return b.date < a.date;
-            });
-
-            // Checks which chalkboards I am attending and which ones I have completed
-            chalkboards.forEach((chalkboard) => {
-              if (chalkboard.attendees) {
-                let attendees = Object.keys(chalkboard.attendees).map(function(key) {
-                  return chalkboard.attendees[key];
-                });
-
-                attendees.forEach((attendee) => {
-                  if (this.props.state.name === attendee.name) {
-                    if (chalkboard.date >= today) {
-                      myAttendingChalkboards.push(chalkboard);
-                    }
-                    else {
-                      myCompletedChalkboards.push(chalkboard);
-                    }
-                  }
-                });
-              }
-            });
-
-            userChalkboardsRef.on('value', (snapshot) => {
+          if (snap.val()) {
+            myChalkboardsRef.on('value', (snapshot) => {
+              let myChalkboards = [];
               let myHostingChalkboards = [];
+              let myAttendingChalkboards = [];
+              let myCompletedChalkboards = [];
               let upcomingChalkboards = [];
               let completedChalkboards = [];
+
+              // Converts object to array
+              chalkboards = Object.keys(snap.val()).map(function(key) {
+                return snap.val()[key];
+              });
+
+              chalkboards.sort(function(a, b) {
+                return b.date < a.date;
+              });
+
+              // Checks which chalkboards I am attending and which ones I have completed
+              chalkboards.forEach((chalkboard) => {
+                if (chalkboard.attendees) {
+                  let attendees = Object.keys(chalkboard.attendees).map(function(key) {
+                    return chalkboard.attendees[key];
+                  });
+
+                  attendees.forEach((attendee) => {
+                    if (this.props.state.name === attendee.name) {
+                      if (chalkboard.date >= today) {
+                        myAttendingChalkboards.push(chalkboard);
+                      }
+                      else {
+                        myCompletedChalkboards.push(chalkboard);
+                      }
+                    }
+                  });
+                }
+              });
 
               // Checks if user has any chalkboards
               if (snapshot.val()) {

@@ -214,10 +214,6 @@ export default class PledgeApp extends Component {
         contentContainer.childNodes[index].style.marginBottom = '50px';
         contentContainer.childNodes[index].style.height = 'calc(100% - 150px)';
       }
-
-      if ((this.props.state.status !== 'pledge' && index === 3) || (index === 2)) {
-        contentContainer.childNodes[index].style.height = 'calc(100vh - 157px)';
-      }
     }
   }
 

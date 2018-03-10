@@ -6,6 +6,7 @@
 #my-chalkboards.active,
 #all-chalkboards.active {
   display: block;
+  padding-bottom: 57px;
   animation: fadeIn .25s ease-in forwards;
 }
 
