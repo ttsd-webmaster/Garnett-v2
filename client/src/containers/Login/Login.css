@@ -81,6 +81,9 @@
   height: 2px;
   width: 0;
   background: #960018;
+  -webkit-transition: width .5s ease, background-color .5s ease;
+  -moz-transition: width .5s ease, background-color .5s ease;
+  -o-transition: width .5s ease, background-color .5s ease;
   transition: width .5s ease, background-color .5s ease;
 }
 .sign-options span.underline:after {
