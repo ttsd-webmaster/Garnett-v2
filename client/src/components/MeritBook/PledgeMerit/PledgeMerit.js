@@ -94,7 +94,7 @@ export default class PledgeMerit extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <div className="animate-in">
+        <div id="pledge-meritbook" className="animate-in">
           <List className="animate-in garnett-list no-header" id="pledge-merit">
             {this.state.merits.map((merit, i) => (
               <LazyLoad

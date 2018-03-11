@@ -78,6 +78,9 @@
 .garnett-divider.large {
   margin-left: 102px !important;
 }
+.garnett-divider.last {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+}
 
 /* Garnett Dialog */
 .garnett-dialog-tabs > div:first-child {
@@ -102,9 +105,12 @@
   flex-direction: column;
   min-height: 285px;
   max-height: 352px !important;
-  background-color: #fafafa;
+  background-color: #fff;
   padding: 0 !important;
   border-bottom: 1px solid rgb(224, 224, 224) !important;
+}
+.garnett-dialog-body.grey {
+  background-color: #fafafa;
 }
 
 .garnett-dialog-content {
@@ -126,6 +132,11 @@
   .garnett-input {
     width: 80% !important;
   }
+}
+
+.garnett-icon {
+  font-size: 1.4em;
+  color: var(--primary-color);
 }
 
 /* Bottom Navigation */

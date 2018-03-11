@@ -37,46 +37,46 @@ export default class ContactsDialog extends Component {
               <p> {this.props.active.firstName} {this.props.active.lastName} </p>
             }
             leftIcon={
-              <i className="icon-user contacts-icon"></i>
+              <i className="icon-user garnett-icon"></i>
             }
           />
-          <Divider className="contacts-divider" inset={true} />
+          <Divider className="garnett-divider" inset={true} />
           <ListItem
             className="contacts-list-item"
             primaryText="Phone Number"
             secondaryText={this.props.active.phone}
             leftIcon={
-              <i className="icon-phone settings-icon"></i>
+              <i className="icon-phone garnett-icon"></i>
             }
           />
-          <Divider className="contacts-divider" inset={true} />
+          <Divider className="garnett-divider" inset={true} />
           <ListItem
             className="contacts-list-item"
             primaryText="Email Address"
             secondaryText={this.props.active.email}
             leftIcon={
-              <i className="icon-mail-alt settings-icon"></i>
+              <i className="icon-mail-alt garnett-icon"></i>
             }
           />
-          <Divider className="contacts-divider" inset={true} />
+          <Divider className="garnett-divider" inset={true} />
           <ListItem
             className="contacts-list-item"
             primaryText="Class"
             secondaryText={this.props.active.class}
             leftIcon={
-              <i className="icon-users settings-icon"></i>
+              <i className="icon-users garnett-icon"></i>
             }
           />
-          <Divider className="contacts-divider" inset={true} />
+          <Divider className="garnett-divider" inset={true} />
           <ListItem
             className="contacts-list-item"
             primaryText="Major"
             secondaryText={this.props.active.major}
             leftIcon={
-              <i className="icon-briefcase settings-icon"></i>
+              <i className="icon-briefcase garnett-icon"></i>
             }
           />
-          <Divider className="contacts-divider last" />
+          <Divider className="garnett-divider last" />
         </List>
       </Dialog>
     )

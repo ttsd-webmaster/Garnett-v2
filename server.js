@@ -145,9 +145,6 @@ app.post('/api/signup', function(req, res) {
       firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
       .then((user) => {
         if (user && !user.emailVerified) {
-          let firstName = req.body.firstName.replace(/ /g,'');
-          let lastName = req.body.lastName.replace(/ /g,'');
-
           user.updateProfile({
             displayName: fullName
           })
@@ -299,7 +296,11 @@ app.post('/api/pledges', function(req, res) {
     });
     pledgeArray = pledgeArray.filter(function(user) {
       return user.status === 'pledge';
-    })
+    });
+    pledgeArray.sort((a, b) => {
+      return a.lastName > b.lastName ? 1 : -1;
+    });
+
     console.log("Pledge array: ", pledgeArray);
     res.json(pledgeArray);
   });
@@ -315,8 +316,12 @@ app.post('/api/actives', function(req, res) {
       return snapshot.val()[key];
     });
     activeArray = activeArray.filter(function(user) {
-      return user.status === 'active' || user.status === 'alumni';
-    })
+      return user.status !== 'pledge';
+    });
+    activeArray.sort((a, b) => {
+      return a.lastName > b.lastName ? 1 : -1;
+    });
+
     console.log("Active array: ", activeArray);
     res.json(activeArray);
   });

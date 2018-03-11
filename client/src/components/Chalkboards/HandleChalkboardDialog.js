@@ -112,7 +112,7 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
-  handleOpen = (field) => {
+  handleEditOpen = (field) => {
     if (this.props.type === 'hosting') {
       this.setState({
         open: true,
@@ -121,9 +121,17 @@ export default class HandleChalkboardDialog extends Component {
     }
   }
 
-  handleClose = () => {
+  handleEditClose = () => {
     this.setState({
       open: false
+    });
+  }
+
+  handleClose = () => {
+    this.props.handleClose();
+
+    this.setState({
+      index: 0
     });
   }
 
@@ -144,7 +152,7 @@ export default class HandleChalkboardDialog extends Component {
       <FlatButton
         label="Close"
         primary={true}
-        onClick={this.props.handleClose}
+        onClick={this.handleClose}
       />,
       this.props.type !== 'completed' && (
         <RaisedButton
@@ -174,10 +182,10 @@ export default class HandleChalkboardDialog extends Component {
             actions={actions}
             modal={false}
             className="garnett-dialog"
-            bodyClassName="garnett-dialog-body"
+            bodyClassName="garnett-dialog-body grey"
             contentClassName="garnett-dialog-content"
             open={this.props.open}
-            onRequestClose={this.props.handleClose}
+            onRequestClose={this.handleClose}
             autoScrollBodyContent={true}
           >
             <Tabs 
@@ -192,35 +200,50 @@ export default class HandleChalkboardDialog extends Component {
                     innerDivStyle={listItemStyle}
                     primaryText="Active Name"
                     secondaryText={this.props.chalkboard.activeName}
+                    leftIcon={
+                      <i className="icon-user garnett-icon"></i>
+                    }
                   />
-                  <Divider className="garnett-divider" />
+                  <Divider className="garnett-divider" inset={true} />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Description"
                     secondaryText={this.props.chalkboard.description}
-                    onClick={() => this.handleOpen('description')}
+                    leftIcon={
+                      <i className="icon-info-circled garnett-icon"></i>
+                    }
+                    onClick={() => this.handleEditOpen('description')}
                   />
-                  <Divider className="garnett-divider" />
+                  <Divider className="garnett-divider" inset={true} />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Date"
                     secondaryText={this.props.chalkboard.date}
+                    leftIcon={
+                      <i className="icon-calendar-check-o garnett-icon"></i>
+                    }
                   />
-                  <Divider className="garnett-divider" />
+                  <Divider className="garnett-divider" inset={true} />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Time"
                     secondaryText={this.props.chalkboard.time}
-                    onClick={() => this.handleOpen('time')}
+                    leftIcon={
+                      <i className="icon-clock garnett-icon"></i>
+                    }
+                    onClick={() => this.handleEditOpen('time')}
                   />
-                  <Divider className="garnett-divider" />
+                  <Divider className="garnett-divider" inset={true} />
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Location"
                     secondaryText={this.props.chalkboard.location}
-                    onClick={() => this.handleOpen('location')}
+                    leftIcon={
+                      <i className="icon-location garnett-icon"></i>
+                    }
+                    onClick={() => this.handleEditOpen('location')}
                   />
-                  <Divider style={dividerStyle} />
+                  <Divider className="garnett-divider last" />
                 </List>
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
@@ -234,7 +257,7 @@ export default class HandleChalkboardDialog extends Component {
             state={this.props.state}
             chalkboard={this.props.chalkboard}
             field={this.state.field}
-            handleClose={this.handleClose}
+            handleClose={this.handleEditClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
         </div>

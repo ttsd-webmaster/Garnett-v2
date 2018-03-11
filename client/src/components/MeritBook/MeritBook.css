@@ -1,3 +1,8 @@
+/* Merit Book */
+#pledge-meritbook {
+  padding-bottom: 57px;
+}
+
 /* Pledge List */
 .pledge-name {
   font-weight: 700;
@@ -46,13 +51,13 @@
 
 .total-merits {
   position: fixed;
-  background-color: var(--primary-color);
-  color: #fff;
+  background-color: #fff;
+  color: #777;
   bottom: 0;
-  height: 50px;
-  line-height: 50px;
+  height: 57px;
+  line-height: 57px;
   width: 100%;
   font-size: 20px;
+  border-top: 1px solid #ccc;
   text-align: center;
 }
-

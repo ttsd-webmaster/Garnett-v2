@@ -8,24 +8,12 @@
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
 }
 
-.contacts-icon {
-  font-size: 1.4em;
-  color: var(--primary-color);
-}
-
 .contacts-list {
   text-align: left;
 }
 
 .contacts-list-item > div > div {
   background-color: #fff;
-}
-
-.contacts-divider {
-  position: relative;
-}
-.contacts-divider.last {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
 }
 
 .contacts-dialog-body {
@@ -35,13 +23,6 @@
 
 .contacts-dialog-content {
   width: 90% !important;
-}
-
-.contacts-subheader {
-  line-height: 88px !important;
-  font-size: 18px !important;
-  padding-left: 0 !important;
-  text-align: center;
 }
 
 .active-name {

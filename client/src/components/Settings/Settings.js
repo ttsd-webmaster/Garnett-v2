@@ -44,7 +44,7 @@ export default class Settings extends Component {
               primaryText="Name"
               secondaryText={this.props.state.name}
               leftIcon={
-                <i className="icon-user settings-icon"></i>
+                <i className="icon-user garnett-icon"></i>
               }
             />
             <Divider inset={true} />
@@ -53,7 +53,7 @@ export default class Settings extends Component {
               primaryText="Phone Number"
               secondaryText={this.props.state.phone}
               leftIcon={
-                <i className="icon-phone settings-icon"></i>
+                <i className="icon-phone garnett-icon"></i>
               }
             />
             <Divider inset={true} />
@@ -62,7 +62,7 @@ export default class Settings extends Component {
               primaryText="Email Address"
               secondaryText={this.props.state.email}
               leftIcon={
-                <i className="icon-mail-alt settings-icon"></i>
+                <i className="icon-mail-alt garnett-icon"></i>
               }
             />
             <Divider inset={true} />
@@ -71,7 +71,7 @@ export default class Settings extends Component {
               primaryText="Class"
               secondaryText={this.props.state.class}
               leftIcon={
-                <i className="icon-users settings-icon"></i>
+                <i className="icon-users garnett-icon"></i>
               }
             />
             <Divider inset={true} />
@@ -80,7 +80,7 @@ export default class Settings extends Component {
               primaryText="Major"
               secondaryText={this.props.state.major}
               leftIcon={
-                <i className="icon-graduation-cap settings-icon"></i>
+                <i className="icon-graduation-cap garnett-icon"></i>
               }
             />
             <Divider style={dividerStyle} />

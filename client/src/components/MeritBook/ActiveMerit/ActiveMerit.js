@@ -62,6 +62,9 @@ export default class ActiveMerit extends Component {
           pledges = pledges.filter(function(user) {
             return user.status === 'pledge';
           });
+          pledges.sort((a, b) => {
+            return a.lastName > b.lastName ? 1 : -1;
+          });
 
           console.log('Pledge array: ', pledges);
 
