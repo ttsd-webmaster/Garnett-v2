@@ -61,6 +61,7 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  // Joins the chalkboard
   join = (chalkboard) => {
     let name = this.props.state.name;
     let photoURL = this.props.state.photoURL;
@@ -78,6 +79,7 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  // Removes the chalkboard
   remove = (chalkboard) => {
     let displayName = this.props.state.displayName;
 
@@ -94,6 +96,7 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  // Leaves the chalkboard
   leave = (chalkboard) => {
     let name = this.props.state.name;
 
@@ -110,6 +113,7 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  // Updates the chalkboard information displayed
   updateChalkboardInfo = () => {
     API.getChalkboardInfo(this.state.chalkboard.title)
     .then((res) => {
@@ -122,12 +126,14 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  // Updates the bottom navigation tab index
   handleChange = (value) => {
     this.setState({
       index: value
     });
   }
 
+  // Opens the edit dialog if user is hosting chalkboard
   handleEditOpen = (field) => {
     if (this.props.type === 'hosting') {
       this.setState({
@@ -137,6 +143,7 @@ export default class HandleChalkboardDialog extends Component {
     }
   }
 
+  // Closes the edit dialog
   handleEditClose = () => {
     this.setState({
       open: false,
@@ -144,6 +151,7 @@ export default class HandleChalkboardDialog extends Component {
     });
   }
 
+  // Closes this dialog
   handleClose = () => {
     this.props.handleClose();
 
