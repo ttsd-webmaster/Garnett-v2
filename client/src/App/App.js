@@ -76,20 +76,20 @@ class App extends Component {
   }
 
   loginCallBack = (res) => {
-    let firebase = window.firebase;
     let displayName = res.data.user.firstName + res.data.user.lastName;
 
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     if (isSafari || process.env.NODE_ENV === 'development') {
-      this.checkPhoto(res, firebase, displayName);
+      this.checkPhoto(res, displayName);
     }
     else {
       navigator.serviceWorker.getRegistration(swUrl)
       .then((registration) => {
         loadFirebase('messaging')
         .then(() => {
+          let firebase = window.firebase;
           let messaging = firebase.messaging();
           messaging.useServiceWorker(registration);
 
@@ -129,12 +129,13 @@ class App extends Component {
     }
   }
 
-  checkPhoto(res, firebase, displayName) {
+  checkPhoto(res, displayName) {
     let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
     if (res.data.user.photoURL === defaultPhoto && res.data.user.status !== 'alumni') {
       loadFirebase('storage')
       .then(() => {
+        let firebase = window.firebase;
         let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
         storage.getDownloadURL()
         .then((url) => {

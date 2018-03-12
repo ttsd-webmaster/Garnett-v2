@@ -83,7 +83,7 @@ export default class AddChalkboardDialog extends Component {
       .catch((error) => {
         console.log('Error: ', error);
         this.handleClose();
-        this.props.handleRequestOpen('Error creating chalkboard');
+        this.props.handleRequestOpen('Error: Choose a different title');
       });
     }
   }

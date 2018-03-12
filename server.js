@@ -152,13 +152,13 @@ app.post('/api/signup', function(req, res) {
             let userRef = dbRef.child(user.displayName);
 
             userRef.set({
-              firstName: req.body.firstName,
-              lastName: req.body.lastName,
+              firstName: req.body.firstName.trim(),
+              lastName: req.body.lastName.trim(),
               class: req.body.className,
               major: req.body.majorName,
               year: req.body.year,
               phone: req.body.phone,
-              email: req.body.email,
+              email: req.body.email.trim(),
               photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
             });
 
@@ -502,24 +502,29 @@ app.post('/api/meritall', function(req, res) {
 // Creates a chalkboard
 app.post('/api/createchalkboard', function(req, res) {
   let fullName = req.body.displayName;
-  let chalkboardInfo = {
-    displayName: req.body.displayName,
-    activeName: req.body.activeName,
-    photoURL: req.body.photoURL,
-    title: req.body.title,
-    description: req.body.description,
-    date: req.body.date,
-    time: req.body.time,
-    location: req.body.location
-  };
   let chalkboardsRef = admin.database().ref('/chalkboards');
-  let userChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
 
   // Adds chalkboards to general chalkboards and user's chalkboards
-  chalkboardsRef.push(chalkboardInfo);
-  userChalkboardsRef.push(chalkboardInfo);
-
-  res.sendStatus(200);
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      if (req.body.title === chalkboard.val().title) {
+        res.sendStatus(400);
+      }
+      else {
+        chalkboardsRef.push({
+          displayName: req.body.displayName,
+          activeName: req.body.activeName,
+          photoURL: req.body.photoURL,
+          title: req.body.title,
+          description: req.body.description,
+          date: req.body.date,
+          time: req.body.time,
+          location: req.body.location
+        });
+        res.sendStatus(200);
+      }
+    });
+  });
 });
 
 // Edits chalkboard
@@ -527,7 +532,6 @@ app.post('/api/editchalkboard', function(req, res) {
   let editedField = req.body.field;
   let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
-  let userChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
 
   chalkboardsRef.once('value', (snapshot) => {
     snapshot.forEach((chalkboard) => {
@@ -538,19 +542,7 @@ app.post('/api/editchalkboard', function(req, res) {
           [editedField]: req.body.newValue
         });
 
-        userChalkboardsRef.once('value', (snapshot) => {
-          snapshot.forEach((chalkboard) => {
-            // Looks for the chalkboard in the user's chalkboards ref
-            if (req.body.chalkboard.title === chalkboard.val().title) {
-              // Updates the chalkboard
-              chalkboard.ref.update({
-                [editedField]: req.body.newValue
-              });
-
-              res.sendStatus(200);
-            }
-          });
-        });
+        res.sendStatus(200);
       }
     });
   });
@@ -579,7 +571,6 @@ app.post('/api/joinchalkboard', function(req, res) {
 // Removes chalkboard from both user's list and general list
 app.post('/api/removechalkboard', function(req, res) {
   let fullName = req.body.displayName;
-  let userChalkboardsRef = admin.database().ref('/users/' + fullName + '/chalkboards');
   let chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (snapshot) => {
@@ -587,16 +578,7 @@ app.post('/api/removechalkboard', function(req, res) {
       // Removes chalkboard in the chalkboards ref
       if (req.body.chalkboard.title === chalkboard.val().title) {
         chalkboard.ref.remove(() => {
-          userChalkboardsRef.once('value', (snapshot) => {
-            snapshot.forEach((chalkboard) => {
-              // Removes chalkbaord in the user's chalkbaords ref
-              if (req.body.chalkboard.title === chalkboard.val().title) {
-                chalkboard.ref.remove(() => {
-                  res.sendStatus(200);
-                });
-              }
-            });
-          });
+          res.sendStatus(200);
         });
       }
     });
