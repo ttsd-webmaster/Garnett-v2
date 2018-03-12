@@ -1,7 +1,6 @@
 import './Chalkboards.css';
 import MyChalkboards from './MyChalkboards';
 import AllChalkboards from './AllChalkboards';
-import API from "../../api/API.js";
 import {loadFirebase, getDate} from '../../helpers/functions.js';
 import {LoadingComponent} from '../../helpers/loaders.js';
 
@@ -47,8 +46,7 @@ export default class Chalkboards extends Component {
       upcomingChalkboards: this.props.upcomingChalkboards,
       completedChalkboards: this.props.completedChalkboards,
       selectedChalkboard: null,
-      chalkboardType: '',
-      attendees: []
+      chalkboardType: ''
     };
   }
 
@@ -227,24 +225,11 @@ export default class Chalkboards extends Component {
   }
 
   handleOpen = (chalkboard, type) => {
-    if (navigator.onLine) {
-      API.getAttendees(chalkboard)
-      .then((res) => {
-        this.setState({
-          open: true,
-          selectedChalkboard: chalkboard,
-          chalkboardType: type,
-          attendees: res.data
-        });
-      })
-      .catch((error) => {
-        console.log('Error: ', error);
-        this.props.handleRequestOpen('There was an error retrieving the attendees');
-      });
-    }
-    else {
-      this.props.handleRequestOpen('You are offline.');
-    }
+    this.setState({
+      open: true,
+      selectedChalkboard: chalkboard,
+      chalkboardType: type
+    });
   }
 
   handleClose = () => {

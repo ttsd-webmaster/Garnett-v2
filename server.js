@@ -328,29 +328,33 @@ app.post('/api/actives', function(req, res) {
 });
 
 // Query for merit data on Active App
-app.post('/api/activemerits', function(req, res) {
+app.post('/api/activeremainingmerits', function(req, res) {
   let fullName = req.body.displayName;
   let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
-  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits');
   let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
-  let remainingMerits;
-  let merits = [];
   
   userRef.once('value', (snapshot) => {
-    remainingMerits = snapshot.val().merits;
+    res.json({
+      remainingMerits: snapshot.val().merits
+    });
+  });
+});
 
-    meritRef.once('value', (snapshot) => {
-      if (snapshot.val()) {
-        merits = Object.keys(snapshot.val()).map(function(key) {
-          return snapshot.val()[key];
-        });
-      }
+// Query for the specified pledge's merits
+app.post('/api/pledgemerits', function(req, res) {
+  let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
+  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits');
+  let merits = [];
 
-      const data = {
-        remainingMerits: remainingMerits,
-        merits: merits
-      };
-      res.json(data);
+  meritRef.once('value', (snapshot) => {
+    if (snapshot.val()) {
+      merits = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      });
+    }
+
+    res.json({
+      merits: merits
     });
   });
 });

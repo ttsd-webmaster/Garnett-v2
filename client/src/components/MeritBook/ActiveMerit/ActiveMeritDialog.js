@@ -269,7 +269,7 @@ export default class ActiveMerit extends Component {
             </div>
           </Tab>
           <Tab label="Past Merits" value={1}>
-            <LoadableMeritList merits={this.props.merits} />
+            <LoadableMeritList pledge={this.props.pledge} />
           </Tab>
         </Tabs>
       </Dialog>

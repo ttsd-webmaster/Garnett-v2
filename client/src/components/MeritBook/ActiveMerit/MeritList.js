@@ -1,4 +1,5 @@
 import '../MeritBook.css';
+import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
 import Avatar from 'material-ui/Avatar';
@@ -6,10 +7,32 @@ import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 export default class ActiveMerit extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      merits: []
+    };
+  }
+
+  componentDidMount() {
+    if (navigator.onLine) {
+      API.getPledgeMerits(this.props.pledge)
+      .then(res => {
+        this.setState({
+          merits: res.data.merits
+        });
+      })
+      .catch(err => console.log('err', err));
+    }
+    else {
+      this.props.handleRequestOpen('You are offline.');
+    }
+  }
+
   render() {
     return (
       <List id="merit-dialog-list">
-        {this.props.merits.map((merit, i) => (
+        {this.state.merits.map((merit, i) => (
           <div key={i}>
             <div>
               <Divider className="garnett-divider" inset={true} />

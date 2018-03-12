@@ -273,7 +273,7 @@ export default class HandleChalkboardDialog extends Component {
                 </List>
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
-                <LoadableAttendeeList attendees={this.props.attendees} />
+                <LoadableAttendeeList chalkboard={this.state.chalkboard} />
               </Tab>
             </Tabs>
           </Dialog>

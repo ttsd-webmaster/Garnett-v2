@@ -101,13 +101,12 @@ export default class ActiveMerit extends Component {
     let displayName = this.props.state.displayName;
 
     if (navigator.onLine) {
-      API.getActiveMerits(displayName, pledge)
+      API.getActiveRemainingMerits(displayName, pledge)
       .then(res => {
         this.setState({
           open: true,
           pledge: pledge,
-          remainingMerits: res.data.remainingMerits,
-          merits: res.data.merits
+          remainingMerits: res.data.remainingMerits
         });
       })
       .catch(err => console.log('err', err));

@@ -27,8 +27,11 @@ export default {
   getActives: function() {
     return axios.post('/api/actives');
   },
-  getActiveMerits: function(displayName, pledge) {
-    return axios.post('/api/activemerits', {displayName, pledge})
+  getActiveRemainingMerits: function(displayName, pledge) {
+    return axios.post('/api/activeremainingmerits', {displayName, pledge})
+  },
+  getPledgeMerits: function(pledge) {
+    return axios.post('/api/pledgemerits', {pledge});
   },
   getPledgeData: function(displayName) {
     return axios.post('/api/pledgedata', {displayName});
