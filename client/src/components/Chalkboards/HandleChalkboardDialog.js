@@ -48,10 +48,17 @@ export default class HandleChalkboardDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      chalkboard: null,
       open: false,
       field: '',
       index: 0
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      chalkboard: nextProps.chalkboard
+    });
   }
 
   join = (chalkboard) => {
@@ -100,6 +107,18 @@ export default class HandleChalkboardDialog extends Component {
       console.log('Error: ', error);
       this.props.handleClose();
       this.props.handleRequestOpen('Error leaving chalkboard');
+    });
+  }
+
+  updateChalkboardInfo = () => {
+    API.getChalkboardInfo(this.state.chalkboard.title)
+    .then((res) => {
+      this.setState({
+        chalkboard: res.data.chalkboard
+      });
+    })
+    .catch((error) => {
+      console.log('Error: ', error);
     });
   }
 
@@ -158,13 +177,13 @@ export default class HandleChalkboardDialog extends Component {
           primary={true}
           onClick={() => {
             if (this.props.type === 'upcoming') {
-              this.join(this.props.chalkboard);
+              this.join(this.state.chalkboard);
             }
             else if (this.props.type === 'attending') {
-              this.leave(this.props.chalkboard);
+              this.leave(this.state.chalkboard);
             }
             else {
-              this.remove(this.props.chalkboard);
+              this.remove(this.state.chalkboard);
             }
           }}
         />
@@ -172,10 +191,10 @@ export default class HandleChalkboardDialog extends Component {
     ];
 
     return (
-      this.props.chalkboard && (
+      this.state.chalkboard && (
         <div>
           <Dialog
-            title={this.props.chalkboard.title}
+            title={this.state.chalkboard.title}
             titleClassName="garnett-dialog-title"
             actions={actions}
             modal={false}
@@ -197,7 +216,7 @@ export default class HandleChalkboardDialog extends Component {
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Active Name"
-                    secondaryText={this.props.chalkboard.activeName}
+                    secondaryText={this.state.chalkboard.activeName}
                     leftIcon={
                       <i className="icon-user garnett-icon"></i>
                     }
@@ -206,7 +225,7 @@ export default class HandleChalkboardDialog extends Component {
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Description"
-                    secondaryText={this.props.chalkboard.description}
+                    secondaryText={this.state.chalkboard.description}
                     leftIcon={
                       <i className="icon-info-circled garnett-icon"></i>
                     }
@@ -216,7 +235,7 @@ export default class HandleChalkboardDialog extends Component {
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Date"
-                    secondaryText={this.props.chalkboard.date}
+                    secondaryText={this.state.chalkboard.date}
                     leftIcon={
                       <i className="icon-calendar-check-o garnett-icon"></i>
                     }
@@ -226,7 +245,7 @@ export default class HandleChalkboardDialog extends Component {
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Time"
-                    secondaryText={this.props.chalkboard.time}
+                    secondaryText={this.state.chalkboard.time}
                     leftIcon={
                       <i className="icon-clock garnett-icon"></i>
                     }
@@ -236,7 +255,7 @@ export default class HandleChalkboardDialog extends Component {
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText="Location"
-                    secondaryText={this.props.chalkboard.location}
+                    secondaryText={this.state.chalkboard.location}
                     leftIcon={
                       <i className="icon-location garnett-icon"></i>
                     }
@@ -254,8 +273,9 @@ export default class HandleChalkboardDialog extends Component {
           <LoadableEditChalkboardDialog
             open={this.state.open}
             state={this.props.state}
-            chalkboard={this.props.chalkboard}
+            chalkboard={this.state.chalkboard}
             field={this.state.field}
+            updateChalkboardInfo={this.updateChalkboardInfo}
             handleClose={this.handleEditClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

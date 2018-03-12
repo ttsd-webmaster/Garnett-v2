@@ -39,6 +39,7 @@ export default class EditChalkboardDialog extends Component {
       API.editChalkboard(displayName, chalkboard, field, value)
       .then((res) => {
         console.log(`Edited ${field}`);
+        this.props.updateChalkboardInfo();
         this.props.handleClose();
         this.props.handleRequestOpen(`Edited ${field}`);
 

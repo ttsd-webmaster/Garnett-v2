@@ -57,6 +57,9 @@ export default {
   leaveChalkboard: function(name, chalkboard) {
     return axios.post('/api/leavechalkboard', {name, chalkboard});
   },
+  getChalkboardInfo: function(title) {
+    return axios.post('/api/getchalkboardinfo', {title});
+  },
   getAttendees: function(chalkboard) {
     return axios.post('/api/getattendees', {chalkboard});
   },

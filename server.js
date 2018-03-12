@@ -616,6 +616,23 @@ app.post('/api/leavechalkboard', function(req, res) {
   });
 });
 
+// Gets the chalkboard information
+app.post('/api/getchalkboardinfo', function(req, res) {
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  // Searches for the chalkboard by checking title
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      if (req.body.title === chalkboard.val().title) {
+        res.json({
+          chalkboard: chalkboard.val()
+        });
+      }
+    });
+  });
+});
+
+// Retrieves all the attendees of the chalkboard
 app.post('/api/getattendees', function(req, res) {
   let attendeesArray = [];
   let chalkboardsRef = admin.database().ref('/chalkboards');
