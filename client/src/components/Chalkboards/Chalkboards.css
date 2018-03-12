@@ -10,15 +10,6 @@
   animation: fadeIn .25s ease-in forwards;
 }
 
-.chalkboards-description {
-  word-wrap: break-word;
-}
-
-.chalkboards-date {
-  float: right;
-  margin-left: 20px;
-}
-
 .attendee-name {
   font-weight: 700;
   font-size: 18px;

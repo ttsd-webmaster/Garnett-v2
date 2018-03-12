@@ -72,6 +72,17 @@
   margin: 0;
 }
 
+.garnett-description {
+  word-wrap: break-word;
+}
+
+.garnett-date {
+  float: right;
+  color: #777;
+  font-size: 14px;
+  margin-left: 20px;
+}
+
 .garnett-divider {
   position: relative;
 }
@@ -106,11 +117,13 @@
   min-height: 285px;
   max-height: 352px !important;
   background-color: #fff;
-  padding: 0 !important;
   border-bottom: 1px solid rgb(224, 224, 224) !important;
 }
 .garnett-dialog-body.grey {
   background-color: #fafafa;
+}
+.garnett-dialog-body.tabs {
+  padding: 0 !important;
 }
 
 .garnett-dialog-content {
@@ -124,15 +137,15 @@
 }
 
 .garnett-input {
-  width: 40% !important;
-  max-width: 576px;
+  /*width: 40% !important;
+  max-width: 576px;*/
   margin: 0 auto;
 }
-@media(max-width: 768px) {
+/*@media(max-width: 768px) {
   .garnett-input {
     width: 80% !important;
   }
-}
+}*/
 
 .garnett-icon {
   font-size: 1.4em;

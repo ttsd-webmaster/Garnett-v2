@@ -39,13 +39,13 @@ export default class PastComplaints extends Component {
                     <p className="garnett-name"> {complaint.pledgeName} </p>
                   }
                   secondaryText={
-                    <p className="complaints-description">
+                    <p className="garnett-description">
                       {complaint.description}
                     </p>
                   }
                   secondaryTextLines={2}
                 >
-                  <p className="complaints-date"> {complaint.date} </p>
+                  <p className="garnett-date"> {complaint.date} </p>
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />
               </div>

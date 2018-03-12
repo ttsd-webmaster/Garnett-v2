@@ -1,12 +1,15 @@
-import {getDate} from '../../helpers/functions.js';
 import API from '../../api/API.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
+import TimePicker from 'material-ui/TimePicker';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+
+const defaultTime = new Date();
+defaultTime.setHours(12, 0, 0, 0);
 
 export default class AddChalkboardDialog extends Component {
   constructor(props) {
@@ -15,7 +18,7 @@ export default class AddChalkboardDialog extends Component {
       title: '',
       description: '',
       date: null,
-      time: 'TBD',
+      time: defaultTime,
       location: 'TBD',
       titleValidation: true,
       descriptionValidation: true,
@@ -31,9 +34,9 @@ export default class AddChalkboardDialog extends Component {
     let photoURL = this.props.state.photoURL;
     let title = this.state.title;
     let description = this.state.description;
+    let date = this.state.date;
     let time = this.state.time;
     let location = this.state.location;
-    let date = getDate(this.state.date);
     let titleValidation = true;
     let descriptionValidation = true;
     let dateValidation = true;
@@ -66,7 +69,10 @@ export default class AddChalkboardDialog extends Component {
       });
     }
     else {
-      API.createChalkboard(displayName, activeName, photoURL, title, description, date, time, location)
+      let parsedDate = date.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
+      let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+      API.createChalkboard(displayName, activeName, photoURL, title, description, parsedDate, parsedTime, location)
       .then((res) => {
         console.log(res);
         this.handleClose();
@@ -76,16 +82,28 @@ export default class AddChalkboardDialog extends Component {
           title: '',
           description: '',
           date: null,
-          time: 'TBD',
+          time: defaultTime,
           location: 'TBD'
         });
       })
       .catch((error) => {
         console.log('Error: ', error);
         this.handleClose();
-        this.props.handleRequestOpen('Error: Choose a different title');
+        this.props.handleRequestOpen('Error: Chalkboard title is already taken');
+
+        this.setState({
+          title: '',
+          description: '',
+          date: null,
+          time: defaultTime,
+          location: 'TBD'
+        });
       });
     }
+  }
+
+  formatDate(date) {
+    return date.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
   }
 
   disableDates(date) {
@@ -109,7 +127,7 @@ export default class AddChalkboardDialog extends Component {
       title: '',
       description: '',
       date: null,
-      time: 'TBD',
+      time: defaultTime,
       location: 'TBD',
       titleValidation: true,
       descriptionValidation: true,
@@ -168,22 +186,22 @@ export default class AddChalkboardDialog extends Component {
         />
         <DatePicker
           className="garnett-input"
-          style={{'marginTop': '20px'}}
-          hintText="Date"
+          floatingLabelText="Date"
           value={this.state.date}
           disableYearSelection
           firstDayOfWeek={0}
+          formatDate={this.formatDate}
           shouldDisableDate={this.disableDates}
           onChange={(e, newValue) => this.handleChange('date', newValue)}
           errorText={!this.state.dateValidation && 'Select a date.'}
         />
-        <TextField
+        <TimePicker
           className="garnett-input"
-          type="text"
+          textFieldStyle={{'display': 'block'}}
           floatingLabelText="Time"
-          multiLine={true}
-          rowsMax={3}
           value={this.state.time}
+          defaultTime={defaultTime}
+          minutesStep={5}
           onChange={(e, newValue) => this.handleChange('time', newValue)}
           errorText={!this.state.timeValidation && 'Enter a time.'}
         />

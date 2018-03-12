@@ -503,25 +503,31 @@ app.post('/api/meritall', function(req, res) {
 app.post('/api/createchalkboard', function(req, res) {
   let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
+  let counter = 0;
 
   // Adds chalkboards to general chalkboards and user's chalkboards
   chalkboardsRef.once('value', (snapshot) => {
     snapshot.forEach((chalkboard) => {
+      counter++;
+
       if (req.body.title === chalkboard.val().title) {
         res.sendStatus(400);
       }
       else {
-        chalkboardsRef.push({
-          displayName: req.body.displayName,
-          activeName: req.body.activeName,
-          photoURL: req.body.photoURL,
-          title: req.body.title,
-          description: req.body.description,
-          date: req.body.date,
-          time: req.body.time,
-          location: req.body.location
-        });
-        res.sendStatus(200);
+        if (!res.headersSent && counter === snapshot.numChildren()) {
+          chalkboardsRef.push({
+            displayName: req.body.displayName,
+            activeName: req.body.activeName,
+            photoURL: req.body.photoURL,
+            title: req.body.title,
+            description: req.body.description,
+            date: req.body.date,
+            time: req.body.time,
+            location: req.body.location
+          });
+
+          res.sendStatus(200);
+        }
       }
     });
   });
@@ -529,7 +535,7 @@ app.post('/api/createchalkboard', function(req, res) {
 
 // Edits chalkboard
 app.post('/api/editchalkboard', function(req, res) {
-  let editedField = req.body.field;
+  let editedField = req.body.field.toLowerCase();
   let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
 

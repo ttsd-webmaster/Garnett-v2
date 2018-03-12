@@ -235,7 +235,7 @@ export default class ActiveMerit extends Component {
         actions={actions}
         modal={false}
         className="garnett-dialog"
-        bodyClassName="garnett-dialog-body"
+        bodyClassName="garnett-dialog-body tabs"
         contentClassName="garnett-dialog-content"
         open={this.props.open}
         onRequestClose={this.handleClose}

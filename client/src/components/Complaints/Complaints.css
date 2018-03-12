@@ -9,12 +9,3 @@
   padding-bottom: 57px;
   animation: fadeIn .25s ease-in forwards;
 }
-
-.complaints-description {
-  word-wrap: break-word;
-}
-
-.complaints-date {
-  float: right;
-  margin-left: 20px;
-}

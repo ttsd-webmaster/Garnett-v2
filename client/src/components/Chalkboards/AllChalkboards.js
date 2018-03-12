@@ -39,14 +39,14 @@ export default class AllChalkboards extends Component {
                     <p className="garnett-name"> {chalkboard.title} </p>
                   }
                   secondaryText={
-                    <p className="chalkboards-description">
+                    <p className="garnett-description">
                       {chalkboard.description}
                     </p>
                   }
                   secondaryTextLines={2}
                   onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
                 >
-                  <p className="chalkboards-date"> {chalkboard.date} </p>
+                  <p className="garnett-date"> {chalkboard.date} </p>
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />
               </div>
@@ -84,14 +84,14 @@ export default class AllChalkboards extends Component {
                     <p className="garnett-name"> {chalkboard.title} </p>
                   }
                   secondaryText={
-                    <p className="chalkboards-description">
+                    <p className="garnett-description">
                       {chalkboard.description}
                     </p>
                   }
                   secondaryTextLines={2}
                   onClick={() => this.props.handleOpen(chalkboard, 'completed')}
                 >
-                  <p className="chalkboards-date"> {chalkboard.date} </p>
+                  <p className="garnett-date"> {chalkboard.date} </p>
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />
               </div>

@@ -15,10 +15,6 @@ const listItemStyle = {
   backgroundColor: '#fff'
 };
 
-const dividerStyle = {
-  boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px'
-};
-
 const inkBarStyle = {
   position: 'fixed',
   top: '124px',
@@ -53,6 +49,7 @@ export default class HandleChalkboardDialog extends Component {
     super(props);
     this.state = {
       open: false,
+      field: '',
       index: 0
     };
   }
@@ -123,7 +120,8 @@ export default class HandleChalkboardDialog extends Component {
 
   handleEditClose = () => {
     this.setState({
-      open: false
+      open: false,
+      field: ''
     });
   }
 
@@ -182,7 +180,7 @@ export default class HandleChalkboardDialog extends Component {
             actions={actions}
             modal={false}
             className="garnett-dialog"
-            bodyClassName="garnett-dialog-body grey"
+            bodyClassName="garnett-dialog-body tabs grey"
             contentClassName="garnett-dialog-content"
             open={this.props.open}
             onRequestClose={this.handleClose}
@@ -212,7 +210,7 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-info-circled garnett-icon"></i>
                     }
-                    onClick={() => this.handleEditOpen('description')}
+                    onClick={() => this.handleEditOpen('Description')}
                   />
                   <Divider className="garnett-divider" inset={true} />
                   <ListItem
@@ -222,6 +220,7 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-calendar-check-o garnett-icon"></i>
                     }
+                    onClick={() => this.handleEditOpen('Date')}
                   />
                   <Divider className="garnett-divider" inset={true} />
                   <ListItem
@@ -231,7 +230,7 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-clock garnett-icon"></i>
                     }
-                    onClick={() => this.handleEditOpen('time')}
+                    onClick={() => this.handleEditOpen('Time')}
                   />
                   <Divider className="garnett-divider" inset={true} />
                   <ListItem
@@ -241,7 +240,7 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-location garnett-icon"></i>
                     }
-                    onClick={() => this.handleEditOpen('location')}
+                    onClick={() => this.handleEditOpen('Location')}
                   />
                   <Divider className="garnett-divider last" />
                 </List>

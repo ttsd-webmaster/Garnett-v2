@@ -96,12 +96,12 @@ export default class PledgeComplaints extends Component {
                   <ListItem
                     innerDivStyle={listItemStyle}
                     primaryText={
-                      <p className="complaints-description">
+                      <p className="garnett-description">
                         {complaint.description}
                       </p>
                     }
                   >
-                    <p className="complaints-date"> {complaint.date} </p>
+                    <p className="garnett-date"> {complaint.date} </p>
                   </ListItem>
                   <Divider />
                 </div>
