@@ -129,7 +129,7 @@ class App extends Component {
     }
   }
 
-  checkPhoto(res, displayName) {
+  checkPhoto = (res, displayName) => {
     let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
     if (res.data.user.photoURL === defaultPhoto && res.data.user.status !== 'alumni') {
@@ -159,7 +159,7 @@ class App extends Component {
     }
   }
 
-  setData(res) {
+  setData = (res) => {
     this.setState({
       name: `${res.data.user.firstName} ${res.data.user.lastName}`,
       firstName: res.data.user.firstName,

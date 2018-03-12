@@ -130,7 +130,7 @@ app.post('/api/login', function(req, res) {
 
 // Signup Route
 app.post('/api/signup', function(req, res) {
-  let dbRef = admin.database().ref('/users');
+  let usersRef = admin.database().ref('/users');
   let firstName = req.body.firstName.replace(/ /g,'');
   let lastName = req.body.lastName.replace(/ /g,'');
   let fullName = firstName + lastName;
@@ -149,7 +149,7 @@ app.post('/api/signup', function(req, res) {
             displayName: fullName
           })
           .then(function() {
-            let userRef = dbRef.child(user.displayName);
+            let userRef = usersRef.child(user.displayName);
 
             userRef.set({
               firstName: req.body.firstName.trim(),
@@ -168,7 +168,7 @@ app.post('/api/signup', function(req, res) {
                 totalMerits: 0
               });
 
-              dbRef.once('value', (snapshot) => {
+              usersRef.once('value', (snapshot) => {
                 snapshot.forEach((brother) => {
                   let pledgeName = user.displayName;
                   
@@ -197,7 +197,7 @@ app.post('/api/signup', function(req, res) {
                 });
               }
 
-              dbRef.once('value', (snapshot) => {
+              usersRef.once('value', (snapshot) => {
                 snapshot.forEach((child) => {
                   if (child.val().status === 'pledge') {
                     let pledgeName = child.key;
@@ -287,10 +287,10 @@ app.post('/api/photo', function(req, res) {
 
 // Query for pledges data
 app.post('/api/pledges', function(req, res) {
-  let dbRef = admin.database().ref('/users');
+  let usersRef = admin.database().ref('/users');
   let pledgeArray = [];
 
-  dbRef.once('value', (snapshot) => {
+  usersRef.once('value', (snapshot) => {
     pledgeArray = Object.keys(snapshot.val()).map(function(key) {
       return snapshot.val()[key];
     });
@@ -308,10 +308,10 @@ app.post('/api/pledges', function(req, res) {
 
 // Query for active data
 app.post('/api/actives', function(req, res) {
-  let dbRef = admin.database().ref('/users');
+  let usersRef = admin.database().ref('/users');
   let activeArray = [];
 
-  dbRef.once('value', (snapshot) => {
+  usersRef.once('value', (snapshot) => {
     activeArray = Object.keys(snapshot.val()).map(function(key) {
       return snapshot.val()[key];
     });
@@ -649,11 +649,9 @@ app.post('/api/complain', function(req, res) {
   // Check if active is PI/PM or not
   if (req.body.status === 'active') {
     let complaintsRef = admin.database().ref('/pendingComplaints');
-    let pendingComplaintsRef = admin.database().ref('/users/' + fullName + '/pendingComplaints');
 
     // Add complaints to active's pending complaints list and the pending complaints list
     complaintsRef.push(complaintInfo);
-    pendingComplaintsRef.push(complaintInfo);
   }
   else {
     let complaintsRef = admin.database().ref('/approvedComplaints');
@@ -675,7 +673,6 @@ app.post('/api/complain', function(req, res) {
 // Removes complaint for active
 app.post('/api/removecomplaint', function(req, res) {
   let activeName = req.body.complaint.activeDisplayName;
-  let userPendingComplaintsRef = admin.database().ref('/users/' + activeName + '/pendingComplaints');
   let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
   pendingComplaintsRef.once('value', (snapshot) => {
@@ -683,16 +680,7 @@ app.post('/api/removecomplaint', function(req, res) {
       // Removes complaint from the pending complaints list
       if (equal(req.body.complaint, complaint.val())) {
         complaint.ref.remove(() => {
-          userPendingComplaintsRef.once('value', (snapshot) => {
-            snapshot.forEach((complaint) => {
-              // Removes complaint from the active's pending complaints list
-              if (equal(req.body.complaint, complaint.val())) {
-                complaint.ref.remove(() => {
-                  res.sendStatus(200);
-                });
-              }
-            });
-          });
+          res.sendStatus(200);
         });
       }
     });
@@ -703,7 +691,6 @@ app.post('/api/removecomplaint', function(req, res) {
 app.post('/api/approvecomplaint', function(req, res) {
   let activeName = req.body.complaint.activeDisplayName;
   let pledgeName = req.body.complaint.pledgeDisplayName;
-  let activeRef = admin.database().ref('/users/' + activeName);
   let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
   let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
   let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
@@ -715,36 +702,26 @@ app.post('/api/approvecomplaint', function(req, res) {
         complaint.ref.remove(() => {
           // Adds complaint to the approved complaints list
           approvedComplaintsRef.push(req.body.complaint);
-          activeRef.child('/pendingComplaints').once('value', (snapshot) => {
-            snapshot.forEach((complaint) => {
-              // Removes complaint from the active's pending complaints list
-              if (equal(req.body.complaint, complaint.val())) {
-                complaint.ref.remove(() => {
-                  // Adds complaint to the active's approved complaints list
-                  activeRef.child('/approvedComplaints').push(req.body.complaint);
-                  // Adds complaint to the pledge's complaints list
-                  pledgeComplaintsRef.push({
-                    activeName: req.body.complaint.activeName,
-                    description: req.body.complaint.description,
-                    date: req.body.complaint.date
-                  });
-
-                  res.sendStatus(200);
-                });
-              }
-            });
+          // Adds complaint to the pledge's complaints list
+          pledgeComplaintsRef.push({
+            activeName: req.body.complaint.activeName,
+            description: req.body.complaint.description,
+            date: req.body.complaint.date
           });
+
+          res.sendStatus(200);
         });
       }
     });
   });
 });
 
+// Gets all the pledges for complaints
 app.post('/api/pledgecomplaints', function(req, res) {
-  let dbRef = admin.database().ref('/users');
+  let usersRef = admin.database().ref('/users');
 
   // Loop through all users for pledges
-  dbRef.once('value', (snapshot) => {
+  usersRef.once('value', (snapshot) => {
     let pledgeArray = Object.keys(snapshot.val()).map(function(key) {
       return snapshot.val()[key];
     });

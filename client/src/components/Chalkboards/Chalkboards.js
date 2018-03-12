@@ -81,6 +81,7 @@ export default class Chalkboards extends Component {
 
             // Checks which chalkboards I am attending and which ones I have completed
             chalkboards.forEach((chalkboard) => {
+              // Checks if the user has created the chalkboard
               if (this.props.state.status !== 'pledge' &&
                   this.props.state.name === chalkboard.activeName) {
                 if (chalkboard.date >= today) {
@@ -90,6 +91,7 @@ export default class Chalkboards extends Component {
                   myCompletedChalkboards.push(chalkboard);
                 }
               }
+              // Checks if the user is attending the chalkboard
               else if (chalkboard.attendees) {
                 let attendees = Object.keys(chalkboard.attendees).map(function(key) {
                   return chalkboard.attendees[key];
@@ -106,6 +108,7 @@ export default class Chalkboards extends Component {
                   }
                 });
               }
+              // All chalkboards the user did not create or is not attending
               else {
                 if (chalkboard.date >= today) {
                   upcomingChalkboards.push(chalkboard);

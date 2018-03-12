@@ -41,74 +41,53 @@ export default class ActiveComplaints extends Component {
       loadFirebase('database')
       .then(() => {
         let firebase = window.firebase;
-        let complaintsRef = firebase.database().ref('/approvedComplaints/');
+        let dbRef = firebase.database().ref('/');
 
-        complaintsRef.on('value', (snapshot) => {
+        dbRef.on('value', (snapshot) => {
           let complaints = this.state.complaints;
+          let pendingComplaints = this.state.pendingComplaints;
+          let approvedComplaints = this.state.approvedComplaints;
           
-          if (snapshot.val()) {
-            complaints = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
+          if (snapshot.val().pendingComplaints) {
+            pendingComplaints = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
+              return snapshot.val().pendingComplaints[key];
             });
-          }
 
-          console.log('Complaints Array: ', complaints);
-
-          localStorage.setItem('activeComplaints', JSON.stringify(complaints));
-
-          if (this.props.state.status === 'active') {
-            let fullName = this.props.state.displayName;
-            let userRef = firebase.database().ref('/users/' + fullName);
-
-            userRef.on('value', (snapshot) => {
-              let approvedComplaints = this.state.approvedComplaints;
-              let pendingComplaints = this.state.pendingComplaints;
-
-              if (snapshot.val().pendingComplaints) {
-                pendingComplaints = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
-                  return snapshot.val().pendingComplaints[key];
-                });
-              }
-              if (snapshot.val().approvedComplaints) {
-                approvedComplaints = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
-                  return snapshot.val().approvedComplaints[key];
-                });
-              }
-
-              localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
-              localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
-
-              this.setState({
-                loaded: true,
-                complaints: complaints,
-                pendingComplaints: pendingComplaints,
-                approvedComplaints: approvedComplaints
+            if (this.props.state.status === 'active') {
+              pendingComplaints = pendingComplaints.filter((complaint) => {
+                return this.props.state.name === complaint.activeName;
               });
-            });
+            }
           }
-          else {
-            let pendingComplaintsRef = firebase.database().ref('/pendingComplaints/');
+          
+          if (snapshot.val().approvedComplaints) {
+            approvedComplaints = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
+              return snapshot.val().approvedComplaints[key];
+            });
 
-            pendingComplaintsRef.on('value', (snapshot) => {
-              let pendingComplaints = [];
+            complaints = approvedComplaints;
 
-              if (snapshot.val()) {
-                pendingComplaints = Object.keys(snapshot.val()).map(function(key) {
-                  return snapshot.val()[key];
-                });
-              }
-
-              localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
-              localStorage.setItem('approvedComplaints', JSON.stringify(complaints));
-
-              this.setState({
-                loaded: true,
-                complaints: complaints,
-                pendingComplaints: pendingComplaints,
-                approvedComplaints: complaints
+            if (this.props.state.status === 'active') {
+              approvedComplaints = approvedComplaints.filter((complaint) => {
+                return this.props.state.name === complaint.activeName;
               });
-            });
+            }
           }
+
+          console.log('Complaints: ', complaints);
+          console.log('Pending Complaints: ', pendingComplaints);
+          console.log('Approved Complaints: ', approvedComplaints);
+
+          localStorage.setItem('complaints', JSON.stringify(complaints));
+          localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
+          localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
+
+          this.setState({
+            loaded: true,
+            complaints: complaints,
+            pendingComplaints: pendingComplaints,
+            approvedComplaints: approvedComplaints
+          });
         });
       })
       .catch(err => console.log(err));
