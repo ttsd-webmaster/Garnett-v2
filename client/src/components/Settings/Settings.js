@@ -1,10 +1,10 @@
 import './Settings.css';
+import API from '../../api/API.js';
 import {LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import API from '../../api/API.js';
 
 const listItemStyle = {
   backgroundColor: '#fff',

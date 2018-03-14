@@ -25,11 +25,21 @@ function LoadingLogin() {
   )
 }
 
+function LoadingHome() {
+  return (
+    <div className="loading-container">
+      <div className="app-header">
+        <span> Home </span>
+      </div>
+    </div>
+  )
+}
+
 function LoadingPledgeApp() {
   return (
     <div className="loading-container">
       <div className="app-header">
-        Merit Book
+        <span> Merit Book </span>
       </div>
       <Tabs
         inkBarStyle={inkBarStyle}
@@ -76,4 +86,4 @@ function LoadingComponent() {
   )
 }
 
-export {LoadingLogin, LoadingPledgeApp, LoadingComponent};
+export {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingComponent};

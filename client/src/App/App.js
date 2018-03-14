@@ -2,7 +2,7 @@ import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
 import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
-import {LoadingLogin, LoadingPledgeApp} from '../helpers/loaders.js';
+import {LoadingLogin, LoadingHome, LoadingPledgeApp} from '../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
@@ -12,18 +12,36 @@ const LoadableLogin = Loadable({
   loader: () => import('../containers/Login/Login'),
   render(loaded, props) {
     let Component = loaded.default;
-    return <Component {...props}/>;
+    return <Component {...props} />;
   },
   loading: LoadingLogin
+});
+
+const LoadableHome = Loadable({
+  loader: () => import('../containers/Home/Home'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingHome
 });
 
 const LoadablePledgeApp = Loadable({
   loader: () => import('../containers/PledgeApp/PledgeApp'),
   render(loaded, props) {
     let Component = loaded.default;
-    return <Component {...props}/>;
+    return <Component {...props} />;
   },
   loading: LoadingPledgeApp
+});
+
+const LoadableDelibsApp = Loadable({
+  loader: () => import('../containers/PledgeApp/PledgeApp'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingHome
 });
 
 class App extends Component {
@@ -52,6 +70,11 @@ class App extends Component {
               API.getAuthStatus(user)
               .then(res => {
                 this.loginCallBack(res);
+              });
+            }
+            else {
+              this.setState({
+                loaded: true
               });
             }
           });
@@ -188,9 +211,13 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Route exact path='/' render={() => (
+          <Route exact path="/" render={() => (
             this.state.isAuthenticated ? (
-              <Redirect to="/pledge-app" />
+              this.state.status === "pledge" ? (
+                <Redirect to="/pledge-app" />
+              ) : (
+                <Redirect to="/home" />
+              )
             ) : (
               this.state.loaded ? (
                 <LoadableLogin 
@@ -202,7 +229,22 @@ class App extends Component {
               )
             )
           )}/>
-          <Route exact path='/pledge-app' render={({history}) => (
+          <Route exact path="/home" render={({history}) => (
+            this.state.isAuthenticated ? (
+              <LoadableHome
+                state={this.state}
+                history={history}
+                logoutCallBack={this.logoutCallBack}
+              />
+            ) : (
+              this.state.loaded ? (
+                <Redirect to="/" />
+              ) : (
+                <LoadingLogin />
+              )
+            )
+          )}/>
+          <Route exact path="/pledge-app" render={({history}) => (
             this.state.isAuthenticated ? (
               <LoadablePledgeApp 
                 state={this.state} 
@@ -210,7 +252,26 @@ class App extends Component {
                 logoutCallBack={this.logoutCallBack}
               />
             ) : (
-              <Redirect to="/" />
+              this.state.loaded ? (
+                <Redirect to="/" />
+              ) : (
+                <LoadingLogin />
+              )
+            )
+          )}/>
+          <Route exact path="/delibs-app" render={({history}) => (
+            this.state.isAuthenticated ? (
+              <LoadableDelibsApp
+                state={this.state} 
+                history={history}
+                logoutCallBack={this.logoutCallBack}
+              />
+            ) : (
+              this.state.loaded ? (
+                <Redirect to="/" />
+              ) : (
+                <LoadingLogin />
+              )
             )
           )}/>
         </div>

@@ -301,7 +301,7 @@ export default class PledgeApp extends Component {
       this.state.loaded ? (
         <div>
           <div className="app-header">
-            {this.state.title}
+            <span> {this.state.title} </span>
           </div>
           <Tabs
             contentContainerClassName="content-container"

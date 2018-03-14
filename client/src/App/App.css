@@ -47,6 +47,10 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #fff;
 }
 
+div, a {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+}
+
 /* Main Loading Screen */
 .loading {
   display: block;
@@ -93,10 +97,12 @@ input:-webkit-autofill {
   height: 37px;
   width: 100%;
   font-size: 20px;
-  padding-left: 15px;
   padding-top: 15px;
   text-align: left;
   z-index: 1;
+}
+.app-header > span:first-child {
+  margin-left: 15px;
 }
 
 /* Animates the component in */
