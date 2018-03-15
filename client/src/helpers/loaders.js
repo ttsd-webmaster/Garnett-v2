@@ -17,6 +17,11 @@ const tabContainerStyle = {
   zIndex: 1
 };
 
+const backHomeStyle = {
+  float: 'right',
+  marginRight: '15px'
+};
+
 function LoadingLogin() {
   return (
     <div className="loading">
@@ -70,6 +75,17 @@ function LoadingPledgeApp() {
   )
 }
 
+function LoadingDelibsApp() {
+  return (
+    <div className="loading-container">
+      <div className="app-header">
+        <span> Delibs App </span>
+        <span style={backHomeStyle}> Home </span>
+      </div>
+    </div>
+  )
+}
+
 function LoadingComponent() {
   return (
     <div className="loader-container">
@@ -86,4 +102,4 @@ function LoadingComponent() {
   )
 }
 
-export {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingComponent};
+export {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingDelibsApp, LoadingComponent};

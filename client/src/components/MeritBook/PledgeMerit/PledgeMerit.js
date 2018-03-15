@@ -8,21 +8,6 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-const listItemStyle = {
-  backgroundColor: '#fff',
-  paddingLeft: '102px',
-  zIndex: -1
-};
-
-const avatarStyle = {
-  top: 9,
-  objectFit: 'cover'
-};
-
-const dividerStyle = {
-  marginLeft: '102px'
-};
-
 export default class PledgeMerit extends Component {
   constructor(props) {
     super(props);
@@ -106,21 +91,21 @@ export default class PledgeMerit extends Component {
                 key={i}
                 placeholder={
                   <div className="placeholder-skeleton">
-                    <Divider style={dividerStyle} inset={true} />
+                    <Divider className="garnett-divider large" inset={true} />
                     <div className="placeholder-avatar"></div>
                     <div className="placeholder-name"></div>
                     <div className="placeholder-year"></div>
                     <div className="placeholder-date"></div>
                     <div className="placeholder-merits"></div>
-                    <Divider style={dividerStyle} inset={true} />
+                    <Divider className="garnett-divider large" inset={true} />
                   </div>
                 }
               >
                 <div>
-                  <Divider style={dividerStyle} inset={true} />
+                  <Divider className="garnett-divider large" inset={true} />
                   <ListItem
-                    innerDivStyle={listItemStyle}
-                    leftAvatar={<Avatar size={70} src={merit.photoURL} style={avatarStyle} />}
+                    className="garnett-list-item large"
+                    leftAvatar={<Avatar size={70} src={merit.photoURL} className="garnett-image large" />}
                     primaryText={
                       <p className="garnett-name"> {merit.name} </p>
                     }
@@ -134,7 +119,7 @@ export default class PledgeMerit extends Component {
                       <p className="merit-amount"> {merit.amount} </p>
                     </div>
                   </ListItem>
-                  <Divider style={dividerStyle} inset={true} />
+                  <Divider className="garnett-divider large" inset={true} />
                 </div>
               </LazyLoad>
             ))}

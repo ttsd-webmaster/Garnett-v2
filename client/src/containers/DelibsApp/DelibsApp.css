@@ -1,0 +1,20 @@
+.back-home {
+  float: right;
+  color: #fff;
+  margin-right: 15px;
+  text-decoration: none;
+}
+
+.garnett-list.delibs {
+  position: absolute;
+  top: 52px;
+  width: 100vw;
+}
+
+.garnett-dialog-body.delibs {
+  padding-top: 24px !important;
+}
+
+.delibs-radio-button {
+  margin-bottom: 15px;
+}

@@ -47,13 +47,12 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidMount() {
-    let pledges = this.state.pledges;
-
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
+        let pledges;
         let firebase = window.firebase;
-        let dbRef = firebase.database().ref('/users/');
+        let dbRef = firebase.database().ref('/users');
 
         dbRef.on('value', (snapshot) => {
           pledges = Object.keys(snapshot.val()).map(function(key) {

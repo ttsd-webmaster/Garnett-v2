@@ -2,7 +2,7 @@ import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
 import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
-import {LoadingLogin, LoadingHome, LoadingPledgeApp} from '../helpers/loaders.js';
+import {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingDelibsApp} from '../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
@@ -36,12 +36,12 @@ const LoadablePledgeApp = Loadable({
 });
 
 const LoadableDelibsApp = Loadable({
-  loader: () => import('../containers/PledgeApp/PledgeApp'),
+  loader: () => import('../containers/DelibsApp/DelibsApp'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;
   },
-  loading: LoadingHome
+  loading: LoadingDelibsApp
 });
 
 class App extends Component {

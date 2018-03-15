@@ -822,6 +822,54 @@ app.post('/api/sendmessage', function(req, res) {
   });
 });
 
+// Voting for rushee
+app.post('/api/vote', function(req, res) {
+  let rusheeName = req.body.rushee.replace(/ /g,'');
+  let rusheeRef = admin.database().ref('/rushees/' + rusheeName);
+  let fullName = req.body.displayName;
+  let activeRef = admin.database().ref('/rushees/' + rusheeName + '/Actives/' + fullName);
+  let vote;
+
+  activeRef.once('value', (snapshot) => {
+    if (snapshot.val().vote === 'yes') {
+      if (req.body.vote === 'yes') {
+        vote = 0;
+      }
+      else {
+        vote = -1;
+      }
+    }
+    else {
+      if (req.body.vote === 'yes') {
+        vote = 1;
+      }
+      else {
+        vote = 0;
+      } 
+    }
+
+    rusheeRef.once('value', (snapshot) => {
+      let storedVotes;
+      if (!snapshot.val().votes) {
+        storedVotes = 0;
+      }
+      else {
+        storedVotes = snapshot.val().votes;
+      }
+      let totalVotes = parseInt(storedVotes) + vote;
+
+      rusheeRef.update({
+        votes: totalVotes
+      });
+      activeRef.update({
+        vote: req.body.vote
+      });
+
+      res.sendStatus(200);
+    });
+  });
+});
+
 app.listen(port, function () {
   console.log('Example app listening on port 4000!')
 });

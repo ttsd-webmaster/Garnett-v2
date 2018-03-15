@@ -2,6 +2,7 @@ import axios from 'axios';
 
 //Search functions to connect with back-end
 export default {
+  // Pledge App
   getAuthStatus: function(user) {
     return axios.post('/api/', {user});
   },
@@ -84,5 +85,9 @@ export default {
   },
   sendMessage: function(pledgeName, activeName, amount) {
     return axios.post('/api/sendmessage', {pledgeName, activeName, amount});
+  },
+  // Delibs App
+  voteForRushee: function(displayName, rushee, vote) {
+    return axios.post('/api/vote', {displayName, rushee, vote});
   }
 };

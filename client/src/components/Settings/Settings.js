@@ -86,7 +86,11 @@ export default class Settings extends Component {
             <Divider style={dividerStyle} />
           </List>
 
-          <div className="logout-button" onClick={this.logout}> Log Out </div>
+          {this.props.state.status !== 'pledge' ? (
+            <a className="logout-button" href="/"> Back Home </a>
+          ) : (
+            <div className="logout-button" onClick={this.logout}> Log Out </div>
+          )}
         </div>
       ) : (
         <LoadingComponent />
