@@ -87,6 +87,15 @@ export default {
     return axios.post('/api/sendmessage', {pledgeName, activeName, amount});
   },
   // Delibs App
+  getRushee: function(rusheeName) {
+    return axios.post('/api/getrushee', {rusheeName});
+  },
+  startVote: function(rusheeName) {
+    return axios.post('/api/startvote', {rusheeName});
+  },
+  endVote: function() {
+    return axios.post('/api/endvote');
+  },
   voteForRushee: function(displayName, rushee, vote) {
     return axios.post('/api/vote', {displayName, rushee, vote});
   }

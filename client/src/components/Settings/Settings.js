@@ -6,16 +6,11 @@ import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-const listItemStyle = {
-  backgroundColor: '#fff',
-  zIndex: -1
-};
-
-const dividerStyle = {
-  boxShadow: 'rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px'
-};
-
 export default class Settings extends Component {
+  goHome = () => {
+    this.props.history.push('/home');
+  }
+  
   logout = () => {
     if (navigator.onLine) {
       API.logout()
@@ -40,7 +35,7 @@ export default class Settings extends Component {
           <List>
             <Divider />
             <ListItem
-              innerDivStyle={listItemStyle}
+              className="garnett-list-item settings"
               primaryText="Name"
               secondaryText={this.props.state.name}
               leftIcon={
@@ -49,7 +44,7 @@ export default class Settings extends Component {
             />
             <Divider inset={true} />
             <ListItem
-              innerDivStyle={listItemStyle}
+              className="garnett-list-item settings"
               primaryText="Phone Number"
               secondaryText={this.props.state.phone}
               leftIcon={
@@ -58,7 +53,7 @@ export default class Settings extends Component {
             />
             <Divider inset={true} />
             <ListItem
-              innerDivStyle={listItemStyle}
+              className="garnett-list-item settings"
               primaryText="Email Address"
               secondaryText={this.props.state.email}
               leftIcon={
@@ -67,7 +62,7 @@ export default class Settings extends Component {
             />
             <Divider inset={true} />
             <ListItem
-              innerDivStyle={listItemStyle}
+              className="garnett-list-item settings"
               primaryText="Class"
               secondaryText={this.props.state.class}
               leftIcon={
@@ -76,18 +71,18 @@ export default class Settings extends Component {
             />
             <Divider inset={true} />
             <ListItem
-              innerDivStyle={listItemStyle}
+              className="garnett-list-item settings"
               primaryText="Major"
               secondaryText={this.props.state.major}
               leftIcon={
                 <i className="icon-graduation-cap garnett-icon"></i>
               }
             />
-            <Divider style={dividerStyle} />
+            <Divider className="garnett-divider last" />
           </List>
 
           {this.props.state.status !== 'pledge' ? (
-            <a className="logout-button" href="/"> Back Home </a>
+            <span className="logout-button" onClick={this.goHome}> Back Home </span>
           ) : (
             <div className="logout-button" onClick={this.logout}> Log Out </div>
           )}

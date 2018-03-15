@@ -822,6 +822,50 @@ app.post('/api/sendmessage', function(req, res) {
   });
 });
 
+// Get rushee information
+app.post('/api/getrushee', function(req, res) {
+  let rusheeName = req.body.rusheeName;
+  let rusheeRef = admin.database().ref('/rushees/' + rusheeName);
+
+  rusheeRef.once('value', (snapshot) => {
+    let rushee = {
+      name: `${snapshot.val().firstName} ${snapshot.val().lastName}`,
+      email: snapshot.val().email,
+      year: snapshot.val().year,
+      major: snapshot.val().major,
+      graduationYear: snapshot.val().graduationYear,
+      phone: snapshot.val().phone,
+      photo: snapshot.val().photo,
+    };
+
+    res.json(rushee);
+  });
+});
+
+// Start vote for rushee
+app.post('/api/startvote', function(req, res) {
+  let delibsRef = admin.database().ref('/delibsVoting');
+
+  delibsRef.update({
+    open: true,
+    rushee: req.body.rusheeName
+  });
+
+  res.sendStatus(200);
+});
+
+// End vote for rushee
+app.post('/api/endvote', function(req, res) {
+  let delibsRef = admin.database().ref('/delibsVoting');
+
+  delibsRef.update({
+    open: false,
+    rushee: false
+  });
+
+  res.sendStatus(200);
+});
+
 // Voting for rushee
 app.post('/api/vote', function(req, res) {
   let rusheeName = req.body.rushee.replace(/ /g,'');
@@ -830,8 +874,8 @@ app.post('/api/vote', function(req, res) {
   let activeRef = admin.database().ref('/rushees/' + rusheeName + '/Actives/' + fullName);
   let vote;
 
-  activeRef.once('value', (snapshot) => {
-    if (snapshot.val().vote === 'yes') {
+  activeRef.once('value', (active) => {
+    if (active.val().vote === 'yes') {
       if (req.body.vote === 'yes') {
         vote = 0;
       }
@@ -848,21 +892,21 @@ app.post('/api/vote', function(req, res) {
       } 
     }
 
-    rusheeRef.once('value', (snapshot) => {
-      let storedVotes;
-      if (!snapshot.val().votes) {
-        storedVotes = 0;
+    rusheeRef.once('value', (rushee) => {
+      let votes = rushee.val().votes + vote;
+
+      if (active.val().voted === false) {
+        rusheeRef.update({
+          totalVotes: rushee.val().totalVotes + 1
+        });
       }
-      else {
-        storedVotes = snapshot.val().votes;
-      }
-      let totalVotes = parseInt(storedVotes) + vote;
 
       rusheeRef.update({
-        votes: totalVotes
+        votes: votes
       });
       activeRef.update({
-        vote: req.body.vote
+        vote: req.body.vote,
+        voted: true
       });
 
       res.sendStatus(200);

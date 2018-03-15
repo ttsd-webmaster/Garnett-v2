@@ -86,6 +86,17 @@ function LoadingDelibsApp() {
   )
 }
 
+function LoadingRusheeProfile() {
+  return (
+    <div className="loading-container">
+      <div className="app-header">
+        <span> Rushee Profile </span>
+        <span style={backHomeStyle}> Back </span>
+      </div>
+    </div>
+  )
+}
+
 function LoadingComponent() {
   return (
     <div className="loader-container">
@@ -102,4 +113,4 @@ function LoadingComponent() {
   )
 }
 
-export {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingDelibsApp, LoadingComponent};
+export {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingDelibsApp, LoadingRusheeProfile, LoadingComponent};

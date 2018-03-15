@@ -157,7 +157,6 @@ export default class AddChalkboardDialog extends Component {
         titleClassName="garnett-dialog-title"
         actions={actions}
         modal={false}
-        className="garnett-dialog"
         bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}

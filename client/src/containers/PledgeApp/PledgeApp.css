@@ -58,6 +58,9 @@
 .garnett-list-item.large > div > div {
   padding-left: 102px !important;
 }
+.garnett-list-item.settings > div > div {
+  z-index: -1;
+}
 
 .garnett-image {
   object-fit: cover;

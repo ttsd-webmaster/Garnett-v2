@@ -2,7 +2,13 @@ import './App.css';
 import '../fontello/css/fontello.css';
 import API from '../api/API.js';
 import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
-import {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingDelibsApp} from '../helpers/loaders.js';
+import {
+  LoadingLogin, 
+  LoadingHome, 
+  LoadingPledgeApp, 
+  LoadingDelibsApp, 
+  LoadingRusheeProfile
+} from '../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
@@ -42,6 +48,15 @@ const LoadableDelibsApp = Loadable({
     return <Component {...props} />;
   },
   loading: LoadingDelibsApp
+});
+
+const LoadableRusheeProfile = Loadable({
+  loader: () => import('../containers/DelibsApp/RusheeProfile'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingRusheeProfile
 });
 
 class App extends Component {
@@ -264,7 +279,21 @@ class App extends Component {
               <LoadableDelibsApp
                 state={this.state} 
                 history={history}
-                logoutCallBack={this.logoutCallBack}
+              />
+            ) : (
+              this.state.loaded ? (
+                <Redirect to="/" />
+              ) : (
+                <LoadingLogin />
+              )
+            )
+          )}/>
+          <Route exact path="/delibs-app/:id" render={(props, history) => (
+            this.state.isAuthenticated ? (
+              <LoadableRusheeProfile
+                state={this.state} 
+                history={history}
+                {...props}
               />
             ) : (
               this.state.loaded ? (

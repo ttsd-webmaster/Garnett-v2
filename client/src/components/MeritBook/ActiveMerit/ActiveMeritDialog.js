@@ -144,15 +144,13 @@ export default class ActiveMerit extends Component {
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         let registrationToken = localStorage.getItem('registrationToken');
 
-        this.props.handleClose();
+        this.handleClose();
 
         if (isSafari || !registrationToken) {
           this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
 
           this.setState({
-            open: false,
-            description: '',
-            amount: ''
+            open: false
           });
         }
         else {
@@ -161,9 +159,7 @@ export default class ActiveMerit extends Component {
             this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
 
             this.setState({
-              open: false,
-              description: '',
-              amount: ''
+              open: false
             });
           })
           .catch(err => console.log(err));
@@ -234,7 +230,6 @@ export default class ActiveMerit extends Component {
       <Dialog
         actions={actions}
         modal={false}
-        className="garnett-dialog"
         bodyClassName="garnett-dialog-body tabs"
         contentClassName="garnett-dialog-content"
         open={this.props.open}

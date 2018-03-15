@@ -52,7 +52,6 @@ export default class VoteDialog extends Component {
         title={this.state.rushee}
         titleClassName="garnett-dialog-title"
         modal={true}
-        className="garnett-dialog"
         bodyClassName="garnett-dialog-body delibs"
         contentClassName="garnett-dialog-content"
         open={this.state.open}

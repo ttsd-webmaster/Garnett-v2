@@ -18,7 +18,12 @@ usersRef.once('value', (snapshot) => {
       rusheesRef.once('value', (snapshot) => {
         snapshot.forEach((child) => {
           child.ref.child('/Actives/' + activeName).update({
-            vote: 'false'
+            vote: 'false',
+            voted: false
+          });
+          child.ref.update({
+            totalVotes: 0,
+            votes: 0
           });
         });
       });

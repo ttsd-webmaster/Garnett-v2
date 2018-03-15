@@ -1,14 +1,14 @@
 .back-home {
   float: right;
-  color: #fff;
   margin-right: 15px;
-  text-decoration: none;
 }
 
 .garnett-list.delibs {
   position: absolute;
   top: 52px;
   width: 100vw;
+  background-color: #fafafa;
+  z-index: 0;
 }
 
 .garnett-dialog-body.delibs {
@@ -17,4 +17,12 @@
 
 .delibs-radio-button {
   margin-bottom: 15px;
+}
+
+.rushee-profile-container {
+  position: absolute;
+  top: 52px;
+  width: 100vw;
+  background-color: #fafafa;
+  z-index: 0;
 }

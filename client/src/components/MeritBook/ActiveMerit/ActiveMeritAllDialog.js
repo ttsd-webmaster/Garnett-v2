@@ -60,6 +60,7 @@ export default class ActiveMerit extends Component {
         let pledge = error.response.data;
 
         console.log('Not enough merits for ', pledge);
+        this.props.handleMeritAllClose();
         this.props.handleRequestOpen(`Not enough merits for ${pledge}.`);
       });
     }
@@ -150,7 +151,6 @@ export default class ActiveMerit extends Component {
         titleClassName="garnett-dialog-title"
         actions={actions}
         modal={false}
-        className="garnett-dialog"
         bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}

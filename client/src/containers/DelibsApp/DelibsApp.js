@@ -69,6 +69,16 @@ export default class DelibsApp extends Component {
     }
   }
 
+  goHome = () => {
+    this.props.history.push('/home');
+  }
+
+  openRushee = (rushee) => {
+    let rusheeName = rushee.firstName + rushee.lastName;
+
+    this.props.history.push('/delibs-app/' + rusheeName);
+  }
+
   handleRequestOpen = (message) => {
     this.setState({
       open: true,
@@ -88,7 +98,7 @@ export default class DelibsApp extends Component {
         <div className="loading-container">
           <div className="app-header">
             <span> Delibs App </span>
-            <a className="back-home" href="/"> Home </a>
+            <span className="back-home" onClick={this.goHome}> Home </span>
           </div>
 
           <List className="animate-in garnett-list delibs">
@@ -127,6 +137,7 @@ export default class DelibsApp extends Component {
                     </p>
                   }
                     secondaryTextLines={2}
+                    onClick={() => this.openRushee(rushee)}
                   />
                   <Divider className="garnett-divider large" inset={true} />
                 </div>
