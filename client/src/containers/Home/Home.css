@@ -8,6 +8,7 @@
 .log-out {
   float: right;
   margin-right: 15px;
+  cursor: pointer;
 }
 
 .app-icon {

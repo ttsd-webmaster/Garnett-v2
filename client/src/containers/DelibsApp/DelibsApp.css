@@ -1,6 +1,7 @@
 .back-home {
   float: right;
   margin-right: 15px;
+  cursor: pointer;
 }
 
 .garnett-list.delibs {
