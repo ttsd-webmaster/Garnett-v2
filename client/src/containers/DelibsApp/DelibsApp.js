@@ -1,7 +1,7 @@
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
 import {loadFirebase} from '../../helpers/functions.js';
-import {LoadingDelibsApp} from '../../helpers/loaders.js';
+import {LoadingDelibsApp, LoadingComponent} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 
 import React, {Component} from 'react';
@@ -160,7 +160,10 @@ export default class DelibsApp extends Component {
           />
         </div>
       ) : (
-        <LoadingDelibsApp />
+        <div>
+          <LoadingDelibsApp />
+          <LoadingComponent />
+        </div>
       )
     )
   }

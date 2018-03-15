@@ -299,12 +299,14 @@ div, a {
 
 /* Loader */
 .loader-container {
+  position: absolute;
+  top: 0;
   background-color: #fafafa;
   height: calc(100vh - 100px);
   width: 100vw;
 }
 .loader-container.pledge {
-  height: calc(100vh - 150px);
+  height: calc(100vh - 157px);
 }
 
 .line-scale-container {

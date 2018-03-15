@@ -35,6 +35,7 @@ function LoadingHome() {
     <div className="loading-container">
       <div className="app-header">
         <span> Home </span>
+        <span style={backHomeStyle}> Log Out </span>
       </div>
     </div>
   )
