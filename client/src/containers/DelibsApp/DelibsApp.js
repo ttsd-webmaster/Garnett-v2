@@ -1,3 +1,4 @@
+import '../../App/App.css';
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
 import {loadFirebase} from '../../helpers/functions.js';

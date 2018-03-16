@@ -1,3 +1,4 @@
+import '../../App/App.css';
 import './Home.css';
 import {LoadingHome} from '../../helpers/loaders.js';
 import API from '../../api/API.js';

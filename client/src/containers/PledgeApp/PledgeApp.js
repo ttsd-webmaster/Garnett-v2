@@ -1,3 +1,4 @@
+import '../../App/App.css';
 import './PledgeApp.css';
 import API from '../../api/API.js';
 import {getTabStyle} from '../../helpers/functions.js';
