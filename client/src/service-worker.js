@@ -14,7 +14,7 @@ workbox.skipWaiting();
 workbox.clientsClaim();
 
 // Google analytics for workbox v3
-// workbox.googleAnalytics.initialize()
+workbox.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
 workbox.precaching.precache([]);
@@ -24,7 +24,7 @@ workbox.routing.registerNavigationRoute('index.html');
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workbox.routing.registerRoute(
   /^https:\/\/firebasestorage\.googleapis\.com\//,
-  new workbox.strategies.CacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'firebasestorage',
     cacheExpiration: {
       // Expire after 30 days (expressed in seconds)
@@ -36,7 +36,7 @@ workbox.routing.registerRoute(
 // Use a cache first strategy for files from googleapis.com
 workbox.routing.registerRoute(
   /^https:\/\/fonts\.googleapis\.com\//,
-  new workbox.strategies.CacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'googlefonts',
     cacheExpiration: {
       // Expire after 30 days (expressed in seconds)
@@ -48,7 +48,7 @@ workbox.routing.registerRoute(
 // Note to self, woff regexp will also match woff2 :P
 workbox.routing.registerRoute(
   new RegExp('.(?:ttf|otf|eot|svg|woff)$'),
-  new workbox.strategies.CacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'fonts',
     cacheExpiration: {
       // Expire after 24 hours (expressed in seconds)
@@ -59,7 +59,7 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
   new RegExp('.(css)$'),
-  new workbox.strategies.NetworkFirst({
+  workbox.strategies.networkFirst({
     cacheName: 'css',
     cacheExpiration: {
       maxAgeSeconds: 1 * 24 * 60 * 60,
@@ -70,7 +70,7 @@ workbox.routing.registerRoute(
 // Use a cache-first strategy for the images
 workbox.routing.registerRoute(
   new RegExp('.(?:png|gif|jpg|svg)$'),
-  new workbox.strategies.CacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'images',
     cacheExpiration: {
       // maximum 50 entries
@@ -88,7 +88,7 @@ workbox.routing.registerRoute(
 // Match all .htm and .html files use cacheFirst
 workbox.routing.registerRoute(
   new RegExp('(.htm)$'),
-  new workbox.strategies.CacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'content',
     cacheExpiration: {
       maxAgeSeconds: 1 * 24 * 60 * 60,
