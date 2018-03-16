@@ -300,15 +300,14 @@ module.exports = {
     }),
     // copy WorkboxSW production build file   
     new CopyWebpackPlugin([   
-      { from: require.resolve('workbox-sw'), to: 'workbox-sw.js' }   
+      { from: require.resolve('workbox-sw'), to: 'workbox-sw.prod.js' }   
     ]),
     // Generate a service worker script that will precache, and keep up to date,
     // the HTML & assets that are part of the Webpack build.
     new InjectManifest({
-      importWorkboxFrom: 'local',
       globDirectory: 'build',
       globPatterns: ['**\/*.{html,js,css}'],
-      globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.js'],
+      globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
       swSrc: 'src/service-worker.js',
       swDest: path.join('build', 'service-worker.js')
     }),
