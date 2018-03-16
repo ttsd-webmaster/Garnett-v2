@@ -17,14 +17,16 @@ global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 require('dotenv').config();
 
 // Firebase Config
-firebase.initializeApp({
-  apiKey: "AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc",
-  authDomain: "garnett-42475.firebaseapp.com",
-  databaseURL: "https://garnett-42475.firebaseio.com",
-  projectId: "garnett-42475",
-  storageBucket: "garnett-42475.appspot.com",
-  messagingSenderId: "741733387760"
-})
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc",
+    authDomain: "garnett-42475.firebaseapp.com",
+    databaseURL: "https://garnett-42475.firebaseio.com",
+    projectId: "garnett-42475",
+    storageBucket: "garnett-42475.appspot.com",
+    messagingSenderId: "741733387760"
+  });
+}
 
 if (!admin.apps.length) {
   admin.initializeApp({
