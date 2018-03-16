@@ -1,30 +1,28 @@
 // Give the service worker access to Firebase Messaging.
 // Note that you can only use Firebase Messaging here, other Firebase libraries
 // are not available in the service worker.
-// importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js');
-// importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-messaging.js');
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js');
+importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
+importScripts('workbox-sw.prod.js');
 
 // Create Workbox service worker instance
-// const workboxSW = new WorkboxSW({ 
-//   clientsClaim: true,
-//   skipWaiting: true
-// });
-workbox.skipWaiting();
-workbox.clientsClaim();
+const workboxSW = new WorkboxSW({ 
+  clientsClaim: true,
+  skipWaiting: true
+});
 
 // Google analytics for workbox v3
 // workbox.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
-workbox.precaching.precache([]);
+workboxSW.precache([]);
 
-workbox.routing.registerNavigationRoute('index.html');
+workboxSW.router.registerNavigationRoute('index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
-workbox.routing.registerRoute(
+workboxSW.router.registerRoute(
   /^https:\/\/firebasestorage\.googleapis\.com\//,
-  workbox.strategies.cacheFirst({
+  workboxSW.strategies.cacheFirst({
     cacheName: 'firebasestorage',
     cacheExpiration: {
       // Expire after 30 days (expressed in seconds)
@@ -34,9 +32,9 @@ workbox.routing.registerRoute(
 );
 
 // Use a cache first strategy for files from googleapis.com
-workbox.routing.registerRoute(
+workboxSW.router.registerRoute(
   /^https:\/\/fonts\.googleapis\.com\//,
-  workbox.strategies.cacheFirst({
+  workboxSW.strategies.cacheFirst({
     cacheName: 'googlefonts',
     cacheExpiration: {
       // Expire after 30 days (expressed in seconds)
@@ -46,9 +44,9 @@ workbox.routing.registerRoute(
 );
 
 // Note to self, woff regexp will also match woff2 :P
-workbox.routing.registerRoute(
+workboxSW.router.registerRoute(
   new RegExp('.(?:ttf|otf|eot|svg|woff)$'),
-  workbox.strategies.cacheFirst({
+  workboxSW.strategies.cacheFirst({
     cacheName: 'fonts',
     cacheExpiration: {
       // Expire after 24 hours (expressed in seconds)
@@ -57,9 +55,9 @@ workbox.routing.registerRoute(
   })
 );
 
-workbox.routing.registerRoute(
+workboxSW.router.registerRoute(
   new RegExp('.(css)$'),
-  workbox.strategies.networkFirst({
+  workboxSW.strategies.networkFirst({
     cacheName: 'css',
     cacheExpiration: {
       maxAgeSeconds: 1 * 24 * 60 * 60,
@@ -68,9 +66,9 @@ workbox.routing.registerRoute(
 );
 
 // Use a cache-first strategy for the images
-workbox.routing.registerRoute(
+workboxSW.router.registerRoute(
   new RegExp('.(?:png|gif|jpg|svg)$'),
-  workbox.strategies.cacheFirst({
+  workboxSW.strategies.cacheFirst({
     cacheName: 'images',
     cacheExpiration: {
       // maximum 50 entries
@@ -86,9 +84,9 @@ workbox.routing.registerRoute(
 );
 
 // Match all .htm and .html files use cacheFirst
-workbox.routing.registerRoute(
+workboxSW.router.registerRoute(
   new RegExp('(.htm)$'),
-  workbox.strategies.cacheFirst({
+  workboxSW.strategies.cacheFirst({
     cacheName: 'content',
     cacheExpiration: {
       maxAgeSeconds: 1 * 24 * 60 * 60,
@@ -98,23 +96,23 @@ workbox.routing.registerRoute(
 
 // Initialize the Firebase app in the service worker by passing in the
 // messagingSenderId.
-// firebase.initializeApp({
-//   'messagingSenderId': '741733387760'
-// });
+firebase.initializeApp({
+  'messagingSenderId': '741733387760'
+});
 
-// // Retrieve an instance of Firebase Messaging so that it can handle background
-// // messages.
-// const messaging = firebase.messaging();
+// Retrieve an instance of Firebase Messaging so that it can handle background
+// messages.
+const messaging = firebase.messaging();
 
-// messaging.setBackgroundMessageHandler(function(payload) {
-//   console.log(payload);
-//   // Customize notification here
-//   const title = 'Garnett';
-//   const options = {
-//     body: 'Background Message body.',
-//     icon: '/images/garnett.png',
-//     click_action: 'https://garnett-app.herokuapp.com'
-//   };
+messaging.setBackgroundMessageHandler(function(payload) {
+  console.log(payload);
+  // Customize notification here
+  const title = 'Garnett';
+  const options = {
+    body: 'Background Message body.',
+    icon: '/images/garnett.png',
+    click_action: 'https://garnett-app.herokuapp.com'
+  };
 
-//   return self.registration.showNotification(title, options);
-// });
+  return self.registration.showNotification(title, options);
+});
