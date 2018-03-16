@@ -80,7 +80,7 @@ workbox.routing.registerRoute(
     },
     // The images are returned as opaque responses, with a status of 0.
     // Normally these wouldn't be cached; here we opt-in to caching them.
-    // If the image returns a satus 200 we cache it too
+    // If the image returns a status 200 we cache it too
     cacheableResponse: {statuses: [0, 200]},
   })
 );
