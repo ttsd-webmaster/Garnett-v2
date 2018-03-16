@@ -48,11 +48,15 @@ export default class Home extends Component {
           </div>
           <div className="icon-container">
             <div className="app-icon" onClick={() => this.goTo('pledge-app')}>
-              <img className="app-icon-image" src={require('./images/pledge-app-icon.png')} />
+              <div className="app-icon-image-container">
+                <img className="app-icon-image" src={require('./images/pledge-app-icon.png')} />
+              </div>
               <p> Pledge App </p>
             </div>
             <div className="app-icon" onClick={() => this.goTo('delibs-app')}>
-              <img className="app-icon-image" src={require('./images/delibs-icon.png')} />
+              <div className="app-icon-image-container">
+                <img className="app-icon-image" src={require('./images/delibs-icon.png')} />
+              </div>
               <p> Delibs App </p>
             </div>
           </div>
