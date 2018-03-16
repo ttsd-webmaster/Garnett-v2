@@ -47,7 +47,7 @@ workbox.routing.registerRoute(
 
 // Note to self, woff regexp will also match woff2 :P
 workbox.routing.registerRoute(
-  new RegExp('.(?:ttf|otf|eot|svg|woff)$'),
+  new RegExp('.(?:ttf|otf|eot|woff)$'),
   workbox.strategies.cacheFirst({
     cacheName: 'fonts',
     cacheExpiration: {

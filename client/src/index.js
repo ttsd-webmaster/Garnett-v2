@@ -1,6 +1,4 @@
 import './index.css';
-import './App/App.css';
-import './fontello/css/fontello.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
