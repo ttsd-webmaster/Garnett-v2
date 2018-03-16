@@ -15,12 +15,12 @@ workbox.setConfig({
 // workbox.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
-workbox.precache([]);
+workbox.precaching.precache([]);
 
-workbox.router.registerNavigationRoute('index.html');
+workbox.routing.registerNavigationRoute('index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
-workbox.router.registerRoute(
+workbox.routing.registerRoute(
   /^https:\/\/firebasestorage\.googleapis\.com\//,
   workbox.strategies.cacheFirst({
     cacheName: 'firebasestorage',
@@ -32,7 +32,7 @@ workbox.router.registerRoute(
 );
 
 // Use a cache first strategy for files from googleapis.com
-workbox.router.registerRoute(
+workbox.routing.registerRoute(
   /^https:\/\/fonts\.googleapis\.com\//,
   workbox.strategies.cacheFirst({
     cacheName: 'googlefonts',
@@ -44,7 +44,7 @@ workbox.router.registerRoute(
 );
 
 // Note to self, woff regexp will also match woff2 :P
-workbox.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('.(?:ttf|otf|eot|svg|woff)$'),
   workbox.strategies.cacheFirst({
     cacheName: 'fonts',
@@ -55,7 +55,7 @@ workbox.router.registerRoute(
   })
 );
 
-workbox.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('.(css)$'),
   workbox.strategies.networkFirst({
     cacheName: 'css',
@@ -66,7 +66,7 @@ workbox.router.registerRoute(
 );
 
 // Use a cache-first strategy for the images
-workbox.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('.(?:png|gif|jpg|svg)$'),
   workbox.strategies.cacheFirst({
     cacheName: 'images',
@@ -84,7 +84,7 @@ workbox.router.registerRoute(
 );
 
 // Match all .htm and .html files use cacheFirst
-workbox.router.registerRoute(
+workbox.routing.registerRoute(
   new RegExp('(.htm)$'),
   workbox.strategies.cacheFirst({
     cacheName: 'content',
