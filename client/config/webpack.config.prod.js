@@ -307,10 +307,10 @@ module.exports = {
     new InjectManifest({
       importWorkboxFrom: 'disabled',
       globDirectory: 'build',
-      globPatterns: ['**\/*.{html,js,css}'],
+      globPatterns: ['**\/*.{html,js,css,png,svg,webp}'],
       globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
       swSrc: 'src/service-worker.js',
-      swDest: path.join('build', 'service-worker.js')
+      swDest: 'service-worker.js'
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
