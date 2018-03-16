@@ -822,26 +822,6 @@ app.post('/api/sendmessage', function(req, res) {
   });
 });
 
-// Get rushee information
-app.post('/api/getrushee', function(req, res) {
-  let rusheeName = req.body.rusheeName;
-  let rusheeRef = admin.database().ref('/rushees/' + rusheeName);
-
-  rusheeRef.once('value', (snapshot) => {
-    let rushee = {
-      name: `${snapshot.val().firstName} ${snapshot.val().lastName}`,
-      email: snapshot.val().email,
-      year: snapshot.val().year,
-      major: snapshot.val().major,
-      graduationYear: snapshot.val().graduationYear,
-      phone: snapshot.val().phone,
-      photo: snapshot.val().photo,
-    };
-
-    res.json(rushee);
-  });
-});
-
 // Start vote for rushee
 app.post('/api/startvote', function(req, res) {
   let delibsRef = admin.database().ref('/delibsVoting');

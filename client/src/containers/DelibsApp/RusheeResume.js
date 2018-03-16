@@ -1,7 +1,7 @@
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
 import '../../components/Settings/Settings.css';
-import {LoadingRusheeProfile} from '../../helpers/loaders.js';
+import {LoadingRusheeResume} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 
 import React, {Component} from 'react';
@@ -32,24 +32,12 @@ const LoadableVoteDialog = Loadable({
   }
 });
 
-const LoadableResumeDialog = Loadable({
-  loader: () => import('./ResumeDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
-
 export default class RusheeProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
       rushee: this.props.history.location.state,
-      openResume: false,
       openSnackbar: false,
       message: ''
     };
@@ -74,21 +62,16 @@ export default class RusheeProfile extends Component {
     });
   }
 
+  viewResume = () => {
+    let rusheeName = this.state.rushee.name;
+    let resume = this.state.rushee.resume;
+
+    this.props.history.push('/delibs-app/' + rusheeName + '/resume', resume);
+  }
+
   handleClose = () => {
     this.setState({
       open: false
-    });
-  }
-
-  viewResume = () => {
-    this.setState({
-      openResume: true
-    });
-  }
-
-  closeResume = () => {
-    this.setState({
-      openResume: false
     });
   }
 
@@ -171,11 +154,6 @@ export default class RusheeProfile extends Component {
               <div>
                 <div className="logout-button" onClick={this.viewResume}> View Resume </div>
                 
-                <LoadableResumeDialog
-                  open={this.state.openResume}
-                  resume={this.state.rushee.resume}
-                  handleClose={this.closeResume}
-                />
                 <LoadableVoteDialog
                   state={this.props.state}
                   handleRequestOpen={this.handleRequestOpen}

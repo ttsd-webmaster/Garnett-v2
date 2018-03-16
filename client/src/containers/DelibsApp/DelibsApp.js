@@ -70,13 +70,23 @@ export default class DelibsApp extends Component {
   }
 
   goHome = () => {
-    this.props.history.push('/home');
+    this.props.history.goBack();
   }
 
   openRushee = (rushee) => {
     let rusheeName = rushee.firstName + rushee.lastName;
+    let rusheeInfo = {
+      name: `${rushee.firstName} ${rushee.lastName}`,
+      email: rushee.email,
+      year: rushee.year,
+      major: rushee.major,
+      graduationYear: rushee.graduationYear,
+      phone: rushee.phone,
+      photo: rushee.photo,
+      resume: rushee.resume
+    }
 
-    this.props.history.push('/delibs-app/' + rusheeName);
+    this.props.history.push('/delibs-app/' + rusheeName, rusheeInfo);
   }
 
   handleRequestOpen = (message) => {

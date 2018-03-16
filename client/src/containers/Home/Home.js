@@ -1,43 +1,65 @@
 import './Home.css';
+import {LoadingHome} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 
 import React, {Component} from 'react';
 
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loaded: false
+    };
+  }
+
+  componentDidMount() {
+    this.setState({
+      loaded: true
+    });
+  }
+
   logout = () => {
     if (navigator.onLine) {
       API.logout()
       .then(res => {
         console.log(res);
         this.props.logoutCallBack();
-        this.props.history.push('/');
+        this.props.history.goBack();
       })
       .catch(err => console.log('err', err));
     }
     else {
       this.props.logoutCallBack();
-      this.props.history.push('/');
+      this.props.history.goBack();
     }
+  }
+
+  goTo = (route) => {
+    this.props.history.push('/' + route);
   }
 
   render() {
     return (
-      <div className="loading-container">
-        <div className="app-header">
-          <span> Home </span>
-          <span className="log-out" onClick={this.logout}> Log Out </span>
+      this.state.loaded ? (
+        <div className="loading-container">
+          <div className="app-header">
+            <span> Home </span>
+            <span className="log-out" onClick={this.logout}> Log Out </span>
+          </div>
+          <div className="icon-container">
+            <div className="app-icon" onClick={() => this.goTo('pledge-app')}>
+              <img className="app-icon-image" src={require('./images/pledge-app-icon.png')} />
+              <p> Pledge App </p>
+            </div>
+            <div className="app-icon" onClick={() => this.goTo('delibs-app')}>
+              <img className="app-icon-image" src={require('./images/delibs-icon.png')} />
+              <p> Delibs App </p>
+            </div>
+          </div>
         </div>
-        <div className="icon-container">
-          <a className="app-icon" href="/pledge-app">
-            <img className="app-icon-image" src={require('./images/pledge-app-icon.png')} />
-            <p> Pledge App </p>
-          </a>
-          <a className="app-icon" href="/delibs-app">
-            <img className="app-icon-image" src={require('./images/delibs-icon.png')} />
-            <p> Delibs App </p>
-          </a>
-        </div>
-      </div>
+      ) : (
+        <LoadingHome />
+      )
     )
   }
 }

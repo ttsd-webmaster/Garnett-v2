@@ -288,12 +288,11 @@ class App extends Component {
               )
             )
           )}/>
-          <Route exact path="/delibs-app/:id" render={(props, history) => (
+          <Route exact path="/delibs-app/:id" render={({history}) => (
             this.state.isAuthenticated ? (
               <LoadableRusheeProfile
                 state={this.state} 
                 history={history}
-                {...props}
               />
             ) : (
               this.state.loaded ? (
