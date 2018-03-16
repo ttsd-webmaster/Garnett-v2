@@ -26,10 +26,12 @@ workbox.routing.registerRoute(
   /^https:\/\/firebasestorage\.googleapis\.com\//,
   workbox.strategies.cacheFirst({
     cacheName: 'firebasestorage',
-    cacheExpiration: {
-      // Expire after 30 days (expressed in seconds)
-      maxAgeSeconds: 30 * 24 * 60 * 60,
-    },
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      })
+    ]
   })
 );
 
@@ -38,10 +40,12 @@ workbox.routing.registerRoute(
   /^https:\/\/fonts\.googleapis\.com\//,
   workbox.strategies.cacheFirst({
     cacheName: 'googlefonts',
-    cacheExpiration: {
-      // Expire after 30 days (expressed in seconds)
-      maxAgeSeconds: 30 * 24 * 60 * 60,
-    },
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      })
+    ]
   })
 );
 
@@ -50,10 +54,12 @@ workbox.routing.registerRoute(
   new RegExp('.(?:ttf|otf|eot|woff)$'),
   workbox.strategies.cacheFirst({
     cacheName: 'fonts',
-    cacheExpiration: {
-      // Expire after 24 hours (expressed in seconds)
-      maxAgeSeconds: 1 * 24 * 60 * 60,
-    },
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 24 hours (expressed in seconds)
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      })
+    ]
   })
 );
 
@@ -61,9 +67,12 @@ workbox.routing.registerRoute(
   new RegExp('.(css)$'),
   workbox.strategies.networkFirst({
     cacheName: 'css',
-    cacheExpiration: {
-      maxAgeSeconds: 1 * 24 * 60 * 60,
-    },
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 24 hours (expressed in seconds)
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      })
+    ]
   })
 );
 
@@ -72,16 +81,20 @@ workbox.routing.registerRoute(
   new RegExp('.(?:png|gif|jpg|svg)$'),
   workbox.strategies.cacheFirst({
     cacheName: 'images',
-    cacheExpiration: {
-      // maximum 50 entries
-      maxEntries: 50,
-      // Expire after 30 days (expressed in seconds)
-      maxAgeSeconds: 30 * 24 * 60 * 60,
-    },
-    // The images are returned as opaque responses, with a status of 0.
-    // Normally these wouldn't be cached; here we opt-in to caching them.
-    // If the image returns a status 200 we cache it too
-    cacheableResponse: {statuses: [0, 200]},
+    plugins: [
+      new workbox.expiration.Plugin({
+        // maximum 50 entries
+        maxEntries: 50,
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      }),
+      new workbox.cacheableResponse.Plugin({
+        // The images are returned as opaque responses, with a status of 0.
+        // Normally these wouldn't be cached; here we opt-in to caching them.
+        // If the image returns a status 200 we cache it too
+        statuses: [0, 200]
+      })
+    ]
   })
 );
 
@@ -90,9 +103,12 @@ workbox.routing.registerRoute(
   new RegExp('(.htm)$'),
   workbox.strategies.cacheFirst({
     cacheName: 'content',
-    cacheExpiration: {
-      maxAgeSeconds: 1 * 24 * 60 * 60,
-    },
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 24 hours (expressed in seconds)
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      })
+    ]
   })
 );
 
