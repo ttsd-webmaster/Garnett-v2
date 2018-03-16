@@ -26,10 +26,12 @@ firebase.initializeApp({
   messagingSenderId: "741733387760"
 })
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://garnett-42475.firebaseio.com"
-})
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://garnett-42475.firebaseio.com"
+  });
+}
 
 // Redirect all HTTP traffic to HTTPS
 function ensureSecure(req, res, next){
