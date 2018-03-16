@@ -3,7 +3,7 @@
 // are not available in the service worker.
 importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-messaging.js');
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js');
+importScripts('workbox-sw.prod.js');
 
 // Create Workbox service worker instance
 // const workboxSW = new WorkboxSW({ 
