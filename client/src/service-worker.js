@@ -10,6 +10,8 @@ importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox
 //   clientsClaim: true,
 //   skipWaiting: true
 // });
+workbox.skipWaiting();
+workbox.clientsClaim();
 
 // Google analytics for workbox v3
 workbox.googleAnalytics.initialize()
