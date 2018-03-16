@@ -55,10 +55,6 @@ export default class RusheeProfile extends Component {
     };
   }
 
-  goBack = () => {
-    this.props.history.goBack();
-  }
-
   startVote = () => {
     let rusheeName = this.state.rushee.name;
 
@@ -111,7 +107,7 @@ export default class RusheeProfile extends Component {
         <div className="loading-container">
           <div className="app-header">
             <span> Rushee Profile </span>
-            <span className="back-home" onClick={this.goBack}> Back </span>
+            <span className="back-home" onClick={this.props.history.goBack}> Back </span>
           </div>
 
           <div className="rushee-profile-container">

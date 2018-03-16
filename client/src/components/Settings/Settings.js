@@ -8,7 +8,7 @@ import Divider from 'material-ui/Divider';
 
 export default class Settings extends Component {
   goHome = () => {
-    this.props.history.goBack();
+    this.props.history.push('/home');
   }
   
   logout = () => {
@@ -17,13 +17,13 @@ export default class Settings extends Component {
       .then(res => {
         console.log(res);
         this.props.logoutCallBack();
-        this.props.history.goBack();
+        this.props.history.push('/');
       })
       .catch(err => console.log('err', err));
     }
     else {
       this.props.logoutCallBack();
-      this.props.history.goBack();
+      this.props.history.push('/');
     }
   }
 

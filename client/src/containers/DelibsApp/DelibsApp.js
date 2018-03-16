@@ -70,7 +70,7 @@ export default class DelibsApp extends Component {
   }
 
   goHome = () => {
-    this.props.history.goBack();
+    this.props.history.push('/home');
   }
 
   openRushee = (rushee) => {
