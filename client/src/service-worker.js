@@ -19,7 +19,7 @@ workbox.googleAnalytics.initialize()
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
 workbox.precaching.precache([]);
 
-workbox.routing.registerNavigationRoute('/index.html');
+workbox.routing.registerNavigationRoute('index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workbox.routing.registerRoute(
