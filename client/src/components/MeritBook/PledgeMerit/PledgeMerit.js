@@ -18,7 +18,7 @@ export default class PledgeMerit extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

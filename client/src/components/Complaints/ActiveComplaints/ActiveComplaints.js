@@ -36,7 +36,7 @@ export default class ActiveComplaints extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

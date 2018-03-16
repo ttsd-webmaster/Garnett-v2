@@ -21,7 +21,7 @@ export default class PledgeComplaints extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

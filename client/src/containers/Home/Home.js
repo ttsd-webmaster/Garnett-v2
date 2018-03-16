@@ -12,7 +12,7 @@ export default class Home extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({
       loaded: true
     });

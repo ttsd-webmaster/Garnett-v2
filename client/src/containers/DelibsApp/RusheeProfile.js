@@ -55,6 +55,12 @@ export default class RusheeProfile extends Component {
     };
   }
 
+  componentWillMount() {
+    if (!this.props.history.location.state) {
+      this.props.history.push('/delibs-app');
+    }
+  }
+
   startVote = () => {
     let rusheeName = this.state.rushee.name;
 

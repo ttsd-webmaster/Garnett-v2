@@ -30,7 +30,7 @@ export default class Contacts extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       API.getActives()
       .then(res => {

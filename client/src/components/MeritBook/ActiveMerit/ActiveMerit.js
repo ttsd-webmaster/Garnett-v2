@@ -46,7 +46,7 @@ export default class ActiveMerit extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

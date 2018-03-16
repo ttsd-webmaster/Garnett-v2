@@ -50,7 +50,7 @@ export default class Chalkboards extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

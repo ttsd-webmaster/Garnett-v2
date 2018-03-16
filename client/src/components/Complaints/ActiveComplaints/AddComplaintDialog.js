@@ -21,7 +21,7 @@ export default class AddComplaintDialog extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       API.getPledgesForComplaints()
       .then((res) => {

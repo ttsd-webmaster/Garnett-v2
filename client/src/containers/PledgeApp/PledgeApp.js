@@ -79,7 +79,7 @@ export default class PledgeApp extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     console.log('Pledge app mount: ', this.props.state.name)
 
     let data = JSON.parse(localStorage.getItem('data'));

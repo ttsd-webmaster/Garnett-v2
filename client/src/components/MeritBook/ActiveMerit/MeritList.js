@@ -14,7 +14,7 @@ export default class ActiveMerit extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     if (navigator.onLine) {
       API.getPledgeMerits(this.props.pledge)
       .then(res => {
