@@ -6,7 +6,7 @@ importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
 importScripts('workbox-sw.prod.js');
 
 // Create Workbox service worker instance
-const workboxSW = new WorkboxSW({ 
+workbox.setConfig({ 
   clientsClaim: true,
   skipWaiting: true
 });
@@ -15,14 +15,14 @@ const workboxSW = new WorkboxSW({
 // workbox.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
-workboxSW.precache([]);
+workbox.precache([]);
 
-workboxSW.router.registerNavigationRoute('index.html');
+workbox.router.registerNavigationRoute('index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
-workboxSW.router.registerRoute(
+workbox.router.registerRoute(
   /^https:\/\/firebasestorage\.googleapis\.com\//,
-  workboxSW.strategies.cacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'firebasestorage',
     cacheExpiration: {
       // Expire after 30 days (expressed in seconds)
@@ -32,9 +32,9 @@ workboxSW.router.registerRoute(
 );
 
 // Use a cache first strategy for files from googleapis.com
-workboxSW.router.registerRoute(
+workbox.router.registerRoute(
   /^https:\/\/fonts\.googleapis\.com\//,
-  workboxSW.strategies.cacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'googlefonts',
     cacheExpiration: {
       // Expire after 30 days (expressed in seconds)
@@ -44,9 +44,9 @@ workboxSW.router.registerRoute(
 );
 
 // Note to self, woff regexp will also match woff2 :P
-workboxSW.router.registerRoute(
+workbox.router.registerRoute(
   new RegExp('.(?:ttf|otf|eot|svg|woff)$'),
-  workboxSW.strategies.cacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'fonts',
     cacheExpiration: {
       // Expire after 24 hours (expressed in seconds)
@@ -55,9 +55,9 @@ workboxSW.router.registerRoute(
   })
 );
 
-workboxSW.router.registerRoute(
+workbox.router.registerRoute(
   new RegExp('.(css)$'),
-  workboxSW.strategies.networkFirst({
+  workbox.strategies.networkFirst({
     cacheName: 'css',
     cacheExpiration: {
       maxAgeSeconds: 1 * 24 * 60 * 60,
@@ -66,9 +66,9 @@ workboxSW.router.registerRoute(
 );
 
 // Use a cache-first strategy for the images
-workboxSW.router.registerRoute(
+workbox.router.registerRoute(
   new RegExp('.(?:png|gif|jpg|svg)$'),
-  workboxSW.strategies.cacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'images',
     cacheExpiration: {
       // maximum 50 entries
@@ -84,9 +84,9 @@ workboxSW.router.registerRoute(
 );
 
 // Match all .htm and .html files use cacheFirst
-workboxSW.router.registerRoute(
+workbox.router.registerRoute(
   new RegExp('(.htm)$'),
-  workboxSW.strategies.cacheFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'content',
     cacheExpiration: {
       maxAgeSeconds: 1 * 24 * 60 * 60,
