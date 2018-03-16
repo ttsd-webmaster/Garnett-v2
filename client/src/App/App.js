@@ -119,52 +119,52 @@ class App extends Component {
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-    // if (isSafari || process.env.NODE_ENV === 'development') {
+    if (isSafari || process.env.NODE_ENV === 'development') {
       this.checkPhoto(res, displayName);
     }
-    // else {
-    //   navigator.serviceWorker.getRegistration(swUrl)
-    //   .then((registration) => {
-    //     loadFirebase('messaging')
-    //     .then(() => {
-    //       let firebase = window.firebase;
-    //       let messaging = firebase.messaging();
-    //       messaging.useServiceWorker(registration);
+    else {
+      navigator.serviceWorker.getRegistration(swUrl)
+      .then((registration) => {
+        loadFirebase('messaging')
+        .then(() => {
+          let firebase = window.firebase;
+          let messaging = firebase.messaging();
+          messaging.useServiceWorker(registration);
 
-    //       messaging.requestPermission()
-    //       .then(() => {
-    //         console.log('Notification permission granted.');
-    //         // Get Instance ID token. Initially this makes a network call, once retrieved
-    //         // subsequent calls to getToken will return from cache.
-    //         messaging.getToken()
-    //         .then((currentToken) => {
-    //           if (currentToken) {
-    //             localStorage.setItem('registrationToken', currentToken);
+          messaging.requestPermission()
+          .then(() => {
+            console.log('Notification permission granted.');
+            // Get Instance ID token. Initially this makes a network call, once retrieved
+            // subsequent calls to getToken will return from cache.
+            messaging.getToken()
+            .then((currentToken) => {
+              if (currentToken) {
+                localStorage.setItem('registrationToken', currentToken);
 
-    //             API.saveMessagingToken(displayName, currentToken)
-    //             .then(messageRes => {
-    //               console.log(messageRes);
-    //               this.checkPhoto(res, firebase, displayName);
-    //             })
-    //             .catch(err => console.log(err));
-    //           } 
-    //           else {
-    //             // Show permission request.
-    //             console.log('No Instance ID token available. Request permission to generate one.');
-    //           }
-    //         })
-    //         .catch((err) => {
-    //           console.log('An error occurred while retrieving token. ', err);
-    //           this.checkPhoto(res, firebase, displayName);
-    //         });
-    //       })
-    //       .catch((err) => {
-    //         console.log('Unable to get permission to notify.', err);
-    //         this.checkPhoto(res, firebase, displayName);
-    //       });
-    //     });
-    //   });
-    // }
+                API.saveMessagingToken(displayName, currentToken)
+                .then(messageRes => {
+                  console.log(messageRes);
+                  this.checkPhoto(res, displayName);
+                })
+                .catch(err => console.log(err));
+              } 
+              else {
+                // Show permission request.
+                console.log('No Instance ID token available. Request permission to generate one.');
+              }
+            })
+            .catch((err) => {
+              console.log('An error occurred while retrieving token. ', err);
+              this.checkPhoto(res, displayName);
+            });
+          })
+          .catch((err) => {
+            console.log('Unable to get permission to notify.', err);
+            this.checkPhoto(res, displayName);
+          });
+        });
+      });
+    }
   }
 
   checkPhoto = (res, displayName) => {
