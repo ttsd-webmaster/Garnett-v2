@@ -1,6 +1,7 @@
 // Give the service worker access to Firebase Messaging.
 // Note that you can only use Firebase Messaging here, other Firebase libraries
 // are not available in the service worker.
+importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-messaging.js');
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/3.0.0/workbox-sw.js');
 
@@ -13,7 +14,7 @@ workbox.skipWaiting();
 workbox.clientsClaim();
 
 // Google analytics for workbox v3
-// workbox.googleAnalytics.initialize()
+workbox.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
 workbox.precaching.precache([]);
