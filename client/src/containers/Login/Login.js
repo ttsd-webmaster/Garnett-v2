@@ -1,4 +1,3 @@
-import '../../App/App.css';
 import './Login.css';
 import {activeCode, pledgeCode} from './data.js';
 import {initializeFirebase, loadFirebase, validateEmail} from '../../helpers/functions.js';
