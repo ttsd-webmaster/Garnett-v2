@@ -1,0 +1,30 @@
+{
+  "short_name": "Garnett",
+  "name": "Garnett",
+  "icons": [
+    {
+      "src": "images/garnett.png",
+      "sizes": "192x192"
+    },
+    {  
+      "src": "images/garnett.png",  
+      "sizes": "256x256",  
+      "type": "image/png"  
+    },  
+    {  
+      "src": "images/garnett.png",  
+      "sizes": "384x384",  
+      "type": "image/png"  
+    },  
+    {  
+      "src": "images/garnett.png",  
+      "sizes": "512x512",  
+      "type": "image/png"  
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+  "background_color": "#2e2f33",
+  "gcm_sender_id": "103953800507"
+}
