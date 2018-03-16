@@ -226,7 +226,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Route exact path="/" render={({history}) => (
+          <Route exact path="/" render={() => (
             this.state.isAuthenticated ? (
               this.state.status === "pledge" ? (
                 <Redirect to="/pledge-app" />
@@ -237,7 +237,6 @@ class App extends Component {
               this.state.loaded ? (
                 <LoadableLogin 
                   state={this.state}
-                  history={history}
                   loginCallBack={this.loginCallBack}
                 />
               ) : (
