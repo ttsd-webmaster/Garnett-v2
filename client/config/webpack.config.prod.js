@@ -305,7 +305,7 @@ module.exports = {
     // Generate a service worker script that will precache, and keep up to date,
     // the HTML & assets that are part of the Webpack build.
     new InjectManifest({
-      importWorkboxFrom: 'none',
+      importWorkboxFrom: 'disabled',
       globDirectory: 'build',
       globPatterns: ['**\/*.{html,js,css}'],
       globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
