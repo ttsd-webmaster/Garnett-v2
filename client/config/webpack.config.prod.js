@@ -103,6 +103,15 @@ module.exports = {
       // please link the files into your node_modules/ and let module-resolution kick in.
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
+      // Generate a service worker script that will precache, and keep up to date,
+      // the HTML & assets that are part of the Webpack build.
+      InjectManifest({
+        globDirectory: 'build',
+        globPatterns: ['**\/*.{html,js,css}'],
+        globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
+        swSrc: 'src/service-worker.js',
+        swDest: path.join('build', 'service-worker.js')
+      }),
     ],
   },
   module: {
@@ -302,15 +311,6 @@ module.exports = {
     new CopyWebpackPlugin([   
       { from: require.resolve('workbox-sw'), to: 'workbox-sw.prod.js' }   
     ]),
-    // Generate a service worker script that will precache, and keep up to date,
-    // the HTML & assets that are part of the Webpack build.
-    InjectManifest({
-      globDirectory: 'build',
-      globPatterns: ['**\/*.{html,js,css}'],
-      globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
-      swSrc: 'src/service-worker.js',
-      swDest: path.join('build', 'service-worker.js')
-    }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
     // solution that requires the user to opt into importing specific locales.
