@@ -158,6 +158,8 @@ export default class Login extends Component {
         if (res.status === 200) {
           localStorage.setItem('data', JSON.stringify(res));
 
+          console.log('yo')
+
           initializeFirebase(res.data.firebaseData);
 
           loadFirebase('auth')
