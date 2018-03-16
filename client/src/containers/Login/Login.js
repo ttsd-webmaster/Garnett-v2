@@ -166,6 +166,7 @@ export default class Login extends Component {
             
             firebase.auth().signInWithCustomToken(res.data.token)
             .then(() => {
+              this.props.history.push('/pledge-app');
               this.props.loginCallBack(res);
               
               this.setState({
