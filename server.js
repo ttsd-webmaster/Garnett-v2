@@ -17,23 +17,19 @@ global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 require('dotenv').config();
 
 // Firebase Config
-if (!firebase.apps.length) {
-  firebase.initializeApp({
-    apiKey: "AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc",
-    authDomain: "garnett-42475.firebaseapp.com",
-    databaseURL: "https://garnett-42475.firebaseio.com",
-    projectId: "garnett-42475",
-    storageBucket: "garnett-42475.appspot.com",
-    messagingSenderId: "741733387760"
-  });
-}
+firebase.initializeApp({
+  apiKey: "AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc",
+  authDomain: "garnett-42475.firebaseapp.com",
+  databaseURL: "https://garnett-42475.firebaseio.com",
+  projectId: "garnett-42475",
+  storageBucket: "garnett-42475.appspot.com",
+  messagingSenderId: "741733387760"
+})
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://garnett-42475.firebaseio.com"
-  });
-}
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://garnett-42475.firebaseio.com"
+})
 
 // Redirect all HTTP traffic to HTTPS
 function ensureSecure(req, res, next){
