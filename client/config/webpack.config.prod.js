@@ -8,7 +8,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const workboxPlugin = require('workbox-webpack-plugin');
+const {InjectManifest} = require('workbox-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
@@ -304,7 +304,7 @@ module.exports = {
     ]),
     // Generate a service worker script that will precache, and keep up to date,
     // the HTML & assets that are part of the Webpack build.
-    new workboxPlugin({
+    InjectManifest({
       globDirectory: 'build',
       globPatterns: ['**\/*.{html,js,css}'],
       globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js'],
