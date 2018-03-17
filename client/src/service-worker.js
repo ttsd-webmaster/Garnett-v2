@@ -64,11 +64,9 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  new RegExp('.(?:js|css)$'),
-  workbox.strategies.staleWhileRevalidate({
-    cacheName: 'js/css'
-  })
-);
+  /\.(?:js|css)$/,
+  workbox.strategies.staleWhileRevalidate(),
+); 
 
 // Use a cache-first strategy for the images
 workbox.routing.registerRoute(
