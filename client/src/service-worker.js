@@ -3,6 +3,7 @@
 // are not available in the service worker.
 importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-messaging.js');
+importScripts('workbox-sw.prod.js');
 
 // Create Workbox service worker instance
 // const workboxSW = new WorkboxSW({ 
@@ -18,7 +19,7 @@ workbox.googleAnalytics.initialize()
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
 workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
 
-workbox.routing.registerNavigationRoute('index.html');
+workbox.routing.registerNavigationRoute('/index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workbox.routing.registerRoute(
