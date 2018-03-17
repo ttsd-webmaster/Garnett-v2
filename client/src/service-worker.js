@@ -22,95 +22,95 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
 workbox.routing.registerNavigationRoute('/index.html');
 
 // // Use a cache first strategy for files from firebasestorage.googleapis.com
-// workbox.routing.registerRoute(
-//   /^https:\/\/firebasestorage\.googleapis\.com\//,
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'firebasestorage',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 30 days (expressed in seconds)
-//         maxAgeSeconds: 30 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+workbox.routing.registerRoute(
+  /^https:\/\/firebasestorage\.googleapis\.com\//,
+  workbox.strategies.cacheFirst({
+    cacheName: 'firebasestorage',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
-// // Use a cache first strategy for files from googleapis.com
-// workbox.routing.registerRoute(
-//   /^https:\/\/fonts\.googleapis\.com\//,
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'googlefonts',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 30 days (expressed in seconds)
-//         maxAgeSeconds: 30 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+// Use a cache first strategy for files from googleapis.com
+workbox.routing.registerRoute(
+  /^https:\/\/fonts\.googleapis\.com\//,
+  workbox.strategies.cacheFirst({
+    cacheName: 'googlefonts',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
-// // Note to self, woff regexp will also match woff2 :P
-// workbox.routing.registerRoute(
-//   new RegExp('.(?:ttf|otf|eot|woff)$'),
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'fonts',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 24 hours (expressed in seconds)
-//         maxAgeSeconds: 1 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+// Note to self, woff regexp will also match woff2 :P
+workbox.routing.registerRoute(
+  new RegExp('.(?:ttf|otf|eot|woff)$'),
+  workbox.strategies.cacheFirst({
+    cacheName: 'fonts',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 24 hours (expressed in seconds)
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
-// workbox.routing.registerRoute(
-//   new RegExp('.(css)$'),
-//   workbox.strategies.networkFirst({
-//     cacheName: 'css',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 24 hours (expressed in seconds)
-//         maxAgeSeconds: 1 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+workbox.routing.registerRoute(
+  new RegExp('.(css)$'),
+  workbox.strategies.networkFirst({
+    cacheName: 'css',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 24 hours (expressed in seconds)
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
-// // Use a cache-first strategy for the images
-// workbox.routing.registerRoute(
-//   new RegExp('.(?:png|gif|jpg|svg)$'),
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'images',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // maximum 50 entries
-//         maxEntries: 50,
-//         // Expire after 30 days (expressed in seconds)
-//         maxAgeSeconds: 30 * 24 * 60 * 60,
-//       }),
-//       new workbox.cacheableResponse.Plugin({
-//         // The images are returned as opaque responses, with a status of 0.
-//         // Normally these wouldn't be cached; here we opt-in to caching them.
-//         // If the image returns a status 200 we cache it too
-//         statuses: [0, 200]
-//       })
-//     ]
-//   })
-// );
+// Use a cache-first strategy for the images
+workbox.routing.registerRoute(
+  new RegExp('.(?:png|gif|jpg|svg)$'),
+  workbox.strategies.cacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // maximum 50 entries
+        maxEntries: 50,
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      }),
+      new workbox.cacheableResponse.Plugin({
+        // The images are returned as opaque responses, with a status of 0.
+        // Normally these wouldn't be cached; here we opt-in to caching them.
+        // If the image returns a status 200 we cache it too
+        statuses: [0, 200]
+      })
+    ]
+  })
+);
 
-// // Match all .htm and .html files use cacheFirst
-// workbox.routing.registerRoute(
-//   new RegExp('(.htm)$'),
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'content',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 24 hours (expressed in seconds)
-//         maxAgeSeconds: 1 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+// Match all .htm and .html files use cacheFirst
+workbox.routing.registerRoute(
+  new RegExp('(.htm)$'),
+  workbox.strategies.cacheFirst({
+    cacheName: 'content',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 24 hours (expressed in seconds)
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
 // Initialize the Firebase app in the service worker by passing in the
 // messagingSenderId.
