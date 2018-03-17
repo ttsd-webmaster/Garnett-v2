@@ -67,7 +67,7 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let data = JSON.parse(localStorage.getItem('data'));
     let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
 
