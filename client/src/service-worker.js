@@ -17,7 +17,7 @@ workbox.clientsClaim();
 workbox.googleAnalytics.initialize()
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
-workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
+workbox.precaching.precache(self.__precacheManifest || []);
 
 workbox.routing.registerNavigationRoute('/index.html');
 
