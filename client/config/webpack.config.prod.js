@@ -306,8 +306,6 @@ module.exports = {
     // the HTML & assets that are part of the Webpack build.
     new InjectManifest({
       importWorkboxFrom: 'disabled',
-      globDirectory: '.',
-      globIgnores: ['node_modules/**/*', '/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js', 'precache-manifest.*.js'],
       swSrc: 'src/service-worker.js',
       swDest: 'service-worker.js'
     }),
