@@ -307,7 +307,8 @@ module.exports = {
     new InjectManifest({
       importWorkboxFrom: 'disabled',
       globDirectory: 'bundle',
-      globIgnores: ['/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js', 'precache-manifest.*.js'],
+      globPatterns: ['**\/*.{html,js,css}'],
+      globIgnores: ['/.map', 'asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js', 'precache-manifest.*.js'],
       swSrc: 'src/service-worker.js',
       swDest: 'service-worker.js'
     }),
