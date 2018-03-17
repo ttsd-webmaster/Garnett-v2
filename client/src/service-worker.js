@@ -64,8 +64,8 @@ workbox.routing.registerRoute(
 );
 
 workbox.routing.registerRoute(
-  new RegExp('(.css)$'),
-  workbox.strategies.networkFirst({
+  new RegExp('.(?:js|css)$'),
+  workbox.strategies.staleWhileRevalidate({
     cacheName: 'css',
     plugins: [
       new workbox.expiration.Plugin({
