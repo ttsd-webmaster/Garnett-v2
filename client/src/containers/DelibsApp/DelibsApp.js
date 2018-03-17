@@ -1,7 +1,7 @@
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
 import {loadFirebase} from '../../helpers/functions.js';
-import {LoadingDelibsApp, LoadingComponent} from '../../helpers/loaders.js';
+import {wrapDelibsApp, LoadingComponent} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 
 import React, {Component} from 'react';
@@ -23,6 +23,8 @@ const LoadableVoteDialog = Loadable({
     return <div></div>;
   }
 });
+
+const LoadingDelibsApp = wrapDelibsApp(LoadingComponent);
 
 export default class DelibsApp extends Component {
   constructor(props) {
@@ -75,18 +77,8 @@ export default class DelibsApp extends Component {
 
   openRushee = (rushee) => {
     let rusheeName = rushee.firstName + rushee.lastName;
-    let rusheeInfo = {
-      name: `${rushee.firstName} ${rushee.lastName}`,
-      email: rushee.email,
-      year: rushee.year,
-      major: rushee.major,
-      graduationYear: rushee.graduationYear,
-      phone: rushee.phone,
-      photo: rushee.photo,
-      resume: rushee.resume
-    }
 
-    this.props.history.push('/delibs-app/' + rusheeName, rusheeInfo);
+    this.props.history.push('/delibs-app/' + rusheeName, rusheeName);
   }
 
   handleRequestOpen = (message) => {
@@ -170,10 +162,7 @@ export default class DelibsApp extends Component {
           />
         </div>
       ) : (
-        <div>
-          <LoadingDelibsApp />
-          <LoadingComponent />
-        </div>
+        <LoadingDelibsApp />
       )
     )
   }

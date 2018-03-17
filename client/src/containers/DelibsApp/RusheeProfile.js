@@ -1,6 +1,7 @@
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
 import '../../components/Settings/Settings.css';
+import {loadFirebase} from '../../helpers/functions.js';
 import {LoadingRusheeProfile} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 
@@ -48,7 +49,7 @@ export default class RusheeProfile extends Component {
     super(props);
     this.state = {
       open: false,
-      rushee: this.props.history.location.state,
+      rushee: null,
       openResume: false,
       openSnackbar: false,
       message: ''
@@ -56,13 +57,30 @@ export default class RusheeProfile extends Component {
   }
 
   componentWillMount() {
+    let rusheeName = this.props.history.location.state;
+
     if (!this.props.history.location.state) {
       this.props.history.push('/delibs-app');
+    }
+
+    if (navigator.onLine) {
+      loadFirebase('database')
+      .then(() => {
+        let rushees;
+        let firebase = window.firebase;
+        let rusheesRef = firebase.database().ref('/rushees/' + rusheeName);
+
+        rusheesRef.on('value', (snapshot) => {
+          this.setState({
+            rushee: snapshot.val()
+          });
+        });
+      });
     }
   }
 
   startVote = () => {
-    let rusheeName = this.state.rushee.name;
+    let rusheeName = `${this.state.rushee.firstName} ${this.state.rushee.lastName}`;
 
     API.startVote(rusheeName)
     .then((res) => {
@@ -123,7 +141,7 @@ export default class RusheeProfile extends Component {
               <ListItem
                 className="garnett-list-item settings"
                 primaryText="Name"
-                secondaryText={this.state.rushee.name}
+                secondaryText={`${this.state.rushee.firstName} ${this.state.rushee.lastName}`}
               />
               <Divider />
               <ListItem
@@ -164,7 +182,7 @@ export default class RusheeProfile extends Component {
 
                 <LoadableEndVoteDialog
                   open={this.state.open}
-                  rushee={this.state.rushee.name}
+                  rushee={`${this.state.rushee.firstName} ${this.state.rushee.lastName}`}
                   handleClose={this.handleClose}
                   handleRequestOpen={this.handleRequestOpen}
                 />

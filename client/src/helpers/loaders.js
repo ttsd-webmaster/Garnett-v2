@@ -76,12 +76,13 @@ function LoadingPledgeApp() {
   )
 }
 
-function LoadingDelibsApp() {
+const wrapDelibsApp = (Slot) => (props) => {
   return (
     <div className="loading-container">
       <div className="app-header">
         <span> Delibs App </span>
         <span style={backHomeStyle}> Home </span>
+        <Slot {...props} />
       </div>
     </div>
   )
@@ -114,4 +115,4 @@ function LoadingComponent() {
   )
 }
 
-export {LoadingLogin, LoadingHome, LoadingPledgeApp, LoadingDelibsApp, LoadingRusheeProfile, LoadingComponent};
+export {LoadingLogin, LoadingHome, LoadingPledgeApp, wrapDelibsApp, LoadingRusheeProfile, LoadingComponent};
