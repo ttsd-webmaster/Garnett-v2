@@ -307,7 +307,6 @@ module.exports = {
     new InjectManifest({
       importWorkboxFrom: 'disabled',
       globDirectory: '.',
-      globPatterns: ['**\/*.{html,js,css}'],
       globIgnores: ['node_modules/**/*', '/.map', '/asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js', 'precache-manifest.*.js'],
       swSrc: 'src/service-worker.js',
       swDest: 'service-worker.js'
