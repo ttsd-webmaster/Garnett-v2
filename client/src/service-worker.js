@@ -63,18 +63,18 @@ workbox.routing.registerRoute(
   })
 );
 
-// workbox.routing.registerRoute(
-//   new RegExp('.(?:js|css)$'),
-//   workbox.strategies.staleWhileRevalidate({
-//     cacheName: 'css',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 24 hours (expressed in seconds)
-//         maxAgeSeconds: 1 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+workbox.routing.registerRoute(
+  new RegExp('.(?:js|css)$'),
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'css',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 24 hours (expressed in seconds)
+        maxAgeSeconds: 1 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
 // Use a cache-first strategy for the images
 workbox.routing.registerRoute(
