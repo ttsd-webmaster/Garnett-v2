@@ -6,8 +6,8 @@ export default {
   getAuthStatus: function(user) {
     return axios.post('/api/', {user});
   },
-  login: function(email, password) {
-    return axios.post('/api/login', {email, password});
+  getFirebaseData: function() {
+    return axios.post('/api/getfirebasedata');
   },
   signUp: function(email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode) {
     let body = {email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode};
@@ -20,7 +20,7 @@ export default {
     return axios.post('/api/logout');
   },
   setPhoto: function(displayName, url) {
-    return axios.post('/api/photo', {displayName, url});
+    return axios.post('/api/setphoto', {displayName, url});
   },
   getPledges: function() {
     return axios.post('/api/pledges');

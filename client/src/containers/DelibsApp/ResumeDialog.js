@@ -31,7 +31,7 @@ export default class ResumeDialog extends Component {
         onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
       >
-        <img src={this.props.resume} width="100%" />
+        <img src={this.props.resume} width="100%" alt="Resume" />
       </Dialog>
     )
   }

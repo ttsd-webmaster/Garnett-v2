@@ -1,6 +1,6 @@
 import './PledgeApp.css';
 import '../../fontello/css/fontello.css';
-import API from '../../api/API.js';
+// import API from '../../api/API.js';
 import {getTabStyle} from '../../helpers/functions.js';
 import {LoadingPledgeApp} from '../../helpers/loaders.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
@@ -91,13 +91,13 @@ export default class PledgeApp extends Component {
       });
     }
     else {
-      let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
       let myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards'));
       let myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards'));
       let upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards'));
       let completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards'));
 
-      if (data.data.user.status !== 'pledge') {
+      if (data.status !== 'pledge') {
+        let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
         let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
         let activeArray = JSON.parse(localStorage.getItem('activeArray'));
         let complaintsPledgeArray = JSON.parse(localStorage.getItem('complaintsPledgeArray'));

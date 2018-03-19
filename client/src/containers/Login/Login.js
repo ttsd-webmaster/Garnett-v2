@@ -153,38 +153,51 @@ export default class Login extends Component {
       });
     }
     else {
-      API.login(email, password)
+      API.getFirebaseData()
       .then(res => {
         if (res.status === 200) {
-          localStorage.setItem('data', JSON.stringify(res));
-
-          initializeFirebase(res.data.firebaseData);
+          initializeFirebase(res.data);
 
           loadFirebase('auth')
           .then(() => {
-            let firebase = window.firebase;
-            
-            firebase.auth().signInWithCustomToken(res.data.token)
-            .then(() => {
-              this.props.loginCallBack(res);
-              
-              // this.setState({
-              //   signEmail: '',
-              //   signPassword: '',
-              // });
+            let firebase= window.firebase;
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+            .then((user) => {
+              if (user) {
+                loadFirebase('database')
+                .then(() => {
+                  const fullName = user.displayName;
+                  let userRef = firebase.database().ref('/users/' + fullName);
+
+                  userRef.once('value', (snapshot) => {
+                    let user = snapshot.val();
+                    localStorage.setItem('data', JSON.stringify(user));
+
+                    this.setState({
+                      signEmail: '',
+                      signPassword: '',
+                    });
+
+                    this.props.loginCallBack(user);
+                  });
+                });
+              }
+              else {
+                let message = 'Email is not verified.';
+
+                this.handleRequestOpen(message);
+              }
             })
             .catch((error) => {
-              console.log(error);
+              console.log('Error: ', error);
+              let message = 'Email or password is incorrect.';
+
+              this.handleRequestOpen(message);
             });
           });
         }
       })
-      .catch((error) => {
-        let message = error.response.data;
-        console.log(error);
-
-        this.handleRequestOpen(message);
-      });
     }
   }
 

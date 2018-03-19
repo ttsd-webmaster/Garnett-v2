@@ -57,74 +57,26 @@ app.get('*', (req, res) => {
 app.post('/api', function(req, res) {
   // Send back user's info to the client
   let fullName = req.body.user.displayName;
+  let userRef = admin.database().ref('/users/' + fullName);
   console.log(fullName)
 
-  // Look for user's info in data base
-  let userRef = admin.database().ref('/users/' + fullName);
   userRef.once('value', (snapshot) => {
-    const userInfo = snapshot.val();
-    const data = {
-      user: userInfo,
-      firebaseData: {
-        apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
-        authDomain: 'garnett-42475.firebaseapp.com',
-        databaseURL: 'https://garnett-42475.firebaseio.com',
-        storageBucket: 'garnett-42475.appspot.com',
-        messagingSenderId: '741733387760'
-      }
-    };
-    res.json(data);
+    let user = snapshot.val();
+    res.json(user);
   });
 });
 
-// Login Post Route
-app.post('/api/login', function(req, res) {
+// Get Firebase Data Route
+app.post('/api/getfirebasedata', function(req, res) {
+  const firebaseData = {
+    apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
+    authDomain: 'garnett-42475.firebaseapp.com',
+    databaseURL: 'https://garnett-42475.firebaseio.com',
+    storageBucket: 'garnett-42475.appspot.com',
+    messagingSenderId: '741733387760'
+  }
 
-  // Authenticate the credentials
-  firebase.auth().signInWithEmailAndPassword(req.body.email, req.body.password)
-  .then((user) => {
-    if (user) {
-      const uid = user.uid;
-      const fullName = user.displayName;
-
-      // Send back user's info and a token to the client
-      admin.auth().createCustomToken(uid)
-      .then(function(customToken) {
-        // Look for user's info in data base
-        let userRef = admin.database().ref('/users/' + fullName);
-
-        userRef.once('value', (snapshot) => {
-          const userInfo = snapshot.val();
-          const data = {
-            token: customToken,
-            user: userInfo,
-            firebaseData: {
-              apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
-              authDomain: 'garnett-42475.firebaseapp.com',
-              databaseURL: 'https://garnett-42475.firebaseio.com',
-              storageBucket: 'garnett-42475.appspot.com',
-              messagingSenderId: '741733387760'
-            }
-          };
-          res.json(data);
-        });
-      })
-      .catch(function(error) {
-        console.log("Error creating custom token:", error);
-      });
-    }
-    else {
-      res.status(400).send('Email is not verified.');
-    }
-  })
-  .catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    // ...
-    console.log(errorCode, errorMessage);
-    res.status(400).send('Email or password is incorrect.');
-  });
+  res.json(firebaseData);
 });
 
 // Signup Route
@@ -267,7 +219,7 @@ app.post('/api/logout', function(req, res) {
 });
 
 // Sets the user photo
-app.post('/api/photo', function(req, res) {
+app.post('/api/setphoto', function(req, res) {
   let fullName = req.body.displayName;
   let userRef = admin.database().ref('/users/' + fullName);
 
@@ -276,11 +228,9 @@ app.post('/api/photo', function(req, res) {
   });
 
   userRef.once('value', (snapshot) => {
-    const userInfo = snapshot.val();
-    const data = {
-      user: userInfo
-    };
-    res.json(data);
+    const user = snapshot.val();
+
+    res.json(user);
   });
 });
 

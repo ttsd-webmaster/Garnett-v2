@@ -66,7 +66,6 @@ export default class RusheeProfile extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let rushees;
         let firebase = window.firebase;
         let rusheesRef = firebase.database().ref('/rushees/' + rusheeName);
 

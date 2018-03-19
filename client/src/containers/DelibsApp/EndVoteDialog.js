@@ -17,7 +17,6 @@ export default class VoteDialog extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let totalVotes;
         let rusheeName = this.props.rushee.replace(/ /g,'');
         let firebase = window.firebase;
         let rusheeRef = firebase.database().ref('/rushees/' + rusheeName);

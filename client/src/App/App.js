@@ -84,7 +84,7 @@ class App extends Component {
             if (user) {
               API.getAuthStatus(user)
               .then(res => {
-                this.loginCallBack(res);
+                this.loginCallBack(res.data);
               });
             }
             else {
@@ -113,14 +113,14 @@ class App extends Component {
     }
   }
 
-  loginCallBack = (res) => {
-    let displayName = res.data.user.firstName + res.data.user.lastName;
+  loginCallBack = (user) => {
+    let displayName = user.firstName + user.lastName;
 
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     if (isSafari || process.env.NODE_ENV === 'development') {
-      this.checkPhoto(res, displayName);
+      this.checkPhoto(user, displayName);
     }
     else {
       navigator.serviceWorker.getRegistration(swUrl)
@@ -144,7 +144,7 @@ class App extends Component {
                 API.saveMessagingToken(displayName, currentToken)
                 .then(messageRes => {
                   console.log(messageRes);
-                  this.checkPhoto(res, displayName);
+                  this.checkPhoto(user, displayName);
                 })
                 .catch(err => console.log(err));
               } 
@@ -155,60 +155,60 @@ class App extends Component {
             })
             .catch((err) => {
               console.log('An error occurred while retrieving token. ', err);
-              this.checkPhoto(res, displayName);
+              this.checkPhoto(user, displayName);
             });
           })
           .catch((err) => {
             console.log('Unable to get permission to notify.', err);
-            this.checkPhoto(res, displayName);
+            this.checkPhoto(user, displayName);
           });
         });
       });
     }
   }
 
-  checkPhoto = (res, displayName) => {
+  checkPhoto = (user, displayName) => {
     let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
-    if (res.data.user.photoURL === defaultPhoto && res.data.user.status !== 'alumni') {
+    if (user.photoURL === defaultPhoto && user.status !== 'alumni') {
       loadFirebase('storage')
       .then(() => {
         let firebase = window.firebase;
-        let storage = firebase.storage().ref(`${res.data.user.firstName}${res.data.user.lastName}.jpg`);
+        let storage = firebase.storage().ref(`${user.firstName}${user.lastName}.jpg`);
         storage.getDownloadURL()
         .then((url) => {
           API.setPhoto(displayName, url)
-          .then((response) => {
-            console.log(response)
+          .then((res) => {
+            console.log(res.data)
 
-            this.setData(response);
+            this.setData(res.data);
           })
           .catch(err => console.log(err));
         })
         .catch((error) => {
           console.log(error);
 
-          this.setData(res);
+          this.setData(user);
         });
       });
     }
     else {
-      this.setData(res);
+      this.setData(user);
     }
   }
 
-  setData = (res) => {
+  setData = (user) => {
     this.setState({
-      name: `${res.data.user.firstName} ${res.data.user.lastName}`,
-      firstName: res.data.user.firstName,
-      lastName: res.data.user.lastName,
-      displayName: res.data.user.firstName + res.data.user.lastName,
-      phone: res.data.user.phone,
-      email: res.data.user.email,
-      class: res.data.user.class,
-      major: res.data.user.major,
-      status: res.data.user.status,
-      photoURL: res.data.user.photoURL,
+      name: `${user.firstName} ${user.lastName}`,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      displayName: user.firstName + user.lastName,
+      phone: user.phone,
+      email: user.email,
+      class: user.class,
+      major: user.major,
+      status: user.status,
+      photoURL: user.photoURL,
       isAuthenticated: true
     });
   }
