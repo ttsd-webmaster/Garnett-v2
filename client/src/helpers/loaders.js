@@ -1,5 +1,7 @@
 import React from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
+import Dialog from 'material-ui/Dialog';
+import CircularProgress from 'material-ui/CircularProgress';
 
 const inkBarStyle = {
   position: 'fixed',
@@ -20,6 +22,11 @@ const tabContainerStyle = {
 const backHomeStyle = {
   float: 'right',
   marginRight: '15px'
+};
+
+const completingTaskDialogStyle = {
+  display: 'flex',
+  alignItems: 'center'
 };
 
 function LoadingLogin() {
@@ -115,4 +122,25 @@ function LoadingComponent() {
   )
 }
 
-export {LoadingLogin, LoadingHome, LoadingPledgeApp, wrapDelibsApp, LoadingRusheeProfile, LoadingComponent};
+function CompletingTaskDialog(props) {
+  return (
+    <Dialog
+      bodyStyle={completingTaskDialogStyle}
+      modal={true}
+      open={props.open}
+    >
+      <CircularProgress size={25} />
+      <span style={{margin:'auto'}}> {props.message} </span>
+    </Dialog>
+  )
+}
+
+export {
+  LoadingLogin,
+  LoadingHome,
+  LoadingPledgeApp,
+  wrapDelibsApp,
+  LoadingRusheeProfile,
+  LoadingComponent,
+  CompletingTaskDialog
+};

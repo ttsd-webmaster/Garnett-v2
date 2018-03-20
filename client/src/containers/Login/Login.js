@@ -1,13 +1,13 @@
 import './Login.css';
 import {activeCode, pledgeCode} from './data.js';
 import {initializeFirebase, loadFirebase, validateEmail} from '../../helpers/functions.js';
+import {CompletingTaskDialog} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import ForgotPassword from './ForgotPassword';
 
 import React, {Component} from 'react';
-import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
 
 const snackbarBackground = {
@@ -154,40 +154,31 @@ export default class Login extends Component {
       });
     }
     else {
-      this.updatedProgressCompletion(true, 0);
+      this.setState({
+        openCompletingTask: true,
+        completingTaskMessage: 'Logging In...'
+      });
 
       API.getFirebaseData()
       .then(res => {
         if (res.status === 200) {
-          this.updatedProgressCompletion(true, 30);
           initializeFirebase(res.data);
 
           loadFirebase('auth')
           .then(() => {
             let firebase= window.firebase;
 
-            this.updatedProgressCompletion(true, 50);
-
             firebase.auth().signInWithEmailAndPassword(email, password)
             .then((user) => {
               if (user) {
-                this.updatedProgressCompletion(true, 80);
-
                 loadFirebase('database')
                 .then(() => {
                   const fullName = user.displayName;
                   let userRef = firebase.database().ref('/users/' + fullName);
 
-                  this.updatedProgressCompletion(true, 100);
-
                   userRef.once('value', (snapshot) => {
                     let user = snapshot.val();
                     localStorage.setItem('data', JSON.stringify(user));
-
-                    this.setState({
-                      signEmail: '',
-                      signPassword: '',
-                    });
 
                     this.props.loginCallBack(user);
                   });
@@ -196,7 +187,6 @@ export default class Login extends Component {
               else {
                 let message = 'Email is not verified.';
 
-                this.updatedProgressCompletion(false, 0);
                 this.handleRequestOpen(message);
               }
             })
@@ -204,7 +194,6 @@ export default class Login extends Component {
               console.log('Error: ', error);
               let message = 'Email or password is incorrect.';
 
-              this.updatedProgressCompletion(false, 0);
               this.handleRequestOpen(message);
             });
           });
@@ -348,13 +337,6 @@ export default class Login extends Component {
     });
   }
 
-  updatedProgressCompletion(progress, value) {
-    this.setState({
-      progress: progress,
-      completed: value
-    });
-  }
-
   handleRequestOpen = (message) => {
     this.setState({
       open: true,
@@ -371,11 +353,10 @@ export default class Login extends Component {
   render() {
     return (
       <div className="login">
-        {this.state.progress &&
-          <LinearProgress 
-            style={{position: 'absolute'}} 
-            mode="determinate" 
-            value={this.state.completed} 
+        {this.state.openCompletingTask &&
+          <CompletingTaskDialog
+            open={this.state.openCompletingTask}
+            message={this.state.completingTaskMessage}
           />
         }
 
