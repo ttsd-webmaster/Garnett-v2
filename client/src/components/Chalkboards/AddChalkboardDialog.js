@@ -77,27 +77,11 @@ export default class AddChalkboardDialog extends Component {
         console.log(res);
         this.handleClose();
         this.props.handleRequestOpen('Created a chalkboard!');
-
-        this.setState({
-          title: '',
-          description: '',
-          date: null,
-          time: defaultTime,
-          location: 'TBD'
-        });
       })
       .catch((error) => {
         console.log('Error: ', error);
         this.handleClose();
         this.props.handleRequestOpen('Error: Chalkboard title is already taken');
-
-        this.setState({
-          title: '',
-          description: '',
-          date: null,
-          time: defaultTime,
-          location: 'TBD'
-        });
       });
     }
   }

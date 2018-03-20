@@ -156,7 +156,7 @@ export default class Login extends Component {
     else {
       this.setState({
         openCompletingTask: true,
-        completingTaskMessage: 'Logging In...'
+        completingTaskMessage: 'Logging in...'
       });
 
       API.getFirebaseData()

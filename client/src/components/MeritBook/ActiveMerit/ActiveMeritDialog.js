@@ -79,27 +79,15 @@ export default class ActiveMerit extends Component {
           const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
           let registrationToken = localStorage.getItem('registrationToken');
 
-          this.props.handleClose();
+          this.handleClose();
 
           if (isSafari || !registrationToken) {
             this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
-
-            this.setState({
-              open: false,
-              description: '',
-              amount: ''
-            });
           }
           else {
             API.sendMessage(pledgeName, activeName, amount)
             .then(res => {
               this.props.handleRequestOpen(`Merited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
-
-              this.setState({
-                open: false,
-                description: '',
-                amount: ''
-              });
             })
             .catch(err => console.log(err));
           }
@@ -148,19 +136,11 @@ export default class ActiveMerit extends Component {
 
         if (isSafari || !registrationToken) {
           this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
-
-          this.setState({
-            open: false
-          });
         }
         else {
           API.sendMessage(pledgeName, activeName, amount)
           .then(res => {
             this.props.handleRequestOpen(`Demerited ${pledge.firstName} ${pledge.lastName}: ${amount} merits`);
-
-            this.setState({
-              open: false
-            });
           })
           .catch(err => console.log(err));
         }

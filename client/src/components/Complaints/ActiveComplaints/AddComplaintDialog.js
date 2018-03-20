@@ -64,17 +64,12 @@ export default class AddComplaintDialog extends Component {
       API.complain(status, displayName, activeName, pledge, description, date)
       .then((res) => {
         console.log(res);
-        this.props.handleClose();
+        this.handleClose();
         this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
-
-        this.setState({
-          pledge: null,
-          description: ''
-        });
       })
       .catch((error) => {
         console.log('Error: ', error);
-        this.props.handleClose();
+        this.handleClose();
         this.props.handleRequestOpen('Error creating complaint');
       });
     }

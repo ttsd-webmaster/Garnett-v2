@@ -47,20 +47,15 @@ export default class ActiveMerit extends Component {
       API.meritAll(displayName, activeName, description, amount, photoURL, date)
       .then(res => {
         console.log(res);
-        this.props.handleMeritAllClose();
+        this.handleClose();
         this.props.handleRequestOpen(`Merited all pledges: ${amount} merits`);
-
-        this.setState({
-          description: '',
-          amount: ''
-        });
       })
       .catch((error) => {
         console.log(error)
         let pledge = error.response.data;
 
         console.log('Not enough merits for ', pledge);
-        this.props.handleMeritAllClose();
+        this.handleClose();
         this.props.handleRequestOpen(`Not enough merits for ${pledge}.`);
       });
     }
@@ -94,13 +89,8 @@ export default class ActiveMerit extends Component {
       API.meritAll(displayName, activeName, description, -amount, photoURL, date)
       .then(res => {
         console.log(res);
-        this.props.handleMeritAllClose();
+        this.handleClose();
         this.props.handleRequestOpen(`Demerited all pledges: ${amount} merits`);
-
-        this.setState({
-          description: '',
-          amount: ''
-        });
       })
       .catch((err) => console.log('err', err));
     }
