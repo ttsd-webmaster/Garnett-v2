@@ -359,25 +359,26 @@ export default class Login extends Component {
             message={this.state.completingTaskMessage}
           />
         }
+        <div className="animate-in">
+          <div className="login-logo">
+            <img src={require('./images/garnett.svg')} alt="garnett"/>
+            <h1> Garne<span className="tt">tt</span> </h1>
+          </div>
 
-        <div className="login-logo">
-          <img src={require('./images/garnett.svg')} alt="garnett"/>
-          <h1> Garne<span className="tt">tt</span> </h1>
-        </div>
-
-        <div className="sign-options">
-          <span className="sign-in underline"
-            id="sign-in"
-            onClick={this.active}
-          >
-            Sign In
-          </span>
-          <span className="sign-up"
-            id="sign-up"
-            onClick={this.active}
-          >
-            Sign Up
-          </span>
+          <div className="sign-options">
+            <span className="sign-in underline"
+              id="sign-in"
+              onClick={this.active}
+            >
+              Sign In
+            </span>
+            <span className="sign-up"
+              id="sign-up"
+              onClick={this.active}
+            >
+              Sign Up
+            </span>
+          </div>
         </div>
 
         <SignIn

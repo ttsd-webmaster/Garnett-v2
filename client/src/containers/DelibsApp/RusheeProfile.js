@@ -133,7 +133,7 @@ export default class RusheeProfile extends Component {
             <span className="back-home" onClick={this.props.history.goBack}> Back </span>
           </div>
 
-          <div className="rushee-profile-container">
+          <div className="rushee-profile-container animate-in">
             <img className="user-photo" src={this.state.rushee.photo} alt="User" />
             <List>
               <Divider />

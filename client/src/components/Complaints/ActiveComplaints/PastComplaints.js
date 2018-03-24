@@ -16,7 +16,6 @@ export default class PastComplaints extends Component {
               height={88}
               offset={500}
               once
-              unmountIfInvisible
               overflow
               key={i}
               placeholder={

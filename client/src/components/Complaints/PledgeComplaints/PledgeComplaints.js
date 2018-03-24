@@ -80,7 +80,6 @@ export default class PledgeComplaints extends Component {
                 height={88}
                 offset={500}
                 once
-                unmountIfInvisible
                 overflow
                 key={i}
                 placeholder={

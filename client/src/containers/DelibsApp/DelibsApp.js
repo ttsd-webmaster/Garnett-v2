@@ -109,7 +109,6 @@ export default class DelibsApp extends Component {
                 height={88}
                 offset={500}
                 once
-                unmountIfInvisible
                 overflow
                 key={i}
                 placeholder={

@@ -46,7 +46,7 @@ export default class Home extends Component {
             <span> Home </span>
             <span className="log-out" onClick={this.logout}> Log Out </span>
           </div>
-          <div className="icon-container">
+          <div className="icon-container animate-in">
             <div className="app-icon" onClick={() => this.goTo('pledge-app')}>
               <div className="app-icon-image-container">
                 <img 

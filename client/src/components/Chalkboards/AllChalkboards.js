@@ -16,7 +16,6 @@ export default class AllChalkboards extends Component {
               height={88}
               offset={500}
               once
-              unmountIfInvisible
               overflow
               key={i}
               placeholder={
@@ -61,7 +60,6 @@ export default class AllChalkboards extends Component {
               height={88}
               offset={500}
               once
-              unmountIfInvisible
               overflow
               key={i}
               placeholder={
