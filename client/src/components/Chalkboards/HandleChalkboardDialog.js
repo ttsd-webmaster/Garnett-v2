@@ -1,6 +1,6 @@
 import './Chalkboards.css';
 import API from '../../api/API.js';
-import {getTabStyle} from '../../helpers/functions.js';
+import {mapsSelector, getTabStyle} from '../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -266,7 +266,15 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-location garnett-icon"></i>
                     }
-                    onClick={() => this.handleEditOpen('Location')}
+                    onClick={() => {
+                      if (this.props.type === 'hosting') {
+                        this.handleEditOpen('Location');
+                      }
+                      else {
+                        mapsSelector(this.state.chalkboard.location);
+                        this.handleClose();
+                      }
+                    }}
                   />
                   <Divider className="garnett-divider last" />
                 </List>

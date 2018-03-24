@@ -61,4 +61,17 @@ function getDate() {
   return today;
 }
 
-export {initializeFirebase, loadFirebase, validateEmail, getDate, getTabStyle};
+function mapsSelector(location) {
+  /* if we're on iOS, open in Apple Maps */
+  if ((navigator.platform.indexOf("iPhone") != -1) || 
+      (navigator.platform.indexOf("iPad") != -1) || 
+      (navigator.platform.indexOf("iPod") != -1)) {
+    window.open(`maps://maps.google.com/maps?daddr=${location}&amp;ll=`);
+  }
+  /* else use Google */
+  else {
+    window.open(`https://maps.google.com/maps?daddr=${location}&amp;ll=`);
+  }
+}
+
+export {initializeFirebase, loadFirebase, validateEmail, getDate, mapsSelector, getTabStyle};

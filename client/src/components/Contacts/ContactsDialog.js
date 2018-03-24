@@ -6,6 +6,11 @@ import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
+const activePhoneNumber = {
+  display: 'block',
+  textDecoration: 'none'
+}
+
 export default class ContactsDialog extends Component {
   render() {
     const actions = [
@@ -42,14 +47,16 @@ export default class ContactsDialog extends Component {
             }
           />
           <Divider className="garnett-divider" inset={true} />
-          <ListItem
-            className="contacts-list-item"
-            primaryText="Phone Number"
-            secondaryText={this.props.active.phone}
-            leftIcon={
-              <i className="icon-phone garnett-icon"></i>
-            }
-          />
+          <a style={activePhoneNumber} href={`tel:${this.props.active.phone}`}>
+            <ListItem
+              className="contacts-list-item"
+              primaryText="Phone Number"
+              secondaryText={this.props.active.phone}
+              leftIcon={
+                <i className="icon-phone garnett-icon"></i>
+              }
+            />
+          </a>
           <Divider className="garnett-divider" inset={true} />
           <ListItem
             className="contacts-list-item"
