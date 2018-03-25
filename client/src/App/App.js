@@ -1,3 +1,4 @@
+import './App.css';
 import API from '../api/API.js';
 import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
 import {

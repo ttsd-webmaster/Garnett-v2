@@ -51,6 +51,16 @@ div, a {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.visible {
+  visibility: visible;
+  opacity: 1;
+}
+
 /* Main Loading Screen */
 .loading {
   display: block;
