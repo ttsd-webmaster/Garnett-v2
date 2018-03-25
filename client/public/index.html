@@ -23,10 +23,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    
+    <style>
+      body {
+        background-color: #2e2f33;
+      }
+    </style>
     <title>Garnett</title>
   </head>
   <body>
+    <div class="loading" id="loading"></div>
+
     <div id="root"></div>
     <!--
       This HTML file is a template.
@@ -39,9 +45,10 @@
       To create a production bundle, use `npm run build`.
     -->
     <script>
-      let root = document.documentElement;
-      root.className += 'hidden';
-      (function(H){H.className=H.className.replace(/\bhidden\b/,'visible')})(document.documentElement);
+      window.onload = function() {
+        document.body.style.backgroundColor = "#fafafa";
+        document.getElementById("loading").style.display = "none";
+      }
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107328054-2"></script>
