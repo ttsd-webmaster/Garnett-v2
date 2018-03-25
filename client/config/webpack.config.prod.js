@@ -8,7 +8,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const {InjectManifest} = require('workbox-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
@@ -96,6 +95,8 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
+      'react': 'preact-compat',
+      'react-dom': 'preact-compat'
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -299,14 +300,6 @@ module.exports = {
     // Common Bundles
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common' // Specify the common bundle's name.
-    }),
-    // Compress files
-    new CompressionPlugin({
-      asset: "[path].gz[query]",
-      algorithm: "gzip",
-      test: /\.js$|\.css$|\.html$/,
-      threshold: 10240,
-      minRatio: 0.8
     }),
     // Note: this won't work without ExtractTextPlugin.extract(..) in `loaders`.
     new ExtractTextPlugin({
