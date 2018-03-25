@@ -27,6 +27,7 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "concurrently": "^3.5.1"
+    "concurrently": "^3.5.1",
+    "mime": "^2.2.0"
   }
 }

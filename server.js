@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
 const app = express();
+const mime = require('mime');
 const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
@@ -41,32 +42,32 @@ function ensureSecure(req, res, next){
 // Handle environments
 if (process.env.NODE_ENV == 'production') {
   app.all('*', ensureSecure);
-}
 
-// This middleware serves all js files as gzip
-app.use(function(req, res, next) {
-  var originalPath = req.path;
-  if (!originalPath.endsWith('.js')) {
-    next();
-    return;
-  }
-  try {
-    var stats = fs.statSync(path.join('public', `${req.path}.gz`));
-    res.append('Content-Encoding', 'gzip');
-    res.setHeader('Vary', 'Accept-Encoding');
-    res.setHeader('Cache-Control', 'public, max-age=512000');
-    req.url = `${req.url}.gz`;
-
-    var type = mime.lookup(path.join('public', originalPath));
-    if (typeof type != 'undefined') {
-      var charset = mime.charsets.lookup(type);
-      res.setHeader('Content-Type', type + (charset ? '; charset=' + charset : ''));
+  // This middleware serves all js files as gzip
+  app.use(function(req, res, next) {
+    var originalPath = req.path;
+    if (!originalPath.endsWith('.js')) {
+      next();
+      return;
     }
-  } 
-  catch (e) {
-  }
-  next();
-});
+    try {
+      var stats = fs.statSync(path.join('./client/build', `${req.path}.gz`));
+      res.append('Content-Encoding', 'gzip');
+      res.setHeader('Vary', 'Accept-Encoding');
+      res.setHeader('Cache-Control', 'public, max-age=512000');
+      req.url = `${req.url}.gz`;
+
+      var type = mime.getType(path.join('./client/build', originalPath));
+      if (typeof type != 'undefined') {
+        var charset = mime.charsets.getType(type);
+        res.setHeader('Content-Type', type + (charset ? '; charset=' + charset : ''));
+      }
+    } 
+    catch (e) {
+    }
+    next();
+  });
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
