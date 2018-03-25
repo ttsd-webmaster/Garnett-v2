@@ -31,6 +31,12 @@
 
 .app-icon-image-container {
   position: relative;
+  height: 75px;
+}
+@media(max-width: 768px) {
+  .app-icon-image-container {
+    height: 68px;
+  }
 }
 .app-icon-image-container:hover::before {
   position: absolute;
@@ -53,7 +59,7 @@
 }
 @media(max-width: 768px) {
   .app-icon-image {
-    height: 67px;
-    width: 67px;
+    height: 68px;
+    width: 68px;
   }
 }
