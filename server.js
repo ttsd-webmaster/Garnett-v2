@@ -2,8 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
+const compression = require('compression');
 const app = express();
-const mime = require('mime');
 const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
@@ -42,20 +42,12 @@ function ensureSecure(req, res, next){
 // Handle environments
 if (process.env.NODE_ENV == 'production') {
   app.all('*', ensureSecure);
-
-  // This middleware serves all js files as gzip
-  app.get('*.js', function (req, res, next) {
-    req.url = req.url + '.gz';
-    res.set('Content-Encoding', 'gzip');
-    next();
-  });
 }
 
+app.use(compression()); // Gzips file
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-var oneWeek = 86400000*7;
-app.use(express.static(path.join(__dirname, './client/build'), { maxAge: oneWeek, lastModified: true }));
+app.use(express.static(path.join(__dirname, './client/build')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
