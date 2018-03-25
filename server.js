@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
-const compression = require('compression');
 const app = express();
 const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
@@ -44,10 +43,36 @@ if (process.env.NODE_ENV == 'production') {
   app.all('*', ensureSecure);
 }
 
-app.use(compression()); // Gzips file
+// This middleware serves all js files as gzip
+app.use(function(req, res, next) {
+  var originalPath = req.path;
+  if (!originalPath.endsWith('.js')) {
+    next();
+    return;
+  }
+  try {
+    var stats = fs.statSync(path.join('./client/build', `${req.path}.gz`));
+    res.append('Content-Encoding', 'gzip');
+    res.setHeader('Vary', 'Accept-Encoding');
+    res.setHeader('Cache-Control', 'public, max-age=512000');
+    req.url = `${req.url}.gz`;
+
+    var type = mime.lookup(path.join('./client/build', originalPath));
+    if (typeof type != 'undefined') {
+      var charset = mime.charsets.lookup(type);
+      res.setHeader('Content-Type', type + (charset ? '; charset=' + charset : ''));
+    }
+  } 
+  catch (e) {
+  }
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './client/build')));
+
+var oneWeek = 86400000*7;
+app.use(express.static(path.join(__dirname, './client/build'), { maxAge: oneWeek, lastModified: true }));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
