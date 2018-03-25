@@ -1,5 +1,5 @@
 import './index.css';
-import './App.css';
+import './App/App.css';
 import registerServiceWorker from './registerServiceWorker';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
