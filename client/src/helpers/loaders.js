@@ -1,3 +1,5 @@
+import {isMobileDevice} from './functions.js';
+
 import React from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
@@ -24,32 +26,36 @@ const backHomeStyle = {
   marginRight: '15px'
 };
 
-const completingTaskDialogStyle = {
+const completingTaskDialogMobile = {
   display: 'flex',
+  alignItems: 'center'
+};
+
+const completingTaskDialog = {
+  display: 'flex',
+  flexDirection: 'column',
   alignItems: 'center'
 };
 
 function LoadingLogin() {
   return (
-    <div className="loading">
-      <div className="loading-image"></div>
-    </div>
-  )
-}
-
-function LoadingLoginMobile() {
-  return (
-    <div className="loading">
-      <div className="line-scale-container">
-        <div className="line-scale">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+    isMobileDevice() ? (
+      <div className="loading">
+        <div className="line-scale-container">
+          <div className="line-scale">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
         </div>
       </div>
-    </div>
+    ) : (
+      <div className="loading">
+        <div className="loading-image"></div>
+      </div>
+    )
   )
 }
 
@@ -140,20 +146,31 @@ function LoadingComponent() {
 
 function CompletingTaskDialog(props) {
   return (
-    <Dialog
-      bodyStyle={completingTaskDialogStyle}
-      modal={true}
-      open={props.open}
-    >
-      <CircularProgress size={25} />
-      <span style={{margin:'auto'}}> {props.message} </span>
-    </Dialog>
+    isMobileDevice() ? (
+      <Dialog
+        bodyStyle={completingTaskDialogMobile}
+        modal={true}
+        open={props.open}
+      >
+        <CircularProgress size={25} />
+        <span style={{margin:'auto'}}> {props.message} </span>
+      </Dialog>
+    ) : (
+      <Dialog
+        contentStyle={{maxWidth:'500px'}}
+        bodyStyle={completingTaskDialog}
+        modal={true}
+        open={props.open}
+      >
+        <CircularProgress size={90} thickness={5} />
+        <span style={{marginTop:'50px'}}> {props.message} </span>
+      </Dialog>
+    )
   )
 }
 
 export {
   LoadingLogin,
-  LoadingLoginMobile,
   LoadingHome,
   LoadingPledgeApp,
   wrapDelibsApp,
