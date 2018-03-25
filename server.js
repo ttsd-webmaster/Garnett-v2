@@ -51,13 +51,13 @@ app.use(function(req, res, next) {
     return;
   }
   try {
-    var stats = fs.statSync(path.join('./client/build', `${req.path}.gz`));
+    var stats = fs.statSync(path.join('public', `${req.path}.gz`));
     res.append('Content-Encoding', 'gzip');
     res.setHeader('Vary', 'Accept-Encoding');
     res.setHeader('Cache-Control', 'public, max-age=512000');
     req.url = `${req.url}.gz`;
 
-    var type = mime.lookup(path.join('./client/build', originalPath));
+    var type = mime.lookup(path.join('public', originalPath));
     if (typeof type != 'undefined') {
       var charset = mime.charsets.lookup(type);
       res.setHeader('Content-Type', type + (charset ? '; charset=' + charset : ''));
