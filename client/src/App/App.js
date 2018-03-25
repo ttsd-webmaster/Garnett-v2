@@ -1,10 +1,11 @@
 import './App.css';
 import API from '../api/API.js';
-import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
+import {isMobileDevice, initializeFirebase, loadFirebase} from '../helpers/functions.js';
 import {
-  LoadingLogin, 
-  LoadingHome, 
-  LoadingPledgeApp, 
+  LoadingLogin,
+  LoadingLoginMobile,
+  LoadingHome,
+  LoadingPledgeApp,
   wrapDelibsApp,
   LoadingRusheeProfile,
   LoadingComponent
@@ -240,7 +241,11 @@ class App extends Component {
                   loginCallBack={this.loginCallBack}
                 />
               ) : (
-                <LoadingLogin />
+                isMobileDevice() ? (
+                  <LoadingLoginMobile />
+                ) : (
+                  <LoadingLogin />
+                )
               )
             )
           )}/>

@@ -11,6 +11,11 @@ function getTabStyle(isActive) {
   return isActive ? tabStyle.active : tabStyle.default
 }
 
+function isMobileDevice() {
+    return (typeof window.orientation !== "undefined") || 
+           (navigator.userAgent.indexOf('IEMobile') !== -1);
+};
+
 function initializeFirebase(data) {
   loadFirebase('app')
   .then(() => {
@@ -74,4 +79,4 @@ function mapsSelector(location) {
   }
 }
 
-export {initializeFirebase, loadFirebase, validateEmail, getDate, mapsSelector, getTabStyle};
+export {isMobileDevice, initializeFirebase, loadFirebase, validateEmail, getDate, mapsSelector, getTabStyle};

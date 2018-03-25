@@ -37,6 +37,22 @@ function LoadingLogin() {
   )
 }
 
+function LoadingLoginMobile() {
+  return (
+    <div className="loading">
+      <div className="line-scale-container">
+        <div className="line-scale">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function LoadingHome() {
   return (
     <div className="loading-container">
@@ -137,6 +153,7 @@ function CompletingTaskDialog(props) {
 
 export {
   LoadingLogin,
+  LoadingLoginMobile,
   LoadingHome,
   LoadingPledgeApp,
   wrapDelibsApp,

@@ -308,6 +308,9 @@ div, a {
   top: calc(50% - 75px);
   left: calc(50% - 20px);
 }
+.loading .line-scale-container {
+  top: calc(50% - 50px);
+}
 
 @-webkit-keyframes line-scale {
   0% {
@@ -358,4 +361,8 @@ div, a {
   margin: 2px;
   -webkit-animation-fill-mode: both;
           animation-fill-mode: both;
-  display: inline-block; }
+  display: inline-block; 
+}
+.loading .line-scale > div {
+  background-color: var(--primary-color);
+}
