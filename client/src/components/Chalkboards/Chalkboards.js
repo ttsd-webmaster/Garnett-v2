@@ -156,13 +156,13 @@ export default class Chalkboards extends Component {
       if (this.props.index === 2) {
         chalkboardsTabs.style.display = 'flex';
         if (this.props.state.status !== 'pledge') {
-          addChalkboard.style.display = 'flex';
+          addChalkboard.classList.remove('hidden');
         }
       }
       else {
         chalkboardsTabs.style.display = 'none';
         if (this.props.state.status !== 'pledge') {
-          addChalkboard.style.display = 'none';
+          addChalkboard.classList.add('hidden');
         }
       }
     }

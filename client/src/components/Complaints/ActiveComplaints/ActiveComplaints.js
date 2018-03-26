@@ -106,11 +106,11 @@ export default class ActiveComplaints extends Component {
     // Changes complaints tabs and add button to be viewable if slide is on complaints
     if (addComplaint && complaintsTabs) {
       if (this.props.state.status !== 'pledge' && this.props.index === 3) {
-        addComplaint.style.display = 'flex';
+        addComplaint.classList.remove('hidden');
         complaintsTabs.style.display = 'flex';
       }
       else {
-        addComplaint.style.display = 'none';
+        addComplaint.classList.add('hidden');
         complaintsTabs.style.display = 'none';
       }
     }
