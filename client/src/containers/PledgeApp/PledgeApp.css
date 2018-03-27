@@ -119,7 +119,7 @@
   display: flex;
   flex-direction: column;
   min-height: 285px;
-  max-height: 352px !important;
+  max-height: 50vh !important;
   background-color: #fff;
   border-bottom: 1px solid rgb(224, 224, 224) !important;
 }

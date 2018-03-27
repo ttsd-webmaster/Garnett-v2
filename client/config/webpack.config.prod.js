@@ -290,8 +290,11 @@ module.exports = {
         // https://github.com/facebookincubator/create-react-app/issues/2488
         ascii_only: true,
       },
-      sourceMap: shouldUseSourceMap
+      sourceMap: shouldUseSourceMap,
+      minimize: true,
     }),
+    // Merge chunks
+    new webpack.optimize.AggressiveMergingPlugin(),
     // Common Bundles
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common' // Specify the common bundle's name.

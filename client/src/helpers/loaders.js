@@ -21,11 +21,6 @@ const tabContainerStyle = {
   zIndex: 1
 };
 
-const backHomeStyle = {
-  float: 'right',
-  marginRight: '15px'
-};
-
 const completingTaskDialogMobile = {
   display: 'flex',
   alignItems: 'center'
@@ -62,10 +57,7 @@ function LoadingLogin() {
 function LoadingHome() {
   return (
     <div className="loading-container">
-      <div className="app-header">
-        <span> Home </span>
-        <span style={backHomeStyle}> Log Out </span>
-      </div>
+      <div className="app-header"></div>
     </div>
   )
 }
@@ -109,8 +101,6 @@ const wrapDelibsApp = (Slot) => (props) => {
   return (
     <div className="loading-container">
       <div className="app-header">
-        <span> Delibs App </span>
-        <span style={backHomeStyle}> Home </span>
         <Slot {...props} />
       </div>
     </div>
@@ -120,10 +110,7 @@ const wrapDelibsApp = (Slot) => (props) => {
 function LoadingRusheeProfile() {
   return (
     <div className="loading-container">
-      <div className="app-header">
-        <span> Rushee Profile </span>
-        <span style={backHomeStyle}> Back </span>
-      </div>
+      <div className="app-header"></div>
     </div>
   )
 }

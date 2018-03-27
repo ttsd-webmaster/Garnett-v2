@@ -218,7 +218,7 @@ export default class HandleChalkboardDialog extends Component {
               onChange={this.handleChange}
             >
               <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
-                <List>
+                <List style={{padding:'24px 0'}}>
                   <Divider />
                   <ListItem
                     innerDivStyle={listItemStyle}
