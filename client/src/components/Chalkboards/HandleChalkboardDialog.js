@@ -17,7 +17,8 @@ const listItemStyle = {
 
 const inkBarStyle = {
   position: 'fixed',
-  top: '124px',
+  bottom: 'auto',
+  marginTop: '46px',
   backgroundColor: 'var(--primary-color)',
   zIndex: 2
 };
@@ -202,8 +203,19 @@ export default class HandleChalkboardDialog extends Component {
       this.state.chalkboard && (
         <div>
           <Dialog
-            title={this.state.chalkboard.title}
-            titleClassName="garnett-dialog-title"
+            title={this.props.type === 'hosting' ? (
+              <div>
+                {this.state.chalkboard.title}
+                <i className="icon-edit edit-chalkboard"></i>
+              </div>
+            ) : (
+              this.state.chalkboard.title
+            )}
+            titleClassName={this.props.type === 'hosting' ? (
+              "garnett-dialog-title hosting" 
+            ) : (
+              "garnett-dialog-title"
+            )}
             actions={actions}
             modal={false}
             bodyClassName="garnett-dialog-body tabs grey"

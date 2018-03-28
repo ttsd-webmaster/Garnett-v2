@@ -16,3 +16,15 @@
   margin: 0;
   margin-left: 5px;
 }
+
+.edit-chalkboard {
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  font-size: 1.4em;
+  color: #fff;
+}
+
+.garnett-dialog-title.hosting {
+  padding: 24px 60px 20px 24px !important;
+}
