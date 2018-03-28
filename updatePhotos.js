@@ -10,20 +10,24 @@ let usersRef = admin.database().ref('/users');
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
-    let userRef = admin.database().ref('/users/' + user.key);
-    let bucket = admin.storage().bucket("garnett-42475.appspot.com");
+    let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
-    bucket.file(`${user.key}.jpg`).getSignedUrl({
-      action: 'read',
-      expires: '03-17-2025'
-    })
-    .then((url) => {
-      userRef.update({
-        photoURL: url[0]
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    })
+    if (user.val().photoURL !== defaultPhoto) {
+      let userRef = admin.database().ref('/users/' + user.key);
+      let bucket = admin.storage().bucket("garnett-42475.appspot.com");
+
+      bucket.file(`${user.key}.jpg`).getSignedUrl({
+        action: 'read',
+        expires: '03-17-2025'
+      })
+      .then((url) => {
+        userRef.update({
+          photoURL: url[0]
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    }
   });
 });

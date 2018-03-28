@@ -1,4 +1,5 @@
 import './Contacts.css';
+import {isMobileDevice} from '../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
@@ -8,12 +9,14 @@ import Divider from 'material-ui/Divider';
 
 export default class ActiveList extends Component {
   render() {
+    const offset = isMobileDevice() ? 700 : 1000;
+
     return (
       this.props.actives.map((active, i) => (
         this.props.classLabel === active.class &&
           <LazyLoad
             height={88}
-            offset={700}
+            offset={offset}
             once
             overflow
             key={i}

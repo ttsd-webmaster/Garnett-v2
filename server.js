@@ -455,6 +455,16 @@ app.post('/api/meritall', function(req, res) {
 
 // Creates a chalkboard
 app.post('/api/createchalkboard', function(req, res) {
+  let chalkboardInfo = {
+    displayName: req.body.displayName,
+    activeName: req.body.activeName,
+    photoURL: req.body.photoURL,
+    title: req.body.title,
+    description: req.body.description,
+    date: req.body.date,
+    time: req.body.time,
+    location: req.body.location
+  };
   let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
   let counter = 0;
@@ -470,16 +480,7 @@ app.post('/api/createchalkboard', function(req, res) {
         }
         else {
           if (!res.headersSent && counter === snapshot.numChildren()) {
-            chalkboardsRef.push({
-              displayName: req.body.displayName,
-              activeName: req.body.activeName,
-              photoURL: req.body.photoURL,
-              title: req.body.title,
-              description: req.body.description,
-              date: req.body.date,
-              time: req.body.time,
-              location: req.body.location
-            });
+            chalkboardsRef.push(chalkboardInfo);
 
             res.sendStatus(200);
           }
@@ -487,16 +488,7 @@ app.post('/api/createchalkboard', function(req, res) {
       });
     }
     else {
-      chalkboardsRef.push({
-        displayName: req.body.displayName,
-        activeName: req.body.activeName,
-        photoURL: req.body.photoURL,
-        title: req.body.title,
-        description: req.body.description,
-        date: req.body.date,
-        time: req.body.time,
-        location: req.body.location
-      });
+      chalkboardsRef.push(chalkboardInfo);
 
       res.sendStatus(200);
     }
