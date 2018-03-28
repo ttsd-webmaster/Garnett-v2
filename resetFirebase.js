@@ -6,36 +6,43 @@ admin.initializeApp({
   databaseURL: "https://garnett-42475.firebaseio.com"
 })
 
-let dbRef = admin.database().ref('/users/');
+let usersRef = admin.database().ref('/users/');
+let approvedComplaints = admin.database().ref('/approvedComplaints');
+let pendingComplaints = admin.database().ref('/pendingComplaints');
+let chalkboards = admin.database().ref('/chalkboards');
 
-dbRef.once('value', (snapshot) => {
-  snapshot.forEach((child) => {
-    let childRef = admin.database().ref('/users/' + child.key);
+approvedComplaints.remove();
+pendingComplaints.remove();
+chalkboards.remove();
 
-    if (child.val().status === 'pledge') {
-      childRef.update({
+usersRef.once('value', (snapshot) => {
+  snapshot.forEach((user) => {
+    let userRef = admin.database().ref('/users/' + user.key);
+
+    if (user.val().status === 'pledge') {
+      userRef.update({
         Complaints: null,
         Merits: null,
         totalMerits: 0
       });
     }
     else {
-      childRef.update({
+      userRef.update({
         Pledges: null
       });
 
-      dbRef.once('value', (snapshot) => {
+      usersRef.once('value', (snapshot) => {
         snapshot.forEach((child) => {
           if (child.val().status === 'pledge') {
             let pledgeName = child.key;
 
-            if (child.val().status === 'alumni') {
-              childRef.child('/Pledges/' + pledgeName).update({
+            if (user.val().status === 'alumni') {
+              userRef.child('/Pledges/' + pledgeName).update({
                 merits: 200
               });
             }
             else {
-              childRef.child('/Pledges/' + pledgeName).update({
+              userRef.child('/Pledges/' + pledgeName).update({
                 merits: 100
               });
             }

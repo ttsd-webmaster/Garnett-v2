@@ -58,14 +58,15 @@ export default class Chalkboards extends Component {
         let chalkboardsRef = firebase.database().ref('/chalkboards');
 
         chalkboardsRef.on('value', (snap) => {
+          let chalkboards = [];
+          let myHostingChalkboards = [];
+          let myAttendingChalkboards = [];
+          let myCompletedChalkboards = [];
+          let upcomingChalkboards = [];
+          let completedChalkboards = [];
+          
           // Checks if there are any chalkboards
           if (snap.val()) {
-            let chalkboards = [];
-            let myHostingChalkboards = [];
-            let myAttendingChalkboards = [];
-            let myCompletedChalkboards = [];
-            let upcomingChalkboards = [];
-            let completedChalkboards = [];
             let today = getDate();
 
             // Converts object to array
@@ -116,27 +117,27 @@ export default class Chalkboards extends Component {
                 }
               }
             });
-
-            console.log('Upcoming Chalkboards: ', upcomingChalkboards);
-            console.log('My Hosting Chalkboards: ', myHostingChalkboards);
-            console.log('My Attending Chalkboards: ', myAttendingChalkboards);
-            console.log('My Completed Chalkboards: ', myCompletedChalkboards);
-
-            localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
-            localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
-            localStorage.setItem('myHostingChalkboards', JSON.stringify(myHostingChalkboards));
-            localStorage.setItem('myAttendingChalkboards', JSON.stringify(myAttendingChalkboards));
-            localStorage.setItem('myCompletedChalkboards', JSON.stringify(myCompletedChalkboards));
-
-            this.setState({
-              loaded: true,
-              upcomingChalkboards: upcomingChalkboards,
-              completedChalkboards: completedChalkboards,
-              myHostingChalkboards: myHostingChalkboards,
-              myAttendingChalkboards: myAttendingChalkboards,
-              myCompletedChalkboards: myCompletedChalkboards
-            });
           }
+
+          console.log('Upcoming Chalkboards: ', upcomingChalkboards);
+          console.log('My Hosting Chalkboards: ', myHostingChalkboards);
+          console.log('My Attending Chalkboards: ', myAttendingChalkboards);
+          console.log('My Completed Chalkboards: ', myCompletedChalkboards);
+
+          localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
+          localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
+          localStorage.setItem('myHostingChalkboards', JSON.stringify(myHostingChalkboards));
+          localStorage.setItem('myAttendingChalkboards', JSON.stringify(myAttendingChalkboards));
+          localStorage.setItem('myCompletedChalkboards', JSON.stringify(myCompletedChalkboards));
+
+          this.setState({
+            loaded: true,
+            upcomingChalkboards: upcomingChalkboards,
+            completedChalkboards: completedChalkboards,
+            myHostingChalkboards: myHostingChalkboards,
+            myAttendingChalkboards: myAttendingChalkboards,
+            myCompletedChalkboards: myCompletedChalkboards
+          });
         });
       });
     }

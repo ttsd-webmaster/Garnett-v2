@@ -227,6 +227,7 @@ app.post('/api/setphoto', function(req, res) {
     photoURL: req.body.url
   });
 
+  // Sends back new user data with updated photo
   userRef.once('value', (snapshot) => {
     const user = snapshot.val();
 
@@ -460,29 +461,45 @@ app.post('/api/createchalkboard', function(req, res) {
 
   // Adds chalkboards to general chalkboards and user's chalkboards
   chalkboardsRef.once('value', (snapshot) => {
-    snapshot.forEach((chalkboard) => {
-      counter++;
+    if (snapshot.val()) {
+      snapshot.forEach((chalkboard) => {
+        counter++;
 
-      if (req.body.title === chalkboard.val().title) {
-        res.sendStatus(400);
-      }
-      else {
-        if (!res.headersSent && counter === snapshot.numChildren()) {
-          chalkboardsRef.push({
-            displayName: req.body.displayName,
-            activeName: req.body.activeName,
-            photoURL: req.body.photoURL,
-            title: req.body.title,
-            description: req.body.description,
-            date: req.body.date,
-            time: req.body.time,
-            location: req.body.location
-          });
-
-          res.sendStatus(200);
+        if (req.body.title === chalkboard.val().title) {
+          res.sendStatus(400);
         }
-      }
-    });
+        else {
+          if (!res.headersSent && counter === snapshot.numChildren()) {
+            chalkboardsRef.push({
+              displayName: req.body.displayName,
+              activeName: req.body.activeName,
+              photoURL: req.body.photoURL,
+              title: req.body.title,
+              description: req.body.description,
+              date: req.body.date,
+              time: req.body.time,
+              location: req.body.location
+            });
+
+            res.sendStatus(200);
+          }
+        }
+      });
+    }
+    else {
+      chalkboardsRef.push({
+        displayName: req.body.displayName,
+        activeName: req.body.activeName,
+        photoURL: req.body.photoURL,
+        title: req.body.title,
+        description: req.body.description,
+        date: req.body.date,
+        time: req.body.time,
+        location: req.body.location
+      });
+
+      res.sendStatus(200);
+    }
   });
 });
 
