@@ -88,110 +88,165 @@ app.post('/api/signup', function(req, res) {
   let checkRef = admin.database().ref('/users/' + fullName);
 
   checkRef.once('value', (snapshot) => {
-    // if (snapshot.val()) {
-    //   res.status(400).send('This active is already signed up.');
-    // }
-    // else {
-      // Create user with email and password
-      firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
-      .then((user) => {
-        if (user && !user.emailVerified) {
-          user.updateProfile({
-            displayName: fullName
-          })
-          .then(function() {
-            let userRef = usersRef.child(user.displayName);
+    if (req.body.year === 'Alumni') {
+      if (snapshot.val()) {
+        // Create user with email and password
+        firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
+        .then((user) => {
+          if (user && !user.emailVerified) {
+            user.updateProfile({
+              displayName: fullName
+            })
+            .then(function() {
+              let userRef = usersRef.child(user.displayName);
 
-            userRef.set({
-              firstName: req.body.firstName.trim(),
-              lastName: req.body.lastName.trim(),
-              class: req.body.className,
-              major: req.body.majorName,
-              year: req.body.year,
-              phone: req.body.phone,
-              email: req.body.email.trim(),
-              photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
-            });
-
-            if (req.body.code === req.body.pledgeCode) {
+              userRef.set({
+                firstName: req.body.firstName.trim(),
+                lastName: req.body.lastName.trim(),
+                class: req.body.className,
+                major: req.body.majorName,
+                year: req.body.year,
+                phone: req.body.phone,
+                email: req.body.email.trim(),
+                photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
+              });
+              
               userRef.update({
-                status: 'pledge',
-                totalMerits: 0
+                status: 'alumni'
               });
-
-              usersRef.once('value', (snapshot) => {
-                snapshot.forEach((brother) => {
-                  let pledgeName = user.displayName;
-                  
-                  if (child.val().status === 'active') {
-                    brother.ref.child('/Pledges/' + pledgeName).set({
-                      merits: 100
-                    });
-                  }
-                  else if (child.val().status === 'alumni') {
-                    brother.ref.child('/Pledges/' + pledgeName).set({
-                      merits: 200
-                    });
-                  }
-                });
-              });
-            }
-            else {
-              if (req.body.year === 'Alumni') {
-                userRef.update({
-                  status: 'alumni'
-                });
-              }
-              else {
-                userRef.update({
-                  status: 'active'
-                });
-              }
 
               usersRef.once('value', (snapshot) => {
                 snapshot.forEach((child) => {
                   if (child.val().status === 'pledge') {
                     let pledgeName = child.key;
 
-                    if (req.body.year === 'Alumni') {
-                      userRef.child('/Pledges/' + pledgeName).set({
+                    userRef.child('/Pledges/' + pledgeName).set({
+                      merits: 200
+                    });
+                  }
+                });
+              });
+
+              user.sendEmailVerification()
+              .then(function() {
+                res.status(200).send('Verification email has been sent.');
+              });
+            })
+            .catch(function(error) {
+              // Handle errors here.
+              let errorCode = error.code;
+              let errorMessage = error.message;
+
+              console.log(errorCode, errorMessage);
+              res.status(400).send('Something went wrong on the server.');
+            });
+          }
+        })
+        .catch(function(error) {
+          // Handle errors here.
+          let errorCode = error.code;
+          let errorMessage = error.message;
+
+          console.log(errorCode, errorMessage);
+          res.status(400).send('Email has already been taken.');
+        });
+      }
+      else {
+        res.status(400).send('Please check if the name is correct.');
+      }
+    }
+    else {
+      if (snapshot.val()) {
+        res.status(400).send('This active is already signed up.');
+      }
+      else {
+        // Create user with email and password
+        firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
+        .then((user) => {
+          if (user && !user.emailVerified) {
+            user.updateProfile({
+              displayName: fullName
+            })
+            .then(function() {
+              let userRef = usersRef.child(user.displayName);
+
+              userRef.set({
+                firstName: req.body.firstName.trim(),
+                lastName: req.body.lastName.trim(),
+                class: req.body.className,
+                major: req.body.majorName,
+                year: req.body.year,
+                phone: req.body.phone,
+                email: req.body.email.trim(),
+                photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
+              });
+
+              if (req.body.code === req.body.pledgeCode) {
+                userRef.update({
+                  status: 'pledge',
+                  totalMerits: 0
+                });
+
+                usersRef.once('value', (snapshot) => {
+                  snapshot.forEach((brother) => {
+                    let pledgeName = user.displayName;
+                    
+                    if (child.val().status === 'active') {
+                      brother.ref.child('/Pledges/' + pledgeName).set({
+                        merits: 100
+                      });
+                    }
+                    else if (child.val().status === 'alumni') {
+                      brother.ref.child('/Pledges/' + pledgeName).set({
                         merits: 200
                       });
                     }
-                    else {
+                  });
+                });
+              }
+              else {
+                userRef.update({
+                  status: 'active'
+                });
+
+                usersRef.once('value', (snapshot) => {
+                  snapshot.forEach((child) => {
+                    if (child.val().status === 'pledge') {
+                      let pledgeName = child.key;
+
                       userRef.child('/Pledges/' + pledgeName).set({
                         merits: 100
                       });
                     }
-                  }
+                  });
                 });
+              }
+
+              user.sendEmailVerification()
+              .then(function() {
+                res.status(200).send('Verification email has been sent.');
               });
-            }
+            })
+            .catch(function(error) {
+              // Handle errors here.
+              let errorCode = error.code;
+              let errorMessage = error.message;
 
-            user.sendEmailVerification()
-            .then(function() {
-              res.status(200).send('Verification email has been sent.');
+              console.log(errorCode, errorMessage);
+              res.status(400).send('Something went wrong on the server.');
             });
-          })
-          .catch(function(error) {
-            // Handle errors here.
-            let errorCode = error.code;
-            let errorMessage = error.message;
+          }
+        })
+        .catch(function(error) {
+          // Handle errors here.
+          let errorCode = error.code;
+          let errorMessage = error.message;
 
-            console.log(errorCode, errorMessage);
-            res.status(400).send('Something went wrong on the server.');
-          });
-        }
-      })
-      .catch(function(error) {
-        // Handle errors here.
-        let errorCode = error.code;
-        let errorMessage = error.message;
-
-        console.log(errorCode, errorMessage);
-        res.status(400).send('Email has already been taken.');
-      });
-    // }
+          console.log(errorCode, errorMessage);
+          res.status(400).send('Email has already been taken.');
+        });
+      }
+    }
   });
 });
 
