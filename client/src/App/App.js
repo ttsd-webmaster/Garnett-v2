@@ -115,12 +115,11 @@ class App extends Component {
 
   loginCallBack = (user) => {
     let displayName = user.firstName + user.lastName;
-
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
     if (isSafari || process.env.NODE_ENV === 'development') {
-      this.checkPhoto(user, displayName);
+      this.checkPhoto(user);
     }
     else {
       navigator.serviceWorker.getRegistration(swUrl)
@@ -144,7 +143,7 @@ class App extends Component {
                 API.saveMessagingToken(displayName, currentToken)
                 .then(messageRes => {
                   console.log(messageRes);
-                  this.checkPhoto(user, displayName);
+                  this.checkPhoto(user);
                 })
                 .catch(err => console.log(err));
               } 
@@ -155,20 +154,21 @@ class App extends Component {
             })
             .catch((err) => {
               console.log('An error occurred while retrieving token. ', err);
-              this.checkPhoto(user, displayName);
+              this.checkPhoto(user);
             });
           })
           .catch((err) => {
             console.log('Unable to get permission to notify.', err);
-            this.checkPhoto(user, displayName);
+            this.checkPhoto(user);
           });
         });
       });
     }
   }
 
-  checkPhoto = (user, displayName) => {
-    let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+  checkPhoto = (user) => {
+    let displayName = user.firstName + user.lastName;
+    const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
     if (user.photoURL === defaultPhoto && user.status !== 'alumni') {
       loadFirebase('storage')
