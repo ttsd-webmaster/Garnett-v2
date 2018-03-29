@@ -88,11 +88,11 @@ app.post('/api/signup', function(req, res) {
   let checkRef = admin.database().ref('/users/' + fullName);
 
   checkRef.once('value', (snapshot) => {
-    // if (snapshot.val()) {
-    //   res.status(400).send('This active is already signed up.');
-    // }
-    // else {
-      // Create user with email and password
+    if (snapshot.val()) {
+      res.status(400).send('This active is already signed up.');
+    }
+    else {
+      Create user with email and password
       firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
       .then((user) => {
         if (user && !user.emailVerified) {
