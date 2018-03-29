@@ -25,9 +25,11 @@ export default class EditChalkboardDialog extends Component {
 
   // Updates the state based on the selected chalkboard
   componentWillReceiveProps(nextProps) {
-    let parsedTime = nextProps.chalkboard.time;
+    let year = new Date().getFullYear();
     let date = new Date(nextProps.chalkboard.date);
+    date.setYear(year);
     let time = new Date();
+    let parsedTime = nextProps.chalkboard.time;
     time.setHours(parsedTime.substr(0, parsedTime.indexOf(":")));
     time.setMinutes(parsedTime.substr(parsedTime.indexOf(":") + 1, parsedTime.indexOf(":") + 1));
 
