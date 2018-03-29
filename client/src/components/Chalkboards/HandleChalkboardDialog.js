@@ -135,13 +135,10 @@ export default class HandleChalkboardDialog extends Component {
   }
 
   // Opens the edit dialog if user is hosting chalkboard
-  handleEditOpen = (field) => {
-    if (this.props.type === 'hosting') {
-      this.setState({
-        open: true,
-        field: field
-      });
-    }
+  handleEditOpen = () => {
+    this.setState({
+      open: true,
+    });
   }
 
   // Closes the edit dialog
@@ -206,7 +203,11 @@ export default class HandleChalkboardDialog extends Component {
             title={this.props.type === 'hosting' ? (
               <div>
                 {this.state.chalkboard.title}
-                <i className="icon-edit edit-chalkboard"></i>
+                <i 
+                  className="icon-edit edit-chalkboard"
+                  onClick={this.handleEditOpen}
+                >
+                </i>
               </div>
             ) : (
               this.state.chalkboard.title
@@ -248,7 +249,6 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-info-circled garnett-icon"></i>
                     }
-                    onClick={() => this.handleEditOpen('Description')}
                   />
                   <Divider className="garnett-divider" inset={true} />
                   <ListItem
@@ -258,7 +258,6 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-calendar-check-o garnett-icon"></i>
                     }
-                    onClick={() => this.handleEditOpen('Date')}
                   />
                   <Divider className="garnett-divider" inset={true} />
                   <ListItem
@@ -268,7 +267,6 @@ export default class HandleChalkboardDialog extends Component {
                     leftIcon={
                       <i className="icon-clock garnett-icon"></i>
                     }
-                    onClick={() => this.handleEditOpen('Time')}
                   />
                   <Divider className="garnett-divider" inset={true} />
                   <ListItem
@@ -279,13 +277,7 @@ export default class HandleChalkboardDialog extends Component {
                       <i className="icon-location garnett-icon"></i>
                     }
                     onClick={() => {
-                      if (this.props.type === 'hosting') {
-                        this.handleEditOpen('Location');
-                      }
-                      else {
-                        mapsSelector(this.state.chalkboard.location);
-                        this.handleClose();
-                      }
+                      mapsSelector(this.state.chalkboard.location);
                     }}
                   />
                   <Divider className="garnett-divider last" />
@@ -301,7 +293,6 @@ export default class HandleChalkboardDialog extends Component {
             open={this.state.open}
             state={this.props.state}
             chalkboard={this.state.chalkboard}
-            field={this.state.field}
             updateChalkboardInfo={this.updateChalkboardInfo}
             handleClose={this.handleEditClose}
             handleRequestOpen={this.props.handleRequestOpen}

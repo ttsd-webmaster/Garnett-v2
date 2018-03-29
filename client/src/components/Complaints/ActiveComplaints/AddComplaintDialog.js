@@ -45,7 +45,7 @@ export default class AddComplaintDialog extends Component {
     let descriptionValidation = true;
     let pledgeValidation = true;
 
-    if (!pledge || !description) {
+    if (!pledge || !description || description.length > 45) {
       if (!pledge) {
         pledgeValidation = false;
       }

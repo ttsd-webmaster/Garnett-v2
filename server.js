@@ -552,7 +552,6 @@ app.post('/api/createchalkboard', function(req, res) {
 
 // Edits chalkboard
 app.post('/api/editchalkboard', function(req, res) {
-  let editedField = req.body.field.toLowerCase();
   let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
 
@@ -562,7 +561,10 @@ app.post('/api/editchalkboard', function(req, res) {
       if (req.body.chalkboard.title === chalkboard.val().title) {
         // Updates the chalkboard
         chalkboard.ref.update({
-          [editedField]: req.body.newValue
+          description: req.body.description,
+          date: req.body.date,
+          time: req.body.time,
+          location: req.body.location
         });
 
         res.sendStatus(200);

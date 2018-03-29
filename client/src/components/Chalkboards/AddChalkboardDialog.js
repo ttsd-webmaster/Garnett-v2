@@ -43,7 +43,7 @@ export default class AddChalkboardDialog extends Component {
     let timeValidation = true;
     let locationValidation = true;
 
-    if (!title || !description) {
+    if (!title || title.length > 25 || !description || !date || !time || !location) {
       if (!title || title.length > 25) {
         titleValidation = false;
       }
