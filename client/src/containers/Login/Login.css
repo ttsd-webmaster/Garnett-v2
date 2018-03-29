@@ -1,12 +1,9 @@
 /* Garnett Container */
 .login {
-  position: absolute;
   background-color: var(--secondary-dark);
   color: #fff;
-  height: 100%;
-  width: 100%;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
+  min-height: 100vh;
+  width: 100vw;
 }
 
 .tt-logo {
@@ -21,7 +18,7 @@
   justify-content: space-around;
   width: 400px;
   margin: auto;
-  margin-top: 75px;
+  padding-top: 75px;
   margin-bottom: 50px;
 }
 @media(max-width: 768px) {
@@ -94,7 +91,7 @@
 /* Form Fields */
 .login-form {
   display: none;
-  margin: 20px auto;
+  margin: 20px auto 0;
 }
 
 .login-form.active {
