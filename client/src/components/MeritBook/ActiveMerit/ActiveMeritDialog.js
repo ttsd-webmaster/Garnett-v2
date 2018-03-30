@@ -38,16 +38,6 @@ export default class ActiveMerit extends Component {
     };
   }
 
-  onBackButton = (event) => {
-    let path = 'https://garnett-app.herokuapp.com/';
-    window.history.pushState(null, null, path + window.location.search);
-    this.handleClose();
-  }
-
-  componentDidMount() {
-    window.onpopstate = this.onBackButton;
-  }
-
   merit = (pledge) => {
     let status = this.props.state.status;
     let maxAmount;

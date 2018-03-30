@@ -21,21 +21,6 @@ export default class AddComplaintDialog extends Component {
     };
   }
 
-  onBackButton = (event) => {
-    if (event.keyCode == 27) {
-      event.preventDefault();
-      this.handleClose();
-    }
-  }
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.onBackButton);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onBackButton);
-  }
-
   componentWillMount() {
     if (navigator.onLine) {
       API.getPledgesForComplaints()

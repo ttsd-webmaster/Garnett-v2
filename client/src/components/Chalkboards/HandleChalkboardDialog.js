@@ -56,21 +56,6 @@ export default class HandleChalkboardDialog extends Component {
     };
   }
 
-  onBackButton = (event) => {
-    if (event.keyCode == 27) {
-      event.preventDefault();
-      this.handleClose();
-    }
-  }
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.onBackButton);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onBackButton);
-  }
-
   componentWillReceiveProps(nextProps) {
     this.setState({
       chalkboard: nextProps.chalkboard

@@ -6,21 +6,6 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 export default class HandleComplaintDialog extends Component {
-  onBackButton = (event) => {
-    if (event.keyCode == 27) {
-      event.preventDefault();
-      this.props.handleClose();
-    }
-  }
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.onBackButton);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onBackButton);
-  }
-
   approve = (complaint) => {
     API.approveComplaint(complaint)
     .then((res) => {
