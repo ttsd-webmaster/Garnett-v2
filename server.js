@@ -100,7 +100,7 @@ app.post('/api/signup', function(req, res) {
             .then(function() {
               let userRef = usersRef.child(user.displayName);
 
-              userRef.set({
+              userRef.update({
                 firstName: req.body.firstName.trim(),
                 lastName: req.body.lastName.trim(),
                 class: req.body.className,
@@ -108,10 +108,6 @@ app.post('/api/signup', function(req, res) {
                 year: req.body.year,
                 phone: req.body.phone,
                 email: req.body.email.trim(),
-                photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
-              });
-              
-              userRef.update({
                 status: 'alumni'
               });
 
