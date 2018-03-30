@@ -39,18 +39,13 @@ export default class ActiveMerit extends Component {
   }
 
   onBackButton = (event) => {
-    if (event.keyCode == 27) {
-      event.preventDefault();
-      this.handleClose();
-    }
+    let path = 'https://garnett-app.herokuapp.com/';
+    window.history.pushState(null, null, path + window.location.search);
+    this.handleClose();
   }
 
   componentDidMount() {
-    window.addEventListener('keydown', this.onBackButton);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onBackButton);
+    window.onpopstate = this.onBackButton;
   }
 
   merit = (pledge) => {
