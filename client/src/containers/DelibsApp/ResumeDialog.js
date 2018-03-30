@@ -12,6 +12,21 @@ const contentStyle = {
 };
 
 export default class ResumeDialog extends Component {
+  onBackButton = (event) => {
+    if (event.keyCode == 27) {
+      event.preventDefault();
+      this.props.handleClose();
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.onBackButton);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onBackButton);
+  }
+
   render() {
     const actions = [
       <FlatButton

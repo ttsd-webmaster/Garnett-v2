@@ -38,6 +38,21 @@ export default class ActiveMerit extends Component {
     };
   }
 
+  onBackButton = (event) => {
+    if (event.keyCode == 27) {
+      event.preventDefault();
+      this.handleClose();
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.onBackButton);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onBackButton);
+  }
+
   merit = (pledge) => {
     let status = this.props.state.status;
     let maxAmount;

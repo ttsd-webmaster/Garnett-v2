@@ -46,6 +46,7 @@
     -->
     <script>
       window.onload = function() {
+        // Removes focus from input after touching on background for IOS
         document.body.firstElementChild.tabIndex = 1;
         document.body.style.backgroundColor = "#fafafa";
         document.getElementById("loading").style.display = "none";

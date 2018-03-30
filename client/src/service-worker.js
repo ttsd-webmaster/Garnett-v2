@@ -6,10 +6,6 @@ importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-messaging.js')
 importScripts('workbox-sw.prod.js');
 
 // Create Workbox service worker instance
-// const workboxSW = new WorkboxSW({ 
-//   clientsClaim: true,
-//   skipWaiting: true
-// });
 workbox.skipWaiting();
 workbox.clientsClaim();
 

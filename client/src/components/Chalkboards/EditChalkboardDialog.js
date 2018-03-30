@@ -23,6 +23,21 @@ export default class EditChalkboardDialog extends Component {
     };
   }
 
+  onBackButton = (event) => {
+    if (event.keyCode == 27) {
+      event.preventDefault();
+      this.handleClose();
+    }
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.onBackButton);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.onBackButton);
+  }
+
   // Updates the state based on the selected chalkboard
   componentWillReceiveProps(nextProps) {
     let year = new Date().getFullYear();
@@ -82,12 +97,12 @@ export default class EditChalkboardDialog extends Component {
       .then((res) => {
         console.log('Edited chalkboard');
         this.props.updateChalkboardInfo();
-        this.props.handleClose();
+        this.handleClose();
         this.props.handleRequestOpen('Edited chalkboard');
       })
       .catch((error) => {
         console.log('Error: ', error);
-        this.props.handleClose();
+        this.handleClose();
         this.props.handleRequestOpen('Error editing chalkboard');
       });
     }
@@ -111,12 +126,27 @@ export default class EditChalkboardDialog extends Component {
     });
   }
 
+  handleClose = () => {
+    this.props.handleClose();
+
+    this.setState({
+      description: '',
+      date: null,
+      time: null,
+      location: '',
+      descriptionValidation: true,
+      dateValidation: true,
+      timeValidation: true,
+      locationValidation: true
+    });
+  }
+
   render() {
     const actions = [
       <FlatButton
         label="Close"
         primary={true}
-        onClick={this.props.handleClose}
+        onClick={this.handleClose}
       />,
       <RaisedButton
         label="Update"
@@ -134,7 +164,7 @@ export default class EditChalkboardDialog extends Component {
         bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}
-        onRequestClose={this.props.handleClose}
+        onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
         <TextField
