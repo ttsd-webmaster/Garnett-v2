@@ -325,6 +325,7 @@ module.exports = {
       swDest: 'service-worker.js'
     }),
     new HtmlCriticalPlugin({
+      base: path.resolve(__dirname),
       src: 'index.html',
       inline: true,
       minify: true,
