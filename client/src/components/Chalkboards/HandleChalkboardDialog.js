@@ -137,18 +137,19 @@ export default class HandleChalkboardDialog extends Component {
   // Opens the edit dialog if user is hosting chalkboard
   handleEditOpen = () => {
     // Handles android back button for edit dialog
-    let path;
-    if (process.env.NODE_ENV === 'development') {
-      path = 'http://localhost:3000';
-    }
-    else {
-      path = 'https://garnett-app.herokuapp.com';
-    }
+    if (/android/i.test(navigator.userAgent)) {
+      let path;
+      if (process.env.NODE_ENV === 'development') {
+        path = 'http://localhost:3000';
+      }
+      else {
+        path = 'https://garnett-app.herokuapp.com';
+      }
 
-    window.history.pushState(null, null, path + window.location.pathname);
-    window.onpopstate = () => {
       window.history.pushState(null, null, path + window.location.pathname);
-      this.handleEditClose();
+      window.onpopstate = () => {
+        this.handleEditClose();
+      }
     }
 
     this.setState({
@@ -159,18 +160,19 @@ export default class HandleChalkboardDialog extends Component {
   // Closes the edit dialog
   handleEditClose = () => {
     // Handles android back button for this dialog
-    let path;
-    if (process.env.NODE_ENV === 'development') {
-      path = 'http://localhost:3000';
-    }
-    else {
-      path = 'https://garnett-app.herokuapp.com';
-    }
+    if (/android/i.test(navigator.userAgent)) {
+      let path;
+      if (process.env.NODE_ENV === 'development') {
+        path = 'http://localhost:3000';
+      }
+      else {
+        path = 'https://garnett-app.herokuapp.com';
+      }
 
-    window.history.pushState(null, null, path + window.location.pathname);
-    window.onpopstate = () => {
       window.history.pushState(null, null, path + window.location.pathname);
-      this.handleClose();
+      window.onpopstate = () => {
+        this.handleClose();
+      }
     }
 
     this.setState({
@@ -181,7 +183,10 @@ export default class HandleChalkboardDialog extends Component {
 
   // Closes this dialog
   handleClose = () => {
-    window.onpopstate = () => {};
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
     this.props.handleClose();
 
     this.setState({

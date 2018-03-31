@@ -209,21 +209,6 @@ export default class Chalkboards extends Component {
   }
 
   addOpen = () => {
-    // Handles android back button
-    let path;
-    if (process.env.NODE_ENV === 'development') {
-      path = 'http://localhost:3000';
-    }
-    else {
-      path = 'https://garnett-app.herokuapp.com';
-    }
-
-    window.history.pushState(null, null, path + window.location.pathname);
-    window.onpopstate = () => {
-      window.history.pushState(null, null, path + window.location.pathname);
-      this.addClose();
-    }
-
     if (navigator.onLine) {
       this.setState({
         openAdd: true
@@ -232,10 +217,29 @@ export default class Chalkboards extends Component {
     else {
       this.props.handleRequestOpen('You are offline.');
     }
+
+    // Handles android back button
+    if (/android/i.test(navigator.userAgent)) {
+      let path;
+      if (process.env.NODE_ENV === 'development') {
+        path = 'http://localhost:3000';
+      }
+      else {
+        path = 'https://garnett-app.herokuapp.com';
+      }
+
+      window.history.pushState(null, null, path + window.location.pathname);
+      window.onpopstate = () => {
+        this.addClose();
+      }
+    }
   }
 
   addClose = () => {
-    window.onpopstate = () => {};
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
     this.setState({
       openAdd: false
     });
@@ -243,18 +247,19 @@ export default class Chalkboards extends Component {
 
   handleOpen = (chalkboard, type) => {
     // Handles android back button
-    let path;
-    if (process.env.NODE_ENV === 'development') {
-      path = 'http://localhost:3000';
-    }
-    else {
-      path = 'https://garnett-app.herokuapp.com';
-    }
+    if (/android/i.test(navigator.userAgent)) {
+      let path;
+      if (process.env.NODE_ENV === 'development') {
+        path = 'http://localhost:3000';
+      }
+      else {
+        path = 'https://garnett-app.herokuapp.com';
+      }
 
-    window.history.pushState(null, null, path + window.location.pathname);
-    window.onpopstate = () => {
       window.history.pushState(null, null, path + window.location.pathname);
-      this.handleClose();
+      window.onpopstate = () => {
+        this.handleClose();
+      }
     }
 
     this.setState({
@@ -265,7 +270,10 @@ export default class Chalkboards extends Component {
   }
 
   handleClose = () => {
-    window.onpopstate = () => {};
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
     this.setState({
       open: false
     });
@@ -281,13 +289,11 @@ export default class Chalkboards extends Component {
             myAttendingChalkboards={this.state.myAttendingChalkboards}
             myCompletedChalkboards={this.state.myCompletedChalkboards}
             handleOpen={this.handleOpen}
-            handleRequestOpen={this.props.handleRequestOpen}
           />
           <AllChalkboards
             upcomingChalkboards={this.state.upcomingChalkboards}
             completedChalkboards={this.state.completedChalkboards}
             handleOpen={this.handleOpen}
-            handleRequestOpen={this.props.handleRequestOpen}
           />
 
           <BottomNavigation 
@@ -328,7 +334,6 @@ export default class Chalkboards extends Component {
             state={this.props.state}
             type={this.state.chalkboardType}
             chalkboard={this.state.selectedChalkboard}
-            attendees={this.state.attendees}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

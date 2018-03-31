@@ -51,18 +51,19 @@ export default class Contacts extends Component {
 
   handleOpen = (active) => {
     // Handles android back button
-    let path;
-    if (process.env.NODE_ENV === 'development') {
-      path = 'http://localhost:3000';
-    }
-    else {
-      path = 'https://garnett-app.herokuapp.com';
-    }
+    if (/android/i.test(navigator.userAgent)) {
+      let path;
+      if (process.env.NODE_ENV === 'development') {
+        path = 'http://localhost:3000';
+      }
+      else {
+        path = 'https://garnett-app.herokuapp.com';
+      }
 
-    window.history.pushState(null, null, path + window.location.pathname);
-    window.onpopstate = () => {
       window.history.pushState(null, null, path + window.location.pathname);
-      this.handleClose();
+      window.onpopstate = () => {
+        this.handleClose();
+      }
     }
 
     this.setState({
@@ -72,7 +73,10 @@ export default class Contacts extends Component {
   }
 
   handleClose = () => {
-    window.onpopstate = () => {};
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
     this.setState({
       open: false
     });

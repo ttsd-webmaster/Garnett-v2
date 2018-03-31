@@ -5,48 +5,6 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 export default class MyChalkboards extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false,
-      selectedchalkboard: null
-    };
-  }
-
-  handleOpen = (chalkboard) => {
-    if (navigator.onLine) {
-      this.setState({
-        open: true,
-        selectedchalkboard: chalkboard
-      });
-    }
-    else {
-      this.handleRequestOpen('You are offline.');
-    }
-
-    // Handles android back button
-    let path;
-    if (process.env.NODE_ENV === 'development') {
-      path = 'http://localhost:3000';
-    }
-    else {
-      path = 'https://garnett-app.herokuapp.com';
-    }
-
-    window.history.pushState(null, null, path + window.location.pathname);
-    window.onpopstate = () => {
-      window.history.pushState(null, null, path + window.location.pathname);
-      this.handleClose();
-    }
-  }
-
-  handleClose = () => {
-    window.onpopstate = () => {};
-    this.setState({
-      open: false
-    });
-  }
-
   render() {
     return (
       <div id="my-chalkboards" className="active">
