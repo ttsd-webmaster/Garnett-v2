@@ -305,7 +305,7 @@ module.exports = {
       filename: cssFilename,
     }),
     new HtmlCriticalPlugin({
-      base: path.resolve('build'),
+      base: path.resolve(publicPath),
       src: 'index.html',
       dest: 'index.html',
       inline: true,
