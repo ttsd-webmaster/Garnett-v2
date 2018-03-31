@@ -23,21 +23,6 @@ export default class EditChalkboardDialog extends Component {
     };
   }
 
-  onBackButton = (event) => {
-    if (event.keyCode == 27) {
-      event.preventDefault();
-      this.handleClose();
-    }
-  }
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.onBackButton);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onBackButton);
-  }
-
   // Updates the state based on the selected chalkboard
   componentWillReceiveProps(nextProps) {
     let year = new Date().getFullYear();

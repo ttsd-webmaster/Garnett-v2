@@ -100,12 +100,28 @@ export default class RusheeProfile extends Component {
   }
 
   viewResume = () => {
+    // Handles android back button
+    let path;
+    if (process.env.NODE_ENV === 'development') {
+      path = 'http://localhost:3000';
+    }
+    else {
+      path = 'https://garnett-app.herokuapp.com';
+    }
+
+    window.history.pushState(null, null, path + window.location.pathname);
+    window.onpopstate = () => {
+      window.history.pushState(null, null, path + window.location.pathname);
+      this.closeResume();
+    }
+
     this.setState({
       openResume: true
     });
   }
 
   closeResume = () => {
+    window.onpopstate = () => {};
     this.setState({
       openResume: false
     });

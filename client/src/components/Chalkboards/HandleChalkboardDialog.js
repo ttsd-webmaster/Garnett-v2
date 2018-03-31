@@ -136,6 +136,21 @@ export default class HandleChalkboardDialog extends Component {
 
   // Opens the edit dialog if user is hosting chalkboard
   handleEditOpen = () => {
+    // Handles android back button for edit dialog
+    let path;
+    if (process.env.NODE_ENV === 'development') {
+      path = 'http://localhost:3000';
+    }
+    else {
+      path = 'https://garnett-app.herokuapp.com';
+    }
+
+    window.history.pushState(null, null, path + window.location.pathname);
+    window.onpopstate = () => {
+      window.history.pushState(null, null, path + window.location.pathname);
+      this.handleEditClose();
+    }
+
     this.setState({
       open: true,
     });
@@ -143,6 +158,21 @@ export default class HandleChalkboardDialog extends Component {
 
   // Closes the edit dialog
   handleEditClose = () => {
+    // Handles android back button for this dialog
+    let path;
+    if (process.env.NODE_ENV === 'development') {
+      path = 'http://localhost:3000';
+    }
+    else {
+      path = 'https://garnett-app.herokuapp.com';
+    }
+
+    window.history.pushState(null, null, path + window.location.pathname);
+    window.onpopstate = () => {
+      window.history.pushState(null, null, path + window.location.pathname);
+      this.handleClose();
+    }
+
     this.setState({
       open: false,
       field: ''
@@ -151,6 +181,7 @@ export default class HandleChalkboardDialog extends Component {
 
   // Closes this dialog
   handleClose = () => {
+    window.onpopstate = () => {};
     this.props.handleClose();
 
     this.setState({
