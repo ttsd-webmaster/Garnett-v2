@@ -9,6 +9,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {InjectManifest} = require('workbox-webpack-plugin');
+const CriticalPlugin = require('webpack-plugin-critical').CriticalPlugin;
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
@@ -322,6 +323,12 @@ module.exports = {
       globIgnores: ['/.map', 'asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js', 'precache-manifest.*.js'],
       swSrc: 'src/service-worker.js',
       swDest: 'service-worker.js'
+    }),
+    new CriticalPlugin({
+      src: 'index.html',
+      inline: true,
+      minify: true,
+      dest: 'index.html'
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
