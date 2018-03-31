@@ -304,6 +304,17 @@ module.exports = {
     new ExtractTextPlugin({
       filename: cssFilename,
     }),
+    new HtmlCriticalPlugin({
+      base: path.resolve('build'),
+      src: 'index.html',
+      dest: 'index.html',
+      inline: true,
+      minify: true,
+      extract: true,
+      penthouse: {
+        blockJSRequests: false,
+      }
+    }),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
@@ -323,17 +334,6 @@ module.exports = {
       globIgnores: ['/.map', 'asset-manifest.json', 'service-worker.js', 'workbox-sw.prod.js', 'precache-manifest.*.js'],
       swSrc: 'src/service-worker.js',
       swDest: 'service-worker.js'
-    }),
-    new HtmlCriticalPlugin({
-      base: path.resolve('build'),
-      src: 'index.html',
-      dest: 'index.html',
-      inline: true,
-      minify: true,
-      extract: true,
-      penthouse: {
-        blockJSRequests: false,
-      }
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
