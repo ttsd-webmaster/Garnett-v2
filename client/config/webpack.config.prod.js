@@ -9,7 +9,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const {InjectManifest} = require('workbox-webpack-plugin');
-const CriticalPlugin = require('webpack-plugin-critical').CriticalPlugin;
+const HtmlCriticalPlugin = require('html-critical-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const paths = require('./paths');
@@ -324,7 +324,7 @@ module.exports = {
       swSrc: 'src/service-worker.js',
       swDest: 'service-worker.js'
     }),
-    new CriticalPlugin({
+    new HtmlCriticalPlugin({
       src: 'index.html',
       inline: true,
       minify: true,
