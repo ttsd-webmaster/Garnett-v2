@@ -327,9 +327,13 @@ module.exports = {
     new HtmlCriticalPlugin({
       base: path.resolve('build'),
       src: 'index.html',
+      dest: 'index.html',
       inline: true,
       minify: true,
-      dest: 'index.html'
+      extract: true,
+      penthouse: {
+        blockJSRequests: false,
+      }
     }),
     // Moment.js is an extremely popular library that bundles large locale files
     // by default due to how Webpack interprets its code. This is a practical
