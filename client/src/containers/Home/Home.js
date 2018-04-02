@@ -42,7 +42,7 @@ export default class Home extends Component {
     return (
       this.state.loaded ? (
         <div className="loading-container">
-          <div className="app-header">
+          <div className="app-header no-tabs">
             <span> Home </span>
             <span className="log-out" onClick={this.logout}> Log Out </span>
           </div>

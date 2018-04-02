@@ -96,6 +96,7 @@ div, a {
   height: 100vh;
   width: 100vw;
 }
+
 .app-header {
   position: fixed;
   top: 0;
@@ -110,6 +111,9 @@ div, a {
 }
 .app-header > span:first-child {
   margin-left: 15px;
+}
+.app-header.no-tabs {
+  box-shadow: rgba(12, 42, 51, 0.3) 0px 1px 8px;
 }
 
 /* Animates the component in */

@@ -97,7 +97,7 @@ export default class DelibsApp extends Component {
     return (
       this.state.loaded ? (
         <div className="loading-container">
-          <div className="app-header">
+          <div className="app-header no-tabs">
             <span> Delibs App </span>
             <span className="back-home" onClick={this.goHome}> Home </span>
           </div>

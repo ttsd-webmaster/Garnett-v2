@@ -148,7 +148,7 @@ export default class RusheeProfile extends Component {
     return (
       this.state.rushee ? (
         <div className="loading-container">
-          <div className="app-header">
+          <div className="app-header no-tabs">
             <span> Rushee Profile </span>
             <span className="back-home" onClick={this.props.history.goBack}> Back </span>
           </div>
