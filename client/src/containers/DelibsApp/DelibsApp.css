@@ -27,8 +27,10 @@
 /* Counts interactions */
 .interactedCheckbox {
   position: absolute !important;
-  right: 0;
+  top: 50%;
+  right: 6%;
   width: auto !important;
+  transform: translateY(-50%);
 }
 .interactedCheckbox > div {
   flex-direction: column;
