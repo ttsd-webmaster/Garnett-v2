@@ -855,6 +855,8 @@ app.post('/api/updateinteraction', function(req, res) {
   activeRef.update({
     interacted: !req.body.interacted
   });
+
+  res.sendStatus(200);
 });
 
 // Start vote for rushee
