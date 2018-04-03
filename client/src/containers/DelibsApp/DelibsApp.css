@@ -16,6 +16,24 @@
   position: absolute;
 }
 
+/* Delibs Resources Buttons */
+.delibs-resources {
+  display: flex;
+  justify-content: space-around;
+  width: 100vw;
+  max-width: 700px;
+  margin: 30px auto auto;
+}
+
+.delibs-button {
+  height: 75px;
+  width: 75px;
+  background-color: var(--primary-color);
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+/* Delibs Dialog */
 .garnett-dialog-body.delibs {
   padding-top: 24px !important;
 }

@@ -1,4 +1,5 @@
 import './DelibsApp.css';
+import '../Home/Home.css';
 import '../PledgeApp/PledgeApp.css';
 import '../../components/Settings/Settings.css';
 import {loadFirebase} from '../../helpers/functions.js';
@@ -10,9 +11,6 @@ import Loadable from 'react-loadable';
 import Snackbar from 'material-ui/Snackbar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
 
 const LoadableEndVoteDialog = Loadable({
   loader: () => import('./Dialogs/EndVoteDialog'),
@@ -226,22 +224,48 @@ export default class RusheeProfile extends Component {
               </div>
             ) : (
               <div>
-                <Popover
-                  open={this.state.openMenu}
-                  anchorEl={this.state.anchorEl}
-                  anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
-                  targetOrigin={{horizontal: 'middle', vertical: 'top'}}
-                  onRequestClose={this.handleMenuClose}
-                >
-                  <Menu>
-                    <MenuItem primaryText="Resume" onClick={this.viewResume} />
-                    <MenuItem primaryText="Cover Letter" />
-                    <MenuItem primaryText="Schedule" />
-                    <MenuItem primaryText="Pre-Delibs Sheet" />
-                  </Menu>
-                </Popover>
-
-                <div className="logout-button" onClick={this.handleOpenMenu}> Resources </div>
+                <div className="delibs-resources">
+                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                    <div className="app-icon-image-container">
+                      <img 
+                        className="app-icon-image"
+                        src={require('../Home/images/pledge-app-icon.png')}
+                        alt="Pledge App"
+                      />
+                    </div>
+                    <p> Resume </p>
+                  </div>
+                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                    <div className="app-icon-image-container">
+                      <img 
+                        className="app-icon-image"
+                        src={require('../Home/images/delibs-icon.png')}
+                        alt="Delibs App"
+                      />
+                    </div>
+                    <p> Cover Letter </p>
+                  </div>
+                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                    <div className="app-icon-image-container">
+                      <img 
+                        className="app-icon-image"
+                        src={require('../Home/images/pledge-app-icon.png')}
+                        alt="Pledge App"
+                      />
+                    </div>
+                    <p> Schedule </p>
+                  </div>
+                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                    <div className="app-icon-image-container">
+                      <img 
+                        className="app-icon-image"
+                        src={require('../Home/images/delibs-icon.png')}
+                        alt="Delibs App"
+                      />
+                    </div>
+                    <p> Pre-Delibs </p>
+                  </div>
+                </div>
                 
                 <LoadableResumeDialog
                   open={this.state.openResume}

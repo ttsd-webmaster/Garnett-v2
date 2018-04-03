@@ -14,19 +14,19 @@
 .app-icon {
   display: flex;
   flex-direction: column;
+  align-items: center;
   color: #777;
   font-size: 14px;
   margin-right: 6vw;
   cursor: pointer;
 }
-.app-icon > p {
-  margin-left: auto;
-  margin-right: auto;
-}
 @media(max-width: 768px) {
   .app-icon {
     font-size: 13px;
   }
+}
+.app-icon.delibs {
+  margin-right: 0;
 }
 
 .app-icon-image-container {
@@ -53,7 +53,6 @@
 .app-icon-image {
   height: 75px;
   width: 75px;
-  margin: auto;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
 }
