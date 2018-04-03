@@ -2,6 +2,7 @@ import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
 import {loadFirebase} from '../../helpers/functions.js';
 import {wrapDelibsApp, LoadingComponent} from '../../helpers/loaders.js';
+import API from '../../api/API.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -11,9 +12,15 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import Checkbox from 'material-ui/Checkbox';
+
+const labelStyle = {
+  left: '-10px',
+  width: 'auto'
+};
 
 const LoadableVoteDialog = Loadable({
-  loader: () => import('./VoteDialog'),
+  loader: () => import('./Dialogs/VoteDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -40,16 +47,31 @@ export default class DelibsApp extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let rushees;
         let firebase = window.firebase;
+        let displayName = this.props.state.displayName;
         let rusheesRef = firebase.database().ref('/rushees');
 
         rusheesRef.on('value', (snapshot) => {
-          rushees = Object.keys(snapshot.val()).map(function(key) {
+          let interactions = [];
+
+          snapshot.forEach((rushee) => {
+            rusheesRef.child(rushee.key + '/Actives/' + displayName).on('value', (active) => {
+              interactions.push(active.val().interacted);
+            })
+          });
+
+          let rushees = Object.keys(snapshot.val()).map(function(key) {
             return snapshot.val()[key];
           });
-          rushees.sort((a, b) => {
-            return a.lastName > b.lastName ? 1 : -1;
+
+          rushees.forEach((rushee, i) => {
+            rushee['interacted'] = interactions[i];
+          });
+
+          rushees.sort((rushee1, rushee2) => {
+            let name1 = rushee1.name.split(" ").splice(-1);
+            let name2 = rushee2.name.split(" ").splice(-1);
+            return name1 > name2 ? 1 : -1;
           });
 
           console.log('Rushees array: ', rushees);
@@ -75,9 +97,28 @@ export default class DelibsApp extends Component {
   }
 
   openRushee = (rushee) => {
-    let rusheeName = rushee.firstName + rushee.lastName;
+    let rusheeName = rushee.name.replace(/ /g,'');
 
     this.props.history.push('/delibs-app/' + rusheeName, rusheeName);
+  }
+
+  updateInteraction = (rushee) => {
+    let displayName = this.props.state.displayName;
+    let rusheeName = rushee.name.replace(/ /g,'');
+    let interacted = rushee.interacted;
+    let totalInteractions = rushee.totalInteractions;
+
+    API.updateInteraction(displayName, rusheeName, interacted, totalInteractions)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log('Error: ', err);
+    });
+  }
+
+  handleClickCapture(event) {
+    event.stopPropagation();
   }
 
   handleRequestOpen = (message) => {
@@ -102,7 +143,7 @@ export default class DelibsApp extends Component {
             <span className="back-home" onClick={this.goHome}> Home </span>
           </div>
 
-          <div className="animate-in" id="delibs-app">
+          <div className="animate-in delibs-app">
             <Subheader className="garnett-subheader"> Rushees </Subheader>
             <List className="garnett-list">
               {this.state.rushees.map((rushee, i) => (
@@ -128,18 +169,29 @@ export default class DelibsApp extends Component {
                       className="garnett-list-item large"
                       leftAvatar={<Avatar size={70} src={rushee.photo} className="garnett-image large" />}
                       primaryText={
-                        <p className="garnett-name"> {rushee.firstName} {rushee.lastName}</p>
+                        <p className="garnett-name"> {rushee.name} </p>
                       }
                       secondaryText={
-                      <p>
-                        {rushee.year}
-                        <br />
-                        {rushee.major}
-                      </p>
-                    }
+                        <p>
+                          {rushee.year}
+                          <br />
+                          {rushee.major}
+                        </p>
+                      }
                       secondaryTextLines={2}
                       onClick={() => this.openRushee(rushee)}
-                    />
+                    >
+                      <div onClickCapture={this.handleClickCapture}>
+                        <Checkbox
+                          className="interactedCheckbox"
+                          label="Interacted?"
+                          labelStyle={labelStyle}
+                          checked={rushee.interacted}
+                          onCheck={() => this.updateInteraction(rushee)}
+                        />
+                        <p className="interactedCount"> {rushee.totalInteractions} </p>
+                      </div>
+                    </ListItem>
                     <Divider className="garnett-divider large" inset={true} />
                   </div>
                 </LazyLoad>

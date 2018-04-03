@@ -83,7 +83,7 @@ export default class ContactsDialog extends Component {
               <i className="icon-briefcase garnett-icon"></i>
             }
           />
-          <Divider className="garnett-divider last" />
+          <Divider className="garnett-divider" />
         </List>
       </Dialog>
     )

@@ -10,9 +10,12 @@ import Loadable from 'react-loadable';
 import Snackbar from 'material-ui/Snackbar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
 const LoadableEndVoteDialog = Loadable({
-  loader: () => import('./EndVoteDialog'),
+  loader: () => import('./Dialogs/EndVoteDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -23,7 +26,7 @@ const LoadableEndVoteDialog = Loadable({
 });
 
 const LoadableVoteDialog = Loadable({
-  loader: () => import('./VoteDialog'),
+  loader: () => import('./Dialogs/VoteDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -34,7 +37,7 @@ const LoadableVoteDialog = Loadable({
 });
 
 const LoadableResumeDialog = Loadable({
-  loader: () => import('./ResumeDialog'),
+  loader: () => import('./Dialogs/ResumeDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -50,6 +53,7 @@ export default class RusheeProfile extends Component {
     this.state = {
       open: false,
       rushee: null,
+      openMenu: false,
       openResume: false,
       openSnackbar: false,
       message: ''
@@ -79,7 +83,7 @@ export default class RusheeProfile extends Component {
   }
 
   startVote = () => {
-    let rusheeName = `${this.state.rushee.firstName} ${this.state.rushee.lastName}`;
+    let rusheeName = this.state.rushee.name;
 
     API.startVote(rusheeName)
     .then((res) => {
@@ -96,6 +100,19 @@ export default class RusheeProfile extends Component {
   handleClose = () => {
     this.setState({
       open: false
+    });
+  }
+
+  handleOpenMenu = (event) => {
+    this.setState({
+      openMenu: true,
+      anchorEl: event.currentTarget
+    });
+  }
+
+  handleMenuClose = () => {
+    this.setState({
+      openMenu: false,
     });
   }
 
@@ -117,6 +134,7 @@ export default class RusheeProfile extends Component {
     }
 
     this.setState({
+      openMenu: false,
       openResume: true
     });
   }
@@ -153,14 +171,14 @@ export default class RusheeProfile extends Component {
             <span className="back-home" onClick={this.props.history.goBack}> Back </span>
           </div>
 
-          <div className="rushee-profile-container animate-in">
+          <div className="animate-in delibs-app rushee">
             <img className="user-photo" src={this.state.rushee.photo} alt="User" />
-            <List>
+            <List className="garnett-list">
               <Divider />
               <ListItem
                 className="garnett-list-item settings"
                 primaryText="Name"
-                secondaryText={`${this.state.rushee.firstName} ${this.state.rushee.lastName}`}
+                secondaryText={this.state.rushee.name}
               />
               <Divider />
               <ListItem
@@ -201,14 +219,29 @@ export default class RusheeProfile extends Component {
 
                 <LoadableEndVoteDialog
                   open={this.state.open}
-                  rushee={`${this.state.rushee.firstName} ${this.state.rushee.lastName}`}
+                  rushee={this.state.rushee.name}
                   handleClose={this.handleClose}
                   handleRequestOpen={this.handleRequestOpen}
                 />
               </div>
             ) : (
               <div>
-                <div className="logout-button" onClick={this.viewResume}> View Resume </div>
+                <Popover
+                  open={this.state.openMenu}
+                  anchorEl={this.state.anchorEl}
+                  anchorOrigin={{horizontal: 'middle', vertical: 'top'}}
+                  targetOrigin={{horizontal: 'middle', vertical: 'top'}}
+                  onRequestClose={this.handleMenuClose}
+                >
+                  <Menu>
+                    <MenuItem primaryText="Resume" onClick={this.viewResume} />
+                    <MenuItem primaryText="Cover Letter" />
+                    <MenuItem primaryText="Schedule" />
+                    <MenuItem primaryText="Pre-Delibs Sheet" />
+                  </Menu>
+                </Popover>
+
+                <div className="logout-button" onClick={this.handleOpenMenu}> Resources </div>
                 
                 <LoadableResumeDialog
                   open={this.state.openResume}

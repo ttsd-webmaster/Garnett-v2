@@ -87,6 +87,9 @@ export default {
     return axios.post('/api/sendmessage', {pledgeName, activeName, amount});
   },
   // Delibs App
+  updateInteraction: function(displayName, rusheeName, interacted, totalInteractions) {
+    return axios.post('/api/updateinteraction', {displayName, rusheeName, interacted, totalInteractions});
+  },
   startVote: function(rusheeName) {
     return axios.post('/api/startvote', {rusheeName});
   },

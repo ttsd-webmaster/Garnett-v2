@@ -49,15 +49,13 @@
 
 /* Garnett List, List Items, and Dividers */
 .garnett-subheader {
-  min-width: 500px;
-  width: 70vw !important;
+  width: 100vw !important;
   max-width: 700px;
   margin: auto !important;
 }
 
 .garnett-list {
-  min-width: 500px;
-  width: 70vw;
+  width: 100vw;
   max-width: 700px;
   padding: 0 !important;
   margin: auto;
@@ -106,9 +104,6 @@
 }
 .garnett-divider.large {
   margin-left: 102px !important;
-}
-.garnett-divider.last {
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
 }
 
 /* Garnett Dialog */

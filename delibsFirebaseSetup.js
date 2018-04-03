@@ -19,11 +19,13 @@ usersRef.once('value', (snapshot) => {
         snapshot.forEach((child) => {
           child.ref.child('/Actives/' + activeName).update({
             vote: 'false',
-            voted: false
+            voted: false,
+            interacted: false
           });
           child.ref.update({
             totalVotes: 0,
-            votes: 0
+            votes: 0,
+            totalInteractions: 0
           });
         });
       });

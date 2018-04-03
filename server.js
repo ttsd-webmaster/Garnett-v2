@@ -833,6 +833,30 @@ app.post('/api/sendmessage', function(req, res) {
   });
 });
 
+// Update interaction for rushee
+app.post('/api/updateinteraction', function(req, res) {
+  let totalInteractions = req.body.totalInteractions;
+  let rusheeName = req.body.rusheeName;
+  let displayName = req.body.displayName;
+  let rusheeRef = admin.database().ref('/rushees/' + rusheeName);
+  let activeRef = rusheeRef.child('Actives/' + displayName);
+
+  if (!req.body.interacted == true) {
+    totalInteractions++;
+  }
+  else {
+    totalInteractions--;
+  }
+
+  rusheeRef.update({
+    totalInteractions: totalInteractions
+  });
+
+  activeRef.update({
+    interacted: !req.body.interacted
+  });
+});
+
 // Start vote for rushee
 app.post('/api/startvote', function(req, res) {
   let delibsRef = admin.database().ref('/delibsVoting');

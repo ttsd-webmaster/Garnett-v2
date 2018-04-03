@@ -1,5 +1,5 @@
-import {loadFirebase} from '../../helpers/functions.js';
-import API from '../../api/API.js';
+import {loadFirebase} from '../../../helpers/functions.js';
+import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';

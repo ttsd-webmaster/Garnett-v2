@@ -316,7 +316,7 @@ export default class HandleChalkboardDialog extends Component {
                       mapsSelector(this.state.chalkboard.location);
                     }}
                   />
-                  <Divider className="garnett-divider last" />
+                  <Divider className="garnett-divider" />
                 </List>
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>

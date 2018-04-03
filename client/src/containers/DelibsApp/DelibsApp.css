@@ -4,13 +4,16 @@
   cursor: pointer;
 }
 
-#delibs-app {
+.delibs-app {
   position: relative;
   top: 52px;
   width: 100vw;
   background-color: #fafafa;
-  margin-bottom: 48px;
+  padding-bottom: 48px;
   z-index: 0;
+}
+.delibs-app.rushee {
+  position: absolute;
 }
 
 .garnett-dialog-body.delibs {
@@ -21,10 +24,20 @@
   margin-bottom: 15px;
 }
 
-.rushee-profile-container {
+/* Counts interactions */
+.interactedCheckbox {
+  position: absolute !important;
+  top: 5px;
+  right: 0;
+  width: auto !important;
+}
+.interactedCheckbox > div {
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+.interactedCount {
   position: absolute;
-  top: 52px;
-  width: 100vw;
-  background-color: #fafafa;
-  z-index: 0;
+  right: 42px;
+  bottom: -5px;
 }

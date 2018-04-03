@@ -78,7 +78,7 @@ export default class Settings extends Component {
                 <i className="icon-graduation-cap garnett-icon"></i>
               }
             />
-            <Divider className="garnett-divider last" />
+            <Divider />
           </List>
 
           {this.props.state.status !== 'pledge' ? (
