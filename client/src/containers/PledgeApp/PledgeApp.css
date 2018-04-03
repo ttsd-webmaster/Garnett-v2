@@ -50,7 +50,7 @@
 /* Garnett List, List Items, and Dividers */
 .garnett-subheader {
   min-width: 500px;
-  width: 70vw;
+  width: 70vw !important;
   max-width: 700px;
   margin: auto !important;
 }
