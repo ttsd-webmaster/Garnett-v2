@@ -15,7 +15,7 @@ import Divider from 'material-ui/Divider';
 import Checkbox from 'material-ui/Checkbox';
 
 const labelStyle = {
-  left: '-10px',
+  left: '-7px',
   width: 'auto'
 };
 
@@ -184,12 +184,11 @@ export default class DelibsApp extends Component {
                       <div onClickCapture={this.handleClickCapture}>
                         <Checkbox
                           className="interactedCheckbox"
-                          label="Interacted?"
+                          label={<span> {rushee.totalInteractions} </span>}
                           labelStyle={labelStyle}
                           checked={rushee.interacted}
                           onCheck={() => this.updateInteraction(rushee)}
                         />
-                        <p className="interactedCount"> {rushee.totalInteractions} </p>
                       </div>
                     </ListItem>
                     <Divider className="garnett-divider large" inset={true} />
