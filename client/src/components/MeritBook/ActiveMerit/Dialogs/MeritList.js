@@ -1,5 +1,5 @@
-import '../MeritBook.css';
-import API from '../../../api/API.js';
+import '../../MeritBook.css';
+import API from '../../../../api/API.js';
 
 import React, {Component} from 'react';
 import Avatar from 'material-ui/Avatar';

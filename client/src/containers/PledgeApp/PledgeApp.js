@@ -304,6 +304,7 @@ export default class PledgeApp extends Component {
           <div className="app-header">
             <span> {this.state.title} </span>
           </div>
+          
           <Tabs
             contentContainerClassName="content-container"
             inkBarStyle={inkBarStyle}

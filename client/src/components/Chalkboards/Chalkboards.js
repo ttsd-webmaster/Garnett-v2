@@ -1,6 +1,6 @@
 import './Chalkboards.css';
-import MyChalkboards from './MyChalkboards';
-import AllChalkboards from './AllChalkboards';
+import MyChalkboards from './Views/MyChalkboards';
+import AllChalkboards from './Views/AllChalkboards';
 import {loadFirebase, getDate} from '../../helpers/functions.js';
 import {LoadingComponent} from '../../helpers/loaders.js';
 
@@ -9,7 +9,7 @@ import Loadable from 'react-loadable';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 const LoadableAddChalkboardDialog = Loadable({
-  loader: () => import('./AddChalkboardDialog'),
+  loader: () => import('./Dialogs/AddChalkboardDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -20,7 +20,7 @@ const LoadableAddChalkboardDialog = Loadable({
 });
 
 const LoadableHandleChalkboardDialog = Loadable({
-  loader: () => import('./HandleChalkboardDialog'),
+  loader: () => import('./Dialogs/HandleChalkboardDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;

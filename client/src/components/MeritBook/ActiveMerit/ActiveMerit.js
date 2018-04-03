@@ -11,7 +11,7 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 const LoadableActiveMeritDialog = Loadable({
-  loader: () => import('./ActiveMeritDialog'),
+  loader: () => import('./Dialogs/ActiveMeritDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -22,7 +22,7 @@ const LoadableActiveMeritDialog = Loadable({
 });
 
 const LoadableActiveMeritAllDialog = Loadable({
-  loader: () => import('./ActiveMeritAllDialog'),
+  loader: () => import('./Dialogs/ActiveMeritAllDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -182,8 +182,8 @@ export default class ActiveMerit extends Component {
     return (
       this.state.loaded ? (
         <div className="animate-in">
+          <Subheader className="garnett-subheader"> Pledges </Subheader>
           <List className="garnett-list">
-            <Subheader> Pledges </Subheader>
             {this.state.pledges.map((pledge, i) => (
               <div key={i}>
                 <Divider className="garnett-divider large" inset={true} />

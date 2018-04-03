@@ -32,7 +32,7 @@ export default class Settings extends Component {
       this.props.state.photoURL ? (
         <div>
           <img className="user-photo" src={this.props.state.photoURL} alt="User" />
-          <List>
+          <List className="garnett-list">
             <Divider />
             <ListItem
               className="garnett-list-item settings"

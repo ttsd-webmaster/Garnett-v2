@@ -15,11 +15,13 @@
 
 .content-container > div {
   background-color: #fafafa;
-  height: 100%;
   top: 100px;
   overflow: scroll !important;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
+}
+.content-container > div > div {
+  margin-bottom: 48px;
 }
 
 .fixed-button {
@@ -46,11 +48,23 @@
 }
 
 /* Garnett List, List Items, and Dividers */
+.garnett-subheader {
+  min-width: 500px;
+  width: 70vw;
+  max-width: 700px;
+  margin: auto !important;
+}
+
 .garnett-list {
-  padding: 0px 0 48px !important;
+  min-width: 500px;
+  width: 70vw;
+  max-width: 700px;
+  padding: 0 !important;
+  margin: auto;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
 }
 .garnett-list.no-header {
-  padding: 48px 0 48px !important;
+  margin-top: 48px !important;
 }
 
 .garnett-list-item > div > div {

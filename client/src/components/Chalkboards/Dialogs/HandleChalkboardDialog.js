@@ -1,6 +1,6 @@
-import './Chalkboards.css';
-import API from '../../api/API.js';
-import {mapsSelector, getTabStyle} from '../../helpers/functions.js';
+import '../Chalkboards.css';
+import API from '../../../api/API.js';
+import {mapsSelector, getTabStyle} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';

@@ -1,6 +1,6 @@
-import '../MeritBook.css';
-import {getDate} from '../../../helpers/functions.js';
-import API from '../../../api/API.js';
+import '../../MeritBook.css';
+import {getDate} from '../../../../helpers/functions.js';
+import API from '../../../../api/API.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';

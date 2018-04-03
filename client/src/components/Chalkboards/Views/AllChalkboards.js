@@ -9,8 +9,8 @@ export default class AllChalkboards extends Component {
   render() {
     return (
       <div id="all-chalkboards">
+        <Subheader className="garnett-subheader"> Upcoming </Subheader>
         <List className="garnett-list">
-          <Subheader> Upcoming </Subheader>
           {this.props.upcomingChalkboards.map((chalkboard, i) => (
             <LazyLoad
               height={88}
@@ -29,32 +29,32 @@ export default class AllChalkboards extends Component {
                 </div>
               }
             >
-              <div>
-                <Divider className="garnett-divider large" inset={true} />
-                <ListItem
-                  className="garnett-list-item large"
-                  leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
-                  primaryText={
-                    <p className="garnett-name"> {chalkboard.title} </p>
-                  }
-                  secondaryText={
-                    <p className="garnett-description">
-                      {chalkboard.description}
-                    </p>
-                  }
-                  secondaryTextLines={2}
-                  onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
-                >
-                  <p className="garnett-date"> {chalkboard.date} </p>
-                </ListItem>
-                <Divider className="garnett-divider large" inset={true} />
-              </div>
+              <Divider className="garnett-divider large" inset={true} />
+              <ListItem
+                className="garnett-list-item large"
+                leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
+                primaryText={
+                  <p className="garnett-name"> {chalkboard.title} </p>
+                }
+                secondaryText={
+                  <p className="garnett-description">
+                    {chalkboard.description}
+                  </p>
+                }
+                secondaryTextLines={2}
+                onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
+              >
+                <p className="garnett-date"> {chalkboard.date} </p>
+              </ListItem>
+              <Divider className="garnett-divider large" inset={true} />
             </LazyLoad>
           ))}
+        </List>
 
-          <Divider />
+        <Divider className="garnett-subheader" />
 
-          <Subheader> Completed </Subheader>
+        <Subheader className="garnett-subheader"> Completed </Subheader>
+        <List className="garnett-list">
           {this.props.completedChalkboards.map((chalkboard, i) => (
             <LazyLoad
               height={88}
@@ -73,26 +73,24 @@ export default class AllChalkboards extends Component {
                 </div>
               }
             >
-              <div>
-                <Divider className="garnett-divider large" inset={true} />
-                <ListItem
-                  className="garnett-list-item large"
-                  leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
-                  primaryText={
-                    <p className="garnett-name"> {chalkboard.title} </p>
-                  }
-                  secondaryText={
-                    <p className="garnett-description">
-                      {chalkboard.description}
-                    </p>
-                  }
-                  secondaryTextLines={2}
-                  onClick={() => this.props.handleOpen(chalkboard, 'completed')}
-                >
-                  <p className="garnett-date"> {chalkboard.date} </p>
-                </ListItem>
-                <Divider className="garnett-divider large" inset={true} />
-              </div>
+              <Divider className="garnett-divider large" inset={true} />
+              <ListItem
+                className="garnett-list-item large"
+                leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
+                primaryText={
+                  <p className="garnett-name"> {chalkboard.title} </p>
+                }
+                secondaryText={
+                  <p className="garnett-description">
+                    {chalkboard.description}
+                  </p>
+                }
+                secondaryTextLines={2}
+                onClick={() => this.props.handleOpen(chalkboard, 'completed')}
+              >
+                <p className="garnett-date"> {chalkboard.date} </p>
+              </ListItem>
+              <Divider className="garnett-divider large" inset={true} />
             </LazyLoad>
           ))}
         </List>

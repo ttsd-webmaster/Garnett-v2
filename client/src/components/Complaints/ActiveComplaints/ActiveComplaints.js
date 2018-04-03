@@ -1,6 +1,6 @@
 import '../Complaints.css';
-import MyComplaints from './MyComplaints';
-import PastComplaints from './PastComplaints';
+import MyComplaints from './Views/MyComplaints';
+import PastComplaints from './Views/PastComplaints';
 import {loadFirebase} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
 
@@ -9,7 +9,7 @@ import Loadable from 'react-loadable';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 const LoadableAddComplaintDialog = Loadable({
-  loader: () => import('./AddComplaintDialog'),
+  loader: () => import('./Dialogs/AddComplaintDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;

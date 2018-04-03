@@ -1,4 +1,4 @@
-import './Contacts.css';
+import '../Contacts.css';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';

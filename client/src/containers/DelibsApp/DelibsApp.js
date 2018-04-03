@@ -102,48 +102,50 @@ export default class DelibsApp extends Component {
             <span className="back-home" onClick={this.goHome}> Home </span>
           </div>
 
-          <List className="animate-in garnett-list delibs">
-            <Subheader> Rushees </Subheader>
-            {this.state.rushees.map((rushee, i) => (
-              <LazyLoad
-                height={88}
-                offset={500}
-                once
-                overflow
-                key={i}
-                placeholder={
-                  <div className="placeholder-skeleton">
+          <div className="animate-in" id="delibs-app">
+            <Subheader className="garnett-subheader"> Rushees </Subheader>
+            <List className="garnett-list">
+              {this.state.rushees.map((rushee, i) => (
+                <LazyLoad
+                  height={88}
+                  offset={500}
+                  once
+                  overflow
+                  key={i}
+                  placeholder={
+                    <div className="placeholder-skeleton">
+                      <Divider className="garnett-divider large" inset={true} />
+                      <div className="placeholder-avatar"></div>
+                      <div className="placeholder-name"></div>
+                      <div className="placeholder-year"></div>
+                      <Divider className="garnett-divider large" inset={true} />
+                    </div>
+                  }
+                >
+                  <div>
                     <Divider className="garnett-divider large" inset={true} />
-                    <div className="placeholder-avatar"></div>
-                    <div className="placeholder-name"></div>
-                    <div className="placeholder-year"></div>
+                    <ListItem
+                      className="garnett-list-item large"
+                      leftAvatar={<Avatar size={70} src={rushee.photo} className="garnett-image large" />}
+                      primaryText={
+                        <p className="garnett-name"> {rushee.firstName} {rushee.lastName}</p>
+                      }
+                      secondaryText={
+                      <p>
+                        {rushee.year}
+                        <br />
+                        {rushee.major}
+                      </p>
+                    }
+                      secondaryTextLines={2}
+                      onClick={() => this.openRushee(rushee)}
+                    />
                     <Divider className="garnett-divider large" inset={true} />
                   </div>
-                }
-              >
-                <div>
-                  <Divider className="garnett-divider large" inset={true} />
-                  <ListItem
-                    className="garnett-list-item large"
-                    leftAvatar={<Avatar size={70} src={rushee.photo} className="garnett-image large" />}
-                    primaryText={
-                      <p className="garnett-name"> {rushee.firstName} {rushee.lastName}</p>
-                    }
-                    secondaryText={
-                    <p>
-                      {rushee.year}
-                      <br />
-                      {rushee.major}
-                    </p>
-                  }
-                    secondaryTextLines={2}
-                    onClick={() => this.openRushee(rushee)}
-                  />
-                  <Divider className="garnett-divider large" inset={true} />
-                </div>
-              </LazyLoad>
-            ))}
-          </List>
+                </LazyLoad>
+              ))}
+            </List>
+          </div>
 
           {this.props.state.status !== 'regent' && (
             <LoadableVoteDialog

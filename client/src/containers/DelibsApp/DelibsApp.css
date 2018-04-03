@@ -4,11 +4,12 @@
   cursor: pointer;
 }
 
-.garnett-list.delibs {
-  position: absolute;
+#delibs-app {
+  position: relative;
   top: 52px;
   width: 100vw;
   background-color: #fafafa;
+  margin-bottom: 48px;
   z-index: 0;
 }
 

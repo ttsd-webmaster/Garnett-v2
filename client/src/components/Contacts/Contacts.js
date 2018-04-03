@@ -8,7 +8,7 @@ import {List} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 
 const LoadableContactsDialog = Loadable({
-  loader: () => import('./ContactsDialog'),
+  loader: () => import('./Dialogs/ContactsDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -85,23 +85,26 @@ export default class Contacts extends Component {
   render() {
     return (
       this.state.loaded ? (
-        <List className="garnett-list">
+        <div>
           {this.state.classes.map((classLabel, i) => (
             <div key={i}>
-              <Subheader> {classLabel} </Subheader>
-              <ActiveList 
-                actives={this.state.actives} 
-                classLabel={classLabel}
-                handleOpen={this.handleOpen}
-              />
+              <Subheader className="garnett-subheader"> {classLabel} </Subheader>
+              <List className="garnett-list">
+                <ActiveList 
+                  actives={this.state.actives} 
+                  classLabel={classLabel}
+                  handleOpen={this.handleOpen}
+                />
+              </List>
             </div>
           ))}
+
           <LoadableContactsDialog
             open={this.state.open}
             active={this.state.active}
             handleClose={this.handleClose}
           />
-        </List>
+        </div>
       ) : (
         <LoadingComponent />
       )

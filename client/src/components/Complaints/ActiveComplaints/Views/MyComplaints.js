@@ -6,7 +6,7 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 const LoadableHandleComplaintDialog = Loadable({
-  loader: () => import('./HandleComplaintDialog'),
+  loader: () => import('../Dialogs/HandleComplaintDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -66,8 +66,8 @@ export default class MyComplaints extends Component {
   render() {
     return (
       <div id="my-complaints" className="active">
+        <Subheader className="garnett-subheader"> Approved </Subheader>
         <List className="garnett-list">
-          <Subheader> Approved </Subheader>
           {this.props.approvedComplaints.map((complaint, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />
@@ -89,10 +89,12 @@ export default class MyComplaints extends Component {
               <Divider className="garnett-divider large" inset={true} />
             </div>
           ))}
+        </List>
 
-          <Divider />
+        <Divider className="garnett-subheader" />
 
-          <Subheader> Pending </Subheader>
+        <Subheader className="garnett-subheader"> Pending </Subheader>
+        <List className="garnett-list">
           {this.props.pendingComplaints.map((complaint, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />

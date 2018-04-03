@@ -8,10 +8,10 @@ export default class MyChalkboards extends Component {
   render() {
     return (
       <div id="my-chalkboards" className="active">
-        <List className="garnett-list">
-          {this.props.state.status !== 'pledge' && (
-            <div>
-              <Subheader> Hosting </Subheader>
+        {this.props.state.status !== 'pledge' && (
+          <div>
+            <Subheader className="garnett-subheader"> Hosting </Subheader>
+            <List className="garnett-list">
               {this.props.myHostingChalkboards.map((chalkboard, i) => (
                 <div key={i}>
                   <Divider className="garnett-divider large" inset={true} />
@@ -34,12 +34,14 @@ export default class MyChalkboards extends Component {
                   <Divider className="garnett-divider large" inset={true} />
                 </div>
               ))}
+            </List>
 
-              <Divider />
-            </div>
-          )}
+            <Divider className="garnett-subheader" />
+          </div>
+        )}
 
-          <Subheader> Attending </Subheader>
+        <Subheader className="garnett-subheader"> Attending </Subheader>
+        <List className="garnett-list">
           {this.props.myAttendingChalkboards.map((chalkboard, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />
@@ -62,10 +64,12 @@ export default class MyChalkboards extends Component {
               <Divider className="garnett-divider large" inset={true} />
             </div>
           ))}
+        </List>
 
-          <Divider />
+        <Divider className="garnett-subheader" />
 
-          <Subheader> Completed </Subheader>
+        <Subheader className="garnett-subheader"> Completed </Subheader>
+        <List className="garnett-list">
           {this.props.myCompletedChalkboards.map((chalkboard, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />
