@@ -1,6 +1,6 @@
 import './Login.css';
 import {activeCode, pledgeCode} from './data.js';
-import {initializeFirebase, loadFirebase, validateEmail} from '../../helpers/functions.js';
+import {isMobileDevice, initializeFirebase, loadFirebase, validateEmail} from '../../helpers/functions.js';
 import {CompletingTaskDialog} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 import SignIn from './SignIn';
@@ -360,6 +360,12 @@ export default class Login extends Component {
           />
         }
         <div className="animate-in">
+          {!isMobileDevice() && (
+            <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
+              <img className="logo" src={require('./images/logo.png')} alt="logo"/>
+            </a>
+          )}
+
           <div className="login-logo">
             <img src={require('./images/garnett.svg')} alt="garnett"/>
             <h1> Garne<span className="tt">tt</span> </h1>
