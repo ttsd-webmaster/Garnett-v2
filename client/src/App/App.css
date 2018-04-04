@@ -113,7 +113,7 @@ div, a {
   margin-left: 15px;
 }
 .app-header.no-tabs {
-  box-shadow: rgba(12, 42, 51, 0.3) 0px 1px 8px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
 }
 
 /* Animates the component in */

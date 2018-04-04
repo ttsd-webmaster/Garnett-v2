@@ -57,7 +57,7 @@ function LoadingLogin() {
 function LoadingHome() {
   return (
     <div className="loading-container">
-      <div className="app-header"></div>
+      <div className="app-header no-tabs"></div>
     </div>
   )
 }
@@ -100,7 +100,7 @@ function LoadingPledgeApp() {
 const wrapDelibsApp = (Slot) => (props) => {
   return (
     <div className="loading-container">
-      <div className="app-header">
+      <div className="app-header no-tabs">
         <Slot {...props} />
       </div>
     </div>
@@ -110,7 +110,7 @@ const wrapDelibsApp = (Slot) => (props) => {
 function LoadingRusheeProfile() {
   return (
     <div className="loading-container">
-      <div className="app-header"></div>
+      <div className="app-header no-tabs"></div>
     </div>
   )
 }

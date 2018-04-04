@@ -25,7 +25,7 @@ const tabContainerStyle = {
   top: 52,
   backgroundColor: 'white',
   borderBottom: '1px solid #e0e0e0',
-  boxShadow: 'rgba(12, 42, 51, 0.3) 0px 1px 8px',
+  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px',
   zIndex: 1
 };
 
