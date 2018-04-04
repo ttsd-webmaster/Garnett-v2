@@ -225,7 +225,7 @@ export default class RusheeProfile extends Component {
             ) : (
               <div>
                 <div className="delibs-resources">
-                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                  <div className="app-icon delibs" onClick={this.viewResume}>
                     <div className="app-icon-image-container">
                       <img 
                         className="app-icon-image"
@@ -235,7 +235,7 @@ export default class RusheeProfile extends Component {
                     </div>
                     <p> Resume </p>
                   </div>
-                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                  <div className="app-icon delibs" onClick={this.viewResume}>
                     <div className="app-icon-image-container">
                       <img 
                         className="app-icon-image"
@@ -245,7 +245,7 @@ export default class RusheeProfile extends Component {
                     </div>
                     <p> Cover Letter </p>
                   </div>
-                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                  <div className="app-icon delibs" onClick={this.viewResume}>
                     <div className="app-icon-image-container">
                       <img 
                         className="app-icon-image"
@@ -255,7 +255,7 @@ export default class RusheeProfile extends Component {
                     </div>
                     <p> Schedule </p>
                   </div>
-                  <div className="app-icon delibs" onClick={() => this.viewResume(this.state.rushee)}>
+                  <div className="app-icon delibs" onClick={this.viewResume}>
                     <div className="app-icon-image-container">
                       <img 
                         className="app-icon-image"
