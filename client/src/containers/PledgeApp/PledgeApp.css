@@ -110,7 +110,7 @@
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
   border-bottom: 1px solid #e0e0e0;
-  box-shadow: rgba(12, 42, 51, 0.3) 0px 1px 8px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   z-index: 2;
 }
 .garnett-dialog-tabs > div:last-child > div {
