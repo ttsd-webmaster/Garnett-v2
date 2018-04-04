@@ -43,14 +43,20 @@
 }
 
 /* Counts interactions */
-.interactedCheckbox {
-  position: absolute !important;
-  top: 50%;
-  right: 6%;
-  width: auto !important;
-  transform: translateY(-50%);
+.checkbox-container {
+  position: absolute;
+  top: 5px;
+  right: 3vw;
 }
+
 .interactedCheckbox > div {
-  flex-direction: column;
+  flex-direction: column-reverse;
   align-items: center;
+}
+
+.interactedCount {
+  position: relative;
+  right: -8px;
+  bottom: -5px;
+  margin: auto;
 }
