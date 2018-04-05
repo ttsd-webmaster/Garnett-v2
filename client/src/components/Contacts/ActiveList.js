@@ -9,14 +9,12 @@ import Divider from 'material-ui/Divider';
 
 export default class ActiveList extends Component {
   render() {
-    const offset = isMobileDevice() ? 700 : 1000;
-
     return (
       this.props.actives.map((active, i) => (
         this.props.classLabel === active.class &&
           <LazyLoad
             height={88}
-            offset={offset}
+            offset={window.innerHeight}
             once
             overflow
             key={i}

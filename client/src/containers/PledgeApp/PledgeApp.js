@@ -1,7 +1,7 @@
 import './PledgeApp.css';
 import '../../fontello/css/fontello.css';
 // import API from '../../api/API.js';
-import {getTabStyle} from '../../helpers/functions.js';
+import {getTabStyle, isMobileDevice} from '../../helpers/functions.js';
 import {LoadingPledgeApp} from '../../helpers/loaders.js';
 import MeritBook from '../../components/MeritBook/MeritBook';
 import Contacts from '../../components/Contacts/Contacts';
@@ -13,41 +13,12 @@ import React, {Component} from 'react';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 
-const inkBarStyle = {
-  position: 'fixed',
-  top: 100,
-  backgroundColor: 'var(--primary-color)',
-  zIndex: 1
-};
-
-const tabContainerStyle = {
-  position: 'fixed',
-  top: 52,
-  backgroundColor: 'white',
-  borderBottom: '1px solid #e0e0e0',
-  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px',
-  zIndex: 1
-};
-
 let didScroll = false;
+let previousScrollTop = 0;
 
 function watchScroll() {
   didScroll = true;
 }
-
-// Changes touch action of view if scroll is at top of view
-// function onScroll = () => {
-//   let contentContainer = document.querySelector('.content-container');
-//   let index = this.state.slideIndex;
-//   let view = contentContainer.childNodes[index];
-
-//   if (view.scrollTop >= 1) {
-//     view.style.touchAction = 'auto';
-//   } 
-//   else {
-//     view.style.touchAction = 'pan-down';
-//   }
-// }
 
 export default class PledgeApp extends Component {
   constructor(props) {
@@ -139,13 +110,14 @@ export default class PledgeApp extends Component {
     }
 
     // Checks if page has scrolled
-
-    // setInterval(() => {
-    //   if (didScroll) {
-    //     didScroll = false;
-    //     onScroll();
-    //   }
-    // }, 100);
+    setInterval(() => {
+      if (isMobileDevice()) {
+        if (didScroll) {
+          didScroll = false;
+          this.onScroll();
+        }
+      }
+    }, 100);
 
     // Initializes Pull To Refresh
     
@@ -187,15 +159,25 @@ export default class PledgeApp extends Component {
     // });
   }
 
+  componentDidMount() {
+    let contentContainer = document.querySelector('.content-container');
+
+    if (contentContainer) {
+      contentContainer.firstChild.style.position = 'fixed';
+      contentContainer.firstChild.style.height = 'calc(100% - 100px)';
+      contentContainer.firstChild.onscroll = watchScroll;
+    }
+  }
+
   // Changes view margin if view is pledge merit book
   componentDidUpdate() {
     let index = this.state.slideIndex;
-    let pullToRefresh = document.querySelector('.ptr--ptr');
+    // let pullToRefresh = document.querySelector('.ptr--ptr');
     let contentContainer = document.querySelector('.content-container');
     
-    if (pullToRefresh) {
-      pullToRefresh.style.marginTop = '100px';
-    }
+    // if (pullToRefresh) {
+    //   pullToRefresh.style.marginTop = '100px';
+    // }
 
     // Changes view margin if view is pledge merit book
     if (contentContainer) {
@@ -213,6 +195,42 @@ export default class PledgeApp extends Component {
     }
   }
 
+  // Changes touch action of view if scroll is at top of view for mobile
+  onScroll = () => {
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
+    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    let contentContainer = document.querySelector('.content-container');
+    let appBar = document.querySelector('.app-header');
+    let index = this.state.slideIndex;
+    let view = contentContainer.childNodes[index];
+    let scrollTop = view.scrollTop;
+
+    // if (view.scrollTop >= 1) {
+    //   view.style.touchAction = 'auto';
+    // } 
+    // else {
+    //   view.style.touchAction = 'pan-down';
+    // }
+    
+    // Hides and shows the app bar and the necessary components on scroll
+    if (scrollTop > previousScrollTop) {
+      // Scroll Down
+      tabs.classList.add('hide-tabs');
+      appBar.classList.add('hide-app-bar');
+      view.classList.add('hide-content-container');
+      inkBar.classList.add('hide-content-container');
+    }
+    else {
+      // Scroll Up
+      tabs.classList.remove('hide-tabs');
+      appBar.classList.remove('hide-app-bar');
+      view.classList.remove('hide-content-container');
+      inkBar.classList.remove('hide-content-container');
+    }
+    
+    previousScrollTop = scrollTop;
+  }
+
   handleChange = (index) => {
     let title;
     let previousIndex = this.state.previousIndex;
@@ -221,9 +239,29 @@ export default class PledgeApp extends Component {
     let scrollPosition3 = this.state.scrollPosition3;
     let scrollPosition4 = this.state.scrollPosition4;
     let scrollPosition5 = this.state.scrollPosition5;
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
+    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    let appBar = document.querySelector('.app-header');
     let contentContainer = document.querySelector('.content-container');
+    let view = contentContainer.childNodes[index];
     let scrollPosition = contentContainer.childNodes[previousIndex].scrollTop;
     let scrolled;
+
+    // Hides and shows the app bar if scrolled for that view for mobile
+    if (isMobileDevice()) {
+      if (view.scrollTop === 0) {
+        tabs.classList.remove('hide-tabs');
+        appBar.classList.remove('hide-app-bar');
+        view.classList.remove('hide-content-container');
+        inkBar.classList.remove('hide-content-container');
+      }
+      else {
+        tabs.classList.add('hide-tabs');
+        appBar.classList.add('hide-app-bar');
+        view.classList.add('hide-content-container');
+        inkBar.classList.add('hide-content-container');
+      }
+    }
 
     // Sets the title and marks scroll position based on the tab index
     if (index === 0) {
@@ -265,11 +303,11 @@ export default class PledgeApp extends Component {
     }
 
     if (contentContainer) {
-      contentContainer.childNodes[index].style.position = 'fixed';
-      contentContainer.childNodes[index].style.height = 'calc(100% - 157px)';
+      view.style.position = 'fixed';
+      view.style.height = 'calc(100% - 157px)';
 
-      // Sets the window scroll position based on tab
-      contentContainer.childNodes[index].scrollTop = scrolled;
+      // Sets the view scroll position based on tab
+      view.scrollTop = scrolled;
     }
 
     this.setState({
@@ -306,9 +344,8 @@ export default class PledgeApp extends Component {
           </div>
           
           <Tabs
+            id="pledge-app-tabs"
             contentContainerClassName="content-container"
-            inkBarStyle={inkBarStyle}
-            tabItemContainerStyle={tabContainerStyle}
             onChange={this.handleChange}
             value={this.state.slideIndex}
           >

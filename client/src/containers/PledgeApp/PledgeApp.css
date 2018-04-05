@@ -1,7 +1,39 @@
+/* Pledge App Tabs */
+#pledge-app-tabs > div:first-child {
+  position: fixed;
+  top: 52px;
+  background-color: #fff !important;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  z-index: 1;
+  transition: top 0.2s ease-in-out;
+}
+/* Pledge App Tabs Ink Bar */
+#pledge-app-tabs > div:nth-child(2) > div {
+  position: fixed !important;
+  top: 100px;
+  background-color: var(--primary-color) !important;
+  z-index: 1;
+  transition: left 1s cubic-bezier(0.23, 1, 0.32, 1) 0ms, top 0.2s ease-in-out !important;
+}
+
+/* Hide on scroll for app bar, tabs, and body */
+.hide-tabs {
+  top: 0px !important;
+}
+.hide-app-bar {
+  top: -52px;
+}
+.hide-content-container {
+  top: 48px !important;
+}
+
+/* The container for the content for each tab */
 .content-container {
   position: relative;
   background-color: #fafafa;
   z-index: 0;
+  transition: top 0.2s ease-in-out;
 }
 
 /* Pull To Refresh version */

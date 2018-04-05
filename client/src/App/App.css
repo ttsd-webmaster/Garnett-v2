@@ -31,9 +31,7 @@ body {
   --secondary-color: #444;
   --secondary-light: #555;
   --secondary-dark: #2e2f33;
-  --accent-color: #ccc;
-  --accent-light: #eee;
-  --complement-color: #00967e;
+  --accent-color: #00967e;
 }
 
 @media(max-width: 410px) {
@@ -108,6 +106,7 @@ div, a {
   padding-top: 15px;
   text-align: left;
   z-index: 1;
+  transition: top 0.2s ease-in-out;
 }
 .app-header > span:first-child {
   margin-left: 15px;
@@ -365,7 +364,7 @@ div, a {
           animation: line-scale 1s 0s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08); }
 
 .line-scale > div {
-  background-color: var(--complement-color);
+  background-color: var(--accent-color);
   width: 4px;
   height: 35px;
   border-radius: 2px;

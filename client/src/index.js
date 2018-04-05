@@ -10,8 +10,8 @@ import ReactDOM from 'react-dom';
 const muiTheme = getMuiTheme({
   palette: {
     primary1Color: 'var(--primary-color)',
-    primary2Color: 'var(--complement-color)',
-    accent1Color: 'var(--primary-color)',
+    primary2Color: 'var(--accent-color)',
+    accent1Color: 'var(--accent-color)',
     pickerHeaderColor: 'var(--primary-color)'
   },
 });
