@@ -28,13 +28,6 @@
   top: 48px !important;
 }
 
-/* The container for the content for each tab */
-.content-container {
-  position: relative;
-  background-color: #fafafa;
-  z-index: 0;
-}
-
 /* Pull To Refresh version */
 /*.content-container > div {
   background-color: #fafafa;
@@ -44,6 +37,12 @@
   z-index: 0;
 }*/
 
+/* The container for the content for each tab */
+.content-container {
+  position: relative;
+  background-color: #fafafa;
+  z-index: 0;
+}
 .content-container > div {
   background-color: #fafafa;
   top: 100px;
@@ -52,10 +51,8 @@
   z-index: 0;
   transition: top 0.2s ease-in-out;
 }
-@media(min-width: 1200px) {
-  .content-container > div > div {
-    margin-bottom: 48px;
-  }
+.content-container > div > div {
+  margin-bottom: 48px;
 }
 
 .fixed-button {

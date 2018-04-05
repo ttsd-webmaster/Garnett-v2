@@ -113,6 +113,7 @@ export default class RusheeProfile extends Component {
         path = 'https://garnett-app.herokuapp.com';
       }
 
+      window.history.pushState(null, null, path + window.location.pathname);
       window.onpopstate = () => {
         this.closeResume();
       }

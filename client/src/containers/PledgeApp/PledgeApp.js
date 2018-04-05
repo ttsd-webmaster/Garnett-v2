@@ -164,7 +164,7 @@ export default class PledgeApp extends Component {
 
     if (contentContainer) {
       contentContainer.firstChild.style.position = 'fixed';
-      contentContainer.firstChild.style.height = 'calc(100% - 100px)';
+      contentContainer.firstChild.style.height = 'calc(100% - 48px)';
       contentContainer.firstChild.onscroll = watchScroll;
     }
   }
@@ -184,7 +184,7 @@ export default class PledgeApp extends Component {
       contentContainer.childNodes[index].onscroll = watchScroll;
 
       contentContainer.childNodes[index].style.position = 'fixed';
-      contentContainer.childNodes[index].style.height = 'calc(100% - 100px)';
+      contentContainer.childNodes[index].style.height = 'calc(100% - 48px)';
 
       for (let i = 0; i < 5; i++) {
         if (index !== i) {
@@ -302,13 +302,8 @@ export default class PledgeApp extends Component {
       scrollPosition5 = scrollPosition;
     }
 
-    if (contentContainer) {
-      view.style.position = 'fixed';
-      view.style.height = 'calc(100% - 157px)';
-
-      // Sets the view scroll position based on tab
-      view.scrollTop = scrolled;
-    }
+    // Sets the view scroll position based on tab
+    view.scrollTop = scrolled;
 
     this.setState({
       title: title,
