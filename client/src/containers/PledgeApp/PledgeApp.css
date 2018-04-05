@@ -100,6 +100,7 @@
   background-color: #fff;
 }
 .garnett-list-item.large > div > div {
+  min-height: 56px;
   padding-left: 102px !important;
 }
 .garnett-list-item.settings > div > div {
@@ -158,8 +159,6 @@
 .garnett-dialog-body {
   display: flex;
   flex-direction: column;
-  min-height: 285px;
-  max-height: 50vh !important;
   background-color: #fff;
   border-bottom: 1px solid rgb(224, 224, 224) !important;
 }
@@ -167,6 +166,7 @@
   background-color: #fafafa;
 }
 .garnett-dialog-body.tabs {
+  min-height: 320px;
   padding: 0 !important;
 }
 

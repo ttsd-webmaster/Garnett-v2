@@ -52,6 +52,9 @@ export default {
   editChalkboard: function(displayName, chalkboard, description, date, time, location) {
     return axios.post('/api/editchalkboard', {displayName, chalkboard, description, date, time, location});
   },
+  editChalkboardMobile: function(displayName, chalkboard, field, value) {
+    return axios.post('/api/editchalkboardmobile', {displayName, chalkboard, field, value});
+  },
   joinChalkboard: function(name, photoURL, chalkboard) {
     return axios.post('/api/joinchalkboard', {name, photoURL, chalkboard});
   },

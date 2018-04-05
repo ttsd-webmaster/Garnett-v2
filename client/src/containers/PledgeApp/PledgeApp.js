@@ -164,8 +164,14 @@ export default class PledgeApp extends Component {
 
     if (contentContainer) {
       contentContainer.firstChild.style.position = 'fixed';
-      contentContainer.firstChild.style.height = 'calc(100% - 48px)';
-      contentContainer.firstChild.onscroll = watchScroll;
+
+      if (isMobileDevice()) {
+        contentContainer.firstChild.onscroll = watchScroll;
+        contentContainer.firstChild.style.height = 'calc(100% - 48px)';
+      }
+      else {
+        contentContainer.firstChild.style.height = 'calc(100% - 100px)';
+      }
     }
   }
 
@@ -181,10 +187,15 @@ export default class PledgeApp extends Component {
 
     // Changes view margin if view is pledge merit book
     if (contentContainer) {
-      contentContainer.childNodes[index].onscroll = watchScroll;
-
       contentContainer.childNodes[index].style.position = 'fixed';
-      contentContainer.childNodes[index].style.height = 'calc(100% - 48px)';
+
+      if (isMobileDevice()) {
+        contentContainer.childNodes[index].onscroll = watchScroll;
+        contentContainer.childNodes[index].style.height = 'calc(100% - 48px)';
+      }
+      else {
+        contentContainer.childNodes[index].style.height = 'calc(100% - 100px)';
+      }
 
       for (let i = 0; i < 5; i++) {
         if (index !== i) {
