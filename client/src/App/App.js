@@ -5,9 +5,8 @@ import {
   LoadingLogin,
   LoadingHome,
   LoadingPledgeApp,
-  wrapDelibsApp,
-  LoadingRusheeProfile,
-  LoadingComponent
+  LoadingDelibsApp,
+  LoadingRusheeProfile
 } from '../helpers/loaders.js';
 
 import React, {Component} from 'react';
@@ -47,7 +46,7 @@ const LoadableDelibsApp = Loadable({
     let Component = loaded.default;
     return <Component {...props} />;
   },
-  loading: wrapDelibsApp(LoadingComponent)
+  loading: LoadingDelibsApp
 });
 
 const LoadableRusheeProfile = Loadable({

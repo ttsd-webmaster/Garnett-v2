@@ -33,7 +33,6 @@
   position: relative;
   background-color: #fafafa;
   z-index: 0;
-  transition: top 0.2s ease-in-out;
 }
 
 /* Pull To Refresh version */
@@ -51,9 +50,7 @@
   overflow: scroll !important;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
-}
-.content-container > div > div {
-  margin-bottom: 48px;
+  transition: top 0.2s ease-in-out;
 }
 
 .fixed-button {

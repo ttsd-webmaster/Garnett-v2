@@ -54,14 +54,6 @@ function LoadingLogin() {
   )
 }
 
-function LoadingHome() {
-  return (
-    <div className="loading-container">
-      <div className="app-header no-tabs"></div>
-    </div>
-  )
-}
-
 function LoadingPledgeApp() {
   return (
     <div className="loading-container">
@@ -97,24 +89,6 @@ function LoadingPledgeApp() {
   )
 }
 
-const wrapDelibsApp = (Slot) => (props) => {
-  return (
-    <div className="loading-container">
-      <div className="app-header no-tabs">
-        <Slot {...props} />
-      </div>
-    </div>
-  )
-}
-
-function LoadingRusheeProfile() {
-  return (
-    <div className="loading-container">
-      <div className="app-header no-tabs"></div>
-    </div>
-  )
-}
-
 function LoadingComponent() {
   return (
     <div className="loader-container">
@@ -126,6 +100,17 @@ function LoadingComponent() {
           <div></div>
           <div></div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+const loaderWrapper = (name) => (props) => {
+  return (
+    <div className="loading-container">
+      <div className="app-header no-tabs">
+        <span> {name} </span>
+        <LoadingComponent />
       </div>
     </div>
   )
@@ -156,12 +141,16 @@ function CompletingTaskDialog(props) {
   )
 }
 
+const LoadingHome = loaderWrapper('Home');
+const LoadingDelibsApp = loaderWrapper('Delibs App');
+const LoadingRusheeProfile = loaderWrapper('Rushee Profile');
+
 export {
   LoadingLogin,
-  LoadingHome,
   LoadingPledgeApp,
-  wrapDelibsApp,
-  LoadingRusheeProfile,
   LoadingComponent,
-  CompletingTaskDialog
+  CompletingTaskDialog,
+  LoadingHome,
+  LoadingDelibsApp,
+  LoadingRusheeProfile
 };

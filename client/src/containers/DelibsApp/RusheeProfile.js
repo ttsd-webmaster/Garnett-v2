@@ -1,5 +1,4 @@
 import './DelibsApp.css';
-import '../Home/Home.css';
 import '../PledgeApp/PledgeApp.css';
 import '../../components/Settings/Settings.css';
 import {loadFirebase} from '../../helpers/functions.js';
@@ -11,6 +10,8 @@ import Loadable from 'react-loadable';
 import Snackbar from 'material-ui/Snackbar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+import Subheader from 'material-ui/Subheader';
+import {BottomSheet} from 'material-ui-bottom-sheet';
 
 const LoadableEndVoteDialog = Loadable({
   loader: () => import('./Dialogs/EndVoteDialog'),
@@ -51,7 +52,7 @@ export default class RusheeProfile extends Component {
     this.state = {
       open: false,
       rushee: null,
-      openMenu: false,
+      sheetOpen: false,
       openResume: false,
       openSnackbar: false,
       message: ''
@@ -101,19 +102,6 @@ export default class RusheeProfile extends Component {
     });
   }
 
-  handleOpenMenu = (event) => {
-    this.setState({
-      openMenu: true,
-      anchorEl: event.currentTarget
-    });
-  }
-
-  handleMenuClose = () => {
-    this.setState({
-      openMenu: false,
-    });
-  }
-
   viewResume = () => {
     // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
@@ -125,14 +113,13 @@ export default class RusheeProfile extends Component {
         path = 'https://garnett-app.herokuapp.com';
       }
 
-      window.history.pushState(null, null, path + window.location.pathname);
       window.onpopstate = () => {
         this.closeResume();
       }
     }
 
     this.setState({
-      openMenu: false,
+      sheetOpen: false,
       openResume: true
     });
   }
@@ -224,47 +211,24 @@ export default class RusheeProfile extends Component {
               </div>
             ) : (
               <div>
-                <div className="delibs-resources">
-                  <div className="app-icon delibs" onClick={this.viewResume}>
-                    <div className="app-icon-image-container">
-                      <img 
-                        className="app-icon-image"
-                        src={require('../Home/images/pledge-app-icon.png')}
-                        alt="Pledge App"
-                      />
-                    </div>
-                    <p> Resume </p>
-                  </div>
-                  <div className="app-icon delibs" onClick={this.viewResume}>
-                    <div className="app-icon-image-container">
-                      <img 
-                        className="app-icon-image"
-                        src={require('../Home/images/delibs-icon.png')}
-                        alt="Delibs App"
-                      />
-                    </div>
-                    <p> Cover Letter </p>
-                  </div>
-                  <div className="app-icon delibs" onClick={this.viewResume}>
-                    <div className="app-icon-image-container">
-                      <img 
-                        className="app-icon-image"
-                        src={require('../Home/images/pledge-app-icon.png')}
-                        alt="Pledge App"
-                      />
-                    </div>
-                    <p> Schedule </p>
-                  </div>
-                  <div className="app-icon delibs" onClick={this.viewResume}>
-                    <div className="app-icon-image-container">
-                      <img 
-                        className="app-icon-image"
-                        src={require('../Home/images/delibs-icon.png')}
-                        alt="Delibs App"
-                      />
-                    </div>
-                    <p> Pre-Delibs </p>
-                  </div>
+                <BottomSheet
+                  onRequestClose={() => this.setState({sheetOpen: false})}
+                  open={this.state.sheetOpen}
+                >
+                  <Subheader> Open </Subheader>
+                  <List>
+                    <ListItem primaryText="Resume" onClick={this.viewResume} />
+                    <ListItem primaryText="Cover Letter" onClick={this.viewResume} />
+                    <ListItem primaryText="Schedule" onClick={this.viewResume} />
+                    <ListItem primaryText="Pre-Delibs Sheet" onClick={this.viewResume} />
+                  </List>
+                </BottomSheet>
+
+                <div 
+                  className="logout-button"
+                  onClick={() => this.setState({sheetOpen: true})}
+                >
+                  Resources 
                 </div>
                 
                 <LoadableResumeDialog

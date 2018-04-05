@@ -1,7 +1,7 @@
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
 import {loadFirebase} from '../../helpers/functions.js';
-import {wrapDelibsApp, LoadingComponent} from '../../helpers/loaders.js';
+import {LoadingDelibsApp} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 
 import React, {Component} from 'react';
@@ -29,8 +29,6 @@ const LoadableVoteDialog = Loadable({
     return <div></div>;
   }
 });
-
-const LoadingDelibsApp = wrapDelibsApp(LoadingComponent);
 
 export default class DelibsApp extends Component {
   constructor(props) {

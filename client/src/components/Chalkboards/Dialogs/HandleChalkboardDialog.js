@@ -1,6 +1,6 @@
 import '../Chalkboards.css';
 import API from '../../../api/API.js';
-import {mapsSelector, getTabStyle} from '../../../helpers/functions.js';
+import {getTabStyle, isMobileDevice, mapsSelector} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -10,6 +10,7 @@ import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import FullscreenDialog from 'material-ui-fullscreen-dialog'
 
 const listItemStyle = {
   backgroundColor: '#fff'
@@ -234,106 +235,201 @@ export default class HandleChalkboardDialog extends Component {
 
     return (
       this.state.chalkboard && (
-        <div>
-          <Dialog
-            title={this.props.type === 'hosting' ? (
-              <div>
-                {this.state.chalkboard.title}
-                <i 
-                  className="icon-edit edit-chalkboard"
-                  onClick={this.handleEditOpen}
-                >
-                </i>
-              </div>
-            ) : (
-              this.state.chalkboard.title
-            )}
-            titleClassName={this.props.type === 'hosting' ? (
-              "garnett-dialog-title hosting" 
-            ) : (
-              "garnett-dialog-title"
-            )}
-            actions={actions}
-            modal={false}
-            bodyClassName="garnett-dialog-body tabs grey"
-            contentClassName="garnett-dialog-content"
-            open={this.props.open}
-            onRequestClose={this.handleClose}
-            autoScrollBodyContent={true}
-          >
-            <Tabs 
-              className="garnett-dialog-tabs chalkboard"
-              inkBarStyle={inkBarStyle}
-              onChange={this.handleChange}
+        isMobileDevice() ? (
+          <div>
+            <Dialog
+              title={this.props.type === 'hosting' ? (
+                <div>
+                  {this.state.chalkboard.title}
+                  <i 
+                    className="icon-edit edit-chalkboard"
+                    onClick={this.handleEditOpen}
+                  >
+                  </i>
+                </div>
+              ) : (
+                this.state.chalkboard.title
+              )}
+              titleClassName={this.props.type === 'hosting' ? (
+                "garnett-dialog-title hosting" 
+              ) : (
+                "garnett-dialog-title"
+              )}
+              actions={actions}
+              modal={false}
+              bodyClassName="garnett-dialog-body tabs grey"
+              contentClassName="garnett-dialog-content"
+              open={this.props.open}
+              onRequestClose={this.handleClose}
+              autoScrollBodyContent={true}
             >
-              <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
-                <List style={{padding:'24px 0'}}>
-                  <Divider />
-                  <ListItem
-                    innerDivStyle={listItemStyle}
-                    primaryText="Active Name"
-                    secondaryText={this.state.chalkboard.activeName}
-                    leftIcon={
-                      <i className="icon-user garnett-icon"></i>
-                    }
-                  />
-                  <Divider className="garnett-divider" inset={true} />
-                  <ListItem
-                    innerDivStyle={listItemStyle}
-                    primaryText="Description"
-                    secondaryText={this.state.chalkboard.description}
-                    leftIcon={
-                      <i className="icon-info-circled garnett-icon"></i>
-                    }
-                  />
-                  <Divider className="garnett-divider" inset={true} />
-                  <ListItem
-                    innerDivStyle={listItemStyle}
-                    primaryText="Date"
-                    secondaryText={this.state.chalkboard.date}
-                    leftIcon={
-                      <i className="icon-calendar-check-o garnett-icon"></i>
-                    }
-                  />
-                  <Divider className="garnett-divider" inset={true} />
-                  <ListItem
-                    innerDivStyle={listItemStyle}
-                    primaryText="Time"
-                    secondaryText={this.state.chalkboard.time}
-                    leftIcon={
-                      <i className="icon-clock garnett-icon"></i>
-                    }
-                  />
-                  <Divider className="garnett-divider" inset={true} />
-                  <ListItem
-                    innerDivStyle={listItemStyle}
-                    primaryText="Location"
-                    secondaryText={this.state.chalkboard.location}
-                    leftIcon={
-                      <i className="icon-location garnett-icon"></i>
-                    }
-                    onClick={() => {
-                      mapsSelector(this.state.chalkboard.location);
-                    }}
-                  />
-                  <Divider className="garnett-divider" />
-                </List>
-              </Tab>
-              <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
-                <LoadableAttendeeList chalkboard={this.state.chalkboard} />
-              </Tab>
-            </Tabs>
-          </Dialog>
+              <Tabs 
+                className="garnett-dialog-tabs chalkboard"
+                inkBarStyle={inkBarStyle}
+                onChange={this.handleChange}
+              >
+                <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
+                  <List style={{padding:'24px 0'}}>
+                    <Divider />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Active Name"
+                      secondaryText={this.state.chalkboard.activeName}
+                      leftIcon={
+                        <i className="icon-user garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Description"
+                      secondaryText={this.state.chalkboard.description}
+                      leftIcon={
+                        <i className="icon-info-circled garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Date"
+                      secondaryText={this.state.chalkboard.date}
+                      leftIcon={
+                        <i className="icon-calendar-check-o garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Time"
+                      secondaryText={this.state.chalkboard.time}
+                      leftIcon={
+                        <i className="icon-clock garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Location"
+                      secondaryText={this.state.chalkboard.location}
+                      leftIcon={
+                        <i className="icon-location garnett-icon"></i>
+                      }
+                      onClick={() => {
+                        mapsSelector(this.state.chalkboard.location);
+                      }}
+                    />
+                    <Divider className="garnett-divider" />
+                  </List>
+                </Tab>
+                <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
+                  <LoadableAttendeeList chalkboard={this.state.chalkboard} />
+                </Tab>
+              </Tabs>
+            </Dialog>
 
-          <LoadableEditChalkboardDialog
-            open={this.state.open}
-            state={this.props.state}
-            chalkboard={this.state.chalkboard}
-            updateChalkboardInfo={this.updateChalkboardInfo}
-            handleClose={this.handleEditClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
-        </div>
+            <LoadableEditChalkboardDialog
+              open={this.state.open}
+              state={this.props.state}
+              chalkboard={this.state.chalkboard}
+              updateChalkboardInfo={this.updateChalkboardInfo}
+              handleClose={this.handleEditClose}
+              handleRequestOpen={this.props.handleRequestOpen}
+            />
+          </div>
+        ) : (
+          <div>
+            <FullscreenDialog
+              title={this.props.type === 'hosting' ? (
+                <div>
+                  {this.state.chalkboard.title}
+                  <i 
+                    className="icon-edit edit-chalkboard"
+                    onClick={this.handleEditOpen}
+                  >
+                  </i>
+                </div>
+              ) : (
+                this.state.chalkboard.title
+              )}
+              titleClassName={this.props.type === 'hosting' ? (
+                "garnett-dialog-title hosting" 
+              ) : (
+                "garnett-dialog-title"
+              )}
+              actions={actions}
+              modal={false}
+              style={{zIndex:1000}}
+              bodyClassName="garnett-dialog-body tabs grey"
+              contentClassName="garnett-dialog-content"
+              open={this.props.open}
+              onRequestClose={this.handleClose}
+              autoScrollBodyContent={true}
+            >
+              <Tabs 
+                className="garnett-dialog-tabs chalkboard"
+                inkBarStyle={inkBarStyle}
+                onChange={this.handleChange}
+              >
+                <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
+                  <List style={{padding:'24px 0'}}>
+                    <Divider />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Active Name"
+                      secondaryText={this.state.chalkboard.activeName}
+                      leftIcon={
+                        <i className="icon-user garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Description"
+                      secondaryText={this.state.chalkboard.description}
+                      leftIcon={
+                        <i className="icon-info-circled garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Date"
+                      secondaryText={this.state.chalkboard.date}
+                      leftIcon={
+                        <i className="icon-calendar-check-o garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Time"
+                      secondaryText={this.state.chalkboard.time}
+                      leftIcon={
+                        <i className="icon-clock garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      innerDivStyle={listItemStyle}
+                      primaryText="Location"
+                      secondaryText={this.state.chalkboard.location}
+                      leftIcon={
+                        <i className="icon-location garnett-icon"></i>
+                      }
+                      onClick={() => {
+                        mapsSelector(this.state.chalkboard.location);
+                      }}
+                    />
+                    <Divider className="garnett-divider" />
+                  </List>
+                </Tab>
+                <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
+                  <LoadableAttendeeList chalkboard={this.state.chalkboard} />
+                </Tab>
+              </Tabs>
+            </FullscreenDialog>
+          </div>
+        )
       )
     )
   }
