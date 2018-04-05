@@ -246,6 +246,14 @@ export default class Chalkboards extends Component {
   }
 
   handleOpen = (chalkboard, type) => {
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
+    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    let appBar = document.querySelector('.app-header');
+
+    tabs.style.zIndex = 0;
+    inkBar.style.zIndex = 0;
+    appBar.style.zIndex = 0;
+
     // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
       let path;
@@ -270,6 +278,14 @@ export default class Chalkboards extends Component {
   }
 
   handleClose = () => {
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
+    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    let appBar = document.querySelector('.app-header');
+
+    tabs.style.zIndex = 1;
+    inkBar.style.zIndex = 1;
+    appBar.style.zIndex = 1;
+
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }

@@ -52,6 +52,11 @@
   z-index: 0;
   transition: top 0.2s ease-in-out;
 }
+@media(min-width: 1200px) {
+  .content-container > div > div {
+    margin-bottom: 48px;
+  }
+}
 
 .fixed-button {
   position: fixed;
@@ -179,15 +184,8 @@
 }
 
 .garnett-input {
-  /*width: 40% !important;
-  max-width: 576px;*/
   margin: 0 auto;
 }
-/*@media(max-width: 768px) {
-  .garnett-input {
-    width: 80% !important;
-  }
-}*/
 
 .garnett-icon {
   font-size: 1.4em;

@@ -11,7 +11,7 @@ import Snackbar from 'material-ui/Snackbar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
-import {BottomSheet} from 'material-ui-bottom-sheet';
+import {BottomSheet} from '../../helpers/BottomSheet/index.js';
 
 const LoadableEndVoteDialog = Loadable({
   loader: () => import('./Dialogs/EndVoteDialog'),

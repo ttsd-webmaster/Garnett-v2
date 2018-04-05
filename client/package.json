@@ -46,7 +46,6 @@
   "dependencies": {
     "axios": "^0.17.1",
     "material-ui": "^0.19.4",
-    "material-ui-bottom-sheet": "^0.5.1",
     "material-ui-fullscreen-dialog": "^0.7.2",
     "npm": "^5.8.0",
     "react": "^16.2.0",

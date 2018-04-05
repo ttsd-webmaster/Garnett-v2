@@ -358,7 +358,6 @@ export default class HandleChalkboardDialog extends Component {
               )}
               actions={actions}
               modal={false}
-              style={{zIndex:1000}}
               bodyClassName="garnett-dialog-body tabs grey"
               contentClassName="garnett-dialog-content"
               open={this.props.open}

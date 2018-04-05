@@ -137,7 +137,7 @@ export default class AddChalkboardDialog extends Component {
 
     return (
       <Dialog
-        title="Submit Chalkboard"
+        title="New Chalkboard"
         titleClassName="garnett-dialog-title"
         actions={actions}
         modal={false}
