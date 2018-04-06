@@ -52,7 +52,7 @@ export default class ActiveMerit extends Component {
 
   render() {
     return (
-      <List id="merit-dialog-list">
+      <List className="garnett-list dialog">
         {this.state.merits.map((merit, i) => (
           <div key={i}>
             <div>

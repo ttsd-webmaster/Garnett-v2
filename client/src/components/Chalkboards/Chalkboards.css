@@ -41,11 +41,6 @@
   cursor: pointer;
 }
 
-.garnett-list.attendees {
-  max-width: none !important;
-  margin: 24px auto;
-}
-
 .garnett-dialog-title.hosting {
   padding: 24px 60px 20px 24px !important;
 }

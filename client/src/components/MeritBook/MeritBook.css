@@ -17,10 +17,6 @@
 }
 
 /* Merit List */
-#merit-dialog-list {
-  background-color: #fafafa;
-}
-
 .merit-amount-container {
   float: right;
   margin-right: 10px;

@@ -95,6 +95,10 @@
 .garnett-list.no-header {
   margin-top: 48px !important;
 }
+.garnett-list.dialog {
+  max-width: none !important;
+  margin: 24px auto;
+}
 
 .garnett-list-item > div > div {
   background-color: #fff;
