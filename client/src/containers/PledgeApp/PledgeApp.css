@@ -46,13 +46,10 @@
 .content-container > div {
   background-color: #fafafa;
   top: 100px;
-  overflow: scroll;
+  overflow: scroll !important;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
   transition: top 0.2s ease-in-out;
-}
-.content-container > div:nth-child(2) {
-  overflow: scroll !important;
 }
 .content-container > div > div {
   margin-bottom: 48px;

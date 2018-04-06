@@ -255,7 +255,7 @@ export default class Chalkboards extends Component {
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
     let appBar = document.querySelector('.app-header');
 
-    contentContainer.style.overflow = 'hidden';
+    contentContainer.style.setProperty('overflow', 'hidden', 'important');
     tabs.style.zIndex = 0;
     inkBar.style.zIndex = 0;
     appBar.style.zIndex = 0;
@@ -289,7 +289,7 @@ export default class Chalkboards extends Component {
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
     let appBar = document.querySelector('.app-header');
 
-    contentContainer.style.overflow = 'scroll';
+    contentContainer.style.setProperty('overflow', 'scroll', 'important');
     tabs.style.zIndex = 1;
     inkBar.style.zIndex = 1;
     appBar.style.zIndex = 1;
