@@ -27,6 +27,10 @@
 .hide-content-container {
   top: 48px !important;
 }
+.content-container.hide-buttons .fixed-button{
+  opacity: 0;
+  visibility: hidden;
+}
 
 /* Pull To Refresh version */
 /*.content-container > div {
@@ -42,10 +46,6 @@
   position: relative;
   background-color: #fafafa;
   z-index: 0;
-}
-.content-container.hide-buttons .fixed-button{
-  opacity: 0;
-  visibility: hidden;
 }
 .content-container > div {
   background-color: #fafafa;

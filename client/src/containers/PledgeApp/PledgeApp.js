@@ -208,7 +208,6 @@ export default class PledgeApp extends Component {
 
   // Changes touch action of view if scroll is at top of view for mobile
   onScroll = () => {
-    let fixedButtons = document.querySelector('.fixed-button');
     let tabs = document.getElementById('pledge-app-tabs').firstChild;
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
     let contentContainer = document.querySelector('.content-container');
