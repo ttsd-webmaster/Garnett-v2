@@ -11,12 +11,14 @@ let image = 'garnett-image';
 let imageSize = 40;
 let listItem = 'garnett-list-item';
 let divider = 'garnett-divider';
+let attendeeName = 'attendee-name';
 
 if (isMobileDevice()) {
   image += ' large';
   imageSize = 70;
   listItem += ' large';
   divider += ' large';
+  attendeeName += ' large';
 }
 
 export default class AttendeeList extends Component {
@@ -55,7 +57,7 @@ export default class AttendeeList extends Component {
               className={listItem}
               leftAvatar={<Avatar className={image} size={imageSize} src={attendee.photoURL} />}
               primaryText={
-                <p className="attendee-name"> {attendee.name} </p>
+                <p className={attendeeName}> {attendee.name} </p>
               }
             />
             <Divider className={image} inset={true} />

@@ -5,6 +5,7 @@ import {loadFirebase, getDate} from '../../helpers/functions.js';
 import {LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
+import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
@@ -46,7 +47,8 @@ export default class Chalkboards extends Component {
       upcomingChalkboards: this.props.upcomingChalkboards,
       completedChalkboards: this.props.completedChalkboards,
       selectedChalkboard: null,
-      chalkboardType: ''
+      chalkboardType: '',
+      index: 0
     };
   }
 
@@ -201,6 +203,8 @@ export default class Chalkboards extends Component {
     // Sets the window scroll position based on tab
     contentContainer.childNodes[2].scrollTop = scrolled;
 
+    forceCheck();
+
     this.setState({
       selectedIndex: index,
       scrollPosition1: scrollPosition1,
@@ -246,10 +250,12 @@ export default class Chalkboards extends Component {
   }
 
   handleOpen = (chalkboard, type) => {
+    let contentContainer = document.querySelector('.content-container').childNodes[2];
     let tabs = document.getElementById('pledge-app-tabs').firstChild;
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
     let appBar = document.querySelector('.app-header');
 
+    contentContainer.style.overflow = 'hidden';
     tabs.style.zIndex = 0;
     inkBar.style.zIndex = 0;
     appBar.style.zIndex = 0;
@@ -278,10 +284,12 @@ export default class Chalkboards extends Component {
   }
 
   handleClose = () => {
+    let contentContainer = document.querySelector('.content-container').childNodes[2];
     let tabs = document.getElementById('pledge-app-tabs').firstChild;
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
     let appBar = document.querySelector('.app-header');
 
+    contentContainer.style.overflow = 'scroll';
     tabs.style.zIndex = 1;
     inkBar.style.zIndex = 1;
     appBar.style.zIndex = 1;
@@ -291,7 +299,8 @@ export default class Chalkboards extends Component {
     }
 
     this.setState({
-      open: false
+      open: false,
+      index: 0
     });
   }
 
@@ -350,6 +359,7 @@ export default class Chalkboards extends Component {
             state={this.props.state}
             type={this.state.chalkboardType}
             chalkboard={this.state.selectedChalkboard}
+            index={this.state.index}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

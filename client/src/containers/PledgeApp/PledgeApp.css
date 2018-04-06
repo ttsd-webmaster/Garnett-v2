@@ -46,7 +46,7 @@
 .content-container > div {
   background-color: #fafafa;
   top: 100px;
-  overflow: scroll !important;
+  overflow: scroll;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
   transition: top 0.2s ease-in-out;
@@ -141,19 +141,13 @@
 /* Garnett Dialog */
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
+  background-color: #fff !important;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   z-index: 2;
 }
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
-}
-.garnett-dialog-tabs.merit > div:last-child > div:first-child {
-  display: flex;
-  justify-content: center;
-}
-.garnett-dialog-tabs.chalkboard > div:first-child {
-  background-color: #fff !important;
 }
 
 .garnett-dialog-body {

@@ -5,6 +5,7 @@ import {LoadingComponent} from '../../../helpers/loaders.js';
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
 import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 const listItemStyle = {
@@ -74,11 +75,12 @@ export default class PledgeComplaints extends Component {
     return (
       this.state.loaded ? (
         <div id="pledge-complaints">
+          <Subheader className="garnett-subheader"> Recent </Subheader>
           <List className="garnett-list no-header">
             {this.state.complaints.map((complaint, i) => (
               <LazyLoad
                 height={88}
-                offset={500}
+                offset={window.innerHeight}
                 once
                 overflow
                 key={i}

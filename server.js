@@ -355,7 +355,7 @@ app.post('/api/pledgemerits', function(req, res) {
     }
 
     res.json({
-      merits: merits
+      merits: merits.reverse()
     });
   });
 });
@@ -392,7 +392,7 @@ app.post('/api/pledgedata', function(req, res) {
 
         const data = {
           totalMerits: totalMerits,
-          meritArray: meritArray,
+          meritArray: meritArray.reverse(),
           complaintsArray: complaintsArray
         };
 

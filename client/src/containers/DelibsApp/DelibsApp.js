@@ -147,7 +147,7 @@ export default class DelibsApp extends Component {
               {this.state.rushees.map((rushee, i) => (
                 <LazyLoad
                   height={88}
-                  offset={500}
+                  offset={window.innerHeight}
                   once
                   overflow
                   key={i}

@@ -1,10 +1,31 @@
 import '../../MeritBook.css';
 import API from '../../../../api/API.js';
+import {isMobileDevice} from '../../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
+
+let image = 'garnett-image';
+let imageSize = 40;
+let listItem = 'garnett-list-item';
+let divider = 'garnett-divider';
+let meritAmountContainer = 'merit-amount-container';
+let meritDate = 'merit-date';
+let meritAmount = 'merit-amount';
+
+if (isMobileDevice()) {
+  image += ' large';
+  imageSize = 70;
+  listItem += ' large';
+  divider += ' large';
+}
+else {
+  meritAmountContainer += ' small';
+  meritDate += ' small';
+  meritAmount += ' small';
+}
 
 export default class ActiveMerit extends Component {
   constructor(props) {
@@ -35,10 +56,10 @@ export default class ActiveMerit extends Component {
         {this.state.merits.map((merit, i) => (
           <div key={i}>
             <div>
-              <Divider className="garnett-divider" inset={true} />
+              <Divider className={divider} inset={true} />
               <ListItem
-                className="garnett-list-item"
-                leftAvatar={<Avatar className="garnett-image" src={merit.photoURL} />}
+                className={listItem}
+                leftAvatar={<Avatar className={image} size={imageSize} src={merit.photoURL} />}
                 primaryText={
                   <p className="garnett-name"> {merit.name} </p>
                 }
@@ -46,12 +67,12 @@ export default class ActiveMerit extends Component {
                   <p> {merit.description} </p>
                 }
               >
-                <div className="merit-amount-container small">
-                  <p className="merit-date small"> {merit.date} </p>
-                  <p className="merit-amount small"> {merit.amount} </p>
+                <div className={meritAmountContainer}>
+                  <p className={meritDate}> {merit.date} </p>
+                  <p className={meritAmount}> {merit.amount} </p>
                 </div>
               </ListItem>
-              <Divider className="garnett-divider" inset={true} />
+              <Divider className={divider} inset={true} />
             </div>
           </div>
         ))}

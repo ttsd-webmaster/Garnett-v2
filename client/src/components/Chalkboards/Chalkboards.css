@@ -28,6 +28,9 @@
   margin: 0;
   margin-left: 5px;
 }
+.attendee-name.large {
+  margin-top: 15px;
+}
 
 .edit-chalkboard {
   position: absolute;

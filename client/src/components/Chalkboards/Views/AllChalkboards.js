@@ -14,7 +14,7 @@ export default class AllChalkboards extends Component {
           {this.props.upcomingChalkboards.map((chalkboard, i) => (
             <LazyLoad
               height={88}
-              offset={500}
+              offset={window.innerHeight}
               once
               overflow
               key={i}
@@ -58,7 +58,7 @@ export default class AllChalkboards extends Component {
           {this.props.completedChalkboards.map((chalkboard, i) => (
             <LazyLoad
               height={88}
-              offset={500}
+              offset={window.innerHeight}
               once
               overflow
               key={i}

@@ -6,6 +6,7 @@ import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 export default class PledgeMerit extends Component {
@@ -48,7 +49,7 @@ export default class PledgeMerit extends Component {
             this.setState({
               loaded: true,
               totalMerits: totalMerits,
-              merits: merits,
+              merits: merits.reverse(),
             });
           });
         });
@@ -80,11 +81,12 @@ export default class PledgeMerit extends Component {
     return (
       this.state.loaded ? (
         <div className="animate-in" id="pledge-meritbook" >
-          <List className="animate-in garnett-list no-header" id="pledge-merit">
+          <Subheader className="garnett-subheader"> Recent </Subheader>
+          <List className="animate-in garnett-list" id="pledge-merit">
             {this.state.merits.map((merit, i) => (
               <LazyLoad
                 height={88}
-                offset={500}
+                offset={window.innerHeight}
                 once
                 overflow
                 key={i}

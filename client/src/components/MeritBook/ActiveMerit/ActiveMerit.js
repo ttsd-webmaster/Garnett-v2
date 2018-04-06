@@ -10,8 +10,8 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
-const LoadableActiveMeritDialog = Loadable({
-  loader: () => import('./Dialogs/ActiveMeritDialog'),
+const LoadablePledgeInfoDialog = Loadable({
+  loader: () => import('./Dialogs/PledgeInfoDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -42,7 +42,8 @@ export default class ActiveMerit extends Component {
       openMeritAll: false,
       pledge: null,
       merits: [],
-      remainingMerits: ''
+      remainingMerits: '',
+      index: 0
     };
   }
 
@@ -97,6 +98,16 @@ export default class ActiveMerit extends Component {
   }
 
   handleOpen = (pledge) => {
+    let contentContainer = document.querySelector('.content-container').firstChild;
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
+    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    let appBar = document.querySelector('.app-header');
+
+    contentContainer.style.overflow = 'hidden';
+    tabs.style.zIndex = 0;
+    inkBar.style.zIndex = 0;
+    appBar.style.zIndex = 0;
+
     let displayName = this.props.state.displayName;
 
     if (navigator.onLine) {
@@ -132,12 +143,23 @@ export default class ActiveMerit extends Component {
   }
 
   handleClose = () => {
+    let contentContainer = document.querySelector('.content-container').firstChild;
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
+    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    let appBar = document.querySelector('.app-header');
+
+    contentContainer.style.overflow = 'scroll';
+    tabs.style.zIndex = 1;
+    inkBar.style.zIndex = 1;
+    appBar.style.zIndex = 1;
+
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }
 
     this.setState({
-      open: false
+      open: false,
+      index: 0
     });
   }
 
@@ -214,12 +236,13 @@ export default class ActiveMerit extends Component {
             <i className="icon-pencil"></i>
           </div>
           
-          <LoadableActiveMeritDialog
+          <LoadablePledgeInfoDialog
             open={this.state.open}
             state={this.props.state}
             pledge={this.state.pledge}
             remainingMerits={this.state.remainingMerits}
             merits={this.state.merits}
+            index={this.state.index}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

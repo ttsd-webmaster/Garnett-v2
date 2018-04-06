@@ -5,6 +5,7 @@ import {loadFirebase} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
+import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
@@ -147,6 +148,8 @@ export default class ActiveComplaints extends Component {
 
     // Sets the window scroll position based on tab
     contentContainer.childNodes[3].scrollTop = scrolled;
+
+    forceCheck();
 
     this.setState({
       selectedIndex: index,

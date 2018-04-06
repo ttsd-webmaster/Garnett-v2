@@ -14,7 +14,7 @@ export default class PastComplaints extends Component {
           {this.props.complaints.map((complaint, i) => (
             <LazyLoad
               height={88}
-              offset={500}
+              offset={window.innerHeight}
               once
               overflow
               key={i}
