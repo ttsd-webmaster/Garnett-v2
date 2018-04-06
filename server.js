@@ -546,7 +546,7 @@ app.post('/api/createchalkboard', function(req, res) {
   });
 });
 
-// Edits chalkboard
+// Edits chalkboard for desktop
 app.post('/api/editchalkboard', function(req, res) {
   let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
@@ -561,6 +561,27 @@ app.post('/api/editchalkboard', function(req, res) {
           date: req.body.date,
           time: req.body.time,
           location: req.body.location
+        });
+
+        res.sendStatus(200);
+      }
+    });
+  });
+});
+
+// Edits chalkboard for mobile devices
+app.post('/api/editchalkboardmobile', function(req, res) {
+  let editedField = req.body.field.toLowerCase();
+  let fullName = req.body.displayName;
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    snapshot.forEach((chalkboard) => {
+      // Looks for the chalkboard in the chalkboards ref
+      if (req.body.chalkboard.title === chalkboard.val().title) {
+        // Updates the chalkboard
+        chalkboard.ref.update({
+          [editedField]: req.body.value
         });
 
         res.sendStatus(200);
