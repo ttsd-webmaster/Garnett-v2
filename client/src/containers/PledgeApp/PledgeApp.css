@@ -43,6 +43,10 @@
   background-color: #fafafa;
   z-index: 0;
 }
+.content-container.hide-buttons .fixed-button{
+  opacity: 0;
+  visibility: hidden;
+}
 .content-container > div {
   background-color: #fafafa;
   top: 100px;
@@ -70,6 +74,7 @@
   border-radius: 50%;
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
+  transition: visibility 0.2s, opacity 0.2s linear;
 }
 .fixed-button#merit-all {
   bottom: 20px;

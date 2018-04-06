@@ -111,7 +111,7 @@ export default class PledgeApp extends Component {
 
     // Checks if page has scrolled
     setInterval(() => {
-      if (isMobileDevice()) {
+      if (!isMobileDevice()) {
         if (didScroll) {
           didScroll = false;
           this.onScroll();
@@ -165,7 +165,7 @@ export default class PledgeApp extends Component {
     if (contentContainer) {
       contentContainer.firstChild.style.position = 'fixed';
 
-      if (isMobileDevice()) {
+      if (!isMobileDevice()) {
         contentContainer.firstChild.onscroll = watchScroll;
         contentContainer.firstChild.style.height = 'calc(100% - 48px)';
       }
@@ -189,7 +189,7 @@ export default class PledgeApp extends Component {
     if (contentContainer) {
       contentContainer.childNodes[index].style.position = 'fixed';
 
-      if (isMobileDevice()) {
+      if (!isMobileDevice()) {
         contentContainer.childNodes[index].onscroll = watchScroll;
         contentContainer.childNodes[index].style.height = 'calc(100% - 48px)';
       }
@@ -208,6 +208,7 @@ export default class PledgeApp extends Component {
 
   // Changes touch action of view if scroll is at top of view for mobile
   onScroll = () => {
+    let fixedButtons = document.querySelector('.fixed-button');
     let tabs = document.getElementById('pledge-app-tabs').firstChild;
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
     let contentContainer = document.querySelector('.content-container');
@@ -230,6 +231,7 @@ export default class PledgeApp extends Component {
       appBar.classList.add('hide-app-bar');
       view.classList.add('hide-content-container');
       inkBar.classList.add('hide-content-container');
+      contentContainer.classList.add('hide-buttons');
     }
     else {
       // Scroll Up
@@ -237,6 +239,7 @@ export default class PledgeApp extends Component {
       appBar.classList.remove('hide-app-bar');
       view.classList.remove('hide-content-container');
       inkBar.classList.remove('hide-content-container');
+      contentContainer.classList.remove('hide-buttons');
     }
     
     previousScrollTop = scrollTop;
@@ -259,7 +262,7 @@ export default class PledgeApp extends Component {
     let scrolled;
 
     // Hides and shows the app bar if scrolled for that view for mobile
-    if (isMobileDevice()) {
+    if (!isMobileDevice()) {
       if (view.scrollTop === 0) {
         tabs.classList.remove('hide-tabs');
         appBar.classList.remove('hide-app-bar');
