@@ -10,6 +10,18 @@
   animation: fadeIn .25s ease-in forwards;
 }
 
+.chalkboard-photo {
+  object-fit: cover;
+  position: relative;
+  top: 10px;
+  display: block;
+  height: 100px;
+  width: 100px;
+  margin: auto;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
+}
+
 .attendee-name {
   font-weight: 700;
   font-size: 18px;
