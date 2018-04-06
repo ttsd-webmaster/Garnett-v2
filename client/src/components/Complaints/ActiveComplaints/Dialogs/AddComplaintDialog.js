@@ -111,7 +111,7 @@ export default class AddComplaintDialog extends Component {
 
     return (
       <Dialog
-        title="Submit Complaint"
+        title="New Complaint"
         titleClassName="garnett-dialog-title"
         actions={actions}
         modal={false}

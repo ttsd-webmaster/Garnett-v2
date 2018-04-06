@@ -51,6 +51,9 @@
   z-index: 0;
   transition: top 0.2s ease-in-out;
 }
+.content-container > div:nth-child(2) {
+  overflow: scroll !important;
+}
 .content-container > div > div {
   margin-bottom: 48px;
 }
