@@ -4,6 +4,7 @@ import '../../components/Settings/Settings.css';
 import {loadFirebase} from '../../helpers/functions.js';
 import {LoadingRusheeProfile} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
+import {rusheeInfo} from './data.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -160,43 +161,17 @@ export default class RusheeProfile extends Component {
           <div className="animate-in delibs-app rushee">
             <img className="user-photo" src={this.state.rushee.photo} alt="User" />
             <List className="garnett-list">
-              <Divider />
-              <ListItem
-                className="garnett-list-item settings"
-                primaryText="Name"
-                secondaryText={this.state.rushee.name}
-              />
-              <Divider />
-              <ListItem
-                className="garnett-list-item settings"
-                primaryText="Phone Number"
-                secondaryText={this.state.rushee.phone}
-              />
-              <Divider />
-              <ListItem
-                className="garnett-list-item settings"
-                primaryText="Email Address"
-                secondaryText={this.state.rushee.email}
-              />
-              <Divider />
-              <ListItem
-                className="garnett-list-item settings"
-                primaryText="Year"
-                secondaryText={this.state.rushee.year}
-              />
-              <Divider />
-              <ListItem
-                className="garnett-list-item settings"
-                primaryText="Graduation Year"
-                secondaryText={this.state.rushee.graduationYear}
-              />
-              <Divider />
-              <ListItem
-                className="garnett-list-item settings"
-                primaryText="Major"
-                secondaryText={this.props.state.major}
-              />
-              <Divider className="garnett-divider last" />
+              {rusheeInfo.map((info, i) => (
+                <div key={i}>
+                  <Divider />
+                  <ListItem
+                    className="garnett-list-item rushee"
+                    primaryText={info.label}
+                    secondaryText={this.state.rushee[info.value]}
+                  />
+                  <Divider />
+                </div>
+              ))}
             </List>
 
             {this.props.state.status === 'regent' ? (

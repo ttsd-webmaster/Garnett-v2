@@ -16,6 +16,15 @@
   position: absolute;
 }
 
+/* Rushee Profile List */
+.garnett-list-item.rushee > div > div {
+  z-index: -1;
+}
+.garnett-list-item.rushee > div > div > div:last-child {
+  height: fit-content !important;
+  white-space: unset !important;
+}
+
 /* Delibs Dialog */
 .garnett-dialog-body.delibs {
   padding-top: 24px !important;

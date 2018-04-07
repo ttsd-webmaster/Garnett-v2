@@ -149,7 +149,6 @@ export default class DelibsApp extends Component {
                   height={88}
                   offset={window.innerHeight}
                   once
-                  overflow
                   key={i}
                   placeholder={
                     <div className="placeholder-skeleton">
