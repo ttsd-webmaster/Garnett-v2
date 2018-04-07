@@ -2,14 +2,10 @@ import './PledgeApp.css';
 import '../../fontello/css/fontello.css';
 // import API from '../../api/API.js';
 import {getTabStyle, isMobileDevice} from '../../helpers/functions.js';
-import {LoadingPledgeApp} from '../../helpers/loaders.js';
-import MeritBook from '../../components/MeritBook/MeritBook';
-import Contacts from '../../components/Contacts/Contacts';
-import Chalkboards from '../../components/Chalkboards/Chalkboards';
-import Complaints from '../../components/Complaints/Complaints';
-import Settings from '../../components/Settings/Settings';
+import {LoadingPledgeApp, LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
+import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Snackbar from 'material-ui/Snackbar';
 
@@ -19,6 +15,51 @@ let previousScrollTop = 0;
 function watchScroll() {
   didScroll = true;
 }
+
+const LoadableMeritBook = Loadable({
+  loader: () => import('../../components/MeritBook/MeritBook'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingComponent
+});
+
+const LoadableContacts = Loadable({
+  loader: () => import('../../components/Contacts/Contacts'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingComponent
+});
+
+const LoadableChalkboards = Loadable({
+  loader: () => import('../../components/Chalkboards/Chalkboards'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingComponent
+});
+
+const LoadableComplaints = Loadable({
+  loader: () => import('../../components/Complaints/Complaints'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingComponent
+});
+
+const LoadableSettings = Loadable({
+  loader: () => import('../../components/Settings/Settings'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingComponent
+});
 
 export default class PledgeApp extends Component {
   constructor(props) {
@@ -364,7 +405,7 @@ export default class PledgeApp extends Component {
               icon={<i style={getTabStyle(this.state.slideIndex === 0)} className="icon-star"></i>}
               value={0}
             >
-              <MeritBook 
+              <LoadableMeritBook 
                 state={this.props.state}
                 index={this.state.slideIndex}
                 pledgeArray={this.state.pledgeArray}
@@ -377,7 +418,7 @@ export default class PledgeApp extends Component {
               icon={<i style={getTabStyle(this.state.slideIndex === 1)} className="icon-address-book"></i>}
               value={1}
             >
-              <Contacts
+              <LoadableContacts
                 state={this.props.state}
                 actives={this.state.activeArray}
               />
@@ -386,7 +427,7 @@ export default class PledgeApp extends Component {
               icon={<i style={getTabStyle(this.state.slideIndex === 2)} className="icon-calendar-empty"></i>}
               value={2}
             >
-              <Chalkboards 
+              <LoadableChalkboards 
                 state={this.props.state}
                 index={this.state.slideIndex}
                 myHostingChalkboards={this.state.myHostingChalkboards}
@@ -401,7 +442,7 @@ export default class PledgeApp extends Component {
               icon={<i style={getTabStyle(this.state.slideIndex === 3)} className="icon-thumbs-down-alt"></i>}
               value={3}
             >
-              <Complaints
+              <LoadableComplaints
                 state={this.props.state}
                 index={this.state.slideIndex}
                 pledgeComplaintsArray={this.state.pledgeComplaintsArray}
@@ -416,7 +457,7 @@ export default class PledgeApp extends Component {
               icon={<i style={getTabStyle(this.state.slideIndex === 4)} className="icon-cog"></i>}
               value={4}
             >
-              <Settings 
+              <LoadableSettings 
                 state={this.props.state} 
                 logoutCallBack={this.props.logoutCallBack} 
                 history={this.props.history}
