@@ -154,7 +154,7 @@ export default class PledgeApp extends Component {
     }
 
     // Checks if page has scrolled
-    setInterval(() => {
+    this.interval = setInterval(() => {
       if (isMobileDevice()) {
         if (didScroll) {
           didScroll = false;
@@ -248,6 +248,10 @@ export default class PledgeApp extends Component {
         }
       }
     }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   // Changes touch action of view if scroll is at top of view for mobile
