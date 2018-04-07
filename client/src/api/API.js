@@ -28,22 +28,21 @@ export default {
   getActives: function() {
     return axios.post('/api/actives');
   },
-  getActiveRemainingMerits: function(displayName, pledge) {
-    return axios.post('/api/activeremainingmerits', {displayName, pledge})
-  },
-  getPledgeMerits: function(pledge) {
-    return axios.post('/api/pledgemerits', {pledge});
-  },
   getPledgeData: function(displayName) {
     return axios.post('/api/pledgedata', {displayName});
   },
-  merit: function(displayName, pledgeName, activeName, description, amount, photoURL, date) {
-    let body = {displayName, pledgeName, activeName, description, amount, photoURL, date};
+  getPledgeMerits: function(pledgeName) {
+    return axios.post('/api/pledgemerits', {pledgeName});
+  },
+  getPledgeComplaints: function(pledgeName) {
+    return axios.post('/api/pledgecomplaints', {pledgeName});
+  },
+  merit: function(displayName, activeName, pledges, description, amount, photoURL, date) {
+    let body = {displayName, activeName, pledges, description, amount, photoURL, date};
     return axios.post('/api/merit', body);
   },
-  meritAll: function(displayName, activeName, description, amount, photoURL, date) {
-    let body = {displayName, activeName, description, amount, photoURL, date};
-    return axios.post('/api/meritall', body);
+  getPledgesForMerit: function(displayName) {
+    return axios.post('/api/pledgesForMerit', {displayName});
   },
   createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location) {
     let body = {displayName, activeName, photoURL, title, description, date, time, location};
@@ -81,7 +80,7 @@ export default {
     return axios.post('/api/approvecomplaint', {complaint});
   },
   getPledgesForComplaints: function() {
-    return axios.post('/api/pledgecomplaints');
+    return axios.post('/api/pledgesForComplaints');
   },
   saveMessagingToken: function(displayName, token) {
     return axios.post('/api/savemessagetoken', {displayName, token});

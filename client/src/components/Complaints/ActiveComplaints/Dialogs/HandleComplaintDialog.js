@@ -38,7 +38,7 @@ export default class HandleComplaintDialog extends Component {
     let message;
     let label;
 
-    if (this.props.state.status === 'active') {
+    if (this.props.state.status !== 'pipm') {
       label = 'Remove';
       message = 'Remove Complaint?';
     }
@@ -57,7 +57,7 @@ export default class HandleComplaintDialog extends Component {
         label={label}
         primary={true}
         onClick={() => {
-          if (this.props.state.status === 'active') {
+          if (this.props.state.status !== 'pipm') {
             this.remove(this.props.complaint);
           }
           else {

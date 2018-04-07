@@ -45,6 +45,7 @@
   font-size: 12px;
 }
 
+/* Total Merits for Pledges */
 .total-merits {
   position: fixed;
   background-color: #fff;
@@ -56,4 +57,15 @@
   font-size: 20px;
   border-top: 1px solid #ccc;
   text-align: center;
+}
+
+/* Merit Button */
+.fixed-button#merit-button {
+  bottom: 20px;
+}
+
+/* Merit Dialog */
+#remaining-merits {
+  font-size: 14px;
+  margin: 20px auto 0;
 }

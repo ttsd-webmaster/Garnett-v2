@@ -27,7 +27,7 @@ else {
   meritAmount += ' small';
 }
 
-export default class ActiveMerit extends Component {
+export default class MeritsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,10 +37,10 @@ export default class ActiveMerit extends Component {
 
   componentWillMount() {
     if (navigator.onLine) {
-      API.getPledgeMerits(this.props.pledge)
+      API.getPledgeMerits(this.props.pledgeName)
       .then(res => {
         this.setState({
-          merits: res.data.merits
+          merits: res.data
         });
       })
       .catch(err => console.log('err', err));
@@ -55,25 +55,23 @@ export default class ActiveMerit extends Component {
       <List className="garnett-list dialog">
         {this.state.merits.map((merit, i) => (
           <div key={i}>
-            <div>
-              <Divider className={divider} inset={true} />
-              <ListItem
-                className={listItem}
-                leftAvatar={<Avatar className={image} size={imageSize} src={merit.photoURL} />}
-                primaryText={
-                  <p className="garnett-name"> {merit.name} </p>
-                }
-                secondaryText={
-                  <p> {merit.description} </p>
-                }
-              >
-                <div className={meritAmountContainer}>
-                  <p className={meritDate}> {merit.date} </p>
-                  <p className={meritAmount}> {merit.amount} </p>
-                </div>
-              </ListItem>
-              <Divider className={divider} inset={true} />
-            </div>
+            <Divider className={divider} inset={true} />
+            <ListItem
+              className={listItem}
+              leftAvatar={<Avatar className={image} size={imageSize} src={merit.photoURL} />}
+              primaryText={
+                <p className="garnett-name"> {merit.name} </p>
+              }
+              secondaryText={
+                <p> {merit.description} </p>
+              }
+            >
+              <div className={meritAmountContainer}>
+                <p className={meritDate}> {merit.date} </p>
+                <p className={meritAmount}> {merit.amount} </p>
+              </div>
+            </ListItem>
+            <Divider className={divider} inset={true} />
           </div>
         ))}
       </List>

@@ -1,12 +1,10 @@
 import '../../MeritBook.css';
-import {getTabStyle, isMobileDevice, getDate} from '../../../../helpers/functions.js';
-import API from '../../../../api/API.js';
+import {getTabStyle, isMobileDevice} from '../../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -25,8 +23,19 @@ const inkBarStyle = {
   zIndex: 2
 };
 
-const LoadableMeritList = Loadable({
-  loader: () => import('./MeritList'),
+const LoadableMeritsList = Loadable({
+  loader: () => import('./MeritsList'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div> Loading... </div>;
+  }
+});
+
+const LoadableComplaintsList = Loadable({
+  loader: () => import('./ComplaintsList'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -68,9 +77,11 @@ export default class ActiveMerit extends Component {
 
   render() {
     let pledgeName;
+    let pledgeDisplayName;
 
     if (this.state.pledge) {
       pledgeName = `${this.state.pledge.firstName} ${this.state.pledge.lastName}`;
+      pledgeDisplayName = this.state.pledge.firstName + this.state.pledge.lastName;
     }
 
     const actions = [
@@ -90,7 +101,7 @@ export default class ActiveMerit extends Component {
       this.state.pledge && (
         isMobileDevice() ? (
           <FullscreenDialog
-            title={pledgeName}
+            title="Pledge Information"
             open={this.props.open}
             onRequestClose={this.handleClose}
           >
@@ -99,7 +110,7 @@ export default class ActiveMerit extends Component {
               inkBarStyle={inkBarStyle}
               onChange={this.handleChange}
             >
-              <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
+              <Tab style={getTabStyle(this.state.index === 0)} label="Bio" value={0}>
                 <img className="chalkboard-photo" src={this.state.pledge.photoURL} alt="User" />
                 <List style={{padding:'24px 0'}}>
                   <Divider />
@@ -143,14 +154,17 @@ export default class ActiveMerit extends Component {
                   <Divider className="garnett-divider" />
                 </List>
               </Tab>
-              <Tab style={getTabStyle(this.state.index === 1)} label="Past Merits" value={1}>
-                <LoadableMeritList pledge={this.state.pledge} />
+              <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
+                <LoadableMeritsList pledgeName={pledgeDisplayName} />
+              </Tab>
+              <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
+                <LoadableComplaintsList pledgeName={pledgeDisplayName} />
               </Tab>
             </Tabs>
           </FullscreenDialog>
         ) : (
           <Dialog
-            title={pledgeName}
+            title="Pledge Information"
             titleClassName="garnett-dialog-title"
             actions={actions}
             modal={false}
@@ -165,7 +179,7 @@ export default class ActiveMerit extends Component {
               inkBarStyle={inkBarStyle}
               onChange={this.handleChange}
             >
-              <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
+              <Tab style={getTabStyle(this.state.index === 0)} label="Bio" value={0}>
                 <List style={{padding:'24px 0'}}>
                   <Divider />
                   <ListItem
@@ -208,8 +222,11 @@ export default class ActiveMerit extends Component {
                   <Divider className="garnett-divider" />
                 </List>
               </Tab>
-              <Tab style={getTabStyle(this.state.index === 1)} label="Past Merits" value={1}>
-                <LoadableMeritList pledge={this.state.pledge} />
+              <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
+                <LoadableMeritsList pledgeName={pledgeDisplayName} />
+              </Tab>
+              <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
+                <LoadableComplaintsList pledgeName={pledgeDisplayName} />
               </Tab>
             </Tabs>
           </Dialog>

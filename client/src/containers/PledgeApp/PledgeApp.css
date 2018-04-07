@@ -28,8 +28,7 @@
   top: 48px !important;
 }
 .content-container.hide-buttons .fixed-button{
-  opacity: 0;
-  visibility: hidden;
+  transform: scale(0);
 }
 
 /* Pull To Refresh version */
@@ -74,10 +73,7 @@
   border-radius: 50%;
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
-  transition: visibility 0.2s, opacity 0.2s linear;
-}
-.fixed-button#merit-all {
-  bottom: 20px;
+  transition: all 0.2s linear;
 }
 .fixed-button.hidden {
   display: none;
@@ -101,7 +97,8 @@
   margin-top: 48px !important;
 }
 .garnett-list.dialog {
-  max-width: none !important;
+  width: auto;
+  max-width: none;
   margin: 24px auto;
 }
 
@@ -111,6 +108,9 @@
 .garnett-list-item.large > div > div {
   min-height: 56px;
   padding-left: 102px !important;
+}
+.garnett-list-item.small > div > div {
+  padding: 8px 16px !important;
 }
 .garnett-list-item.settings > div > div {
   z-index: -1;
@@ -163,6 +163,7 @@
   display: flex;
   flex-direction: column;
   background-color: #fff;
+  padding-bottom: 44px !important;
   border-bottom: 1px solid rgb(224, 224, 224) !important;
 }
 .garnett-dialog-body.grey {

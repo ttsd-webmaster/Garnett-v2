@@ -9,7 +9,7 @@ export default class PastComplaints extends Component {
   render() {
     return (
       <div id="past-complaints">
-        <Subheader className="garnett-subheader"> General </Subheader>
+        <Subheader className="garnett-subheader"> Recent </Subheader>
         <List className="garnett-list">
           {this.props.complaints.map((complaint, i) => (
             <LazyLoad

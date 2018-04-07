@@ -45,16 +45,19 @@ export default class ActiveComplaints extends Component {
         let dbRef = firebase.database().ref('/');
 
         dbRef.on('value', (snapshot) => {
-          let complaints = this.state.complaints;
-          let pendingComplaints = this.state.pendingComplaints;
-          let approvedComplaints = this.state.approvedComplaints;
+          let complaints = [];
+          let pendingComplaints = [];
+          let approvedComplaints = [];
           
           if (snapshot.val().pendingComplaints) {
             pendingComplaints = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
               return snapshot.val().pendingComplaints[key];
             });
+            pendingComplaints.sort((a, b) => {
+              return a.date < b.date ? 1 : -1;
+            });
 
-            if (this.props.state.status === 'active') {
+            if (this.props.state.status !== 'pipm') {
               pendingComplaints = pendingComplaints.filter((complaint) => {
                 return this.props.state.name === complaint.activeName;
               });
@@ -65,10 +68,13 @@ export default class ActiveComplaints extends Component {
             approvedComplaints = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
               return snapshot.val().approvedComplaints[key];
             });
+            approvedComplaints.sort((a, b) => {
+              return a.date < b.date ? 1 : -1;
+            });
 
             complaints = approvedComplaints;
 
-            if (this.props.state.status === 'active') {
+            if (this.props.state.status !== 'pipm') {
               approvedComplaints = approvedComplaints.filter((complaint) => {
                 return this.props.state.name === complaint.activeName;
               });
@@ -207,7 +213,6 @@ export default class ActiveComplaints extends Component {
           />
           <PastComplaints
             complaints={this.state.complaints}
-            scrollPosition={this.props.scrollPosition}
           />
 
           <BottomNavigation 

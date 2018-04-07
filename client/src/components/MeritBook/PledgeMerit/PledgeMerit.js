@@ -35,7 +35,7 @@ export default class PledgeMerit extends Component {
           localStorage.setItem('totalMerits', totalMerits);
 
           meritRef.on('value', (snapshot) => {
-            let merits = this.state.merits;
+            let merits = [];
 
             if (snapshot.val()) {
               merits = Object.keys(snapshot.val()).map(function(key) {
@@ -62,27 +62,12 @@ export default class PledgeMerit extends Component {
     }
   }
 
-  componentDidUpdate() {
-    let view = document.getElementById('pledge-merit');
-
-    if (view) {
-      let height = view.clientHeight;
-
-      if (this.props.scrollPosition) {
-        view.parentNode.scrollTop = this.props.scrollPosition;
-      }
-      else {
-        view.parentNode.scrollTop = height;
-      }
-    }
-  }
-
   render() {
     return (
       this.state.loaded ? (
         <div className="animate-in" id="pledge-meritbook" >
           <Subheader className="garnett-subheader"> Recent </Subheader>
-          <List className="animate-in garnett-list" id="pledge-merit">
+          <List className="animate-in garnett-list">
             {this.state.merits.map((merit, i) => (
               <LazyLoad
                 height={88}

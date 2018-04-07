@@ -328,38 +328,6 @@ app.post('/api/actives', function(req, res) {
   });
 });
 
-// Query for merit data on Active App
-app.post('/api/activeremainingmerits', function(req, res) {
-  let fullName = req.body.displayName;
-  let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
-  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledgeName);
-  
-  userRef.once('value', (snapshot) => {
-    res.json({
-      remainingMerits: snapshot.val().merits
-    });
-  });
-});
-
-// Query for the specified pledge's merits
-app.post('/api/pledgemerits', function(req, res) {
-  let pledgeName = req.body.pledge.firstName + req.body.pledge.lastName;
-  let meritRef = admin.database().ref('/users/' + pledgeName + '/Merits');
-  let merits = [];
-
-  meritRef.once('value', (snapshot) => {
-    if (snapshot.val()) {
-      merits = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      });
-    }
-
-    res.json({
-      merits: merits.reverse()
-    });
-  });
-});
-
 // Query for merit data on Pledge App
 app.post('/api/pledgedata', function(req, res) {
   let fullName = req.body.displayName;
@@ -402,105 +370,105 @@ app.post('/api/pledgedata', function(req, res) {
   });
 });
 
-// Post merit data
-app.post('/api/merit', function(req, res) {
-  let fullName = req.body.displayName;
-  let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + req.body.pledgeName);
-  let pledgeRef = admin.database().ref('/users/' + req.body.pledgeName);
-  let meritRef = pledgeRef.child('/Merits');
+// Query for the specified pledge's merits
+app.post('/api/pledgemerits', function(req, res) {
+  let pledgeName = req.body.pledgeName;
+  let meritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
+  let merits = [];
 
-  userRef.once('value', (snapshot) => {
-    if (req.body.amount > 0) {
-      userRef.update({
-        merits: snapshot.val().merits - req.body.amount 
+  meritsRef.once('value', (snapshot) => {
+    if (snapshot.val()) {
+      merits = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
       });
     }
-  });
 
-  pledgeRef.once('value', (snapshot) => {
-    pledgeRef.update({
-      totalMerits: snapshot.val().totalMerits + req.body.amount
-    });
+    res.json(merits.reverse());
   });
-
-  meritRef.push({
-    name: req.body.activeName,
-    description: req.body.description,
-    amount: req.body.amount,
-    photoURL: req.body.photoURL,
-    date: req.body.date
-  });
-
-  res.sendStatus(200);
 });
 
-// Post merit data for all pledges
-app.post('/api/meritall', function(req, res) {
-  let fullName = req.body.displayName;
-  let userRef = admin.database().ref('/users/' + fullName + '/Pledges');
+// Query for the specified pledge's merits
+app.post('/api/pledgecomplaints', function(req, res) {
+  let pledgeName = req.body.pledgeName;
+  let complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+  let complaints = [];
+
+  complaintsRef.once('value', (snapshot) => {
+    if (snapshot.val()) {
+      complaints = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      });
+      complaints.sort((a, b) => {
+        return a.date < b.date ? 1 : -1;
+      });
+    }
+
+    res.json(complaints);
+  });
+});
+
+// Post merit data
+app.post('/api/merit', function(req, res) {
   let counter = 0;
+  let pledges = req.body.pledges;
 
-  userRef.once('value', (snapshot) => {
-    snapshot.forEach((child) => {
-      let userPledgeRef = child.ref;
-      let pledgeRef = admin.database().ref('/users/' + child.key);
-      let meritRef = pledgeRef.child('/Merits/');
-      let remainingMerits = child.val().merits - req.body.amount;
-      counter++;
+  pledges.forEach((pledge) => {
+    let fullName = req.body.displayName;
+    let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledge.value);
+    let pledgeRef = admin.database().ref('/users/' + pledge.value);
+    let meritRef = pledgeRef.child('/Merits');
+    counter++;
 
-      if (req.body.amount > 0) {
-        if (remainingMerits > 0) {
-          pledgeRef.once('value', (snap) => {
-            pledgeRef.update({
-              totalMerits: snap.val().totalMerits + req.body.amount
-            });
-
-            userPledgeRef.update({
-              merits: remainingMerits
-            });
-
-            meritRef.push({
-              name: req.body.activeName,
-              description: req.body.description,
-              amount: req.body.amount,
-              photoURL: req.body.photoURL,
-              date: req.body.date
-            });
-
-            if (!res.headersSent && counter === snapshot.numChildren()) {
-              res.sendStatus(200);
-            }
-          });
-        }
-        else {
-          pledgeRef.once('value', (snap) => {
-            let pledgeName = `${snap.val().firstName} ${snap.val().lastName}`;
-            if (!res.headersSent) {
-              res.status(400).send(pledgeName);
-            }
-          });
-        }
-      }
-      else {
-        pledgeRef.once('value', (snap) => {
-          pledgeRef.update({
-            totalMerits: snap.val().totalMerits + req.body.amount
-          });
-
-          meritRef.push({
-            name: req.body.activeName,
-            description: req.body.description,
-            amount: req.body.amount,
-            photoURL: req.body.photoURL,
-            date: req.body.date
-          });
-
-          if (!res.headersSent && counter === snapshot.numChildren()) {
-            res.sendStatus(200);
-          }
+    userRef.once('value', (snapshot) => {
+      if (req.body.amount > 0 && snapshot.val().merits - req.body.amount > 0) {
+        userRef.update({
+          merits: snapshot.val().merits - req.body.amount 
         });
       }
+      else {
+        if (!res.headersSent) {
+          res.sendStatus(400).send(pledge.label);
+        }
+      }
     });
+
+    pledgeRef.once('value', (snapshot) => {
+      pledgeRef.update({
+        totalMerits: snapshot.val().totalMerits + req.body.amount
+      });
+    });
+
+    meritRef.push({
+      name: req.body.activeName,
+      description: req.body.description,
+      amount: req.body.amount,
+      photoURL: req.body.photoURL,
+      date: req.body.date
+    });
+
+    if (!res.headersSent && counter === pledges.length) {
+      res.sendStatus(200);
+    }
+  })
+});
+
+// Gets all the pledges for merit
+app.post('/api/pledgesForMerit', function(req, res) {
+  let pledgesRef = admin.database().ref('/users/' + req.body.displayName + '/Pledges');
+
+  pledgesRef.once('value', (snapshot) => {
+    let pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+      return [key, snapshot.val()[key]];
+    });
+
+    pledgeArray = pledgeArray.map(function(pledge) {
+      return {'value': pledge[0], 
+              'label': pledge[0].replace(/([a-z])([A-Z])/, '$1 $2'),
+              'remainingMerits': pledge[1].merits
+             };
+    });
+
+    res.json(pledgeArray);
   });
 });
 
@@ -694,7 +662,6 @@ app.post('/api/getattendees', function(req, res) {
 
 // Post complaint data
 app.post('/api/complain', function(req, res) {
-  let fullName = req.body.displayName;
   let complaintInfo = {
     activeDisplayName: req.body.displayName,
     activeName: req.body.activeName,
@@ -731,7 +698,6 @@ app.post('/api/complain', function(req, res) {
 
 // Removes complaint for active
 app.post('/api/removecomplaint', function(req, res) {
-  let activeName = req.body.complaint.activeDisplayName;
   let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
   pendingComplaintsRef.once('value', (snapshot) => {
@@ -748,7 +714,6 @@ app.post('/api/removecomplaint', function(req, res) {
 
 // Approves complaint for PI/PM
 app.post('/api/approvecomplaint', function(req, res) {
-  let activeName = req.body.complaint.activeDisplayName;
   let pledgeName = req.body.complaint.pledgeDisplayName;
   let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
   let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
@@ -776,7 +741,7 @@ app.post('/api/approvecomplaint', function(req, res) {
 });
 
 // Gets all the pledges for complaints
-app.post('/api/pledgecomplaints', function(req, res) {
+app.post('/api/pledgesForComplaints', function(req, res) {
   let usersRef = admin.database().ref('/users');
 
   // Loop through all users for pledges

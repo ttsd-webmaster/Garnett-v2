@@ -1,7 +1,6 @@
 import '../MeritBook.css';
 import {loadFirebase} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
-import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -21,8 +20,8 @@ const LoadablePledgeInfoDialog = Loadable({
   }
 });
 
-const LoadableActiveMeritAllDialog = Loadable({
-  loader: () => import('./Dialogs/ActiveMeritAllDialog'),
+const LoadableActiveMeritDialog = Loadable({
+  loader: () => import('./Dialogs/ActiveMeritDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -39,10 +38,8 @@ export default class ActiveMerit extends Component {
       loaded: false,
       pledges: this.props.pledges,
       open: false,
-      openMeritAll: false,
+      openMerit: false,
       pledge: null,
-      merits: [],
-      remainingMerits: '',
       index: 0
     };
   }
@@ -85,14 +82,14 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidUpdate() {
-    let meritAll = document.getElementById('merit-all');
+    let meritButton = document.getElementById('merit-button');
 
-    if (meritAll) {
+    if (meritButton) {
       if (this.props.index === 0) {
-        meritAll.style.display = 'flex';
+        meritButton.style.display = 'flex';
       }
       else {
-        meritAll.style.display = 'none';
+        meritButton.style.display = 'none';
       }
     }
   }
@@ -108,22 +105,10 @@ export default class ActiveMerit extends Component {
     inkBar.style.zIndex = 0;
     appBar.style.zIndex = 0;
 
-    let displayName = this.props.state.displayName;
-
-    if (navigator.onLine) {
-      API.getActiveRemainingMerits(displayName, pledge)
-      .then(res => {
-        this.setState({
-          open: true,
-          pledge: pledge,
-          remainingMerits: res.data.remainingMerits
-        });
-      })
-      .catch(err => console.log('err', err));
-    }
-    else {
-      this.props.handleRequestOpen('You are offline.');
-    }
+    this.setState({
+      open: true,
+      pledge: pledge
+    });
 
     // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
@@ -163,10 +148,10 @@ export default class ActiveMerit extends Component {
     });
   }
 
-  handleMeritAllOpen = () => {
+  handleMeritOpen = () => {
     if (navigator.onLine) {
       this.setState({
-        openMeritAll: true
+        openMerit: true
       });
     }
     else {
@@ -185,18 +170,18 @@ export default class ActiveMerit extends Component {
 
       window.history.pushState(null, null, path + window.location.pathname);
       window.onpopstate = () => {
-        this.handleMeritAllClose();
+        this.handleMeritClose();
       }
     }
   }
 
-  handleMeritAllClose = () => {
+  handleMeritClose = () => {
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }
 
     this.setState({
-      openMeritAll: false
+      openMerit: false
     });
   }
 
@@ -232,7 +217,7 @@ export default class ActiveMerit extends Component {
             ))}
           </List>
 
-          <div id="merit-all" className="fixed-button" onClick={this.handleMeritAllOpen}>
+          <div id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
             <i className="icon-pencil"></i>
           </div>
           
@@ -240,17 +225,16 @@ export default class ActiveMerit extends Component {
             open={this.state.open}
             state={this.props.state}
             pledge={this.state.pledge}
-            remainingMerits={this.state.remainingMerits}
-            merits={this.state.merits}
             index={this.state.index}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
 
-          <LoadableActiveMeritAllDialog
-            open={this.state.openMeritAll}
+          <LoadableActiveMeritDialog
+            open={this.state.openMerit}
             state={this.props.state}
-            handleMeritAllClose={this.handleMeritAllClose}
+            pledges={this.props.pledgesForMerit}
+            handleMeritClose={this.handleMeritClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
         </div>

@@ -37,6 +37,9 @@ export default class PledgeComplaints extends Component {
             complaints = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             });
+            complaints.sort((a, b) => {
+              return a.date > b.date ? 1 : -1;
+            });
           }
 
           console.log('Complaints Array: ', complaints);
@@ -53,21 +56,6 @@ export default class PledgeComplaints extends Component {
       this.setState({
         loaded: true
       });
-    }
-  }
-
-  componentDidUpdate() {
-    let view = document.getElementById('pledge-complaints');
-
-    if (view) {
-      let height = view.clientHeight;
-
-      if (this.props.scrollPosition) {
-        view.parentNode.scrollTop = this.props.scrollPosition;
-      }
-      else {
-        view.parentNode.scrollTop = height;
-      }
     }
   }
 

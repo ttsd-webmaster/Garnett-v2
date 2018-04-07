@@ -3,9 +3,9 @@ import API from '../../../../api/API.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
-import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -27,7 +27,6 @@ export default class AddComplaintDialog extends Component {
       .then((res) => {
         let pledges = res.data;
 
-        console.log('Complaints Pledge Array: ', pledges);
         localStorage.setItem('complaintsPledgeArray', JSON.stringify(pledges));
 
         this.setState({
@@ -37,10 +36,11 @@ export default class AddComplaintDialog extends Component {
     }
   }
 
-  complain = (pledge) => {
+  complain = () => {
     let status = this.props.state.status;
     let displayName = this.props.state.displayName;
     let activeName = this.props.state.name;
+    let pledge = this.state.pledge;
     let description = this.state.description;
     let descriptionValidation = true;
     let pledgeValidation = true;
@@ -105,7 +105,7 @@ export default class AddComplaintDialog extends Component {
       <RaisedButton
         label="Submit"
         primary={true}
-        onClick={() => this.complain(this.state.pledge)}
+        onClick={this.complain}
       />,
     ];
 
@@ -129,7 +129,13 @@ export default class AddComplaintDialog extends Component {
           errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
         >
           {this.state.pledges.map((pledge, i) => (
-            <MenuItem key={i} value={pledge} primaryText={pledge.label} />
+            <MenuItem
+              key={i}
+              value={pledge}
+              primaryText={pledge.label}
+              insetChildren
+              checked={pledge === this.state.pledge}
+            />
           ))}
         </SelectField>
         <TextField

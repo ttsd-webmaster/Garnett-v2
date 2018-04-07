@@ -12,7 +12,6 @@ export default class Complaints extends Component {
         <PledgeComplaints 
           state={this.props.state}
           complaints={this.props.pledgeComplaintsArray}
-          scrollPosition={this.props.scrollPosition}
         />
       ) : (
         <ActiveComplaints 
@@ -22,7 +21,6 @@ export default class Complaints extends Component {
           complaints={this.props.activeComplaintsArray}
           pendingComplaints={this.props.pendingComplaintsArray}
           approvedComplaints={this.props.approvedComplaintsArray}
-          scrollPosition={this.props.scrollPosition}
           handleRequestOpen={this.props.handleRequestOpen}
         />
       )

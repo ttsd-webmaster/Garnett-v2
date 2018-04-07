@@ -38,11 +38,12 @@ export default class PledgeApp extends Component {
       activeArray: [],
       pledgeArray: [],
       meritArray: [],
+      meritPledgeArray: [],
       pledgeComplaintsArray: [],
-      complaintsPledgeArray: [],
       activeComplaintsArray: [],
       pendingComplaintsArray: [],
       approvedComplaintsArray: [],
+      complaintsPledgeArray: [],
       myHostingChalkboards: [],
       myAttendingChalkboards: [],
       myCompletedChalkboards: [],
@@ -71,6 +72,7 @@ export default class PledgeApp extends Component {
         let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
         let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
         let activeArray = JSON.parse(localStorage.getItem('activeArray'));
+        let meritPledgeArray = JSON.parse(localStorage.getItem('meritPledgeArray'));
         let complaintsPledgeArray = JSON.parse(localStorage.getItem('complaintsPledgeArray'));
         let activeComplaintsArray = JSON.parse(localStorage.getItem('activeComplaintsArray'));
         let pendingComplaintsArray = JSON.parse(localStorage.getItem('pendingComplaintsArray'));
@@ -80,6 +82,7 @@ export default class PledgeApp extends Component {
           loaded: true,
           pledgeArray: pledgeArray,
           activeArray: activeArray,
+          meritPledgeArray: meritPledgeArray,
           complaintsPledgeArray: complaintsPledgeArray,
           activeComplaintsArray: activeComplaintsArray,
           pendingComplaintsArray: pendingComplaintsArray,
@@ -365,8 +368,8 @@ export default class PledgeApp extends Component {
                 state={this.props.state}
                 index={this.state.slideIndex}
                 pledgeArray={this.state.pledgeArray}
+                meritPledgeArray={this.state.meritPledgeArray}
                 meritArray={this.state.meritArray}
-                scrollPosition={this.state.scrollPosition1}
                 handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>
@@ -391,7 +394,6 @@ export default class PledgeApp extends Component {
                 myCompletedChalkboards={this.state.myCompletedChalkboards}
                 upcomingChalkboards={this.state.upcomingChalkboards}
                 completedChalkboards={this.state.completedChalkboard}
-                scrollPosition={this.state.scrollPosition3}
                 handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>
@@ -407,7 +409,6 @@ export default class PledgeApp extends Component {
                 activeComplaintsArray={this.state.activeComplaintsArray}
                 pendingComplaintsArray={this.state.pendingComplaintsArray}
                 approvedComplaintsArray={this.state.approvedComplaintsArray}
-                scrollPosition={this.state.scrollPosition4}
                 handleRequestOpen={this.handleRequestOpen}
               />
             </Tab>

@@ -13,14 +13,14 @@ export default class MeritBook extends Component {
           state={this.props.state}
           merits={this.props.meritArray} 
           totalMerits={this.props.state.totalMerits}
-          scrollPosition={this.props.scrollPosition}
           handleRequestOpen={this.props.handleRequestOpen} 
         />
       ) : (
         <ActiveMerit 
           state={this.props.state}
           index={this.props.index}
-          pledges={this.props.pledgeArray} 
+          pledges={this.props.pledgeArray}
+          pledgesForMerit={this.props.meritPledgeArray}
           handleRequestOpen={this.props.handleRequestOpen} 
         />
       )

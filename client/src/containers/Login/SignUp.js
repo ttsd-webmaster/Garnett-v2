@@ -36,7 +36,13 @@ export default class SignUp extends Component {
             key={i}
           >
             {select.options.map((item, i) => (
-              <MenuItem key={i} value={item} primaryText={item} />
+              <MenuItem
+                key={i}
+                value={item}
+                primaryText={item}
+                insetChildren
+                checked={item === this.props[`${select.value}`]}
+              />
             ))}
           </SelectField>
         ))}
