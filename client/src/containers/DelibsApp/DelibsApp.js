@@ -164,7 +164,11 @@ export default class DelibsApp extends Component {
                     <Divider className="garnett-divider large" inset={true} />
                     <ListItem
                       className="garnett-list-item large"
-                      leftAvatar={<Avatar size={70} src={rushee.photo} className="garnett-image large" />}
+                      leftAvatar={rushee.rotate ? (
+                        <Avatar size={70} src={rushee.photo} className="garnett-image large rotate" />
+                      ) : (
+                        <Avatar size={70} src={rushee.photo} className="garnett-image large" />
+                      )}
                       primaryText={
                         <p className="garnett-name"> {rushee.name} </p>
                       }

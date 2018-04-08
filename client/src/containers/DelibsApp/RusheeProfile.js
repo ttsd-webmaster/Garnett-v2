@@ -215,7 +215,12 @@ export default class RusheeProfile extends Component {
           </div>
 
           <div className="animate-in delibs-app rushee">
-            <img className="user-photo" src={this.state.rushee.photo} alt="User" />
+            {this.state.rushee.rotate ? (
+              <img className="user-photo rotate" src={this.state.rushee.photo} alt="Rushee" />
+            ) : (
+              <img className="user-photo" src={this.state.rushee.photo} alt="Rushee" />
+            )}
+
             <List className="garnett-list">
               {rusheeInfo.map((info, i) => (
                 <div key={i}>
@@ -250,10 +255,12 @@ export default class RusheeProfile extends Component {
                   <Subheader> Open </Subheader>
                   <List>
                     <ListItem primaryText="Resume" onClick={() => this.viewResource('resume')} />
-                    <ListItem primaryText="Cover Letter" onClick={() => this.viewResource('coverLetter')} />
+                    <ListItem primaryText="Degree Audit" onClick={() => this.viewResource('degreeAudit')} />
                     <ListItem primaryText="Schedule" onClick={() => this.viewResource('schedule')} />
                     <ListItem primaryText="Interview Responses" onClick={this.viewInterview} />
-                    <ListItem primaryText="Pre-Delibs Sheet" onClick={this.viewResume} />
+                    <a style={{textDecoration:'none'}} href={this.state.rushee.preDelibs} target="_blank">
+                      <ListItem primaryText="Pre-Delibs Sheet"/>
+                    </a>
                   </List>
                 </BottomSheet>
 
@@ -266,7 +273,7 @@ export default class RusheeProfile extends Component {
                 
                 <LoadableResourceDialog
                   open={this.state.openResource}
-                  resource={this.state.rushee[this.state.resource]}
+                  resource={this.state.rushee.resources[this.state.resource]}
                   resourceName={this.state.resource}
                   handleClose={this.closeResource}
                 />

@@ -16,6 +16,24 @@
   position: absolute;
 }
 
+/* Rushee Image */
+.delibs-app .garnett-image {
+  object-position: 0 50%;
+}
+.delibs-app .user-photo {
+  object-position: 0 50%;
+  height: 200px;
+  width: 200px;
+  margin-bottom: 23px;
+}
+.delibs-app .rotate {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
 /* Rushee Profile List */
 .garnett-list-item.rushee > div > div {
   z-index: -1;

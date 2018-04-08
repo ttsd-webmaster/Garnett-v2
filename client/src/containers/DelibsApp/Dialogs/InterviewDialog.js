@@ -19,13 +19,17 @@ export default class InterviewDialog extends Component {
           >
             <img className="user-photo" src={this.props.rushee.photo} alt="Rushee" />
             <List style={{padding:'24px 0'}}>
-              <Divider className="garnett-divider" />
-              <ListItem
-                className="garnett-list-item long"
-                primaryText="Active Name"
-                secondaryText={this.props.rushee.name}
-              />
-              <Divider className="garnett-divider" />
+              {interviewResponses.map((response, i) => (
+                <div key={i}>
+                  <Divider className="garnett-divider" />
+                  <ListItem
+                    className="garnett-list-item long"
+                    primaryText={response.label}
+                    secondaryText={this.props.rushee.interviewResponses[response.value]}
+                  />
+                  <Divider className="garnett-divider" />
+                </div>
+              ))}
             </List>
           </FullscreenDialog>
         ) : (
