@@ -167,7 +167,7 @@ export default class RusheeProfile extends Component {
 
       window.history.pushState(null, null, path + window.location.pathname);
       window.onpopstate = () => {
-        this.closeInterviewResponses();
+        this.closeInterview();
       }
     }
 
