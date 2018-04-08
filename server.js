@@ -152,10 +152,10 @@ app.post('/api/signup', function(req, res) {
       }
     }
     else {
-      if (snapshot.val()) {
-        res.status(400).send('This active is already signed up.');
-      }
-      else {
+      // if (snapshot.val()) {
+      //   res.status(400).send('This active is already signed up.');
+      // }
+      // else {
         // Create user with email and password
         firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
         .then((user) => {
@@ -242,7 +242,7 @@ app.post('/api/signup', function(req, res) {
           res.status(400).send('Email has already been taken.');
         });
       }
-    }
+    // }
   });
 });
 
