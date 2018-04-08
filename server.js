@@ -457,16 +457,20 @@ app.post('/api/pledgesForMerit', function(req, res) {
   let pledgesRef = admin.database().ref('/users/' + req.body.displayName + '/Pledges');
 
   pledgesRef.once('value', (snapshot) => {
-    let pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-      return [key, snapshot.val()[key]];
-    });
+    let pledgeArray = [];
 
-    pledgeArray = pledgeArray.map(function(pledge) {
-      return {'value': pledge[0], 
-              'label': pledge[0].replace(/([a-z])([A-Z])/, '$1 $2'),
-              'remainingMerits': pledge[1].merits
-             };
-    });
+    if (snaphshot.val()) {
+      pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+        return [key, snapshot.val()[key]];
+      });
+
+      pledgeArray = pledgeArray.map(function(pledge) {
+        return {'value': pledge[0], 
+                'label': pledge[0].replace(/([a-z])([A-Z])/, '$1 $2'),
+                'remainingMerits': pledge[1].merits
+               };
+      });
+    }
 
     res.json(pledgeArray);
   });
