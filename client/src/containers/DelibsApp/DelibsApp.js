@@ -66,12 +66,6 @@ export default class DelibsApp extends Component {
             rushee['interacted'] = interactions[i];
           });
 
-          rushees.sort((rushee1, rushee2) => {
-            let name1 = rushee1.name.split(" ").splice(-1);
-            let name2 = rushee2.name.split(" ").splice(-1);
-            return name1 > name2 ? 1 : -1;
-          });
-
           console.log('Rushees array: ', rushees);
 
           localStorage.setItem('rusheesArray', JSON.stringify(rushees));
