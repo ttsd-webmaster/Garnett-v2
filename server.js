@@ -93,7 +93,7 @@ app.post('/api/signup', function(req, res) {
         // Create user with email and password
         firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
         .then((user) => {
-          if (user) {
+          if (user && !user.emailVerified) {
             user.updateProfile({
               displayName: fullName
             })
@@ -159,7 +159,7 @@ app.post('/api/signup', function(req, res) {
         // Create user with email and password
         firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
         .then((user) => {
-          if (user && !user.emailVerified) {
+          if (user) {
             user.updateProfile({
               displayName: fullName
             })
@@ -184,17 +184,17 @@ app.post('/api/signup', function(req, res) {
                 });
 
                 usersRef.once('value', (snapshot) => {
-                  snapshot.forEach((brother) => {
+                  snapshot.forEach((child) => {
                     let pledgeName = user.displayName;
                     
-                    if (child.val().status === 'active') {
-                      brother.ref.child('/Pledges/' + pledgeName).set({
-                        merits: 100
+                    if (child.val().status === 'alumni') {
+                      child.ref.child('/Pledges/' + pledgeName).set({
+                        merits: 200
                       });
                     }
-                    else if (child.val().status === 'alumni') {
-                      brother.ref.child('/Pledges/' + pledgeName).set({
-                        merits: 200
+                    else {
+                      child.ref.child('/Pledges/' + pledgeName).set({
+                        merits: 100
                       });
                     }
                   });

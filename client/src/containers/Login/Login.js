@@ -187,6 +187,9 @@ export default class Login extends Component {
               else {
                 let message = 'Email is not verified.';
 
+                this.setState({
+                  openCompletingTask: false
+                });
                 this.handleRequestOpen(message);
               }
             })
@@ -194,6 +197,9 @@ export default class Login extends Component {
               console.log('Error: ', error);
               let message = 'Email or password is incorrect.';
 
+              this.setState({
+                openCompletingTask: false
+              });
               this.handleRequestOpen(message);
             });
           });
