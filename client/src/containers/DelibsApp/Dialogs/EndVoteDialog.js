@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class VoteDialog extends Component {
+export default class EndVoteDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {

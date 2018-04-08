@@ -36,8 +36,19 @@ const LoadableVoteDialog = Loadable({
   }
 });
 
-const LoadableResumeDialog = Loadable({
-  loader: () => import('./Dialogs/ResumeDialog'),
+const LoadableResourceDialog = Loadable({
+  loader: () => import('./Dialogs/ResourceDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>;
+  }
+});
+
+const LoadableInterviewDialog = Loadable({
+  loader: () => import('./Dialogs/InterviewDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -51,10 +62,12 @@ export default class RusheeProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      openEndVote: false,
       rushee: null,
+      resource: '',
       sheetOpen: false,
-      openResume: false,
+      openResource: false,
+      openInterview: false,
       openSnackbar: false,
       message: ''
     };
@@ -89,7 +102,7 @@ export default class RusheeProfile extends Component {
     .then((res) => {
       console.log('Started Vote');
       this.setState({
-        open: true
+        openEndVote: true
       });
     })
     .catch((error) => {
@@ -97,13 +110,13 @@ export default class RusheeProfile extends Component {
     });
   }
 
-  handleClose = () => {
+  closeEndVote = () => {
     this.setState({
-      open: false
+      openEndVote: false
     });
   }
 
-  viewResume = () => {
+  viewResource = (resource) => {
     // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
       let path;
@@ -116,23 +129,66 @@ export default class RusheeProfile extends Component {
 
       window.history.pushState(null, null, path + window.location.pathname);
       window.onpopstate = () => {
-        this.closeResume();
+        this.closeResource();
       }
     }
 
     this.setState({
       sheetOpen: false,
-      openResume: true
+      openResource: true,
+      resource: resource
     });
   }
 
-  closeResume = () => {
+  closeResource = () => {
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }
 
     this.setState({
-      openResume: false
+      openResource: false
+    });
+  }
+
+  viewInterview = () => {
+    let appBar = document.querySelector('.app-header');
+
+    appBar.style.zIndex = 0;
+
+    // Handles android back button
+    if (/android/i.test(navigator.userAgent)) {
+      let path;
+      if (process.env.NODE_ENV === 'development') {
+        path = 'http://localhost:3000';
+      }
+      else {
+        path = 'https://garnett-app.herokuapp.com';
+      }
+
+      window.history.pushState(null, null, path + window.location.pathname);
+      window.onpopstate = () => {
+        this.closeInterviewResponses();
+      }
+    }
+
+    this.setState({
+      sheetOpen: false,
+      openInterview: true
+    });
+  }
+
+  closeInterview = () => {
+    let appBar = document.querySelector('.app-header');
+
+    appBar.style.zIndex = 1;
+
+    // Handles android back button
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
+    this.setState({
+      openInterview: false
     });
   }
 
@@ -165,7 +221,7 @@ export default class RusheeProfile extends Component {
                 <div key={i}>
                   <Divider />
                   <ListItem
-                    className="garnett-list-item rushee"
+                    className="garnett-list-item rushee long"
                     primaryText={info.label}
                     secondaryText={this.state.rushee[info.value]}
                   />
@@ -179,23 +235,24 @@ export default class RusheeProfile extends Component {
                 <div className="logout-button" onClick={this.startVote}> Start Vote </div>
 
                 <LoadableEndVoteDialog
-                  open={this.state.open}
+                  open={this.state.openEndVote}
                   rushee={this.state.rushee.name}
-                  handleClose={this.handleClose}
+                  handleClose={this.closeEndVote}
                   handleRequestOpen={this.handleRequestOpen}
                 />
               </div>
             ) : (
               <div>
                 <BottomSheet
-                  onRequestClose={() => this.setState({sheetOpen: false})}
                   open={this.state.sheetOpen}
+                  onRequestClose={() => this.setState({sheetOpen: false})}
                 >
                   <Subheader> Open </Subheader>
                   <List>
-                    <ListItem primaryText="Resume" onClick={this.viewResume} />
-                    <ListItem primaryText="Cover Letter" onClick={this.viewResume} />
-                    <ListItem primaryText="Schedule" onClick={this.viewResume} />
+                    <ListItem primaryText="Resume" onClick={() => this.viewResource('resume')} />
+                    <ListItem primaryText="Cover Letter" onClick={() => this.viewResource('coverLetter')} />
+                    <ListItem primaryText="Schedule" onClick={() => this.viewResource('schedule')} />
+                    <ListItem primaryText="Interview Responses" onClick={this.viewInterview} />
                     <ListItem primaryText="Pre-Delibs Sheet" onClick={this.viewResume} />
                   </List>
                 </BottomSheet>
@@ -207,10 +264,16 @@ export default class RusheeProfile extends Component {
                   Resources 
                 </div>
                 
-                <LoadableResumeDialog
-                  open={this.state.openResume}
-                  resume={this.state.rushee.resume}
-                  handleClose={this.closeResume}
+                <LoadableResourceDialog
+                  open={this.state.openResource}
+                  resource={this.state.rushee[this.state.resource]}
+                  resourceName={this.state.resource}
+                  handleClose={this.closeResource}
+                />
+                <LoadableInterviewDialog
+                  open={this.state.openInterview}
+                  rushee={this.state.rushee}
+                  handleClose={this.closeInterview}
                 />
                 <LoadableVoteDialog
                   state={this.props.state}

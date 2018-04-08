@@ -11,7 +11,7 @@ const contentStyle = {
   width: '100vw'
 };
 
-export default class ResumeDialog extends Component {
+export default class ResourceDialog extends Component {
   render() {
     const actions = [
       <FlatButton
@@ -31,7 +31,7 @@ export default class ResumeDialog extends Component {
         onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
       >
-        <img src={this.props.resume} width="100%" alt="Resume" />
+        <img src={this.props.resource} width="100%" alt={this.props.resourceName} />
       </Dialog>
     )
   }
