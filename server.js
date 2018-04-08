@@ -93,7 +93,7 @@ app.post('/api/signup', function(req, res) {
         // Create user with email and password
         firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
         .then((user) => {
-          if (user && !user.emailVerified) {
+          if (user) {
             user.updateProfile({
               displayName: fullName
             })
