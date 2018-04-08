@@ -459,7 +459,7 @@ app.post('/api/pledgesForMerit', function(req, res) {
   pledgesRef.once('value', (snapshot) => {
     let pledgeArray = [];
 
-    if (snaphshot.val()) {
+    if (snapshot.val()) {
       pledgeArray = Object.keys(snapshot.val()).map(function(key) {
         return [key, snapshot.val()[key]];
       });
