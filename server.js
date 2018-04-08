@@ -192,7 +192,7 @@ app.post('/api/signup', function(req, res) {
                         merits: 200
                       });
                     }
-                    else {
+                    else if (child.val().status !== 'pledge') {
                       child.ref.child('/Pledges/' + pledgeName).set({
                         merits: 100
                       });
