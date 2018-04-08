@@ -750,20 +750,24 @@ app.post('/api/pledgesForComplaints', function(req, res) {
 
   // Loop through all users for pledges
   usersRef.once('value', (snapshot) => {
-    let pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-      return snapshot.val()[key];
-    });
-    // Filter pledges
-    pledgeArray = pledgeArray.filter(function(user) {
-      return user.status === 'pledge';
-    });
-    // Save the value, label, and photoURL for each pledge
-    pledgeArray = pledgeArray.map(function(pledge) {
-      return {'value': pledge.firstName + pledge.lastName, 
-              'label': `${pledge.firstName} ${pledge.lastName}`,
-              'photoURL': pledge.photoURL
-             };
-    });
+    let pledgeArray = [];
+
+    if (snapshot.val()) {
+      pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      });
+      // Filter pledges
+      pledgeArray = pledgeArray.filter(function(user) {
+        return user.status === 'pledge';
+      });
+      // Save the value, label, and photoURL for each pledge
+      pledgeArray = pledgeArray.map(function(pledge) {
+        return {'value': pledge.firstName + pledge.lastName, 
+                'label': `${pledge.firstName} ${pledge.lastName}`,
+                'photoURL': pledge.photoURL
+               };
+      });
+    }
 
     res.json(pledgeArray);
   });
