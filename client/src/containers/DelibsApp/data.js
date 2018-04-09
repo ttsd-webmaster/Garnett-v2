@@ -32,7 +32,7 @@ const rusheeInfo = [
     value: 'otherReasons'
   },
   {
-    label: 'What do you want to join?',
+    label: 'Why do you want to join?',
     value: 'why'
   },
   {
