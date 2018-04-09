@@ -80,7 +80,7 @@ export default class ContactsDialog extends Component {
             primaryText="Major"
             secondaryText={this.props.active.major}
             leftIcon={
-              <i className="icon-briefcase garnett-icon"></i>
+              <i className="icon-graduation-cap garnett-icon"></i>
             }
           />
           <Divider className="garnett-divider" />

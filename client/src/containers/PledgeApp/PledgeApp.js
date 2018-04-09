@@ -310,18 +310,10 @@ export default class PledgeApp extends Component {
 
     // Hides and shows the app bar if scrolled for that view for mobile
     if (isMobileDevice()) {
-      if (appBar.scrollTop === 0) {
-        tabs.classList.remove('hide-tabs');
-        appBar.classList.remove('hide-app-bar');
-        view.classList.remove('hide-content-container');
-        inkBar.classList.remove('hide-content-container');
-      }
-      else {
-        tabs.classList.add('hide-tabs');
-        appBar.classList.add('hide-app-bar');
-        view.classList.add('hide-content-container');
-        inkBar.classList.add('hide-content-container');
-      }
+      tabs.classList.remove('hide-tabs');
+      appBar.classList.remove('hide-app-bar');
+      view.classList.remove('hide-content-container');
+      inkBar.classList.remove('hide-content-container');
     }
 
     // Sets the title and marks scroll position based on the tab index

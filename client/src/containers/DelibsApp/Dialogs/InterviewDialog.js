@@ -17,7 +17,12 @@ export default class InterviewDialog extends Component {
             open={this.props.open}
             onRequestClose={this.props.handleClose}
           >
-            <img className="user-photo" src={this.props.rushee.photo} alt="Rushee" />
+            {this.props.rushee.rotate ? (
+              <img className="user-photo rotate" src={this.props.rushee.photo} alt="Rushee" />
+            ) : (
+              <img className="user-photo" src={this.props.rushee.photo} alt="Rushee" />
+            )}
+            
             <List style={{padding:'24px 0'}}>
               {interviewResponses.map((response, i) => (
                 <div key={i}>

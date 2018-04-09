@@ -146,6 +146,7 @@ export default class AddChalkboardDialog extends Component {
         open={this.props.open}
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
+        autoDetectWindowHeight={false}
       >
         <TextField
           className="garnett-input"

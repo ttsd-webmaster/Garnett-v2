@@ -276,7 +276,7 @@ export default class HandleChalkboardDialog extends Component {
         <div>
           {isMobileDevice() ? (
             <FullscreenDialog
-              title={this.state.chalkboard.title}
+              title="Chalkboard"
               actionButton={actionButton}
               open={this.props.open}
               onRequestClose={this.handleClose}
@@ -292,6 +292,15 @@ export default class HandleChalkboardDialog extends Component {
                     <Divider />
                     <ListItem
                       className="garnett-list-item"
+                      primaryText="Chalkboard Name"
+                      secondaryText={this.state.chalkboard.title}
+                      leftIcon={
+                        <i className="icon-info-circled garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      className="garnett-list-item"
                       primaryText="Active Name"
                       secondaryText={this.state.chalkboard.activeName}
                       leftIcon={
@@ -304,7 +313,7 @@ export default class HandleChalkboardDialog extends Component {
                       primaryText="Description"
                       secondaryText={this.state.chalkboard.description}
                       leftIcon={
-                        <i className="icon-info-circled garnett-icon"></i>
+                        <i className="icon-list-alt garnett-icon"></i>
                       }
                       onClick={() => this.handleEditOpen('Description')}
                     />
@@ -357,7 +366,7 @@ export default class HandleChalkboardDialog extends Component {
             <Dialog
               title={this.props.type === 'hosting' ? (
                 <div>
-                  {this.state.chalkboard.title}
+                  <span> Chalkboard </span>
                   <i 
                     className="icon-edit edit-chalkboard"
                     onClick={this.handleEditOpen}
@@ -365,13 +374,9 @@ export default class HandleChalkboardDialog extends Component {
                   </i>
                 </div>
               ) : (
-                this.state.chalkboard.title
+                <span> Chalkboard </span>
               )}
-              titleClassName={this.props.type === 'hosting' ? (
-                "garnett-dialog-title hosting" 
-              ) : (
-                "garnett-dialog-title"
-              )}
+              titleClassName="garnett-dialog-title"
               actions={actions}
               modal={false}
               bodyClassName="garnett-dialog-body tabs grey"
@@ -390,6 +395,15 @@ export default class HandleChalkboardDialog extends Component {
                     <Divider />
                     <ListItem
                       className="garnett-list-item"
+                      primaryText="Chalkboard Name"
+                      secondaryText={this.state.chalkboard.title}
+                      leftIcon={
+                        <i className="icon-info-circled garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      className="garnett-list-item"
                       primaryText="Active Name"
                       secondaryText={this.state.chalkboard.activeName}
                       leftIcon={
@@ -402,7 +416,7 @@ export default class HandleChalkboardDialog extends Component {
                       primaryText="Description"
                       secondaryText={this.state.chalkboard.description}
                       leftIcon={
-                        <i className="icon-info-circled garnett-icon"></i>
+                        <i className="icon-list-alt garnett-icon"></i>
                       }
                     />
                     <Divider className="garnett-divider" inset={true} />
