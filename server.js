@@ -86,6 +86,8 @@ app.post('/api/signup', function(req, res) {
   let lastName = req.body.lastName.replace(/ /g,'');
   let fullName = firstName + lastName;
   let checkRef = admin.database().ref('/users/' + fullName);
+  firstName = firstName[0].toUpperCase() + firstName.substr(1);
+  lastName = lastName[0].toUpperCase() + lastName.substr(1);
 
   checkRef.once('value', (snapshot) => {
     if (req.body.year === 'Alumni') {
