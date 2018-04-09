@@ -310,7 +310,7 @@ export default class PledgeApp extends Component {
 
     // Hides and shows the app bar if scrolled for that view for mobile
     if (isMobileDevice()) {
-      if (view.scrollTop === 0) {
+      if (appBar.scrollTop === 0) {
         tabs.classList.remove('hide-tabs');
         appBar.classList.remove('hide-app-bar');
         view.classList.remove('hide-content-container');
