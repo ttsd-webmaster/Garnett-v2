@@ -292,7 +292,7 @@ export default class HandleChalkboardDialog extends Component {
                     <Divider />
                     <ListItem
                       className="garnett-list-item"
-                      primaryText="Chalkboard Name"
+                      primaryText="Title"
                       secondaryText={this.state.chalkboard.title}
                       leftIcon={
                         <i className="icon-info-circled garnett-icon"></i>
@@ -395,7 +395,7 @@ export default class HandleChalkboardDialog extends Component {
                     <Divider />
                     <ListItem
                       className="garnett-list-item"
-                      primaryText="Chalkboard Name"
+                      primaryText="Title"
                       secondaryText={this.state.chalkboard.title}
                       leftIcon={
                         <i className="icon-info-circled garnett-icon"></i>

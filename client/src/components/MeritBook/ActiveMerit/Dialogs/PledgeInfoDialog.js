@@ -101,7 +101,7 @@ export default class ActiveMerit extends Component {
       this.state.pledge && (
         isMobileDevice() ? (
           <FullscreenDialog
-            title="Pledge Information"
+            title="Pledge"
             open={this.props.open}
             onRequestClose={this.handleClose}
           >
@@ -110,7 +110,7 @@ export default class ActiveMerit extends Component {
               inkBarStyle={inkBarStyle}
               onChange={this.handleChange}
             >
-              <Tab style={getTabStyle(this.state.index === 0)} label="Bio" value={0}>
+              <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
                 <img className="chalkboard-photo" src={this.state.pledge.photoURL} alt="User" />
                 <List style={{padding:'24px 0'}}>
                   <Divider />
@@ -164,7 +164,7 @@ export default class ActiveMerit extends Component {
           </FullscreenDialog>
         ) : (
           <Dialog
-            title="Pledge Information"
+            title="Pledge"
             titleClassName="garnett-dialog-title"
             actions={actions}
             modal={false}
@@ -179,7 +179,7 @@ export default class ActiveMerit extends Component {
               inkBarStyle={inkBarStyle}
               onChange={this.handleChange}
             >
-              <Tab style={getTabStyle(this.state.index === 0)} label="Bio" value={0}>
+              <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
                 <List style={{padding:'24px 0'}}>
                   <Divider />
                   <ListItem
