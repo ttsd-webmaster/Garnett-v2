@@ -16,7 +16,7 @@ const LoadablePledgeInfoDialog = Loadable({
     return <Component {...props}/>;
   },
   loading() {
-    return <div> Loading... </div>;
+    return <div></div>;
   }
 });
 
@@ -27,7 +27,7 @@ const LoadableActiveMeritDialog = Loadable({
     return <Component {...props}/>;
   },
   loading() {
-    return <div> Loading... </div>
+    return <div></div>
   }
 });
 

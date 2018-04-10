@@ -7,6 +7,7 @@ import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
+import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
 
 
@@ -19,8 +20,7 @@ export default class ActiveMeritDialog extends Component {
       description: '',
       amount: '',
       pledgeValidation: true,
-      descriptionValidation: true,
-      amountValidation: true,
+      descriptionValidation: true
     };
   }
 
@@ -40,7 +40,6 @@ export default class ActiveMeritDialog extends Component {
   }
 
   merit = (type) => {
-    let status = this.props.state.status;
     let displayName = this.props.state.displayName;
     let activeName = this.props.state.name;
     let pledges = this.state.selectedPledges;
@@ -50,42 +49,27 @@ export default class ActiveMeritDialog extends Component {
     let pledgeValidation = true;
     let descriptionValidation = true;
     let amountValidation = true;
-    let maxAmount;
 
-    if (status === 'alumni') {
-      maxAmount = 50;
-    }
-    else {
-      maxAmount = 30;
-    }
-
-    if (pledges.length === 0 || !description || description.length > 45 || !amount || amount < 0 || amount % 5 !== 0) {
+    if (pledges.length === 0 || !description || description.length > 45) {
       if (pledges.length === 0) {
         pledgeValidation = false;
       }
       if (!description || description.length > 45) {
         descriptionValidation = false;
       }
-      if (!amount || amount > maxAmount || amount < 0 || amount % 5 !== 0) {
-        amountValidation = false;
-      }
 
       this.setState({
         pledgeValidation: pledgeValidation,
-        descriptionValidation: descriptionValidation,
-        amountValidation: amountValidation,
+        descriptionValidation: descriptionValidation
       });
     }
     else {
-      let action;
+      let action = 'Merited';
       let date = getDate();
 
       if (type === 'demerit') {
         amount = -amount;
         action = 'Demerited';
-      }
-      else {
-        action = 'Merited';
       }
 
       API.merit(displayName, activeName, pledges, description, amount, photoURL, date)
@@ -133,6 +117,12 @@ export default class ActiveMeritDialog extends Component {
   }
 
   render(){
+    let maxAmount = 30;
+
+    if (this.props.state.status === 'alumni') {
+      maxAmount = 50;
+    }
+
     const actions = [
       <FlatButton
         label="Demerit"
@@ -189,16 +179,16 @@ export default class ActiveMeritDialog extends Component {
           onChange={(e, newValue) => this.handleChange('description', newValue)}
           errorText={!this.state.descriptionValidation && 'Enter a description.'}
         />
-        <TextField
-          className="garnett-input"
-          type="number"
-          step={5}
+        <span style={{marginTop:'2em',marginBottom:0}}>
+          Amount: {this.state.amount}
+        </span>
+        <Slider
+          name="Amount"
           min={0}
-          max={30}
-          floatingLabelText="Amount"
+          max={maxAmount}
+          step={5}
           value={this.state.amount}
           onChange={(e, newValue) => this.handleChange('amount', newValue)}
-          errorText={!this.state.amountValidation && 'Enter a valid amount.'}
         />
 
         <div id="remaining-merits">

@@ -19,7 +19,7 @@ const LoadableContactsDialog = Loadable({
     return <Component {...props}/>;
   },
   loading() {
-    return <div> Loading... </div>
+    return <div></div>
   }
 });
 
