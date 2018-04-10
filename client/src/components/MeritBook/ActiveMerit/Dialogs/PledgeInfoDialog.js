@@ -102,6 +102,7 @@ export default class ActiveMerit extends Component {
         isMobileDevice() ? (
           <FullscreenDialog
             title="Pledge"
+            titleStyle={{fontSize:'22px'}}
             open={this.props.open}
             onRequestClose={this.handleClose}
           >

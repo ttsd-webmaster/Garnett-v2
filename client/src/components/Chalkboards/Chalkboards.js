@@ -214,32 +214,52 @@ export default class Chalkboards extends Component {
 
   addOpen = () => {
     if (navigator.onLine) {
+      let contentContainer = document.querySelector('.content-container').childNodes[2];
+      let tabs = document.getElementById('pledge-app-tabs').firstChild;
+      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+      let appBar = document.querySelector('.app-header');
+
+      contentContainer.style.setProperty('overflow', 'hidden', 'important');
+      tabs.style.zIndex = 0;
+      inkBar.style.zIndex = 0;
+      appBar.style.zIndex = 0;
+
       this.setState({
         openAdd: true
       });
+
+      // Handles android back button
+      if (/android/i.test(navigator.userAgent)) {
+        let path;
+        if (process.env.NODE_ENV === 'development') {
+          path = 'http://localhost:3000';
+        }
+        else {
+          path = 'https://garnett-app.herokuapp.com';
+        }
+
+        window.history.pushState(null, null, path + window.location.pathname);
+        window.onpopstate = () => {
+          this.addClose();
+        }
+      }
     }
     else {
       this.props.handleRequestOpen('You are offline.');
     }
-
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      let path;
-      if (process.env.NODE_ENV === 'development') {
-        path = 'http://localhost:3000';
-      }
-      else {
-        path = 'https://garnett-app.herokuapp.com';
-      }
-
-      window.history.pushState(null, null, path + window.location.pathname);
-      window.onpopstate = () => {
-        this.addClose();
-      }
-    }
   }
 
   addClose = () => {
+    let contentContainer = document.querySelector('.content-container').childNodes[2];
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
+    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    let appBar = document.querySelector('.app-header');
+
+    contentContainer.style.setProperty('overflow', 'scroll', 'important');
+    tabs.style.zIndex = 1;
+    inkBar.style.zIndex = 1;
+    appBar.style.zIndex = 1;
+    
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }

@@ -158,7 +158,6 @@ export default class ActiveMeritDialog extends Component {
         open={this.props.open}
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
-        autoDetectWindowHeight={false}
       >
         <SelectField
           className="garnett-input"

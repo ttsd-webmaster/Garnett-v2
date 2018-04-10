@@ -249,7 +249,7 @@ export default class HandleChalkboardDialog extends Component {
       ),
     ];
 
-    const actionButton = (
+    const mobileAction = (
       this.props.type !== 'completed' ? (
         <FlatButton
           label={label}
@@ -277,7 +277,8 @@ export default class HandleChalkboardDialog extends Component {
           {isMobileDevice() ? (
             <FullscreenDialog
               title="Chalkboard"
-              actionButton={actionButton}
+              titleStyle={{fontSize:'22px'}}
+              actionButton={mobileAction}
               open={this.props.open}
               onRequestClose={this.handleClose}
             >

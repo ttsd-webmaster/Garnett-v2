@@ -169,25 +169,25 @@ export default class ActiveComplaints extends Component {
       this.setState({
         open: true
       });
+
+      // Handles android back button
+      if (/android/i.test(navigator.userAgent)) {
+        let path;
+        if (process.env.NODE_ENV === 'development') {
+          path = 'http://localhost:3000';
+        }
+        else {
+          path = 'https://garnett-app.herokuapp.com';
+        }
+
+        window.history.pushState(null, null, path + window.location.pathname);
+        window.onpopstate = () => {
+          this.handleClose();
+        }
+      }
     }
     else {
       this.handleRequestOpen('You are offline.');
-    }
-
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      let path;
-      if (process.env.NODE_ENV === 'development') {
-        path = 'http://localhost:3000';
-      }
-      else {
-        path = 'https://garnett-app.herokuapp.com';
-      }
-
-      window.history.pushState(null, null, path + window.location.pathname);
-      window.onpopstate = () => {
-        this.handleClose();
-      }
     }
   }
 
