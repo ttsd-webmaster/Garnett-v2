@@ -59,8 +59,8 @@ export default class ActiveMeritDialog extends Component {
       maxAmount = 30;
     }
 
-    if (!pledges || !description || description.length > 45 || !amount || amount < 0 || amount % 5 !== 0) {
-      if (!pledges) {
+    if (pledges.length === 0 || !description || description.length > 45 || !amount || amount < 0 || amount % 5 !== 0) {
+      if (pledges.length === 0) {
         pledgeValidation = false;
       }
       if (!description || description.length > 45) {
