@@ -83,7 +83,6 @@
 .garnett-subheader {
   width: 100vw !important;
   max-width: 700px;
-  padding-right: 16px;
   margin: auto !important;
 }
 
@@ -202,7 +201,7 @@
 }
 
 /* Photo for mobile dialog */
-.mobile-photo {
+.dialog-photo {
   object-fit: cover;
   position: relative;
   top: 10px;

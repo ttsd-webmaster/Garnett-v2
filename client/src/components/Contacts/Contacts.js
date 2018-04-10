@@ -6,6 +6,7 @@ import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import {List} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
@@ -196,6 +197,7 @@ export default class Contacts extends Component {
                   handleOpen={this.handleOpen}
                 />
               </List>
+              <Divider className="garnett-subheader" />
             </div>
           ))}
 
