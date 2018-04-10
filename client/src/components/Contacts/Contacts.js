@@ -156,6 +156,9 @@ export default class Contacts extends Component {
     if (filter === 'firstName' || filter === 'lastName') {
       filter = 'name';
     }
+    if (filter === 'active' || filter == 'alumni') {
+      filter = 'class';
+    }
 
     let labels = this.state[filter];
 
@@ -206,6 +209,8 @@ export default class Contacts extends Component {
             <Menu>
               <MenuItem primaryText="Class" onClick={() => this.setFilter('Class')} />
               <MenuItem primaryText="Major" onClick={() => this.setFilter('Major')} />
+              <MenuItem primaryText="Active" onClick={() => this.setFilter('Active')} />
+              <MenuItem primaryText="Alumni" onClick={() => this.setFilter('Alumni')} />
               <MenuItem primaryText="First Name" onClick={() => this.setFilter('First Name')} />
               <MenuItem primaryText="Last Name" onClick={() => this.setFilter('Last Name')} />
             </Menu>
