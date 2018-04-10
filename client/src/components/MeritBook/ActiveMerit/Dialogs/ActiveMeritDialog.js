@@ -109,7 +109,7 @@ export default class ActiveMeritDialog extends Component {
     this.setState({
       selectedPledges: [],
       description: '',
-      amount: '',
+      amount: 0,
       pledgeValidation: true,
       descriptionValidation: true,
       amountValidation: true
