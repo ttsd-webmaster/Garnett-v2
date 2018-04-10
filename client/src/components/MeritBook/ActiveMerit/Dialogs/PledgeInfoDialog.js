@@ -84,18 +84,13 @@ export default class ActiveMerit extends Component {
       pledgeDisplayName = this.state.pledge.firstName + this.state.pledge.lastName;
     }
 
-    const actions = [
+    const actions = (
       <FlatButton
-        label="Demerit"
+        label="Close"
         primary={true}
-        onClick={() => this.demerit(this.state.pledge)}
-      />,
-      <FlatButton
-        label="Merit"
-        primary={true}
-        onClick={() => this.merit(this.state.pledge)}
-      />,
-    ];
+        onClick={this.handleClose}
+      />
+    );
 
     return (
       this.state.pledge && (

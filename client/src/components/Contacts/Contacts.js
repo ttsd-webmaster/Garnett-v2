@@ -157,7 +157,7 @@ export default class Contacts extends Component {
     if (filter === 'firstName' || filter === 'lastName') {
       filter = 'name';
     }
-    if (filter === 'active' || filter == 'alumni') {
+    if (filter === 'active' || filter === 'alumni') {
       filter = 'class';
     }
 

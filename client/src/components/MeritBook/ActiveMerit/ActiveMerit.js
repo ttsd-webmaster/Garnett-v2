@@ -39,8 +39,7 @@ export default class ActiveMerit extends Component {
       pledges: this.props.pledges,
       open: false,
       openMerit: false,
-      pledge: null,
-      index: 0
+      pledge: null
     };
   }
 
@@ -143,8 +142,7 @@ export default class ActiveMerit extends Component {
     }
 
     this.setState({
-      open: false,
-      index: 0
+      open: false
     });
   }
 
@@ -225,7 +223,6 @@ export default class ActiveMerit extends Component {
             open={this.state.open}
             state={this.props.state}
             pledge={this.state.pledge}
-            index={this.state.index}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

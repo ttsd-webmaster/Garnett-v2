@@ -71,8 +71,7 @@ export default class HandleChalkboardDialog extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      chalkboard: nextProps.chalkboard,
-      index: nextProps.index
+      chalkboard: nextProps.chalkboard
     });
   }
 

@@ -24,7 +24,7 @@ export default class ActiveMeritDialog extends Component {
     };
   }
 
-  componentWillMount() {
+  componentWillReceiveProps() {
     if (navigator.onLine) {
       API.getPledgesForMerit(this.props.state.displayName)
       .then((res) => {
@@ -52,7 +52,6 @@ export default class ActiveMeritDialog extends Component {
     let amountValidation = true;
     let maxAmount;
 
-    console.log(pledges)
     if (status === 'alumni') {
       maxAmount = 50;
     }
@@ -60,14 +59,14 @@ export default class ActiveMeritDialog extends Component {
       maxAmount = 30;
     }
 
-    if (!pledges || !description || description.length > 45 || !amount || amount < 0) {
+    if (!pledges || !description || description.length > 45 || !amount || amount < 0 || amount % 5 !== 0) {
       if (!pledges) {
         pledgeValidation = false;
       }
       if (!description || description.length > 45) {
         descriptionValidation = false;
       }
-      if (!amount || amount > maxAmount || amount < 0) {
+      if (!amount || amount > maxAmount || amount < 0 || amount % 5 !== 0) {
         amountValidation = false;
       }
 
@@ -194,6 +193,7 @@ export default class ActiveMeritDialog extends Component {
           className="garnett-input"
           type="number"
           step={5}
+          min={0}
           max={30}
           floatingLabelText="Amount"
           value={this.state.amount}

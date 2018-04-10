@@ -47,8 +47,7 @@ export default class Chalkboards extends Component {
       upcomingChalkboards: this.props.upcomingChalkboards,
       completedChalkboards: this.props.completedChalkboards,
       selectedChalkboard: null,
-      chalkboardType: '',
-      index: 0
+      chalkboardType: ''
     };
   }
 
@@ -319,8 +318,7 @@ export default class Chalkboards extends Component {
     }
 
     this.setState({
-      open: false,
-      index: 0
+      open: false
     });
   }
 
@@ -379,7 +377,6 @@ export default class Chalkboards extends Component {
             state={this.props.state}
             type={this.state.chalkboardType}
             chalkboard={this.state.selectedChalkboard}
-            index={this.state.index}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

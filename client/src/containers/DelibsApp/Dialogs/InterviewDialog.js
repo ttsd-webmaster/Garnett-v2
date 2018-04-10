@@ -3,12 +3,21 @@ import {interviewResponses} from '../data.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
 export default class InterviewDialog extends Component {
   render() {
+    const actions = (
+      <FlatButton
+        label="Close"
+        primary={true}
+        onClick={this.props.handleClose}
+      />
+    );
+
     return (
       <div>
         {isMobileDevice() ? (
@@ -41,6 +50,7 @@ export default class InterviewDialog extends Component {
           <Dialog
             title="Interview Responses"
             titleClassName="garnett-dialog-title"
+            actions={actions}
             modal={false}
             bodyClassName="garnett-dialog-body tabs grey"
             contentClassName="garnett-dialog-content"

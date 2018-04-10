@@ -154,10 +154,10 @@ app.post('/api/signup', function(req, res) {
       }
     }
     else {
-      // if (snapshot.val()) {
-      //   res.status(400).send('This active is already signed up.');
-      // }
-      // else {
+      if (snapshot.val()) {
+        res.status(400).send('This active is already signed up.');
+      }
+      else {
         // Create user with email and password
         firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
         .then((user) => {
@@ -244,7 +244,7 @@ app.post('/api/signup', function(req, res) {
           res.status(400).send('Email has already been taken.');
         });
       }
-    // }
+    }
   });
 });
 
@@ -422,35 +422,35 @@ app.post('/api/merit', function(req, res) {
     counter++;
 
     userRef.once('value', (snapshot) => {
-      if (req.body.amount > 0 && snapshot.val().merits - req.body.amount > 0) {
-        userRef.update({
-          merits: snapshot.val().merits - req.body.amount 
-        });
+      if (req.body.amount > 0 && 
+          snapshot.val().merits - req.body.amount < 0 && 
+          !res.headersSent) {
+        res.sendStatus(400).send(pledge.label);
       }
       else {
-        if (!res.headersSent) {
-          res.sendStatus(400).send(pledge.label);
-        }
+        userRef.update({
+          merits: snapshot.val().merits - req.body.amount
+        });
       }
-    });
 
-    pledgeRef.once('value', (snapshot) => {
-      pledgeRef.update({
-        totalMerits: snapshot.val().totalMerits + req.body.amount
+      pledgeRef.once('value', (snapshot) => {
+        pledgeRef.update({
+          totalMerits: snapshot.val().totalMerits + req.body.amount
+        });
+
+        meritRef.push({
+          name: req.body.activeName,
+          description: req.body.description,
+          amount: req.body.amount,
+          photoURL: req.body.photoURL,
+          date: req.body.date
+        });
+
+        if (!res.headersSent && counter === pledges.length) {
+          res.sendStatus(200);
+        }
       });
     });
-
-    meritRef.push({
-      name: req.body.activeName,
-      description: req.body.description,
-      amount: req.body.amount,
-      photoURL: req.body.photoURL,
-      date: req.body.date
-    });
-
-    if (!res.headersSent && counter === pledges.length) {
-      res.sendStatus(200);
-    }
   })
 });
 
