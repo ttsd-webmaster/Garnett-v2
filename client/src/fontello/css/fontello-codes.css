@@ -10,6 +10,8 @@
 .icon-info-circled:before { content: '\e808'; } /* '' */
 .icon-location:before { content: '\e809'; } /* '' */
 .icon-clock:before { content: '\e80a'; } /* '' */
+.icon-up-open-mini:before { content: '\e80d'; } /* '' */
+.icon-down-open-mini:before { content: '\e80e'; } /* '' */
 .icon-mail-alt:before { content: '\f0e0'; } /* '' */
 .icon-calendar-empty:before { content: '\f133'; } /* '' */
 .icon-thumbs-down-alt:before { content: '\f165'; } /* '' */

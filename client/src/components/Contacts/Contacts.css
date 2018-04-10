@@ -29,3 +29,10 @@
   font-weight: 700;
   margin: 0;
 }
+
+.reverse-toggle {
+  padding: 0 !important;
+}
+.reverse-toggle .icon-down-open-mini {
+  top: 4px;
+}

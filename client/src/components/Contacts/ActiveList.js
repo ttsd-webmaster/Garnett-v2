@@ -7,10 +7,23 @@ import {ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 export default class ActiveList extends Component {
+  checkCondition(active) {
+    let condition = false;
+
+    if (this.props.filter === 'firstName' || this.props.filter === 'lastName') {
+      condition = active[this.props.filter].startsWith(this.props.label);
+    }
+    else {
+      condition = this.props.label === active[this.props.filter];
+    }
+
+    return condition;
+  }
+
   render() {
     return (
       this.props.actives.map((active, i) => (
-        this.props.classLabel === active.class &&
+        this.checkCondition(active) &&
           <LazyLoad
             height={88}
             offset={window.innerHeight}
