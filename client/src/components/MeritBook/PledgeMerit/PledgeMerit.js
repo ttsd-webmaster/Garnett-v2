@@ -41,7 +41,6 @@ export default class PledgeMerit extends Component {
         let firebase = window.firebase;
         let fullName = this.props.state.displayName;
         let userRef = firebase.database().ref('/users/' + fullName);
-        let meritRef = firebase.database().ref('/users/' + fullName + '/Merits/');
 
         userRef.on('value', (user) => {
           let totalMerits = user.val().totalMerits;
@@ -49,7 +48,7 @@ export default class PledgeMerit extends Component {
           console.log('Total Merits: ', totalMerits);
           localStorage.setItem('totalMerits', totalMerits);
 
-          meritRef.on('value', (snapshot) => {
+          userRef.child('Merits').on('value', (snapshot) => {
             let merits = [];
 
             if (snapshot.val()) {

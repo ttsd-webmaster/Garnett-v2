@@ -484,10 +484,6 @@ app.post('/api/meritAsPledge', function(req, res) {
         userRef.once('value', (snapshot) => {
           counter++;
 
-          userRef.update({
-            totalMerits: snapshot.val().totalMerits + req.body.amount
-          });
-
           meritRef.push({
             name: `${active.val().firstName} ${active.val().lastName}`,
             description: req.body.description,
@@ -497,6 +493,10 @@ app.post('/api/meritAsPledge', function(req, res) {
           });
 
           if (!res.headersSent && counter === actives.length) {
+            userRef.update({
+              totalMerits: snapshot.val().totalMerits + (req.body.amount * actives.length)
+            });
+            
             res.sendStatus(200);
           }
         });

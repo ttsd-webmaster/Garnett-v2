@@ -77,12 +77,14 @@ export default class PledgeMeritDialog extends Component {
 
       API.meritAsPledge(displayName, actives, description, amount, date)
       .then(res => {
+        let totalAmount = amount * actives.length;
+
         console.log(res);
         this.handleClose();
         this.setState({
           openCompletingTask: false
         });
-        this.props.handleRequestOpen(`${action} for ${amount} merits`);
+        this.props.handleRequestOpen(`${action} for ${totalAmount} merits`);
       })
       .catch((error) => {
         console.log(error)
