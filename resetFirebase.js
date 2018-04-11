@@ -28,7 +28,8 @@ usersRef.once('value', (snapshot) => {
     }
     else {
       userRef.update({
-        Pledges: null
+        Pledges: null,
+        totalMerits: null
       });
 
       usersRef.once('value', (snapshot) => {

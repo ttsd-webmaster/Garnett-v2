@@ -359,12 +359,6 @@ export default class Login extends Component {
   render() {
     return (
       <div className="login">
-        {this.state.openCompletingTask &&
-          <CompletingTaskDialog
-            open={this.state.openCompletingTask}
-            message={this.state.completingTaskMessage}
-          />
-        }
         <div className="animate-in">
           {!isMobileDevice() && (
             <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
@@ -444,6 +438,13 @@ export default class Login extends Component {
           autoHideDuration={4000}
           onRequestClose={this.handleRequestClose}
         />
+
+        {this.state.openCompletingTask &&
+          <CompletingTaskDialog
+            open={this.state.openCompletingTask}
+            message={this.state.completingTaskMessage}
+          />
+        }
       </div>
     );
   }

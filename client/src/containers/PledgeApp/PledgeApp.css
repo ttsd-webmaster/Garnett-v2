@@ -127,6 +127,8 @@
 .garnett-name {
   font-weight: 700;
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .garnett-description {

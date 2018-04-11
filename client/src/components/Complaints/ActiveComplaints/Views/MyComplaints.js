@@ -4,6 +4,7 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import IconButton from 'material-ui/IconButton';
 
 const LoadableHandleComplaintDialog = Loadable({
   loader: () => import('../Dialogs/HandleComplaintDialog'),
@@ -21,7 +22,8 @@ export default class MyComplaints extends Component {
     super(props);
     this.state = {
       open: false,
-      selectedComplaint: null
+      selectedComplaint: null,
+      reverse: false
     };
   }
 
@@ -63,12 +65,45 @@ export default class MyComplaints extends Component {
     });
   }
 
+  reverse = () => {
+    let reverse = true;
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      reverse: reverse
+    });
+  }
+
   render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    let approvedComplaints = this.props.approvedComplaints;
+    let pendingComplaints = this.props.pendingComplaints;
+
+    if (this.state.reverse) {
+      approvedComplaints = approvedComplaints.slice().reverse();
+      pendingComplaints = pendingComplaints.slice().reverse();
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
       <div id="my-complaints" className="active">
-        <Subheader className="garnett-subheader"> Approved </Subheader>
+        <Subheader className="garnett-subheader">
+          Approved
+          <IconButton
+            style={{float:'right',cursor:'pointer'}}
+            iconClassName={toggleIcon}
+            className="reverse-toggle"
+            onClick={this.reverse}
+          >
+          </IconButton>
+        </Subheader>
+        
         <List className="garnett-list">
-          {this.props.approvedComplaints.map((complaint, i) => (
+          {approvedComplaints.map((complaint, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />
               <ListItem
@@ -95,7 +130,7 @@ export default class MyComplaints extends Component {
 
         <Subheader className="garnett-subheader"> Pending </Subheader>
         <List className="garnett-list">
-          {this.props.pendingComplaints.map((complaint, i) => (
+          {pendingComplaints.map((complaint, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />
               <ListItem

@@ -47,17 +47,17 @@ export default class ActiveMerit extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let pledges;
+        let pledges = [];
         let firebase = window.firebase;
         let dbRef = firebase.database().ref('/users');
 
         dbRef.on('value', (snapshot) => {
-          pledges = Object.keys(snapshot.val()).map(function(key) {
-            return snapshot.val()[key];
+          snapshot.forEach((child) => {
+            if (child.val().status === 'pledge') {
+              pledges.push(child.val());
+            }
           });
-          pledges = pledges.filter(function(user) {
-            return user.status === 'pledge';
-          });
+
           pledges.sort((a, b) => {
             return a.lastName > b.lastName ? 1 : -1;
           });

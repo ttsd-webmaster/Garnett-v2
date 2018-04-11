@@ -56,8 +56,7 @@ export default class ActiveMerit extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      pledge: nextProps.pledge,
-      index: nextProps.index
+      pledge: nextProps.pledge
     });
   }
 

@@ -41,15 +41,22 @@ export default {
     let body = {displayName, activeName, pledges, description, amount, photoURL, date};
     return axios.post('/api/merit', body);
   },
+  meritAsPledge: function(displayName, actives, description, amount, date) {
+    let body = {displayName, actives, description, amount, date};
+    return axios.post('/api/meritAsPledge', body);
+  },
   getPledgesForMerit: function(displayName) {
     return axios.post('/api/pledgesForMerit', {displayName});
   },
-  createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location) {
-    let body = {displayName, activeName, photoURL, title, description, date, time, location};
+  getActivesForMerit: function(displayName) {
+    return axios.post('/api/activesForMerit', {displayName});
+  },
+  createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount) {
+    let body = {displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount};
     return axios.post('/api/createchalkboard', body);
   },
-  editChalkboard: function(displayName, chalkboard, description, date, time, location) {
-    return axios.post('/api/editchalkboard', {displayName, chalkboard, description, date, time, location});
+  editChalkboard: function(displayName, chalkboard, description, date, time, location, timeCommitment, amount) {
+    return axios.post('/api/editchalkboard', {displayName, chalkboard, description, date, time, location, timeCommitment, amount});
   },
   editChalkboardMobile: function(displayName, chalkboard, field, value) {
     return axios.post('/api/editchalkboardmobile', {displayName, chalkboard, field, value});

@@ -294,12 +294,12 @@ app.post('/api/pledges', function(req, res) {
   let pledgeArray = [];
 
   usersRef.once('value', (snapshot) => {
-    pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-      return snapshot.val()[key];
+    snapshot.forEach((child) => {
+      if (child.val().status === 'pledge') {
+        pledgeArray.push(child.val());
+      }
     });
-    pledgeArray = pledgeArray.filter(function(user) {
-      return user.status === 'pledge';
-    });
+
     pledgeArray.sort((a, b) => {
       return a.lastName > b.lastName ? 1 : -1;
     });
@@ -315,12 +315,12 @@ app.post('/api/actives', function(req, res) {
   let activeArray = [];
 
   usersRef.once('value', (snapshot) => {
-    activeArray = Object.keys(snapshot.val()).map(function(key) {
-      return snapshot.val()[key];
+    snapshot.forEach((child) => {
+      if (child.val().status !== 'pledge') {
+        activeArray.push(child.val());
+      }
     });
-    activeArray = activeArray.filter(function(user) {
-      return user.status !== 'pledge';
-    });
+
     activeArray.sort((a, b) => {
       return a.lastName > b.lastName ? 1 : -1;
     });
@@ -389,7 +389,7 @@ app.post('/api/pledgemerits', function(req, res) {
   });
 });
 
-// Query for the specified pledge's merits
+// Query for the specified pledge's complaints
 app.post('/api/pledgecomplaints', function(req, res) {
   let pledgeName = req.body.pledgeName;
   let complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
@@ -409,7 +409,7 @@ app.post('/api/pledgecomplaints', function(req, res) {
   });
 });
 
-// Post merit data
+// Post merit data as active
 app.post('/api/merit', function(req, res) {
   let counter = 0;
   let pledges = req.body.pledges;
@@ -419,7 +419,6 @@ app.post('/api/merit', function(req, res) {
     let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledge.value);
     let pledgeRef = admin.database().ref('/users/' + pledge.value);
     let meritRef = pledgeRef.child('/Merits');
-    counter++;
 
     userRef.once('value', (snapshot) => {
       if (req.body.amount > 0 && 
@@ -434,6 +433,8 @@ app.post('/api/merit', function(req, res) {
       }
 
       pledgeRef.once('value', (snapshot) => {
+        counter++;
+
         pledgeRef.update({
           totalMerits: snapshot.val().totalMerits + req.body.amount
         });
@@ -454,27 +455,106 @@ app.post('/api/merit', function(req, res) {
   })
 });
 
+// Post merit data as pledge
+app.post('/api/meritAsPledge', function(req, res) {
+  let counter = 0;
+  let actives = req.body.actives;
+  let fullName = req.body.displayName;
+  let userRef = admin.database().ref('/users/' + fullName);
+  let meritRef = userRef.child('/Merits');
+
+  actives.forEach((child) => {
+    let activeRef = admin.database().ref('/users/' + child.value);
+
+    activeRef.once('value', (active) => {
+      let activePledgeRef = active.ref.child('/Pledges/' + fullName);
+
+      activePledgeRef.once('value', (user) => {
+        if (req.body.amount > 0 && 
+            user.val().merits - req.body.amount < 0 && 
+            !res.headersSent) {
+          res.sendStatus(400).send(active.label);
+        }
+        else {
+          activePledgeRef.update({
+            merits: user.val().merits - req.body.amount
+          });
+        }
+
+        userRef.once('value', (snapshot) => {
+          counter++;
+
+          userRef.update({
+            totalMerits: snapshot.val().totalMerits + req.body.amount
+          });
+
+          meritRef.push({
+            name: `${active.val().firstName} ${active.val().lastName}`,
+            description: req.body.description,
+            amount: req.body.amount,
+            photoURL: active.val().photoURL,
+            date: req.body.date
+          });
+
+          if (!res.headersSent && counter === actives.length) {
+            res.sendStatus(200);
+          }
+        });
+      });
+    });
+  })
+});
+
 // Gets all the pledges for merit
 app.post('/api/pledgesForMerit', function(req, res) {
-  let pledgesRef = admin.database().ref('/users/' + req.body.displayName + '/Pledges');
+  let displayName = req.body.displayName;
+  let pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
 
   pledgesRef.once('value', (snapshot) => {
     let pledgeArray = [];
 
     if (snapshot.val()) {
       pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-        return [key, snapshot.val()[key]];
-      });
-
-      pledgeArray = pledgeArray.map(function(pledge) {
-        return {'value': pledge[0], 
-                'label': pledge[0].replace(/([a-z])([A-Z])/, '$1 $2'),
-                'remainingMerits': pledge[1].merits
+        return {'value': key,
+                'label': key.replace(/([a-z])([A-Z])/, '$1 $2'),
+                'remainingMerits': snapshot.val()[key].merits
                };
       });
     }
 
     res.json(pledgeArray);
+  });
+});
+
+// Gets all the pledges for merit
+app.post('/api/activesForMerit', function(req, res) {
+  let counter = 0;
+  let activeCount = 43;
+  let displayName = req.body.displayName;
+  let usersRef = admin.database().ref('/users');
+
+  usersRef.once('value', (snapshot) => {
+    let activeArray = [];
+
+    snapshot.forEach((active) => {
+      if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+        let activeRef = admin.database().ref('/users/' + active.key + '/Pledges/' + displayName);
+
+        activeRef.once('value', (user) => {
+          counter++;
+
+          activeArray.push({
+            'value': active.key,
+            'label': active.key.replace(/([a-z])([A-Z])/, '$1 $2'),
+            'remainingMerits': user.val().merits
+          });
+
+          if (!res.headersSent && counter === activeCount) {
+            res.json(activeArray);
+          }
+        });
+      }
+    });
   });
 });
 
@@ -488,7 +568,9 @@ app.post('/api/createchalkboard', function(req, res) {
     description: req.body.description,
     date: req.body.date,
     time: req.body.time,
-    location: req.body.location
+    location: req.body.location,
+    timeCommitment: req.body.timeCommitment,
+    amount: req.body.amount
   };
   let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
@@ -534,7 +616,9 @@ app.post('/api/editchalkboard', function(req, res) {
           description: req.body.description,
           date: req.body.date,
           time: req.body.time,
-          location: req.body.location
+          location: req.body.location,
+          timeCommitment: req.body.timeCommitment,
+          amount: req.body.amount
         });
 
         res.sendStatus(200);
@@ -755,13 +839,12 @@ app.post('/api/pledgesForComplaints', function(req, res) {
     let pledgeArray = [];
 
     if (snapshot.val()) {
-      pledgeArray = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
+      snapshot.forEach((child) => {
+        if (child.val().status === 'pledge') {
+          pledgeArray.push(child.val());
+        }
       });
-      // Filter pledges
-      pledgeArray = pledgeArray.filter(function(user) {
-        return user.status === 'pledge';
-      });
+
       // Save the value, label, and photoURL for each pledge
       pledgeArray = pledgeArray.map(function(pledge) {
         return {'value': pledge.firstName + pledge.lastName, 

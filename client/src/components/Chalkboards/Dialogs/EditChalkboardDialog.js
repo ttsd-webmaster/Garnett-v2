@@ -5,6 +5,7 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -16,10 +17,13 @@ export default class EditChalkboardDialog extends Component {
       date: null,
       time: null,
       location: '',
+      timeCommitment: 0,
+      amount: 0,
       descriptionValidation: true,
       dateValidation: true,
       timeValidation: true,
-      locationValidation: true
+      locationValidation: true,
+      timeCommitmentValidation: true
     };
   }
 
@@ -37,7 +41,9 @@ export default class EditChalkboardDialog extends Component {
       description: nextProps.chalkboard.description,
       date: date,
       time: time,
-      location: nextProps.chalkboard.location
+      location: nextProps.chalkboard.location,
+      timeCommitment: nextProps.chalkboard.timeCommitment,
+      amount: nextProps.chalkboard.amount
     });
   }
 
@@ -48,12 +54,15 @@ export default class EditChalkboardDialog extends Component {
     let date = this.state.date;
     let time = this.state.time;
     let location = this.state.location;
+    let timeCommitment = this.state.timeCommitment;
+    let amount = this.state.amount;
     let descriptionValidation = true;
     let dateValidation = true;
     let timeValidation = true;
     let locationValidation = true;
+    let timeCommitmentValidation = true;
 
-    if (!description || !date || !time || !location) {
+    if (!description || !date || !time || !location || timeCommitment === 0 || amount === 0) {
       if (!description) {
         descriptionValidation = false;
       }
@@ -66,19 +75,23 @@ export default class EditChalkboardDialog extends Component {
       if (!location) {
         locationValidation = false;
       }
+      if (timeCommitment === 0) {
+        timeCommitmentValidation = false;
+      }
 
       this.setState({
         descriptionValidation: descriptionValidation,
         dateValidation: dateValidation,
         timeValidation: timeValidation,
-        locationValidation: locationValidation
+        locationValidation: locationValidation,
+        timeCommitmentValidation: timeCommitmentValidation
       });
     }
     else {
       let parsedDate = date.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
       let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-      API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location)
+      API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location, timeCommitment, amount)
       .then((res) => {
         console.log('Edited chalkboard');
         this.props.updateChalkboardInfo();
@@ -103,10 +116,30 @@ export default class EditChalkboardDialog extends Component {
   }
 
   handleChange = (label, value) => {
+    let newValue = value;
     let validationLabel = [label] + 'Validation';
 
+    if (label === 'timeCommitment') {
+      let oldValue = value.substring(0, value.indexOf(' '));
+      newValue = value.substring(value.indexOf('s') + 1);
+
+      if (!newValue) {
+        newValue = 0;
+      }
+      else if (value.indexOf('s') === -1) {
+        newValue = parseInt(oldValue.slice(0, -1), 10);
+
+        if (!newValue) {
+          newValue = 0;
+        }
+      }
+      else {
+        newValue = parseInt(oldValue + newValue, 10);
+      }
+    }
+
     this.setState({
-      [label]: value,
+      [label]: newValue,
       [validationLabel]: true
     });
   }
@@ -119,10 +152,13 @@ export default class EditChalkboardDialog extends Component {
       date: null,
       time: null,
       location: '',
+      timeCommitment: 0,
+      amount: 0,
       descriptionValidation: true,
       dateValidation: true,
       timeValidation: true,
-      locationValidation: true
+      locationValidation: true,
+      timeCommitmentValidation: true
     });
   }
 
@@ -192,6 +228,31 @@ export default class EditChalkboardDialog extends Component {
           onChange={(e, newValue) => this.handleChange('location', newValue)}
           errorText={!this.state.locationValidation && 'Enter a location.'}
         />
+        <TextField
+          className="garnett-input"
+          type="number"
+          min={0}
+          floatingLabelText="Time Commitment"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.timeCommitment + ' hours'}
+          onChange={(e, newValue) => this.handleChange('timeCommitment', newValue)}
+          errorText={!this.state.timeCommitmentValidation && 'Enter a time commitment.'}
+        />
+        <div style={{width:'256px',margin:'20px auto 0'}}>
+          <span>
+            Amount: {this.state.amount}
+          </span>
+          <Slider
+            sliderStyle={{marginBottom:0}}
+            name="Amount"
+            min={0}
+            max={100}
+            step={5}
+            value={this.state.amount}
+            onChange={(e, newValue) => this.handleChange('amount', newValue)}
+          />
+        </div>
       </Dialog>
     )
   }

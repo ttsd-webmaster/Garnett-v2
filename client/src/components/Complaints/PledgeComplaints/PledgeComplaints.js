@@ -7,6 +7,7 @@ import LazyLoad from 'react-lazyload';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import IconButton from 'material-ui/IconButton';
 
 const listItemStyle = {
   backgroundColor: '#fff',
@@ -18,7 +19,8 @@ export default class PledgeComplaints extends Component {
     super(props);
     this.state = {
       loaded: false,
-      complaints: this.props.complaints
+      complaints: this.props.complaints,
+      reverse: false
     }
   }
 
@@ -59,13 +61,44 @@ export default class PledgeComplaints extends Component {
     }
   }
 
+  reverse = () => {
+    let reverse = true;
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      reverse: reverse
+    });
+  }
+
   render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    let complaints = this.state.complaints;
+
+    if (this.state.reverse) {
+      complaints = complaints.slice().reverse();
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
       this.state.loaded ? (
         <div id="pledge-complaints">
-          <Subheader className="garnett-subheader"> Recent </Subheader>
-          <List className="garnett-list no-header">
-            {this.state.complaints.map((complaint, i) => (
+          <Subheader className="garnett-subheader">
+            Recent
+            <IconButton
+              style={{float:'right',cursor:'pointer'}}
+              iconClassName={toggleIcon}
+              className="reverse-toggle"
+              onClick={this.reverse}
+            >
+            </IconButton>
+          </Subheader>
+
+          <List className="garnett-list">
+            {complaints.map((complaint, i) => (
               <LazyLoad
                 height={88}
                 offset={window.innerHeight}

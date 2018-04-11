@@ -5,6 +5,7 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
+import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -40,7 +41,7 @@ export default class MobileEditChalkboardDialog extends Component {
       .then((res) => {
         console.log(`Edited ${field}`);
         this.props.updateChalkboardInfo();
-        this.props.handleClose();
+        this.handleClose();
         this.props.handleRequestOpen(`Edited ${field}`);
 
         this.setState({
@@ -50,7 +51,7 @@ export default class MobileEditChalkboardDialog extends Component {
       })
       .catch((error) => {
         console.log('Error: ', error);
-        this.props.handleClose();
+        this.handleClose();
         this.props.handleRequestOpen(`Error editing ${field}`);
 
         this.setState({
@@ -116,6 +117,24 @@ export default class MobileEditChalkboardDialog extends Component {
           errorText={!this.state.newValueValidation && 'Enter a time.'}
         />
       );
+    }
+    else if (this.props.field === 'Amount') {
+      EditField = (
+        <div style={{width:'256px',margin:'20px auto 0'}}>
+          <span>
+            Amount: {this.state.newValue}
+          </span>
+          <Slider
+            sliderStyle={{marginBottom:0}}
+            name="Amount"
+            min={0}
+            max={100}
+            step={5}
+            value={this.state.newValue}
+            onChange={this.handleChange}
+          />
+        </div>
+      )
     }
     else {
       EditField = (

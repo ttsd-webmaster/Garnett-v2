@@ -125,6 +125,18 @@
       "css": "down-open-mini",
       "code": 59406,
       "src": "entypo"
+    },
+    {
+      "uid": "9dfee680431bb2f9cc4485bfa4d982ac",
+      "css": "hourglass-o",
+      "code": 62032,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "41087bc74d4b20b55059c60a33bf4008",
+      "css": "edit",
+      "code": 59403,
+      "src": "fontawesome"
     }
   ]
 }

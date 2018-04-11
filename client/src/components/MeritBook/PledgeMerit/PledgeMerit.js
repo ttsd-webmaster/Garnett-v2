@@ -3,11 +3,24 @@ import {loadFirebase} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
+import Loadable from 'react-loadable';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import IconButton from 'material-ui/IconButton';
+
+const LoadablePledgeMeritDialog = Loadable({
+  loader: () => import('./Dialogs/PledgeMeritDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>
+  }
+});
 
 export default class PledgeMerit extends Component {
   constructor(props) {
@@ -15,7 +28,9 @@ export default class PledgeMerit extends Component {
     this.state = {
       loaded: false,
       merits: this.props.merits,
-      totalMerits: 0
+      totalMerits: 0,
+      open: false,
+      reverse: false
     }
   }
 
@@ -62,13 +77,81 @@ export default class PledgeMerit extends Component {
     }
   }
 
+  handleOpen = () => {
+    if (navigator.onLine) {
+      this.setState({
+        open: true
+      });
+
+      // Handles android back button
+      if (/android/i.test(navigator.userAgent)) {
+        let path;
+        if (process.env.NODE_ENV === 'development') {
+          path = 'http://localhost:3000';
+        }
+        else {
+          path = 'https://garnett-app.herokuapp.com';
+        }
+
+        window.history.pushState(null, null, path + window.location.pathname);
+        window.onpopstate = () => {
+          this.handleClose();
+        }
+      }
+    }
+    else {
+      this.handleRequestOpen('You are offline.');
+    }
+  }
+
+  handleClose = () => {
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
+    this.setState({
+      open: false
+    });
+  }
+
+  reverse = () => {
+    let reverse = true;
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      reverse: reverse
+    });
+  }
+
   render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    let merits = this.state.merits;
+
+    if (this.state.reverse) {
+      merits = merits.slice().reverse();
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
       this.state.loaded ? (
         <div className="animate-in" id="pledge-meritbook" >
-          <Subheader className="garnett-subheader"> Recent </Subheader>
+          <Subheader className="garnett-subheader">
+            Recent
+            <IconButton
+              style={{float:'right',cursor:'pointer'}}
+              iconClassName={toggleIcon}
+              className="reverse-toggle"
+              onClick={this.reverse}
+            >
+            </IconButton>
+          </Subheader>
+
           <List className="animate-in garnett-list">
-            {this.state.merits.map((merit, i) => (
+            {merits.map((merit, i) => (
               <LazyLoad
                 height={88}
                 offset={window.innerHeight}
@@ -111,9 +194,21 @@ export default class PledgeMerit extends Component {
             ))}
           </List>
 
-          <div className="total-merits"> 
-            Total Merits: {this.state.totalMerits} 
+          <div className="fixed-button" onClick={this.handleOpen}>
+            <i className="icon-pencil"></i>
           </div>
+
+          <div className="total-merits-container"> 
+            Total Merits: <span id="total-merits"> {this.state.totalMerits} </span>
+          </div>
+
+          <LoadablePledgeMeritDialog
+            open={this.state.open}
+            state={this.props.state}
+            actives={this.props.activesForMerit}
+            handleClose={this.handleClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
         </div>
       ) : (
         <LoadingComponent />

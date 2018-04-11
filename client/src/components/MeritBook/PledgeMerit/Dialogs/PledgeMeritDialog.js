@@ -12,29 +12,29 @@ import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
 
 
-export default class ActiveMeritDialog extends Component {
+export default class PledgeMeritDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pledges: this.props.pledges,
-      selectedPledges: [],
+      actives: this.props.actives,
+      selectedActives: [],
       description: '',
       amount: 0,
-      pledgeValidation: true,
+      activeValidation: true,
       descriptionValidation: true
     };
   }
 
   componentWillReceiveProps() {
     if (navigator.onLine) {
-      API.getPledgesForMerit(this.props.state.displayName)
+      API.getActivesForMerit(this.props.state.displayName)
       .then((res) => {
-        let pledges = res.data;
+        let actives = res.data;
 
-        localStorage.setItem('meritPledgeArray', JSON.stringify(pledges));
+        localStorage.setItem('meritActiveArray', JSON.stringify(actives));
 
         this.setState({
-          pledges: pledges
+          actives: actives
         });
       });
     }
@@ -42,24 +42,22 @@ export default class ActiveMeritDialog extends Component {
 
   merit = (type) => {
     let displayName = this.props.state.displayName;
-    let activeName = this.props.state.name;
-    let pledges = this.state.selectedPledges;
+    let actives = this.state.selectedActives;
     let description = this.state.description;
     let amount = this.state.amount;
-    let photoURL = this.props.state.photoURL;
-    let pledgeValidation = true;
+    let activeValidation = true;
     let descriptionValidation = true;
 
-    if (pledges.length === 0 || !description || description.length > 45 || amount === 0) {
-      if (pledges.length === 0) {
-        pledgeValidation = false;
+    if (actives.length === 0 || !description || description.length > 45 || amount === 0) {
+      if (actives.length === 0) {
+        activeValidation = false;
       }
       if (!description || description.length > 45) {
         descriptionValidation = false;
       }
 
       this.setState({
-        pledgeValidation: pledgeValidation,
+        activeValidation: activeValidation,
         descriptionValidation: descriptionValidation
       });
     }
@@ -77,25 +75,25 @@ export default class ActiveMeritDialog extends Component {
         completingTaskMessage: 'Meriting pledges...'
       });
 
-      API.merit(displayName, activeName, pledges, description, amount, photoURL, date)
+      API.meritAsPledge(displayName, actives, description, amount, date)
       .then(res => {
         console.log(res);
         this.handleClose();
         this.setState({
           openCompletingTask: false
         });
-        this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
+        this.props.handleRequestOpen(`${action} for ${amount} merits`);
       })
       .catch((error) => {
         console.log(error)
-        let pledge = error.response.data;
+        let active = error.response.data;
 
-        console.log('Not enough merits for ', pledge);
+        console.log('Not enough merits for ', active);
         this.handleClose();
         this.setState({
           openCompletingTask: false
         });
-        this.props.handleRequestOpen(`Not enough merits for ${pledge}.`);
+        this.props.handleRequestOpen(`${active} does not have enough merits.`);
       });
     }
   }
@@ -115,13 +113,13 @@ export default class ActiveMeritDialog extends Component {
   }
 
   handleClose = () => {
-    this.props.handleMeritClose();
+    this.props.handleClose();
 
     this.setState({
-      selectedPledges: [],
+      selectedActives: [],
       description: '',
       amount: 0,
-      pledgeValidation: true,
+      activeValidation: true,
       descriptionValidation: true
     });
   }
@@ -160,21 +158,21 @@ export default class ActiveMeritDialog extends Component {
       >
         <SelectField
           className="garnett-input"
-          value={this.state.selectedPledges}
-          floatingLabelText="Pledge Name"
+          value={this.state.selectedActives}
+          floatingLabelText="Active Name"
           multiple={true}
-          onChange={(e, key, newValues) => this.handleChange('selectedPledges', newValues)}
-          errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
+          onChange={(e, key, newValues) => this.handleChange('selectedActives', newValues)}
+          errorText={!this.state.activeValidation && 'Please select an active.'}
         >
-          {this.state.pledges.map((pledge, i) => (
+          {this.state.actives.map((active, i) => (
             <MenuItem
               key={i}
-              value={pledge}
-              primaryText={pledge.label}
+              value={active}
+              primaryText={active.label}
               insetChildren
               checked={
-                this.state.selectedPledges && 
-                this.state.selectedPledges.indexOf(pledge) > -1
+                this.state.selectedActives && 
+                this.state.selectedActives.indexOf(active) > -1
               }
             />
           ))}
@@ -205,8 +203,8 @@ export default class ActiveMeritDialog extends Component {
         </div>
 
         <div id="remaining-merits">
-          {this.state.selectedPledges.map((pledge, i) => (
-            <p key={i}> Remaining Merits for {pledge.label}: {pledge.remainingMerits} </p>
+          {this.state.selectedActives.map((active, i) => (
+            <p key={i}> Remaining Merits for {active.label}: {active.remainingMerits} </p>
           ))}
         </div>
 

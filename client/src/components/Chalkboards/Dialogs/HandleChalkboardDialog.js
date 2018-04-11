@@ -27,7 +27,7 @@ const LoadableAttendeeList = Loadable({
     return <Component {...props}/>;
   },
   loading() {
-    return <div> Loading... </div>;
+    return <div></div>;
   }
 });
 
@@ -41,7 +41,7 @@ if (isMobileDevice()) {
       return <Component {...props}/>;
     },
     loading() {
-      return <div> Loading... </div>;
+      return <div></div>;
     }
   });
 }
@@ -53,7 +53,7 @@ else {
       return <Component {...props}/>;
     },
     loading() {
-      return <div> Loading... </div>;
+      return <div></div>;
     }
   });
 }
@@ -354,6 +354,26 @@ export default class HandleChalkboardDialog extends Component {
                         }
                       }}
                     />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      className="garnett-list-item"
+                      primaryText="Time Commitment"
+                      secondaryText={`${this.state.chalkboard.timeCommitment} hours`}
+                      leftIcon={
+                        <i className="icon-hourglass-o garnett-icon"></i>
+                      }
+                      onClick={() => this.handleEditOpen('Time Commitment')}
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      className="garnett-list-item"
+                      primaryText="Amount"
+                      secondaryText={this.state.chalkboard.amount}
+                      leftIcon={
+                        <i className="icon-star garnett-icon"></i>
+                      }
+                      onClick={() => this.handleEditOpen('Amount')}
+                    />
                     <Divider className="garnett-divider" />
                   </List>
                 </Tab>
@@ -374,7 +394,7 @@ export default class HandleChalkboardDialog extends Component {
                   </i>
                 </div>
               ) : (
-                <span> Chalkboard </span>
+                "Chalkboard"
               )}
               titleClassName="garnett-dialog-title"
               actions={actions}
@@ -448,6 +468,24 @@ export default class HandleChalkboardDialog extends Component {
                       onClick={() => {
                         mapsSelector(this.state.chalkboard.location);
                       }}
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      className="garnett-list-item"
+                      primaryText="Time Commitment"
+                      secondaryText={`${this.state.chalkboard.timeCommitment} hours`}
+                      leftIcon={
+                        <i className="icon-hourglass-o garnett-icon"></i>
+                      }
+                    />
+                    <Divider className="garnett-divider" inset={true} />
+                    <ListItem
+                      className="garnett-list-item"
+                      primaryText="Amount"
+                      secondaryText={this.state.chalkboard.amount}
+                      leftIcon={
+                        <i className="icon-star garnett-icon"></i>
+                      }
                     />
                     <Divider className="garnett-divider" />
                   </List>

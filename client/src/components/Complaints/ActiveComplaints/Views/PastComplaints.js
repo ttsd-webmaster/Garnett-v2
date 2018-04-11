@@ -4,14 +4,52 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import IconButton from 'material-ui/IconButton';
 
 export default class PastComplaints extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      reverse: false
+    };
+  }
+
+  reverse = () => {
+    let reverse = true;
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      reverse: reverse
+    });
+  }
+
   render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    let complaints = this.props.complaints;
+
+    if (this.state.reverse) {
+      complaints = complaints.slice().reverse();
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
       <div id="past-complaints">
-        <Subheader className="garnett-subheader"> Recent </Subheader>
+        <Subheader className="garnett-subheader">
+          Recent
+          <IconButton
+            style={{float:'right',cursor:'pointer'}}
+            iconClassName={toggleIcon}
+            className="reverse-toggle"
+            onClick={this.reverse}
+          >
+          </IconButton>
+        </Subheader>
         <List className="garnett-list">
-          {this.props.complaints.map((complaint, i) => (
+          {complaints.map((complaint, i) => (
             <LazyLoad
               height={88}
               offset={window.innerHeight}
