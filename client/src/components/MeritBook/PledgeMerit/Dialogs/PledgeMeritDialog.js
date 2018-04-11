@@ -127,12 +127,6 @@ export default class PledgeMeritDialog extends Component {
   }
 
   render(){
-    let maxAmount = 30;
-
-    if (this.props.state.status === 'alumni') {
-      maxAmount = 50;
-    }
-
     const actions = [
       <FlatButton
         label="Demerit"
@@ -197,7 +191,7 @@ export default class PledgeMeritDialog extends Component {
             sliderStyle={{marginBottom:0}}
             name="Amount"
             min={0}
-            max={maxAmount}
+            max={30}
             step={5}
             value={this.state.amount}
             onChange={(e, newValue) => this.handleChange('amount', newValue)}

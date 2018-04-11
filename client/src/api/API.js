@@ -37,8 +37,8 @@ export default {
   getPledgeComplaints: function(pledgeName) {
     return axios.post('/api/pledgecomplaints', {pledgeName});
   },
-  merit: function(displayName, activeName, pledges, description, amount, photoURL, date) {
-    let body = {displayName, activeName, pledges, description, amount, photoURL, date};
+  merit: function(displayName, activeName, pledges, description, amount, photoURL, date, status) {
+    let body = {displayName, activeName, pledges, description, amount, photoURL, date, status};
     return axios.post('/api/merit', body);
   },
   meritAsPledge: function(displayName, actives, description, amount, date) {

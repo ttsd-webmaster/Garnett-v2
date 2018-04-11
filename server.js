@@ -194,6 +194,11 @@ app.post('/api/signup', function(req, res) {
                         merits: 200
                       });
                     }
+                    else if (child.val().status === 'pipm') {
+                      child.ref.child('/Pledges/' + pledgeName).set({
+                        merits: 'unlimited'
+                      });
+                    }
                     else if (child.val().status !== 'pledge') {
                       child.ref.child('/Pledges/' + pledgeName).set({
                         merits: 100
@@ -399,8 +404,7 @@ app.post('/api/pledgecomplaints', function(req, res) {
     if (snapshot.val()) {
       complaints = Object.keys(snapshot.val()).map(function(key) {
         return snapshot.val()[key];
-      });
-      complaints.sort((a, b) => {
+      }).sort((a, b) => {
         return a.date < b.date ? 1 : -1;
       });
     }
@@ -421,15 +425,17 @@ app.post('/api/merit', function(req, res) {
     let meritRef = pledgeRef.child('/Merits');
 
     userRef.once('value', (snapshot) => {
-      if (req.body.amount > 0 && 
-          snapshot.val().merits - req.body.amount < 0 && 
-          !res.headersSent) {
-        res.sendStatus(400).send(pledge.label);
-      }
-      else {
-        userRef.update({
-          merits: snapshot.val().merits - req.body.amount
-        });
+      if (req.body.status !== 'pipm') {
+        if (req.body.amount > 0 && 
+            snapshot.val().merits - req.body.amount < 0 && 
+            !res.headersSent) {
+          res.sendStatus(400).send(pledge.label);
+        }
+        else {
+          userRef.update({
+            merits: snapshot.val().merits - req.body.amount
+          });
+        }
       }
 
       pledgeRef.once('value', (snapshot) => {

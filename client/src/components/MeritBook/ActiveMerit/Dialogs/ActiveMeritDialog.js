@@ -64,6 +64,7 @@ export default class ActiveMeritDialog extends Component {
       });
     }
     else {
+      let status = this.props.state.status;
       let action = 'Merited';
       let date = getDate();
 
@@ -77,7 +78,7 @@ export default class ActiveMeritDialog extends Component {
         completingTaskMessage: 'Meriting pledges...'
       });
 
-      API.merit(displayName, activeName, pledges, description, amount, photoURL, date)
+      API.merit(displayName, activeName, pledges, description, amount, photoURL, date, status)
       .then(res => {
         console.log(res);
         this.handleClose();
@@ -131,6 +132,9 @@ export default class ActiveMeritDialog extends Component {
 
     if (this.props.state.status === 'alumni') {
       maxAmount = 50;
+    }
+    else if (this.props.state.status === 'pipm') {
+      maxAmount = 100;
     }
 
     const actions = [

@@ -38,8 +38,7 @@ export default class PledgeComplaints extends Component {
           if (snapshot.val()) {
             complaints = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
-            });
-            complaints.sort((a, b) => {
+            }).sort((a, b) => {
               return a.date < b.date ? 1 : -1;
             });
           }

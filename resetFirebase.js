@@ -42,6 +42,11 @@ usersRef.once('value', (snapshot) => {
                 merits: 200
               });
             }
+            else if (user.val().status === 'pipm') {
+              userRef.child('/Pledges/' + pledgeName).update({
+                merits: 'unlimited'
+              }); 
+            }
             else {
               userRef.child('/Pledges/' + pledgeName).update({
                 merits: 100

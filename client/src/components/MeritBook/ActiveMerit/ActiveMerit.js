@@ -52,13 +52,11 @@ export default class ActiveMerit extends Component {
         let dbRef = firebase.database().ref('/users');
 
         dbRef.on('value', (snapshot) => {
-          snapshot.forEach((child) => {
-            if (child.val().status === 'pledge') {
-              pledges.push(child.val());
-            }
-          });
-
-          pledges.sort((a, b) => {
+          pledges = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          }).filter((child) => {
+            return child.status === 'pledge';
+          }).sort((a, b) => {
             return a.lastName > b.lastName ? 1 : -1;
           });
 

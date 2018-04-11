@@ -368,7 +368,7 @@ export default class HandleChalkboardDialog extends Component {
                     <ListItem
                       className="garnett-list-item"
                       primaryText="Amount"
-                      secondaryText={this.state.chalkboard.amount}
+                      secondaryText={`${this.state.chalkboard.amount} merits`}
                       leftIcon={
                         <i className="icon-star garnett-icon"></i>
                       }
@@ -482,7 +482,7 @@ export default class HandleChalkboardDialog extends Component {
                     <ListItem
                       className="garnett-list-item"
                       primaryText="Amount"
-                      secondaryText={this.state.chalkboard.amount}
+                      secondaryText={`${this.state.chalkboard.amount} merits`}
                       leftIcon={
                         <i className="icon-star garnett-icon"></i>
                       }
