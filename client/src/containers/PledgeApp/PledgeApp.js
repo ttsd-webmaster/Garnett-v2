@@ -316,6 +316,7 @@ export default class PledgeApp extends Component {
       appBar.classList.remove('hide-app-bar');
       view.classList.remove('hide-content-container');
       inkBar.classList.remove('hide-content-container');
+      contentContainer.classList.remove('hide-buttons');
     }
 
     // Sets the title and marks scroll position based on the tab index
