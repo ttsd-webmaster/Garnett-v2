@@ -56,7 +56,7 @@ export default class ActiveMerit extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (navigator.onLine) {
+    if (navigator.onLine && nextProps.pledge) {
       let displayName = nextProps.state.displayName;
       let pledgeName = nextProps.pledge.firstName + nextProps.pledge.lastName;
 
