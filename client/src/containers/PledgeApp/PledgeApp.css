@@ -81,6 +81,7 @@
 
 /* Garnett List, List Items, and Dividers */
 .garnett-subheader {
+  display: table;
   width: 100vw !important;
   max-width: 700px;
   margin: auto !important;
