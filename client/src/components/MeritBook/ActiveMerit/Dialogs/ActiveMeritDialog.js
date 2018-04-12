@@ -128,7 +128,7 @@ export default class ActiveMeritDialog extends Component {
   }
 
   render(){
-    let maxAmount = 30;
+    let maxAmount = 35;
 
     if (this.props.state.status === 'alumni') {
       maxAmount = 50;

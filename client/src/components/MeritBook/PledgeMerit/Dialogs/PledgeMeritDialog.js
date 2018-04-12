@@ -191,7 +191,7 @@ export default class PledgeMeritDialog extends Component {
             sliderStyle={{marginBottom:0}}
             name="Amount"
             min={0}
-            max={30}
+            max={35}
             step={5}
             value={this.state.amount}
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
