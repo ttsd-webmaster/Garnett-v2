@@ -21,13 +21,15 @@ usersRef.once('value', (snapshot) => {
 
     if (user.val().status === 'pledge') {
       userRef.update({
-        Complaints: null,
         Merits: null,
+        Complaints: null,
         totalMerits: 0
       });
     }
     else {
       userRef.update({
+        Merits: null,
+        Complaints: null,
         Pledges: null,
         totalMerits: null
       });

@@ -8,6 +8,7 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import CountUp from 'react-countup';
 
 const LoadablePledgeInfoDialog = Loadable({
   loader: () => import('./Dialogs/PledgeInfoDialog'),
@@ -206,7 +207,7 @@ export default class ActiveMerit extends Component {
                   secondaryTextLines={2}
                   onClick={() => this.handleOpen(pledge)}
                 >
-                  <p className="pledge-merits"> {pledge.totalMerits} </p>
+                  <CountUp className="pledge-merits" start={0} end={pledge.totalMerits} useEasing />
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />
               </div>
