@@ -118,13 +118,13 @@ export default class MyChalkboards extends Component {
                     onClick={() => this.props.handleOpen(chalkboard, 'hosting')}
                   >
                     <p className="garnett-date">
-                      {chalkboard[filter]}
                       {filter === 'timeCommitment' ? (
-                        ' hours'
+                        chalkboard[filter].value
                       ) : (
-                        filter === 'amount' && (
-                          ' merits'
-                        )
+                        chalkboard[filter]
+                      )}
+                      {filter === 'amount' && (
+                        ' merits'
                       )}
                     </p>
                   </ListItem>
@@ -172,13 +172,13 @@ export default class MyChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'attending')}
               >
                 <p className="garnett-date">
-                  {chalkboard[filter]}
                   {filter === 'timeCommitment' ? (
-                    ' hours'
+                    chalkboard[filter].value
                   ) : (
-                    filter === 'amount' && (
-                      ' merits'
-                    )
+                    chalkboard[filter]
+                  )}
+                  {filter === 'amount' && (
+                    ' merits'
                   )}
                 </p>
               </ListItem>
@@ -209,13 +209,13 @@ export default class MyChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'completed')}
               >
                 <p className="garnett-date">
-                  {chalkboard[filter]}
                   {filter === 'timeCommitment' ? (
-                    ' hours'
+                    chalkboard[filter].value
                   ) : (
-                    filter === 'amount' && (
-                      ' merits'
-                    )
+                    chalkboard[filter]
+                  )}
+                  {filter === 'amount' && (
+                    ' merits'
                   )}
                 </p>
               </ListItem>

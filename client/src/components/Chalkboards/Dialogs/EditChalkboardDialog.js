@@ -1,8 +1,11 @@
+import {commitmentOptions} from '../data.js';
 import API from "../../../api/API.js";
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Slider from 'material-ui/Slider';
@@ -17,7 +20,7 @@ export default class EditChalkboardDialog extends Component {
       date: null,
       time: null,
       location: '',
-      timeCommitment: 0,
+      timeCommitment: {},
       amount: 0,
       descriptionValidation: true,
       dateValidation: true,
@@ -62,7 +65,7 @@ export default class EditChalkboardDialog extends Component {
     let locationValidation = true;
     let timeCommitmentValidation = true;
 
-    if (!description || !date || !time || !location || timeCommitment === 0 || amount === 0) {
+    if (!description || !date || !time || !location || !timeCommitment || amount === 0) {
       if (!description) {
         descriptionValidation = false;
       }
@@ -75,7 +78,7 @@ export default class EditChalkboardDialog extends Component {
       if (!location) {
         locationValidation = false;
       }
-      if (timeCommitment === 0) {
+      if (!timeCommitment) {
         timeCommitmentValidation = false;
       }
 
@@ -116,30 +119,10 @@ export default class EditChalkboardDialog extends Component {
   }
 
   handleChange = (label, value) => {
-    let newValue = value;
     let validationLabel = [label] + 'Validation';
 
-    if (label === 'timeCommitment') {
-      let oldValue = value.substring(0, value.indexOf(' '));
-      newValue = value.substring(value.indexOf('s') + 1);
-
-      if (!newValue) {
-        newValue = 0;
-      }
-      else if (value.indexOf('s') === -1) {
-        newValue = parseInt(oldValue.slice(0, -1), 10);
-
-        if (!newValue) {
-          newValue = 0;
-        }
-      }
-      else {
-        newValue = parseInt(oldValue + newValue, 10);
-      }
-    }
-
     this.setState({
-      [label]: newValue,
+      [label]: value,
       [validationLabel]: true
     });
   }
@@ -152,7 +135,7 @@ export default class EditChalkboardDialog extends Component {
       date: null,
       time: null,
       location: '',
-      timeCommitment: 0,
+      timeCommitment: {},
       amount: 0,
       descriptionValidation: true,
       dateValidation: true,
@@ -228,17 +211,23 @@ export default class EditChalkboardDialog extends Component {
           onChange={(e, newValue) => this.handleChange('location', newValue)}
           errorText={!this.state.locationValidation && 'Enter a location.'}
         />
-        <TextField
+        <SelectField
           className="garnett-input"
-          type="number"
-          min={0}
+          value={this.state.timeCommitment}
           floatingLabelText="Time Commitment"
-          multiLine={true}
-          rowsMax={3}
-          value={this.state.timeCommitment + ' hours'}
-          onChange={(e, newValue) => this.handleChange('timeCommitment', newValue)}
+          onChange={(e, key, newValue) => this.handleChange('timeCommitment', newValue)}
           errorText={!this.state.timeCommitmentValidation && 'Enter a time commitment.'}
-        />
+        >
+          {commitmentOptions.map((option, i) => (
+            <MenuItem
+              key={i}
+              value={option}
+              primaryText={option.label}
+              insetChildren
+              checked={option === this.state.timeCommitment}
+            />
+          ))}
+        </SelectField>
         <div style={{width:'256px',margin:'20px auto 0'}}>
           <span>
             Amount: {this.state.amount}

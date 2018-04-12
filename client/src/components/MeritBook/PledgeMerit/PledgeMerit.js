@@ -10,6 +10,7 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
+import CountUp from 'react-countup';
 
 const LoadablePledgeMeritDialog = Loadable({
   loader: () => import('./Dialogs/PledgeMeritDialog'),
@@ -29,6 +30,7 @@ export default class PledgeMerit extends Component {
       loaded: false,
       merits: this.props.merits,
       totalMerits: 0,
+      previousTotalMerits: 0,
       open: false,
       reverse: false
     }
@@ -63,6 +65,7 @@ export default class PledgeMerit extends Component {
             this.setState({
               loaded: true,
               totalMerits: totalMerits,
+              previousTotalMerits: this.state.totalMerits,
               merits: merits.reverse(),
             });
           });
@@ -198,7 +201,7 @@ export default class PledgeMerit extends Component {
           </div>
 
           <div className="total-merits-container"> 
-            Total Merits: <span id="total-merits"> {this.state.totalMerits} </span>
+            Total Merits: <CountUp id="total-merits" start={this.state.previousTotalMerits} end={this.state.totalMerits} useEasing />
           </div>
 
           <LoadablePledgeMeritDialog

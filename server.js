@@ -196,7 +196,7 @@ app.post('/api/signup', function(req, res) {
                     }
                     else if (child.val().status === 'pipm') {
                       child.ref.child('/Pledges/' + pledgeName).set({
-                        merits: 'unlimited'
+                        merits: 'Unlimited'
                       });
                     }
                     else if (child.val().status !== 'pledge') {

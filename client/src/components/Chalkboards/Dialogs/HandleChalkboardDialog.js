@@ -358,7 +358,7 @@ export default class HandleChalkboardDialog extends Component {
                     <ListItem
                       className="garnett-list-item"
                       primaryText="Time Commitment"
-                      secondaryText={`${this.state.chalkboard.timeCommitment} hours`}
+                      secondaryText={this.state.chalkboard.timeCommitment.label}
                       leftIcon={
                         <i className="icon-hourglass-o garnett-icon"></i>
                       }
@@ -473,7 +473,7 @@ export default class HandleChalkboardDialog extends Component {
                     <ListItem
                       className="garnett-list-item"
                       primaryText="Time Commitment"
-                      secondaryText={`${this.state.chalkboard.timeCommitment} hours`}
+                      secondaryText={this.state.chalkboard.timeCommitment.label}
                       leftIcon={
                         <i className="icon-hourglass-o garnett-icon"></i>
                       }

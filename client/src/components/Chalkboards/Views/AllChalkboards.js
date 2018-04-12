@@ -129,13 +129,13 @@ export default class AllChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
               >
                 <p className="garnett-date"> 
-                  {chalkboard[filter]}
                   {filter === 'timeCommitment' ? (
-                    ' hours'
+                    chalkboard[filter].value
                   ) : (
-                    filter === 'amount' && (
-                      ' merits'
-                    )
+                    chalkboard[filter]
+                  )}
+                  {filter === 'amount' && (
+                    ' merits'
                   )}
                 </p>
               </ListItem>
@@ -182,13 +182,13 @@ export default class AllChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'completed')}
               >
                 <p className="garnett-date">
-                  {chalkboard[filter]}
                   {filter === 'timeCommitment' ? (
-                    ' hours'
+                    chalkboard[filter].value
                   ) : (
-                    filter === 'amount' && (
-                      ' merits'
-                    )
+                    chalkboard[filter]
+                  )}
+                  {filter === 'amount' && (
+                    ' merits'
                   )}
                 </p>
               </ListItem>

@@ -1,8 +1,11 @@
+import {commitmentOptions} from '../data.js';
 import API from "../../../api/API.js";
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import DatePicker from 'material-ui/DatePicker';
 import TimePicker from 'material-ui/TimePicker';
 import Slider from 'material-ui/Slider';
@@ -134,7 +137,28 @@ export default class MobileEditChalkboardDialog extends Component {
             onChange={this.handleChange}
           />
         </div>
-      )
+      );
+    }
+    else if (this.props.field === 'Time Commitment') {
+      EditField = (
+        <SelectField
+          className="garnett-input"
+          value={this.state.newValue}
+          floatingLabelText="Time Commitment"
+          onChange={this.handleChange}
+          errorText={!this.state.newValueValidation && 'Enter a time commitment.'}
+        >
+          {commitmentOptions.map((option, i) => (
+            <MenuItem
+              key={i}
+              value={option}
+              primaryText={option.label}
+              insetChildren
+              checked={option === this.state.newValue}
+            />
+          ))}
+        </SelectField>
+      );
     }
     else {
       EditField = (
