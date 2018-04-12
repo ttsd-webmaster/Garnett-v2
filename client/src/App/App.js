@@ -12,6 +12,7 @@ import {
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import urlExists from 'url-exists';
 
 const LoadableLogin = Loadable({
   loader: () => import('../containers/Login/Login'),
@@ -173,16 +174,39 @@ class App extends Component {
       loadFirebase('storage')
       .then(() => {
         let firebase = window.firebase;
-        let storage = firebase.storage().ref(`${user.firstName}${user.lastName}.jpg`);
+        let storage = firebase.storage().ref(`${user.key}.jpg`);
+
         storage.getDownloadURL()
         .then((url) => {
-          API.setPhoto(displayName, url)
-          .then((res) => {
-            console.log(res.data)
+          urlExists(url, function(err, exists) {
+            if (exists) {
+              API.setPhoto(displayName, url)
+              .then((res) => {
+                console.log(res.data)
 
-            this.setData(res.data);
-          })
-          .catch(err => console.log(err));
+                this.setData(res.data);
+              })
+              .catch(err => console.log(err));
+            }
+            else {
+              let storage = firebase.storage.ref(`${user.key}.JPG`);
+
+              storage.getDownloadURL()
+              .then((url) => {
+                urlExists(url, function(err, exists) {
+                  if (exists) {
+                    API.setPhoto(displayName, url)
+                    .then((res) => {
+                      console.log(res.data)
+
+                      this.setData(res.data);
+                    })
+                    .catch(err => console.log(err));
+                  }
+                })
+              });
+            }
+          });
         })
         .catch((error) => {
           console.log(error);
