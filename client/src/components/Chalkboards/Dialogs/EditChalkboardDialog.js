@@ -52,8 +52,6 @@ export default class EditChalkboardDialog extends Component {
   }
 
   editChalkboard = () => {
-    let displayName = this.props.state.displayName;
-    let chalkboard = this.props.chalkboard;
     let description = this.state.description;
     let date = this.state.date;
     let time = this.state.time;
@@ -97,6 +95,8 @@ export default class EditChalkboardDialog extends Component {
         });
       }
       else {
+        let displayName = this.props.state.displayName;
+        let chalkboard = this.props.chalkboard;
         let parsedDate = this.formatDate(date);
         let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 

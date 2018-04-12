@@ -10,7 +10,14 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
+import Checkbox from 'material-ui/Checkbox';
 
+const checkboxStyle = {
+  left: '50%',
+  width: 'max-content',
+  marginTop: '20px',
+  transform: 'translateX(-50%)'
+};
 
 export default class PledgeMeritDialog extends Component {
   constructor(props) {
@@ -19,6 +26,7 @@ export default class PledgeMeritDialog extends Component {
       actives: this.props.actives,
       selectedActives: [],
       description: '',
+      isChalkboard: false,
       amount: 0,
       activeValidation: true,
       descriptionValidation: true
@@ -41,7 +49,6 @@ export default class PledgeMeritDialog extends Component {
   }
 
   merit = (type) => {
-    let displayName = this.props.state.displayName;
     let actives = this.state.selectedActives;
     let description = this.state.description;
     let amount = this.state.amount;
@@ -62,6 +69,8 @@ export default class PledgeMeritDialog extends Component {
       });
     }
     else {
+      let displayName = this.props.state.displayName;
+      let isChalkboard = this.state.isChalkboard;
       let action = 'Merited';
       let date = getDate();
 
@@ -75,7 +84,7 @@ export default class PledgeMeritDialog extends Component {
         completingTaskMessage: 'Meriting pledges...'
       });
 
-      API.meritAsPledge(displayName, actives, description, amount, date)
+      API.meritAsPledge(displayName, actives, description, amount, date, isChalkboard)
       .then(res => {
         let totalAmount = amount * actives.length;
 
@@ -197,6 +206,12 @@ export default class PledgeMeritDialog extends Component {
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>
+        <Checkbox
+          style={checkboxStyle}
+          label="Chalkboard"
+          checked={this.state.isChalkboard}
+          onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
+        />
 
         <div id="remaining-merits">
           {this.state.selectedActives.map((active, i) => (

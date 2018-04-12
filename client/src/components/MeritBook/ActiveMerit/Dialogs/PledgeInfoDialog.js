@@ -61,7 +61,8 @@ export default class ActiveMerit extends Component {
       let pledgeName = nextProps.pledge.firstName + nextProps.pledge.lastName;
 
       this.setState({
-        pledge: null
+        pledge: null,
+        index: 0
       });
 
       API.getMeritsRemaining(displayName, pledgeName)

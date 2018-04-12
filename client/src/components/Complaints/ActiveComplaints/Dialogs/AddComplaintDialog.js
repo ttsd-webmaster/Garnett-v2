@@ -37,9 +37,6 @@ export default class AddComplaintDialog extends Component {
   }
 
   complain = () => {
-    let status = this.props.state.status;
-    let displayName = this.props.state.displayName;
-    let activeName = this.props.state.name;
     let pledge = this.state.pledge;
     let description = this.state.description;
     let descriptionValidation = true;
@@ -59,6 +56,9 @@ export default class AddComplaintDialog extends Component {
       });
     }
     else {
+      let status = this.props.state.status;
+      let displayName = this.props.state.displayName;
+      let activeName = this.props.state.name;
       let date = getDate();
       
       API.complain(status, displayName, activeName, pledge, description, date)

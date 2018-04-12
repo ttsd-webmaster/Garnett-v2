@@ -46,9 +46,6 @@ export default class AddChalkboardDialog extends Component {
   }
 
   addChalkboard = () => {
-    let displayName = this.props.state.displayName;
-    let activeName = this.props.state.name;
-    let photoURL = this.props.state.photoURL;
     let title = this.state.title;
     let description = this.state.description;
     let date = this.state.date;
@@ -98,6 +95,9 @@ export default class AddChalkboardDialog extends Component {
         });
       }
       else {
+        let displayName = this.props.state.displayName;
+        let activeName = this.props.state.name;
+        let photoURL = this.props.state.photoURL;
         let parsedDate = this.formatDate(date);
         let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 

@@ -37,12 +37,12 @@ export default {
   getPledgeComplaints: function(pledgeName) {
     return axios.post('/api/pledgecomplaints', {pledgeName});
   },
-  merit: function(displayName, activeName, pledges, description, amount, photoURL, date, status) {
-    let body = {displayName, activeName, pledges, description, amount, photoURL, date, status};
+  merit: function(displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status) {
+    let body = {displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status};
     return axios.post('/api/merit', body);
   },
-  meritAsPledge: function(displayName, actives, description, amount, date) {
-    let body = {displayName, actives, description, amount, date};
+  meritAsPledge: function(displayName, actives, description, amount, date, isChalkboard) {
+    let body = {displayName, actives, description, amount, date, isChalkboard};
     return axios.post('/api/meritAsPledge', body);
   },
   getMeritsRemaining: function(displayName, pledgeName) {

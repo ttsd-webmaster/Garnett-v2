@@ -10,7 +10,14 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
+import Checkbox from 'material-ui/Checkbox';
 
+const checkboxStyle = {
+  left: '50%',
+  width: 'max-content',
+  marginTop: '20px',
+  transform: 'translateX(-50%)'
+};
 
 export default class ActiveMeritDialog extends Component {
   constructor(props) {
@@ -19,6 +26,7 @@ export default class ActiveMeritDialog extends Component {
       pledges: this.props.pledges,
       selectedPledges: [],
       description: '',
+      isChalkboard: false,
       amount: 0,
       pledgeValidation: true,
       descriptionValidation: true
@@ -41,8 +49,6 @@ export default class ActiveMeritDialog extends Component {
   }
 
   merit = (type) => {
-    let displayName = this.props.state.displayName;
-    let activeName = this.props.state.name;
     let pledges = this.state.selectedPledges;
     let description = this.state.description;
     let amount = this.state.amount;
@@ -64,7 +70,10 @@ export default class ActiveMeritDialog extends Component {
       });
     }
     else {
+      let displayName = this.props.state.displayName;
+      let activeName = this.props.state.name;
       let status = this.props.state.status;
+      let isChalkboard = this.state.isChalkboard;
       let action = 'Merited';
       let date = getDate();
 
@@ -78,7 +87,7 @@ export default class ActiveMeritDialog extends Component {
         completingTaskMessage: 'Meriting pledges...'
       });
 
-      API.merit(displayName, activeName, pledges, description, amount, photoURL, date, status)
+      API.merit(displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status)
       .then(res => {
         console.log(res);
         this.handleClose();
@@ -207,6 +216,12 @@ export default class ActiveMeritDialog extends Component {
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>
+        <Checkbox
+          style={checkboxStyle}
+          label="Chalkboard"
+          checked={this.state.isChalkboard}
+          onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
+        />
 
         <div id="remaining-merits">
           {this.state.selectedPledges.map((pledge, i) => (

@@ -424,16 +424,16 @@ app.post('/api/merit', function(req, res) {
     let pledgeRef = admin.database().ref('/users/' + pledge.value);
     let meritRef = pledgeRef.child('/Merits');
 
-    userRef.once('value', (snapshot) => {
-      if (req.body.status !== 'pipm') {
+    userRef.once('value', (pledge) => {
+      if (req.body.status !== 'pipm' || !req.body.isChalkboard) {
         if (req.body.amount > 0 && 
-            snapshot.val().merits - req.body.amount < 0 && 
+            pledge.val().merits - req.body.amount < 0 && 
             !res.headersSent) {
           res.sendStatus(400).send(pledge.label);
         }
         else {
           userRef.update({
-            merits: snapshot.val().merits - req.body.amount
+            merits: pledge.val().merits - req.body.amount
           });
         }
       }
@@ -475,16 +475,18 @@ app.post('/api/meritAsPledge', function(req, res) {
     activeRef.once('value', (active) => {
       let activePledgeRef = active.ref.child('/Pledges/' + fullName);
 
-      activePledgeRef.once('value', (user) => {
-        if (req.body.amount > 0 && 
-            user.val().merits - req.body.amount < 0 && 
-            !res.headersSent) {
-          res.sendStatus(400).send(active.label);
-        }
-        else {
-          activePledgeRef.update({
-            merits: user.val().merits - req.body.amount
-          });
+      activePledgeRef.once('value', (pledge) => {
+        if (active.val().status !== 'pipm' || !req.body.isChalkboard) {
+          if (req.body.amount > 0 && 
+              pledge.val().merits - req.body.amount < 0 && 
+              !res.headersSent) {
+            res.sendStatus(400).send(child.label);
+          }
+          else {
+            activePledgeRef.update({
+              merits: pledge.val().merits - req.body.amount
+            });
+          }
         }
 
         userRef.once('value', (snapshot) => {
