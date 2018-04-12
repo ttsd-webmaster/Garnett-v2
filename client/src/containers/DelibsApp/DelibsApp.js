@@ -50,30 +50,37 @@ export default class DelibsApp extends Component {
         let rusheesRef = firebase.database().ref('/rushees');
 
         rusheesRef.on('value', (snapshot) => {
-          let interactions = [];
+          if (snapshot.val()) {
+            let interactions = [];
+            
+            snapshot.forEach((rushee) => {
+              rusheesRef.child(rushee.key + '/Actives/' + displayName).on('value', (active) => {
+                interactions.push(active.val().interacted);
+              })
+            });
 
-          snapshot.forEach((rushee) => {
-            rusheesRef.child(rushee.key + '/Actives/' + displayName).on('value', (active) => {
-              interactions.push(active.val().interacted);
-            })
-          });
+            let rushees = Object.keys(snapshot.val()).map(function(key) {
+              return snapshot.val()[key];
+            });
 
-          let rushees = Object.keys(snapshot.val()).map(function(key) {
-            return snapshot.val()[key];
-          });
+            rushees.forEach((rushee, i) => {
+              rushee['interacted'] = interactions[i];
+            });
 
-          rushees.forEach((rushee, i) => {
-            rushee['interacted'] = interactions[i];
-          });
+            console.log('Rushees array: ', rushees);
 
-          console.log('Rushees array: ', rushees);
-
-          localStorage.setItem('rusheesArray', JSON.stringify(rushees));
-          
-          this.setState({
-            loaded: true,
-            rushees: rushees
-          });
+            localStorage.setItem('rusheesArray', JSON.stringify(rushees));
+            
+            this.setState({
+              loaded: true,
+              rushees: rushees
+            });
+          }
+          else {
+            this.setState({
+              loaded: true
+            });
+          }
         });
       });
     }
