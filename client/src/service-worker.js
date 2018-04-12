@@ -121,12 +121,12 @@ const messaging = firebase.messaging();
 messaging.setBackgroundMessageHandler(function(payload) {
   console.log(payload);
   // Customize notification here
-  const title = 'Garnett';
-  const options = {
-    body: 'Background Message body.',
-    icon: '/images/garnett.png',
-    click_action: 'https://garnett-app.herokuapp.com'
-  };
+  // const title = 'Garnett';
+  // const options = {
+  //   body: 'Background Message body.',
+  //   icon: '/images/garnett.png',
+  //   click_action: 'https://garnett-app.herokuapp.com'
+  // };
 
-  return self.registration.showNotification(title, options);
+  return self.registration.showNotification(payload.notification.title, payload.notification);
 });
