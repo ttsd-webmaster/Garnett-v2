@@ -89,12 +89,25 @@ export default class ActiveMeritDialog extends Component {
 
       API.merit(displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status)
       .then(res => {
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        let registrationToken = localStorage.getItem('registrationToken');
+
         console.log(res);
         this.handleClose();
         this.setState({
           openCompletingTask: false
         });
-        this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
+
+        if (isSafari || !registrationToken) {
+          this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
+        }
+        else {
+          API.sendActiveMeritNotification(activeName, pledges, amount)
+          .then(res => {
+            this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
+          })
+          .catch(err => console.log(err));
+        }
       })
       .catch((error) => {
         console.log(error)

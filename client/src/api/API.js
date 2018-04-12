@@ -79,9 +79,8 @@ export default {
   getAttendees: function(chalkboard) {
     return axios.post('/api/getattendees', {chalkboard});
   },
-  complain: function(status, displayName, activeName, pledge, description, date) {
-    let body = {status, displayName, activeName, pledge, description, date};
-    return axios.post('/api/complain', body);
+  complain: function(complaint) {
+    return axios.post('/api/complain', {complaint});
   },
   removeComplaint: function(complaint) {
     return axios.post('/api/removecomplaint', {complaint});
@@ -92,11 +91,27 @@ export default {
   getPledgesForComplaints: function() {
     return axios.post('/api/pledgesForComplaints');
   },
+  // Notification Messaging
   saveMessagingToken: function(displayName, token) {
     return axios.post('/api/savemessagetoken', {displayName, token});
   },
-  sendMessage: function(pledgeName, activeName, amount) {
-    return axios.post('/api/sendmessage', {pledgeName, activeName, amount});
+  sendActiveMeritNotification: function(activeName, pledges, amount) {
+    return axios.post('/api/sendActiveMeritNotification', {activeName, pledges, amount});
+  },
+  sendPledgeMeritNotification: function(pledgeName, actives, amount) {
+    return axios.post('/api/sendActiveMeritNotification', {pledgeName, actives, amount});
+  },
+  sendCreatedChalkboardNotification: function(chalkboardTitle) {
+    return axios.post('/sendCreatedChalkboardNotification', {chalkboardTitle});
+  },
+  sendJoinedChalkboardNotification: function(name, chalkboard) {
+    return axios.post('/sendJoinedChalkboardNotification', {name, chalkboard});
+  },
+  sendLeftChalkboardNotification: function(name, chalkboard) {
+    return axios.post('/sendLeftChalkboardNotification', {name, chalkboard});
+  },
+  sendComplaintNotification: function(complaint) {
+    return axios.post('/sendComplaintNotification', {complaint});
   },
   // Delibs App
   updateInteraction: function(displayName, rusheeName, interacted, totalInteractions) {

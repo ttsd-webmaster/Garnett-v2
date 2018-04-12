@@ -771,35 +771,22 @@ app.post('/api/getattendees', function(req, res) {
 
 // Post complaint data
 app.post('/api/complain', function(req, res) {
-  let complaintInfo = {
-    activeDisplayName: req.body.displayName,
-    activeName: req.body.activeName,
-    pledgeDisplayName: req.body.pledge.value,
-    pledgeName: req.body.pledge.label,
-    description: req.body.description,
-    photoURL: req.body.pledge.photoURL,
-    date: req.body.date
-  };
-
   // Check if active is PI/PM or not
   if (req.body.status === 'active') {
     let complaintsRef = admin.database().ref('/pendingComplaints');
 
     // Add complaints to active's pending complaints list and the pending complaints list
-    complaintsRef.push(complaintInfo);
+    complaintsRef.push(req.body.complaint);
   }
   else {
+    let pledgeName = req.body.complaint.pledgeDisplayName;
     let complaintsRef = admin.database().ref('/approvedComplaints');
-    let pledgeComplaintsRef = admin.database().ref('/users/' + req.body.pledge.value + '/Complaints');
+    let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
 
     // Add complaints to the approved complaints list and the specified pledge's complaints list
-    complaintsRef.push(complaintInfo);
+    complaintsRef.push(req.body.complaint);
 
-    pledgeComplaintsRef.push({
-      activeName: req.body.activeName,
-      description: req.body.description,
-      date: req.body.date
-    });
+    pledgeComplaintsRef.push(req.body.complaint);
   }
 
   res.sendStatus(200);
@@ -836,11 +823,7 @@ app.post('/api/approvecomplaint', function(req, res) {
           // Adds complaint to the approved complaints list
           approvedComplaintsRef.push(req.body.complaint);
           // Adds complaint to the pledge's complaints list
-          pledgeComplaintsRef.push({
-            activeName: req.body.complaint.activeName,
-            description: req.body.complaint.description,
-            date: req.body.complaint.date
-          });
+          pledgeComplaintsRef.push(req.body.complaint);
 
           res.sendStatus(200);
         });
@@ -889,10 +872,11 @@ app.post('/api/savemessagetoken', function(req, res) {
   res.sendStatus(200);
 });
 
-// Send message from server
-app.post('/api/sendmessage', function(req, res) {
-  let pledgeRef = admin.database().ref('/users/' + req.body.pledgeName);
+// Send active merit notification to pledges
+app.post('/api/sendActiveMeritNotification', function(req, res) {
+  let pledges = req.body.pledges;
   let merits = '';
+  let counter = 0;
 
   if (req.body.amount > 0) {
     merits = 'merits';
@@ -901,14 +885,233 @@ app.post('/api/sendmessage', function(req, res) {
     merits = 'demerits';
   }
 
-  pledgeRef.once('value', (snapshot) => {
-    let registrationToken = snapshot.val().registrationToken;
-    let amount = Math.abs(req.body.amount);
+  pledges.forEach((pledge) => {
+    let pledgeRef = admin.database().ref('/users/' + pledge.value);
 
+    pledgeRef.once('value', (snapshot) => {
+      let registrationToken = snapshot.val().registrationToken;
+      let amount = Math.abs(req.body.amount);
+      counter++;
+
+      let payload = {
+        notification: {
+          title: 'Garnett',
+          body: `You have received ${amount} ${merits} from ${pledge.label}`,
+          clickAction: 'https://garnett-app.herokuapp.com',
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+        }
+      };
+
+      if (registrationToken) {
+        admin.messaging().sendToDevice(registrationToken, payload)
+        .then(function(response) {
+          console.log("Successfully sent message:", response);
+
+          if (!res.headersSent && counter === pledges.length) {
+            res.sendStatus(200);
+          }
+        })
+        .catch(function(error) {
+          console.log("Error sending message:", error);
+
+          if (!res.headersSent && counter === pledges.length) {
+            res.sendStatus(400);
+          }
+        });
+      }
+      else {
+        if (!res.headersSent && counter === pledges.length) {
+          res.sendStatus(200);
+        }
+      }
+    })
+  });
+});
+
+// Send pledge merit notification to actives
+app.post('/api/sendPledgeMeritNotification', function(req, res) {
+  let actives = req.body.actives;
+  let merits = '';
+  let counter = 0;
+
+  if (req.body.amount > 0) {
+    merits = 'merits';
+  }
+  else {
+    merits = 'demerits';
+  }
+
+  actives.forEach((active) => {
+    let activeRef = admin.database().ref('/users/' + active.value);
+
+    activeRef.once('value', (snapshot) => {
+      let registrationToken = snapshot.val().registrationToken;
+      let amount = Math.abs(req.body.amount);
+      counter++;
+
+      let payload = {
+        notification: {
+          title: 'Garnett',
+          body: `You have given ${amount} ${merits} to ${req.body.pledgeName}`,
+          clickAction: 'https://garnett-app.herokuapp.com',
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+        }
+      };
+
+      if (registrationToken) {
+        admin.messaging().sendToDevice(registrationToken, payload)
+        .then(function(response) {
+          console.log("Successfully sent message:", response);
+
+          if (!res.headersSent && counter === actives.length) {
+            res.sendStatus(200);
+          }
+        })
+        .catch(function(error) {
+          console.log("Error sending message:", error);
+
+          if (!res.headersSent && counter === actives.length) {
+            res.sendStatus(400);
+          }
+        });
+      }
+      else {
+        if (!res.headersSent && counter === actives.length) {
+          res.sendStatus(200);
+        }
+      }
+    })
+  });
+});
+
+// Send created chalkboard notification to pledges
+app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
+  let usersRef = admin.database().ref('/users');
+  let counter = 0;
+
+  usersRef.once('value', (snapshot) => {
+    snapshot.forEach((user) => {
+      if (user.val().status === 'pledge') {
+        let pledgeRef = admin.database().ref('/users/' + user.key);
+
+        pledgeRef.once('value', (snapshot) => {
+          let registrationToken = snapshot.val().registrationToken;
+          counter++;
+
+          let payload = {
+            notification: {
+              title: 'Garnett',
+              body: `New Chalkboard: ${req.body.chalkboardTitle}`,
+              clickAction: 'https://garnett-app.herokuapp.com',
+              icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+            }
+          };
+
+          if (registrationToken) {
+            admin.messaging().sendToDevice(registrationToken, payload)
+            .then(function(response) {
+              console.log("Successfully sent message:", response);
+              if (!res.headersSent && counter === 14) {
+                res.sendStatus(200);
+              }
+            })
+            .catch(function(error) {
+              console.log("Error sending message:", error);
+              if (!res.headersSent && counter === 14) {
+                res.sendStatus(400);
+              }
+            });
+          }
+          else {
+            if (!res.headersSent && counter === 14) {
+              res.sendStatus(200);
+            }
+          }
+        });
+      }
+    });
+  });
+});
+
+// Send joined chalkboard notification to active
+app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
+  let activeName = chalkboard.displayName;
+  let name = req.body.name;
+  let activeRef = admin.database().ref('/users/' + activeName);
+
+  activeRef.once('value', (snapshot) => {
+    let registrationToken = snapshot.val().registrationToken;
     let payload = {
       notification: {
         title: 'Garnett',
-        body: `You have received ${amount} ${merits} from ${req.body.activeName}`,
+        body: `${name} has joined your chalkboard, ${chalkboard.title}`,
+        clickAction: 'https://garnett-app.herokuapp.com',
+        icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+      }
+    };
+
+    if (registrationToken) {
+      admin.messaging().sendToDevice(registrationToken, payload)
+      .then(function(response) {
+        console.log("Successfully sent message:", response);
+        res.sendStatus(200);
+      })
+      .catch(function(error) {
+        console.log("Error sending message:", error);
+        res.sendStatus(400);
+      });
+    }
+    else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+// Send left chalkboard notification to active
+app.post('/api/sendLeftChalkboardNotification', function(req, res) {
+  let activeName = chalkboard.displayName;
+  let name = req.body.name;
+  let activeRef = admin.database().ref('/users/' + activeName);
+
+  activeRef.once('value', (snapshot) => {
+    let registrationToken = snapshot.val().registrationToken;
+    let payload = {
+      notification: {
+        title: 'Garnett',
+        body: `${name} has left your chalkboard, ${chalkboard.title}`,
+        clickAction: 'https://garnett-app.herokuapp.com',
+        icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+      }
+    };
+
+    if (registrationToken) {
+      admin.messaging().sendToDevice(registrationToken, payload)
+      .then(function(response) {
+        console.log("Successfully sent message:", response);
+        res.sendStatus(200);
+      })
+      .catch(function(error) {
+        console.log("Error sending message:", error);
+        res.sendStatus(400);
+      });
+    }
+    else {
+      res.sendStatus(200);
+    }
+  });
+});
+
+// Send complaint notification to pledge
+app.post('/api/sendComplaintNotification', function(req, res) {
+  let pledgeName = req.body.complaint.pledgeDisplayName;
+  let pledgeRef = admin.database().ref('/users/' + pledgeName);
+
+  pledgeRef.once('value', (snapshot) => {
+    let registrationToken = snapshot.val().registrationToken;
+    let payload = {
+      notification: {
+        title: 'Garnett',
+        body: `You have received a complaint from ${complaint.activeName}`,
         clickAction: 'https://garnett-app.herokuapp.com',
         icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
       }

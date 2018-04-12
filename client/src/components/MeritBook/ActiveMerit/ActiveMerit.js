@@ -145,6 +145,7 @@ export default class ActiveMerit extends Component {
       appBar.style.zIndex = 1;
     }
 
+    // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }
@@ -182,6 +183,7 @@ export default class ActiveMerit extends Component {
   }
 
   handleMeritClose = () => {
+    // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }

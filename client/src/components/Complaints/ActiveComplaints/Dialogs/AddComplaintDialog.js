@@ -60,12 +60,34 @@ export default class AddComplaintDialog extends Component {
       let displayName = this.props.state.displayName;
       let activeName = this.props.state.name;
       let date = getDate();
+      let complaint = {
+        activeDisplayName: displayName,
+        activeName: activeName,
+        pledgeDisplayName: pledge.value,
+        pledgeName: pledge.label,
+        description: description,
+        photoURL: pledge.photoURL,
+        date: date
+      };
       
-      API.complain(status, displayName, activeName, pledge, description, date)
+      API.complain(complaint)
       .then((res) => {
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        let registrationToken = localStorage.getItem('registrationToken');
+        
         console.log(res);
         this.handleClose();
-        this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
+
+        if (isSafari || !registrationToken || status !== 'pipm') {
+          this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
+        }
+        else {
+          API.sendComplaintNotification(complaint)
+          .then(res => {
+            this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
+          })
+          .catch(err => console.log(err));
+        }
       })
       .catch((error) => {
         console.log('Error: ', error);

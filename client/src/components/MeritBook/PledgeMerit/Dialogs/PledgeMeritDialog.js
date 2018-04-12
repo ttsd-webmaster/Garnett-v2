@@ -87,13 +87,27 @@ export default class PledgeMeritDialog extends Component {
       API.meritAsPledge(displayName, actives, description, amount, date, isChalkboard)
       .then(res => {
         let totalAmount = amount * actives.length;
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        let registrationToken = localStorage.getItem('registrationToken');
 
         console.log(res);
         this.handleClose();
         this.setState({
           openCompletingTask: false
         });
-        this.props.handleRequestOpen(`${action} for ${totalAmount} merits`);
+
+        if (isSafari || !registrationToken) {
+          this.props.handleRequestOpen(`${action} yourself ${totalAmount} merits`);
+        }
+        else {
+          let pledgeName = this.props.state.name;
+          
+          API.sendPledgeMeritNotification(pledgeName, actives, amount)
+          .then(res => {
+            this.props.handleRequestOpen(`${action} yourself ${totalAmount} merits`);
+          })
+          .catch(err => console.log(err));
+        }
       })
       .catch((error) => {
         console.log(error)

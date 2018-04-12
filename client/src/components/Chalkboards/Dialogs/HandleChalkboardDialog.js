@@ -83,13 +83,26 @@ export default class HandleChalkboardDialog extends Component {
 
     API.joinChalkboard(name, photoURL, chalkboard)
     .then((res) => {
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      let registrationToken = localStorage.getItem('registrationToken');
+
       console.log('Joined chalkboard');
-      this.props.handleClose();
-      this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
+      this.handleClose();
+
+      if (isSafari || !registrationToken) {
+        this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
+      }
+      else {
+        API.sendJoinedChalkboardNotification(name, chalkboard)
+        .then(res => {
+          this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
+        })
+        .catch(err => console.log(err));
+      }
     })
     .catch((error) => {
       console.log('Error: ', error);
-      this.props.handleClose();
+      this.handleClose();
       this.props.handleRequestOpen('Error joining chalkboard');
     });
   }
@@ -101,12 +114,12 @@ export default class HandleChalkboardDialog extends Component {
     API.removeChalkboard(displayName, chalkboard)
     .then((res) => {
       console.log('Removed chalkboard');
-      this.props.handleClose();
+      this.handleClose();
       this.props.handleRequestOpen(`Removed ${chalkboard.title}`);
     })
     .catch((error) => {
       console.log('Error: ', error);
-      this.props.handleClose();
+      this.handleClose();
       this.props.handleRequestOpen('Error removing chalkboard');
     });
   }
@@ -117,13 +130,26 @@ export default class HandleChalkboardDialog extends Component {
 
     API.leaveChalkboard(name, chalkboard)
     .then((res) => {
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      let registrationToken = localStorage.getItem('registrationToken');
+      
       console.log('Left chalkboard');
-      this.props.handleClose();
-      this.props.handleRequestOpen(`Left ${chalkboard.title}`);
+      this.handleClose();
+
+      if (isSafari || !registrationToken) {
+        this.props.handleRequestOpen(`Left ${chalkboard.title}`);
+      }
+      else {
+        API.sendLeftChalkboardNotification(name, chalkboard)
+        .then(res => {
+          this.props.handleRequestOpen(`Left ${chalkboard.title}`);
+        })
+        .catch(err => console.log(err));
+      }
     })
     .catch((error) => {
       console.log('Error: ', error);
-      this.props.handleClose();
+      this.handleClose();
       this.props.handleRequestOpen('Error leaving chalkboard');
     });
   }
