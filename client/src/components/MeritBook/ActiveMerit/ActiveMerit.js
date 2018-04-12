@@ -225,7 +225,7 @@ export default class ActiveMerit extends Component {
             ))}
           </List>
 
-          {this.props.state.status === 'alumni' && (
+          {this.props.state.status === 'alumni' || this.props.state.status === 'pipm' && (
             <div id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
               <i className="icon-pencil"></i>
             </div>
