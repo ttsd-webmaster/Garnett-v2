@@ -102,16 +102,16 @@ export default {
     return axios.post('/api/sendActiveMeritNotification', {pledgeName, actives, amount});
   },
   sendCreatedChalkboardNotification: function(chalkboardTitle) {
-    return axios.post('/sendCreatedChalkboardNotification', {chalkboardTitle});
+    return axios.post('/api/sendCreatedChalkboardNotification', {chalkboardTitle});
   },
   sendJoinedChalkboardNotification: function(name, chalkboard) {
-    return axios.post('/sendJoinedChalkboardNotification', {name, chalkboard});
+    return axios.post('/api/sendJoinedChalkboardNotification', {name, chalkboard});
   },
   sendLeftChalkboardNotification: function(name, chalkboard) {
-    return axios.post('/sendLeftChalkboardNotification', {name, chalkboard});
+    return axios.post('/api/sendLeftChalkboardNotification', {name, chalkboard});
   },
   sendComplaintNotification: function(complaint) {
-    return axios.post('/sendComplaintNotification', {complaint});
+    return axios.post('/api/sendComplaintNotification', {complaint});
   },
   // Delibs App
   updateInteraction: function(displayName, rusheeName, interacted, totalInteractions) {
