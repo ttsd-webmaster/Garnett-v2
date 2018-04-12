@@ -44,10 +44,10 @@ if (process.env.NODE_ENV == 'production') {
   app.all('*', ensureSecure);
 }
 
+app.use(express.static(path.join(__dirname, './client/build')));
 app.use(compression()); // Gzips file
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, './client/build')));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));

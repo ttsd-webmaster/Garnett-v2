@@ -20,16 +20,16 @@ const LoadablePledgeInfoDialog = Loadable({
   }
 });
 
-// const LoadableActiveMeritDialog = Loadable({
-//   loader: () => import('./Dialogs/ActiveMeritDialog'),
-//   render(loaded, props) {
-//     let Component = loaded.default;
-//     return <Component {...props}/>;
-//   },
-//   loading() {
-//     return <div></div>
-//   }
-// });
+const LoadableActiveMeritDialog = Loadable({
+  loader: () => import('./Dialogs/ActiveMeritDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>
+  }
+});
 
 export default class ActiveMerit extends Component {
   constructor(props) {
@@ -213,9 +213,11 @@ export default class ActiveMerit extends Component {
             ))}
           </List>
 
-          {/*<div id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
-            <i className="icon-pencil"></i>
-          </div>*/}
+          {this.props.state.status === 'alumni' && (
+            <div id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
+              <i className="icon-pencil"></i>
+            </div>
+          )}
           
           <LoadablePledgeInfoDialog
             open={this.state.open}
@@ -225,13 +227,13 @@ export default class ActiveMerit extends Component {
             handleRequestOpen={this.props.handleRequestOpen}
           />
 
-          {/*<LoadableActiveMeritDialog
+          <LoadableActiveMeritDialog
             open={this.state.openMerit}
             state={this.props.state}
             pledges={this.props.pledgesForMerit}
             handleMeritClose={this.handleMeritClose}
             handleRequestOpen={this.props.handleRequestOpen}
-          />*/}
+          />
         </div>
       ) : (
         <LoadingComponent />
