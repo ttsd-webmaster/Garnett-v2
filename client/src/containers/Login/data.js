@@ -1,6 +1,6 @@
 const activeCode = 'garnett';
 
-const pledgeCode = 'rhoclass';
+const pledgeCode = 'sigmaclass';
 
 const formData1 = [
   {
@@ -26,7 +26,7 @@ const selectData = [
                'Delta', 'Epsilon', 'Zeta', 'Eta', 
                'Theta', 'Iota', 'Kappa', 'Lambda', 
                'Mu', 'Nu', 'Xi', 'Omicron', 
-               'Pi', 'Rho'
+               'Pi', 'Rho', 'Sigma'
              ],
   },
   {

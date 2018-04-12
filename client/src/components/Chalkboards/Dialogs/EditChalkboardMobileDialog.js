@@ -34,7 +34,7 @@ export default class MobileEditChalkboardDialog extends Component {
       let value = newValue;
 
       if (field === 'Date') {
-        value = newValue.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
+        value = this.formatDate(newValue);
       }
       else if (field === 'Time') {
         value = newValue.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
@@ -97,6 +97,7 @@ export default class MobileEditChalkboardDialog extends Component {
       EditField = (
         <DatePicker
           className="garnett-input"
+          textFieldStyle={{display:'block',margin:'0 auto'}}
           floatingLabelText="Date"
           value={this.state.newValue}
           disableYearSelection
@@ -112,7 +113,7 @@ export default class MobileEditChalkboardDialog extends Component {
       EditField = (
         <TimePicker
           className="garnett-input"
-          textFieldStyle={{'display': 'block'}}
+          textFieldStyle={{display:'block'}}
           floatingLabelText="Time"
           value={this.state.newValue}
           minutesStep={5}
@@ -164,7 +165,7 @@ export default class MobileEditChalkboardDialog extends Component {
       EditField = (
         <TextField
           className="garnett-input"
-          style={{'display': 'block'}}
+          style={{display:'block'}}
           type="text"
           floatingLabelText={this.props.field}
           multiLine={true}

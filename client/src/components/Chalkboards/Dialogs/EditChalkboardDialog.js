@@ -20,7 +20,7 @@ export default class EditChalkboardDialog extends Component {
       date: null,
       time: null,
       location: '',
-      timeCommitment: {},
+      timeCommitment: null,
       amount: 0,
       descriptionValidation: true,
       dateValidation: true,
@@ -91,7 +91,7 @@ export default class EditChalkboardDialog extends Component {
       });
     }
     else {
-      let parsedDate = date.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
+      let parsedDate = this.formatDate(date);
       let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
       API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location, timeCommitment, amount)
@@ -183,6 +183,7 @@ export default class EditChalkboardDialog extends Component {
         />
         <DatePicker
           className="garnett-input"
+          textFieldStyle={{display:'block',margin:'0 auto'}}
           floatingLabelText="Date"
           value={this.state.date}
           disableYearSelection
@@ -194,7 +195,7 @@ export default class EditChalkboardDialog extends Component {
         />
         <TimePicker
           className="garnett-input"
-          textFieldStyle={{'display': 'block'}}
+          textFieldStyle={{display:'block'}}
           floatingLabelText="Time"
           value={this.state.time}
           minutesStep={5}

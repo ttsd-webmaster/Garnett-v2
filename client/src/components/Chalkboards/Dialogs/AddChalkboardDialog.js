@@ -21,7 +21,8 @@ const mobileAddChalkboardStyle = {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  backgroundColor: '#fff'
+  backgroundColor: '#fff',
+  paddingBottom: '50px'
 };
 
 export default class AddChalkboardDialog extends Component {
@@ -33,7 +34,7 @@ export default class AddChalkboardDialog extends Component {
       date: null,
       time: defaultTime,
       location: 'TBD',
-      timeCommitment: {},
+      timeCommitment: null,
       amount: 0,
       titleValidation: true,
       descriptionValidation: true,
@@ -92,7 +93,7 @@ export default class AddChalkboardDialog extends Component {
       });
     }
     else {
-      let parsedDate = date.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
+      let parsedDate = this.formatDate(date);
       let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
       API.createChalkboard(displayName, activeName, photoURL, title, description, parsedDate, parsedTime, location, timeCommitment, amount)
@@ -212,7 +213,7 @@ export default class AddChalkboardDialog extends Component {
           />
           <TimePicker
             className="garnett-input"
-            textFieldStyle={{'display': 'block'}}
+            textFieldStyle={{display:'block'}}
             floatingLabelText="Time"
             value={this.state.time}
             defaultTime={defaultTime}
@@ -235,7 +236,7 @@ export default class AddChalkboardDialog extends Component {
             value={this.state.timeCommitment}
             floatingLabelText="Time Commitment"
             onChange={(e, key, newValue) => this.handleChange('timeCommitment', newValue)}
-            errorText={!this.state.pledgeValidation && 'Enter a time commitment.'}
+            errorText={!this.state.timeCommitmentValidation && 'Enter a time commitment.'}
           >
             {commitmentOptions.map((option, i) => (
               <MenuItem
@@ -296,6 +297,7 @@ export default class AddChalkboardDialog extends Component {
           />
           <DatePicker
             className="garnett-input"
+            textFieldStyle={{display:'block',margin:'0 auto'}}
             floatingLabelText="Date"
             value={this.state.date}
             disableYearSelection
@@ -307,7 +309,7 @@ export default class AddChalkboardDialog extends Component {
           />
           <TimePicker
             className="garnett-input"
-            textFieldStyle={{'display': 'block'}}
+            textFieldStyle={{display:'block'}}
             floatingLabelText="Time"
             value={this.state.time}
             defaultTime={defaultTime}

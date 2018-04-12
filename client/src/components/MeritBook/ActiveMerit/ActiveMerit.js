@@ -97,7 +97,7 @@ export default class ActiveMerit extends Component {
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
     let appBar = document.querySelector('.app-header');
 
-    contentContainer.style.setProperty('overflow', 'hidden', 'important');
+    contentContainer.style.setProperty('overflow', 'unset', 'important');
     tabs.style.zIndex = 0;
     inkBar.style.zIndex = 0;
     appBar.style.zIndex = 0;
