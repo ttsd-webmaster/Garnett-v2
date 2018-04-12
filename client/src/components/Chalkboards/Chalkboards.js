@@ -217,7 +217,13 @@ export default class Chalkboards extends Component {
         let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
         let appBar = document.querySelector('.app-header');
 
-        contentContainer.style.setProperty('overflow', 'unset', 'important');
+        if (/android/i.test(navigator.userAgent)) {
+          contentContainer.style.setProperty('overflow', 'hidden', 'important');
+        }
+        else {
+          contentContainer.style.setProperty('overflow', 'unset', 'important');
+        }
+
         tabs.style.zIndex = 0;
         inkBar.style.zIndex = 0;
         appBar.style.zIndex = 0;
@@ -277,7 +283,13 @@ export default class Chalkboards extends Component {
       let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
       let appBar = document.querySelector('.app-header');
 
-      contentContainer.style.setProperty('overflow', 'unset', 'important');
+      if (/android/i.test(navigator.userAgent)) {
+        contentContainer.style.setProperty('overflow', 'hidden', 'important');
+      }
+      else {
+        contentContainer.style.setProperty('overflow', 'unset', 'important');
+      }
+      
       tabs.style.zIndex = 0;
       inkBar.style.zIndex = 0;
       appBar.style.zIndex = 0;
