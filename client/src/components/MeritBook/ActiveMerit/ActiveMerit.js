@@ -1,5 +1,5 @@
 import '../MeritBook.css';
-import {loadFirebase} from '../../../helpers/functions.js';
+import {loadFirebase, isMobileDevice} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
@@ -92,15 +92,17 @@ export default class ActiveMerit extends Component {
   }
 
   handleOpen = (pledge) => {
-    let contentContainer = document.querySelector('.content-container').firstChild;
-    let tabs = document.getElementById('pledge-app-tabs').firstChild;
-    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-    let appBar = document.querySelector('.app-header');
+    if (isMobileDevice()) {
+      let contentContainer = document.querySelector('.content-container').firstChild;
+      let tabs = document.getElementById('pledge-app-tabs').firstChild;
+      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+      let appBar = document.querySelector('.app-header');
 
-    contentContainer.style.setProperty('overflow', 'unset', 'important');
-    tabs.style.zIndex = 0;
-    inkBar.style.zIndex = 0;
-    appBar.style.zIndex = 0;
+      contentContainer.style.setProperty('overflow', 'unset', 'important');
+      tabs.style.zIndex = 0;
+      inkBar.style.zIndex = 0;
+      appBar.style.zIndex = 0;
+    }
 
     this.setState({
       open: true,
@@ -125,15 +127,17 @@ export default class ActiveMerit extends Component {
   }
 
   handleClose = () => {
-    let contentContainer = document.querySelector('.content-container').firstChild;
-    let tabs = document.getElementById('pledge-app-tabs').firstChild;
-    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-    let appBar = document.querySelector('.app-header');
+    if (isMobileDevice()) {
+      let contentContainer = document.querySelector('.content-container').firstChild;
+      let tabs = document.getElementById('pledge-app-tabs').firstChild;
+      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+      let appBar = document.querySelector('.app-header');
 
-    contentContainer.style.setProperty('overflow', 'scroll', 'important');
-    tabs.style.zIndex = 1;
-    inkBar.style.zIndex = 1;
-    appBar.style.zIndex = 1;
+      contentContainer.style.setProperty('overflow', 'scroll', 'important');
+      tabs.style.zIndex = 1;
+      inkBar.style.zIndex = 1;
+      appBar.style.zIndex = 1;
+    }
 
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
