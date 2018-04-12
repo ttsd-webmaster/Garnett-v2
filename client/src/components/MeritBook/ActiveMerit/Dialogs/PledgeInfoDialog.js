@@ -173,8 +173,6 @@ export default class ActiveMerit extends Component {
                   />
                   <Divider className="garnett-divider" />
                 </List>
-
-                <p> Merits remaining: {this.state.meritsRemaining} </p>
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
                 <LoadableMeritsList pledgeName={pledgeDisplayName} />
