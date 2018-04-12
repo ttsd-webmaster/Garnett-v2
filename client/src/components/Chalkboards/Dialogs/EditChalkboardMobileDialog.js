@@ -1,5 +1,6 @@
 import {commitmentOptions} from '../data.js';
-import API from "../../../api/API.js";
+import API from '../../../api/API.js';
+import {invalidSafariVersion} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -22,46 +23,53 @@ export default class MobileEditChalkboardDialog extends Component {
   }
 
   edit = (newValue) => {
-    if (!newValue) {
-      this.setState({
-        newValueValidation: false
-      });
+    let field = this.props.field;
+
+    if (field === 'Date' && invalidSafariVersion()) {
+      this.handleClose();
+      this.props.handleRequestOpen('Please update to Safari version 10 or above.');
     }
     else {
-      let displayName = this.props.state.displayName;
-      let chalkboard = this.props.chalkboard;
-      let field = this.props.field;
-      let value = newValue;
-
-      if (field === 'Date') {
-        value = this.formatDate(newValue);
-      }
-      else if (field === 'Time') {
-        value = newValue.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-      }
-
-      API.editChalkboardMobile(displayName, chalkboard, field, value)
-      .then((res) => {
-        console.log(`Edited ${field}`);
-        this.props.updateChalkboardInfo();
-        this.handleClose();
-        this.props.handleRequestOpen(`Edited ${field}`);
-
+      if (!newValue) {
         this.setState({
-          newValue: undefined,
-          newValueValidation: true
+          newValueValidation: false
         });
-      })
-      .catch((error) => {
-        console.log('Error: ', error);
-        this.handleClose();
-        this.props.handleRequestOpen(`Error editing ${field}`);
+      }
+      else {
+        let displayName = this.props.state.displayName;
+        let chalkboard = this.props.chalkboard;
+        let value = newValue;
 
-        this.setState({
-          newValue: undefined,
-          newValueValidation: true
+        if (field === 'Date') {
+          value = this.formatDate(newValue);
+        }
+        else if (field === 'Time') {
+          value = newValue.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        API.editChalkboardMobile(displayName, chalkboard, field, value)
+        .then((res) => {
+          console.log(`Edited ${field}`);
+          this.props.updateChalkboardInfo();
+          this.handleClose();
+          this.props.handleRequestOpen(`Edited ${field}`);
+
+          this.setState({
+            newValue: undefined,
+            newValueValidation: true
+          });
+        })
+        .catch((error) => {
+          console.log('Error: ', error);
+          this.handleClose();
+          this.props.handleRequestOpen(`Error editing ${field}`);
+
+          this.setState({
+            newValue: undefined,
+            newValueValidation: true
+          });
         });
-      });
+      }
     }
   }
 

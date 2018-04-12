@@ -1,7 +1,7 @@
 import './PledgeApp.css';
 import '../../fontello/css/fontello.css';
 // import API from '../../api/API.js';
-import {getTabStyle, isMobileDevice} from '../../helpers/functions.js';
+import {getTabStyle} from '../../helpers/functions.js';
 import {LoadingPledgeApp, LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
@@ -157,7 +157,7 @@ export default class PledgeApp extends Component {
 
     // Checks if page has scrolled
     this.interval = setInterval(() => {
-      if (isMobileDevice()) {
+      if (/android/i.test(navigator.userAgent)) {
         if (didScroll) {
           didScroll = false;
           this.onScroll();
@@ -211,7 +211,7 @@ export default class PledgeApp extends Component {
     if (contentContainer) {
       contentContainer.firstChild.style.position = 'fixed';
 
-      if (isMobileDevice()) {
+      if (/android/i.test(navigator.userAgent)) {
         contentContainer.firstChild.onscroll = watchScroll;
         contentContainer.firstChild.style.height = 'calc(100% - 48px)';
       }
@@ -235,7 +235,7 @@ export default class PledgeApp extends Component {
     if (contentContainer) {
       contentContainer.childNodes[index].style.position = 'fixed';
 
-      if (isMobileDevice()) {
+      if (/android/i.test(navigator.userAgent)) {
         contentContainer.childNodes[index].onscroll = watchScroll;
         contentContainer.childNodes[index].style.height = 'calc(100% - 48px)';
       }
@@ -311,7 +311,7 @@ export default class PledgeApp extends Component {
     let scrolled;
 
     // Hides and shows the app bar if scrolled for that view for mobile
-    if (isMobileDevice()) {
+    if (/android/i.test(navigator.userAgent)) {
       tabs.classList.remove('hide-tabs');
       appBar.classList.remove('hide-app-bar');
       view.classList.remove('hide-content-container');

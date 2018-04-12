@@ -1,6 +1,6 @@
 import {commitmentOptions} from '../data.js';
 import API from '../../../api/API.js';
-import {isMobileDevice} from '../../../helpers/functions.js';
+import {isMobileDevice, invalidSafariVersion} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import FullscreenDialog from 'material-ui-fullscreen-dialog'
@@ -63,50 +63,56 @@ export default class AddChalkboardDialog extends Component {
     let locationValidation = true;
     let timeCommitmentValidation = true;
 
-    if (!title || title.length > 25 || !description || !date || !time || !location || !timeCommitment || amount === 0) {
-      if (!title || title.length > 25) {
-        titleValidation = false;
-      }
-      if (!description) {
-        descriptionValidation = false;
-      }
-      if (!date) {
-        dateValidation = false;
-      }
-      if (!time) {
-        timeValidation = false;
-      }
-      if (!location) {
-        locationValidation = false;
-      }
-      if (!timeCommitment) {
-        timeCommitmentValidation = false;
-      }
-
-      this.setState({
-        titleValidation: titleValidation,
-        descriptionValidation: descriptionValidation,
-        dateValidation: dateValidation,
-        timeValidation: timeValidation,
-        locationValidation: locationValidation,
-        timeCommitmentValidation: timeCommitmentValidation
-      });
+    if (invalidSafariVersion()) {
+      this.handleClose();
+      this.props.handleRequestOpen('Please update to Safari version 10 or above.');
     }
     else {
-      let parsedDate = this.formatDate(date);
-      let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      if (!title || title.length > 25 || !description || !date || !time || !location || !timeCommitment || amount === 0) {
+        if (!title || title.length > 25) {
+          titleValidation = false;
+        }
+        if (!description) {
+          descriptionValidation = false;
+        }
+        if (!date) {
+          dateValidation = false;
+        }
+        if (!time) {
+          timeValidation = false;
+        }
+        if (!location) {
+          locationValidation = false;
+        }
+        if (!timeCommitment) {
+          timeCommitmentValidation = false;
+        }
 
-      API.createChalkboard(displayName, activeName, photoURL, title, description, parsedDate, parsedTime, location, timeCommitment, amount)
-      .then((res) => {
-        console.log(res);
-        this.handleClose();
-        this.props.handleRequestOpen('Created a chalkboard!');
-      })
-      .catch((error) => {
-        console.log('Error: ', error);
-        this.handleClose();
-        this.props.handleRequestOpen('Error: Chalkboard title is already taken');
-      });
+        this.setState({
+          titleValidation: titleValidation,
+          descriptionValidation: descriptionValidation,
+          dateValidation: dateValidation,
+          timeValidation: timeValidation,
+          locationValidation: locationValidation,
+          timeCommitmentValidation: timeCommitmentValidation
+        });
+      }
+      else {
+        let parsedDate = this.formatDate(date);
+        let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        API.createChalkboard(displayName, activeName, photoURL, title, description, parsedDate, parsedTime, location, timeCommitment, amount)
+        .then((res) => {
+          console.log(res);
+          this.handleClose();
+          this.props.handleRequestOpen('Created a chalkboard!');
+        })
+        .catch((error) => {
+          console.log('Error: ', error);
+          this.handleClose();
+          this.props.handleRequestOpen('Error: Chalkboard title is already taken');
+        });
+      }
     }
   }
 

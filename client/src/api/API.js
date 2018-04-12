@@ -45,6 +45,9 @@ export default {
     let body = {displayName, actives, description, amount, date};
     return axios.post('/api/meritAsPledge', body);
   },
+  getMeritsRemaining: function(displayName, pledgeName) {
+    return axios.post('/api/meritsRemaining', {displayName, pledgeName});
+  },
   getPledgesForMerit: function(displayName) {
     return axios.post('/api/pledgesForMerit', {displayName});
   },

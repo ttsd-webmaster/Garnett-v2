@@ -25,9 +25,9 @@ export default class ActiveMeritDialog extends Component {
     };
   }
 
-  componentWillReceiveProps() {
+  componentWillReceiveProps(nextProps) {
     if (navigator.onLine) {
-      API.getPledgesForMerit(this.props.state.displayName)
+      API.getPledgesForMerit(nextProps.state.displayName)
       .then((res) => {
         let pledges = res.data;
 
@@ -210,7 +210,7 @@ export default class ActiveMeritDialog extends Component {
 
         <div id="remaining-merits">
           {this.state.selectedPledges.map((pledge, i) => (
-            <p key={i}> Remaining Merits for {pledge.label}: {pledge.remainingMerits} </p>
+            <p key={i}> Merits remaining for {pledge.label}: {pledge.meritsRemaining} </p>
           ))}
         </div>
 

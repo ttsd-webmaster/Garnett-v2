@@ -511,7 +511,18 @@ app.post('/api/meritAsPledge', function(req, res) {
   })
 });
 
-// Gets all the pledges for merit
+// Get merits remaining for pledge
+app.post('/api/meritsRemaining', function(req, res) {
+  let displayName = req.body.displayName;
+  let pledgeName = req.body.pledgeName;
+  let pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
+
+  pledgeRef.once('value', (snapshot) => {
+    res.json(snapshot.val().merits);
+  });
+});
+
+// Gets all the pledges for meriting as active
 app.post('/api/pledgesForMerit', function(req, res) {
   let displayName = req.body.displayName;
   let pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
@@ -523,7 +534,7 @@ app.post('/api/pledgesForMerit', function(req, res) {
       pledgeArray = Object.keys(snapshot.val()).map(function(key) {
         return {'value': key,
                 'label': key.replace(/([a-z])([A-Z])/, '$1 $2'),
-                'remainingMerits': snapshot.val()[key].merits
+                'meritsRemaining': snapshot.val()[key].merits
                };
       });
     }
@@ -532,7 +543,7 @@ app.post('/api/pledgesForMerit', function(req, res) {
   });
 });
 
-// Gets all the pledges for merit
+// Gets all the actives for meriting as pledge
 app.post('/api/activesForMerit', function(req, res) {
   let counter = 0;
   let activeCount = 43;
@@ -552,7 +563,7 @@ app.post('/api/activesForMerit', function(req, res) {
           activeArray.push({
             'value': active.key,
             'label': active.key.replace(/([a-z])([A-Z])/, '$1 $2'),
-            'remainingMerits': user.val().merits
+            'meritsRemaining': user.val().merits
           });
 
           if (!res.headersSent && counter === activeCount) {

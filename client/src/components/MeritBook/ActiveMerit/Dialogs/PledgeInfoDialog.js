@@ -1,5 +1,6 @@
 import '../../MeritBook.css';
 import {getTabStyle, isMobileDevice} from '../../../../helpers/functions.js';
+import API from '../../../../api/API.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -55,9 +56,24 @@ export default class ActiveMerit extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      pledge: nextProps.pledge
-    });
+    if (navigator.onLine) {
+      let displayName = nextProps.state.displayName;
+      let pledgeName = nextProps.pledge.firstName + nextProps.pledge.lastName;
+
+      this.setState({
+        pledge: null
+      });
+
+      API.getMeritsRemaining(displayName, pledgeName)
+      .then((res) => {
+        let meritsRemaining = res.data;
+
+        this.setState({
+          pledge: nextProps.pledge,
+          meritsRemaining: meritsRemaining
+        });
+      });
+    }
   }
 
   handleChange = (value) => {
@@ -146,8 +162,19 @@ export default class ActiveMerit extends Component {
                       <i className="icon-graduation-cap garnett-icon"></i>
                     }
                   />
+                  <Divider className="garnett-divider" inset={true} />
+                  <ListItem
+                    className="garnett-list-item"
+                    primaryText="Merits Remaining"
+                    secondaryText={`${this.state.meritsRemaining} merits`}
+                    leftIcon={
+                      <i className="icon-star garnett-icon"></i>
+                    }
+                  />
                   <Divider className="garnett-divider" />
                 </List>
+
+                <p> Merits remaining: {this.state.meritsRemaining} </p>
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
                 <LoadableMeritsList pledgeName={pledgeDisplayName} />
@@ -175,6 +202,7 @@ export default class ActiveMerit extends Component {
               onChange={this.handleChange}
             >
               <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
+                <img className="dialog-photo" src={this.state.pledge.photoURL} alt="User" />
                 <List style={{padding:'24px 0'}}>
                   <Divider />
                   <ListItem
@@ -212,6 +240,15 @@ export default class ActiveMerit extends Component {
                     secondaryText={this.state.pledge.major}
                     leftIcon={
                       <i className="icon-graduation-cap garnett-icon"></i>
+                    }
+                  />
+                  <Divider className="garnett-divider" inset={true} />
+                  <ListItem
+                    className="garnett-list-item"
+                    primaryText="Merits Remaining"
+                    secondaryText={`${this.state.meritsRemaining} merits`}
+                    leftIcon={
+                      <i className="icon-star garnett-icon"></i>
                     }
                   />
                   <Divider className="garnett-divider" />

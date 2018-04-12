@@ -1,5 +1,6 @@
 import {commitmentOptions} from '../data.js';
-import API from "../../../api/API.js";
+import API from '../../../api/API.js';
+import {invalidSafariVersion} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -65,47 +66,53 @@ export default class EditChalkboardDialog extends Component {
     let locationValidation = true;
     let timeCommitmentValidation = true;
 
-    if (!description || !date || !time || !location || !timeCommitment || amount === 0) {
-      if (!description) {
-        descriptionValidation = false;
-      }
-      if (!date) {
-        dateValidation = false;
-      }
-      if (!time) {
-        timeValidation = false;
-      }
-      if (!location) {
-        locationValidation = false;
-      }
-      if (!timeCommitment) {
-        timeCommitmentValidation = false;
-      }
-
-      this.setState({
-        descriptionValidation: descriptionValidation,
-        dateValidation: dateValidation,
-        timeValidation: timeValidation,
-        locationValidation: locationValidation,
-        timeCommitmentValidation: timeCommitmentValidation
-      });
+    if (invalidSafariVersion()) {
+      this.handleClose();
+      this.props.handleRequestOpen('Please update to Safari version 10 or above.');
     }
     else {
-      let parsedDate = this.formatDate(date);
-      let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      if (!description || !date || !time || !location || !timeCommitment || amount === 0) {
+        if (!description) {
+          descriptionValidation = false;
+        }
+        if (!date) {
+          dateValidation = false;
+        }
+        if (!time) {
+          timeValidation = false;
+        }
+        if (!location) {
+          locationValidation = false;
+        }
+        if (!timeCommitment) {
+          timeCommitmentValidation = false;
+        }
 
-      API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location, timeCommitment, amount)
-      .then((res) => {
-        console.log('Edited chalkboard');
-        this.props.updateChalkboardInfo();
-        this.handleClose();
-        this.props.handleRequestOpen('Edited chalkboard');
-      })
-      .catch((error) => {
-        console.log('Error: ', error);
-        this.handleClose();
-        this.props.handleRequestOpen('Error editing chalkboard');
-      });
+        this.setState({
+          descriptionValidation: descriptionValidation,
+          dateValidation: dateValidation,
+          timeValidation: timeValidation,
+          locationValidation: locationValidation,
+          timeCommitmentValidation: timeCommitmentValidation
+        });
+      }
+      else {
+        let parsedDate = this.formatDate(date);
+        let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+        API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location, timeCommitment, amount)
+        .then((res) => {
+          console.log('Edited chalkboard');
+          this.props.updateChalkboardInfo();
+          this.handleClose();
+          this.props.handleRequestOpen('Edited chalkboard');
+        })
+        .catch((error) => {
+          console.log('Error: ', error);
+          this.handleClose();
+          this.props.handleRequestOpen('Error editing chalkboard');
+        });
+      }
     }
   }
 
