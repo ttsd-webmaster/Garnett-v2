@@ -34,25 +34,25 @@ export default class Contacts extends Component {
                'Pi', 'Rho'
              ],
       major: [ 'Aerospace Engineering',
-                'Bioengineering',
-                'Chemical Engineering',
-                'Computer Engineering',
-                'Computer Science',
-                'Electrical Engineering',
-                'Environmental Engineering',
-                'Mechanical Engineering',
-                'Nanoengineering',
-                'Structural Engineering'
+               'Bioengineering',
+               'Chemical Engineering',
+               'Computer Engineering',
+               'Computer Science',
+               'Electrical Engineering',
+               'Environmental Engineering',
+               'Mechanical Engineering',
+               'Nanoengineering',
+               'Structural Engineering'
               ],
       name: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
+      year: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Alumni'],
       actives: this.props.actives,
-      loaded: false,
-      open: false,
       active: null,
-      openPopover: false,
       filter: 'class',
       filterName: 'Class',
-      reverse: false
+      reverse: false,
+      open: false,
+      openPopover: false
     }
   }
 
@@ -63,7 +63,6 @@ export default class Contacts extends Component {
         localStorage.setItem('activeArray', JSON.stringify(res.data));
 
         this.setState({
-          loaded: true,
           actives: res.data,
           labels: this.state.class
         });
@@ -71,7 +70,6 @@ export default class Contacts extends Component {
     }
     else {
       this.setState({
-        loaded: true,
         labels: this.state.class
       });
     }
@@ -129,9 +127,18 @@ export default class Contacts extends Component {
   setFilter = (filterName) => {
     let filter = filterName.replace(/ /g,'');
     filter = filter[0].toLowerCase() + filter.substr(1);
+    let labelFilter = filter;
+
+    if (filter === 'firstName' || filter === 'lastName') {
+      labelFilter = 'name';
+    }
+    if (filter === 'active' || filter === 'alumni') {
+      labelFilter = 'class';
+    }
 
     this.setState({
       openPopover: false,
+      labels: this.state[labelFilter],
       filter: filter,
       filterName: filterName,
       reverse: false
@@ -140,38 +147,29 @@ export default class Contacts extends Component {
 
   reverse = () => {
     let reverse = true;
+    let labels = this.state.labels.slice().reverse();
 
     if (this.state.reverse) {
       reverse = false;
     }
 
     this.setState({
+      labels: labels,
       reverse: reverse
     });
   }
 
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let filter = this.state.filter;
-
-    if (filter === 'firstName' || filter === 'lastName') {
-      filter = 'name';
-    }
-    if (filter === 'active' || filter === 'alumni') {
-      filter = 'class';
-    }
-
-    let labels = this.state[filter];
 
     if (this.state.reverse) {
-      labels = labels.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
 
     return (
-      this.state.loaded ? (
+      this.state.labels ? (
         <div>
-          {labels.map((label, i) => (
+          {this.state.labels.map((label, i) => (
             <div key={i}>
               <Subheader className="garnett-subheader">
                 {label}
@@ -211,6 +209,7 @@ export default class Contacts extends Component {
             <Menu>
               <MenuItem primaryText="Class" onClick={() => this.setFilter('Class')} />
               <MenuItem primaryText="Major" onClick={() => this.setFilter('Major')} />
+              <MenuItem primaryText="Year" onClick={() => this.setFilter('Year')} />
               <MenuItem primaryText="Active" onClick={() => this.setFilter('Active')} />
               <MenuItem primaryText="Alumni" onClick={() => this.setFilter('Alumni')} />
               <MenuItem primaryText="First Name" onClick={() => this.setFilter('First Name')} />

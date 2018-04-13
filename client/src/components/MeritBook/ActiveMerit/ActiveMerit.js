@@ -8,6 +8,10 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
 
 const LoadablePledgeInfoDialog = Loadable({
   loader: () => import('./Dialogs/PledgeInfoDialog'),
@@ -37,9 +41,13 @@ export default class ActiveMerit extends Component {
     this.state = {
       loaded: false,
       pledges: this.props.pledges,
+      pledge: null,
+      filter: 'lastName',
+      filterName: 'Last Name',
+      reverse: false,
       open: false,
       openMerit: false,
-      pledge: null
+      openPopover: false
     };
   }
 
@@ -193,11 +201,86 @@ export default class ActiveMerit extends Component {
     });
   }
 
+  openPopover = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      openPopover: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  closePopover = () => {
+    this.setState({
+      openPopover: false,
+    });
+  };
+
+  setFilter = (filterName) => {
+    let filter = filterName.replace(/ /g,'');
+    filter = filter[0].toLowerCase() + filter.substr(1);
+    let pledges;
+
+    if (filterName === 'Total Merits') {
+      pledges = this.state.pledges.sort(function(a, b) {
+        return a[filter] < b[filter] ? 1 : -1;
+      });
+    }
+    else {
+      pledges = this.state.pledges.sort(function(a, b) {
+        return a[filter] > b[filter] ? 1 : -1;
+      });
+    }
+
+    this.setState({
+      pledges: pledges,
+      filter: filter,
+      filterName: filterName,
+      reverse: false,
+      openPopover: false
+    });
+  }
+
+  reverse = () => {
+    let reverse = true;
+    let pledges = this.state.pledges.slice().reverse();
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      pledges: pledges,
+      reverse: reverse
+    });
+  }
+
   render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    if (this.state.reverse) {
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
       this.state.loaded ? (
         <div className="animate-in">
-          <Subheader className="garnett-subheader"> Pledges </Subheader>
+          <Subheader className="garnett-subheader">
+            Pledges
+            <span style={{float:'right'}}>
+              <span style={{cursor:'pointer'}} onClick={this.openPopover}> 
+                {this.state.filterName}
+              </span>
+              <IconButton
+                iconClassName={toggleIcon}
+                className="reverse-toggle"
+                onClick={this.reverse}
+              >
+              </IconButton>
+            </span>
+          </Subheader>
+
           <List className="garnett-list">
             {this.state.pledges.map((pledge, i) => (
               <div key={i}>
@@ -230,6 +313,22 @@ export default class ActiveMerit extends Component {
               <i className="icon-pencil"></i>
             </div>
           )}
+
+          <Popover
+            open={this.state.openPopover}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this.closePopover}
+          >
+            <Menu>
+              <MenuItem primaryText="Last Name" onClick={() => this.setFilter('Last Name')} />
+              <MenuItem primaryText="First Name" onClick={() => this.setFilter('First Name')} />
+              <MenuItem primaryText="Year" onClick={() => this.setFilter('Year')} />
+              <MenuItem primaryText="Major" onClick={() => this.setFilter('Major')} />
+              <MenuItem primaryText="Total Merits" onClick={() => this.setFilter('Total Merits')} />
+            </Menu>
+          </Popover>
           
           <LoadablePledgeInfoDialog
             open={this.state.open}

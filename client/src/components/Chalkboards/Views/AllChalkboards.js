@@ -13,10 +13,12 @@ export default class AllChalkboards extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      upcomingChalkboards: this.props.upcomingChalkboards,
+      completedChalkboards: this.props.completedChalkboards,
       filter: 'date',
       filterName: 'Date',
-      reverse: false
+      reverse: false,
+      open: false
     };
   }
 
@@ -40,30 +42,6 @@ export default class AllChalkboards extends Component {
     let filter = filterName.replace(/ /g,'');
     filter = filter[0].toLowerCase() + filter.substr(1);
 
-    this.setState({
-      open: false,
-      filter: filter,
-      filterName: filterName,
-      reverse: false
-    });
-  }
-
-  reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
-  }
-
-  render() {
-    let toggleIcon = "icon-down-open-mini";
-    let filter = this.state.filter;
-
     let upcomingChalkboards = this.props.upcomingChalkboards.sort(function(a, b) {
       return a[filter] > b[filter];
     });
@@ -71,9 +49,36 @@ export default class AllChalkboards extends Component {
       return a[filter] > b[filter];
     });
 
+    this.setState({
+      upcomingChalkboards: upcomingChalkboards,
+      completedChalkboards: completedChalkboards,
+      filter: filter,
+      filterName: filterName,
+      reverse: false,
+      open: false
+    });
+  }
+
+  reverse = () => {
+    let reverse = true;
+    let upcomingChalkboards = this.state.upcomingChalkboards.slice().reverse();
+    let completedChalkboards = this.state.completedChalkboards.slice().reverse();
+
     if (this.state.reverse) {
-      upcomingChalkboards = upcomingChalkboards.slice().reverse();
-      completedChalkboards = completedChalkboards.slice().reverse();
+      reverse = false;
+    }
+
+    this.setState({
+      upcomingChalkboards: upcomingChalkboards,
+      completedChalkboards: completedChalkboards,
+      reverse: reverse
+    });
+  }
+
+  render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    if (this.state.reverse) {
       toggleIcon = "icon-up-open-mini";
     }
 
@@ -95,7 +100,7 @@ export default class AllChalkboards extends Component {
         </Subheader>
 
         <List className="garnett-list">
-          {upcomingChalkboards.map((chalkboard, i) => (
+          {this.state.upcomingChalkboards.map((chalkboard, i) => (
             <LazyLoad
               height={88}
               offset={window.innerHeight}
@@ -130,12 +135,12 @@ export default class AllChalkboards extends Component {
                   onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
                 >
                   <p className="garnett-date"> 
-                    {filter === 'timeCommitment' ? (
-                      chalkboard[filter].value
+                    {this.state.filter === 'timeCommitment' ? (
+                      chalkboard[this.state.filter].value
                     ) : (
-                      chalkboard[filter]
+                      chalkboard[this.state.filter]
                     )}
-                    {filter === 'amount' && (
+                    {this.state.filter === 'amount' && (
                       ' merits'
                     )}
                   </p>
@@ -150,7 +155,7 @@ export default class AllChalkboards extends Component {
 
         <Subheader className="garnett-subheader"> Completed </Subheader>
         <List className="garnett-list">
-          {completedChalkboards.map((chalkboard, i) => (
+          {this.state.completedChalkboards.map((chalkboard, i) => (
             <LazyLoad
               height={88}
               offset={window.innerHeight}
@@ -185,12 +190,12 @@ export default class AllChalkboards extends Component {
                   onClick={() => this.props.handleOpen(chalkboard, 'completed')}
                 >
                   <p className="garnett-date">
-                    {filter === 'timeCommitment' ? (
-                      chalkboard[filter].value
+                    {this.state.filter === 'timeCommitment' ? (
+                      chalkboard[this.state.filter].value
                     ) : (
-                      chalkboard[filter]
+                      chalkboard[this.state.filter]
                     )}
-                    {filter === 'amount' && (
+                    {this.state.filter === 'amount' && (
                       ' merits'
                     )}
                   </p>

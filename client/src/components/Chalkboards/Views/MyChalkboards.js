@@ -12,10 +12,13 @@ export default class MyChalkboards extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      myHostingChalkboards: this.props.myHostingChalkboards,
+      myAttendingChalkboards: this.props.myAttendingChalkboards,
+      myCompletedChalkboards: this.props.myCompletedChalkboards,
       filter: 'date',
       filterName: 'Date',
-      reverse: false
+      reverse: false,
+      open: false
     };
   }
 
@@ -39,30 +42,6 @@ export default class MyChalkboards extends Component {
     let filter = filterName.replace(/ /g,'');
     filter = filter[0].toLowerCase() + filter.substr(1);
 
-    this.setState({
-      open: false,
-      filter: filter,
-      filterName: filterName,
-      reverse: false
-    });
-  }
-
-  reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
-  }
-
-  render() {
-    let toggleIcon = "icon-down-open-mini";
-    let filter = this.state.filter;
-
     let myHostingChalkboards = this.props.myHostingChalkboards.sort(function(a, b) {
       return a[filter] > b[filter];
     });
@@ -73,10 +52,39 @@ export default class MyChalkboards extends Component {
       return a[filter] > b[filter];
     });
 
+    this.setState({
+      myHostingChalkboards: myHostingChalkboards,
+      myAttendingChalkboards: myAttendingChalkboards,
+      myCompletedChalkboards: myCompletedChalkboards,
+      filter: filter,
+      filterName: filterName,
+      reverse: false,
+      open: false
+    });
+  }
+
+  reverse = () => {
+    let reverse = true;
+    let myHostingChalkboards = this.state.myHostingChalkboards.slice().reverse();
+    let myAttendingChalkboards = this.state.myAttendingChalkboards.slice().reverse();
+    let myCompletedChalkboards = this.state.myCompletedChalkboards.slice().reverse();
+
     if (this.state.reverse) {
-      myHostingChalkboards = myHostingChalkboards.slice().reverse();
-      myAttendingChalkboards = myAttendingChalkboards.slice().reverse();
-      myCompletedChalkboards = myCompletedChalkboards.slice().reverse();
+      reverse = false;
+    }
+
+    this.setState({
+      myHostingChalkboards: myHostingChalkboards,
+      myAttendingChalkboards: myAttendingChalkboards,
+      myCompletedChalkboards: myCompletedChalkboards,
+      reverse: reverse
+    });
+  }
+
+  render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    if (this.state.reverse) {
       toggleIcon = "icon-up-open-mini";
     }
 
@@ -100,7 +108,7 @@ export default class MyChalkboards extends Component {
             </Subheader>
 
             <List className="garnett-list">
-              {myHostingChalkboards.map((chalkboard, i) => (
+              {this.state.myHostingChalkboards.map((chalkboard, i) => (
                 <div key={i}>
                   <Divider className="garnett-divider large" inset={true} />
                   <ListItem
@@ -118,12 +126,12 @@ export default class MyChalkboards extends Component {
                     onClick={() => this.props.handleOpen(chalkboard, 'hosting')}
                   >
                     <p className="garnett-date">
-                      {filter === 'timeCommitment' ? (
-                        chalkboard[filter].value
+                      {this.state.filter === 'timeCommitment' ? (
+                        chalkboard[this.state.filter].value
                       ) : (
-                        chalkboard[filter]
+                        chalkboard[this.state.filter]
                       )}
-                      {filter === 'amount' && (
+                      {this.state.filter === 'amount' && (
                         ' merits'
                       )}
                     </p>
@@ -154,7 +162,7 @@ export default class MyChalkboards extends Component {
           )}
         </Subheader>
         <List className="garnett-list">
-          {myAttendingChalkboards.map((chalkboard, i) => (
+          {this.state.myAttendingChalkboards.map((chalkboard, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />
               <ListItem
@@ -172,12 +180,12 @@ export default class MyChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'attending')}
               >
                 <p className="garnett-date">
-                  {filter === 'timeCommitment' ? (
-                    chalkboard[filter].value
+                  {this.state.filter === 'timeCommitment' ? (
+                    chalkboard[this.state.filter].value
                   ) : (
-                    chalkboard[filter]
+                    chalkboard[this.state.filter]
                   )}
-                  {filter === 'amount' && (
+                  {this.state.filter === 'amount' && (
                     ' merits'
                   )}
                 </p>
@@ -191,7 +199,7 @@ export default class MyChalkboards extends Component {
 
         <Subheader className="garnett-subheader"> Completed </Subheader>
         <List className="garnett-list">
-          {myCompletedChalkboards.map((chalkboard, i) => (
+          {this.state.myCompletedChalkboards.map((chalkboard, i) => (
             <div key={i}>
               <Divider className="garnett-divider large" inset={true} />
               <ListItem
@@ -209,12 +217,12 @@ export default class MyChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'completed')}
               >
                 <p className="garnett-date">
-                  {filter === 'timeCommitment' ? (
-                    chalkboard[filter].value
+                  {this.state.filter === 'timeCommitment' ? (
+                    chalkboard[this.state.filter].value
                   ) : (
-                    chalkboard[filter]
+                    chalkboard[this.state.filter]
                   )}
-                  {filter === 'amount' && (
+                  {this.state.filter === 'amount' && (
                     ' merits'
                   )}
                 </p>
