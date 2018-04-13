@@ -899,7 +899,7 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
           notification: {
             title: 'Garnett',
             body: `You have received ${amount} ${merits} from ${pledge.label}`,
-            clickAction: 'https://garnett-app.herokuapp.com',
+            click_action: 'https://garnett-app.herokuapp.com',
             icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
           }
         },
@@ -958,7 +958,7 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
           notification: {
             title: 'Garnett',
             body: `You have given ${amount} ${merits} to ${req.body.pledgeName}`,
-            clickAction: 'https://garnett-app.herokuapp.com',
+            click_action: 'https://garnett-app.herokuapp.com',
             icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
           }
         },
@@ -1010,7 +1010,7 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
               notification: {
                 title: 'Garnett',
                 body: `New Chalkboard: ${req.body.chalkboardTitle}`,
-                clickAction: 'https://garnett-app.herokuapp.com',
+                click_action: 'https://garnett-app.herokuapp.com',
                 icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
               }
             },
@@ -1056,7 +1056,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
         notification: {
           title: 'Garnett',
           body: `${name} has joined your chalkboard, ${chalkboard.title}`,
-          clickAction: 'https://garnett-app.herokuapp.com',
+          click_action: 'https://garnett-app.herokuapp.com',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
         }
       },
@@ -1093,7 +1093,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
         notification: {
           title: 'Garnett',
           body: `${name} has left your chalkboard, ${chalkboard.title}`,
-          clickAction: 'https://garnett-app.herokuapp.com',
+          click_action: 'https://garnett-app.herokuapp.com',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
         }
       },
@@ -1129,7 +1129,7 @@ app.post('/api/sendComplaintNotification', function(req, res) {
         notification: {
           title: 'Garnett',
           body: `You have received a complaint from ${complaint.activeName}`,
-          clickAction: 'https://garnett-app.herokuapp.com',
+          click_action: 'https://garnett-app.herokuapp.com',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
         }
       },
