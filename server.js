@@ -1034,7 +1034,7 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
 
   usersRef.once('value', (snapshot) => {
     snapshot.forEach((user) => {
-      if (user.val().status === 'pledge' || user.val().status !== 'alumni') {
+      if (user.val().status !== 'alumni') {
         let pledgeRef = admin.database().ref('/users/' + user.key);
 
         pledgeRef.once('value', (snapshot) => {
