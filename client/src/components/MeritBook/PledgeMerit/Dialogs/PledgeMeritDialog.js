@@ -153,6 +153,18 @@ export default class PledgeMeritDialog extends Component {
   }
 
   render(){
+    let maxAmount = 35;
+    let amount = this.state.amount;
+
+    if (this.state.isChalkboard) {
+      maxAmount = 100;
+    }
+    else {
+      if (amount > 35) {
+        amount = 35;
+      }
+    }
+
     const actions = [
       <FlatButton
         label="Demerit"
@@ -211,15 +223,15 @@ export default class PledgeMeritDialog extends Component {
         />
         <div style={{width:'256px',margin:'20px auto 0'}}>
           <span>
-            Amount: {this.state.amount} merits
+            Amount: {amount} merits
           </span>
           <Slider
             sliderStyle={{marginBottom:0}}
             name="Amount"
             min={0}
-            max={35}
+            max={maxAmount}
             step={5}
-            value={this.state.amount}
+            value={amount}
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>
