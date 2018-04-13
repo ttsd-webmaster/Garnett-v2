@@ -612,6 +612,19 @@ app.post('/api/activesForMerit', function(req, res) {
   });
 });
 
+// Gets all the chalkboards for merit
+app.post('/api/chalkboardsForMerit', function(req, res) {
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    let chalkboards = Object.keys(snapshot.val()).map(function(key) {
+      return snapshot.val()[key];
+    });
+    
+    res.json(chalkboards);
+  });
+});
+
 // Creates a chalkboard
 app.post('/api/createchalkboard', function(req, res) {
   let chalkboardInfo = {

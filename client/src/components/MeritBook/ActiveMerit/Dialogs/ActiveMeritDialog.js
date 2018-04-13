@@ -28,6 +28,7 @@ export default class ActiveMeritDialog extends Component {
       description: '',
       isChalkboard: false,
       amount: 0,
+      chalkboards: null,
       pledgeValidation: true,
       descriptionValidation: true
     };
@@ -133,6 +134,28 @@ export default class ActiveMeritDialog extends Component {
     if (label === 'amount') {
       value = parseInt(newValue, 10)
     }
+    else if (label === 'isChalkboard') {
+      if (newValue === true) {
+        API.getChalkboardsForMerit()
+        .then((res) => {
+          let chalkboards = res.data;
+
+          this.setState({
+            chalkboards: chalkboards
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+      }
+    }
+    else if (label === 'description' && this.state.isChalkboard) {
+      value = newValue.label;
+
+      this.setState({
+        amount: newValue.amount
+      });
+    }
 
     this.setState({
       [label]: value,
@@ -146,7 +169,9 @@ export default class ActiveMeritDialog extends Component {
     this.setState({
       selectedPledges: [],
       description: '',
+      isChalkboard: false,
       amount: 0,
+      chalkboards: null,
       pledgeValidation: true,
       descriptionValidation: true
     });
@@ -154,12 +179,19 @@ export default class ActiveMeritDialog extends Component {
 
   render(){
     let maxAmount = 35;
+    let amount = this.state.amount;
 
-    if (this.props.state.status === 'alumni') {
-      maxAmount = 50;
-    }
-    else if (this.props.state.status === 'pipm') {
+    if (this.state.isChalkboard || this.props.state.status === 'pipm') {
       maxAmount = 100;
+    }
+    else {
+      if (this.props.state.status === 'alumni') {
+        maxAmount = 50;
+      }
+
+      if (amount > maxAmount) {
+        amount = maxAmount;
+      }
     }
 
     const actions = [
@@ -208,19 +240,43 @@ export default class ActiveMeritDialog extends Component {
             />
           ))}
         </SelectField>
-        <TextField
-          className="garnett-input"
-          type="text"
-          floatingLabelText="Description"
-          multiLine={true}
-          rowsMax={3}
-          value={this.state.description}
-          onChange={(e, newValue) => this.handleChange('description', newValue)}
-          errorText={!this.state.descriptionValidation && 'Enter a description.'}
-        />
+
+        {this.state.isChalkboard ? (
+          <SelectField
+            className="garnett-input"
+            value={this.state.description}
+            floatingLabelText="Chalkboard Title"
+            onChange={(e, key, newValue) => this.handleChange('description', newValue)}
+            errorText={!this.state.descriptionValidation && 'Please select a chalkboard.'}
+          >
+            {this.state.chalkboards && (
+              this.state.chalkboards.map((chalkboard, i) => (
+                <MenuItem
+                  key={i}
+                  value={chalkboard}
+                  primaryText={chalkboard.title}
+                  insetChildren
+                  checked={chalkboard.title === this.state.description}
+                />
+              ))
+            )}
+          </SelectField>
+        ) : (
+          <TextField
+            className="garnett-input"
+            type="text"
+            floatingLabelText="Description"
+            multiLine={true}
+            rowsMax={3}
+            value={this.state.description}
+            onChange={(e, newValue) => this.handleChange('description', newValue)}
+            errorText={!this.state.descriptionValidation && 'Enter a description.'}
+          />
+        )}
+
         <div style={{width:'256px',margin:'20px auto 0'}}>
           <span>
-            Amount: {this.state.amount} merits
+            Amount: {amount} merits
           </span>
           <Slider
             sliderStyle={{marginBottom:0}}
@@ -228,7 +284,7 @@ export default class ActiveMeritDialog extends Component {
             min={0}
             max={maxAmount}
             step={5}
-            value={this.state.amount}
+            value={amount}
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>

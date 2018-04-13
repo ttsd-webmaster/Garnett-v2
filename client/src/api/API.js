@@ -57,6 +57,9 @@ export default {
   getActivesForMerit: function(displayName) {
     return axios.post('/api/activesForMerit', {displayName});
   },
+  getChalkboardsForMerit: function() {
+    return axios.post('/api/chalkboardsForMerit');
+  },
   createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount) {
     let body = {displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount};
     return axios.post('/api/createchalkboard', body);
