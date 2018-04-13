@@ -526,20 +526,22 @@ app.post('/api/removeMeritAsPledge', function(req, res) {
       totalMerits: snapshot.val().totalMerits - req.body.merit.amount
     });
 
-    snapshot.ref.child('Merits').once('value', (merit) => {
-      if (equal(req.body.merit, merit.val())) {
-        merit.ref.remove(() => {
-          activeRef.once('value', (pledgeMerits) => {
-            if (req.body.merit.amount > 0 && !req.body.description.startsWith('Chalkboard:')) {
-              pledgeMerits.ref.update({
-                merits: pledgeMerits.val().merits + req.body.merit.amount
-              });
-            }
+    pledgeRef.child('Merits').once('value', (merits) => {
+      merits.forEach((merit) => {
+        if (equal(req.body.merit, merit.val())) {
+          merit.ref.remove(() => {
+            activeRef.once('value', (pledgeMerits) => {
+              if (req.body.merit.amount > 0 && !req.body.description.startsWith('Chalkboard:')) {
+                pledgeMerits.ref.update({
+                  merits: pledgeMerits.val().merits + req.body.merit.amount
+                });
+              }
 
-            res.sendStatus(200);
+              res.sendStatus(200);
+            });
           });
-        });
-      }
+        }
+      })
     });
   });
 });
