@@ -38,10 +38,6 @@
 .garnett-list-item.rushee > div > div {
   z-index: -1;
 }
-.garnett-list-item.long > div > div > div:last-child {
-  height: fit-content !important;
-  white-space: unset !important;
-}
 
 /* Delibs Dialog */
 .garnett-dialog-body.delibs {

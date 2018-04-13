@@ -336,7 +336,7 @@ export default class HandleChalkboardDialog extends Component {
                     />
                     <Divider className="garnett-divider" inset={true} />
                     <ListItem
-                      className="garnett-list-item"
+                      className="garnett-list-item long"
                       primaryText="Description"
                       secondaryText={this.state.chalkboard.description}
                       leftIcon={
@@ -459,7 +459,7 @@ export default class HandleChalkboardDialog extends Component {
                     />
                     <Divider className="garnett-divider" inset={true} />
                     <ListItem
-                      className="garnett-list-item"
+                      className="garnett-list-item long"
                       primaryText="Description"
                       secondaryText={this.state.chalkboard.description}
                       leftIcon={

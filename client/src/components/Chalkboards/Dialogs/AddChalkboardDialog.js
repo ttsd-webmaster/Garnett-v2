@@ -65,8 +65,8 @@ export default class AddChalkboardDialog extends Component {
       this.props.handleRequestOpen('Please update to Safari version 10 or above.');
     }
     else {
-      if (!title || title.length > 25 || !description || !date || !time || !location || !timeCommitment || amount === 0) {
-        if (!title || title.length > 25) {
+      if (!title || title.length > 40 || !description || !date || !time || !location || !timeCommitment || amount === 0) {
+        if (!title || title.length > 40) {
           titleValidation = false;
         }
         if (!description) {
@@ -156,7 +156,7 @@ export default class AddChalkboardDialog extends Component {
       date: null,
       time: defaultTime,
       location: 'TBD',
-      timeCommitment: {},
+      timeCommitment: null,
       amount: 0,
       titleValidation: true,
       descriptionValidation: true,

@@ -142,7 +142,7 @@ export default class EditChalkboardDialog extends Component {
       date: null,
       time: null,
       location: '',
-      timeCommitment: {},
+      timeCommitment: null,
       amount: 0,
       descriptionValidation: true,
       dateValidation: true,
