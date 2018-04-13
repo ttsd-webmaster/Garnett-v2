@@ -1205,7 +1205,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
             });
           });
         });
-      })
+      }
     });
   });
 });
@@ -1301,7 +1301,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
             });
           });
         });
-      })
+      }
     });
   });
 });
