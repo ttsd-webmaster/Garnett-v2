@@ -1159,7 +1159,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
     }
   });
 
-  chalkboardRef.once('value', (chalkboards) => {
+  chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       if (equal(chalkboard, chalkboard.val())) {
         chalkboard.ref.child('attendees').once('value', (attendees) => {
@@ -1215,6 +1215,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
   let chalkboard = req.body.chalkboard;
   let activeName = chalkboard.displayName;
   let name = req.body.name;
+  let chalkboardsRef = admin.database().ref('/chalkboards');
   let activeRef = admin.database().ref('/users/' + activeName);
 
   activeRef.once('value', (snapshot) => {
@@ -1254,7 +1255,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
     }
   });
 
-  chalkboardRef.once('value', (chalkboards) => {
+  chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       if (equal(chalkboard, chalkboard.val())) {
         chalkboard.ref.child('attendees').once('value', (attendees) => {
