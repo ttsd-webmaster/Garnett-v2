@@ -1119,6 +1119,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
   let chalkboard = req.body.chalkboard;
   let activeName = chalkboard.displayName;
   let name = req.body.name;
+  let chalkboardsRef = admin.database().ref('/chalkboards');
   let activeRef = admin.database().ref('/users/' + activeName);
 
   activeRef.once('value', (snapshot) => {
@@ -1140,16 +1141,72 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
       admin.messaging().send(message)
       .then(function(response) {
         console.log("Successfully sent message:", response);
-        res.sendStatus(200);
+        if (!res.headersSent) {
+          res.sendStatus(200);
+        }
       })
       .catch(function(error) {
         console.log("Error sending message:", error);
-        res.sendStatus(400);
+        if (!res.headersSent) {
+          res.sendStatus(400);
+        }
       });
     }
     else {
-      res.sendStatus(200);
+      if (!res.headersSent) {
+        res.sendStatus(200);
+      }
     }
+  });
+
+  chalkboardRef.once('value', (chalkboards) => {
+    chalkboards.forEach((chalkboard) => {
+      if (equal(chalkboard, chalkboard.val())) {
+        chalkboard.ref.child('attendees').once('value', (attendees) => {
+          attendees.forEach((attendee) => {
+            let attendeeName = attendee.val().name.replace(/ /g,'');
+            let attendeeRef = admin.database().ref('/users/' + attendeeName);
+
+            attendeeRef.once('value', (snapshot) => {
+              let registrationToken = snapshot.val().registrationToken;
+              let message = {
+                webpush: {
+                  notification: {
+                    title: 'Garnett',
+                    body: `${name} has joined the chalkboard, ${chalkboard.title}`,
+                    click_action: 'https://garnett-app.herokuapp.com',
+                    icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+                    vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+                  }
+                },
+                token: registrationToken
+              };
+
+              if (registrationToken) {
+                admin.messaging().send(message)
+                .then(function(response) {
+                  console.log("Successfully sent message:", response);
+                  if (!res.headersSent) {
+                    res.sendStatus(200);
+                  }
+                })
+                .catch(function(error) {
+                  console.log("Error sending message:", error);
+                  if (!res.headersSent) {
+                    res.sendStatus(400);
+                  }
+                });
+              }
+              else {
+                if (!res.headersSent) {
+                  res.sendStatus(200);
+                }
+              }
+            });
+          });
+        });
+      })
+    });
   });
 });
 
@@ -1179,16 +1236,72 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
       admin.messaging().send(message)
       .then(function(response) {
         console.log("Successfully sent message:", response);
-        res.sendStatus(200);
+        if (!res.headersSent) {
+          res.sendStatus(200);
+        }
       })
       .catch(function(error) {
         console.log("Error sending message:", error);
-        res.sendStatus(400);
+        if (!res.headersSent) {
+          res.sendStatus(400);
+        }
       });
     }
     else {
-      res.sendStatus(200);
+      if (!res.headersSent) {
+        res.sendStatus(200);
+      }
     }
+  });
+
+  chalkboardRef.once('value', (chalkboards) => {
+    chalkboards.forEach((chalkboard) => {
+      if (equal(chalkboard, chalkboard.val())) {
+        chalkboard.ref.child('attendees').once('value', (attendees) => {
+          attendees.forEach((attendee) => {
+            let attendeeName = attendee.val().name.replace(/ /g,'');
+            let attendeeRef = admin.database().ref('/users/' + attendeeName);
+
+            attendeeRef.once('value', (snapshot) => {
+              let registrationToken = snapshot.val().registrationToken;
+              let message = {
+                webpush: {
+                  notification: {
+                    title: 'Garnett',
+                    body: `${name} has left the chalkboard, ${chalkboard.title}`,
+                    click_action: 'https://garnett-app.herokuapp.com',
+                    icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+                    vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+                  }
+                },
+                token: registrationToken
+              };
+
+              if (registrationToken) {
+                admin.messaging().send(message)
+                .then(function(response) {
+                  console.log("Successfully sent message:", response);
+                  if (!res.headersSent) {
+                    res.sendStatus(200);
+                  }
+                })
+                .catch(function(error) {
+                  console.log("Error sending message:", error);
+                  if (!res.headersSent) {
+                    res.sendStatus(400);
+                  }
+                });
+              }
+              else {
+                if (!res.headersSent) {
+                  res.sendStatus(200);
+                }
+              }
+            });
+          });
+        });
+      })
+    });
   });
 });
 
