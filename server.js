@@ -531,7 +531,7 @@ app.post('/api/removeMeritAsPledge', function(req, res) {
         if (equal(req.body.merit, merit.val())) {
           merit.ref.remove(() => {
             activeRef.once('value', (pledgeMerits) => {
-              if (req.body.merit.amount > 0 && !req.body.description.startsWith('Chalkboard:')) {
+              if (!req.body.merit.description.startsWith('Chalkboard:')) {
                 activeRef.update({
                   merits: pledgeMerits.val().merits + req.body.merit.amount
                 });
