@@ -27,7 +27,8 @@ firebase.initializeApp({
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://garnett-42475.firebaseio.com"
+  databaseURL: "https://garnett-42475.firebaseio.com",
+  projectId: "garnett-42475"
 })
 
 // Redirect all HTTP traffic to HTTPS
@@ -899,11 +900,12 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
           body: `You have received ${amount} ${merits} from ${pledge.label}`,
           clickAction: 'https://garnett-app.herokuapp.com',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
-        }
+        },
+        token: registrationToken
       };
 
       if (registrationToken) {
-        admin.messaging().sendToDevice(registrationToken, payload)
+        admin.messaging().send(payload)
         .then(function(response) {
           console.log("Successfully sent message:", response);
 
@@ -955,11 +957,12 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
           body: `You have given ${amount} ${merits} to ${req.body.pledgeName}`,
           clickAction: 'https://garnett-app.herokuapp.com',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
-        }
+        },
+        token: registrationToken
       };
 
       if (registrationToken) {
-        admin.messaging().sendToDevice(registrationToken, payload)
+        admin.messaging().send(payload)
         .then(function(response) {
           console.log("Successfully sent message:", response);
 
@@ -1004,11 +1007,12 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
               body: `New Chalkboard: ${req.body.chalkboardTitle}`,
               clickAction: 'https://garnett-app.herokuapp.com',
               icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
-            }
+            },
+            token: registrationToken
           };
 
           if (registrationToken) {
-            admin.messaging().sendToDevice(registrationToken, payload)
+            admin.messaging().send(payload)
             .then(function(response) {
               console.log("Successfully sent message:", response);
               if (!res.headersSent) {
@@ -1047,11 +1051,12 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
         body: `${name} has joined your chalkboard, ${chalkboard.title}`,
         clickAction: 'https://garnett-app.herokuapp.com',
         icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
-      }
+      },
+      token: registrationToken
     };
 
     if (registrationToken) {
-      admin.messaging().sendToDevice(registrationToken, payload)
+      admin.messaging().send(payload)
       .then(function(response) {
         console.log("Successfully sent message:", response);
         res.sendStatus(200);
@@ -1081,11 +1086,12 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
         body: `${name} has left your chalkboard, ${chalkboard.title}`,
         clickAction: 'https://garnett-app.herokuapp.com',
         icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
-      }
+      },
+      token: registrationToken
     };
 
     if (registrationToken) {
-      admin.messaging().sendToDevice(registrationToken, payload)
+      admin.messaging().send(payload)
       .then(function(response) {
         console.log("Successfully sent message:", response);
         res.sendStatus(200);
@@ -1114,11 +1120,12 @@ app.post('/api/sendComplaintNotification', function(req, res) {
         body: `You have received a complaint from ${complaint.activeName}`,
         clickAction: 'https://garnett-app.herokuapp.com',
         icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
-      }
+      },
+      token: registrationToken
     };
 
     if (registrationToken) {
-      admin.messaging().sendToDevice(registrationToken, payload)
+      admin.messaging().send(payload)
       .then(function(response) {
         console.log("Successfully sent message:", response);
         res.sendStatus(200);
