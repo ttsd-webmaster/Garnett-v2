@@ -426,7 +426,7 @@ app.post('/api/merit', function(req, res) {
     let meritRef = pledgeRef.child('/Merits');
 
     userRef.once('value', (pledge) => {
-      if (req.body.status !== 'pipm' || !req.body.isChalkboard) {
+      if (req.body.status !== 'pipm' && !req.body.isChalkboard) {
         if (req.body.amount > 0 && 
             pledge.val().merits - req.body.amount < 0 && 
             !res.headersSent) {
@@ -477,7 +477,7 @@ app.post('/api/meritAsPledge', function(req, res) {
       let activePledgeRef = active.ref.child('/Pledges/' + fullName);
 
       activePledgeRef.once('value', (pledge) => {
-        if (active.val().status !== 'pipm' || !req.body.isChalkboard) {
+        if (active.val().status !== 'pipm' && !req.body.isChalkboard) {
           if (req.body.amount > 0 && 
               pledge.val().merits - req.body.amount < 0 && 
               !res.headersSent) {
