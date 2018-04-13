@@ -60,12 +60,16 @@ export default class AddChalkboardDialog extends Component {
     let locationValidation = true;
     let timeCommitmentValidation = true;
 
+    console.log('Outside if else')
+
     if (invalidSafariVersion()) {
+      console.log('Inside first if')
       this.handleClose();
       this.props.handleRequestOpen('Please update to Safari version 10 or above.');
     }
     else {
       if (!title || title.length > 25 || !description || !date || !time || !location || !timeCommitment || amount === 0) {
+        console.log('Second if')
         if (!title || title.length > 25) {
           titleValidation = false;
         }
@@ -95,6 +99,7 @@ export default class AddChalkboardDialog extends Component {
         });
       }
       else {
+        console.log('Else statement')
         let displayName = this.props.state.displayName;
         let activeName = this.props.state.name;
         let photoURL = this.props.state.photoURL;
