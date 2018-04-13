@@ -12,6 +12,17 @@ import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 import CountUp from 'react-countup';
 
+const LoadableRemoveMeritDialog = Loadable({
+  loader: () => import('./Dialogs/RemoveMeritDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>
+  }
+});
+
 const LoadablePledgeMeritDialog = Loadable({
   loader: () => import('./Dialogs/PledgeMeritDialog'),
   render(loaded, props) {
@@ -31,7 +42,9 @@ export default class PledgeMerit extends Component {
       merits: this.props.merits,
       totalMerits: 0,
       previousTotalMerits: 0,
+      merit: null,
       open: false,
+      openMerit: false,
       reverse: false
     }
   }
@@ -79,10 +92,11 @@ export default class PledgeMerit extends Component {
     }
   }
 
-  handleOpen = () => {
+  handleOpen = (merit) => {
     if (navigator.onLine) {
       this.setState({
-        open: true
+        open: true,
+        merit: merit
       });
 
       // Handles android back button
@@ -112,7 +126,45 @@ export default class PledgeMerit extends Component {
     }
 
     this.setState({
-      open: false
+      open: false,
+      merit: null
+    });
+  }
+
+  handleMeritOpen = () => {
+    if (navigator.onLine) {
+      this.setState({
+        openMerit: true
+      });
+
+      // Handles android back button
+      if (/android/i.test(navigator.userAgent)) {
+        let path;
+        if (process.env.NODE_ENV === 'development') {
+          path = 'http://localhost:3000';
+        }
+        else {
+          path = 'https://garnett-app.herokuapp.com';
+        }
+
+        window.history.pushState(null, null, path + window.location.pathname);
+        window.onpopstate = () => {
+          this.handleMeritClose();
+        }
+      }
+    }
+    else {
+      this.handleRequestOpen('You are offline.');
+    }
+  }
+
+  handleMeritClose = () => {
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
+    this.setState({
+      openMerit: false
     });
   }
 
@@ -184,6 +236,7 @@ export default class PledgeMerit extends Component {
                       <p> {merit.description} </p>
                     }
                     secondaryTextLines={2}
+                    onClick={() => this.handleOpen(merit)}
                   >
                     <div className="merit-amount-container">
                       <p className="merit-date"> {merit.date} </p>
@@ -196,7 +249,7 @@ export default class PledgeMerit extends Component {
             ))}
           </List>
 
-          <div className="fixed-button" onClick={this.handleOpen}>
+          <div className="fixed-button" onClick={this.handleMeritOpen}>
             <i className="icon-pencil"></i>
           </div>
 
@@ -204,11 +257,19 @@ export default class PledgeMerit extends Component {
             Total Merits: <CountUp id="total-merits" start={this.state.previousTotalMerits} end={this.state.totalMerits} useEasing />
           </div>
 
-          <LoadablePledgeMeritDialog
+          <LoadableRemoveMeritDialog
             open={this.state.open}
             state={this.props.state}
-            actives={this.props.activesForMerit}
+            merit={this.state.merit}
             handleClose={this.handleClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+
+          <LoadablePledgeMeritDialog
+            open={this.state.openMerit}
+            state={this.props.state}
+            actives={this.props.activesForMerit}
+            handleMeritClose={this.handleMeritClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
         </div>

@@ -56,10 +56,10 @@ export default class Chalkboards extends Component {
       loadFirebase('database')
       .then(() => {
         let firebase = window.firebase;
+        let chalkboards = [];
         let chalkboardsRef = firebase.database().ref('/chalkboards');
 
         chalkboardsRef.on('value', (snap) => {
-          let chalkboards = [];
           let myHostingChalkboards = [];
           let myAttendingChalkboards = [];
           let myCompletedChalkboards = [];

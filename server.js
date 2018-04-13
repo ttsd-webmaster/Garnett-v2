@@ -514,6 +514,36 @@ app.post('/api/meritAsPledge', function(req, res) {
   })
 });
 
+// Removes merit as pledge
+app.post('/api/removeMeritAsPledge', function(req, res) {
+  let pledgeName = req.body.displayName;
+  let activeName = req.body.merit.name.replace(/ /g,'');
+  let pledgeRef = admin.database().ref('/users/' + pledgeName);
+  let activeRef = admin.database().ref('/users/' + activeName +'/Pledges/' + pledgeName);
+
+  pledgeRef.once('value', (snapshot) => {
+    pledgeRef.update({
+      totalMerits: snapshot.val().totalMerits - req.body.merit.amount
+    });
+
+    snapshot.ref.child('Merits').once('value', (merit) => {
+      if (equal(req.body.merit, merit.val())) {
+        merit.ref.remove(() => {
+          activeRef.once('value', (pledgeMerits) => {
+            if (req.body.merit.amount > 0 && !req.body.description.startsWith('Chalkboard:');) {
+              pledgeMerits.ref.update({
+                merits: pledgeMerits.val().merits + req.body.merit.amount
+              });
+            }
+
+            res.sendStatus(200);
+          });
+        });
+      }
+    });
+  });
+});
+
 // Get merits remaining for pledge
 app.post('/api/meritsRemaining', function(req, res) {
   let displayName = req.body.displayName;
@@ -549,7 +579,7 @@ app.post('/api/pledgesForMerit', function(req, res) {
 // Gets all the actives for meriting as pledge
 app.post('/api/activesForMerit', function(req, res) {
   let counter = 0;
-  let activeCount = 44;
+  let activeCount = 42;
   let displayName = req.body.displayName;
   let usersRef = admin.database().ref('/users');
 
@@ -557,7 +587,9 @@ app.post('/api/activesForMerit', function(req, res) {
     let activeArray = [];
 
     snapshot.forEach((active) => {
-      if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+      if (active.val().status !== 'alumni' &&
+          active.val().status !== 'pledge' &&
+          active.val().status !== 'pipm') {
         let activeRef = admin.database().ref('/users/' + active.key + '/Pledges/' + displayName);
 
         activeRef.once('value', (user) => {
@@ -900,7 +932,8 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
             title: 'Garnett',
             body: `You have received ${amount} ${merits} from ${pledge.label}`,
             click_action: 'https://garnett-app.herokuapp.com',
-            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+            vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
           }
         },
         token: registrationToken
@@ -959,7 +992,8 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
             title: 'Garnett',
             body: `You have given ${amount} ${merits} to ${req.body.pledgeName}`,
             click_action: 'https://garnett-app.herokuapp.com',
-            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+            vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
           }
         },
         token: registrationToken
@@ -1011,7 +1045,8 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
                 title: 'Garnett',
                 body: `New Chalkboard: ${req.body.chalkboardTitle}`,
                 click_action: 'https://garnett-app.herokuapp.com',
-                icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+                icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+                vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
               }
             },
             token: registrationToken
@@ -1057,7 +1092,8 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
           title: 'Garnett',
           body: `${name} has joined your chalkboard, ${chalkboard.title}`,
           click_action: 'https://garnett-app.herokuapp.com',
-          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
         }
       },
       token: registrationToken
@@ -1094,7 +1130,8 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
           title: 'Garnett',
           body: `${name} has left your chalkboard, ${chalkboard.title}`,
           click_action: 'https://garnett-app.herokuapp.com',
-          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
         }
       },
       token: registrationToken
@@ -1130,7 +1167,8 @@ app.post('/api/sendComplaintNotification', function(req, res) {
           title: 'Garnett',
           body: `You have received a complaint from ${complaint.activeName}`,
           click_action: 'https://garnett-app.herokuapp.com',
-          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
         }
       },
       token: registrationToken

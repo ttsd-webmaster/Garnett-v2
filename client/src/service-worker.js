@@ -125,7 +125,8 @@ messaging.setBackgroundMessageHandler(function(payload) {
   const options = {
     body: 'Background Message body.',
     icon: '/images/garnett.png',
-    click_action: 'https://garnett-app.herokuapp.com'
+    click_action: 'https://garnett-app.herokuapp.com',
+    vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
   };
 
   return self.registration.showNotification(title, options);

@@ -45,6 +45,9 @@ export default {
     let body = {displayName, actives, description, amount, date, isChalkboard};
     return axios.post('/api/meritAsPledge', body);
   },
+  removeMerit: function(displayName, merit) {
+    return axios.post('/api/removeMeritAsPledge', {displayName, merit});
+  },
   getMeritsRemaining: function(displayName, pledgeName) {
     return axios.post('/api/meritsRemaining', {displayName, pledgeName});
   },

@@ -1,25 +1,10 @@
 import '../Chalkboards.css';
 import API from '../../../api/API.js';
-import {isMobileDevice} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-
-let image = 'garnett-image';
-let imageSize = 40;
-let listItem = 'garnett-list-item';
-let divider = 'garnett-divider';
-let attendeeName = 'attendee-name';
-
-if (isMobileDevice()) {
-  image += ' large';
-  imageSize = 70;
-  listItem += ' large';
-  divider += ' large';
-  attendeeName += ' large';
-}
 
 export default class AttendeeList extends Component {
   constructor(props) {
@@ -52,15 +37,15 @@ export default class AttendeeList extends Component {
       <List className="garnett-list dialog">
         {this.state.attendees.map((attendee, i) => (
           <div key={i}>
-            <Divider className={divider} inset={true} />
+            <Divider className="garnett-divider large" inset={true} />
             <ListItem
-              className={listItem}
-              leftAvatar={<Avatar className={image} size={imageSize} src={attendee.photoURL} />}
+              className="garnett-list-item large"
+              leftAvatar={<Avatar className="garnett-image large" size={70} src={attendee.photoURL} />}
               primaryText={
-                <p className={attendeeName}> {attendee.name} </p>
+                <p className="attendee-name"> {attendee.name} </p>
               }
             />
-            <Divider className={image} inset={true} />
+            <Divider className="garnett-divider large" inset={true} />
           </div>
         ))}
       </List>

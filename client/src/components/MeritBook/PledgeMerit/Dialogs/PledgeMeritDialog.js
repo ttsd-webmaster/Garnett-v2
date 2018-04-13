@@ -141,7 +141,7 @@ export default class PledgeMeritDialog extends Component {
   }
 
   handleClose = () => {
-    this.props.handleClose();
+    this.props.handleMeritClose();
 
     this.setState({
       selectedActives: [],
