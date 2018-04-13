@@ -113,33 +113,35 @@ export default class AllChalkboards extends Component {
                 </div>
               }
             >
-              <Divider className="garnett-divider large" inset={true} />
-              <ListItem
-                className="garnett-list-item large"
-                leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
-                primaryText={
-                  <p className="garnett-name"> {chalkboard.title} </p>
-                }
-                secondaryText={
-                  <p className="garnett-description">
-                    {chalkboard.description}
+              <div>
+                <Divider className="garnett-divider large" inset={true} />
+                <ListItem
+                  className="garnett-list-item large"
+                  leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
+                  primaryText={
+                    <p className="garnett-name"> {chalkboard.title} </p>
+                  }
+                  secondaryText={
+                    <p className="garnett-description">
+                      {chalkboard.description}
+                    </p>
+                  }
+                  secondaryTextLines={2}
+                  onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
+                >
+                  <p className="garnett-date"> 
+                    {filter === 'timeCommitment' ? (
+                      chalkboard[filter].value
+                    ) : (
+                      chalkboard[filter]
+                    )}
+                    {filter === 'amount' && (
+                      ' merits'
+                    )}
                   </p>
-                }
-                secondaryTextLines={2}
-                onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
-              >
-                <p className="garnett-date"> 
-                  {filter === 'timeCommitment' ? (
-                    chalkboard[filter].value
-                  ) : (
-                    chalkboard[filter]
-                  )}
-                  {filter === 'amount' && (
-                    ' merits'
-                  )}
-                </p>
-              </ListItem>
-              <Divider className="garnett-divider large" inset={true} />
+                </ListItem>
+                <Divider className="garnett-divider large" inset={true} />
+              </div>
             </LazyLoad>
           ))}
         </List>
@@ -166,33 +168,35 @@ export default class AllChalkboards extends Component {
                 </div>
               }
             >
-              <Divider className="garnett-divider large" inset={true} />
-              <ListItem
-                className="garnett-list-item large"
-                leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
-                primaryText={
-                  <p className="garnett-name"> {chalkboard.title} </p>
-                }
-                secondaryText={
-                  <p className="garnett-description">
-                    {chalkboard.description}
+              <div>
+                <Divider className="garnett-divider large" inset={true} />
+                <ListItem
+                  className="garnett-list-item large"
+                  leftAvatar={<Avatar className="garnett-image large" size={70} src={chalkboard.photoURL} />}
+                  primaryText={
+                    <p className="garnett-name"> {chalkboard.title} </p>
+                  }
+                  secondaryText={
+                    <p className="garnett-description">
+                      {chalkboard.description}
+                    </p>
+                  }
+                  secondaryTextLines={2}
+                  onClick={() => this.props.handleOpen(chalkboard, 'completed')}
+                >
+                  <p className="garnett-date">
+                    {filter === 'timeCommitment' ? (
+                      chalkboard[filter].value
+                    ) : (
+                      chalkboard[filter]
+                    )}
+                    {filter === 'amount' && (
+                      ' merits'
+                    )}
                   </p>
-                }
-                secondaryTextLines={2}
-                onClick={() => this.props.handleOpen(chalkboard, 'completed')}
-              >
-                <p className="garnett-date">
-                  {filter === 'timeCommitment' ? (
-                    chalkboard[filter].value
-                  ) : (
-                    chalkboard[filter]
-                  )}
-                  {filter === 'amount' && (
-                    ' merits'
-                  )}
-                </p>
-              </ListItem>
-              <Divider className="garnett-divider large" inset={true} />
+                </ListItem>
+                <Divider className="garnett-divider large" inset={true} />
+              </div>
             </LazyLoad>
           ))}
         </List>

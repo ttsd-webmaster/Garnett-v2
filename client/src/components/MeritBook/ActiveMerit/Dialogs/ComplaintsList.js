@@ -1,22 +1,18 @@
 import '../../MeritBook.css';
 import API from '../../../../api/API.js';
-import {isMobileDevice} from '../../../../helpers/functions.js';
 
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-
-let listItem = 'garnett-list-item';
-
-if (!isMobileDevice()) {
-  listItem += ' small';
-}
+import IconButton from 'material-ui/IconButton';
 
 export default class ComplaintsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      complaints: []
+      complaints: [],
+      reverse: false
     };
   }
 
@@ -35,24 +31,58 @@ export default class ComplaintsList extends Component {
     }
   }
 
+  reverse = () => {
+    let reverse = true;
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      reverse: reverse
+    });
+  }
+
   render() {
+    let toggleIcon = "icon-down-open-mini";
+
+    let complaints = this.state.complaints;
+
+    if (this.state.reverse) {
+      complaints = complaints.slice().reverse();
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
-      <List className="garnett-list dialog">
-        {this.state.complaints.map((complaint, i) => (
-          <div key={i}>
-            <Divider className="garnett-divider" />
-            <ListItem
-              className={listItem}
-              primaryText={
-                <p className="garnett-description"> {complaint.description} </p>
-              }
-            >
-              <p className="garnett-date"> {complaint.date} </p>
-            </ListItem>
-            <Divider className="garnett-divider" />
-          </div>
-        ))}
-      </List>
+      <div>
+        <Subheader className="garnett-subheader">
+          Recent
+          <IconButton
+            style={{float:'right',cursor:'pointer'}}
+            iconClassName={toggleIcon}
+            className="reverse-toggle"
+            onClick={this.reverse}
+          >
+          </IconButton>
+        </Subheader>
+
+        <List className="garnett-list dialog pledge">
+          {complaints.map((complaint, i) => (
+            <div key={i}>
+              <Divider className="garnett-divider" />
+              <ListItem
+                className="garnett-list-item"
+                primaryText={
+                  <p className="garnett-description"> {complaint.description} </p>
+                }
+              >
+                <p className="garnett-date"> {complaint.date} </p>
+              </ListItem>
+              <Divider className="garnett-divider" />
+            </div>
+          ))}
+        </List>
+      </div>
     )
   }
 }

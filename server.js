@@ -1116,6 +1116,7 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
 
 // Send joined chalkboard notification to active
 app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
+  let chalkboard = req.body.chalkboard;
   let activeName = chalkboard.displayName;
   let name = req.body.name;
   let activeRef = admin.database().ref('/users/' + activeName);
@@ -1154,6 +1155,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
 
 // Send left chalkboard notification to active
 app.post('/api/sendLeftChalkboardNotification', function(req, res) {
+  let chalkboard = req.body.chalkboard;
   let activeName = chalkboard.displayName;
   let name = req.body.name;
   let activeRef = admin.database().ref('/users/' + activeName);
@@ -1192,8 +1194,8 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
 
 // Send complaint notification to pledge
 app.post('/api/sendComplaintNotification', function(req, res) {
-  let pledgeName = req.body.complaint.pledgeDisplayName;
-  let pledgeRef = admin.database().ref('/users/' + pledgeName);
+  let complaint = req.body.complaint;
+  let pledgeRef = admin.database().ref('/users/' + complaint.pledgeDisplayName);
 
   pledgeRef.once('value', (snapshot) => {
     let registrationToken = snapshot.val().registrationToken;

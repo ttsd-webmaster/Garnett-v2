@@ -73,3 +73,6 @@
   font-size: 14px;
   margin: 20px auto 0;
 }
+.garnett-list.dialog.pledge {
+  margin-top: 0;
+}

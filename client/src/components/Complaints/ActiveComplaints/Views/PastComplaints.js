@@ -48,6 +48,7 @@ export default class PastComplaints extends Component {
           >
           </IconButton>
         </Subheader>
+        
         <List className="garnett-list">
           {complaints.map((complaint, i) => (
             <LazyLoad
