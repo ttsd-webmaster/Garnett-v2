@@ -519,7 +519,7 @@ app.post('/api/removeMeritAsPledge', function(req, res) {
   let pledgeName = req.body.displayName;
   let activeName = req.body.merit.name.replace(/ /g,'');
   let pledgeRef = admin.database().ref('/users/' + pledgeName);
-  let activeRef = admin.database().ref('/users/' + activeName +'/Pledges/' + pledgeName);
+  let activeRef = admin.database().ref('/users/' + activeName + '/Pledges/' + pledgeName);
 
   pledgeRef.once('value', (snapshot) => {
     pledgeRef.update({

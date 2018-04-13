@@ -89,30 +89,34 @@ export default class Chalkboards extends Component {
                   myCompletedChalkboards.push(chalkboard);
                 }
               }
-              // Checks if the user is attending the chalkboard
-              else if (chalkboard.attendees) {
+              else {
+                let isAttendee = false;
                 let attendees = Object.keys(chalkboard.attendees).map(function(key) {
                   return chalkboard.attendees[key];
                 });
-
                 attendees.forEach((attendee) => {
                   if (this.props.state.name === attendee.name) {
-                    if (chalkboard.date >= today) {
-                      myAttendingChalkboards.push(chalkboard);
-                    }
-                    else {
-                      myCompletedChalkboards.push(chalkboard);
-                    }
+                    isAttendee = true;
                   }
                 });
-              }
-              // All chalkboards the user did not create or is not attending
-              else {
-                if (chalkboard.date >= today) {
-                  upcomingChalkboards.push(chalkboard);
+
+                // Checks if the user is attending the chalkboard
+                if (isAttendee) {
+                  if (chalkboard.date >= today) {
+                    myAttendingChalkboards.push(chalkboard);
+                  }
+                  else {
+                    myCompletedChalkboards.push(chalkboard);
+                  }
                 }
+                // All chalkboards the user did not create or is not attending
                 else {
-                  completedChalkboards.push(chalkboard);
+                  if (chalkboard.date >= today) {
+                    upcomingChalkboards.push(chalkboard);
+                  }
+                  else {
+                    completedChalkboards.push(chalkboard);
+                  }
                 }
               }
             });
