@@ -232,9 +232,24 @@ export default class MyChalkboards extends Component {
           onRequestClose={this.closePopover}
         >
           <Menu>
-            <MenuItem primaryText="Date" onClick={() => this.setFilter('Date')} />
-            <MenuItem primaryText="Amount" onClick={() => this.setFilter('Amount')} />
-            <MenuItem primaryText="Time Commitment" onClick={() => this.setFilter('Time Commitment')} />
+            <MenuItem
+              primaryText="Date"
+              insetChildren
+              checked={this.state.filterName === 'Date'}
+              onClick={() => this.setFilter('Date')}
+            />
+            <MenuItem
+              primaryText="Amount"
+              insetChildren
+              checked={this.state.filterName === 'Amount'}
+              onClick={() => this.setFilter('Amount')}
+            />
+            <MenuItem
+              primaryText="Time Commitment"
+              insetChildren
+              checked={this.state.filterName === 'Time Commitment'}
+              onClick={() => this.setFilter('Time Commitment')}
+            />
           </Menu>
         </Popover>
       </div>

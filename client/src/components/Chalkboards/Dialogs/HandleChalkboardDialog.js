@@ -318,7 +318,7 @@ export default class HandleChalkboardDialog extends Component {
                   <List style={{padding:'24px 0'}}>
                     <Divider />
                     <ListItem
-                      className="garnett-list-item"
+                      className="garnett-list-item long"
                       primaryText="Title"
                       secondaryText={this.state.chalkboard.title}
                       leftIcon={
@@ -441,7 +441,7 @@ export default class HandleChalkboardDialog extends Component {
                   <List style={{padding:'24px 0'}}>
                     <Divider />
                     <ListItem
-                      className="garnett-list-item"
+                      className="garnett-list-item long"
                       primaryText="Title"
                       secondaryText={this.state.chalkboard.title}
                       leftIcon={

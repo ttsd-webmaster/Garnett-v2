@@ -324,11 +324,36 @@ export default class ActiveMerit extends Component {
             onRequestClose={this.closePopover}
           >
             <Menu>
-              <MenuItem primaryText="Last Name" onClick={() => this.setFilter('Last Name')} />
-              <MenuItem primaryText="First Name" onClick={() => this.setFilter('First Name')} />
-              <MenuItem primaryText="Year" onClick={() => this.setFilter('Year')} />
-              <MenuItem primaryText="Major" onClick={() => this.setFilter('Major')} />
-              <MenuItem primaryText="Total Merits" onClick={() => this.setFilter('Total Merits')} />
+              <MenuItem
+                primaryText="Last Name"
+                insetChildren
+                checked={this.state.filterName === 'Last Name'}
+                onClick={() => this.setFilter('Last Name')}
+              />
+              <MenuItem
+                primaryText="First Name"
+                insetChildren
+                checked={this.state.filterName === 'First Name'}
+                onClick={() => this.setFilter('First Name')}
+              />
+              <MenuItem
+                primaryText="Year"
+                insetChildren
+                checked={this.state.filterName === 'Year'}
+                onClick={() => this.setFilter('Year')}
+              />
+              <MenuItem
+                primaryText="Major"
+                insetChildren
+                checked={this.state.filterName === 'Major'}
+                onClick={() => this.setFilter('Major')}
+              />
+              <MenuItem
+                primaryText="Total Merits"
+                insetChildren
+                checked={this.state.filterName === 'Total Merits'}
+                onClick={() => this.setFilter('Total Merits')}
+              />
             </Menu>
           </Popover>
           

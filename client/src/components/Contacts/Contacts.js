@@ -207,13 +207,48 @@ export default class Contacts extends Component {
             onRequestClose={this.closePopover}
           >
             <Menu>
-              <MenuItem primaryText="Class" onClick={() => this.setFilter('Class')} />
-              <MenuItem primaryText="Major" onClick={() => this.setFilter('Major')} />
-              <MenuItem primaryText="Year" onClick={() => this.setFilter('Year')} />
-              <MenuItem primaryText="Active" onClick={() => this.setFilter('Active')} />
-              <MenuItem primaryText="Alumni" onClick={() => this.setFilter('Alumni')} />
-              <MenuItem primaryText="First Name" onClick={() => this.setFilter('First Name')} />
-              <MenuItem primaryText="Last Name" onClick={() => this.setFilter('Last Name')} />
+              <MenuItem
+                primaryText="Class"
+                insetChildren
+                checked={this.state.filterName === 'Class'}
+                onClick={() => this.setFilter('Class')}
+              />
+              <MenuItem
+                primaryText="Major"
+                insetChildren
+                checked={this.state.filterName === 'Major'}
+                onClick={() => this.setFilter('Major')}
+              />
+              <MenuItem
+                primaryText="Year"
+                insetChildren
+                checked={this.state.filterName === 'Year'}
+                onClick={() => this.setFilter('Year')}
+              />
+              <MenuItem
+                primaryText="Active"
+                insetChildren
+                checked={this.state.filterName === 'Active'}
+                onClick={() => this.setFilter('Active')}
+              />
+              <MenuItem
+                primaryText="Alumni"
+                insetChildren
+                checked={this.state.filterName === 'Alumni'}
+                onClick={() => this.setFilter('Alumni')}
+              />
+              <MenuItem
+                primaryText="First Name"
+                insetChildren
+                checked={this.state.filterName === 'First Name'}
+                onClick={() => this.setFilter('First Name')}
+              />
+              <MenuItem
+                primaryText="Last Name"
+                insetChildren
+                checked={this.state.filterName === 'Last Name'}
+                onClick={() => this.setFilter('Last Name')}
+              />
             </Menu>
           </Popover>
 
