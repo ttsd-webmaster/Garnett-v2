@@ -161,7 +161,7 @@ app.post('/api/signup', function(req, res) {
         // Create user with email and password
         firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
         .then((user) => {
-          if (user) {
+          if (user && !user.emailVerified) {
             user.updateProfile({
               displayName: fullName
             })
@@ -991,7 +991,7 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
 
   usersRef.once('value', (snapshot) => {
     snapshot.forEach((user) => {
-      if (user.val().status === 'pledge') {
+      if (user.val().status === 'pledge' || user.val().status !== 'alumni') {
         let pledgeRef = admin.database().ref('/users/' + user.key);
 
         pledgeRef.once('value', (snapshot) => {
@@ -1011,19 +1011,19 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
             admin.messaging().sendToDevice(registrationToken, payload)
             .then(function(response) {
               console.log("Successfully sent message:", response);
-              if (!res.headersSent && counter === 14) {
+              if (!res.headersSent) {
                 res.sendStatus(200);
               }
             })
             .catch(function(error) {
               console.log("Error sending message:", error);
-              if (!res.headersSent && counter === 14) {
+              if (!res.headersSent) {
                 res.sendStatus(400);
               }
             });
           }
           else {
-            if (!res.headersSent && counter === 14) {
+            if (!res.headersSent) {
               res.sendStatus(200);
             }
           }
