@@ -530,13 +530,15 @@ app.post('/api/removeMeritAsPledge', function(req, res) {
       merits.forEach((merit) => {
         if (equal(req.body.merit, merit.val())) {
           merit.ref.remove(() => {
-            if (req.body.merit.amount > 0 && !req.body.description.startsWith('Chalkboard:')) {
-              activeRef.update({
-                merits: pledgeMerits.val().merits + req.body.merit.amount
-              });
-            }
+            activeRef.once('value', (pledgeMerits) => {
+              if (req.body.merit.amount > 0 && !req.body.description.startsWith('Chalkboard:')) {
+                activeRef.update({
+                  merits: pledgeMerits.val().merits + req.body.merit.amount
+                });
+              }
 
-            res.sendStatus(200);
+              res.sendStatus(200);
+            });
           });
         }
       })
