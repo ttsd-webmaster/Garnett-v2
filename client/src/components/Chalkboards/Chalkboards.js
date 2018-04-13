@@ -91,14 +91,17 @@ export default class Chalkboards extends Component {
               }
               else {
                 let isAttendee = false;
-                let attendees = Object.keys(chalkboard.attendees).map(function(key) {
-                  return chalkboard.attendees[key];
-                });
-                attendees.forEach((attendee) => {
-                  if (this.props.state.name === attendee.name) {
-                    isAttendee = true;
-                  }
-                });
+                
+                if (chalkboard.attendees) {
+                  let attendees = Object.keys(chalkboard.attendees).map(function(key) {
+                    return chalkboard.attendees[key];
+                  });
+                  attendees.forEach((attendee) => {
+                    if (this.props.state.name === attendee.name) {
+                      isAttendee = true;
+                    }
+                  });
+                }
 
                 // Checks if the user is attending the chalkboard
                 if (isAttendee) {

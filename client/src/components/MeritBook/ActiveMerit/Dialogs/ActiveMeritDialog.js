@@ -57,6 +57,10 @@ export default class ActiveMeritDialog extends Component {
     let pledgeValidation = true;
     let descriptionValidation = true;
 
+    if (typeof description === 'object') {
+      description = description.title;
+    }
+
     if (pledges.length === 0 || !description || description.length > 45 || amount === 0) {
       if (pledges.length === 0) {
         pledgeValidation = false;
@@ -136,21 +140,29 @@ export default class ActiveMeritDialog extends Component {
     }
     else if (label === 'isChalkboard') {
       if (newValue === true) {
-        API.getChalkboardsForMerit()
+        let fullName = this.props.state.name;
+
+        API.getChalkboardsForMerit(fullName)
         .then((res) => {
           let chalkboards = res.data;
 
           this.setState({
-            chalkboards: chalkboards
+            chalkboards: chalkboards,
+            description: ''
           });
         })
         .catch((err) => {
           console.log(err);
         })
       }
+      else {
+        this.setState({
+          description: ''
+        });
+      }
     }
     else if (label === 'description' && this.state.isChalkboard) {
-      value = newValue.label;
+      value = newValue;
 
       this.setState({
         amount: newValue.amount

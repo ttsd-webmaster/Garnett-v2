@@ -614,14 +614,35 @@ app.post('/api/activesForMerit', function(req, res) {
 
 // Gets all the chalkboards for merit
 app.post('/api/chalkboardsForMerit', function(req, res) {
+  let fullName = req.body.fullName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (snapshot) => {
+    let myChalkboards = [];
     let chalkboards = Object.keys(snapshot.val()).map(function(key) {
       return snapshot.val()[key];
     });
+
+    chalkboards.forEach((chalkboard) => {
+      if (chalkboard.activeName === fullName) {
+        myChalkboards.push(chalkboard);
+      }
+      else {
+        if (chalkboard.attendees) {
+          let attendees = Object.keys(chalkboard.attendees).map(function(key) {
+            return chalkboard.attendees[key];
+          });
+
+          attendees.forEach((attendee) => {
+            if (attendee.name === fullName) {
+              myChalkboards.push(chalkboard);
+            }
+          });
+        }
+      }
+    });
     
-    res.json(chalkboards);
+    res.json(myChalkboards);
   });
 });
 
