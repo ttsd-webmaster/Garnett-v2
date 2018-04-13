@@ -12,7 +12,6 @@ import {
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import urlExists from 'url-exists';
 
 const LoadableLogin = Loadable({
   loader: () => import('../containers/Login/Login'),
@@ -83,7 +82,7 @@ class App extends Component {
           firebase.auth().onAuthStateChanged((user) => {
             if (user) {
               API.getAuthStatus(user)
-              .then(res => {
+              .then((res) => {
                 this.loginCallBack(res.data);
               });
             }
@@ -150,6 +149,7 @@ class App extends Component {
               else {
                 // Show permission request.
                 console.log('No Instance ID token available. Request permission to generate one.');
+                this.checkPhoto(user);
               }
             })
             .catch((err) => {
@@ -167,51 +167,43 @@ class App extends Component {
   }
 
   checkPhoto = (user) => {
-    let displayName = user.firstName + user.lastName;
     const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
 
     if (user.photoURL === defaultPhoto && user.status !== 'alumni') {
       loadFirebase('storage')
       .then(() => {
         let firebase = window.firebase;
-        let storage = firebase.storage().ref(`${user.key}.jpg`);
+        let displayName = user.firstName + user.lastName;
+        let storage = firebase.storage().ref(`${displayName}.jpg`);
 
         storage.getDownloadURL()
         .then((url) => {
-          urlExists(url, function(err, exists) {
-            if (exists) {
-              API.setPhoto(displayName, url)
-              .then((res) => {
-                console.log(res.data)
+          API.setPhoto(displayName, url)
+          .then((res) => {
+            console.log(res.data)
 
-                this.setData(res.data);
-              })
-              .catch(err => console.log(err));
-            }
-            else {
-              let storage = firebase.storage.ref(`${user.key}.JPG`);
-
-              storage.getDownloadURL()
-              .then((url) => {
-                urlExists(url, function(err, exists) {
-                  if (exists) {
-                    API.setPhoto(displayName, url)
-                    .then((res) => {
-                      console.log(res.data)
-
-                      this.setData(res.data);
-                    })
-                    .catch(err => console.log(err));
-                  }
-                })
-              });
-            }
-          });
+            this.setData(res.data);
+          })
+          .catch(err => console.log(err));
         })
         .catch((error) => {
-          console.log(error);
+          let storage = firebase.storage.ref(`${displayName}.JPG`);
 
-          this.setData(user);
+          storage.getDownloadURL()
+          .then((url) => {
+            API.setPhoto(displayName, url)
+            .then((res) => {
+              console.log(res.data)
+
+              this.setData(res.data);
+            })
+            .catch(err => console.log(err));
+          })
+          .catch((error) => {
+            console.log(error);
+
+            this.setData(user);
+          });
         });
       });
     }

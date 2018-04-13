@@ -1,7 +1,7 @@
 const commitmentOptions = [
   {
     value: 'Short',
-    label: 'Short ( < 1 hours)'
+    label: 'Short ( < 1 hour)'
   },
   {
     value: 'Medium',

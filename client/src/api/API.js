@@ -99,7 +99,7 @@ export default {
     return axios.post('/api/sendActiveMeritNotification', {activeName, pledges, amount});
   },
   sendPledgeMeritNotification: function(pledgeName, actives, amount) {
-    return axios.post('/api/sendActiveMeritNotification', {pledgeName, actives, amount});
+    return axios.post('/api/sendPledgeMeritNotification', {pledgeName, actives, amount});
   },
   sendCreatedChalkboardNotification: function(chalkboardTitle) {
     return axios.post('/api/sendCreatedChalkboardNotification', {chalkboardTitle});
