@@ -78,6 +78,9 @@ export default class PledgeMeritDialog extends Component {
         amount = -amount;
         action = 'Demerited';
       }
+      if (isChalkboard) {
+        description = 'Chalkboard: ' + description;
+      }
 
       this.setState({
         openCompletingTask: true,
