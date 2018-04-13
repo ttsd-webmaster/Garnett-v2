@@ -1160,9 +1160,9 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
   });
 
   chalkboardsRef.once('value', (chalkboards) => {
-    chalkboards.forEach((chalkboard) => {
-      if (equal(chalkboard, chalkboard.val())) {
-        chalkboard.ref.child('attendees').once('value', (attendees) => {
+    chalkboards.forEach((child) => {
+      if (equal(chalkboard, child.val())) {
+        child.ref.child('attendees').once('value', (attendees) => {
           attendees.forEach((attendee) => {
             let attendeeName = attendee.val().name.replace(/ /g,'');
             let attendeeRef = admin.database().ref('/users/' + attendeeName);
@@ -1256,9 +1256,9 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
   });
 
   chalkboardsRef.once('value', (chalkboards) => {
-    chalkboards.forEach((chalkboard) => {
-      if (equal(chalkboard, chalkboard.val())) {
-        chalkboard.ref.child('attendees').once('value', (attendees) => {
+    chalkboards.forEach((child) => {
+      if (equal(chalkboard, child.val())) {
+        child.ref.child('attendees').once('value', (attendees) => {
           attendees.forEach((attendee) => {
             let attendeeName = attendee.val().name.replace(/ /g,'');
             let attendeeRef = admin.database().ref('/users/' + attendeeName);
