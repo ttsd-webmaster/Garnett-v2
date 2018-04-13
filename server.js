@@ -894,18 +894,20 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
       let amount = Math.abs(req.body.amount);
       counter++;
 
-      let payload = {
-        notification: {
-          title: 'Garnett',
-          body: `You have received ${amount} ${merits} from ${pledge.label}`,
-          clickAction: 'https://garnett-app.herokuapp.com',
-          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+      let message = {
+        webpush: {
+          notification: {
+            title: 'Garnett',
+            body: `You have received ${amount} ${merits} from ${pledge.label}`,
+            clickAction: 'https://garnett-app.herokuapp.com',
+            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+          }
         },
         token: registrationToken
       };
 
       if (registrationToken) {
-        admin.messaging().send(payload)
+        admin.messaging().send(message)
         .then(function(response) {
           console.log("Successfully sent message:", response);
 
@@ -951,18 +953,20 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
       let amount = Math.abs(req.body.amount);
       counter++;
 
-      let payload = {
-        notification: {
-          title: 'Garnett',
-          body: `You have given ${amount} ${merits} to ${req.body.pledgeName}`,
-          clickAction: 'https://garnett-app.herokuapp.com',
-          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+      let message = {
+        webpush: {
+          notification: {
+            title: 'Garnett',
+            body: `You have given ${amount} ${merits} to ${req.body.pledgeName}`,
+            clickAction: 'https://garnett-app.herokuapp.com',
+            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+          }
         },
         token: registrationToken
       };
 
       if (registrationToken) {
-        admin.messaging().send(payload)
+        admin.messaging().send(message)
         .then(function(response) {
           console.log("Successfully sent message:", response);
 
@@ -1001,18 +1005,20 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
           let registrationToken = snapshot.val().registrationToken;
           counter++;
 
-          let payload = {
-            notification: {
-              title: 'Garnett',
-              body: `New Chalkboard: ${req.body.chalkboardTitle}`,
-              clickAction: 'https://garnett-app.herokuapp.com',
-              icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+          let message = {
+            webpush: {
+              notification: {
+                title: 'Garnett',
+                body: `New Chalkboard: ${req.body.chalkboardTitle}`,
+                clickAction: 'https://garnett-app.herokuapp.com',
+                icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+              }
             },
             token: registrationToken
           };
 
           if (registrationToken) {
-            admin.messaging().send(payload)
+            admin.messaging().send(message)
             .then(function(response) {
               console.log("Successfully sent message:", response);
               if (!res.headersSent) {
@@ -1045,18 +1051,20 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
 
   activeRef.once('value', (snapshot) => {
     let registrationToken = snapshot.val().registrationToken;
-    let payload = {
-      notification: {
-        title: 'Garnett',
-        body: `${name} has joined your chalkboard, ${chalkboard.title}`,
-        clickAction: 'https://garnett-app.herokuapp.com',
-        icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+    let message = {
+      webpush: {
+        notification: {
+          title: 'Garnett',
+          body: `${name} has joined your chalkboard, ${chalkboard.title}`,
+          clickAction: 'https://garnett-app.herokuapp.com',
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+        }
       },
       token: registrationToken
     };
 
     if (registrationToken) {
-      admin.messaging().send(payload)
+      admin.messaging().send(message)
       .then(function(response) {
         console.log("Successfully sent message:", response);
         res.sendStatus(200);
@@ -1080,18 +1088,20 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
 
   activeRef.once('value', (snapshot) => {
     let registrationToken = snapshot.val().registrationToken;
-    let payload = {
-      notification: {
-        title: 'Garnett',
-        body: `${name} has left your chalkboard, ${chalkboard.title}`,
-        clickAction: 'https://garnett-app.herokuapp.com',
-        icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+    let message = {
+      webpush: {
+        notification: {
+          title: 'Garnett',
+          body: `${name} has left your chalkboard, ${chalkboard.title}`,
+          clickAction: 'https://garnett-app.herokuapp.com',
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+        }
       },
       token: registrationToken
     };
 
     if (registrationToken) {
-      admin.messaging().send(payload)
+      admin.messaging().send(message)
       .then(function(response) {
         console.log("Successfully sent message:", response);
         res.sendStatus(200);
@@ -1114,18 +1124,20 @@ app.post('/api/sendComplaintNotification', function(req, res) {
 
   pledgeRef.once('value', (snapshot) => {
     let registrationToken = snapshot.val().registrationToken;
-    let payload = {
-      notification: {
-        title: 'Garnett',
-        body: `You have received a complaint from ${complaint.activeName}`,
-        clickAction: 'https://garnett-app.herokuapp.com',
-        icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+    let message = {
+      webpush: {
+        notification: {
+          title: 'Garnett',
+          body: `You have received a complaint from ${complaint.activeName}`,
+          clickAction: 'https://garnett-app.herokuapp.com',
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg'
+        }
       },
       token: registrationToken
     };
 
     if (registrationToken) {
-      admin.messaging().send(payload)
+      admin.messaging().send(message)
       .then(function(response) {
         console.log("Successfully sent message:", response);
         res.sendStatus(200);
