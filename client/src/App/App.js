@@ -117,11 +117,12 @@ class App extends Component {
 
   componentDidMount() {
     let sw_msg = localStorage.getItem('sw_msg');
+    console.log(sw_msg)
 
     if (sw_msg) {
       setTimeout(() => {
-        this.handleRequestOpen(sw_msg);
         localStorage.removeItem('sw_msg');
+        this.handleRequestOpen(sw_msg);
       }, 2000);
     }
   }
