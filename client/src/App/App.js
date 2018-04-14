@@ -115,10 +115,10 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    if (this.props.message) {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.message) {
       setTimeout(() => {
-        this.handleRequestOpen(this.props.message);
+        this.handleRequestOpen(nextProps.message);
       }, 2000);
     }
   }
