@@ -120,8 +120,8 @@ class App extends Component {
     console.log(localStorage.getItem('sw_msg'))
 
     if (sw_msg) {
+      localStorage.removeItem('sw_msg');
       setTimeout(() => {
-        localStorage.removeItem('sw_msg');
         this.handleRequestOpen(sw_msg);
       }, 2000);
     }
