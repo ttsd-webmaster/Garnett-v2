@@ -12,6 +12,7 @@ import {
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import Snackbar from 'material-ui/Snackbar';
 
 const LoadableLogin = Loadable({
   loader: () => import('../containers/Login/Login'),
@@ -63,7 +64,9 @@ class App extends Component {
     super(props);
     this.state = {
       isAuthenticated: false,
-      loaded: false
+      loaded: false,
+      open: false,
+      message: ''
     };
   }
 
@@ -109,6 +112,14 @@ class App extends Component {
           loaded: true
         });
       }
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.message) {
+      setTimeout(() => {
+        this.handleRequestOpen(this.props.message);
+      }, 2000);
     }
   }
 
@@ -237,6 +248,19 @@ class App extends Component {
     });
   }
 
+  handleRequestOpen = (message) => {
+    this.setState({
+      open: true,
+      message: message
+    });
+  }
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false
+    });
+  }
+
   render() {
     return (
       <Router>
@@ -253,6 +277,7 @@ class App extends Component {
                 <LoadableLogin 
                   state={this.state}
                   loginCallBack={this.loginCallBack}
+                  handleRequestOpen={this.handleRequestOpen}
                 />
               ) : (
                 <LoadingLogin />
@@ -280,6 +305,7 @@ class App extends Component {
                 state={this.state} 
                 history={history}
                 logoutCallBack={this.logoutCallBack}
+                handleRequestOpen={this.handleRequestOpen}
               />
             ) : (
               this.state.loaded ? (
@@ -294,6 +320,7 @@ class App extends Component {
               <LoadableDelibsApp
                 state={this.state} 
                 history={history}
+                handleRequestOpen={this.handleRequestOpen}
               />
             ) : (
               this.state.loaded ? (
@@ -308,6 +335,7 @@ class App extends Component {
               <LoadableRusheeProfile
                 state={this.state} 
                 history={history}
+                handleRequestOpen={this.handleRequestOpen}
               />
             ) : (
               this.state.loaded ? (
@@ -317,6 +345,13 @@ class App extends Component {
               )
             )
           )}/>
+
+          <Snackbar
+            open={this.state.open}
+            message={this.state.message}
+            autoHideDuration={4000}
+            onRequestClose={this.handleRequestClose}
+          />
         </div>
       </Router>
     );

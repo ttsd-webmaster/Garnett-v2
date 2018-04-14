@@ -16,14 +16,15 @@ const muiTheme = getMuiTheme({
   },
 });
 
+let message = registerServiceWorker();
+
 const Index = () => (
   <MuiThemeProvider muiTheme={muiTheme}>
-    <App />
+    <App message={message} />
   </MuiThemeProvider>
-)
+);
 
 ReactDOM.render(
   <Index/>,
   document.getElementById('root')
 );
-registerServiceWorker();

@@ -7,7 +7,6 @@ import API from '../../api/API.js';
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import LazyLoad from 'react-lazyload';
-import Snackbar from 'material-ui/Snackbar';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -36,8 +35,6 @@ export default class DelibsApp extends Component {
     this.state = {
       loaded: false,
       rushees: [],
-      open: false,
-      message: ''
     };
   }
 
@@ -120,19 +117,6 @@ export default class DelibsApp extends Component {
     event.stopPropagation();
   }
 
-  handleRequestOpen = (message) => {
-    this.setState({
-      open: true,
-      message: message
-    });
-  }
-
-  handleRequestClose = () => {
-    this.setState({
-      open: false
-    });
-  }
-
   render() {
     return (
       this.state.loaded ? (
@@ -204,16 +188,9 @@ export default class DelibsApp extends Component {
           {this.props.state.status !== 'regent' && (
             <LoadableVoteDialog
               state={this.props.state}
-              handleRequestOpen={this.handleRequestOpen}
+              handleRequestOpen={this.props.handleRequestOpen}
             />
           )}
-
-          <Snackbar
-            open={this.state.open}
-            message={this.state.message}
-            autoHideDuration={4000}
-            onRequestClose={this.handleRequestClose}
-          />
         </div>
       ) : (
         <LoadingDelibsApp />

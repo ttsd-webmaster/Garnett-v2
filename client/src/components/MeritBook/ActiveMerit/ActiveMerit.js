@@ -66,9 +66,18 @@ export default class ActiveMerit extends Component {
             return snapshot.val()[key];
           }).filter((child) => {
             return child.status === 'pledge';
-          }).sort((a, b) => {
-            return a[filter] > b[filter] ? 1 : -1;
           });
+
+          if (this.state.filterName === 'Total Merits') {
+            pledges = pledges.sort(function(a, b) {
+              return a[filter] < b[filter] ? 1 : -1;
+            });
+          }
+          else {
+            pledges = pledges.sort(function(a, b) {
+              return a[filter] > b[filter] ? 1 : -1;
+            });
+          }
 
           console.log('Pledge array: ', pledges);
 

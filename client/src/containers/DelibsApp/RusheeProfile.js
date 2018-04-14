@@ -8,7 +8,6 @@ import {rusheeInfo} from './data.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
-import Snackbar from 'material-ui/Snackbar';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
@@ -67,9 +66,7 @@ export default class RusheeProfile extends Component {
       resource: '',
       sheetOpen: false,
       openResource: false,
-      openInterview: false,
-      openSnackbar: false,
-      message: ''
+      openInterview: false
     };
   }
 
@@ -192,19 +189,6 @@ export default class RusheeProfile extends Component {
     });
   }
 
-  handleRequestOpen = (message) => {
-    this.setState({
-      openSnackbar: true,
-      message: message
-    });
-  }
-
-  handleRequestClose = () => {
-    this.setState({
-      openSnackbar: false
-    });
-  }
-
   render() {
     return (
       this.state.rushee ? (
@@ -243,7 +227,7 @@ export default class RusheeProfile extends Component {
                   open={this.state.openEndVote}
                   rushee={this.state.rushee.name}
                   handleClose={this.closeEndVote}
-                  handleRequestOpen={this.handleRequestOpen}
+                  handleRequestOpen={this.props.handleRequestOpen}
                 />
               </div>
             ) : (
@@ -284,18 +268,11 @@ export default class RusheeProfile extends Component {
                 />
                 <LoadableVoteDialog
                   state={this.props.state}
-                  handleRequestOpen={this.handleRequestOpen}
+                  handleRequestOpen={this.props.handleRequestOpen}
                 />
               </div>
             )}
           </div>
-
-          <Snackbar
-            open={this.state.openSnackbar}
-            message={this.state.message}
-            autoHideDuration={4000}
-            onRequestClose={this.handleRequestClose}
-          />
         </div>
       ) : (
         <LoadingRusheeProfile />

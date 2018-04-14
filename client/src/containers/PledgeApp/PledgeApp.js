@@ -7,7 +7,6 @@ import {LoadingPledgeApp, LoadingComponent} from '../../helpers/loaders.js';
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import {Tabs, Tab} from 'material-ui/Tabs';
-import Snackbar from 'material-ui/Snackbar';
 
 let didScroll = false;
 let previousScrollTop = 0;
@@ -74,8 +73,6 @@ export default class PledgeApp extends Component {
       scrollPosition4: 0,
       scrollPosition5: 0,
       loaded: false,
-      open: false,
-      message: '',
       activeArray: [],
       pledgeArray: [],
       meritArray: [],
@@ -373,19 +370,6 @@ export default class PledgeApp extends Component {
     });
   };
 
-  handleRequestOpen = (message) => {
-    this.setState({
-      open: true,
-      message: message
-    });
-  }
-
-  handleRequestClose = () => {
-    this.setState({
-      open: false
-    });
-  }
-
   render() {
     return (
       this.state.loaded ? (
@@ -411,7 +395,7 @@ export default class PledgeApp extends Component {
                 meritPledgeArray={this.state.meritPledgeArray}
                 meritArray={this.state.meritArray}
                 meritActiveArray={this.state.meritActiveArray}
-                handleRequestOpen={this.handleRequestOpen}
+                handleRequestOpen={this.props.handleRequestOpen}
               />
             </Tab>
             <Tab
@@ -435,7 +419,7 @@ export default class PledgeApp extends Component {
                 myCompletedChalkboards={this.state.myCompletedChalkboards}
                 upcomingChalkboards={this.state.upcomingChalkboards}
                 completedChalkboards={this.state.completedChalkboard}
-                handleRequestOpen={this.handleRequestOpen}
+                handleRequestOpen={this.props.handleRequestOpen}
               />
             </Tab>
             <Tab
@@ -450,7 +434,7 @@ export default class PledgeApp extends Component {
                 activeComplaintsArray={this.state.activeComplaintsArray}
                 pendingComplaintsArray={this.state.pendingComplaintsArray}
                 approvedComplaintsArray={this.state.approvedComplaintsArray}
-                handleRequestOpen={this.handleRequestOpen}
+                handleRequestOpen={this.props.handleRequestOpen}
               />
             </Tab>
             <Tab
@@ -464,13 +448,6 @@ export default class PledgeApp extends Component {
               />
             </Tab>
           </Tabs>
-
-          <Snackbar
-            open={this.state.open}
-            message={this.state.message}
-            autoHideDuration={4000}
-            onRequestClose={this.handleRequestClose}
-          />
         </div>
       ) : (
         <LoadingPledgeApp />
