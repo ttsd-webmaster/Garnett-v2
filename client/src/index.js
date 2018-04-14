@@ -17,6 +17,7 @@ const muiTheme = getMuiTheme({
 });
 
 let message = registerServiceWorker();
+console.log(message);
 
 const Index = () => (
   <MuiThemeProvider muiTheme={muiTheme}>
