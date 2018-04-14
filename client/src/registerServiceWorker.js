@@ -37,7 +37,8 @@ export default function register() {
         checkValidServiceWorker(swUrl);
       } else {
         // Is not local host. Just register service worker
-        return registerValidSW(swUrl);
+        let message = registerValidSW(swUrl);
+        return message;
       }
     });
   }
@@ -65,9 +66,6 @@ function registerValidSW(swUrl) {
               console.log('Content is cached for offline use.');
               return 'Content is cached for offline use.';
             }
-          }
-          else {
-            return 'Hello'
           }
         };
       };
