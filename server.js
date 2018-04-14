@@ -581,7 +581,7 @@ app.post('/api/pledgesForMerit', function(req, res) {
 // Gets all the actives for meriting as pledge
 app.post('/api/activesForMerit', function(req, res) {
   let counter = 0;
-  let activeCount = 42;
+  let activeCount = 44;
   let displayName = req.body.displayName;
   let usersRef = admin.database().ref('/users');
 

@@ -59,11 +59,11 @@ export default class PledgeMeritDialog extends Component {
       description = description.title;
     }
 
-    if (actives.length === 0 || !description || description.length > 45 || amount === 0) {
+    if (actives.length === 0 || !description || description.length > 50 || amount === 0) {
       if (actives.length === 0) {
         activeValidation = false;
       }
-      if (!description || description.length > 45) {
+      if (!description || description.length > 50) {
         descriptionValidation = false;
       }
 
@@ -277,7 +277,7 @@ export default class PledgeMeritDialog extends Component {
             rowsMax={3}
             value={this.state.description}
             onChange={(e, newValue) => this.handleChange('description', newValue)}
-            errorText={!this.state.descriptionValidation && 'Enter a description.'}
+            errorText={!this.state.descriptionValidation && 'Enter a description less than 50 characters.'}
           />
         )}
 
