@@ -67,6 +67,9 @@ function registerValidSW(swUrl) {
               return 'Content is cached for offline use.';
             }
           }
+          else {
+            return 'Hello'
+          }
         };
       };
     })
