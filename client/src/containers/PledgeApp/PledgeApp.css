@@ -123,10 +123,19 @@
 
 .garnett-image {
   object-fit: cover;
+  top: 9px !important;
 }
 
-.garnett-image.large {
-  top: 9px !important;
+@media(max-width: 365px) {
+  .garnett-list-item.large > div > div {
+    min-height: unset;
+    padding-left: 80px !important;
+  }
+  .garnett-image {
+    height: 50px !important;
+    width: 50px !important;
+    top: 16px !important;
+  }
 }
 
 .garnett-name {
@@ -226,4 +235,10 @@
   margin: auto;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
+}
+@media(max-width: 365px) {
+  .dialog-photo {
+    height: 80px;
+    width: 80px;
+  }
 }
