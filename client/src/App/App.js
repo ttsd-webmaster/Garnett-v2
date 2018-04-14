@@ -115,10 +115,13 @@ class App extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.message) {
+  componentDidMount() {
+    let sw_msg = localStorage.getItem('sw_msg');
+
+    if (sw_msg) {
       setTimeout(() => {
-        this.handleRequestOpen(nextProps.message);
+        this.handleRequestOpen(sw_msg);
+        localStorage.removeItem('sw_msg');
       }, 2000);
     }
   }

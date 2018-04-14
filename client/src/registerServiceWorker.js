@@ -37,8 +37,7 @@ export default function register() {
         checkValidServiceWorker(swUrl);
       } else {
         // Is not local host. Just register service worker
-        let message = registerValidSW(swUrl);
-        return message;
+        registerValidSW(swUrl);
       }
     });
   }
@@ -58,13 +57,13 @@ function registerValidSW(swUrl) {
               // It's the perfect time to display a "New content is
               // available; please refresh." message in your web app.
               console.log('New content is available; please refresh.');
-              return 'New content is available; please refresh.';
+              localStorage.setItem('sw_msg', 'New content is available; please refresh.');
             } else {
               // At this point, everything has been precached.
               // It's the perfect time to display a
               // "Content is cached for offline use." message.
               console.log('Content is cached for offline use.');
-              return 'Content is cached for offline use.';
+              localStorage.setItem('sw_msg', 'Content is cached for offline use.');
             }
           }
         };
