@@ -114,8 +114,8 @@ export default class AllChalkboards extends Component {
     });
 
     if (this.state.reverse) {
-      upcomingChalkboards = this.state.upcomingChalkboards.slice().reverse();
-      completedChalkboards = this.state.completedChalkboards.slice().reverse();
+      upcomingChalkboards = upcomingChalkboards.slice().reverse();
+      completedChalkboards = completedChalkboards.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
 

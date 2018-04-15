@@ -207,6 +207,7 @@ export default class MyChalkboards extends Component {
             </span>
           )}
         </Subheader>
+        
         <List className="garnett-list">
           {myAttendingChalkboards.map((chalkboard, i) => (
             <div key={i}>
