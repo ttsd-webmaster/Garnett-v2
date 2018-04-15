@@ -110,6 +110,9 @@ export default {
   sendCreatedChalkboardNotification: function(chalkboardTitle) {
     return axios.post('/api/sendCreatedChalkboardNotification', {chalkboardTitle});
   },
+  sendEditedChalkboardNotification: function(chalkboard) {
+    return axios.post('/api/sendEditedChalkboardNotification', {chalkboard});
+  },
   sendJoinedChalkboardNotification: function(name, chalkboard) {
     return axios.post('/api/sendJoinedChalkboardNotification', {name, chalkboard});
   },

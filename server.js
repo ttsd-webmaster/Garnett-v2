@@ -1114,6 +1114,62 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
   });
 });
 
+// Send edited chalkboard notification to attendees
+app.post('/api/sendEditedChalkboardNotification', function(req, res) {
+  let chalkboard = req.body.chalkboard;
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (chalkboards) => {
+    chalkboards.forEach((child) => {
+      if (equal(chalkboard, child.val())) {
+        child.ref.child('attendees').once('value', (attendees) => {
+          attendees.forEach((attendee) => {
+            let attendeeName = attendee.val().name.replace(/ /g,'');
+            let attendeeRef = admin.database().ref('/users/' + attendeeName);
+
+            attendeeRef.once('value', (snapshot) => {
+              let registrationToken = snapshot.val().registrationToken;
+              let message = {
+                webpush: {
+                  notification: {
+                    title: 'Garnett',
+                    body: `${chalkboard.activeName} has edited the chalkboard, ${chalkboard.title}.`,
+                    click_action: 'https://garnett-app.herokuapp.com/pledge-app',
+                    icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+                    vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+                  }
+                },
+                token: registrationToken
+              };
+
+              if (registrationToken) {
+                admin.messaging().send(message)
+                .then(function(response) {
+                  console.log("Successfully sent message:", response);
+                  if (!res.headersSent) {
+                    res.sendStatus(200);
+                  }
+                })
+                .catch(function(error) {
+                  console.log("Error sending message:", error);
+                  if (!res.headersSent) {
+                    res.sendStatus(400);
+                  }
+                });
+              }
+              else {
+                if (!res.headersSent) {
+                  res.sendStatus(200);
+                }
+              }
+            });
+          });
+        });
+      }
+    });
+  });
+});
+
 // Send joined chalkboard notification to active
 app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
   let chalkboard = req.body.chalkboard;
