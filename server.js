@@ -1360,7 +1360,7 @@ app.post('/api/sendApprovedComplaintNotification', function(req, res) {
       webpush: {
         notification: {
           title: 'Garnett',
-          body: `You have received a complaint from ${complaint.activeName}.`,
+          body: 'You have received a complaint.',
           click_action: 'https://garnett-app.herokuapp.com/pledge-app',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
           vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
