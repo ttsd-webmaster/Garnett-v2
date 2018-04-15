@@ -170,7 +170,7 @@ export default class Login extends Component {
 
             firebase.auth().signInWithEmailAndPassword(email, password)
             .then((user) => {
-              if (user) {
+              if (user && user.emailVerified) {
                 loadFirebase('database')
                 .then(() => {
                   const fullName = user.displayName;

@@ -255,22 +255,22 @@ export default class ActiveMerit extends Component {
 
   reverse = () => {
     let reverse = true;
-    let pledges = this.state.pledges.slice().reverse();
 
     if (this.state.reverse) {
       reverse = false;
     }
 
     this.setState({
-      pledges: pledges,
       reverse: reverse
     });
   }
 
   render() {
     let toggleIcon = "icon-down-open-mini";
+    let pledges = this.state.pledges;
 
     if (this.state.reverse) {
+      pledges = pledges.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
 

@@ -70,7 +70,7 @@ export default class AddComplaintDialog extends Component {
         date: date
       };
       
-      API.complain(complaint)
+      API.complain(complaint, status)
       .then((res) => {
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         let registrationToken = localStorage.getItem('registrationToken');

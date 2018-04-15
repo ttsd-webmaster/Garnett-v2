@@ -85,8 +85,8 @@ export default {
   getAttendees: function(chalkboard) {
     return axios.post('/api/getattendees', {chalkboard});
   },
-  complain: function(complaint) {
-    return axios.post('/api/complain', {complaint});
+  complain: function(complaint, status) {
+    return axios.post('/api/complain', {complaint, status});
   },
   removeComplaint: function(complaint) {
     return axios.post('/api/removecomplaint', {complaint});

@@ -841,7 +841,7 @@ app.post('/api/getattendees', function(req, res) {
 // Post complaint data
 app.post('/api/complain', function(req, res) {
   // Check if active is PI/PM or not
-  if (req.body.status === 'active') {
+  if (req.body.status !== 'pipm') {
     let complaintsRef = admin.database().ref('/pendingComplaints');
 
     // Add complaints to active's pending complaints list and the pending complaints list

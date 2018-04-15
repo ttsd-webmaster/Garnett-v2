@@ -117,7 +117,6 @@ class App extends Component {
 
   componentDidMount() {
     let sw_msg = localStorage.getItem('sw_msg');
-    console.log(localStorage.getItem('sw_msg'));
 
     if (sw_msg) {
       localStorage.removeItem('sw_msg');
