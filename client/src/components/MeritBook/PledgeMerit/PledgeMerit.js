@@ -268,6 +268,7 @@ export default class PledgeMerit extends Component {
           </div>
 
           <SwipeableBottomSheet
+            bodyStyle={{backgroundColor:'#fafafa'}}
             overflowHeight={58}
             marginTop={42}
             open={this.state.openPbros}
@@ -278,11 +279,7 @@ export default class PledgeMerit extends Component {
               Total Merits: <CountUp className="total-merits" start={this.state.previousTotalMerits} end={this.state.totalMerits} useEasing />
             </div>
 
-            <Subheader
-              style={{backgroundColor:'#fafafa'}}
-              className="garnett-subheader"
-              onClick={() => this.openBottomSheet(false)}
-            >
+            <Subheader className="garnett-subheader" onClick={() => this.openBottomSheet(false)}>
               Pledge Brothers
             </Subheader>
 
