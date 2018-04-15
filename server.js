@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const http = require('http');
 const path = require('path');
-const compression = require('compression');
+const shrinkRay = require('shrink-ray');
 const app = express();
 const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
@@ -45,7 +45,7 @@ if (process.env.NODE_ENV == 'production') {
   app.all('*', ensureSecure);
 }
 
-app.use(compression()); // Gzips file
+app.use(shrinkRay()); // Gzips file
 app.use(express.static(path.join(__dirname, './client/build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
