@@ -65,15 +65,23 @@ export default class ActiveMerit extends Component {
         index: 0
       });
 
-      API.getMeritsRemaining(displayName, pledgeName)
-      .then((res) => {
-        let meritsRemaining = res.data;
+      if (navigator.onLine) {
+        API.getMeritsRemaining(displayName, pledgeName)
+        .then((res) => {
+          let meritsRemaining = res.data;
 
+          this.setState({
+            pledge: nextProps.pledge,
+            meritsRemaining: meritsRemaining
+          });
+        });
+      }
+      else {
         this.setState({
           pledge: nextProps.pledge,
-          meritsRemaining: meritsRemaining
+          meritsRemaining: 0
         });
-      });
+      }
     }
   }
 

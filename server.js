@@ -563,10 +563,10 @@ app.post('/api/pledgesForMerit', function(req, res) {
   let pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
 
   pledgesRef.once('value', (snapshot) => {
-    let pledgeArray = [];
+    let pledges = [];
 
     if (snapshot.val()) {
-      pledgeArray = Object.keys(snapshot.val()).map(function(key) {
+      pledges = Object.keys(snapshot.val()).map(function(key) {
         return {'value': key,
                 'label': key.replace(/([a-z])([A-Z])/, '$1 $2'),
                 'meritsRemaining': snapshot.val()[key].merits
@@ -574,7 +574,7 @@ app.post('/api/pledgesForMerit', function(req, res) {
       });
     }
 
-    res.json(pledgeArray);
+    res.json(pledges);
   });
 });
 
@@ -586,25 +586,25 @@ app.post('/api/activesForMerit', function(req, res) {
   let usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (snapshot) => {
-    let activeArray = [];
+    let actives = [];
 
     snapshot.forEach((active) => {
       if (active.val().status !== 'alumni' &&
           active.val().status !== 'pledge' &&
           active.val().status !== 'pipm') {
-        let activeRef = admin.database().ref('/users/' + active.key + '/Pledges/' + displayName);
+        let activeRef = active.ref.child('Pledges/' + displayName);
 
         activeRef.once('value', (user) => {
           counter++;
 
-          activeArray.push({
+          actives.push({
             'value': active.key,
-            'label': active.key.replace(/([a-z])([A-Z])/, '$1 $2'),
+            'label': `${active.val().firstName} ${active.val().lastName}`,
             'meritsRemaining': user.val().merits
           });
 
           if (!res.headersSent && counter === activeCount) {
-            res.json(activeArray);
+            res.json(actives);
           }
         });
       }
@@ -643,6 +643,23 @@ app.post('/api/chalkboardsForMerit', function(req, res) {
     });
     
     res.json(myChalkboards);
+  });
+});
+
+// Get Pbros data for pledges
+app.post('/api/getPbros', function(req, res) {
+  let pbros = [];
+  let displayName = req.body.displayName;
+  let usersRef = admin.database().ref('/users');
+
+  usersRef.once('value', (snapshot) => {
+    snapshot.forEach((user) => {
+      if (user.val().status === 'pledge' && user.key !== displayName) {
+        pbros.push(user.val());
+      }
+    });
+
+    res.json(pbros);
   });
 });
 
@@ -1370,36 +1387,34 @@ app.post('/api/sendPendingComplaintNotification', function(req, res) {
   usersRef.once('value', (snapshot) => {
     snapshot.forEach((user) => {
       if (user.val().status === 'pipm') {
-        user.ref.once('value', (pipm) => {
-          let registrationToken = pipm.val().registrationToken;
-          let message = {
-            webpush: {
-              notification: {
-                title: 'Garnett',
-                body: `${complaint.activeName} has submitted a complaint for ${complaint.pledgeName}.`,
-                click_action: 'https://garnett-app.herokuapp.com/pledge-app',
-                icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-                vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
-              }
-            },
-            token: registrationToken
-          };
+        let registrationToken = user.val().registrationToken;
+        let message = {
+          webpush: {
+            notification: {
+              title: 'Garnett',
+              body: `${complaint.activeName} has submitted a complaint for ${complaint.pledgeName}.`,
+              click_action: 'https://garnett-app.herokuapp.com/pledge-app',
+              icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+              vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+            }
+          },
+          token: registrationToken
+        };
 
-          if (registrationToken) {
-            admin.messaging().send(message)
-            .then(function(response) {
-              console.log("Successfully sent message:", response);
-              res.sendStatus(200);
-            })
-            .catch(function(error) {
-              console.log("Error sending message:", error);
-              res.sendStatus(400);
-            });
-          }
-          else {
+        if (registrationToken) {
+          admin.messaging().send(message)
+          .then(function(response) {
+            console.log("Successfully sent message:", response);
             res.sendStatus(200);
-          }
-        })
+          })
+          .catch(function(error) {
+            console.log("Error sending message:", error);
+            res.sendStatus(400);
+          });
+        }
+        else {
+          res.sendStatus(200);
+        }
       }
     });
   });

@@ -1,6 +1,7 @@
 import '../MeritBook.css';
 import {loadFirebase} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
+import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -10,6 +11,7 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
+import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
 import CountUp from 'react-countup';
 
 const LoadableRemoveMeritDialog = Loadable({
@@ -43,8 +45,9 @@ export default class PledgeMerit extends Component {
       totalMerits: 0,
       previousTotalMerits: 0,
       merit: null,
-      open: false,
+      openRemove: false,
       openMerit: false,
+      openPbros: false,
       reverse: false
     }
   }
@@ -92,10 +95,10 @@ export default class PledgeMerit extends Component {
     }
   }
 
-  handleOpen = (merit) => {
+  handleRemoveOpen = (merit) => {
     if (navigator.onLine) {
       this.setState({
-        open: true,
+        openRemove: true,
         merit: merit
       });
 
@@ -111,22 +114,22 @@ export default class PledgeMerit extends Component {
 
         window.history.pushState(null, null, path + window.location.pathname);
         window.onpopstate = () => {
-          this.handleClose();
+          this.handleRemoveClose();
         }
       }
     }
     else {
-      this.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline.');
     }
   }
 
-  handleClose = () => {
+  handleRemoveClose = () => {
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }
 
     this.setState({
-      open: false,
+      openRemove: false,
       merit: null
     });
   }
@@ -154,7 +157,7 @@ export default class PledgeMerit extends Component {
       }
     }
     else {
-      this.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline.');
     }
   }
 
@@ -166,6 +169,17 @@ export default class PledgeMerit extends Component {
     this.setState({
       openMerit: false
     });
+  }
+
+  openBottomSheet = (open) => {
+    API.getPbros()
+    .then(res => {
+      this.setState({
+        openPbros: open,
+        pledges: res.data
+      });
+    })
+    .catch(err => console.log(err));
   }
 
   reverse = () => {
@@ -236,7 +250,7 @@ export default class PledgeMerit extends Component {
                       <p> {merit.description} </p>
                     }
                     secondaryTextLines={2}
-                    onClick={() => this.handleOpen(merit)}
+                    onClick={() => this.handleRemoveOpen(merit)}
                   >
                     <div className="merit-amount-container">
                       <p className="merit-date"> {merit.date} </p>
@@ -253,15 +267,59 @@ export default class PledgeMerit extends Component {
             <i className="icon-pencil"></i>
           </div>
 
-          <div className="total-merits-container"> 
-            Total Merits: <CountUp id="total-merits" start={this.state.previousTotalMerits} end={this.state.totalMerits} useEasing />
-          </div>
+          <SwipeableBottomSheet
+            overflowHeight={58}
+            marginTop={42}
+            open={this.state.openPbros}
+            topShadow={false}
+            onChange={this.openBottomSheet}
+          >
+            <div className="total-merits-container" onClick={() => this.openBottomSheet(true)}> 
+              Total Merits: <CountUp className="total-merits" start={this.state.previousTotalMerits} end={this.state.totalMerits} useEasing />
+            </div>
+
+            <Subheader
+              style={{backgroundColor:'#fafafa'}}
+              className="garnett-subheader"
+              onClick={() => this.openBottomSheet(false)}
+            >
+              Pledge Brothers
+            </Subheader>
+
+            <List className="garnett-list">
+              {this.state.pledges && (
+                this.state.pledges.map((pledge, i) => (
+                  <div key={i}>
+                    <Divider className="garnett-divider large" inset={true} />
+                    <ListItem
+                      className="garnett-list-item large"
+                      leftAvatar={<Avatar className="garnett-image large" size={70} src={pledge.photoURL} />}
+                      primaryText={
+                        <p className="garnett-name"> {pledge.firstName} {pledge.lastName} </p>
+                      }
+                      secondaryText={
+                        <p>
+                          {pledge.year}
+                          <br />
+                          {pledge.major}
+                        </p>
+                      }
+                      secondaryTextLines={2}
+                    >
+                      <p className="pledge-merits"> {pledge.totalMerits} </p>
+                    </ListItem>
+                    <Divider className="garnett-divider large" inset={true} />
+                  </div>
+                ))
+              )}
+            </List>
+          </SwipeableBottomSheet>
 
           <LoadableRemoveMeritDialog
-            open={this.state.open}
+            open={this.state.openRemove}
             state={this.props.state}
             merit={this.state.merit}
-            handleClose={this.handleClose}
+            handleRemoveClose={this.handleRemoveClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
 

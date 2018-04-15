@@ -12,12 +12,12 @@ export default class RemoveMeritDialog extends Component {
     API.removeMerit(displayName, merit)
     .then((res) => {
       console.log('Removed merit');
-      this.props.handleClose();
+      this.props.handleRemoveClose();
       this.props.handleRequestOpen(`Removed merit from ${merit.name}`);
     })
     .catch((error) => {
       console.log('Error: ', error);
-      this.props.handleClose();
+      this.props.handleRemoveClose();
       this.props.handleRequestOpen('Error removing merit');
     });
   }
@@ -27,7 +27,7 @@ export default class RemoveMeritDialog extends Component {
       <FlatButton
         label="Close"
         primary={true}
-        onClick={this.props.handleClose}
+        onClick={this.props.handleRemoveClose}
       />,
       <RaisedButton
         label="Remove"
@@ -41,7 +41,7 @@ export default class RemoveMeritDialog extends Component {
         actions={actions}
         modal={false}
         open={this.props.open}
-        onRequestClose={this.props.handleClose}
+        onRequestClose={this.props.handleRemoveClose}
         autoScrollBodyContent={true}
       >
         Remove Merit?

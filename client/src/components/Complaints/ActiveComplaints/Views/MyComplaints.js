@@ -35,7 +35,7 @@ export default class MyComplaints extends Component {
       });
     }
     else {
-      this.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline.');
     }
 
     // Handles android back button

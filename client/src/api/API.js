@@ -60,6 +60,9 @@ export default {
   getChalkboardsForMerit: function(fullName) {
     return axios.post('/api/chalkboardsForMerit', {fullName});
   },
+  getPbros: function(displayName) {
+    return axios.post('/api/getPbros', {displayName});
+  },
   createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount) {
     let body = {displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount};
     return axios.post('/api/createchalkboard', body);

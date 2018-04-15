@@ -47,18 +47,16 @@
 
 /* Total Merits for Pledges */
 .total-merits-container {
-  position: fixed;
   background-color: #fff;
   color: #777;
-  bottom: 0;
-  height: 57px;
   line-height: 57px;
+  height: 57px;
   width: 100%;
   font-size: 20px;
   border-top: 1px solid #ccc;
   text-align: center;
 }
-#total-merits {
+.total-merits {
   font-family: 'Luckiest Guy';
   color: rgba(0, 0, 0, 0.87);
 }

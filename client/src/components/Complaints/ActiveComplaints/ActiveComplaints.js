@@ -185,7 +185,7 @@ export default class ActiveComplaints extends Component {
       }
     }
     else {
-      this.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline.');
     }
   }
 
