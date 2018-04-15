@@ -19,7 +19,7 @@ export default class HandleComplaintDialog extends Component {
         this.props.handleRequestOpen(`Approved complaint for ${complaint.pledgeName}`);
       }
       else {
-        API.sendComplaintNotification(complaint)
+        API.sendApprovedComplaintNotification(complaint)
         .then(res => {
           this.props.handleRequestOpen(`Approved complaint for ${complaint.pledgeName}`);
         })

@@ -293,7 +293,7 @@ export default class ActiveMerit extends Component {
           </Subheader>
 
           <List className="garnett-list">
-            {this.state.pledges.map((pledge, i) => (
+            {pledges.map((pledge, i) => (
               <div key={i}>
                 <Divider className="garnett-divider large" inset={true} />
                 <ListItem

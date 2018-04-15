@@ -48,6 +48,23 @@ export default class AllChalkboards extends Component {
     });
   }
 
+  filterCount(chalkboard, filter) {
+    if (filter === 'timeCommitment') {
+      return chalkboard[filter].value;
+    }
+    else if (filter === 'attendees') {
+      if (chalkboard[filter] === undefined) {
+        return 0;
+      }
+      else {
+        return Object.keys(chalkboard[filter]).length;
+      }
+    }
+    else {
+      return chalkboard[filter];
+    }
+  }
+
   reverse = () => {
     let reverse = true;
 
@@ -63,18 +80,50 @@ export default class AllChalkboards extends Component {
   render() {
     let toggleIcon = "icon-down-open-mini";
     let filter = this.state.filter;
+    let label;
 
     let upcomingChalkboards = this.props.upcomingChalkboards.sort(function(a, b) {
-      return a[filter] > b[filter];
+      let chalkboard1 = [];
+      let chalkboard2 = [];
+      
+      if (filter === 'attendees') {
+        if (a[filter] !== undefined) {
+          chalkboard1 = a[filter];
+        }
+        if (b[filter] !== undefined) {
+          chalkboard2 = b[filter];
+        }
+        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
+      }
+      return chalkboard1[filter] > chalkboard2[filter];
     });
     let completedChalkboards = this.props.completedChalkboards.sort(function(a, b) {
-      return a[filter] > b[filter];
+      let chalkboard1 = [];
+      let chalkboard2 = [];
+      
+      if (filter === 'attendees') {
+        if (a[filter] !== undefined) {
+          chalkboard1 = a[filter];
+        }
+        if (b[filter] !== undefined) {
+          chalkboard2 = b[filter];
+        }
+        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
+      }
+      return chalkboard1[filter] > chalkboard2[filter];
     });
 
     if (this.state.reverse) {
       upcomingChalkboards = this.state.upcomingChalkboards.slice().reverse();
       completedChalkboards = this.state.completedChalkboards.slice().reverse();
       toggleIcon = "icon-up-open-mini";
+    }
+
+    if (filter === 'amount') {
+      label = 'merits';
+    }
+    else if (filter === 'attendees') {
+      label = 'attendees';
     }
 
     return (
@@ -130,14 +179,7 @@ export default class AllChalkboards extends Component {
                   onClick={() => this.props.handleOpen(chalkboard, 'upcoming')}
                 >
                   <p className="garnett-date"> 
-                    {filter === 'timeCommitment' ? (
-                      chalkboard[filter].value
-                    ) : (
-                      chalkboard[filter]
-                    )}
-                    {filter === 'amount' && (
-                      ' merits'
-                    )}
+                    {this.filterCount(chalkboard, filter)} {label}
                   </p>
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />
@@ -185,14 +227,7 @@ export default class AllChalkboards extends Component {
                   onClick={() => this.props.handleOpen(chalkboard, 'completed')}
                 >
                   <p className="garnett-date">
-                    {filter === 'timeCommitment' ? (
-                      chalkboard[filter].value
-                    ) : (
-                      chalkboard[filter]
-                    )}
-                    {filter === 'amount' && (
-                      ' merits'
-                    )}
+                    {this.filterCount(chalkboard, filter)} {label}
                   </p>
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />
@@ -226,6 +261,12 @@ export default class AllChalkboards extends Component {
               insetChildren
               checked={this.state.filterName === 'Time Commitment'}
               onClick={() => this.setFilter('Time Commitment')}
+            />
+            <MenuItem
+              primaryText="Attendees"
+              insetChildren
+              checked={this.state.filterName === 'Attendees'}
+              onClick={() => this.setFilter('Attendees')}
             />
           </Menu>
         </Popover>

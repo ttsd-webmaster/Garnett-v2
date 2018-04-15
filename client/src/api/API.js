@@ -116,8 +116,11 @@ export default {
   sendLeftChalkboardNotification: function(name, chalkboard) {
     return axios.post('/api/sendLeftChalkboardNotification', {name, chalkboard});
   },
-  sendComplaintNotification: function(complaint) {
-    return axios.post('/api/sendComplaintNotification', {complaint});
+  sendPendingComplaintNotification: function(complaint) {
+    return axios.post('/api/sendPendingComplaintNotification', {complaint});
+  },
+  sendApprovedComplaintNotification: function(complaint) {
+    return axios.post('/api/sendApprovedComplaintNotification', {complaint});
   },
   // Delibs App
   updateInteraction: function(displayName, rusheeName, interacted, totalInteractions) {
