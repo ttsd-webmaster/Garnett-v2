@@ -590,8 +590,7 @@ app.post('/api/activesForMerit', function(req, res) {
 
     snapshot.forEach((active) => {
       if (active.val().status !== 'alumni' &&
-          active.val().status !== 'pledge' &&
-          active.val().status !== 'pipm') {
+          active.val().status !== 'pledge') {
         let activeRef = active.ref.child('Pledges/' + displayName);
 
         activeRef.once('value', (user) => {
