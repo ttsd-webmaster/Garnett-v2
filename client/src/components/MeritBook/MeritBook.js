@@ -13,7 +13,8 @@ export default class MeritBook extends Component {
           state={this.props.state}
           merits={this.props.meritArray}
           activesForMerit={this.props.meritActiveArray}
-          totalMerits={this.props.state.totalMerits}
+          totalMerits={this.props.totalMerits}
+          pbros={this.props.pbros}
           handleRequestOpen={this.props.handleRequestOpen} 
         />
       ) : (

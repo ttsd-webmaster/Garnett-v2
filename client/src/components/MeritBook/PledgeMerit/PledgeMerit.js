@@ -42,8 +42,9 @@ export default class PledgeMerit extends Component {
     this.state = {
       loaded: false,
       merits: this.props.merits,
-      totalMerits: 0,
+      totalMerits: this.props.totalMerits,
       previousTotalMerits: 0,
+      pbros: this.props.pbros,
       merit: null,
       openRemove: false,
       openMerit: false,
@@ -77,6 +78,7 @@ export default class PledgeMerit extends Component {
 
             console.log('Merit array: ', merits);
             localStorage.setItem('meritArray', JSON.stringify(merits));
+            localStorage.setItem('totalMerits', totalMerits);
 
             this.setState({
               loaded: true,
@@ -172,14 +174,23 @@ export default class PledgeMerit extends Component {
   }
 
   openBottomSheet = (open) => {
-    API.getPbros()
-    .then(res => {
+    if (navigator.onLine) {
+      API.getPbros()
+      .then(res => {
+        localStorage.setItem('pbros', JSON.stringify(res.data));
+
+        this.setState({
+          openPbros: open,
+          pbros: res.data
+        });
+      })
+      .catch(err => console.log(err));
+    }
+    else {
       this.setState({
-        openPbros: open,
-        pledges: res.data
+        openPbros: open
       });
-    })
-    .catch(err => console.log(err));
+    }
   }
 
   reverse = () => {
@@ -284,26 +295,26 @@ export default class PledgeMerit extends Component {
             </Subheader>
 
             <List className="garnett-list">
-              {this.state.pledges && (
-                this.state.pledges.map((pledge, i) => (
+              {this.state.pbros && (
+                this.state.pbros.map((pbro, i) => (
                   <div key={i}>
                     <Divider className="garnett-divider large" inset={true} />
                     <ListItem
                       className="garnett-list-item large"
-                      leftAvatar={<Avatar className="garnett-image large" size={70} src={pledge.photoURL} />}
+                      leftAvatar={<Avatar className="garnett-image large" size={70} src={pbro.photoURL} />}
                       primaryText={
-                        <p className="garnett-name"> {pledge.firstName} {pledge.lastName} </p>
+                        <p className="garnett-name"> {pbro.firstName} {pbro.lastName} </p>
                       }
                       secondaryText={
                         <p>
-                          {pledge.year}
+                          {pbro.year}
                           <br />
-                          {pledge.major}
+                          {pbro.major}
                         </p>
                       }
                       secondaryTextLines={2}
                     >
-                      <p className="pledge-merits"> {pledge.totalMerits} </p>
+                      <p className="pledge-merits"> {pbro.totalMerits} </p>
                     </ListItem>
                     <Divider className="garnett-divider large" inset={true} />
                   </div>

@@ -103,19 +103,19 @@ export default class PledgeApp extends Component {
     }
     else {
       let activeArray = JSON.parse(localStorage.getItem('activeArray'));
-      let myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards'));
-      let myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards'));
-      let upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards'));
-      let completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards'));
+      let myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards')) || [];
+      let myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards')) || [];
+      let upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards')) || [];
+      let completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards')) || [];
 
       if (data.status !== 'pledge') {
         let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
         let meritPledgeArray = JSON.parse(localStorage.getItem('meritPledgeArray'));
-        let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
+        let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards')) || [];
         let complaintsPledgeArray = JSON.parse(localStorage.getItem('complaintsPledgeArray'));
-        let activeComplaints = JSON.parse(localStorage.getItem('activeComplaints'));
-        let pendingComplaints = JSON.parse(localStorage.getItem('pendingComplaints'));
-        let approvedComplaints = JSON.parse(localStorage.getItem('approvedComplaints'));
+        let activeComplaints = JSON.parse(localStorage.getItem('activeComplaints')) || [];
+        let pendingComplaints = JSON.parse(localStorage.getItem('pendingComplaints')) || [];
+        let approvedComplaints = JSON.parse(localStorage.getItem('approvedComplaints')) || [];
 
         this.setState({
           loaded: true,
@@ -134,14 +134,16 @@ export default class PledgeApp extends Component {
         });
       }
       else {
-        let meritArray = JSON.parse(localStorage.getItem('meritArray'));
+        let meritArray = JSON.parse(localStorage.getItem('meritArray')) || [];
         let meritActiveArray = JSON.parse(localStorage.getItem('meritActiveArray'));
-        let pledgeComplaints = JSON.parse(localStorage.getItem('pledgeComplaints'));
+        let pledgeComplaints = JSON.parse(localStorage.getItem('pledgeComplaints')) || [];
+        let totalMerits = localStorage.getItem('totalMerits');
 
         this.setState({
           loaded: true,
           meritArray: meritArray,
           meritActiveArray: meritActiveArray,
+          totalMerits: totalMerits,
           pledgeComplaints: pledgeComplaints,
           activeArray: activeArray,
           myAttendingChalkboards: myAttendingChalkboards,
@@ -395,6 +397,7 @@ export default class PledgeApp extends Component {
                 meritPledgeArray={this.state.meritPledgeArray}
                 meritArray={this.state.meritArray}
                 meritActiveArray={this.state.meritActiveArray}
+                totalMerits={this.state.totalMerits}
                 handleRequestOpen={this.props.handleRequestOpen}
               />
             </Tab>
