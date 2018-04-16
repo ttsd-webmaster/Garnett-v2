@@ -19,7 +19,7 @@ workbox.routing.registerNavigationRoute('/index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workbox.routing.registerRoute(
-  /^https:\/\/storage\.googleapis\.com\//,
+  new RegExp('https://storage.googleapis.com'),
   workbox.strategies.cacheFirst({
     cacheName: 'firebasestorage',
     plugins: [
@@ -33,7 +33,7 @@ workbox.routing.registerRoute(
 
 // Use a cache first strategy for files from googleapis.com
 workbox.routing.registerRoute(
-  /^https:\/\/fonts\.googleapis\.com\//,
+  /^https:\/\/firebasestorage\.googleapis\.com\//,
   workbox.strategies.cacheFirst({
     cacheName: 'googlefonts',
     plugins: [
