@@ -8,6 +8,9 @@ import React, {Component} from 'react';
 import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import Popover from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
 const LoadableAddChalkboardDialog = Loadable({
   loader: () => import('./Dialogs/AddChalkboardDialog'),
@@ -47,7 +50,11 @@ export default class Chalkboards extends Component {
       upcomingChalkboards: this.props.upcomingChalkboards,
       completedChalkboards: this.props.completedChalkboards,
       selectedChalkboard: null,
-      chalkboardType: ''
+      chalkboardType: '',
+      openPopover: false,
+      filter: 'date',
+      filterName: 'Date',
+      reverse: false
     };
   }
 
@@ -347,6 +354,63 @@ export default class Chalkboards extends Component {
     });
   }
 
+  openPopover = (event) => {
+    // This prevents ghost click.
+    event.preventDefault();
+
+    this.setState({
+      openPopover: true,
+      anchorEl: event.currentTarget,
+    });
+  };
+
+  closePopover = () => {
+    this.setState({
+      openPopover: false,
+    });
+  };
+
+  setFilter = (filterName) => {
+    let filter = filterName.replace(/ /g,'');
+    filter = filter[0].toLowerCase() + filter.substr(1);
+
+    this.setState({
+      filter: filter,
+      filterName: filterName,
+      reverse: false,
+      openPopover: false
+    });
+  }
+
+  filterCount(chalkboard, filter) {
+    if (filter === 'timeCommitment') {
+      return chalkboard[filter].value;
+    }
+    else if (filter === 'attendees') {
+      if (chalkboard[filter] === undefined) {
+        return 0;
+      }
+      else {
+        return Object.keys(chalkboard[filter]).length;
+      }
+    }
+    else {
+      return chalkboard[filter];
+    }
+  }
+
+  reverse = () => {
+    let reverse = true;
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      reverse: reverse
+    });
+  }
+
   render() {
     return (
       this.state.loaded ? (
@@ -356,11 +420,25 @@ export default class Chalkboards extends Component {
             myHostingChalkboards={this.state.myHostingChalkboards}
             myAttendingChalkboards={this.state.myAttendingChalkboards}
             myCompletedChalkboards={this.state.myCompletedChalkboards}
+            filter={this.state.filter}
+            filterName={this.state.filterName}
+            reverse={this.state.reverse}
+            reverseChalkboards={this.reverse}
+            setFilter={this.setFilter}
+            filterCount={this.filterCount}
+            openPopover={this.openPopover}
             handleOpen={this.handleOpen}
           />
           <AllChalkboards
             upcomingChalkboards={this.state.upcomingChalkboards}
             completedChalkboards={this.state.completedChalkboards}
+            filter={this.state.filter}
+            filterName={this.state.filterName}
+            reverse={this.state.reverse}
+            reverseChalkboards={this.reverse}
+            setFilter={this.setFilter}
+            filterCount={this.filterCount}
+            openPopover={this.openPopover}
             handleOpen={this.handleOpen}
           />
 
@@ -381,6 +459,41 @@ export default class Chalkboards extends Component {
               onClick={() => this.select(1)}
             />
           </BottomNavigation>
+
+          <Popover
+            open={this.state.openPopover}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+            targetOrigin={{horizontal: 'left', vertical: 'top'}}
+            onRequestClose={this.closePopover}
+          >
+            <Menu>
+              <MenuItem
+                primaryText="Date"
+                insetChildren
+                checked={this.state.filterName === 'Date'}
+                onClick={() => this.setFilter('Date')}
+              />
+              <MenuItem
+                primaryText="Amount"
+                insetChildren
+                checked={this.state.filterName === 'Amount'}
+                onClick={() => this.setFilter('Amount')}
+              />
+              <MenuItem
+                primaryText="Time Commitment"
+                insetChildren
+                checked={this.state.filterName === 'Time Commitment'}
+                onClick={() => this.setFilter('Time Commitment')}
+              />
+              <MenuItem
+                primaryText="Attendees"
+                insetChildren
+                checked={this.state.filterName === 'Attendees'}
+                onClick={() => this.setFilter('Attendees')}
+              />
+            </Menu>
+          </Popover>
 
           {this.props.state.status !== 'pledge' && (
             <div>

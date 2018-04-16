@@ -3,82 +3,12 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import Popover from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 
 export default class MyChalkboards extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      filter: 'date',
-      filterName: 'Date',
-      reverse: false,
-      open: false
-    };
-  }
-
-  openPopover = (event) => {
-    // This prevents ghost click.
-    event.preventDefault();
-
-    this.setState({
-      open: true,
-      anchorEl: event.currentTarget,
-    });
-  };
-
-  closePopover = () => {
-    this.setState({
-      open: false,
-    });
-  };
-
-  setFilter = (filterName) => {
-    let filter = filterName.replace(/ /g,'');
-    filter = filter[0].toLowerCase() + filter.substr(1);
-
-    this.setState({
-      filter: filter,
-      filterName: filterName,
-      reverse: false,
-      open: false
-    });
-  }
-
-  filterCount(chalkboard, filter) {
-    if (filter === 'timeCommitment') {
-      return chalkboard[filter].value;
-    }
-    else if (filter === 'attendees') {
-      if (chalkboard[filter] === undefined) {
-        return 0;
-      }
-      else {
-        return Object.keys(chalkboard[filter]).length;
-      }
-    }
-    else {
-      return chalkboard[filter];
-    }
-  }
-
-  reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
-  }
-
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let filter = this.state.filter;
+    let filter = this.props.filter;
     let label;
 
     let myHostingChalkboards = this.props.myHostingChalkboards.sort(function(a, b) {
@@ -94,7 +24,12 @@ export default class MyChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return a[filter] > b[filter];
+      else if (filter === 'timeCommitment') {
+        return a[filter].value < b[filter].value ? 1 : -1;
+      }
+      else {
+        return a[filter] > b[filter];
+      }
     });
     let myAttendingChalkboards = this.props.myAttendingChalkboards.sort(function(a, b) {
       if (filter === 'attendees') {
@@ -109,7 +44,12 @@ export default class MyChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return a[filter] > b[filter];
+      else if (filter === 'timeCommitment') {
+        return a[filter].value < b[filter].value ? 1 : -1;
+      }
+      else {
+        return a[filter] > b[filter];
+      }
     });
     let myCompletedChalkboards = this.props.myCompletedChalkboards.sort(function(a, b) {
       if (filter === 'attendees') {
@@ -124,10 +64,15 @@ export default class MyChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return a[filter] > b[filter];
+      else if (filter === 'timeCommitment') {
+        return a[filter].value < b[filter].value ? 1 : -1;
+      }
+      else {
+        return a[filter] > b[filter];
+      }
     });
 
-    if (this.state.reverse) {
+    if (this.props.reverse) {
       myHostingChalkboards = myHostingChalkboards.slice().reverse();
       myAttendingChalkboards = myAttendingChalkboards.slice().reverse();
       myCompletedChalkboards = myCompletedChalkboards.slice().reverse();
@@ -148,13 +93,13 @@ export default class MyChalkboards extends Component {
             <Subheader className="garnett-subheader">
               Hosting
               <span style={{float:'right'}}>
-                <span style={{cursor:'pointer'}} onClick={this.openPopover}> 
-                  {this.state.filterName}
+                <span style={{cursor:'pointer'}} onClick={this.props.openPopover}> 
+                  {this.props.filterName}
                 </span>
                 <IconButton
                   iconClassName={toggleIcon}
                   className="reverse-toggle"
-                  onClick={this.reverse}
+                  onClick={this.props.reverseChalkboards}
                 >
                 </IconButton>
               </span>
@@ -179,7 +124,7 @@ export default class MyChalkboards extends Component {
                     onClick={() => this.props.handleOpen(chalkboard, 'hosting')}
                   >
                     <p className="garnett-date">
-                      {this.filterCount(chalkboard, filter)} {label}
+                      {this.props.filterCount(chalkboard, filter)} {label}
                     </p>
                   </ListItem>
                   <Divider className="garnett-divider large" inset={true} />
@@ -195,13 +140,13 @@ export default class MyChalkboards extends Component {
           Attending
           {this.props.state.status === 'pledge' && (
             <span style={{float:'right'}}>
-              <span style={{cursor:'pointer'}} onClick={this.openPopover}> 
-                {this.state.filterName}
+              <span style={{cursor:'pointer'}} onClick={this.props.openPopover}> 
+                {this.props.filterName}
               </span>
               <IconButton
                 iconClassName={toggleIcon}
                 className="reverse-toggle"
-                onClick={this.reverse}
+                onClick={this.props.reverseChalkboards}
               >
               </IconButton>
             </span>
@@ -227,7 +172,7 @@ export default class MyChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'attending')}
               >
                 <p className="garnett-date">
-                  {this.filterCount(chalkboard, filter)} {label}
+                  {this.props.filterCount(chalkboard, filter)} {label}
                 </p>
               </ListItem>
               <Divider className="garnett-divider large" inset={true} />
@@ -257,48 +202,13 @@ export default class MyChalkboards extends Component {
                 onClick={() => this.props.handleOpen(chalkboard, 'completed')}
               >
                 <p className="garnett-date">
-                  {this.filterCount(chalkboard, filter)} {label}
+                  {this.props.filterCount(chalkboard, filter)} {label}
                 </p>
               </ListItem>
               <Divider className="garnett-divider large" inset={true} />
             </div>
           ))}
         </List>
-
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.closePopover}
-        >
-          <Menu>
-            <MenuItem
-              primaryText="Date"
-              insetChildren
-              checked={this.state.filterName === 'Date'}
-              onClick={() => this.setFilter('Date')}
-            />
-            <MenuItem
-              primaryText="Amount"
-              insetChildren
-              checked={this.state.filterName === 'Amount'}
-              onClick={() => this.setFilter('Amount')}
-            />
-            <MenuItem
-              primaryText="Time Commitment"
-              insetChildren
-              checked={this.state.filterName === 'Time Commitment'}
-              onClick={() => this.setFilter('Time Commitment')}
-            />
-            <MenuItem
-              primaryText="Attendees"
-              insetChildren
-              checked={this.state.filterName === 'Attendees'}
-              onClick={() => this.setFilter('Attendees')}
-            />
-          </Menu>
-        </Popover>
       </div>
     )
   }
