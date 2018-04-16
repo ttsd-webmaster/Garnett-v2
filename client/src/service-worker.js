@@ -18,32 +18,32 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
 workbox.routing.registerNavigationRoute('/index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
-// workbox.routing.registerRoute(
-//   /^https:\/\/firebasestorage\.googleapis\.com\//,
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'firebasestorage',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 30 days (expressed in seconds)
-//         maxAgeSeconds: 30 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+workbox.routing.registerRoute(
+  /^https:\/\/storage\.googleapis\.com\//,
+  workbox.strategies.cacheFirst({
+    cacheName: 'firebasestorage',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
-// // Use a cache first strategy for files from googleapis.com
-// workbox.routing.registerRoute(
-//   /^https:\/\/fonts\.googleapis\.com\//,
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'googlefonts',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 30 days (expressed in seconds)
-//         maxAgeSeconds: 30 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+// Use a cache first strategy for files from googleapis.com
+workbox.routing.registerRoute(
+  /^https:\/\/fonts\.googleapis\.com\//,
+  workbox.strategies.cacheFirst({
+    cacheName: 'googlefonts',
+    plugins: [
+      new workbox.expiration.Plugin({
+        // Expire after 30 days (expressed in seconds)
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+      })
+    ]
+  })
+);
 
 // // Note to self, woff regexp will also match woff2 :P
 // workbox.routing.registerRoute(
