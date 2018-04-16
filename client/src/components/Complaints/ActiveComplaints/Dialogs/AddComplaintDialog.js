@@ -13,7 +13,7 @@ export default class AddComplaintDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pledges: this.props.pledges,
+      pledges: [],
       pledge: null,
       description: '',
       pledgeValidation: true,
@@ -26,8 +26,6 @@ export default class AddComplaintDialog extends Component {
       API.getPledgesForComplaints()
       .then((res) => {
         let pledges = res.data;
-
-        localStorage.setItem('complaintsPledgeArray', JSON.stringify(pledges));
 
         this.setState({
           pledges: pledges

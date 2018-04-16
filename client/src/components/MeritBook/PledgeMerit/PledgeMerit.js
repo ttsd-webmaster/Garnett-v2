@@ -334,7 +334,6 @@ export default class PledgeMerit extends Component {
           <LoadablePledgeMeritDialog
             open={this.state.openMerit}
             state={this.props.state}
-            actives={this.props.activesForMerit}
             handleMeritClose={this.handleMeritClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

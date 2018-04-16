@@ -23,7 +23,7 @@ export default class PledgeMeritDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      actives: this.props.actives,
+      actives: [],
       selectedActives: [],
       description: '',
       isChalkboard: false,
@@ -38,8 +38,6 @@ export default class PledgeMeritDialog extends Component {
       API.getActivesForMerit(nextProps.state.displayName)
       .then((res) => {
         let actives = res.data;
-
-        localStorage.setItem('meritActiveArray', JSON.stringify(actives));
 
         this.setState({
           actives: actives

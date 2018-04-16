@@ -238,7 +238,6 @@ export default class ActiveComplaints extends Component {
           <LoadableAddComplaintDialog
             open={this.state.open}
             state={this.props.state}
-            pledges={this.props.pledges}
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />

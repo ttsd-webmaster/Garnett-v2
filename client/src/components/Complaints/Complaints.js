@@ -17,7 +17,6 @@ export default class Complaints extends Component {
         <ActiveComplaints 
           state={this.props.state}
           index={this.props.index}
-          pledges={this.props.complaintsPledgeArray}
           complaints={this.props.activeComplaints}
           pendingComplaints={this.props.pendingComplaints}
           approvedComplaints={this.props.approvedComplaints}
