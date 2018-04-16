@@ -78,80 +78,95 @@ export default class HandleChalkboardDialog extends Component {
 
   // Joins the chalkboard
   join = (chalkboard) => {
-    let name = this.props.state.name;
-    let photoURL = this.props.state.photoURL;
+    if (navigator.onLine) {
+      let name = this.props.state.name;
+      let photoURL = this.props.state.photoURL;
 
-    API.joinChalkboard(name, photoURL, chalkboard)
-    .then((res) => {
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      let registrationToken = localStorage.getItem('registrationToken');
+      API.joinChalkboard(name, photoURL, chalkboard)
+      .then((res) => {
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        let registrationToken = localStorage.getItem('registrationToken');
 
-      console.log('Joined chalkboard');
-      this.handleClose();
+        console.log('Joined chalkboard');
+        this.handleClose();
 
-      if (isSafari || !registrationToken) {
-        this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
-      }
-      else {
-        API.sendJoinedChalkboardNotification(name, chalkboard)
-        .then(res => {
+        if (isSafari || !registrationToken) {
           this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
-        })
-        .catch(err => console.log(err));
-      }
-    })
-    .catch((error) => {
-      console.log('Error: ', error);
-      this.handleClose();
-      this.props.handleRequestOpen('Error joining chalkboard');
-    });
+        }
+        else {
+          API.sendJoinedChalkboardNotification(name, chalkboard)
+          .then(res => {
+            this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
+          })
+          .catch(err => console.log(err));
+        }
+      })
+      .catch((error) => {
+        console.log('Error: ', error);
+        this.handleClose();
+        this.props.handleRequestOpen('Error joining chalkboard');
+      });
+    }
+    else {
+      this.props.handleRequestOpen('You are offline.');
+    }
   }
 
   // Removes the chalkboard
   remove = (chalkboard) => {
-    let displayName = this.props.state.displayName;
+    if (navigator.onLine) {
+      let displayName = this.props.state.displayName;
 
-    API.removeChalkboard(displayName, chalkboard)
-    .then((res) => {
-      console.log('Removed chalkboard');
-      this.handleClose();
-      this.props.handleRequestOpen(`Removed ${chalkboard.title}`);
-    })
-    .catch((error) => {
-      console.log('Error: ', error);
-      this.handleClose();
-      this.props.handleRequestOpen('Error removing chalkboard');
-    });
+      API.removeChalkboard(displayName, chalkboard)
+      .then((res) => {
+        console.log('Removed chalkboard');
+        this.handleClose();
+        this.props.handleRequestOpen(`Removed ${chalkboard.title}`);
+      })
+      .catch((error) => {
+        console.log('Error: ', error);
+        this.handleClose();
+        this.props.handleRequestOpen('Error removing chalkboard');
+      });
+    }
+    else {
+      this.props.handleRequestOpen('You are offline.');
+    }
   }
 
   // Leaves the chalkboard
   leave = (chalkboard) => {
-    let name = this.props.state.name;
+    if (navigator.onLine) {
+      let name = this.props.state.name;
 
-    API.leaveChalkboard(name, chalkboard)
-    .then((res) => {
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      let registrationToken = localStorage.getItem('registrationToken');
-      
-      console.log('Left chalkboard');
-      this.handleClose();
+      API.leaveChalkboard(name, chalkboard)
+      .then((res) => {
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        let registrationToken = localStorage.getItem('registrationToken');
+        
+        console.log('Left chalkboard');
+        this.handleClose();
 
-      if (isSafari || !registrationToken) {
-        this.props.handleRequestOpen(`Left ${chalkboard.title}`);
-      }
-      else {
-        API.sendLeftChalkboardNotification(name, chalkboard)
-        .then(res => {
+        if (isSafari || !registrationToken) {
           this.props.handleRequestOpen(`Left ${chalkboard.title}`);
-        })
-        .catch(err => console.log(err));
-      }
-    })
-    .catch((error) => {
-      console.log('Error: ', error);
-      this.handleClose();
-      this.props.handleRequestOpen('Error leaving chalkboard');
-    });
+        }
+        else {
+          API.sendLeftChalkboardNotification(name, chalkboard)
+          .then(res => {
+            this.props.handleRequestOpen(`Left ${chalkboard.title}`);
+          })
+          .catch(err => console.log(err));
+        }
+      })
+      .catch((error) => {
+        console.log('Error: ', error);
+        this.handleClose();
+        this.props.handleRequestOpen('Error leaving chalkboard');
+      });
+    }
+    else {
+      this.props.handleRequestOpen('You are offline.');
+    }
   }
 
   // Updates the chalkboard information displayed
@@ -176,27 +191,32 @@ export default class HandleChalkboardDialog extends Component {
 
   // Opens the edit dialog if user is hosting chalkboard
   handleEditOpen = (field) => {
-    if (this.props.type === 'hosting') {
-      // Handles android back button for edit dialog
-      if (/android/i.test(navigator.userAgent)) {
-        let path;
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
+    if (navigator.onLine) {
+      if (this.props.type === 'hosting') {
+        // Handles android back button for edit dialog
+        if (/android/i.test(navigator.userAgent)) {
+          let path;
+          if (process.env.NODE_ENV === 'development') {
+            path = 'http://localhost:3000';
+          }
+          else {
+            path = 'https://garnett-app.herokuapp.com';
+          }
+
+          window.history.pushState(null, null, path + window.location.pathname);
+          window.onpopstate = () => {
+            this.handleEditClose();
+          }
         }
 
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleEditClose();
-        }
+        this.setState({
+          open: true,
+          field: field
+        });
       }
-
-      this.setState({
-        open: true,
-        field: field
-      });
+    }
+    else {
+      this.props.handleRequestOpen('You are offline.');
     }
   }
 
@@ -405,7 +425,10 @@ export default class HandleChalkboardDialog extends Component {
                   </List>
                 </Tab>
                 <Tab style={getTabStyle(this.state.index === 1)} label="Attendees" value={1}>
-                  <LoadableAttendeeList chalkboard={this.state.chalkboard} />
+                  <LoadableAttendeeList
+                    chalkboard={this.state.chalkboard}
+                    handleRequestOpen={this.props.handleRequestOpen}
+                  />
                 </Tab>
               </Tabs>
             </FullscreenDialog>
