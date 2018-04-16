@@ -184,10 +184,16 @@ export default class ActiveMerit extends Component {
                 </List>
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
-                <LoadableMeritsList pledgeName={pledgeDisplayName} />
+                <LoadableMeritsList
+                  pledgeName={pledgeDisplayName}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
               </Tab>
               <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
-                <LoadableComplaintsList pledgeName={pledgeDisplayName} />
+                <LoadableComplaintsList
+                  pledgeName={pledgeDisplayName}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
               </Tab>
             </Tabs>
           </FullscreenDialog>
@@ -262,10 +268,16 @@ export default class ActiveMerit extends Component {
                 </List>
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
-                <LoadableMeritsList pledgeName={pledgeDisplayName} />
+                <LoadableMeritsList
+                  pledgeName={pledgeDisplayName}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
               </Tab>
               <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
-                <LoadableComplaintsList pledgeName={pledgeDisplayName} />
+                <LoadableComplaintsList
+                  pledgeName={pledgeDisplayName}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
               </Tab>
             </Tabs>
           </Dialog>
