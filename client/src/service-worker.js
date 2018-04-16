@@ -32,7 +32,7 @@ workbox.routing.registerRoute(
         // Normally these wouldn't be cached; here we opt-in to caching them.
         // If the image returns a status 200 we cache it too
         statuses: [0, 200]
-      });
+      })
     ]
   })
 );
