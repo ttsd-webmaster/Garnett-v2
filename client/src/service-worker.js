@@ -1,8 +1,8 @@
 // Give the service worker access to Firebase Messaging.
 // Note that you can only use Firebase Messaging here, other Firebase libraries
 // are not available in the service worker.
-importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/4.10.1/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/4.12.1/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/4.12.1/firebase-messaging.js');
 importScripts('workbox-sw.prod.js');
 
 // Create Workbox service worker instance
@@ -18,18 +18,20 @@ workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
 workbox.routing.registerNavigationRoute('/index.html');
 
 // Use a cache first strategy for files from firebasestorage.googleapis.com
-// workbox.routing.registerRoute(
-//   /^https:\/\/firebasestorage\.googleapis\.com\//,
-//   workbox.strategies.cacheFirst({
-//     cacheName: 'firebasestorage',
-//     plugins: [
-//       new workbox.expiration.Plugin({
-//         // Expire after 30 days (expressed in seconds)
-//         maxAgeSeconds: 30 * 24 * 60 * 60,
-//       })
-//     ]
-//   })
-// );
+workbox.routing.registerRoute(
+  /^https:\/\/storage\.googleapis\.com\//,
+  workbox.strategies.cacheFirst({
+    cacheName: 'firebasestorage',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        // The images are returned as opaque responses, with a status of 0.
+        // Normally these wouldn't be cached; here we opt-in to caching them.
+        // If the image returns a status 200 we cache it too
+        statuses: [0, 200]
+      })
+    ]
+  })
+);
 
 // // Use a cache first strategy for files from googleapis.com
 // workbox.routing.registerRoute(
