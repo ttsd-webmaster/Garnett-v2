@@ -21,15 +21,7 @@ workbox.routing.registerNavigationRoute('/index.html');
 workbox.routing.registerRoute(
   /^https:\/\/storage\.googleapis\.com\//,
   workbox.strategies.cacheFirst({
-    cacheName: 'firebasestorage',
-    plugins: [
-      new workbox.cacheableResponse.Plugin({
-        // The images are returned as opaque responses, with a status of 0.
-        // Normally these wouldn't be cached; here we opt-in to caching them.
-        // If the image returns a status 200 we cache it too
-        statuses: [0, 200]
-      })
-    ]
+    cacheName: 'firebasestorage'
   })
 );
 
