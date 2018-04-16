@@ -55,7 +55,7 @@ export default class ComplaintsList extends Component {
 
     return (
       <div>
-        <Subheader className="garnett-subheader">
+        <Subheader className="garnett-subheader dialog">
           Recent
           <IconButton
             style={{float:'right',cursor:'pointer'}}

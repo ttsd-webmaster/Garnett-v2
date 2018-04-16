@@ -85,6 +85,9 @@
   max-width: 700px;
   margin: auto;
 }
+.garnett-subheader.dialog {
+  max-width: unset;
+}
 
 .garnett-list {
   width: 100vw;
