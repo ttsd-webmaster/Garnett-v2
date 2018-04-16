@@ -82,9 +82,8 @@
 /* Garnett List, List Items, and Dividers */
 .garnett-subheader {
   display: table;
-  width: 100vw !important;
   max-width: 700px;
-  margin: auto !important;
+  margin: auto;
 }
 
 .garnett-list {
@@ -136,6 +135,11 @@
     width: 50px !important;
     top: 16px !important;
   }
+}
+
+.garnett-icon {
+  font-size: 1.4em;
+  color: var(--primary-color);
 }
 
 .garnett-name {
@@ -209,11 +213,6 @@
 .garnett-input {
   margin: 0 auto;
   flex: 0 0 auto;
-}
-
-.garnett-icon {
-  font-size: 1.4em;
-  color: var(--primary-color);
 }
 
 /* Bottom Navigation */
