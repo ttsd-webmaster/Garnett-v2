@@ -20,12 +20,14 @@ workbox.routing.registerNavigationRoute('/index.html');
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workbox.routing.registerRoute(
   /^https:\/\/storage\.googleapis\.com\//,
-  workbox.strategies.staleWhileRevalidate({
+  workbox.strategies.cacheFirst({
     cacheName: 'firebasestorage',
     plugins: [
-      new workbox.expiration.Plugin({
-        // Expire after 30 days (expressed in seconds)
-        maxAgeSeconds: 30 * 24 * 60 * 60,
+      new workbox.cacheableResponse.Plugin({
+        // The images are returned as opaque responses, with a status of 0.
+        // Normally these wouldn't be cached; here we opt-in to caching them.
+        // If the image returns a status 200 we cache it too
+        statuses: [0, 200]
       })
     ]
   })
