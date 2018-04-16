@@ -83,10 +83,10 @@ export default class AllChalkboards extends Component {
     let label;
 
     let upcomingChalkboards = this.props.upcomingChalkboards.sort(function(a, b) {
-      let chalkboard1 = [];
-      let chalkboard2 = [];
-      
       if (filter === 'attendees') {
+        let chalkboard1 = [];
+        let chalkboard2 = [];
+
         if (a[filter] !== undefined) {
           chalkboard1 = a[filter];
         }
@@ -95,13 +95,13 @@ export default class AllChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return chalkboard1[filter] > chalkboard2[filter];
+      return a[filter] > b[filter];
     });
     let completedChalkboards = this.props.completedChalkboards.sort(function(a, b) {
-      let chalkboard1 = [];
-      let chalkboard2 = [];
-      
       if (filter === 'attendees') {
+        let chalkboard1 = [];
+        let chalkboard2 = [];
+
         if (a[filter] !== undefined) {
           chalkboard1 = a[filter];
         }
@@ -110,7 +110,7 @@ export default class AllChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return chalkboard1[filter] > chalkboard2[filter];
+      return a[filter] > b[filter];
     });
 
     if (this.state.reverse) {

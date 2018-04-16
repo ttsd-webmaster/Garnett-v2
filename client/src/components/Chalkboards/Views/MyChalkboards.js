@@ -82,10 +82,10 @@ export default class MyChalkboards extends Component {
     let label;
 
     let myHostingChalkboards = this.props.myHostingChalkboards.sort(function(a, b) {
-      let chalkboard1 = [];
-      let chalkboard2 = [];
-      
       if (filter === 'attendees') {
+        let chalkboard1 = [];
+        let chalkboard2 = [];
+        
         if (a[filter] !== undefined) {
           chalkboard1 = a[filter];
         }
@@ -94,13 +94,13 @@ export default class MyChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return chalkboard1[filter] > chalkboard2[filter];
+      return a[filter] > b[filter];
     });
     let myAttendingChalkboards = this.props.myAttendingChalkboards.sort(function(a, b) {
-      let chalkboard1 = [];
-      let chalkboard2 = [];
-      
       if (filter === 'attendees') {
+        let chalkboard1 = [];
+        let chalkboard2 = [];
+        
         if (a[filter] !== undefined) {
           chalkboard1 = a[filter];
         }
@@ -109,13 +109,13 @@ export default class MyChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return chalkboard1[filter] > chalkboard2[filter];
+      return a[filter] > b[filter];
     });
     let myCompletedChalkboards = this.props.myCompletedChalkboards.sort(function(a, b) {
-      let chalkboard1 = [];
-      let chalkboard2 = [];
-      
       if (filter === 'attendees') {
+        let chalkboard1 = [];
+        let chalkboard2 = [];
+
         if (a[filter] !== undefined) {
           chalkboard1 = a[filter];
         }
@@ -124,7 +124,7 @@ export default class MyChalkboards extends Component {
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
       }
-      return chalkboard1[filter] > chalkboard2[filter];
+      return a[filter] > b[filter];
     });
 
     if (this.state.reverse) {
