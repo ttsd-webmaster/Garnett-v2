@@ -83,7 +83,7 @@ export default class ActiveComplaints extends Component {
           console.log('Pending Complaints: ', pendingComplaints);
           console.log('Approved Complaints: ', approvedComplaints);
 
-          localStorage.setItem('complaints', JSON.stringify(complaints));
+          localStorage.setItem('activeComplaints', JSON.stringify(complaints));
           localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
           localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
 

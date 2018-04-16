@@ -83,6 +83,7 @@
 .garnett-subheader {
   display: table;
   max-width: 700px;
+  background-color: #fafafa;
   margin: auto;
 }
 .garnett-subheader.dialog {

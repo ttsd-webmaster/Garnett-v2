@@ -110,12 +110,12 @@ export default class AddChalkboardDialog extends Component {
           this.handleClose();
 
           if (isSafari || !registrationToken) {
-            this.props.handleRequestOpen('Created a chalkboard!');
+            this.props.handleRequestOpen(`Created chalkboard, ${title}`);
           }
           else {
             API.sendCreatedChalkboardNotification(title)
             .then(res => {
-              this.props.handleRequestOpen('Created a chalkboard!');
+              this.props.handleRequestOpen(`Created chalkboard, ${title}`);
             })
             .catch(err => console.log(err));
           }

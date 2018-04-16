@@ -78,10 +78,10 @@ export default class PledgeApp extends Component {
       meritArray: [],
       meritPledgeArray: [],
       meritActiveArray: [],
-      pledgeComplaintsArray: [],
-      activeComplaintsArray: [],
-      pendingComplaintsArray: [],
-      approvedComplaintsArray: [],
+      pledgeComplaints: [],
+      activeComplaints: [],
+      pendingComplaints: [],
+      approvedComplaints: [],
       complaintsPledgeArray: [],
       myHostingChalkboards: [],
       myAttendingChalkboards: [],
@@ -113,9 +113,9 @@ export default class PledgeApp extends Component {
         let meritPledgeArray = JSON.parse(localStorage.getItem('meritPledgeArray'));
         let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
         let complaintsPledgeArray = JSON.parse(localStorage.getItem('complaintsPledgeArray'));
-        let activeComplaintsArray = JSON.parse(localStorage.getItem('activeComplaintsArray'));
-        let pendingComplaintsArray = JSON.parse(localStorage.getItem('pendingComplaintsArray'));
-        let approvedComplaintsArray = JSON.parse(localStorage.getItem('approvedComplaintsArray'));
+        let activeComplaints = JSON.parse(localStorage.getItem('activeComplaints'));
+        let pendingComplaints = JSON.parse(localStorage.getItem('pendingComplaints'));
+        let approvedComplaints = JSON.parse(localStorage.getItem('approvedComplaints'));
 
         this.setState({
           loaded: true,
@@ -123,9 +123,9 @@ export default class PledgeApp extends Component {
           activeArray: activeArray,
           meritPledgeArray: meritPledgeArray,
           complaintsPledgeArray: complaintsPledgeArray,
-          activeComplaintsArray: activeComplaintsArray,
-          pendingComplaintsArray: pendingComplaintsArray,
-          approvedComplaintsArray: approvedComplaintsArray,
+          activeComplaints: activeComplaints,
+          pendingComplaints: pendingComplaints,
+          approvedComplaints: approvedComplaints,
           myHostingChalkboards: myHostingChalkboards,
           myAttendingChalkboards: myAttendingChalkboards,
           myCompletedChalkboards: myCompletedChalkboards,
@@ -136,13 +136,13 @@ export default class PledgeApp extends Component {
       else {
         let meritArray = JSON.parse(localStorage.getItem('meritArray'));
         let meritActiveArray = JSON.parse(localStorage.getItem('meritActiveArray'));
-        let pledgeComplaintsArray = JSON.parse(localStorage.getItem('pledgeComplaintsArray'));
+        let pledgeComplaints = JSON.parse(localStorage.getItem('pledgeComplaints'));
 
         this.setState({
           loaded: true,
           meritArray: meritArray,
           meritActiveArray: meritActiveArray,
-          pledgeComplaintsArray: pledgeComplaintsArray,
+          pledgeComplaints: pledgeComplaints,
           activeArray: activeArray,
           myAttendingChalkboards: myAttendingChalkboards,
           myCompletedChalkboards: myCompletedChalkboards,
@@ -429,11 +429,11 @@ export default class PledgeApp extends Component {
               <LoadableComplaints
                 state={this.props.state}
                 index={this.state.slideIndex}
-                pledgeComplaintsArray={this.state.pledgeComplaintsArray}
+                pledgeComplaints={this.state.pledgeComplaints}
                 complaintsPledgeArray={this.state.complaintsPledgeArray}
-                activeComplaintsArray={this.state.activeComplaintsArray}
-                pendingComplaintsArray={this.state.pendingComplaintsArray}
-                approvedComplaintsArray={this.state.approvedComplaintsArray}
+                activeComplaints={this.state.activeComplaints}
+                pendingComplaints={this.state.pendingComplaints}
+                approvedComplaints={this.state.approvedComplaints}
                 handleRequestOpen={this.props.handleRequestOpen}
               />
             </Tab>

@@ -1186,50 +1186,8 @@ app.post('/api/sendEditedChalkboardNotification', function(req, res) {
   });
 });
 
-// Send joined chalkboard notification to active
-app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
-  let chalkboard = req.body.chalkboard;
-  let activeName = chalkboard.displayName;
-  let name = req.body.name;
+function sendAttendeesNotification(chalkboard, message, res) {
   let chalkboardsRef = admin.database().ref('/chalkboards');
-  let activeRef = admin.database().ref('/users/' + activeName);
-
-  activeRef.once('value', (snapshot) => {
-    let registrationToken = snapshot.val().registrationToken;
-    let message = {
-      webpush: {
-        notification: {
-          title: 'Garnett',
-          body: `${name} has joined your chalkboard, ${chalkboard.title}.`,
-          click_action: 'https://garnett-app.herokuapp.com/pledge-app',
-          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
-        }
-      },
-      token: registrationToken
-    };
-
-    if (registrationToken) {
-      admin.messaging().send(message)
-      .then(function(response) {
-        console.log("Successfully sent message:", response);
-        if (!res.headersSent) {
-          res.sendStatus(200);
-        }
-      })
-      .catch(function(error) {
-        console.log("Error sending message:", error);
-        if (!res.headersSent) {
-          res.sendStatus(400);
-        }
-      });
-    }
-    else {
-      if (!res.headersSent) {
-        res.sendStatus(200);
-      }
-    }
-  });
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((child) => {
@@ -1241,18 +1199,6 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
 
             attendeeRef.once('value', (snapshot) => {
               let registrationToken = snapshot.val().registrationToken;
-              let message = {
-                webpush: {
-                  notification: {
-                    title: 'Garnett',
-                    body: `${name} has joined the chalkboard, ${chalkboard.title}.`,
-                    click_action: 'https://garnett-app.herokuapp.com/pledge-app',
-                    icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-                    vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
-                  }
-                },
-                token: registrationToken
-              };
 
               if (registrationToken) {
                 admin.messaging().send(message)
@@ -1279,6 +1225,51 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
         });
       }
     });
+  });
+}
+
+// Send joined chalkboard notification to active
+app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
+  let chalkboard = req.body.chalkboard;
+  let activeName = chalkboard.displayName;
+  let name = req.body.name;
+  let activeRef = admin.database().ref('/users/' + activeName);
+
+  activeRef.once('value', (snapshot) => {
+    let registrationToken = snapshot.val().registrationToken;
+    let message = {
+      webpush: {
+        notification: {
+          title: 'Garnett',
+          body: `${name} has joined the chalkboard, ${chalkboard.title}.`,
+          click_action: 'https://garnett-app.herokuapp.com/pledge-app',
+          icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
+          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+        }
+      },
+      token: registrationToken
+    };
+
+    if (registrationToken) {
+      admin.messaging().send(message)
+      .then(function(response) {
+        console.log("Successfully sent message:", response);
+        if (!res.headersSent) {
+          sendAttendeesNotification(chalkboard, message, res);
+        }
+      })
+      .catch(function(error) {
+        console.log("Error sending message:", error);
+        if (!res.headersSent) {
+          res.sendStatus(400);
+        }
+      });
+    }
+    else {
+      if (!res.headersSent) {
+        sendAttendeesNotification(chalkboard, message, res);
+      }
+    }
   });
 });
 
@@ -1296,7 +1287,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
       webpush: {
         notification: {
           title: 'Garnett',
-          body: `${name} has left your chalkboard, ${chalkboard.title}.`,
+          body: `${name} has left the chalkboard, ${chalkboard.title}.`,
           click_action: 'https://garnett-app.herokuapp.com/pledge-app',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
           vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
@@ -1310,7 +1301,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
       .then(function(response) {
         console.log("Successfully sent message:", response);
         if (!res.headersSent) {
-          res.sendStatus(200);
+          sendAttendeesNotification(chalkboard, message, res);
         }
       })
       .catch(function(error) {
@@ -1322,59 +1313,9 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
     }
     else {
       if (!res.headersSent) {
-        res.sendStatus(200);
+        sendAttendeesNotification(chalkboard, message, res);
       }
     }
-  });
-
-  chalkboardsRef.once('value', (chalkboards) => {
-    chalkboards.forEach((child) => {
-      if (equal(chalkboard, child.val())) {
-        child.ref.child('attendees').once('value', (attendees) => {
-          attendees.forEach((attendee) => {
-            let attendeeName = attendee.val().name.replace(/ /g,'');
-            let attendeeRef = admin.database().ref('/users/' + attendeeName);
-
-            attendeeRef.once('value', (snapshot) => {
-              let registrationToken = snapshot.val().registrationToken;
-              let message = {
-                webpush: {
-                  notification: {
-                    title: 'Garnett',
-                    body: `${name} has left the chalkboard, ${chalkboard.title}.`,
-                    click_action: 'https://garnett-app.herokuapp.com/pledge-app',
-                    icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-                    vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
-                  }
-                },
-                token: registrationToken
-              };
-
-              if (registrationToken) {
-                admin.messaging().send(message)
-                .then(function(response) {
-                  console.log("Successfully sent message:", response);
-                  if (!res.headersSent) {
-                    res.sendStatus(200);
-                  }
-                })
-                .catch(function(error) {
-                  console.log("Error sending message:", error);
-                  if (!res.headersSent) {
-                    res.sendStatus(400);
-                  }
-                });
-              }
-              else {
-                if (!res.headersSent) {
-                  res.sendStatus(200);
-                }
-              }
-            });
-          });
-        });
-      }
-    });
   });
 });
 
@@ -1391,7 +1332,7 @@ app.post('/api/sendPendingComplaintNotification', function(req, res) {
           webpush: {
             notification: {
               title: 'Garnett',
-              body: `${complaint.activeName} has submitted a complaint for ${complaint.pledgeName}.`,
+              body: `A complaint has been submitted for ${complaint.pledgeName}.`,
               click_action: 'https://garnett-app.herokuapp.com/pledge-app',
               icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
               vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
