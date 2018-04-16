@@ -172,8 +172,15 @@
 .garnett-divider {
   position: relative;
 }
-.garnett-divider.large {
-  margin-left: 102px !important;
+@media(min-width: 366px) {
+  .garnett-divider.large {
+    margin-left: 102px !important;
+  }
+}
+@media(max-width: 365px) {
+  .garnett-divider.large {
+    margin-left: 80px !important;
+  }
 }
 
 /* Garnett Dialog */
