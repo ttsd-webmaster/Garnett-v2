@@ -251,6 +251,7 @@ export default class PledgeMeritDialog extends Component {
             className="garnett-input"
             value={this.state.description}
             floatingLabelText="Chalkboard Title"
+            maxHeight={345}
             onChange={(e, key, newValue) => this.handleChange('description', newValue)}
             errorText={!this.state.descriptionValidation && 'Please select a chalkboard.'}
           >

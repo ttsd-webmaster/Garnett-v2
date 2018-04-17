@@ -154,6 +154,7 @@ export default class AddComplaintDialog extends Component {
           className="garnett-input"
           value={this.state.pledge}
           floatingLabelText="Pledge Name"
+          maxHeight={345}
           onChange={(e, key, newValue) => this.handleChange('pledge', newValue)}
           errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
         >

@@ -78,6 +78,12 @@
 .fixed-button.hidden {
   display: none;
 }
+@media(min-width: 901px) {
+  .fixed-button {
+    right: 50%;
+    transform: translateX(435px);
+  }
+}
 
 /* Garnett List, List Items, and Dividers */
 .garnett-subheader {

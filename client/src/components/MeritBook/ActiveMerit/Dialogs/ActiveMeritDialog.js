@@ -233,6 +233,7 @@ export default class ActiveMeritDialog extends Component {
           className="garnett-input"
           value={this.state.selectedPledges}
           floatingLabelText="Pledge Name"
+          maxHeight={345}
           multiple={true}
           onChange={(e, key, newValues) => this.handleChange('selectedPledges', newValues)}
           errorText={!this.state.pledgeValidation && 'Please select a pledge.'}

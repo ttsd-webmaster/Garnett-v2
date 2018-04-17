@@ -310,6 +310,12 @@ export default class Chalkboards extends Component {
       appBar.style.zIndex = 0;
     }
 
+    this.setState({
+      open: true,
+      selectedChalkboard: chalkboard,
+      chalkboardType: type
+    });
+
     // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
       let path;
@@ -325,12 +331,6 @@ export default class Chalkboards extends Component {
         this.handleClose();
       }
     }
-
-    this.setState({
-      open: true,
-      selectedChalkboard: chalkboard,
-      chalkboardType: type
-    });
   }
 
   handleClose = () => {
@@ -346,6 +346,7 @@ export default class Chalkboards extends Component {
       appBar.style.zIndex = 1;
     }
 
+    // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }
