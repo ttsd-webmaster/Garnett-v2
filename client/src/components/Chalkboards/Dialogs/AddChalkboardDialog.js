@@ -103,22 +103,14 @@ export default class AddChalkboardDialog extends Component {
 
         API.createChalkboard(displayName, activeName, photoURL, title, description, parsedDate, parsedTime, location, timeCommitment, amount)
         .then((res) => {
-          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-          let registrationToken = localStorage.getItem('registrationToken');
-
           console.log(res);
           this.handleClose();
 
-          if (isSafari || !registrationToken) {
+          API.sendCreatedChalkboardNotification(title)
+          .then(res => {
             this.props.handleRequestOpen(`Created chalkboard, ${title}`);
-          }
-          else {
-            API.sendCreatedChalkboardNotification(title)
-            .then(res => {
-              this.props.handleRequestOpen(`Created chalkboard, ${title}`);
-            })
-            .catch(err => console.log(err));
-          }
+          })
+          .catch(err => console.log(err));
         })
         .catch((error) => {
           console.log('Error: ', error);

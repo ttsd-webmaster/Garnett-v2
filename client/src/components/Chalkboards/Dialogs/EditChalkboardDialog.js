@@ -102,23 +102,15 @@ export default class EditChalkboardDialog extends Component {
 
         API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location, timeCommitment, amount)
         .then((res) => {
-          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-          let registrationToken = localStorage.getItem('registrationToken');
-
           console.log('Edited chalkboard');
           this.props.updateChalkboardInfo();
           this.handleClose();
 
-          if (isSafari || !registrationToken) {
-            this.props.handleRequestOpen('Edited chalkboard');
-          }
-          else {
-            API.sendEditedChalkboardNotification(chalkboard)
-            .then(res => {
-              this.props.handleRequestOpen('Edited chalkboard');            
-            })
-            .catch(err => console.log(err));
-          }
+          API.sendEditedChalkboardNotification(chalkboard)
+          .then(res => {
+            this.props.handleRequestOpen('Edited chalkboard');            
+          })
+          .catch(err => console.log(err));
         })
         .catch((error) => {
           console.log('Error: ', error);

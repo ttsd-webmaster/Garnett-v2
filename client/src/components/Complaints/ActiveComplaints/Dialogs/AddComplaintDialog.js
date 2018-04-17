@@ -70,30 +70,22 @@ export default class AddComplaintDialog extends Component {
       
       API.complain(complaint, status)
       .then((res) => {
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        let registrationToken = localStorage.getItem('registrationToken');
-        
         console.log(res);
         this.handleClose();
 
-        if (isSafari || !registrationToken) {
-          this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
+        if (status === 'pipm') {
+          API.sendApprovedComplaintNotification(complaint)
+          .then(res => {
+            this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
+          })
+          .catch(err => console.log(err));
         }
         else {
-          if (status === 'pipm') {
-            API.sendApprovedComplaintNotification(complaint)
-            .then(res => {
-              this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
-            })
-            .catch(err => console.log(err));
-          }
-          else {
-            API.sendPendingComplaintNotification(complaint)
-            .then(res => {
-              this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
-            })
-            .catch(err => console.log(err));
-          }
+          API.sendPendingComplaintNotification(complaint)
+          .then(res => {
+            this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
+          })
+          .catch(err => console.log(err));
         }
       })
       .catch((error) => {

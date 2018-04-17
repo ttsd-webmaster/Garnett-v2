@@ -58,7 +58,8 @@ export default class ActiveMerit extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.pledge) {
       this.setState({
-        pledge: nextProps.pledge
+        pledge: nextProps.pledge,
+        index: 0
       });
 
       if (navigator.onLine) {
@@ -88,14 +89,6 @@ export default class ActiveMerit extends Component {
     });
   }
 
-  handleClose = () => {
-    this.props.handleClose();
-
-    this.setState({
-      index: 0
-    });
-  }
-
   render() {
     let pledgeName;
     let pledgeDisplayName;
@@ -109,7 +102,7 @@ export default class ActiveMerit extends Component {
       <FlatButton
         label="Close"
         primary={true}
-        onClick={this.handleClose}
+        onClick={this.props.handleClose}
       />
     );
 
@@ -120,7 +113,7 @@ export default class ActiveMerit extends Component {
             title="Pledge"
             titleStyle={{fontSize:'22px'}}
             open={this.props.open}
-            onRequestClose={this.handleClose}
+            onRequestClose={this.props.handleClose}
           >
             <Tabs 
               className="garnett-dialog-tabs"
@@ -203,7 +196,7 @@ export default class ActiveMerit extends Component {
             bodyClassName="garnett-dialog-body tabs grey"
             contentClassName="garnett-dialog-content"
             open={this.props.open}
-            onRequestClose={this.handleClose}
+            onRequestClose={this.props.handleClose}
             autoScrollBodyContent={true}
           >
             <Tabs

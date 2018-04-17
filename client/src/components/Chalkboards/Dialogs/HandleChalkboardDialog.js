@@ -84,26 +84,18 @@ export default class HandleChalkboardDialog extends Component {
 
       API.joinChalkboard(name, photoURL, chalkboard)
       .then((res) => {
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        let registrationToken = localStorage.getItem('registrationToken');
-
         console.log('Joined chalkboard');
-        this.handleClose();
+        this.props.handleClose();
 
-        if (isSafari || !registrationToken) {
+        API.sendJoinedChalkboardNotification(name, chalkboard)
+        .then(res => {
           this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
-        }
-        else {
-          API.sendJoinedChalkboardNotification(name, chalkboard)
-          .then(res => {
-            this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
-          })
-          .catch(err => console.log(err));
-        }
+        })
+        .catch(err => console.log(err));
       })
       .catch((error) => {
         console.log('Error: ', error);
-        this.handleClose();
+        this.props.handleClose();
         this.props.handleRequestOpen('Error joining chalkboard');
       });
     }
@@ -120,12 +112,12 @@ export default class HandleChalkboardDialog extends Component {
       API.removeChalkboard(displayName, chalkboard)
       .then((res) => {
         console.log('Removed chalkboard');
-        this.handleClose();
+        this.props.handleClose();
         this.props.handleRequestOpen(`Removed ${chalkboard.title}`);
       })
       .catch((error) => {
         console.log('Error: ', error);
-        this.handleClose();
+        this.props.handleClose();
         this.props.handleRequestOpen('Error removing chalkboard');
       });
     }
@@ -141,26 +133,18 @@ export default class HandleChalkboardDialog extends Component {
 
       API.leaveChalkboard(name, chalkboard)
       .then((res) => {
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        let registrationToken = localStorage.getItem('registrationToken');
-        
         console.log('Left chalkboard');
-        this.handleClose();
+        this.props.handleClose();
 
-        if (isSafari || !registrationToken) {
+        API.sendLeftChalkboardNotification(name, chalkboard)
+        .then(res => {
           this.props.handleRequestOpen(`Left ${chalkboard.title}`);
-        }
-        else {
-          API.sendLeftChalkboardNotification(name, chalkboard)
-          .then(res => {
-            this.props.handleRequestOpen(`Left ${chalkboard.title}`);
-          })
-          .catch(err => console.log(err));
-        }
+        })
+        .catch(err => console.log(err));
       })
       .catch((error) => {
         console.log('Error: ', error);
-        this.handleClose();
+        this.props.handleClose();
         this.props.handleRequestOpen('Error leaving chalkboard');
       });
     }
@@ -234,26 +218,13 @@ export default class HandleChalkboardDialog extends Component {
 
       window.history.pushState(null, null, path + window.location.pathname);
       window.onpopstate = () => {
-        this.handleClose();
+        this.props.handleClose();
       }
     }
 
     this.setState({
       open: false,
       field: ''
-    });
-  }
-
-  // Closes this dialog
-  handleClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
-    this.props.handleClose();
-
-    this.setState({
-      index: 0
     });
   }
 
@@ -274,7 +245,7 @@ export default class HandleChalkboardDialog extends Component {
       <FlatButton
         label="Close"
         primary={true}
-        onClick={this.handleClose}
+        onClick={this.props.handleClose}
       />,
       this.props.type !== 'completed' && (
         <RaisedButton
@@ -326,7 +297,7 @@ export default class HandleChalkboardDialog extends Component {
               titleStyle={{fontSize:'22px'}}
               actionButton={mobileAction}
               open={this.props.open}
-              onRequestClose={this.handleClose}
+              onRequestClose={this.props.handleClose}
             >
               <Tabs 
                 className="garnett-dialog-tabs"
@@ -452,7 +423,7 @@ export default class HandleChalkboardDialog extends Component {
               bodyClassName="garnett-dialog-body tabs grey"
               contentClassName="garnett-dialog-content"
               open={this.props.open}
-              onRequestClose={this.handleClose}
+              onRequestClose={this.props.handleClose}
               autoScrollBodyContent={true}
             >
               <Tabs 

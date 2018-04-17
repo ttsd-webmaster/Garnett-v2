@@ -9,22 +9,14 @@ export default class HandleComplaintDialog extends Component {
   approve = (complaint) => {
     API.approveComplaint(complaint)
     .then((res) => {
-      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-      let registrationToken = localStorage.getItem('registrationToken');
-
       console.log('Approved complaint');
       this.props.handleClose();
 
-      if (isSafari || !registrationToken) {
+      API.sendApprovedComplaintNotification(complaint)
+      .then(res => {
         this.props.handleRequestOpen(`Approved complaint for ${complaint.pledgeName}`);
-      }
-      else {
-        API.sendApprovedComplaintNotification(complaint)
-        .then(res => {
-          this.props.handleRequestOpen(`Approved complaint for ${complaint.pledgeName}`);
-        })
-        .catch(err => console.log(err));
-      }
+      })
+      .catch(err => console.log(err));
     })
     .catch((error) => {
       console.log('Error: ', error);

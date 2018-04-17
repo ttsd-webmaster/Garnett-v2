@@ -49,23 +49,15 @@ export default class MobileEditChalkboardDialog extends Component {
 
         API.editChalkboardMobile(displayName, chalkboard, field, value)
         .then((res) => {
-          const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-          let registrationToken = localStorage.getItem('registrationToken');
-          
           console.log(`Edited ${field} for ${chalkboard.title}`);
           this.props.updateChalkboardInfo();
           this.handleClose();
-
-          if (isSafari || !registrationToken) {
-            this.props.handleRequestOpen(`Edited ${field} for ${chalkboard.title}`);
-          }
-          else {
-            API.sendEditedChalkboardNotification(chalkboard)
-            .then(res => {
-              this.props.handleRequestOpen(`Edited ${field} for ${chalkboard.title}`);         
-            })
-            .catch(err => console.log(err));
-          }
+          
+          API.sendEditedChalkboardNotification(chalkboard)
+          .then(res => {
+            this.props.handleRequestOpen(`Edited ${field} for ${chalkboard.title}`);         
+          })
+          .catch(err => console.log(err));
         })
         .catch((error) => {
           console.log('Error: ', error);
