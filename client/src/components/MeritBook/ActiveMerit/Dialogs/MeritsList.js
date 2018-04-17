@@ -2,6 +2,7 @@ import '../../MeritBook.css';
 import API from '../../../../api/API.js';
 
 import React, {Component} from 'react';
+import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -69,26 +70,45 @@ export default class MeritsList extends Component {
 
         <List className="garnett-list dialog pledge">
           {merits.map((merit, i) => (
-            <div key={i}>
-              <Divider className="garnett-divider large" inset={true} />
-              <ListItem
-                className="garnett-list-item large"
-                leftAvatar={<Avatar className="garnett-image large" size={70} src={merit.photoURL} />}
-                primaryText={
-                  <p className="garnett-name"> {merit.name} </p>
-                }
-                secondaryText={
-                  <p> {merit.description} </p>
-                }
-                secondaryTextLines={2}
-              >
-                <div className="merit-amount-container">
-                  <p className="merit-date"> {merit.date} </p>
-                  <p className="merit-amount"> {merit.amount} </p>
+            <LazyLoad
+              height={88}
+              offset={window.innerHeight}
+              once
+              overflow
+              key={i}
+              placeholder={
+                <div className="placeholder-skeleton">
+                  <Divider className="garnett-divider large" inset={true} />
+                  <div className="placeholder-avatar"></div>
+                  <div className="placeholder-name"></div>
+                  <div className="placeholder-year"></div>
+                  <div className="placeholder-date"></div>
+                  <div className="placeholder-merits"></div>
+                  <Divider className="garnett-divider large" inset={true} />
                 </div>
-              </ListItem>
-              <Divider className="garnett-divider large" inset={true} />
-            </div>
+              }
+            >
+              <div>
+                <Divider className="garnett-divider large" inset={true} />
+                <ListItem
+                  className="garnett-list-item large"
+                  leftAvatar={<Avatar className="garnett-image large" size={70} src={merit.photoURL} />}
+                  primaryText={
+                    <p className="garnett-name"> {merit.name} </p>
+                  }
+                  secondaryText={
+                    <p> {merit.description} </p>
+                  }
+                  secondaryTextLines={2}
+                >
+                  <div className="merit-amount-container">
+                    <p className="merit-date"> {merit.date} </p>
+                    <p className="merit-amount"> {merit.amount} </p>
+                  </div>
+                </ListItem>
+                <Divider className="garnett-divider large" inset={true} />
+              </div>
+            </LazyLoad>
           ))}
         </List>
       </div>
