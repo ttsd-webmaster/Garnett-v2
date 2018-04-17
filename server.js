@@ -340,7 +340,6 @@ app.post('/api/actives', function(req, res) {
 app.post('/api/pledgedata', function(req, res) {
   let fullName = req.body.displayName;
   let userRef = admin.database().ref('/users/' + fullName);
-  let meritRef = userRef.child('/Merits');
   let complaintsRef = userRef.child('/Complaints');
   let totalMerits;
   let meritArray = [];
@@ -349,7 +348,7 @@ app.post('/api/pledgedata', function(req, res) {
   userRef.once('value', (snapshot) => {
     totalMerits = snapshot.val().totalMerits;
 
-    meritRef.once('value', (snapshot) => {
+    snapshot.ref.child('Merits').once('value', (snapshot) => {
       if (snapshot.val()) {
         meritArray = Object.keys(snapshot.val()).map(function(key) {
           return snapshot.val()[key];
@@ -423,7 +422,6 @@ app.post('/api/merit', function(req, res) {
     let fullName = req.body.displayName;
     let userRef = admin.database().ref('/users/' + fullName + '/Pledges/' + pledge.value);
     let pledgeRef = admin.database().ref('/users/' + pledge.value);
-    let meritRef = pledgeRef.child('/Merits');
 
     userRef.once('value', (pledge) => {
       if (req.body.status !== 'pipm' && !req.body.isChalkboard) {
@@ -446,7 +444,7 @@ app.post('/api/merit', function(req, res) {
           totalMerits: snapshot.val().totalMerits + req.body.amount
         });
 
-        meritRef.push({
+        snapshot.ref.child('Merits').push({
           name: req.body.activeName,
           description: req.body.description,
           amount: req.body.amount,
@@ -468,7 +466,6 @@ app.post('/api/meritAsPledge', function(req, res) {
   let actives = req.body.actives;
   let fullName = req.body.displayName;
   let userRef = admin.database().ref('/users/' + fullName);
-  let meritRef = userRef.child('/Merits');
 
   actives.forEach((child) => {
     let activeRef = admin.database().ref('/users/' + child.value);
@@ -493,7 +490,7 @@ app.post('/api/meritAsPledge', function(req, res) {
         userRef.once('value', (snapshot) => {
           counter++;
 
-          meritRef.push({
+          snapshot.ref.child('Merits').push({
             name: `${active.val().firstName} ${active.val().lastName}`,
             description: req.body.description,
             amount: req.body.amount,
