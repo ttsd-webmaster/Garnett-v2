@@ -87,10 +87,9 @@
 
 /* Garnett List, List Items, and Dividers */
 .garnett-subheader {
-  display: table;
   max-width: 700px;
   background-color: #fafafa;
-  margin: auto;
+  margin: auto !important;
 }
 .garnett-subheader.dialog {
   max-width: unset;
