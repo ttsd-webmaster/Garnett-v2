@@ -74,9 +74,10 @@
   cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
   transition: all 0.2s linear;
+  transform: scale(1);
 }
 .fixed-button.hidden {
-  display: none;
+  transform: scale(0);
 }
 @media(min-width: 901px) {
   .fixed-button {

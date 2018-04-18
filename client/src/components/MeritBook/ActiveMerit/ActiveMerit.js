@@ -102,10 +102,10 @@ export default class ActiveMerit extends Component {
 
     if (meritButton) {
       if (this.props.index === 0) {
-        meritButton.style.display = 'flex';
+        meritButton.classList.remove('hidden');
       }
       else {
-        meritButton.style.display = 'none';
+        meritButton.classList.add('hidden');
       }
     }
   }

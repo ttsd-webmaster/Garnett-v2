@@ -99,6 +99,19 @@ export default class PledgeMerit extends Component {
     }
   }
 
+  componentDidUpdate() {
+    let meritButton = document.querySelector('.fixed-button');
+
+    if (meritButton) {
+      if (this.props.index === 0) {
+        meritButton.classList.remove('hidden');
+      }
+      else {
+        meritButton.classList.add('hidden');
+      }
+    }
+  }
+
   handleRemoveOpen = (merit) => {
     if (navigator.onLine) {
       this.setState({
