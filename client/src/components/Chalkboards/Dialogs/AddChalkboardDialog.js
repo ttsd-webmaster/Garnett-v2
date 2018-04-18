@@ -127,7 +127,7 @@ export default class AddChalkboardDialog extends Component {
 
   disableDates(date) {
     let today = new Date();
-    return today > date;
+    return date < today;
   }
 
   handleChange = (label, value) => {

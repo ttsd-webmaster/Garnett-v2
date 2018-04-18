@@ -379,10 +379,12 @@ app.post('/api/pledgemerits', function(req, res) {
     if (snapshot.val()) {
       merits = Object.keys(snapshot.val()).map(function(key) {
         return snapshot.val()[key];
+      }).sort((a, b) => {
+        return a.date < b.date ? 1 : -1;
       });
     }
 
-    res.json(merits.reverse());
+    res.json(merits);
   });
 });
 
@@ -604,7 +606,10 @@ app.post('/api/chalkboardsForMerit', function(req, res) {
 
     chalkboards.forEach((chalkboard) => {
       if (chalkboard.activeName === fullName) {
-        myChalkboards.push(chalkboard);
+        myChalkboards.push({
+          title: chalkboard.title,
+          amount: chalkboard.amount
+        });
       }
       else {
         if (chalkboard.attendees) {
@@ -614,7 +619,10 @@ app.post('/api/chalkboardsForMerit', function(req, res) {
 
           attendees.forEach((attendee) => {
             if (attendee.name === fullName) {
-              myChalkboards.push(chalkboard);
+              myChalkboards.push({
+                title: chalkboard.title,
+                amount: chalkboard.amount
+              });
             }
           });
         }

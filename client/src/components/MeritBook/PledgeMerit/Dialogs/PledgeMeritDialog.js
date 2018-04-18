@@ -1,5 +1,5 @@
 import '../../MeritBook.css';
-import {getDate} from '../../../../helpers/functions.js';
+import {getDate, invalidSafariVersion} from '../../../../helpers/functions.js';
 import {CompletingTaskDialog} from '../../../../helpers/loaders.js';
 import API from '../../../../api/API.js';
 
@@ -7,6 +7,7 @@ import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import DatePicker from 'material-ui/DatePicker';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
@@ -26,6 +27,7 @@ export default class PledgeMeritDialog extends Component {
       actives: [],
       selectedActives: [],
       description: '',
+      date: new Date(),
       isChalkboard: false,
       amount: 0,
       activeValidation: true,
@@ -72,9 +74,13 @@ export default class PledgeMeritDialog extends Component {
     }
     else {
       let displayName = this.props.state.displayName;
+      let date = this.formatDate(this.state.date);
       let isChalkboard = this.state.isChalkboard;
       let action = 'Merited';
-      let date = getDate();
+
+      if (invalidSafariVersion()) {
+        date = getDate();
+      }
 
       if (type === 'demerit') {
         amount = -amount;
@@ -118,6 +124,17 @@ export default class PledgeMeritDialog extends Component {
         this.props.handleRequestOpen(`${active} does not have enough merits.`);
       });
     }
+  }
+
+  formatDate(date) {
+    return date.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
+  }
+
+  disableDates(date) {
+    let today = new Date();
+    let startDate = new Date(today.getFullYear(), 3, 12);
+
+    return date > today || date < startDate;
   }
 
   handleChange = (label, newValue) => {
@@ -170,6 +187,7 @@ export default class PledgeMeritDialog extends Component {
     this.setState({
       selectedActives: [],
       description: '',
+      date: new Date(),
       isChalkboard: false,
       amount: 0,
       chalkboards: null,
@@ -269,6 +287,20 @@ export default class PledgeMeritDialog extends Component {
             value={this.state.description}
             onChange={(e, newValue) => this.handleChange('description', newValue)}
             errorText={!this.state.descriptionValidation && 'Enter a description less than 50 characters.'}
+          />
+        )}
+
+        {!invalidSafariVersion() && (
+          <DatePicker
+            className="garnett-input"
+            textFieldStyle={{display:'block',margin:'0 auto'}}
+            floatingLabelText="Date"
+            value={this.state.date}
+            disableYearSelection
+            firstDayOfWeek={0}
+            formatDate={this.formatDate}
+            shouldDisableDate={this.disableDates}
+            onChange={(e, newValue) => this.handleChange('date', newValue)}
           />
         )}
 

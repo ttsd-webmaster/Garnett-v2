@@ -74,7 +74,7 @@ export default class MobileEditChalkboardDialog extends Component {
 
   disableDates(date) {
     let today = new Date();
-    return today > date;
+    return date < today;
   }
 
   handleChange = (e, value) => {

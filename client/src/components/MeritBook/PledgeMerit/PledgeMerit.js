@@ -73,6 +73,8 @@ export default class PledgeMerit extends Component {
             if (snapshot.val()) {
               merits = Object.keys(snapshot.val()).map(function(key) {
                 return snapshot.val()[key];
+              }).sort((a, b) => {
+                return a.date < b.date ? 1 : -1;
               });
             }
 
@@ -84,7 +86,7 @@ export default class PledgeMerit extends Component {
               loaded: true,
               totalMerits: totalMerits,
               previousTotalMerits: this.state.totalMerits,
-              merits: merits.reverse(),
+              merits: merits,
             });
           });
         });
