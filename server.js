@@ -62,7 +62,7 @@ app.post('/api', function(req, res) {
   console.log(fullName)
 
   userRef.once('value', (user) => {
-    res.json(user.val();
+    res.json(user.val());
   });
 });
 
