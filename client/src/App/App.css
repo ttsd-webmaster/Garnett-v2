@@ -115,10 +115,10 @@ div, a {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
 }
 
-/* Animates the component in */
-.animate-in {
-  -webkit-animation: fadeIn 0.25s ease-in;
-  animation: fadeIn 0.25s ease-in;
+.log-out {
+  float: right;
+  margin-right: 15px;
+  cursor: pointer;
 }
 
 /* Placeholder skeleton for list items */
@@ -186,35 +186,7 @@ div, a {
   background-color: #eee;
 }
 
-.title {
-  width: 55%;
-  font-weight: 700;
-  font-size: 50px;
-  color: var(--primary-color);
-  margin: auto;
-  margin-bottom: 0.5em;
-  padding-bottom: 0.5em;
-  border-bottom: 4px solid;
-  text-transform: uppercase;
-}
-@media(max-width: 768px) {
-  .title {
-    width: 80%;
-  }
-}
-
-.header {
-  margin-top: 50px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #ccc;
-}
-
-@media(min-width: 992px) {
-  .col-md-5th {
-    width: 20%;
-  }
-}
-
+/* TT Logo to go back to website */
 .logo {
   height: 60px;
   width: 60px;
@@ -230,6 +202,12 @@ div, a {
 .animated {
   animation-duration: 1s;
   animation-fill-mode: both;
+}
+
+/* Animates the component in */
+.animate-in {
+  -webkit-animation: fadeIn 0.25s ease-in;
+  animation: fadeIn 0.25s ease-in;
 }
 
 @keyframes fadeInDown {

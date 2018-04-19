@@ -5,12 +5,6 @@
   display: flex;
 }
 
-.log-out {
-  float: right;
-  margin-right: 15px;
-  cursor: pointer;
-}
-
 .app-icon {
   display: flex;
   flex-direction: column;
