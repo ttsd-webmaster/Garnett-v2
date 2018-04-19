@@ -82,7 +82,10 @@
 @media(min-width: 901px) {
   .fixed-button {
     right: 50%;
-    transform: translateX(435px);
+    transform: translateX(435px) scale(1);
+  }
+  .fixed-button.hidden {
+    transform: translateX(435px) scale(0);
   }
 }
 
