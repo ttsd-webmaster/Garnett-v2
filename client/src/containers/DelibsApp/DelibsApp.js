@@ -123,7 +123,7 @@ export default class DelibsApp extends Component {
         <div className="loading-container">
           <div className="app-header no-tabs">
             <span> Delibs App </span>
-            <span className="back-home" onClick={this.goHome}> Home </span>
+            <span className="back-button" onClick={this.goHome}> Home </span>
           </div>
 
           <div className="animate-in delibs-app">

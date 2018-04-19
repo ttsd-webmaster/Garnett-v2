@@ -195,7 +195,7 @@ export default class RusheeProfile extends Component {
         <div className="loading-container">
           <div className="app-header no-tabs">
             <span> Rushee Profile </span>
-            <span className="back-home" onClick={this.props.history.goBack}> Back </span>
+            <span className="back-button" onClick={this.props.history.goBack}> Back </span>
           </div>
 
           <div className="animate-in delibs-app rushee">

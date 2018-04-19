@@ -44,7 +44,7 @@ export default class Home extends Component {
         <div className="loading-container">
           <div className="app-header no-tabs">
             <span> Home </span>
-            <span className="log-out" onClick={this.logout}> Log Out </span>
+            <span className="back-button" onClick={this.logout}> Log Out </span>
           </div>
           <div className="icon-container animate-in">
             <div className="app-icon" onClick={() => this.goTo('pledge-app')}>
