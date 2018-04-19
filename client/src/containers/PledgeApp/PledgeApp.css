@@ -219,8 +219,6 @@
   min-height: 320px;
   height: 600px;
   padding: 0 !important;
-  overflow-y: scroll !important;
-  -webkit-overflow-scrolling: touch;
 }
 
 .garnett-dialog-content {
