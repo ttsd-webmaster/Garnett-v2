@@ -6,6 +6,7 @@ import API from '../../../api/API.js';
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
 import LazyLoad from 'react-lazyload';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -232,7 +233,7 @@ export default class PledgeMerit extends Component {
 
     return (
       this.state.loaded ? (
-        <div className="animate-in" id="pledge-meritbook" >
+        <div id="pledge-meritbook" className="animate-in">
           <Subheader className="garnett-subheader">
             Recent
             <IconButton
@@ -289,9 +290,9 @@ export default class PledgeMerit extends Component {
             ))}
           </List>
 
-          <div className="fixed-button" onClick={this.handleMeritOpen}>
+          <FloatingActionButton className="fixed-button" onClick={this.handleMeritOpen}>
             <i className="icon-pencil"></i>
-          </div>
+          </FloatingActionButton>
 
           <SwipeableBottomSheet
             bodyStyle={{backgroundColor:'#fafafa'}}

@@ -60,19 +60,9 @@
 
 .fixed-button {
   position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--primary-color);
-  color: #fff;
   bottom: 70px;
   right: 20px;
-  height: 60px;
-  width: 60px;
   font-size: 1.6em;
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 8px 10px, rgba(0, 0, 0, 0.23) 0px 8px 10px;
   transition: all 0.2s linear;
   transform: scale(1);
 }

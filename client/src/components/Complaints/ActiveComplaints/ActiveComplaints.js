@@ -7,6 +7,7 @@ import {LoadingComponent} from '../../../helpers/loaders.js';
 import React, {Component} from 'react';
 import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 
 const LoadableAddComplaintDialog = Loadable({
@@ -105,7 +106,7 @@ export default class ActiveComplaints extends Component {
   }
 
   componentDidUpdate() {
-    let addComplaint = document.getElementById('add-complaint');
+    let addComplaint = document.getElementById('add-complaint').parentNode;
     let complaintsTabs = document.getElementById('complaints-tabs');
     
     // Changes complaints tabs and add button to be viewable if slide is on complaints
@@ -231,9 +232,9 @@ export default class ActiveComplaints extends Component {
             />
           </BottomNavigation>
 
-          <div id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
+          <FloatingActionButton id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
             <i className="icon-pencil"></i>
-          </div>
+          </FloatingActionButton>
 
           <LoadableAddComplaintDialog
             open={this.state.open}

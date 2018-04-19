@@ -62,7 +62,7 @@
 }
 
 /* Merit Button */
-.fixed-button#merit-button {
+#active-meritbook .fixed-button {
   bottom: 20px;
 }
 

@@ -4,6 +4,7 @@ import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
@@ -98,7 +99,7 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidUpdate() {
-    let meritButton = document.getElementById('merit-button');
+    let meritButton = document.getElementById('merit-button').parentNode;
 
     if (meritButton) {
       if (this.props.index === 0) {
@@ -276,7 +277,7 @@ export default class ActiveMerit extends Component {
 
     return (
       this.state.loaded ? (
-        <div className="animate-in">
+        <div id="active-meritbook" className="animate-in">
           <Subheader className="garnett-subheader">
             Pledges
             <span style={{float:'right'}}>
@@ -319,11 +320,9 @@ export default class ActiveMerit extends Component {
             ))}
           </List>
 
-          {(this.props.state.status === 'alumni' || this.props.state.status === 'pipm') && (
-            <div id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
-              <i className="icon-pencil"></i>
-            </div>
-          )}
+          <FloatingActionButton id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
+            <i className="icon-pencil"></i>
+          </FloatingActionButton>
 
           <Popover
             open={this.state.openPopover}

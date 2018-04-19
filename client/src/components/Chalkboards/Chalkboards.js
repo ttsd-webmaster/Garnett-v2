@@ -7,6 +7,7 @@ import {LoadingComponent} from '../../helpers/loaders.js';
 import React, {Component} from 'react';
 import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
@@ -163,7 +164,7 @@ export default class Chalkboards extends Component {
   }
 
   componentDidUpdate() {
-    let addChalkboard = document.getElementById('add-chalkboard');
+    let addChalkboard = document.getElementById('add-chalkboard').parentNode;
     let chalkboardsTabs = document.getElementById('chalkboards-tabs');
 
     // Changes chalkboards tabs and add button to be viewable if slide is on chalkboards
@@ -499,9 +500,9 @@ export default class Chalkboards extends Component {
 
           {this.props.state.status !== 'pledge' && (
             <div>
-              <div id="add-chalkboard" className="fixed-button hidden" onClick={this.addOpen}>
+              <FloatingActionButton id="add-chalkboard" className="fixed-button hidden" onClick={this.addOpen}>
                 <i className="icon-calendar-plus-o"></i>
-              </div>
+              </FloatingActionButton>
 
               <LoadableAddChalkboardDialog
                 open={this.state.openAdd}
