@@ -106,17 +106,17 @@ export default class ActiveComplaints extends Component {
   }
 
   componentDidUpdate() {
-    let addComplaint = document.getElementById('add-complaint').parentNode;
+    let addComplaint = document.getElementById('add-complaint');
     let complaintsTabs = document.getElementById('complaints-tabs');
     
     // Changes complaints tabs and add button to be viewable if slide is on complaints
     if (addComplaint && complaintsTabs) {
       if (this.props.state.status !== 'pledge' && this.props.index === 3) {
-        addComplaint.classList.remove('hidden');
+        addComplaint.parentNode.classList.remove('hidden');
         complaintsTabs.style.display = 'flex';
       }
       else {
-        addComplaint.classList.add('hidden');
+        addComplaint.parentNode.classList.add('hidden');
         complaintsTabs.style.display = 'none';
       }
     }

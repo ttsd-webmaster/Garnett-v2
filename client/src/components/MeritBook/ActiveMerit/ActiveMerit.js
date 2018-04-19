@@ -99,14 +99,14 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidUpdate() {
-    let meritButton = document.getElementById('merit-button').parentNode;
+    let meritButton = document.getElementById('merit-button');
 
     if (meritButton) {
       if (this.props.index === 0) {
-        meritButton.classList.remove('hidden');
+        meritButton.parentNode.classList.remove('hidden');
       }
       else {
-        meritButton.classList.add('hidden');
+        meritButton.parentNode.classList.add('hidden');
       }
     }
   }

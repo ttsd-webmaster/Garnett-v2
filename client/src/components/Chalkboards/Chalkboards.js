@@ -164,7 +164,7 @@ export default class Chalkboards extends Component {
   }
 
   componentDidUpdate() {
-    let addChalkboard = document.getElementById('add-chalkboard').parentNode;
+    let addChalkboard = document.getElementById('add-chalkboard');
     let chalkboardsTabs = document.getElementById('chalkboards-tabs');
 
     // Changes chalkboards tabs and add button to be viewable if slide is on chalkboards
@@ -172,13 +172,13 @@ export default class Chalkboards extends Component {
       if (this.props.index === 2) {
         chalkboardsTabs.style.display = 'flex';
         if (this.props.state.status !== 'pledge') {
-          addChalkboard.classList.remove('hidden');
+          addChalkboard.parentNode.classList.remove('hidden');
         }
       }
       else {
         chalkboardsTabs.style.display = 'none';
         if (this.props.state.status !== 'pledge') {
-          addChalkboard.classList.add('hidden');
+          addChalkboard.parentNode.classList.add('hidden');
         }
       }
     }
