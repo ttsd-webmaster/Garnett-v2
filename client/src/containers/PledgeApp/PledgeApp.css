@@ -55,13 +55,19 @@
 .content-container > div {
   background-color: #fafafa;
   top: 100px;
-  overflow-y: scroll !important;
-  -webkit-overflow-scrolling: touch;
+  overflow: auto !important;
   z-index: 0;
   transition: top 0.2s ease-in-out;
 }
 .content-container > div > div {
   margin-bottom: 48px;
+}
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .content-container > div {
+    overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .fixed-button {
@@ -219,6 +225,13 @@
   min-height: 320px;
   height: 600px;
   padding: 0 !important;
+}
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .garnett-dialog-body.tabs {
+    overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .garnett-dialog-content {
