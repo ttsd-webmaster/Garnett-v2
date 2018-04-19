@@ -8,6 +8,10 @@
   z-index: 1;
   transition: top 0.2s ease-in-out;
 }
+#pledge-app-tabs > div:first-child [class^="icon-"] {
+  -webkit-animation: fadeIn 0.25s ease-in;
+  animation: fadeIn 0.25s ease-in;
+}
 /* Pledge App Tabs Ink Bar */
 #pledge-app-tabs > div:nth-child(2) > div {
   position: fixed !important;
@@ -15,6 +19,8 @@
   background-color: var(--primary-color) !important;
   z-index: 1;
   transition: left 1s cubic-bezier(0.23, 1, 0.32, 1) 0ms, top 0.2s ease-in-out !important;
+  -webkit-animation: fadeIn 0.25s ease-in;
+  animation: fadeIn 0.25s ease-in;
 }
 
 /* Hide on scroll for app bar, tabs, and body */
@@ -49,7 +55,7 @@
 .content-container > div {
   background-color: #fafafa;
   top: 100px;
-  overflow: scroll !important;
+  overflow-y: scroll !important;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
   transition: top 0.2s ease-in-out;
@@ -185,6 +191,8 @@
 }
 
 /* Garnett Dialog */
+
+/* The actual tabs */
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
   background-color: #fff !important;
@@ -192,6 +200,7 @@
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   z-index: 2;
 }
+/* The content container of the tabs */
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
 }
@@ -210,6 +219,8 @@
   min-height: 320px;
   height: 600px;
   padding: 0 !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 .garnett-dialog-content {

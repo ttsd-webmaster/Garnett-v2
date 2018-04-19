@@ -1,4 +1,5 @@
 import './index.css';
+import {invalidSafariVersion} from './helpers/functions.js';
 import registerServiceWorker from './registerServiceWorker';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -26,4 +27,7 @@ ReactDOM.render(
   <Index/>,
   document.getElementById('root')
 );
-registerServiceWorker();
+
+if (!invalidSafariVersion) {
+  registerServiceWorker();
+}

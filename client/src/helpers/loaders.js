@@ -5,13 +5,6 @@ import {Tabs, Tab} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
 
-const inkBarStyle = {
-  position: 'fixed',
-  top: 100,
-  backgroundColor: 'var(--primary-color)',
-  zIndex: 1
-};
-
 const tabContainerStyle = {
   position: 'fixed',
   top: 52,
@@ -61,7 +54,6 @@ function LoadingPledgeApp() {
         <span> Merit Book </span>
       </div>
       <Tabs
-        inkBarStyle={inkBarStyle}
         tabItemContainerStyle={tabContainerStyle}
       >
         <Tab 

@@ -204,6 +204,14 @@ export default class Login extends Component {
             });
           });
         }
+        else {
+          let message = 'Error retrieving database data.';
+
+          this.setState({
+            openCompletingTask: false
+          });
+          this.handleRequestOpen(message);
+        }
       })
     }
   }
