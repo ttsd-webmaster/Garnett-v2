@@ -1,7 +1,7 @@
 import {isMobileDevice} from './functions.js';
 
 import React from 'react';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import {Tabs} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
 
@@ -53,30 +53,7 @@ function LoadingPledgeApp() {
       <div className="app-header">
         <span> Merit Book </span>
       </div>
-      <Tabs
-        tabItemContainerStyle={tabContainerStyle}
-      >
-        <Tab 
-          icon={<i style={{color: 'var(--primary-color)'}} className="icon-star"></i>}
-        >
-        </Tab>
-        <Tab
-          icon={<i style={{color: 'var(--secondary-light)'}} className="icon-address-book"></i>}
-        >
-        </Tab>
-        <Tab
-          icon={<i style={{color: 'var(--secondary-light)'}} className="icon-calendar-empty"></i>}
-        >
-        </Tab>
-        <Tab
-          icon={<i style={{color: 'var(--secondary-light)'}} className="icon-thumbs-down-alt"></i>}
-        >
-        </Tab>
-        <Tab
-          icon={<i style={{color: 'var(--secondary-light)'}} className="icon-cog"></i>}
-        >
-        </Tab>
-      </Tabs>
+      <Tabs tabItemContainerStyle={tabContainerStyle}></Tabs>
     </div>
   )
 }

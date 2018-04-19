@@ -1,5 +1,4 @@
 import './App.css';
-import '../fontello/css/fontello.css';
 import API from '../api/API.js';
 import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
 import {
