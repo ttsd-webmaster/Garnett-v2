@@ -77,17 +77,13 @@
   transform: scale(1);
 }
 .fixed-button.hidden {
-  transform: scale(0);
+  display: none;
 }
 @media(min-width: 901px) {
   .fixed-button {
     right: 50%;
-    -webkit-transform: translateX(435px) scale(1);
-    transform: translateX(435px) scale(1);
-  }
-  .fixed-button.hidden {
-    -webkit-transform: translateX(435px) scale(0);
-    transform: translateX(435px) scale(0);
+    -webkit-transform: translateX(435px);
+    transform: translateX(435px);
   }
 }
 
