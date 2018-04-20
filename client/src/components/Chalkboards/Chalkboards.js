@@ -9,7 +9,7 @@ import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import Popover from 'material-ui/Popover';
+import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
@@ -469,6 +469,7 @@ export default class Chalkboards extends Component {
             anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'left', vertical: 'top'}}
             onRequestClose={this.closePopover}
+            animation={PopoverAnimationVertical}
           >
             <Menu>
               <MenuItem
