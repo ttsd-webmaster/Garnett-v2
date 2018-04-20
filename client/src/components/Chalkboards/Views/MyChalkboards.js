@@ -22,13 +22,13 @@ export default class MyChalkboards extends Component {
         if (b[filter] !== undefined) {
           chalkboard2 = b[filter];
         }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
+        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
       }
       else if (filter === 'timeCommitment') {
         return a[filter].value < b[filter].value ? 1 : -1;
       }
       else {
-        return a[filter] > b[filter];
+        return a[filter] > b[filter] ? 1 : -1;
       }
     });
     let myAttendingChalkboards = this.props.myAttendingChalkboards.sort(function(a, b) {
@@ -42,13 +42,13 @@ export default class MyChalkboards extends Component {
         if (b[filter] !== undefined) {
           chalkboard2 = b[filter];
         }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
+        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
       }
       else if (filter === 'timeCommitment') {
         return a[filter].value < b[filter].value ? 1 : -1;
       }
       else {
-        return a[filter] > b[filter];
+        return a[filter] > b[filter] ? 1 : -1;
       }
     });
     let myCompletedChalkboards = this.props.myCompletedChalkboards.sort(function(a, b) {
@@ -62,13 +62,13 @@ export default class MyChalkboards extends Component {
         if (b[filter] !== undefined) {
           chalkboard2 = b[filter];
         }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
+        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
       }
       else if (filter === 'timeCommitment') {
         return a[filter].value < b[filter].value ? 1 : -1;
       }
       else {
-        return a[filter] > b[filter];
+        return a[filter] > b[filter] ? 1 : -1;
       }
     });
 

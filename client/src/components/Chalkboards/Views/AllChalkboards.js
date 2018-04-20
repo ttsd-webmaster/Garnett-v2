@@ -23,13 +23,13 @@ export default class AllChalkboards extends Component {
         if (b[filter] !== undefined) {
           chalkboard2 = b[filter];
         }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
+        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
       }
       else if (filter === 'timeCommitment') {
         return a[filter].value < b[filter].value ? 1 : -1;
       }
       else {
-        return a[filter] > b[filter];
+        return a[filter] > b[filter] ? 1 : -1;
       }
     });
     let completedChalkboards = this.props.completedChalkboards.sort(function(a, b) {
@@ -43,13 +43,13 @@ export default class AllChalkboards extends Component {
         if (b[filter] !== undefined) {
           chalkboard2 = b[filter];
         }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length;
+        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
       }
       else if (filter === 'timeCommitment') {
         return a[filter].value < b[filter].value ? 1 : -1;
       }
       else {
-        return a[filter] > b[filter];
+        return a[filter] > b[filter] ? 1 : -1;
       }
     });
 

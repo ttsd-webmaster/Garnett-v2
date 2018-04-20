@@ -81,8 +81,6 @@ export default class Chalkboards extends Component {
             // Converts object to array
             chalkboards = Object.keys(snap.val()).map(function(key) {
               return snap.val()[key];
-            }).sort(function(a, b) {
-              return b.date < a.date;
             });
 
             // Checks which chalkboards I am attending and which ones I have completed
