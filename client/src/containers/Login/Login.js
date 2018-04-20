@@ -161,57 +161,47 @@ export default class Login extends Component {
 
       API.getFirebaseData()
       .then(res => {
-        if (res.status === 200) {
-          initializeFirebase(res.data);
+        initializeFirebase(res.data);
 
-          loadFirebase('auth')
-          .then(() => {
-            let firebase= window.firebase;
+        loadFirebase('auth')
+        .then(() => {
+          let firebase= window.firebase;
 
-            firebase.auth().signInWithEmailAndPassword(email, password)
-            .then((user) => {
-              if (user && user.emailVerified) {
-                loadFirebase('database')
-                .then(() => {
-                  const fullName = user.displayName;
-                  let userRef = firebase.database().ref('/users/' + fullName);
+          firebase.auth().signInWithEmailAndPassword(email, password)
+          .then((user) => {
+            if (user && user.emailVerified) {
+              loadFirebase('database')
+              .then(() => {
+                const fullName = user.displayName;
+                let userRef = firebase.database().ref('/users/' + fullName);
 
-                  userRef.once('value', (snapshot) => {
-                    let user = snapshot.val();
-                    localStorage.setItem('data', JSON.stringify(user));
+                userRef.once('value', (snapshot) => {
+                  let user = snapshot.val();
+                  localStorage.setItem('data', JSON.stringify(user));
 
-                    this.props.loginCallBack(user);
-                  });
+                  this.props.loginCallBack(user);
                 });
-              }
-              else {
-                let message = 'Email is not verified.';
-
-                this.setState({
-                  openCompletingTask: false
-                });
-                this.handleRequestOpen(message);
-              }
-            })
-            .catch((error) => {
-              console.log('Error: ', error);
-              let message = 'Email or password is incorrect.';
+              });
+            }
+            else {
+              let message = 'Email is not verified.';
 
               this.setState({
                 openCompletingTask: false
               });
               this.handleRequestOpen(message);
-            });
-          });
-        }
-        else {
-          let message = 'Error retrieving database data.';
+            }
+          })
+          .catch((error) => {
+            console.log('Error: ', error);
+            let message = 'Email or password is incorrect.';
 
-          this.setState({
-            openCompletingTask: false
+            this.setState({
+              openCompletingTask: false
+            });
+            this.handleRequestOpen(message);
           });
-          this.handleRequestOpen(message);
-        }
+        });
       })
     }
   }

@@ -28,6 +28,4 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-if (!invalidSafariVersion) {
-  registerServiceWorker();
-}
+registerServiceWorker();
