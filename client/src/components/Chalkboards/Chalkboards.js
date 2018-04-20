@@ -231,12 +231,7 @@ export default class Chalkboards extends Component {
         let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
         let appBar = document.querySelector('.app-header');
 
-        if (/android/i.test(navigator.userAgent)) {
-          contentContainer.style.setProperty('overflow', 'hidden', 'important');
-        }
-        else {
-          contentContainer.style.setProperty('overflow', 'unset', 'important');
-        }
+        contentContainer.style.setProperty('overflow', 'visible', 'important');
 
         tabs.style.zIndex = 0;
         inkBar.style.zIndex = 0;
@@ -275,7 +270,13 @@ export default class Chalkboards extends Component {
       let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
       let appBar = document.querySelector('.app-header');
 
-      contentContainer.style.setProperty('overflow', 'scroll', 'important');
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+        contentContainer.style.setProperty('overflow', 'scroll', 'important');
+      }
+      else {
+        contentContainer.style.setProperty('overflow', 'auto', 'important');
+      }
+
       tabs.style.zIndex = 1;
       inkBar.style.zIndex = 1;
       appBar.style.zIndex = 1;
@@ -297,12 +298,7 @@ export default class Chalkboards extends Component {
       let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
       let appBar = document.querySelector('.app-header');
 
-      if (/android/i.test(navigator.userAgent)) {
-        contentContainer.style.setProperty('overflow', 'hidden', 'important');
-      }
-      else {
-        contentContainer.style.setProperty('overflow', 'unset', 'important');
-      }
+      contentContainer.style.setProperty('overflow', 'visible', 'important');
       
       tabs.style.zIndex = 0;
       inkBar.style.zIndex = 0;
@@ -339,7 +335,13 @@ export default class Chalkboards extends Component {
       let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
       let appBar = document.querySelector('.app-header');
 
-      contentContainer.style.setProperty('overflow', 'scroll', 'important');
+      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+        contentContainer.style.setProperty('overflow', 'scroll', 'important');
+      }
+      else {
+        contentContainer.style.setProperty('overflow', 'auto', 'important');
+      }
+      
       tabs.style.zIndex = 1;
       inkBar.style.zIndex = 1;
       appBar.style.zIndex = 1;
