@@ -96,6 +96,7 @@
 /* Garnett List, List Items, and Dividers */
 .garnett-subheader {
   max-width: 700px;
+  width: 100%;
   background-color: #fafafa;
   margin: auto !important;
 }

@@ -1,5 +1,4 @@
 import './index.css';
-import {invalidSafariVersion} from './helpers/functions.js';
 import registerServiceWorker from './registerServiceWorker';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

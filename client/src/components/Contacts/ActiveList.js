@@ -13,7 +13,7 @@ export default class ActiveList extends Component {
     if (this.props.filter === 'firstName' || this.props.filter === 'lastName') {
       condition = active[this.props.filter].startsWith(this.props.label);
     }
-    else if (this.props.filter === 'active' || this.props.filter === 'alumni') {
+    else if (this.props.filter === 'activeClass' || this.props.filter === 'alumni') {
       if (this.props.filter === 'alumni') {
         condition = active.status === 'alumni' && 
                     active.class === this.props.label;

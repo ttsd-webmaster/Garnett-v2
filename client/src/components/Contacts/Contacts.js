@@ -33,6 +33,7 @@ export default class Contacts extends Component {
                'Mu', 'Nu', 'Xi', 'Omicron', 
                'Pi', 'Rho'
              ],
+      activeClass: ['Lambda', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'],
       major: [ 'Aerospace Engineering',
                'Bioengineering',
                'Chemical Engineering',
@@ -48,8 +49,8 @@ export default class Contacts extends Component {
       year: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Alumni'],
       actives: this.props.actives,
       active: null,
-      filter: 'class',
-      filterName: 'Class',
+      filter: 'activeClass',
+      filterName: 'Active',
       reverse: false,
       open: false,
       openPopover: false
@@ -64,13 +65,13 @@ export default class Contacts extends Component {
 
         this.setState({
           actives: res.data,
-          labels: this.state.class
+          labels: this.state.activeClass
         });
       });
     }
     else {
       this.setState({
-        labels: this.state.class
+        labels: this.state.activeClass
       });
     }
   }
@@ -129,10 +130,14 @@ export default class Contacts extends Component {
     filter = filter[0].toLowerCase() + filter.substr(1);
     let labelFilter = filter;
 
-    if (filter === 'firstName' || filter === 'lastName') {
+    if (filterName === 'Active') {
+      filter += 'Class';
+      labelFilter += 'Class';
+    }
+    else if (filterName === 'First Name' || filterName === 'Last Name') {
       labelFilter = 'name';
     }
-    if (filter === 'active' || filter === 'alumni') {
+    else if (filterName === 'Alumni') {
       labelFilter = 'class';
     }
 
@@ -208,6 +213,18 @@ export default class Contacts extends Component {
           >
             <Menu>
               <MenuItem
+                primaryText="Active"
+                insetChildren
+                checked={this.state.filterName === 'Active'}
+                onClick={() => this.setFilter('Active')}
+              />
+              <MenuItem
+                primaryText="Alumni"
+                insetChildren
+                checked={this.state.filterName === 'Alumni'}
+                onClick={() => this.setFilter('Alumni')}
+              />
+              <MenuItem
                 primaryText="Class"
                 insetChildren
                 checked={this.state.filterName === 'Class'}
@@ -224,18 +241,6 @@ export default class Contacts extends Component {
                 insetChildren
                 checked={this.state.filterName === 'Year'}
                 onClick={() => this.setFilter('Year')}
-              />
-              <MenuItem
-                primaryText="Active"
-                insetChildren
-                checked={this.state.filterName === 'Active'}
-                onClick={() => this.setFilter('Active')}
-              />
-              <MenuItem
-                primaryText="Alumni"
-                insetChildren
-                checked={this.state.filterName === 'Alumni'}
-                onClick={() => this.setFilter('Alumni')}
               />
               <MenuItem
                 primaryText="First Name"
