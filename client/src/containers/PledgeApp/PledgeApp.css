@@ -202,6 +202,7 @@
 /* The actual tabs */
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
+  left: 0;
   background-color: #fff !important;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
@@ -210,12 +211,6 @@
 /* The content container of the tabs */
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
-}
-@supports (-webkit-overflow-scrolling: touch) {
-  /* CSS specific to iOS devices */ 
-  .garnett-dialog-tabs > div:first-child {
-    -webkit-overflow-scrolling: touch;
-  }
 }
 
 .garnett-dialog-body {
