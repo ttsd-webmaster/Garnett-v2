@@ -135,7 +135,7 @@
 }
 .garnett-list-item.long > div > div > div:last-child {
   height: fit-content !important;
-  white-space: unset !important;
+  white-space: pre-line !important;
 }
 
 .garnett-image {
@@ -211,13 +211,6 @@
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
 }
-@supports (-webkit-overflow-scrolling: touch) {
-  /* CSS specific to iOS devices */ 
-  .garnett-dialog-tabs > div:last-child > div {
-    overflow: scroll !important;
-    -webkit-overflow-scrolling: touch;
-  }
-}
 
 .garnett-dialog-body {
   display: flex;
@@ -237,7 +230,7 @@
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */ 
   .garnett-dialog-body.tabs {
-    overflow: scroll !important;
+    overflow-y: scroll !important;
     -webkit-overflow-scrolling: touch;
   }
 }
