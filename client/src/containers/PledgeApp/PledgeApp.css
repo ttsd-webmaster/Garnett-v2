@@ -206,7 +206,6 @@
   border-bottom: 1px solid #e0e0e0;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   z-index: 2;
-  -webkit-backface-visibility: hidden;
 }
 /* The content container of the tabs */
 .garnett-dialog-tabs > div:last-child > div {
@@ -227,6 +226,13 @@
   min-height: 320px;
   height: 600px;
   padding: 0 !important;
+}
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .garnett-dialog-body.tabs {
+    overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .garnett-dialog-content {
