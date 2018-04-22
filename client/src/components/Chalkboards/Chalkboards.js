@@ -299,7 +299,6 @@ export default class Chalkboards extends Component {
       let appBar = document.querySelector('.app-header');
 
       contentContainer.style.setProperty('overflow', 'visible', 'important');
-      contentContainer.style.WebkitOverflowScrolling = 'auto';
       
       tabs.style.zIndex = 0;
       inkBar.style.zIndex = 0;
@@ -338,7 +337,6 @@ export default class Chalkboards extends Component {
 
       if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         contentContainer.style.setProperty('overflow', 'scroll', 'important');
-        contentContainer.style.WebkitOverflowScrolling = 'touch';
       }
       else {
         contentContainer.style.setProperty('overflow', 'auto', 'important');
