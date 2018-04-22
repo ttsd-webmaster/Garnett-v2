@@ -211,6 +211,13 @@
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
 }
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .garnett-dialog-tabs > div:last-child > div {
+    overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
 
 .garnett-dialog-body {
   display: flex;
