@@ -203,13 +203,20 @@ export default class ActiveMeritDialog extends Component {
   }
 
   render(){
+    let amount = this.state.amount;
     let maxAmount = 35;
+    let minAmount = 0;
 
     if (this.state.isChalkboard) {
       maxAmount = 100;
     }
     else if (this.props.state.status === 'pipm') {
-      maxAmount = 500;
+      minAmount = 560;
+      maxAmount = 665;
+
+      if (amount === 0) {
+        amount = 550;
+      }
     }
     else if (this.props.state.status === 'alumni') {
       maxAmount = 50;
@@ -298,15 +305,15 @@ export default class ActiveMeritDialog extends Component {
 
         <div style={{width:'256px',margin:'20px auto 0'}}>
           <span>
-            Amount: {this.state.amount} merits
+            Amount: {amount} merits
           </span>
           <Slider
             sliderStyle={{marginBottom:0}}
             name="Amount"
-            min={0}
+            min={minAmount}
             max={maxAmount}
             step={5}
-            value={this.state.amount}
+            value={amount}
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>
