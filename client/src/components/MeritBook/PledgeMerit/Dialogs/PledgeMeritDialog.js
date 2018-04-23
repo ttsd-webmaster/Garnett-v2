@@ -74,12 +74,15 @@ export default class PledgeMeritDialog extends Component {
     }
     else {
       let displayName = this.props.state.displayName;
-      let date = this.formatDate(this.state.date);
       let isChalkboard = this.state.isChalkboard;
       let action = 'Merited';
+      let date;
 
       if (invalidSafariVersion()) {
         date = getDate();
+      }
+      else {
+        date = this.formatDate(this.state.date);
       }
 
       if (type === 'demerit') {
@@ -162,8 +165,16 @@ export default class PledgeMeritDialog extends Component {
         })
       }
       else {
+        let amount = this.state.amount;
+        let maxAmount = 50;
+
+        if (amount > maxAmount) {
+          amount = maxAmount;
+        }
+
         this.setState({
-          description: ''
+          description: '',
+          amount: amount
         });
       }
     }
@@ -196,17 +207,11 @@ export default class PledgeMeritDialog extends Component {
     });
   }
 
-  render(){
+  render() {
     let maxAmount = 50;
-    let amount = this.state.amount;
 
     if (this.state.isChalkboard) {
       maxAmount = 100;
-    }
-    else {
-      if (amount > maxAmount) {
-        amount = maxAmount;
-      }
     }
 
     const actions = [
@@ -306,7 +311,7 @@ export default class PledgeMeritDialog extends Component {
 
         <div style={{width:'256px',margin:'20px auto 0'}}>
           <span>
-            Amount: {amount} merits
+            Amount: {this.state.amount} merits
           </span>
           <Slider
             sliderStyle={{marginBottom:0}}
@@ -314,7 +319,7 @@ export default class PledgeMeritDialog extends Component {
             min={0}
             max={maxAmount}
             step={5}
-            value={amount}
+            value={this.state.amount}
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>
