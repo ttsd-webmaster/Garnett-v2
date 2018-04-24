@@ -948,8 +948,8 @@ app.post('/api/savemessagetoken', function(req, res) {
 // Send active merit notification to pledges
 app.post('/api/sendActiveMeritNotification', function(req, res) {
   let pledges = req.body.pledges;
-  let merits = '';
   let counter = 0;
+  let merits;
 
   if (req.body.amount > 0) {
     merits = 'merits';
@@ -982,16 +982,14 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
       if (registrationToken) {
         admin.messaging().send(message)
         .then(function(response) {
-          console.log("Successfully sent message:", response);
-
           if (!res.headersSent && counter === pledges.length) {
+            console.log("Successfully sent message:", response);
             res.sendStatus(200);
           }
         })
         .catch(function(error) {
-          console.log("Error sending message:", error);
-
           if (!res.headersSent && counter === pledges.length) {
+            console.log("Error sending message:", error);
             res.sendStatus(400);
           }
         });
@@ -1008,8 +1006,8 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
 // Send pledge merit notification to actives
 app.post('/api/sendPledgeMeritNotification', function(req, res) {
   let actives = req.body.actives;
-  let merits = '';
   let counter = 0;
+  let merits;
 
   if (req.body.amount > 0) {
     merits = 'merits';
@@ -1042,16 +1040,14 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
       if (registrationToken) {
         admin.messaging().send(message)
         .then(function(response) {
-          console.log("Successfully sent message:", response);
-
           if (!res.headersSent && counter === actives.length) {
+            console.log("Successfully sent message:", response);
             res.sendStatus(200);
           }
         })
         .catch(function(error) {
-          console.log("Error sending message:", error);
-
           if (!res.headersSent && counter === actives.length) {
+            console.log("Error sending message:", error);
             res.sendStatus(400);
           }
         });
@@ -1092,14 +1088,14 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
         if (registrationToken) {
           admin.messaging().send(message)
           .then(function(response) {
-            console.log("Successfully sent message:", response);
             if (!res.headersSent) {
+              console.log("Successfully sent message:", response);
               res.sendStatus(200);
             }
           })
           .catch(function(error) {
-            console.log("Error sending message:", error);
             if (!res.headersSent) {
+              console.log("Error sending message:", error);
               res.sendStatus(400);
             }
           });
@@ -1145,14 +1141,14 @@ app.post('/api/sendEditedChalkboardNotification', function(req, res) {
               if (registrationToken) {
                 admin.messaging().send(message)
                 .then(function(response) {
-                  console.log("Successfully sent message:", response);
                   if (!res.headersSent) {
+                    console.log("Successfully sent message:", response);
                     res.sendStatus(200);
                   }
                 })
                 .catch(function(error) {
-                  console.log("Error sending message:", error);
                   if (!res.headersSent) {
+                    console.log("Error sending message:", error);
                     res.sendStatus(400);
                   }
                 });
@@ -1187,14 +1183,14 @@ function sendAttendeesNotification(chalkboard, message, res) {
               if (registrationToken) {
                 admin.messaging().send(message)
                 .then(function(response) {
-                  console.log("Successfully sent message:", response);
                   if (!res.headersSent) {
+                    console.log("Successfully sent message:", response);
                     res.sendStatus(200);
                   }
                 })
                 .catch(function(error) {
-                  console.log("Error sending message:", error);
                   if (!res.headersSent) {
+                    console.log("Error sending message:", error);
                     res.sendStatus(400);
                   }
                 });
@@ -1237,14 +1233,14 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
     if (registrationToken) {
       admin.messaging().send(message)
       .then(function(response) {
-        console.log("Successfully sent message:", response);
         if (!res.headersSent) {
+          console.log("Successfully sent message:", response);
           sendAttendeesNotification(chalkboard, message, res);
         }
       })
       .catch(function(error) {
-        console.log("Error sending message:", error);
         if (!res.headersSent) {
+          console.log("Error sending message:", error);
           res.sendStatus(400);
         }
       });
@@ -1283,14 +1279,14 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
     if (registrationToken) {
       admin.messaging().send(message)
       .then(function(response) {
-        console.log("Successfully sent message:", response);
         if (!res.headersSent) {
+          console.log("Successfully sent message:", response);
           sendAttendeesNotification(chalkboard, message, res);
         }
       })
       .catch(function(error) {
-        console.log("Error sending message:", error);
         if (!res.headersSent) {
+          console.log("Error sending message:", error);
           res.sendStatus(400);
         }
       });
@@ -1328,16 +1324,22 @@ app.post('/api/sendPendingComplaintNotification', function(req, res) {
         if (registrationToken) {
           admin.messaging().send(message)
           .then(function(response) {
-            console.log("Successfully sent message:", response);
-            res.sendStatus(200);
+            if (!res.headersSent) {
+              console.log("Successfully sent message:", response);
+              res.sendStatus(200);
+            }
           })
           .catch(function(error) {
-            console.log("Error sending message:", error);
-            res.sendStatus(400);
+            if (!res.headersSent) {
+              console.log("Error sending message:", error);
+              res.sendStatus(400);
+            }
           });
         }
         else {
-          res.sendStatus(200);
+          if (!res.headersSent) {
+            res.sendStatus(200);
+          }
         }
       }
     });

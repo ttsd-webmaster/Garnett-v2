@@ -19,11 +19,13 @@ usersRef.once('value', (snapshot) => {
           totalMerits += merit.val().amount;
         });
 
+        console.log(`Previous: ${user.key} ${totalMerits}`);
+
         user.ref.update({
           totalMerits: totalMerits
         });
 
-        console.log(`${user.key} ${totalMerits}`);
+        console.log(`Updated: ${user.key} ${totalMerits}`);
       }); 
     }
   });
