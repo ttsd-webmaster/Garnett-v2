@@ -1,0 +1,59 @@
+const admin = require("firebase-admin");
+var serviceAccount = require("./serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://garnett-42475.firebaseio.com"
+})
+
+let usersRef = admin.database().ref('/users');
+let chalkboardsRef = admin.database().ref('/chalkboards');
+
+usersRef.once('value', (snapshot) => {
+  snapshot.forEach((user) => {
+    if (user.val().status !== 'pledge') {
+      let pledgesRef = user.ref.child('Pledges');
+
+      pledgesRef.once('value', (pledges) => {
+        let removedPledge;
+        let newPledgeArray = [];
+        let pledgeArray = Object.keys(pledges.val()).map(function(key) {
+          return key;
+        });
+
+        snapshot.forEach((user) => {
+          if (user.val().status === 'pledge') {
+            newPledgeArray.push(user.key);
+          }
+        });
+
+        pledgeArray.forEach((pledge) => {
+          if (!newPledgeArray.includes(pledge)) {
+            removedPledge = pledge;
+            pledgesRef.child(pledge).remove(() => {
+              console.log(`Removed ${pledge}`);
+            });
+          }
+        });
+
+        chalkboardsRef.once('value', (snapshot) => {
+          snapshot.forEach((chalkboard) => {
+            let attendeesRef = chalkboard.ref.child('attendees');
+
+            attendeesRef.once('value', (attendees) => {
+              attendees.forEach((attendee) => {
+                let attendeeName = attendee.val().name.replace(/ /g,'');
+
+                if (attendeeName === removedPledge) {
+                  attendee.ref.remove(() => {
+                    console.log(`Removed ${attendeeName} from chalkboard.`);
+                  });
+                }
+              });
+            });
+          });
+        });
+      });
+    }
+  });
+});

@@ -232,13 +232,6 @@ export default class PledgeApp extends Component {
       else {
         contentContainer.childNodes[index].style.height = 'calc(100% - 100px)';
       }
-
-      for (let i = 0; i < 5; i++) {
-        if (index !== i) {
-          contentContainer.childNodes[i].style.position = 'relative';
-          contentContainer.childNodes[i].style.height = 0;
-        }
-      }
     }
   }
 
@@ -297,8 +290,13 @@ export default class PledgeApp extends Component {
     let appBar = document.querySelector('.app-header');
     let contentContainer = document.querySelector('.content-container');
     let view = contentContainer.childNodes[index];
-    let scrollPosition = contentContainer.childNodes[previousIndex].scrollTop;
+    let scrollPosition;
     let scrolled;
+    let loaded = 'load';
+
+    if (contentContainer.childNodes[previousIndex]) {
+      scrollPosition = contentContainer.childNodes[previousIndex].scrollTop;
+    }
 
     // Hides and shows the app bar if scrolled for that view for mobile
     if (/android/i.test(navigator.userAgent)) {
@@ -317,14 +315,17 @@ export default class PledgeApp extends Component {
     else if (index === 1) {
       title = 'Contacts';
       scrolled = scrollPosition2;
+      loaded += 'Contacts';
     }
     else if (index === 2) {
       title = 'Chalkboards';
       scrolled = scrollPosition3;
+      loaded += 'Chalkboards';
     }
     else if (index === 3) {
       title = 'Complaints';
       scrolled = scrollPosition4;
+      loaded += 'Complaints';
     }
     else {
       title = 'Settings';
@@ -349,7 +350,9 @@ export default class PledgeApp extends Component {
     }
 
     // Sets the view scroll position based on tab
-    view.scrollTop = scrolled;
+    if (view) {
+      view.scrollTop = scrolled;
+    }
 
     this.setState({
       title: title,
@@ -360,6 +363,7 @@ export default class PledgeApp extends Component {
       scrollPosition3: scrollPosition3,
       scrollPosition4: scrollPosition4,
       scrollPosition5: scrollPosition5,
+      [loaded]: true
     });
   };
 
@@ -374,8 +378,8 @@ export default class PledgeApp extends Component {
           <Tabs
             id="pledge-app-tabs"
             contentContainerClassName="content-container"
-            onChange={this.handleChange}
             value={this.state.slideIndex}
+            onChange={this.handleChange}
           >
             <Tab 
               icon={<i style={getTabStyle(this.state.slideIndex === 0)} className="icon-star"></i>}
@@ -394,39 +398,51 @@ export default class PledgeApp extends Component {
               icon={<i style={getTabStyle(this.state.slideIndex === 1)} className="icon-address-book"></i>}
               value={1}
             >
-              <LoadableContacts
-                state={this.props.state}
-                actives={this.state.activeArray}
-              />
+              {this.state.loadContacts ? (
+                <LoadableContacts
+                  state={this.props.state}
+                  actives={this.state.activeArray}
+                />
+              ) : (
+                <div></div>
+              )}
             </Tab>
             <Tab
               icon={<i style={getTabStyle(this.state.slideIndex === 2)} className="icon-calendar-empty"></i>}
               value={2}
             >
-              <LoadableChalkboards 
-                state={this.props.state}
-                index={this.state.slideIndex}
-                myHostingChalkboards={this.state.myHostingChalkboards}
-                myAttendingChalkboards={this.state.myAttendingChalkboards}
-                myCompletedChalkboards={this.state.myCompletedChalkboards}
-                upcomingChalkboards={this.state.upcomingChalkboards}
-                completedChalkboards={this.state.completedChalkboards}
-                handleRequestOpen={this.props.handleRequestOpen}
-              />
+              {this.state.loadChalkboards ? (
+                <LoadableChalkboards 
+                  state={this.props.state}
+                  index={this.state.slideIndex}
+                  myHostingChalkboards={this.state.myHostingChalkboards}
+                  myAttendingChalkboards={this.state.myAttendingChalkboards}
+                  myCompletedChalkboards={this.state.myCompletedChalkboards}
+                  upcomingChalkboards={this.state.upcomingChalkboards}
+                  completedChalkboards={this.state.completedChalkboards}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
+              ) : (
+                <div></div>
+              )}
             </Tab>
             <Tab
               icon={<i style={getTabStyle(this.state.slideIndex === 3)} className="icon-thumbs-down-alt"></i>}
               value={3}
             >
-              <LoadableComplaints
-                state={this.props.state}
-                index={this.state.slideIndex}
-                pledgeComplaints={this.state.pledgeComplaints}
-                activeComplaints={this.state.activeComplaints}
-                pendingComplaints={this.state.pendingComplaints}
-                approvedComplaints={this.state.approvedComplaints}
-                handleRequestOpen={this.props.handleRequestOpen}
-              />
+              {this.state.loadComplaints ? (
+                <LoadableComplaints
+                  state={this.props.state}
+                  index={this.state.slideIndex}
+                  pledgeComplaints={this.state.pledgeComplaints}
+                  activeComplaints={this.state.activeComplaints}
+                  pendingComplaints={this.state.pendingComplaints}
+                  approvedComplaints={this.state.approvedComplaints}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
+              ) : (
+                <div></div>
+              )}
             </Tab>
             <Tab
               icon={<i style={getTabStyle(this.state.slideIndex === 4)} className="icon-cog"></i>}
