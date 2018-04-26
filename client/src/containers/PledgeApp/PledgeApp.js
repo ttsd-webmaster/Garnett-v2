@@ -197,19 +197,14 @@ export default class PledgeApp extends Component {
 
   componentDidMount() {
     let contentContainer = document.querySelector('.content-container');
-    let tabs = document.getElementById('pledge-app-tabs').firstChild;
 
     if (contentContainer) {
       if (this.props.state.status === 'pledge') {
-        contentContainer.firstChild.style.height = 'calc(100% - 157px)';
+        contentContainer.firstChild.classList.add('pledge');
       }
 
       if (/android/i.test(navigator.userAgent)) {
         contentContainer.firstChild.onscroll = watchScroll;
-
-        if (tabs.classList.contains('hide-tabs')) {
-          contentContainer.firstChild.style.height = 'calc(100% - 48px)';
-        }
       }
     }
   }
@@ -218,7 +213,6 @@ export default class PledgeApp extends Component {
     let index = this.state.slideIndex;
     // let pullToRefresh = document.querySelector('.ptr--ptr');
     let contentContainer = document.querySelector('.content-container');
-    let tabs = document.getElementById('pledge-app-tabs').firstChild;
     
     // if (pullToRefresh) {
     //   pullToRefresh.style.marginTop = '100px';
@@ -226,16 +220,8 @@ export default class PledgeApp extends Component {
 
     // Changes view margin if view is pledge merit book
     if (contentContainer) {
-      if (this.props.state.status === 'pledge') {
-        contentContainer.firstChild.style.height = 'calc(100% - 157px)';
-      }
-
       if (/android/i.test(navigator.userAgent)) {
         contentContainer.childNodes[index].onscroll = watchScroll;
-
-        if (tabs.classList.contains('hide-tabs')) {
-          contentContainer.firstChild.style.height = 'calc(100% - 48px)';
-        }
       }
     }
   }

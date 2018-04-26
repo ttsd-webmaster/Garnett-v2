@@ -71,9 +71,19 @@
     -webkit-overflow-scrolling: touch;
   }
 }
+.content-container > div:first-child.pledge,
 .content-container > div:nth-child(3),
 .content-container > div:nth-child(4) {
   height: calc(100% - 157px);
+}
+/* For Android when tabs are hidden */
+.content-container.hide-content-container > div {
+  height: calc(100% - 48px);
+}
+.content-container.hide-content-container > div:first-child.pledge,
+.content-container.hide-content-container > div:nth-child(3),
+.content-container.hide-content-container > div:nth-child(4) {
+  height: calc(100% - 105px);
 }
 
 .fixed-button {
