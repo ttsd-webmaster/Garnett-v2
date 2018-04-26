@@ -180,7 +180,7 @@ export default class Contacts extends Component {
                 {label}
                 {i === 0 && (
                   <span style={{float:'right'}}>
-                    <span style={{cursor:'pointer'}} onClick={this.openPopover}> 
+                    <span className="garnett-filter" onClick={this.openPopover}> 
                       {this.state.filterName}
                     </span>
                     <IconButton

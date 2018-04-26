@@ -284,7 +284,7 @@ export default class ActiveMerit extends Component {
           <Subheader className="garnett-subheader">
             Pledges
             <span style={{float:'right'}}>
-              <span style={{cursor:'pointer'}} onClick={this.openPopover}> 
+              <span className="garnett-filter" onClick={this.openPopover}> 
                 {this.state.filterName}
               </span>
               <IconButton

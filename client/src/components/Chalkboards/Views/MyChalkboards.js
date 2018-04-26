@@ -93,7 +93,7 @@ export default class MyChalkboards extends Component {
             <Subheader className="garnett-subheader">
               Hosting
               <span style={{float:'right'}}>
-                <span style={{cursor:'pointer'}} onClick={this.props.openPopover}> 
+                <span className="garnett-filter" onClick={this.props.openPopover}> 
                   {this.props.filterName}
                 </span>
                 <IconButton
@@ -140,7 +140,7 @@ export default class MyChalkboards extends Component {
           Attending
           {this.props.state.status === 'pledge' && (
             <span style={{float:'right'}}>
-              <span style={{cursor:'pointer'}} onClick={this.props.openPopover}> 
+              <span className="garnett-filter" onClick={this.props.openPopover}> 
                 {this.props.filterName}
               </span>
               <IconButton
