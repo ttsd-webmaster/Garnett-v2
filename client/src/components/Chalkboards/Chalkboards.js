@@ -216,6 +216,14 @@ export default class Chalkboards extends Component {
 
     forceCheck();
 
+    if (/android/i.test(navigator.userAgent)) {
+      tabs.classList.remove('hide-tabs');
+      appBar.classList.remove('hide-app-bar');
+      view.classList.remove('hide-content-container');
+      inkBar.classList.remove('hide-content-container');
+      contentContainer.classList.remove('hide-buttons');
+    }
+
     this.setState({
       selectedIndex: index,
       scrollPosition1: scrollPosition1,
