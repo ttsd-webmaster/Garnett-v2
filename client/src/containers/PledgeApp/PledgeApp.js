@@ -197,6 +197,7 @@ export default class PledgeApp extends Component {
 
   componentDidMount() {
     let contentContainer = document.querySelector('.content-container');
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
 
     if (contentContainer) {
       if (this.props.state.status === 'pledge') {
@@ -205,6 +206,7 @@ export default class PledgeApp extends Component {
 
       if (/android/i.test(navigator.userAgent)) {
         contentContainer.firstChild.onscroll = watchScroll;
+        contentContainer.classList.add('android');
       }
     }
   }
@@ -213,6 +215,7 @@ export default class PledgeApp extends Component {
     let index = this.state.slideIndex;
     // let pullToRefresh = document.querySelector('.ptr--ptr');
     let contentContainer = document.querySelector('.content-container');
+    let tabs = document.getElementById('pledge-app-tabs').firstChild;
     
     // if (pullToRefresh) {
     //   pullToRefresh.style.marginTop = '100px';
@@ -222,6 +225,7 @@ export default class PledgeApp extends Component {
     if (contentContainer) {
       if (/android/i.test(navigator.userAgent)) {
         contentContainer.childNodes[index].onscroll = watchScroll;
+        contentContainer.classList.add('android');
       }
     }
   }

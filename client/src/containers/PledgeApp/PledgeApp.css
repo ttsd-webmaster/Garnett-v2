@@ -36,12 +36,13 @@
 .content-container.hide-buttons .fixed-button{
   transform: scale(0);
 }
-.content-container.hide-buttons > div {
+/* For Android when tabs are hidden */
+.content-container.android > div {
   height: calc(100% - 48px);
 }
-.content-container.hide-buttons > div:first-child.pledge,
-.content-container.hide-buttons > div:nth-child(3),
-.content-container.hide-buttons > div:nth-child(4) {
+.content-container.android > div:first-child.pledge,
+.content-container.android > div:nth-child(3),
+.content-container.android > div:nth-child(4) {
   height: calc(100% - 105px);
 }
 
