@@ -135,32 +135,32 @@ export default class ActiveComplaints extends Component {
     if (previousIndex !== index) {
       myComplaints.classList.toggle('active');
       pastComplaints.classList.toggle('active');
-    }
 
-    if (index === 0) {
-      scrolled = scrollPosition1;
-    }
-    else {
-      scrolled = scrollPosition2;
-    }
+      if (index === 0) {
+        scrolled = scrollPosition1;
+      }
+      else {
+        scrolled = scrollPosition2;
+      }
 
-    if (previousIndex === 0) {
-      scrollPosition1 = scrollPosition;
+      if (previousIndex === 0) {
+        scrollPosition1 = scrollPosition;
+      }
+      else {
+        scrollPosition2 = scrollPosition;
+      }
+
+      // Sets the window scroll position based on tab
+      contentContainer.childNodes[3].scrollTop = scrolled;
+
+      forceCheck();
+
+      this.setState({
+        selectedIndex: index,
+        scrollPosition1: scrollPosition1,
+        scrollPosition2: scrollPosition2
+      });
     }
-    else {
-      scrollPosition2 = scrollPosition;
-    }
-
-    // Sets the window scroll position based on tab
-    contentContainer.childNodes[3].scrollTop = scrolled;
-
-    forceCheck();
-
-    this.setState({
-      selectedIndex: index,
-      scrollPosition1: scrollPosition1,
-      scrollPosition2: scrollPosition2
-    });
   }
 
   handleOpen = () => {
