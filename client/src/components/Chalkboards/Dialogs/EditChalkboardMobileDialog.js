@@ -22,14 +22,14 @@ export default class MobileEditChalkboardDialog extends Component {
     };
   }
 
-  componentWillMount() {
-    let field = this.props.field;
+  componentWillReceiveProps(nextProps) {
+    let field = nextProps.field;
 
     if (field === 'Description' || field === 'Location') {
       let label = field.toLowerCase();
 
       this.setState({
-        newValue: this.props.chalkboard[label]
+        newValue: nextProps.chalkboard[label]
       });
     }
   }
