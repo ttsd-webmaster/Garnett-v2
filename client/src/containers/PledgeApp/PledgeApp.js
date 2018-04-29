@@ -234,10 +234,11 @@ export default class PledgeApp extends Component {
   onScroll = () => {
     let tabs = document.getElementById('pledge-app-tabs').firstChild;
     let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-    let contentContainer = document.querySelector('.content-container');
     let appBar = document.querySelector('.app-header');
+    let contentContainer = document.querySelector('.content-container');
     let index = this.state.slideIndex;
     let view = contentContainer.childNodes[index];
+    let body = document.body;
     let scrollTop = view.scrollTop;
 
     // if (view.scrollTop >= 1) {
@@ -254,7 +255,7 @@ export default class PledgeApp extends Component {
       appBar.classList.add('hide-app-bar');
       view.classList.add('hide-content-container');
       inkBar.classList.add('hide-content-container');
-      contentContainer.classList.add('hide-buttons');
+      body.classList.add('hide-buttons');
     }
     else {
       // Scroll Up
@@ -262,7 +263,7 @@ export default class PledgeApp extends Component {
       appBar.classList.remove('hide-app-bar');
       view.classList.remove('hide-content-container');
       inkBar.classList.remove('hide-content-container');
-      contentContainer.classList.remove('hide-buttons');
+      body.classList.remove('hide-buttons');
     }
     
     previousScrollTop = scrollTop;
@@ -281,6 +282,7 @@ export default class PledgeApp extends Component {
     let appBar = document.querySelector('.app-header');
     let contentContainer = document.querySelector('.content-container');
     let view = contentContainer.childNodes[index];
+    let body = document.body;
     let scrollPosition = contentContainer.childNodes[previousIndex].scrollTop;;
     let scrolled;
 
@@ -290,7 +292,7 @@ export default class PledgeApp extends Component {
       appBar.classList.remove('hide-app-bar');
       view.classList.remove('hide-content-container');
       inkBar.classList.remove('hide-content-container');
-      contentContainer.classList.remove('hide-buttons');
+      body.classList.remove('hide-buttons');
     }
 
     // Sets the title and marks scroll position based on the tab index

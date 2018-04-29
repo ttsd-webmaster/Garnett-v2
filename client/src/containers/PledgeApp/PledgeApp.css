@@ -33,7 +33,7 @@
 .hide-content-container {
   top: 48px !important;
 }
-.content-container.hide-buttons .fixed-button{
+.hide-buttons .fixed-button{
   transform: scale(0);
 }
 /* For Android when tabs are hidden */
