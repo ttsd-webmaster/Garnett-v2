@@ -2,9 +2,10 @@
 #my-complaints,
 #past-complaints {
   display: none;
+  padding-bottom: 57px;
+  animation: fadeIn .25s ease-in forwards;
 }
 #my-complaints.active,
 #past-complaints.active {
   display: block;
-  animation: fadeIn .25s ease-in forwards;
 }

@@ -199,10 +199,6 @@ export default class PledgeApp extends Component {
     let contentContainer = document.querySelector('.content-container');
 
     if (contentContainer) {
-      if (this.props.state.status === 'pledge') {
-        contentContainer.firstChild.classList.add('pledge');
-      }
-
       if (/android/i.test(navigator.userAgent)) {
         contentContainer.firstChild.onscroll = watchScroll;
         contentContainer.classList.add('android');

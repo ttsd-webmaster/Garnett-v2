@@ -2,11 +2,12 @@
 #my-chalkboards,
 #all-chalkboards {
   display: none;
+  padding-bottom: 57px;
+  animation: fadeIn .25s ease-in forwards;
 }
 #my-chalkboards.active,
 #all-chalkboards.active {
   display: block;
-  animation: fadeIn .25s ease-in forwards;
 }
 
 .attendee-name {

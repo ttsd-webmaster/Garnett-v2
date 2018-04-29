@@ -40,11 +40,6 @@
 .content-container.android > div {
   height: calc(100% - 48px);
 }
-.content-container.android > div:first-child.pledge,
-.content-container.android > div:nth-child(3),
-.content-container.android > div:nth-child(4) {
-  height: calc(100% - 105px);
-}
 
 /* Pull To Refresh version */
 /*.content-container > div {
@@ -79,11 +74,6 @@
     overflow: scroll !important;
     -webkit-overflow-scrolling: touch;
   }
-}
-.content-container > div:first-child.pledge,
-.content-container > div:nth-child(3),
-.content-container > div:nth-child(4) {
-  height: calc(100% - 157px);
 }
 
 .fixed-button {
