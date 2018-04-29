@@ -93,6 +93,8 @@ export default class PledgeApp extends Component {
 
     let data = JSON.parse(localStorage.getItem('data'));
 
+    localStorage.setItem('route', 'pledge-app');
+
     if (navigator.onLine) {
       this.setState({
         loaded: true

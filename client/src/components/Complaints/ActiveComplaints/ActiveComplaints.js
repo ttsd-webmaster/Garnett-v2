@@ -5,6 +5,7 @@ import {loadFirebase} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
+import {Portal} from 'react-portal';
 import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -214,27 +215,31 @@ export default class ActiveComplaints extends Component {
             complaints={this.state.complaints}
           />
 
-          <BottomNavigation 
-            id="complaints-tabs" 
-            className="bottom-tabs"
-            style={{'display': 'none'}}
-            selectedIndex={this.state.selectedIndex}
-          >
-            <BottomNavigationItem
-              label="My Complaints"
-              icon={<div></div>}
-              onClick={() => this.select(0)}
-            />
-            <BottomNavigationItem
-              label="Past Complaints"
-              icon={<div></div>}
-              onClick={() => this.select(1)}
-            />
-          </BottomNavigation>
+          <Portal>
+            <BottomNavigation 
+              id="complaints-tabs" 
+              className="bottom-tabs"
+              style={{'display': 'none'}}
+              selectedIndex={this.state.selectedIndex}
+            >
+              <BottomNavigationItem
+                label="My Complaints"
+                icon={<div></div>}
+                onClick={() => this.select(0)}
+              />
+              <BottomNavigationItem
+                label="Past Complaints"
+                icon={<div></div>}
+                onClick={() => this.select(1)}
+              />
+            </BottomNavigation>
+          </Portal>
 
-          <FloatingActionButton id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
-            <i className="icon-pencil"></i>
-          </FloatingActionButton>
+          <Portal>
+            <FloatingActionButton id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
+              <i className="icon-pencil"></i>
+            </FloatingActionButton>
+          </Portal>
 
           <LoadableAddComplaintDialog
             open={this.state.open}

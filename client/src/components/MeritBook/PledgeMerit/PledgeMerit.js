@@ -4,6 +4,7 @@ import {LoadingComponent} from '../../../helpers/loaders.js';
 import API from '../../../api/API.js';
 
 import React, {Component} from 'react';
+import {Portal} from 'react-portal';
 import Loadable from 'react-loadable';
 import LazyLoad from 'react-lazyload';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -290,9 +291,11 @@ export default class PledgeMerit extends Component {
             ))}
           </List>
 
-          <FloatingActionButton className="fixed-button" onClick={this.handleMeritOpen}>
-            <i className="icon-pencil"></i>
-          </FloatingActionButton>
+          <Portal>
+            <FloatingActionButton className="fixed-button" onClick={this.handleMeritOpen}>
+              <i className="icon-pencil"></i>
+            </FloatingActionButton>
+          </Portal>
 
           <SwipeableBottomSheet
             bodyStyle={{backgroundColor:'#fafafa'}}

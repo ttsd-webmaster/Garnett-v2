@@ -73,6 +73,11 @@ class App extends Component {
   componentWillMount() {
     let data = JSON.parse(localStorage.getItem('data'));
     let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
+    let route = localStorage.getItem('route');
+
+    this.setState({
+      route: route
+    });
 
     if (navigator.onLine) {
       if (data !== null) {
@@ -270,10 +275,15 @@ class App extends Component {
         <div>
           <Route exact path="/" render={() => (
             this.state.isAuthenticated ? (
-              this.state.status === "pledge" ? (
+              this.state.status === "pledge" || 
+              this.state.route === "pledge-app" ? (
                 <Redirect to="/pledge-app" />
               ) : (
-                <Redirect to="/home" />
+                this.state.route === "delibs-app" ? (
+                  <Redirect to="/delibs-app" />
+                ) : (
+                  <Redirect to="/home" />
+                )
               )
             ) : (
               this.state.loaded ? (

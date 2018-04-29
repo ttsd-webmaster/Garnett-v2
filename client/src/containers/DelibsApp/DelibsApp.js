@@ -39,6 +39,8 @@ export default class DelibsApp extends Component {
   }
 
   componentWillMount() {
+    localStorage.setItem('route', 'delibs-app');
+    
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

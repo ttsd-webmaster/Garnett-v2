@@ -5,6 +5,7 @@ import {loadFirebase, isMobileDevice, getDate} from '../../helpers/functions.js'
 import {LoadingComponent} from '../../helpers/loaders.js';
 
 import React, {Component} from 'react';
+import {Portal} from 'react-portal';
 import {forceCheck} from 'react-lazyload';
 import Loadable from 'react-loadable';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -447,23 +448,25 @@ export default class Chalkboards extends Component {
             handleOpen={this.handleOpen}
           />
 
-          <BottomNavigation 
-            id="chalkboards-tabs" 
-            className="bottom-tabs"
-            style={{'display': 'none'}}
-            selectedIndex={this.state.selectedIndex}
-          >
-            <BottomNavigationItem
-              label="My Chalkboards"
-              icon={<div></div>}
-              onClick={() => this.select(0)}
-            />
-            <BottomNavigationItem
-              label="All Chalkboards"
-              icon={<div></div>}
-              onClick={() => this.select(1)}
-            />
-          </BottomNavigation>
+          <Portal>
+            <BottomNavigation 
+              id="chalkboards-tabs" 
+              className="bottom-tabs"
+              style={{'display': 'none'}}
+              selectedIndex={this.state.selectedIndex}
+            >
+              <BottomNavigationItem
+                label="My Chalkboards"
+                icon={<div></div>}
+                onClick={() => this.select(0)}
+              />
+              <BottomNavigationItem
+                label="All Chalkboards"
+                icon={<div></div>}
+                onClick={() => this.select(1)}
+              />
+            </BottomNavigation>
+          </Portal>
 
           <Popover
             open={this.state.openPopover}
@@ -502,7 +505,7 @@ export default class Chalkboards extends Component {
           </Popover>
 
           {this.props.state.status !== 'pledge' && (
-            <div>
+            <Portal>
               <FloatingActionButton id="add-chalkboard" className="fixed-button hidden" onClick={this.addOpen}>
                 <i className="icon-calendar-plus-o"></i>
               </FloatingActionButton>
@@ -513,7 +516,7 @@ export default class Chalkboards extends Component {
                 handleClose={this.addClose}
                 handleRequestOpen={this.props.handleRequestOpen}
               />
-            </div>
+            </Portal>
           )}
 
           <LoadableHandleChalkboardDialog

@@ -3,6 +3,7 @@ import {loadFirebase, isMobileDevice} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
 
 import React, {Component} from 'react';
+import {Portal} from 'react-portal';
 import Loadable from 'react-loadable';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Avatar from 'material-ui/Avatar';
@@ -324,9 +325,11 @@ export default class ActiveMerit extends Component {
           </List>
 
           {(this.props.state.status === 'alumni' || this.props.state.status === 'pipm') && (
-            <FloatingActionButton id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
-              <i className="icon-pencil"></i>
-            </FloatingActionButton>
+            <Portal>
+              <FloatingActionButton id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
+                <i className="icon-pencil"></i>
+              </FloatingActionButton>
+            </Portal>
           )}
 
           <Popover
