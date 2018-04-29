@@ -519,14 +519,16 @@ export default class Chalkboards extends Component {
             </Portal>
           )}
 
-          <LoadableHandleChalkboardDialog
-            open={this.state.open}
-            state={this.props.state}
-            type={this.state.chalkboardType}
-            chalkboard={this.state.selectedChalkboard}
-            handleClose={this.handleClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
+          <Portal>
+            <LoadableHandleChalkboardDialog
+              open={this.state.open}
+              state={this.props.state}
+              type={this.state.chalkboardType}
+              chalkboard={this.state.selectedChalkboard}
+              handleClose={this.handleClose}
+              handleRequestOpen={this.props.handleRequestOpen}
+            />
+          </Portal>
         </div>
       ) : (
         <LoadingComponent />
