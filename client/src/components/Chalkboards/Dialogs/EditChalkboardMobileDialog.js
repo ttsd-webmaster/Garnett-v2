@@ -22,6 +22,18 @@ export default class MobileEditChalkboardDialog extends Component {
     };
   }
 
+  componentWillMount() {
+    let field = this.props.field;
+
+    if (field === 'Description' || field === 'Location') {
+      let label = field.toLowerCase();
+
+      this.setState({
+        newValue: this.props.chalkboard[label]
+      });
+    }
+  }
+
   edit = (newValue) => {
     let field = this.props.field;
 
