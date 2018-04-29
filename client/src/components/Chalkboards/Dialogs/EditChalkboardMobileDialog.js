@@ -23,9 +23,7 @@ export default class MobileEditChalkboardDialog extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let field = nextProps.field;
-
-    if (field === 'Description') {
+    if (nextProps.field === 'Description') {
       this.setState({
         newValue: nextProps.chalkboard.description
       });
