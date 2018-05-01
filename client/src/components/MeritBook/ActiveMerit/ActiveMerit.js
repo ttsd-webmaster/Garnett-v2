@@ -100,14 +100,14 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidUpdate() {
-    let meritButton = document.getElementById('merit-button');
+    let meritButton = document.querySelector('.fixed-button.active-merit');
 
     if (meritButton) {
       if (this.props.index === 0) {
-        meritButton.parentNode.classList.remove('hidden');
+        meritButton.classList.remove('hidden');
       }
       else {
-        meritButton.parentNode.classList.add('hidden');
+        meritButton.classList.add('hidden');
       }
     }
   }
@@ -281,7 +281,7 @@ export default class ActiveMerit extends Component {
 
     return (
       this.state.loaded ? (
-        <div id="active-meritbook" className="animate-in">
+        <div className="animate-in">
           <Subheader className="garnett-subheader">
             Pledges
             <span style={{float:'right'}}>
@@ -326,7 +326,7 @@ export default class ActiveMerit extends Component {
 
           {(this.props.state.status === 'alumni' || this.props.state.status === 'pipm') && (
             <Portal>
-              <FloatingActionButton id="merit-button" className="fixed-button" onClick={this.handleMeritOpen}>
+              <FloatingActionButton className="fixed-button active-merit" onClick={this.handleMeritOpen}>
                 <i className="icon-pencil"></i>
               </FloatingActionButton>
             </Portal>

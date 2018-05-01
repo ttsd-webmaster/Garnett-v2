@@ -16,7 +16,7 @@ const checkboxStyle = {
   left: '50%',
   width: 'max-content',
   marginTop: '20px',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-130px)'
 };
 
 export default class ActiveMeritDialog extends Component {
