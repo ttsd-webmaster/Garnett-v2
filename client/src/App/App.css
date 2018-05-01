@@ -114,6 +114,12 @@ div, a {
 .app-header.no-tabs {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
 }
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .app-header {
+    padding-top: 35px;
+  }
+}
 
 .back-button {
   float: right;
