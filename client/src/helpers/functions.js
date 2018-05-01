@@ -105,7 +105,7 @@ function invalidSafariVersion() {
   }
 }
 
-function invalidSafariServiceWorker() {
+function invalidSafariVersion() {
   let nAgt = navigator.userAgent;
   let verOffset;
 
@@ -119,7 +119,7 @@ function invalidSafariServiceWorker() {
 
     version = version.split(".")[0];
 
-    if (version >= 11) {
+    if (version > 9) {
       return false;
     }
     else {
@@ -131,6 +131,17 @@ function invalidSafariServiceWorker() {
   }
 }
 
+function iOSversion() {
+  if (/iP(hone|od|ad)/.test(navigator.platform)) {
+    // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
+    var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+    return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+  }
+  else {
+    return null;
+  }
+}
+
 export {
   isMobileDevice,
   initializeFirebase,
@@ -139,6 +150,6 @@ export {
   getDate,
   mapsSelector,
   invalidSafariVersion,
-  invalidSafariServiceWorker,
+  iOSversion,
   getTabStyle
 };

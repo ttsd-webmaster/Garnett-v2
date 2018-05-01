@@ -4,8 +4,7 @@ import {
   isMobileDevice,
   initializeFirebase,
   loadFirebase,
-  validateEmail,
-  invalidSafariServiceWorker
+  validateEmail
 } from '../../helpers/functions.js';
 import {CompletingTaskDialog} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
@@ -185,7 +184,7 @@ export default class Login extends Component {
                   let user = snapshot.val();
                   localStorage.setItem('data', JSON.stringify(user));
 
-                  this.props.setData(user);
+                  this.props.loginCallBack(user);
                 });
               });
             }
