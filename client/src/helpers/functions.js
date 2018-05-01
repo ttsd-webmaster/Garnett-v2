@@ -119,7 +119,7 @@ function validSafariServiceWorker() {
 
     version = version.split(".")[0];
 
-    if (version > 10) {
+    if (version >= 11) {
       return true;
     }
     else {
