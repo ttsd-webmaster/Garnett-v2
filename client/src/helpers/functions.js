@@ -105,7 +105,7 @@ function invalidSafariVersion() {
   }
 }
 
-function validSafariServiceWorker() {
+function invalidSafariServiceWorker() {
   let nAgt = navigator.userAgent;
   let verOffset;
 
@@ -139,6 +139,6 @@ export {
   getDate,
   mapsSelector,
   invalidSafariVersion,
-  validSafariServiceWorker,
+  invalidSafariServiceWorker,
   getTabStyle
 };

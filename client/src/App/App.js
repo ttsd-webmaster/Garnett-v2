@@ -1,6 +1,6 @@
 import './App.css';
 import API from '../api/API.js';
-import {initializeFirebase, loadFirebase} from '../helpers/functions.js';
+import {initializeFirebase, loadFirebase, invalidSafariServiceWorker} from '../helpers/functions.js';
 import {
   LoadingLogin,
   LoadingHome,
@@ -136,7 +136,7 @@ class App extends Component {
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-    if (isSafari || process.env.NODE_ENV === 'development') {
+    if (isSafari || invalidSafariServiceWorker() || process.env.NODE_ENV === 'development') {
       this.checkPhoto(user);
     }
     else {
