@@ -71,7 +71,6 @@
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */ 
   .content-container > div {
-    height: calc(100% - 80px);
     overflow: scroll !important;
     -webkit-overflow-scrolling: touch;
   }
@@ -230,6 +229,13 @@
 .garnett-dialog-tabs > div:last-child > div {
   top: 48px;
 }
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .garnett-dialog-tabs > div:last-child > div {
+    overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
 
 .garnett-dialog-body {
   display: flex;
@@ -246,12 +252,9 @@
   height: 600px;
   padding: 0 !important;
 }
-@supports (-webkit-overflow-scrolling: touch) {
-  /* CSS specific to iOS devices */ 
-  .garnett-dialog-body {
-    overflow: scroll !important;
-    -webkit-overflow-scrolling: touch;
-  }
+
+.garnett-dialog-content {
+  width: 90% !important;
 }
 
 .garnett-dialog-title {
