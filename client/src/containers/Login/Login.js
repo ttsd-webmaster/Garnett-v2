@@ -1,6 +1,6 @@
 import './Login.css';
 import {activeCode, pledgeCode} from './data.js';
-import {isMobileDevice, initializeFirebase, loadFirebase, validateEmail} from '../../helpers/functions.js';
+import {isMobileDevice, initializeFirebase, loadFirebase, validateEmail, invalidSafariServiceWorker} from '../../helpers/functions.js';
 import {CompletingTaskDialog} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 import SignIn from './SignIn';
