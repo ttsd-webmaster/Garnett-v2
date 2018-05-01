@@ -120,14 +120,14 @@ function invalidSafariServiceWorker() {
     version = version.split(".")[0];
 
     if (version >= 11) {
-      return true;
+      return false;
     }
     else {
-      return false;
+      return true;
     }
   }
   else {
-    return true;
+    return false;
   }
 }
 
