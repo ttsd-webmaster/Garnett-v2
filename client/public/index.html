@@ -46,11 +46,17 @@
       To create a production bundle, use `npm run build`.
     -->
     <script>
+      import {iOSversion} from '../src/helpers/functions.js';
+      
       window.onload = function() {
         // Removes focus from input after touching on background for IOS
         document.body.firstElementChild.tabIndex = 1;
         document.body.style.backgroundColor = "#fafafa";
         document.getElementById("loading").style.display = "none";
+
+        if (iOSversion()[0] < 11) {
+          document.body.style.height = 'calc(100% + 20px)';
+        }
       }
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
