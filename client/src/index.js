@@ -1,4 +1,5 @@
 import './index.css';
+import {iOSversion} from './helpers/functions.js';
 import registerServiceWorker from './registerServiceWorker';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -28,3 +29,7 @@ ReactDOM.render(
 );
 
 registerServiceWorker();
+
+if (iOSversion()[0] < 11) {
+  document.body.style.height = 'calc(100% + 20px)';
+}
