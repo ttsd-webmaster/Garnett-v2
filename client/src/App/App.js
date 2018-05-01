@@ -290,7 +290,7 @@ class App extends Component {
                 <LoadableLogin 
                   state={this.state}
                   loginCallBack={this.loginCallBack}
-                  checkPhoto={this.checkPhoto}
+                  setData={this.setData}
                   handleRequestOpen={this.handleRequestOpen}
                 />
               ) : (

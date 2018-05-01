@@ -1,6 +1,12 @@
 import './Login.css';
 import {activeCode, pledgeCode} from './data.js';
-import {isMobileDevice, initializeFirebase, loadFirebase, validateEmail, invalidSafariServiceWorker} from '../../helpers/functions.js';
+import {
+  isMobileDevice,
+  initializeFirebase,
+  loadFirebase,
+  validateEmail,
+  invalidSafariServiceWorker
+} from '../../helpers/functions.js';
 import {CompletingTaskDialog} from '../../helpers/loaders.js';
 import API from '../../api/API.js';
 import SignIn from './SignIn';
@@ -180,7 +186,7 @@ export default class Login extends Component {
                   localStorage.setItem('data', JSON.stringify(user));
 
                   if (invalidSafariServiceWorker()) {
-                    this.props.checkPhoto(user);
+                    this.props.setData(user);
                   }
                   else {
                     this.props.loginCallBack(user);
