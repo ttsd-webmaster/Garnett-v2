@@ -105,7 +105,7 @@ function invalidSafariVersion() {
   }
 }
 
-function validSafariServiceWorker() {
+function invalidSafariServiceWorker() {
   let nAgt = navigator.userAgent;
   let verOffset;
 
@@ -120,14 +120,14 @@ function validSafariServiceWorker() {
     version = version.split(".")[0];
 
     if (version >= 11) {
-      return true;
+      return false;
     }
     else {
-      return false;
+      return true;
     }
   }
   else {
-    return true;
+    return false;
   }
 }
 
@@ -139,6 +139,6 @@ export {
   getDate,
   mapsSelector,
   invalidSafariVersion,
-  validSafariServiceWorker,
+  invalidSafariServiceWorker,
   getTabStyle
 };

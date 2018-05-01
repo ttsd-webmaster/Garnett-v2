@@ -179,7 +179,12 @@ export default class Login extends Component {
                   let user = snapshot.val();
                   localStorage.setItem('data', JSON.stringify(user));
 
-                  this.props.loginCallBack(user);
+                  if (invalidSafariServiceWorker()) {
+                    this.props.checkPhoto(user);
+                  }
+                  else {
+                    this.props.loginCallBack(user);
+                  }
                 });
               });
             }
