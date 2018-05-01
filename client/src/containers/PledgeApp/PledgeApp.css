@@ -227,7 +227,7 @@
 }
 /* The content container of the tabs */
 .garnett-dialog-tabs > div:last-child > div {
-  position: fixed;
+  position: fixed !important;
   top: 112px;
   height: calc(100vh - 112px);
   overflow: auto !important;
