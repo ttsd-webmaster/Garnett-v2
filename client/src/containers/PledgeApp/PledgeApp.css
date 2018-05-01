@@ -71,6 +71,7 @@
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */ 
   .content-container > div {
+    height: calc(100% - 80px);
     overflow: scroll !important;
     -webkit-overflow-scrolling: touch;
   }
@@ -245,9 +246,12 @@
   height: 600px;
   padding: 0 !important;
 }
-
-.garnett-dialog-content {
-  width: 90% !important;
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .garnett-dialog-body {
+    overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .garnett-dialog-title {
