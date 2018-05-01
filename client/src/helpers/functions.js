@@ -105,6 +105,32 @@ function invalidSafariVersion() {
   }
 }
 
+function validSafariServiceWorker() {
+  let nAgt = navigator.userAgent;
+  let verOffset;
+
+  if ((verOffset = nAgt.indexOf('Safari')) !== -1) {
+    let version;
+    version = nAgt.substring(verOffset + 7);
+
+    if ((verOffset = nAgt.indexOf('Version')) !== -1) {
+      version = nAgt.substring(verOffset + 8);
+    }
+
+    version = version.split(".")[0];
+
+    if (version > 10) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+  else {
+    return true;
+  }
+}
+
 export {
   isMobileDevice,
   initializeFirebase,
@@ -113,5 +139,6 @@ export {
   getDate,
   mapsSelector,
   invalidSafariVersion,
+  validSafariServiceWorker,
   getTabStyle
 };
