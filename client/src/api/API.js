@@ -37,6 +37,7 @@ export default {
   getPledgeComplaints: function(pledgeName) {
     return axios.post('/api/pledgecomplaints', {pledgeName});
   },
+  // Merit Book
   merit: function(displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status) {
     let body = {displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status};
     return axios.post('/api/merit', body);
@@ -57,12 +58,16 @@ export default {
   getActivesForMerit: function(displayName) {
     return axios.post('/api/activesForMerit', {displayName});
   },
+  getAlumniForMerit: function(displayName) {
+    return axios.post('/api/alumniForMerit', {displayName});
+  },
   getChalkboardsForMerit: function(fullName) {
     return axios.post('/api/chalkboardsForMerit', {fullName});
   },
   getPbros: function(displayName) {
     return axios.post('/api/getPbros', {displayName});
   },
+  // Chalkboards
   createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount) {
     let body = {displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount};
     return axios.post('/api/createchalkboard', body);
@@ -88,6 +93,7 @@ export default {
   getAttendees: function(chalkboard) {
     return axios.post('/api/getattendees', {chalkboard});
   },
+  // Complaints
   complain: function(complaint, status) {
     return axios.post('/api/complain', {complaint, status});
   },

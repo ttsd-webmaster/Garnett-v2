@@ -593,6 +593,28 @@ app.post('/api/activesForMerit', function(req, res) {
   });
 });
 
+// Gets all the alumni for meriting as pledge
+app.post('/api/alumniForMerit', function(req, res) {
+  let displayName = req.body.displayName;
+  let usersRef = admin.database().ref('/users');
+
+  usersRef.once('value', (snapshot) => {
+    let alumni = [];
+
+    snapshot.forEach((alumnus) => {
+      if (alumnus.val().status === 'alumni') {
+        alumni.push({
+          'value': alumnus.key,
+          'label': `${alumnus.val().firstName} ${alumnus.val().lastName}`,
+          'meritsRemaining': alumnus.val().Pledges[displayName].merits
+        });
+      }
+    });
+
+    res.json(alumni);
+  });
+});
+
 // Gets all the chalkboards for merit
 app.post('/api/chalkboardsForMerit', function(req, res) {
   let fullName = req.body.fullName;

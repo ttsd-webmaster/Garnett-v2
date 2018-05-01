@@ -17,7 +17,7 @@ const checkboxStyle = {
   left: '50%',
   width: 'max-content',
   marginTop: '20px',
-  transform: 'translateX(-50%)'
+  transform: 'translateX(-130px)'
 };
 
 export default class PledgeMeritDialog extends Component {
@@ -147,6 +147,32 @@ export default class PledgeMeritDialog extends Component {
     if (label === 'amount') {
       value = parseInt(newValue, 10)
     }
+    else if (label === 'isAlumni') {
+      let displayName = this.props.state.displayName;
+
+      if (newValue === true) {
+        API.getAlumniForMerit(displayName)
+        .then((res) => {
+          let alumni = res.data;
+
+          this.setState({
+            actives: alumni,
+            selectedActives: []
+          });
+        });
+      }
+      else {
+        API.getActivesForMerit(displayName)
+        .then((res) => {
+          let actives = res.data;
+
+          this.setState({
+            actives: actives,
+            selectedActives: []
+          });
+        });
+      }
+    }
     else if (label === 'isChalkboard') {
       if (newValue === true) {
         let fullName = this.props.state.name;
@@ -209,9 +235,13 @@ export default class PledgeMeritDialog extends Component {
 
   render() {
     let maxAmount = 50;
+    let selectLabel = 'Active Name';
 
     if (this.state.isChalkboard) {
       maxAmount = 100;
+    }
+    if (this.state.isAlumni) {
+      selectLabel = 'Alumni Name';
     }
 
     const actions = [
@@ -242,7 +272,7 @@ export default class PledgeMeritDialog extends Component {
         <SelectField
           className="garnett-input"
           value={this.state.selectedActives}
-          floatingLabelText="Active Name"
+          floatingLabelText={selectLabel}
           multiple={true}
           onChange={(e, key, newValues) => this.handleChange('selectedActives', newValues)}
           errorText={!this.state.activeValidation && 'Please select an active.'}
@@ -260,6 +290,13 @@ export default class PledgeMeritDialog extends Component {
             />
           ))}
         </SelectField>
+
+        <Checkbox
+          style={checkboxStyle}
+          label="Alumni"
+          checked={this.state.isAlumni}
+          onCheck={(e, newValue) => this.handleChange('isAlumni', newValue)}
+        />
 
         {this.state.isChalkboard ? (
           <SelectField
