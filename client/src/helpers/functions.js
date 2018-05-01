@@ -105,32 +105,6 @@ function invalidSafariVersion() {
   }
 }
 
-function invalidSafariVersion() {
-  let nAgt = navigator.userAgent;
-  let verOffset;
-
-  if ((verOffset = nAgt.indexOf('Safari')) !== -1) {
-    let version;
-    version = nAgt.substring(verOffset + 7);
-
-    if ((verOffset = nAgt.indexOf('Version')) !== -1) {
-      version = nAgt.substring(verOffset + 8);
-    }
-
-    version = version.split(".")[0];
-
-    if (version > 9) {
-      return false;
-    }
-    else {
-      return true;
-    }
-  }
-  else {
-    return false;
-  }
-}
-
 function iOSversion() {
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
     // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
@@ -138,7 +112,7 @@ function iOSversion() {
     return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
   }
   else {
-    return null;
+    return -1;
   }
 }
 
