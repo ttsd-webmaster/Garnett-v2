@@ -36,7 +36,7 @@ export default class PledgeMeritDialog extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (navigator.onLine) {
+    if (navigator.onLine && this.props !== nextProps) {
       API.getActivesForMerit(nextProps.state.displayName)
       .then((res) => {
         let actives = res.data;
