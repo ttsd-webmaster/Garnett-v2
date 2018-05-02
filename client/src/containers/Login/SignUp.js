@@ -68,6 +68,7 @@ export default class SignUp extends Component {
             }}
           />
         ))}
+        
         <div className="login-button" onClick={this.props.signUp}>
           Sign Up
         </div>

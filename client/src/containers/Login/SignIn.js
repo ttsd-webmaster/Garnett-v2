@@ -15,7 +15,14 @@ export default class SignIn extends Component {
           value={this.props.signEmail}
           onChange={(e, newValue) => this.props.handleChange('signEmail', newValue)}
           errorText={!this.props.signEmailValidation && 'Please enter a valid email.'}
-         />
+          onSubmit={this.props.login}
+          onKeyPress={(ev) => {
+            if (ev.key === 'Enter') {
+              this.props.login();
+              ev.preventDefault();
+            }
+          }}
+        />
 
         <TextField
           className="login-input"
