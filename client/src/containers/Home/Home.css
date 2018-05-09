@@ -14,7 +14,7 @@
   margin-right: 6vw;
   cursor: pointer;
 }
-@media(max-width: 768px) {
+@media(max-width: 767px) {
   .app-icon {
     font-size: 13px;
   }
@@ -24,12 +24,12 @@
   position: relative;
   height: 75px;
 }
-@media(max-width: 768px) {
+@media(max-width: 767px) {
   .app-icon-image-container {
     height: 68px;
   }
 }
-@media(min-width: 901px) {
+@media(min-width: 992px) {
   .app-icon-image-container:hover::before {
     position: absolute;
     top: 0;
@@ -49,7 +49,7 @@
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
 }
-@media(max-width: 768px) {
+@media(max-width: 767px) {
   .app-icon-image {
     height: 68px;
     width: 68px;

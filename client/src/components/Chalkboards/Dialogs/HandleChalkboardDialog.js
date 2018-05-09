@@ -231,14 +231,14 @@ export default class HandleChalkboardDialog extends Component {
   render() {
     let label;
 
-    if (this.props.type === 'upcoming') {
-      label = 'Join';
+    if (this.props.type === 'hosting') {
+      label = 'Remove';
     }
     else if (this.props.type === 'attending') {
       label = 'Leave';
     }
     else {
-      label = 'Remove';
+      label = 'Join';
     }
 
     const actions = [
@@ -247,46 +247,40 @@ export default class HandleChalkboardDialog extends Component {
         primary={true}
         onClick={this.props.handleClose}
       />,
-      this.props.type !== 'completed' && (
-        <RaisedButton
-          label={label}
-          primary={true}
-          onClick={() => {
-            if (this.props.type === 'upcoming') {
-              this.join(this.state.chalkboard);
-            }
-            else if (this.props.type === 'attending') {
-              this.leave(this.state.chalkboard);
-            }
-            else {
-              this.remove(this.state.chalkboard);
-            }
-          }}
-        />
-      ),
+      <RaisedButton
+        label={label}
+        primary={true}
+        onClick={() => {
+          if (this.props.type === 'hosting') {
+            this.remove(this.state.chalkboard);
+          }
+          else if (this.props.type === 'attending') {
+            this.leave(this.state.chalkboard);
+          }
+          else {
+            this.join(this.state.chalkboard);
+          }
+        }}
+      />
     ];
 
     const mobileAction = (
-      this.props.type !== 'completed' ? (
-        <FlatButton
-          label={label}
-          primary={true}
-          onClick={() => {
-            if (this.props.type === 'upcoming') {
-              this.join(this.state.chalkboard);
-            }
-            else if (this.props.type === 'attending') {
-              this.leave(this.state.chalkboard);
-            }
-            else {
-              this.remove(this.state.chalkboard);
-            }
-          }}
-        />
-      ) : (
-        <div></div>
-      )
-    )
+      <FlatButton
+        label={label}
+        primary={true}
+        onClick={() => {
+          if (this.props.type === 'upcoming') {
+            this.join(this.state.chalkboard);
+          }
+          else if (this.props.type === 'attending') {
+            this.leave(this.state.chalkboard);
+          }
+          else {
+            this.remove(this.state.chalkboard);
+          }
+        }}
+      />
+    );
 
     return (
       this.state.chalkboard && (

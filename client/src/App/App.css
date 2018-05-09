@@ -80,7 +80,7 @@ div, a {
   animation: spin 5s linear infinite, fadeIn 0.5s ease-in;
   z-index: 1100;
 }
-@media(max-width: 768px) {
+@media(max-width: 767px) {
   .loading-image {
     height: 150px;
     width: 150px;
@@ -191,7 +191,7 @@ div, a {
   height: 60px;
   width: 60px;
 }
-@media(max-width: 768px) {
+@media(max-width: 767px) {
   .logo {
     height: 50px;
     width: 50px;

@@ -199,7 +199,7 @@ export default class MyChalkboards extends Component {
                   </p>
                 }
                 secondaryTextLines={2}
-                onClick={() => this.props.handleOpen(chalkboard, 'completed')}
+                onClick={() => this.props.handleOpen(chalkboard, 'attending')}
               >
                 <p className="garnett-date">
                   {this.props.filterCount(chalkboard, filter)} {label}

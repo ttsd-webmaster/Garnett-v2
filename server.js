@@ -1257,6 +1257,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
       .then(function(response) {
         if (!res.headersSent) {
           console.log("Successfully sent message:", response);
+          res.sendStatus(200);
           sendAttendeesNotification(chalkboard, message, res);
         }
       })
@@ -1269,6 +1270,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
     }
     else {
       if (!res.headersSent) {
+        res.sendStatus(200);
         sendAttendeesNotification(chalkboard, message, res);
       }
     }
@@ -1303,6 +1305,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
       .then(function(response) {
         if (!res.headersSent) {
           console.log("Successfully sent message:", response);
+          res.sendStatus(200);
           sendAttendeesNotification(chalkboard, message, res);
         }
       })
@@ -1315,6 +1318,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
     }
     else {
       if (!res.headersSent) {
+        res.sendStatus(200);
         sendAttendeesNotification(chalkboard, message, res);
       }
     }

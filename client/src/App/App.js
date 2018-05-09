@@ -136,7 +136,9 @@ class App extends Component {
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
-    if (isSafari || iOSversion()[0] < 11 || process.env.NODE_ENV === 'development') {
+    /* Checks if browser is Safari, iOS version < 11, IE, Edge, or in development */
+    if (isSafari || iOSversion()[0] < 11 || document.documentMode ||
+        /Edge/.test(navigator.userAgent) || process.env.NODE_ENV === 'development') {
       this.checkPhoto(user);
     }
     else {
@@ -290,7 +292,6 @@ class App extends Component {
                 <LoadableLogin 
                   state={this.state}
                   loginCallBack={this.loginCallBack}
-                  setData={this.setData}
                   handleRequestOpen={this.handleRequestOpen}
                 />
               ) : (
