@@ -9,7 +9,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import FullscreenDialog from 'material-ui-fullscreen-dialog'
+import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
 const activePhoneNumber = {
   display: 'block',

@@ -3,7 +3,7 @@ import API from '../../../api/API.js';
 import {isMobileDevice, invalidSafariVersion} from '../../../helpers/functions.js';
 
 import React, {Component} from 'react';
-import FullscreenDialog from 'material-ui-fullscreen-dialog'
+import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
