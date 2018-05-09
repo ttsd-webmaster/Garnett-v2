@@ -1,10 +1,9 @@
 import '../../MeritBook.css';
-import {isMobileDevice, getDate, invalidSafariVersion} from '../../../../helpers/functions.js';
+import {getDate, invalidSafariVersion} from '../../../../helpers/functions.js';
 import {CompletingTaskDialog} from '../../../../helpers/loaders.js';
 import API from '../../../../api/API.js';
 
 import React, {Component} from 'react';
-import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -13,14 +12,6 @@ import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import FlatButton from 'material-ui/FlatButton';
 import Checkbox from 'material-ui/Checkbox';
-
-const mobileAddChalkboardStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  backgroundColor: '#fff',
-  paddingBottom: '50px'
-};
 
 const checkboxStyle = {
   left: '50%',
@@ -267,250 +258,128 @@ export default class PledgeMeritDialog extends Component {
     ];
 
     return (
-      isMobileDevice() ? (
-        <FullscreenDialog
-          title="Merit"
-          titleStyle={{fontSize:'22px'}}
-          containerStyle={mobileAddChalkboardStyle}
-          actionButton={actions}
-          open={this.props.open}
-          onRequestClose={this.handleClose}
+      <Dialog
+        title="Merit"
+        titleClassName="garnett-dialog-title"
+        actions={actions}
+        modal={false}
+        bodyClassName="garnett-dialog-body"
+        contentClassName="garnett-dialog-content"
+        open={this.props.open}
+        onRequestClose={this.handleClose}
+        autoScrollBodyContent={true}
+      >
+        <SelectField
+          className="garnett-input"
+          value={this.state.selectedActives}
+          floatingLabelText={selectLabel}
+          multiple={true}
+          onChange={(e, key, newValues) => this.handleChange('selectedActives', newValues)}
+          errorText={!this.state.activeValidation && 'Please select an active.'}
         >
+          {this.state.actives.map((active, i) => (
+            <MenuItem
+              key={i}
+              value={active}
+              primaryText={active.label}
+              insetChildren
+              checked={
+                this.state.selectedActives && 
+                this.state.selectedActives.indexOf(active) > -1
+              }
+            />
+          ))}
+        </SelectField>
+
+        <Checkbox
+          style={checkboxStyle}
+          label="Alumni"
+          checked={this.state.isAlumni}
+          onCheck={(e, newValue) => this.handleChange('isAlumni', newValue)}
+        />
+
+        {this.state.isChalkboard ? (
           <SelectField
             className="garnett-input"
-            value={this.state.selectedActives}
-            floatingLabelText={selectLabel}
-            multiple={true}
-            onChange={(e, key, newValues) => this.handleChange('selectedActives', newValues)}
-            errorText={!this.state.activeValidation && 'Please select an active.'}
+            value={this.state.description}
+            floatingLabelText="Chalkboard Title"
+            maxHeight={345}
+            onChange={(e, key, newValue) => this.handleChange('description', newValue)}
+            errorText={!this.state.descriptionValidation && 'Please select a chalkboard.'}
           >
-            {this.state.actives.map((active, i) => (
-              <MenuItem
-                key={i}
-                value={active}
-                primaryText={active.label}
-                insetChildren
-                checked={
-                  this.state.selectedActives && 
-                  this.state.selectedActives.indexOf(active) > -1
-                }
-              />
-            ))}
+            {this.state.chalkboards && (
+              this.state.chalkboards.map((chalkboard, i) => (
+                <MenuItem
+                  key={i}
+                  value={chalkboard}
+                  primaryText={chalkboard.title}
+                  insetChildren
+                  checked={chalkboard.title === this.state.description}
+                />
+              ))
+            )}
           </SelectField>
-
-          <Checkbox
-            style={checkboxStyle}
-            label="Alumni"
-            checked={this.state.isAlumni}
-            onCheck={(e, newValue) => this.handleChange('isAlumni', newValue)}
-          />
-
-          {this.state.isChalkboard ? (
-            <SelectField
-              className="garnett-input"
-              value={this.state.description}
-              floatingLabelText="Chalkboard Title"
-              maxHeight={345}
-              onChange={(e, key, newValue) => this.handleChange('description', newValue)}
-              errorText={!this.state.descriptionValidation && 'Please select a chalkboard.'}
-            >
-              {this.state.chalkboards && (
-                this.state.chalkboards.map((chalkboard, i) => (
-                  <MenuItem
-                    key={i}
-                    value={chalkboard}
-                    primaryText={chalkboard.title}
-                    insetChildren
-                    checked={chalkboard.title === this.state.description}
-                  />
-                ))
-              )}
-            </SelectField>
-          ) : (
-            <TextField
-              className="garnett-input"
-              type="text"
-              floatingLabelText="Description"
-              multiLine={true}
-              rowsMax={3}
-              value={this.state.description}
-              onChange={(e, newValue) => this.handleChange('description', newValue)}
-              errorText={!this.state.descriptionValidation && 'Enter a description less than 50 characters.'}
-            />
-          )}
-
-          {!invalidSafariVersion() && (
-            <DatePicker
-              className="garnett-input"
-              textFieldStyle={{display:'block',margin:'0 auto'}}
-              floatingLabelText="Date"
-              value={this.state.date}
-              disableYearSelection
-              firstDayOfWeek={0}
-              formatDate={this.formatDate}
-              shouldDisableDate={this.disableDates}
-              onChange={(e, newValue) => this.handleChange('date', newValue)}
-            />
-          )}
-
-          <div style={{width:'256px',margin:'20px auto 0'}}>
-            <span>
-              Amount: {this.state.amount} merits
-            </span>
-            <Slider
-              sliderStyle={{marginBottom:0}}
-              name="Amount"
-              min={0}
-              max={maxAmount}
-              step={5}
-              value={this.state.amount}
-              onChange={(e, newValue) => this.handleChange('amount', newValue)}
-            />
-          </div>
-          <Checkbox
-            style={checkboxStyle}
-            label="Chalkboard"
-            checked={this.state.isChalkboard}
-            onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
-          />
-
-          <div id="remaining-merits">
-            {this.state.selectedActives.map((active, i) => (
-              <p key={i}> Merits remaining for {active.label}: {active.meritsRemaining} </p>
-            ))}
-          </div>
-
-          {this.state.openCompletingTask &&
-            <CompletingTaskDialog
-              open={this.state.openCompletingTask}
-              message={this.state.completingTaskMessage}
-            />
-          }
-        </FullscreenDialog>
-      ): (
-        <Dialog
-          title="Merit"
-          titleClassName="garnett-dialog-title"
-          actions={actions}
-          modal={false}
-          bodyClassName="garnett-dialog-body"
-          contentClassName="garnett-dialog-content"
-          open={this.props.open}
-          onRequestClose={this.handleClose}
-          autoScrollBodyContent={true}
-        >
-          <SelectField
+        ) : (
+          <TextField
             className="garnett-input"
-            value={this.state.selectedActives}
-            floatingLabelText={selectLabel}
-            multiple={true}
-            onChange={(e, key, newValues) => this.handleChange('selectedActives', newValues)}
-            errorText={!this.state.activeValidation && 'Please select an active.'}
-          >
-            {this.state.actives.map((active, i) => (
-              <MenuItem
-                key={i}
-                value={active}
-                primaryText={active.label}
-                insetChildren
-                checked={
-                  this.state.selectedActives && 
-                  this.state.selectedActives.indexOf(active) > -1
-                }
-              />
-            ))}
-          </SelectField>
-
-          <Checkbox
-            style={checkboxStyle}
-            label="Alumni"
-            checked={this.state.isAlumni}
-            onCheck={(e, newValue) => this.handleChange('isAlumni', newValue)}
+            type="text"
+            floatingLabelText="Description"
+            multiLine={true}
+            rowsMax={3}
+            value={this.state.description}
+            onChange={(e, newValue) => this.handleChange('description', newValue)}
+            errorText={!this.state.descriptionValidation && 'Enter a description less than 50 characters.'}
           />
+        )}
 
-          {this.state.isChalkboard ? (
-            <SelectField
-              className="garnett-input"
-              value={this.state.description}
-              floatingLabelText="Chalkboard Title"
-              maxHeight={345}
-              onChange={(e, key, newValue) => this.handleChange('description', newValue)}
-              errorText={!this.state.descriptionValidation && 'Please select a chalkboard.'}
-            >
-              {this.state.chalkboards && (
-                this.state.chalkboards.map((chalkboard, i) => (
-                  <MenuItem
-                    key={i}
-                    value={chalkboard}
-                    primaryText={chalkboard.title}
-                    insetChildren
-                    checked={chalkboard.title === this.state.description}
-                  />
-                ))
-              )}
-            </SelectField>
-          ) : (
-            <TextField
-              className="garnett-input"
-              type="text"
-              floatingLabelText="Description"
-              multiLine={true}
-              rowsMax={3}
-              value={this.state.description}
-              onChange={(e, newValue) => this.handleChange('description', newValue)}
-              errorText={!this.state.descriptionValidation && 'Enter a description less than 50 characters.'}
-            />
-          )}
-
-          {!invalidSafariVersion() && (
-            <DatePicker
-              className="garnett-input"
-              textFieldStyle={{display:'block',margin:'0 auto'}}
-              floatingLabelText="Date"
-              value={this.state.date}
-              disableYearSelection
-              firstDayOfWeek={0}
-              formatDate={this.formatDate}
-              shouldDisableDate={this.disableDates}
-              onChange={(e, newValue) => this.handleChange('date', newValue)}
-            />
-          )}
-
-          <div style={{width:'256px',margin:'20px auto 0'}}>
-            <span>
-              Amount: {this.state.amount} merits
-            </span>
-            <Slider
-              sliderStyle={{marginBottom:0}}
-              name="Amount"
-              min={0}
-              max={maxAmount}
-              step={5}
-              value={this.state.amount}
-              onChange={(e, newValue) => this.handleChange('amount', newValue)}
-            />
-          </div>
-          <Checkbox
-            style={checkboxStyle}
-            label="Chalkboard"
-            checked={this.state.isChalkboard}
-            onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
+        {!invalidSafariVersion() && (
+          <DatePicker
+            className="garnett-input"
+            textFieldStyle={{display:'block',margin:'0 auto'}}
+            floatingLabelText="Date"
+            value={this.state.date}
+            disableYearSelection
+            firstDayOfWeek={0}
+            formatDate={this.formatDate}
+            shouldDisableDate={this.disableDates}
+            onChange={(e, newValue) => this.handleChange('date', newValue)}
           />
+        )}
 
-          <div id="remaining-merits">
-            {this.state.selectedActives.map((active, i) => (
-              <p key={i}> Merits remaining for {active.label}: {active.meritsRemaining} </p>
-            ))}
-          </div>
+        <div style={{width:'256px',margin:'20px auto 0'}}>
+          <span>
+            Amount: {this.state.amount} merits
+          </span>
+          <Slider
+            sliderStyle={{marginBottom:0}}
+            name="Amount"
+            min={0}
+            max={maxAmount}
+            step={5}
+            value={this.state.amount}
+            onChange={(e, newValue) => this.handleChange('amount', newValue)}
+          />
+        </div>
+        <Checkbox
+          style={checkboxStyle}
+          label="Chalkboard"
+          checked={this.state.isChalkboard}
+          onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
+        />
 
-          {this.state.openCompletingTask &&
-            <CompletingTaskDialog
-              open={this.state.openCompletingTask}
-              message={this.state.completingTaskMessage}
-            />
-          }
-        </Dialog>
-      )
+        <div id="remaining-merits">
+          {this.state.selectedActives.map((active, i) => (
+            <p key={i}> Merits remaining for {active.label}: {active.meritsRemaining} </p>
+          ))}
+        </div>
+
+        {this.state.openCompletingTask &&
+          <CompletingTaskDialog
+            open={this.state.openCompletingTask}
+            message={this.state.completingTaskMessage}
+          />
+        }
+      </Dialog>
     )
   }
 }
