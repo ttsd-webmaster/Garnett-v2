@@ -269,14 +269,14 @@ export default class HandleChalkboardDialog extends Component {
         label={label}
         primary={true}
         onClick={() => {
-          if (this.props.type === 'upcoming') {
-            this.join(this.state.chalkboard);
+          if (this.props.type === 'hosting') {
+            this.remove(this.state.chalkboard);
           }
           else if (this.props.type === 'attending') {
             this.leave(this.state.chalkboard);
           }
           else {
-            this.remove(this.state.chalkboard);
+            this.join(this.state.chalkboard);
           }
         }}
       />
