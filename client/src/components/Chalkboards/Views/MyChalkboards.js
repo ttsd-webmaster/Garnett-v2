@@ -1,3 +1,5 @@
+import sortChalkboards from './sortChalkboards.js';
+
 import React, {Component} from 'react';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
@@ -11,66 +13,9 @@ export default class MyChalkboards extends Component {
     let filter = this.props.filter;
     let label;
 
-    let myHostingChalkboards = this.props.myHostingChalkboards.sort(function(a, b) {
-      if (filter === 'attendees') {
-        let chalkboard1 = [];
-        let chalkboard2 = [];
-        
-        if (a[filter] !== undefined) {
-          chalkboard1 = a[filter];
-        }
-        if (b[filter] !== undefined) {
-          chalkboard2 = b[filter];
-        }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
-      }
-      else if (filter === 'timeCommitment') {
-        return a[filter].value < b[filter].value ? 1 : -1;
-      }
-      else {
-        return a[filter] > b[filter] ? 1 : -1;
-      }
-    });
-    let myAttendingChalkboards = this.props.myAttendingChalkboards.sort(function(a, b) {
-      if (filter === 'attendees') {
-        let chalkboard1 = [];
-        let chalkboard2 = [];
-        
-        if (a[filter] !== undefined) {
-          chalkboard1 = a[filter];
-        }
-        if (b[filter] !== undefined) {
-          chalkboard2 = b[filter];
-        }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
-      }
-      else if (filter === 'timeCommitment') {
-        return a[filter].value < b[filter].value ? 1 : -1;
-      }
-      else {
-        return a[filter] > b[filter] ? 1 : -1;
-      }
-    });
-    let myCompletedChalkboards = this.props.myCompletedChalkboards.sort(function(a, b) {
-      if (filter === 'attendees') {
-        let chalkboard1 = [];
-        let chalkboard2 = [];
-
-        if (a[filter] !== undefined) {
-          chalkboard1 = a[filter];
-        }
-        if (b[filter] !== undefined) {
-          chalkboard2 = b[filter];
-        }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
-      }
-      else if (filter === 'timeCommitment') {
-        return a[filter].value < b[filter].value ? 1 : -1;
-      }
-      else {
-        return a[filter] > b[filter] ? 1 : -1;
-      }
-    });
+    let myHostingChalkboards = sortChalkboards(this.props.myHostingChalkboards, filter);
+    let myAttendingChalkboards = sortChalkboards(this.props.myAttendingChalkboards, filter);
+    let myCompletedChalkboards = sortChalkboards(this.props.myCompletedChalkboards, filter);
 
     if (this.props.reverse) {
       myHostingChalkboards = myHostingChalkboards.slice().reverse();

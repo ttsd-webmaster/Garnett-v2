@@ -76,7 +76,7 @@ export default class PledgeMerit extends Component {
               merits = Object.keys(snapshot.val()).map(function(key) {
                 return snapshot.val()[key];
               }).sort((a, b) => {
-                return a.date < b.date ? 1 : -1;
+                return new Date(b.date) - new Date(a.date);
               });
             }
 

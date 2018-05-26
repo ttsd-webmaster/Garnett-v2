@@ -55,7 +55,7 @@ export default class ActiveComplaints extends Component {
             pendingComplaints = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
               return snapshot.val().pendingComplaints[key];
             }).sort((a, b) => {
-              return a.date < b.date ? 1 : -1;
+              return new Date(b.date) - new Date(a.date);
             });
 
             if (this.props.state.status !== 'pipm') {
@@ -69,7 +69,7 @@ export default class ActiveComplaints extends Component {
             approvedComplaints = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
               return snapshot.val().approvedComplaints[key];
             }).sort((a, b) => {
-              return a.date < b.date ? 1 : -1;
+              return new Date(b.date) - new Date(a.date);
             });
 
             complaints = approvedComplaints;

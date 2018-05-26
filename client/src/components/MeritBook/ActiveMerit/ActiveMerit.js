@@ -324,13 +324,11 @@ export default class ActiveMerit extends Component {
             ))}
           </List>
 
-          {(this.props.state.status === 'alumni' || this.props.state.status === 'pipm') && (
             <Portal>
               <FloatingActionButton className="fixed-button active-merit" onClick={this.handleMeritOpen}>
                 <i className="icon-pencil"></i>
               </FloatingActionButton>
             </Portal>
-          )}
 
           <Popover
             open={this.state.openPopover}

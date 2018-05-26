@@ -39,7 +39,7 @@ export default class PledgeComplaints extends Component {
             complaints = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             }).sort((a, b) => {
-              return a.date < b.date ? 1 : -1;
+              return new Date(b.date) - new Date(a.date);
             });
           }
 

@@ -380,7 +380,7 @@ app.post('/api/pledgemerits', function(req, res) {
       merits = Object.keys(snapshot.val()).map(function(key) {
         return snapshot.val()[key];
       }).sort((a, b) => {
-        return a.date < b.date ? 1 : -1;
+        return new Date(b.date) - new Date(a.date);
       });
     }
 
@@ -399,7 +399,7 @@ app.post('/api/pledgecomplaints', function(req, res) {
       complaints = Object.keys(snapshot.val()).map(function(key) {
         return snapshot.val()[key];
       }).sort((a, b) => {
-        return a.date < b.date ? 1 : -1;
+        return new Date(b.date) - new Date(a.date);
       });
     }
 

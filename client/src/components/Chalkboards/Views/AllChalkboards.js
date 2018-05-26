@@ -1,3 +1,5 @@
+import sortChalkboards from './sortChalkboards.js';
+
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
@@ -12,46 +14,8 @@ export default class AllChalkboards extends Component {
     let filter = this.props.filter;
     let label;
 
-    let upcomingChalkboards = this.props.upcomingChalkboards.sort(function(a, b) {
-      if (filter === 'attendees') {
-        let chalkboard1 = [];
-        let chalkboard2 = [];
-
-        if (a[filter] !== undefined) {
-          chalkboard1 = a[filter];
-        }
-        if (b[filter] !== undefined) {
-          chalkboard2 = b[filter];
-        }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
-      }
-      else if (filter === 'timeCommitment') {
-        return a[filter].value < b[filter].value ? 1 : -1;
-      }
-      else {
-        return a[filter] > b[filter] ? 1 : -1;
-      }
-    });
-    let completedChalkboards = this.props.completedChalkboards.sort(function(a, b) {
-      if (filter === 'attendees') {
-        let chalkboard1 = [];
-        let chalkboard2 = [];
-
-        if (a[filter] !== undefined) {
-          chalkboard1 = a[filter];
-        }
-        if (b[filter] !== undefined) {
-          chalkboard2 = b[filter];
-        }
-        return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
-      }
-      else if (filter === 'timeCommitment') {
-        return a[filter].value < b[filter].value ? 1 : -1;
-      }
-      else {
-        return a[filter] > b[filter] ? 1 : -1;
-      }
-    });
+    let upcomingChalkboards = sortChalkboards(this.props.upcomingChalkboards, filter);
+    let completedChalkboards = sortChalkboards(this.props.completedChalkboards, filter);
 
     if (this.props.reverse) {
       upcomingChalkboards = upcomingChalkboards.slice().reverse();
