@@ -8,6 +8,8 @@ admin.initializeApp({
 
 let usersRef = admin.database().ref('/users');
 let chalkboardsRef = admin.database().ref('/chalkboards');
+let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
+let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
@@ -46,7 +48,31 @@ usersRef.once('value', (snapshot) => {
 
                 if (attendeeName === removedPledge) {
                   attendee.ref.remove(() => {
-                    console.log(`Removed ${attendeeName} from chalkboard.`);
+                    console.log(`Removed ${attendeeName} from Chalkboards.`);
+                  });
+                }
+              });
+            });
+          });
+
+          approvedComplaintsRef.once('value', (snapshot) => {
+            snapshot.forEach((complaint) => {
+              let pledgeName = complaint.val().pledgeDisplayName;
+
+              if (pledgeName === removedPledge) {
+                complaint.ref.remove(() => {
+                  console.log(`Removed ${pledgeName} from Approved Complaints.`);
+                });
+              }
+            });
+
+            pendingComplaintsRef.once('value', (snapshot) => {
+              snapshot.forEach((complaint) => {
+                let pledgeName = complaint.val().pledgeDisplayName;
+
+                if (pledgeName === removedPledge) {
+                  complaint.ref.remove(() => {
+                    console.log(`Removed ${pledgeName} from Pending Complaints.`);
                   });
                 }
               });

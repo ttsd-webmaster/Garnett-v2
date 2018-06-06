@@ -31,9 +31,9 @@ export default class Contacts extends Component {
                'Delta', 'Epsilon', 'Zeta', 'Eta', 
                'Theta', 'Iota', 'Kappa', 'Lambda', 
                'Mu', 'Nu', 'Xi', 'Omicron', 
-               'Pi', 'Rho'
+               'Pi', 'Rho', 'Sigma'
              ],
-      activeClass: ['Lambda', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho'],
+      activeClass: ['Lambda', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma'],
       major: [ 'Aerospace Engineering',
                'Bioengineering',
                'Chemical Engineering',
