@@ -33,7 +33,7 @@ export default class Contacts extends Component {
                'Mu', 'Nu', 'Xi', 'Omicron', 
                'Pi', 'Rho', 'Sigma'
              ],
-      activeClass: ['Lambda', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma'],
+      activeClass: ['Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma'],
       major: [ 'Aerospace Engineering',
                'Bioengineering',
                'Chemical Engineering',
@@ -47,6 +47,7 @@ export default class Contacts extends Component {
               ],
       name: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
       year: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Alumni'],
+      mbti: ['INTJ', 'INTP', 'ENTJ', 'ENTP', 'INFJ', 'INFP', 'ENFJ', 'ENFP', 'ISTJ', 'ISTP', 'ESTJ', 'ESTP', 'ISFJ', 'ISFP', 'ESFJ', 'ESFP'],
       actives: this.props.actives,
       active: null,
       filter: 'activeClass',
@@ -139,6 +140,10 @@ export default class Contacts extends Component {
     }
     else if (filterName === 'Alumni') {
       labelFilter = 'class';
+    }
+    else if (filterName === 'Personality Type') {
+      filter = 'mbti';
+      labelFilter = 'mbti';
     }
 
     this.setState({
@@ -254,6 +259,12 @@ export default class Contacts extends Component {
                 insetChildren
                 checked={this.state.filterName === 'Last Name'}
                 onClick={() => this.setFilter('Last Name')}
+              />
+              <MenuItem
+                primaryText="Personality Type"
+                insetChildren
+                checked={this.state.filterName === 'Personality Type'}
+                onClick={() => this.setFilter('Personality Type')}
               />
             </Menu>
           </Popover>
