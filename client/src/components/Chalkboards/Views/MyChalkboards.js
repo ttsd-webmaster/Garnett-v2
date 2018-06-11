@@ -37,7 +37,7 @@ export default class MyChalkboards extends Component {
           <div>
             <Subheader className="garnett-subheader">
               Hosting
-              <span style={{float:'right'}}>
+              <span style={{float:'right', height:'48px'}}>
                 <span className="garnett-filter" onClick={this.props.openPopover}> 
                   {this.props.filterName}
                 </span>

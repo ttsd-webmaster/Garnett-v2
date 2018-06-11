@@ -34,7 +34,7 @@ export default class AllChalkboards extends Component {
       <div id="all-chalkboards">
         <Subheader className="garnett-subheader">
           Upcoming
-          <span style={{float:'right'}}>
+          <span style={{float:'right', height:'48px'}}>
             <span style={{cursor:'pointer'}} onClick={this.props.openPopover}> 
               {this.props.filterName}
             </span>
