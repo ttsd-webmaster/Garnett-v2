@@ -3,7 +3,8 @@
   position: fixed;
   top: 52px;
   background-color: #fff !important;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  border-bottom: 1px solid #ccc;
+  /*box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;*/
   z-index: 1;
   transition: top 0.2s ease-in-out;
 }
@@ -220,7 +221,8 @@
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
   background-color: #fff !important;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  border-bottom: 1px solid #ccc;
+  /*box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;*/
   z-index: 2;
 }
 /* The content container of the tabs */

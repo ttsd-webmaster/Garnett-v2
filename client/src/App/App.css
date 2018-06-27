@@ -295,6 +295,7 @@ div, a {
   position: relative;
   top: calc(50% - 75px);
   left: calc(50% - 20px);
+  width: max-content;
 }
 .loading .line-scale-container {
   top: calc(50% - 50px);

@@ -181,7 +181,7 @@ export default class Contacts extends Component {
         <div>
           {this.state.labels.map((label, i) => (
             <div key={i}>
-              <Subheader className="garnett-subheader">
+              <Subheader className="garnett-subheader contacts">
                 {label}
                 {i === 0 && (
                   <span style={{float:'right'}}>

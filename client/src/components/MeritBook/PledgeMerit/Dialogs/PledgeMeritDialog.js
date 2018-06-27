@@ -314,7 +314,7 @@ export default class PledgeMeritDialog extends Component {
                   value={chalkboard}
                   primaryText={chalkboard.title}
                   insetChildren
-                  checked={chalkboard.title === this.state.description}
+                  checked={chalkboard === this.state.description}
                 />
               ))
             )}
