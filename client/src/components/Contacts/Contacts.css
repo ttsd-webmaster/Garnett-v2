@@ -1,11 +1,17 @@
 .contacts-photo {
   object-fit: cover;
   display: block;
-  height: 100px;
-  width: 100px;
+  height: 150px;
+  width: 150px;
   margin: 15px auto;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
+}
+@media(max-width: 374px) {
+  .contacts-photo {
+    height: 100px;
+    width: 100px;
+  }
 }
 
 .contacts-list {
@@ -34,7 +40,8 @@
   .garnett-subheader.contacts {
     position: sticky;
     top: 0;
-    box-shadow: 0 1px 0px rgba(0,0,0,.12);
+    line-height: 47px !important;
+    border-bottom: 1px solid #e0e0e0;
     z-index: 1;
   }
 }
