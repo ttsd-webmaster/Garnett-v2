@@ -121,9 +121,7 @@ export default class ActiveMerit extends Component {
               onChange={this.handleChange}
             >
               <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
-                <div style={{padding:'15px 0'}}>
-                  <img className="dialog-photo" src={this.state.pledge.photoURL} alt="User" />
-                </div>
+                <img className="dialog-photo" src={this.state.pledge.photoURL} alt="User" />
                 <List>
                   <Divider />
                   <ListItem
@@ -207,9 +205,7 @@ export default class ActiveMerit extends Component {
               onChange={this.handleChange}
             >
               <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
-                <div style={{padding:'15px 0'}}>
-                  <img className="dialog-photo" src={this.state.pledge.photoURL} alt="User" />
-                </div>
+                <img className="dialog-photo" src={this.state.pledge.photoURL} alt="User" />
                 <List>
                   <Divider />
                   <ListItem
