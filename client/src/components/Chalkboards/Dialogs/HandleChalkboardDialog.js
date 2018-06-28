@@ -299,8 +299,10 @@ export default class HandleChalkboardDialog extends Component {
                 onChange={this.handleChange}
               >
                 <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
-                  <img className="dialog-photo" src={this.state.chalkboard.photoURL} alt="User" />
-                  <List style={{padding:'24px 0'}}>
+                  <div style={{padding:'15px 0'}}>
+                    <img className="dialog-photo" src={this.state.chalkboard.photoURL} alt="User" />
+                  </div>
+                  <List>
                     <Divider />
                     <ListItem
                       className="garnett-list-item long"

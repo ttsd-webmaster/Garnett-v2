@@ -281,20 +281,12 @@
 /* Photo for mobile dialog */
 .dialog-photo {
   object-fit: cover;
-  position: relative;
-  top: 10px;
   display: block;
-  height: 100px;
-  width: 100px;
+  height: 125px;
+  width: 125px;
   margin: auto;
   border-radius: 50%;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
-}
-@media(max-width: 575px) {
-  .dialog-photo {
-    height: 150px;
-    width: 150px;
-  }
 }
 @media(max-width: 365px) {
   .dialog-photo {
