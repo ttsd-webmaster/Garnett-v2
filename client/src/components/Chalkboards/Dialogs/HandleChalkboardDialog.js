@@ -299,7 +299,9 @@ export default class HandleChalkboardDialog extends Component {
                 onChange={this.handleChange}
               >
                 <Tab style={getTabStyle(this.state.index === 0)} label="Information" value={0}>
-                  <img className="dialog-photo" src={this.state.chalkboard.photoURL} alt="User" />
+                  <div style={{padding:'15px 0'}}>
+                    <img className="dialog-photo" src={this.state.chalkboard.photoURL} alt="User" />
+                  </div>
                   <List>
                     <Divider />
                     <ListItem
