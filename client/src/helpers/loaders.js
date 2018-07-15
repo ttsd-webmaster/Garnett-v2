@@ -113,6 +113,7 @@ function CompletingTaskDialog(props) {
 const LoadingHome = loaderWrapper('Home');
 const LoadingDelibsApp = loaderWrapper('Delibs App');
 const LoadingRusheeProfile = loaderWrapper('Rushee Profile');
+const LoadingDataApp = loaderWrapper('Data App');
 
 export {
   LoadingLogin,
@@ -121,5 +122,6 @@ export {
   CompletingTaskDialog,
   LoadingHome,
   LoadingDelibsApp,
-  LoadingRusheeProfile
+  LoadingRusheeProfile,
+  LoadingDataApp
 };

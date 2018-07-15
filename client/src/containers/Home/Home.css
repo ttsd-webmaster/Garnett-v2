@@ -3,6 +3,7 @@
   top: 75px;
   left: 7%;
   display: flex;
+  flex-wrap: wrap;
 }
 
 .app-icon {

@@ -146,5 +146,9 @@ export default {
   },
   voteForRushee: function(displayName, rushee, vote) {
     return axios.post('/api/vote', {displayName, rushee, vote});
+  },
+  // Data App
+  getPhoto: function(name) {
+    return axios.post('/api/getphoto', {name});
   }
 };

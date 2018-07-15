@@ -6,7 +6,8 @@ import {
   LoadingHome,
   LoadingPledgeApp,
   LoadingDelibsApp,
-  LoadingRusheeProfile
+  LoadingRusheeProfile,
+  LoadingDataApp
 } from '../helpers/loaders.js';
 
 import React, {Component} from 'react';
@@ -57,6 +58,15 @@ const LoadableRusheeProfile = Loadable({
     return <Component {...props} />;
   },
   loading: LoadingRusheeProfile
+});
+
+const LoadableDataApp = Loadable({
+  loader: () => import('../containers/DataApp/DataApp'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props} />;
+  },
+  loading: LoadingDataApp
 });
 
 class App extends Component {
@@ -317,7 +327,7 @@ class App extends Component {
           <Route exact path="/pledge-app" render={({history}) => (
             this.state.isAuthenticated ? (
               <LoadablePledgeApp 
-                state={this.state} 
+                state={this.state}
                 history={history}
                 logoutCallBack={this.logoutCallBack}
                 handleRequestOpen={this.handleRequestOpen}
@@ -333,7 +343,7 @@ class App extends Component {
           <Route exact path="/delibs-app" render={({history}) => (
             this.state.isAuthenticated ? (
               <LoadableDelibsApp
-                state={this.state} 
+                state={this.state}
                 history={history}
                 handleRequestOpen={this.handleRequestOpen}
               />
@@ -348,7 +358,22 @@ class App extends Component {
           <Route exact path="/delibs-app/:id" render={({history}) => (
             this.state.isAuthenticated ? (
               <LoadableRusheeProfile
-                state={this.state} 
+                state={this.state}
+                history={history}
+                handleRequestOpen={this.handleRequestOpen}
+              />
+            ) : (
+              this.state.loaded ? (
+                <Redirect to="/" />
+              ) : (
+                <LoadingLogin />
+              )
+            )
+          )}/>
+          <Route exact path="/data-app" render={({history}) => (
+            this.state.isAuthenticated ? (
+              <LoadableDataApp
+                state={this.state}
                 history={history}
                 handleRequestOpen={this.handleRequestOpen}
               />

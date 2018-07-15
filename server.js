@@ -1507,6 +1507,16 @@ app.post('/api/vote', function(req, res) {
   });
 });
 
+// Get photo for data app
+app.post('/api/getphoto', function(req, res) {
+  let name = req.body.name.replace(/ /g,'');
+  let userRef = admin.database().ref('/users/' + name);
+
+  userRef.once('value', (user) => {
+    res.json(user.val().photoURL);
+  });
+});
+
 app.listen(port, function () {
   console.log('Example app listening on port 4000!')
 });

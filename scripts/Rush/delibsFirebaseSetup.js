@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKey.json");
+var serviceAccount = require("../../serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -11,18 +11,18 @@ let usersRef = admin.database().ref('/users');
 let activeArray = [];
 
 usersRef.once('value', (snapshot) => {
-  snapshot.forEach((child) => {
-    if (child.val().status !== 'pledge' && child.val().status !== 'alumni') {
-      let activeName = child.key;
+  snapshot.forEach((user) => {
+    if (user.val().status !== 'pledge' && user.val().status !== 'alumni') {
+      let activeName = user.key;
       
       rusheesRef.once('value', (snapshot) => {
-        snapshot.forEach((child) => {
-          child.ref.child('/Actives/' + activeName).update({
+        snapshot.forEach((rushee) => {
+          rushee.ref.child('/Actives/' + activeName).update({
             vote: 'false',
             voted: false,
             interacted: false
           });
-          child.ref.update({
+          rushee.ref.update({
             totalVotes: 0,
             votes: 0,
             totalInteractions: 0

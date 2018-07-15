@@ -64,8 +64,7 @@ export default class ActiveList extends Component {
                 }
                 secondaryTextLines={2}
                 onClick={() => this.props.handleOpen(active)}
-              >
-              </ListItem>
+              />
               <Divider className="garnett-divider large" inset={true} />
             </div>
           </LazyLoad>
