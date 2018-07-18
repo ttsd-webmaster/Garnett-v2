@@ -64,8 +64,7 @@ export default class MeritsList extends Component {
             iconClassName={toggleIcon}
             className="reverse-toggle"
             onClick={this.reverse}
-          >
-          </IconButton>
+          />
         </Subheader>
 
         <List className="garnett-list dialog pledge">

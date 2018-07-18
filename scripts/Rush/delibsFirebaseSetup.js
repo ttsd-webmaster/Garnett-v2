@@ -4,7 +4,7 @@ var serviceAccount = require("../../serviceAccountKey.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://garnett-42475.firebaseio.com"
-})
+});
 
 let rusheesRef = admin.database().ref('/rushees');
 let usersRef = admin.database().ref('/users');

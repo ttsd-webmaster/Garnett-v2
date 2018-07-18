@@ -5,15 +5,23 @@
   font-style: normal;
 }
 
-.data-container {
-  position: absolute;
-  top: 75px;
+#pledge-data,
+#rush-data,
+#my-data {
+  display: none;
+  padding-top: 75px;
+  padding-bottom: 57px;
+  animation: fadeIn .25s ease-in forwards;
+}
+#pledge-data.active,
+#rush-data.active,
+#my-data.active {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
-  z-index: 0;
 }
 
+/********************* Pledge Data ***********************/
 .data-card {
   height: fit-content;
   width: 400px;
@@ -40,17 +48,49 @@
 }
 
 .data-value {
-  float: right;
+  position: absolute;
+  right: 26px;
   font-family: 'Luckiest Guy';
   font-size: 18px;
-  margin-right: 10px;
 }
 
 /* Garnett List */
-.garnett-list-item.data > div > div {
+.garnett-list-item.pledge-data > div > div {
   min-height: 38px;
   padding-left: 90px !important;
 }
-.garnett-divider.data {
+.garnett-divider.pledge-data {
   margin-left: 90px !important;
+}
+
+/*********************** Rush Data **************************/
+.filter {
+  flex: 1;
+  margin: 10px;
+  position: relative;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+}
+
+.graph {
+  flex: 5;
+  margin: 10px;
+}
+
+/************************ My Data ***************************/
+.user-photo {
+  object-fit: cover;
+  display: block;
+  height: 150px;
+  width: 150px;
+  margin: 15px auto 23px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px; 
+}
+
+.data-value.my-data {
+  margin-top: 8px;
 }

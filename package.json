@@ -23,6 +23,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.3",
     "firebase-admin": "^5.12.1",
+    "genderize": "^1.6.0",
     "http": "0.0.0",
     "path": "^0.12.7",
     "shrink-ray": "^0.1.3",

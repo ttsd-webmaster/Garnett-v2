@@ -148,7 +148,10 @@ export default {
     return axios.post('/api/vote', {displayName, rushee, vote});
   },
   // Data App
-  getPhoto: function(name) {
-    return axios.post('/api/getphoto', {name});
+  getPhotos: function(data) {
+    return axios.post('/api/getphotos', {data});
+  },
+  getMyData: function(fullName) {
+    return axios.post('/api/getmydata', {fullName});
   }
 };

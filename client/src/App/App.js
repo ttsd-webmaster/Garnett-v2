@@ -294,7 +294,11 @@ class App extends Component {
                 this.state.route === "delibs-app" ? (
                   <Redirect to="/delibs-app" />
                 ) : (
-                  <Redirect to="/home" />
+                  this.state.route === "data-app" ? (
+                    <Redirect to="/data-app" />
+                  ) : (
+                    <Redirect to="/home" />
+                  )
                 )
               )
             ) : (

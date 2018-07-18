@@ -1,4 +1,5 @@
 import '../MeritBook.css';
+import TotalMeritsAndPledgeBrothers from './TotalMeritsAndPledgeBrothers';
 import {loadFirebase} from '../../../helpers/functions.js';
 import {LoadingComponent} from '../../../helpers/loaders.js';
 import API from '../../../api/API.js';
@@ -13,8 +14,6 @@ import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
-import SwipeableBottomSheet from 'react-swipeable-bottom-sheet';
-import CountUp from 'react-countup';
 
 const LoadableRemoveMeritDialog = Loadable({
   loader: () => import('./Dialogs/RemoveMeritDialog'),
@@ -242,8 +241,7 @@ export default class PledgeMerit extends Component {
               iconClassName={toggleIcon}
               className="reverse-toggle"
               onClick={this.reverse}
-            >
-            </IconButton>
+            />
           </Subheader>
 
           <List className="animate-in garnett-list">
@@ -297,50 +295,13 @@ export default class PledgeMerit extends Component {
             </FloatingActionButton>
           </Portal>
 
-          <SwipeableBottomSheet
-            bodyStyle={{backgroundColor:'#fafafa'}}
-            overflowHeight={58}
-            marginTop={42}
-            open={this.state.openPbros}
-            topShadow={false}
-            onChange={this.openBottomSheet}
-          >
-            <div className="total-merits-container" onClick={() => this.openBottomSheet(true)}> 
-              Total Merits: <CountUp className="total-merits" start={this.state.previousTotalMerits} end={this.state.totalMerits} useEasing />
-            </div>
-
-            <Subheader className="garnett-subheader" onClick={() => this.openBottomSheet(false)}>
-              Pledge Brothers
-            </Subheader>
-
-            <List className="garnett-list">
-              {this.state.pbros && (
-                this.state.pbros.map((pbro, i) => (
-                  <div key={i}>
-                    <Divider className="garnett-divider large" inset={true} />
-                    <ListItem
-                      className="garnett-list-item large"
-                      leftAvatar={<Avatar className="garnett-image large" size={70} src={pbro.photoURL} />}
-                      primaryText={
-                        <p className="garnett-name"> {pbro.firstName} {pbro.lastName} </p>
-                      }
-                      secondaryText={
-                        <p>
-                          {pbro.year}
-                          <br />
-                          {pbro.major}
-                        </p>
-                      }
-                      secondaryTextLines={2}
-                    >
-                      <p className="pledge-merits"> {pbro.totalMerits} </p>
-                    </ListItem>
-                    <Divider className="garnett-divider large" inset={true} />
-                  </div>
-                ))
-              )}
-            </List>
-          </SwipeableBottomSheet>
+          <TotalMeritsAndPledgeBrothers
+            previousTotalMerits={this.state.previousTotalMerits}
+            totalMerits={this.state.totalMerits}
+            pbros={this.state.pbros}
+            openPbros={this.state.openPbros}
+            openBottomSheet={this.openBottomSheet}
+          />
 
           <LoadableRemoveMeritDialog
             open={this.state.openRemove}

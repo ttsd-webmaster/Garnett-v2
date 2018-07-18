@@ -1,3 +1,4 @@
+import filters from './data.js';
 import ActiveList from './ActiveList';
 import API from '../../api/API';
 import {LoadingComponent} from '../../helpers/loaders.js';
@@ -27,27 +28,6 @@ export default class Contacts extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      class: [ 'Charter', 'Alpha', 'Beta', 'Gamma', 
-               'Delta', 'Epsilon', 'Zeta', 'Eta', 
-               'Theta', 'Iota', 'Kappa', 'Lambda', 
-               'Mu', 'Nu', 'Xi', 'Omicron', 
-               'Pi', 'Rho', 'Sigma'
-             ],
-      activeClass: ['Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma'],
-      major: [ 'Aerospace Engineering',
-               'Bioengineering',
-               'Chemical Engineering',
-               'Computer Engineering',
-               'Computer Science',
-               'Electrical Engineering',
-               'Environmental Engineering',
-               'Mechanical Engineering',
-               'Nanoengineering',
-               'Structural Engineering'
-              ],
-      name: ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'],
-      year: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Alumni'],
-      mbti: ['INTJ', 'INTP', 'ENTJ', 'ENTP', 'INFJ', 'INFP', 'ENFJ', 'ENFP', 'ISTJ', 'ISTP', 'ESTJ', 'ESTP', 'ISFJ', 'ISFP', 'ESFJ', 'ESFP'],
       actives: this.props.actives,
       active: null,
       filter: 'activeClass',
@@ -66,13 +46,13 @@ export default class Contacts extends Component {
 
         this.setState({
           actives: res.data,
-          labels: this.state.activeClass
+          labels: filters.activeClass
         });
       });
     }
     else {
       this.setState({
-        labels: this.state.activeClass
+        labels: filters.activeClass
       });
     }
   }
@@ -148,7 +128,7 @@ export default class Contacts extends Component {
 
     this.setState({
       openPopover: false,
-      labels: this.state[labelFilter],
+      labels: filters[labelFilter],
       filter: filter,
       filterName: filterName,
       reverse: false
@@ -192,8 +172,7 @@ export default class Contacts extends Component {
                       iconClassName={toggleIcon}
                       className="reverse-toggle"
                       onClick={this.reverse}
-                    >
-                    </IconButton>
+                    />
                   </span>
                 )}
               </Subheader>

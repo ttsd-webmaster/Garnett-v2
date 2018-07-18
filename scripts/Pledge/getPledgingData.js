@@ -14,12 +14,12 @@ let complaintsRef = admin.database().ref('/approvedComplaints');
 usersRef.once('value', (snapshot) => {
   // User map to check status for chalkboard attendees
   let users = new Map();
-  let totalMerits = new Map();
+  let totalMeritInstances = new Map();
   let mostMeritInstances = new Map();
   let mostDemeritInstances = new Map();
+  let totalMeritAmount = new Map();
   let mostMeritAmount = new Map();
   let mostDemeritAmount = new Map();
-  let mostOverallMeritAmount = new Map();
 
   snapshot.forEach((user) => {
     users.set(user.key, user.val().status);
@@ -30,12 +30,12 @@ usersRef.once('value', (snapshot) => {
       });
 
       merits.forEach((merit) => {
-        let totalCounter = totalMerits.get(merit.name) || 0;
+        let totalInstanceCounter = totalMeritInstances.get(merit.name) || 0;
         let meritInstanceCounter = mostMeritInstances.get(merit.name) || 0;
         let demeritInstanceCounter = mostDemeritInstances.get(merit.name) || 0;
+        let totalMeritAmountCounter = totalMeritAmount.get(merit.name) || 0;
         let meritAmountCounter = mostMeritAmount.get(merit.name) || 0;
         let demeritAmountCounter = mostDemeritAmount.get(merit.name) || 0;
-        let overallMeritAmountCounter = mostOverallMeritAmount.get(merit.name) || 0;
 
         if (merit.amount > 0) {
           mostMeritInstances.set(merit.name, meritInstanceCounter += 1);
@@ -46,25 +46,25 @@ usersRef.once('value', (snapshot) => {
           mostDemeritAmount.set(merit.name, demeritAmountCounter += merit.amount);
         }
 
-        totalMerits.set(merit.name, totalCounter += 1);
-        mostOverallMeritAmount.set(merit.name, overallMeritAmountCounter += merit.amount);
+        totalMeritInstances.set(merit.name, totalInstanceCounter += 1);
+        totalMeritAmount.set(merit.name, totalMeritAmountCounter += merit.amount);
       });
     }
   });
 
-  totalMerits = new Map([...totalMerits.entries()].sort((a,b) => b[1] - a[1]).slice(2, 12));
-  mostMeritInstances = new Map([...mostMeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(1, 11));
-  mostDemeritInstances = new Map([...mostDemeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(1, 11));
-  mostMeritAmount = new Map([...mostMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(2, 11));
-  mostDemeritAmount = new Map([...mostDemeritAmount.entries()].sort((a,b) => a[1] - b[1]).slice(1, 11));
-  mostOverallMeritAmount = new Map([...mostOverallMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(1, 11));
+  totalMeritInstances = [...totalMeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(2, 12);
+  mostMeritInstances = [...mostMeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(1, 11);
+  mostDemeritInstances = [...mostDemeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(1, 11);
+  totalMeritAmount = [...totalMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(1, 11);
+  mostMeritAmount = [...mostMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(2, 12);
+  mostDemeritAmount = [...mostDemeritAmount.entries()].sort((a,b) => a[1] - b[1]).slice(1, 11);
 
-  console.log('Most Instances: ', totalMerits);
+  console.log('Most Instances: ', totalMeritInstances);
   console.log('Most Merit Instances: ', mostMeritInstances);
   console.log('Most Demerit Instances: ', mostDemeritInstances);
+  console.log('Total Amount: ', totalMeritAmount);
   console.log('Most Merit Amount: ', mostMeritAmount);
   console.log('Most Demerit Amount: ', mostDemeritAmount);
-  console.log('Most Overall Amount: ', mostOverallMeritAmount);
 
   chalkboardsRef.once('value', (snapshot) => {
     let mostChalkboardsCreated = new Map();
@@ -96,26 +96,27 @@ usersRef.once('value', (snapshot) => {
       });
     });
 
-    mostChalkboardsCreated = new Map([...mostChalkboardsCreated.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10));
-    mostChalkboardsAttendedOverall = new Map([...mostChalkboardsAttendedOverall.entries()].sort((a,b) => b[1] - a[1]).slice(0, 20));
-    mostChalkboardsAttendedActive = new Map([...mostChalkboardsAttendedActive.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10));
-    mostChalkboardsAttendedPledge = new Map([...mostChalkboardsAttendedPledge.entries()].sort((a,b) => b[1] - a[1]).slice(0, 5));
+    mostChalkboardsCreated = [...mostChalkboardsCreated.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
+    mostChalkboardsAttendedOverall = [...mostChalkboardsAttendedOverall.entries()].sort((a,b) => b[1] - a[1]).slice(0, 20);
+    mostChalkboardsAttendedActive = [...mostChalkboardsAttendedActive.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
+    mostChalkboardsAttendedPledge = [...mostChalkboardsAttendedPledge.entries()].sort((a,b) => b[1] - a[1]).slice(0, 5);
 
     console.log('Most Chalkboards Created: ', mostChalkboardsCreated);
     console.log('Most Chalkboards Attended (Actives + Pledges): ', mostChalkboardsAttendedOverall);
     console.log('Most Chalkboards Attended (Actives): ', mostChalkboardsAttendedActive);
     console.log('Most Chalkboards Attended (Pledges): ', mostChalkboardsAttendedPledge);
     
-    let jsonData = {totalMerits: JSON.stringify([...totalMerits]),
-                    mostMeritInstances: JSON.stringify([...mostMeritInstances]),
-                    mostDemeritInstances: JSON.stringify([...mostDemeritInstances]),
-                    mostMeritAmount: JSON.stringify([...mostMeritAmount]),
-                    mostDemeritAmount: JSON.stringify([...mostDemeritAmount]),
-                    mostOverallMeritAmount: JSON.stringify([...mostOverallMeritAmount]),
-                    mostChalkboardsCreated: JSON.stringify([...mostChalkboardsCreated]),
-                    mostChalkboardsAttendedOverall: JSON.stringify([...mostChalkboardsAttendedOverall]),
-                    mostChalkboardsAttendedActive: JSON.stringify([...mostChalkboardsAttendedActive]),
-                    mostChalkboardsAttendedPledge: JSON.stringify([...mostChalkboardsAttendedPledge])};
+    let jsonData = [
+      ['Total Merit Instances', totalMeritInstances],
+      ['Most Merit Instances', mostMeritInstances],
+      ['Most Demerit Instances', mostDemeritInstances],
+      ['Total Merit Amount', totalMeritAmount],
+      ['Most Merit Amount', mostMeritAmount],
+      ['Most Demerit Amount', mostDemeritAmount],
+      ['Most Chalkboards Created', mostChalkboardsCreated],
+      ['Most Chalkboards Attended (Active)', mostChalkboardsAttendedActive],
+      ['Most Chalkboards Attended (Pledge)', mostChalkboardsAttendedPledge]
+    ];
 
     fs.writeFile("pledgeData.json", JSON.stringify(jsonData), function(err) {
       if (err) {

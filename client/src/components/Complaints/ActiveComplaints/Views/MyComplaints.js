@@ -22,8 +22,7 @@ export default class MyComplaints extends Component {
     super(props);
     this.state = {
       open: false,
-      selectedComplaint: null,
-      reverse: false
+      selectedComplaint: null
     };
   }
 
@@ -65,25 +64,13 @@ export default class MyComplaints extends Component {
     });
   }
 
-  reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
-  }
-
   render() {
     let toggleIcon = "icon-down-open-mini";
 
     let approvedComplaints = this.props.approvedComplaints;
     let pendingComplaints = this.props.pendingComplaints;
 
-    if (this.state.reverse) {
+    if (this.props.reverse) {
       approvedComplaints = approvedComplaints.slice().reverse();
       pendingComplaints = pendingComplaints.slice().reverse();
       toggleIcon = "icon-up-open-mini";
@@ -97,9 +84,8 @@ export default class MyComplaints extends Component {
             style={{float:'right',cursor:'pointer'}}
             iconClassName={toggleIcon}
             className="reverse-toggle"
-            onClick={this.reverse}
-          >
-          </IconButton>
+            onClick={this.props.reverseComplaints}
+          />
         </Subheader>
         
         <List className="garnett-list">

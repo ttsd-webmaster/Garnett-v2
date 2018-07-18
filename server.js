@@ -1508,12 +1508,108 @@ app.post('/api/vote', function(req, res) {
 });
 
 // Get photo for data app
-app.post('/api/getphoto', function(req, res) {
-  let name = req.body.name.replace(/ /g,'');
-  let userRef = admin.database().ref('/users/' + name);
+app.post('/api/getphotos', function(req, res) {
+  let namesMap = req.body.data;
+  let photoMap = new Map();
+  let max = 0;
 
-  userRef.once('value', (user) => {
-    res.json(user.val().photoURL);
+  namesMap.forEach((set) => {
+    [...new Map(set[1])].forEach((entry) => {
+      photoMap.set(entry[0], 0);
+    });
+  });
+
+  max = photoMap.size;
+  photoMap.clear();
+  
+  namesMap.forEach((set) => {
+    [...new Map(set[1])].forEach((entry) => {
+      if (photoMap.get(entry[0]) === undefined) {
+        let name = entry[0].replace(/ /g,'');;
+        let userRef = admin.database().ref('/users/' + name);
+
+        userRef.once('value', (user) => {
+          photoMap.set(entry[0], user.val().photoURL);
+
+          if (photoMap.size === max) {
+            res.json([...photoMap]);
+          }
+        });
+      }
+    });
+  });
+});
+
+// Get my data for data app
+app.post('/api/getmydata', function(req, res) {
+  let fullName = req.body.fullName;
+  let usersRef = admin.database().ref('/users');
+  let chalkboardsRef = admin.database().ref('/chalkboards');
+
+  usersRef.once('value', (users) => {
+    let totalMeritInstances = 0;
+    let meritInstances = 0;
+    let demeritInstances = 0;
+    let totalMeritAmount = 0;
+    let meritAmount = 0;
+    let demeritAmount = 0;
+
+    users.forEach((user) => {
+      if (user.val().status === 'pledge') {
+        let merits = Object.keys(user.val().Merits).map(function(key) {
+          return user.val().Merits[key];
+        });
+
+        merits.forEach((merit) => {
+          if (merit.name === fullName) {
+            if (merit.amount > 0) {
+              meritInstances += 1;
+              meritAmount += merit.amount;
+            }
+            else {
+              demeritInstances += 1;
+              demeritAmount += merit.amount;
+            }
+
+            totalMeritInstances += 1;
+            totalMeritAmount += merit.amount;
+          }
+        });
+      }
+    });
+
+    chalkboardsRef.once('value', (chalkboards) => {
+      let chalkboardsCreated = 0;
+      let chalkboardsAttended = 0;
+
+      chalkboards.forEach((chalkboard) => {
+        if (chalkboard.val().activeName === fullName) {
+          chalkboardsCreated += 1;
+        }
+        else {
+          let attendees = Object.keys(chalkboard.val().attendees).map(function(key) {
+            return chalkboard.val().attendees[key];
+          });
+
+          attendees.forEach((attendee) => {
+            if (attendee.name === fullName) {
+              chalkboardsAttended += 1;
+            }
+          });
+        }
+      });
+
+      res.json([
+        ['Total Merit Instances', totalMeritInstances],
+        ['Merit Instances', meritInstances],
+        ['Demerit Instances', demeritInstances],
+        ['Total Merit Amount', totalMeritAmount],
+        ['Merit Amount', meritAmount],
+        ['Demerit Amount', demeritAmount],
+        ['Chalkboards Created', chalkboardsCreated],
+        ['Chalkboards Attended', chalkboardsAttended],
+      ]);
+    });
   });
 });
 

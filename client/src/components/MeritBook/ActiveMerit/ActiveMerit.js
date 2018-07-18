@@ -292,8 +292,7 @@ export default class ActiveMerit extends Component {
                 iconClassName={toggleIcon}
                 className="reverse-toggle"
                 onClick={this.reverse}
-              >
-              </IconButton>
+              />
             </span>
           </Subheader>
 

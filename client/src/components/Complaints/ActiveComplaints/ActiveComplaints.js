@@ -35,7 +35,8 @@ export default class ActiveComplaints extends Component {
       description: '',
       complaints: this.props.complaints,
       pendingComplaints: this.props.pendingComplaints,
-      approvedComplaints: this.props.approvedComplaints
+      approvedComplaints: this.props.approvedComplaints,
+      reverse: false
     };
   }
 
@@ -201,6 +202,18 @@ export default class ActiveComplaints extends Component {
     });
   }
 
+  reverse = () => {
+    let reverse = true;
+
+    if (this.state.reverse) {
+      reverse = false;
+    }
+
+    this.setState({
+      reverse: reverse
+    });
+  }
+
   render() {
     return (
       this.state.loaded ? (
@@ -210,9 +223,13 @@ export default class ActiveComplaints extends Component {
             approvedComplaints={this.state.approvedComplaints}
             pendingComplaints={this.state.pendingComplaints}
             handleRequestOpen={this.props.handleRequestOpen}
+            reverse={this.state.reverse}
+            reverseComplaints={this.reverse}
           />
           <PastComplaints
             complaints={this.state.complaints}
+            reverse={this.state.reverse}
+            reverseComplaints={this.reverse}
           />
 
           <Portal>
