@@ -27,7 +27,7 @@ export default class ContactsDialog extends Component {
         actions={actions}
         modal={false}
         bodyClassName="contacts-dialog-body"
-        contentClassName="contacts-dialog-content"
+        contentClassName="garnett-dialog-content"
         open={this.props.open}
         onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
