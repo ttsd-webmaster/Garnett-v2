@@ -14,7 +14,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 const checkboxStyle = {
   left: '50%',
-  width: 'max-content',
+  width: '250px',
   marginTop: '20px',
   transform: 'translateX(-130px)'
 };
@@ -196,10 +196,6 @@ export default class ActiveMeritDialog extends Component {
       [validationLabel]: true
     }, () => {
       if (label === 'selectedPledges') {
-        console.log(this.state.pledges);
-        console.log(this.state.selectedPledges);
-        console.log(this.state.pledges.length);
-        console.log(this.state.selectedPledges.length);
         let allSelected = false;
         if (this.state.pledges.length === this.state.selectedPledges.length) {
           allSelected = true;
