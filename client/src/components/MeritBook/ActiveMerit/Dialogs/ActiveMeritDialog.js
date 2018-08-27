@@ -27,6 +27,7 @@ export default class ActiveMeritDialog extends Component {
       selectedPledges: [],
       description: '',
       isChalkboard: false,
+      allPledges: false,
       amount: 0,
       chalkboards: null,
       pledgeValidation: true,
@@ -124,7 +125,6 @@ export default class ActiveMeritDialog extends Component {
   handleChange = (label, newValue) => {
     let validationLabel = [label] + 'Validation';
     let value = newValue;
-
     if (label === 'amount') {
       value = parseInt(newValue, 10)
     }
@@ -158,10 +158,10 @@ export default class ActiveMeritDialog extends Component {
         })
       }
       else {
-        let maxAmount = 35;
+        let maxAmount = 50;
 
         if (this.props.state.status === 'alumni') {
-          maxAmount = 50;
+          maxAmount = 100;
         }
 
         if (amount > maxAmount) {
@@ -174,6 +174,15 @@ export default class ActiveMeritDialog extends Component {
         });
       }
     }
+    else if (label === 'allPledges') {
+      let pledges = [];
+      if (this.state.allPledges === false) {
+        pledges = this.state.pledges;
+      }
+      this.setState({
+        selectedPledges: pledges
+      })
+    }
     else if (label === 'description' && this.state.isChalkboard) {
       value = newValue;
 
@@ -185,6 +194,20 @@ export default class ActiveMeritDialog extends Component {
     this.setState({
       [label]: value,
       [validationLabel]: true
+    }, () => {
+      if (label === 'selectedPledges') {
+        console.log(this.state.pledges);
+        console.log(this.state.selectedPledges);
+        console.log(this.state.pledges.length);
+        console.log(this.state.selectedPledges.length);
+        let allSelected = false;
+        if (this.state.pledges.length === this.state.selectedPledges.length) {
+          allSelected = true;
+        }
+        this.setState({
+          allPledges: allSelected
+        })
+      }
     });
   }
 
@@ -203,7 +226,7 @@ export default class ActiveMeritDialog extends Component {
   }
 
   render() {
-    let maxAmount = 35;
+    let maxAmount = 50;
 
     if (this.state.isChalkboard) {
       maxAmount = 100;
@@ -212,7 +235,7 @@ export default class ActiveMeritDialog extends Component {
       maxAmount = 500;
     }
     else if (this.props.state.status === 'alumni') {
-      maxAmount = 50;
+      maxAmount = 100;
     }
 
     const actions = [
@@ -315,6 +338,12 @@ export default class ActiveMeritDialog extends Component {
           label="Chalkboard"
           checked={this.state.isChalkboard}
           onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
+        />
+        <Checkbox
+          style={checkboxStyle}
+          label="All Pledges"
+          checked={this.state.allPledges}
+          onCheck={(e, newValue) => this.handleChange('allPledges', newValue)}
         />
 
         <div id="remaining-merits">
