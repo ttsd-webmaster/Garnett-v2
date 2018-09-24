@@ -14,7 +14,7 @@ import Checkbox from 'material-ui/Checkbox';
 
 const checkboxStyle = {
   left: '50%',
-  width: 'max-content',
+  width: '250px',
   marginTop: '20px',
   transform: 'translateX(-130px)'
 };
@@ -27,6 +27,7 @@ export default class ActiveMeritDialog extends Component {
       selectedPledges: [],
       description: '',
       isChalkboard: false,
+      allPledges: false,
       amount: 0,
       chalkboards: null,
       pledgeValidation: true,
@@ -153,10 +154,10 @@ export default class ActiveMeritDialog extends Component {
           })
         }
         else {
-          maxAmount = 35;
+          maxAmount = 50;
 
           if (this.props.state.status === 'alumni') {
-            maxAmount = 50;
+            maxAmount = 100;
           }
 
           if (amount > maxAmount) {
@@ -177,12 +178,31 @@ export default class ActiveMeritDialog extends Component {
           this.setState({ amount });
         }
         break;
+      case 'allPledges':
+        let selectedPledges = [];
+
+        if (this.state.allPledges === false) {
+          selectedPledges = this.state.pledges;
+        }
+
+        this.setState({ selectedPledges });
+        break;
       default:
     }
 
     this.setState({
       [label]: value,
       [validationLabel]: true
+    }, () => {
+      if (label === 'selectedPledges') {
+        let allPledges = false;
+
+        if (this.state.pledges.length === this.state.selectedPledges.length) {
+          allPledges = true;
+        }
+
+        this.setState({ allPledges });
+      }
     });
   }
 
@@ -201,7 +221,7 @@ export default class ActiveMeritDialog extends Component {
   }
 
   render() {
-    let maxAmount = 35;
+    let maxAmount = 50;
 
     if (this.state.isChalkboard) {
       maxAmount = 100;
@@ -210,7 +230,7 @@ export default class ActiveMeritDialog extends Component {
       maxAmount = 500;
     }
     else if (this.props.state.status === 'alumni') {
-      maxAmount = 50;
+      maxAmount = 100;
     }
 
     const actions = [
@@ -313,6 +333,12 @@ export default class ActiveMeritDialog extends Component {
           label="Chalkboard"
           checked={this.state.isChalkboard}
           onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
+        />
+        <Checkbox
+          style={checkboxStyle}
+          label="All Pledges"
+          checked={this.state.allPledges}
+          onCheck={(e, newValue) => this.handleChange('allPledges', newValue)}
         />
 
         <div id="remaining-merits">
