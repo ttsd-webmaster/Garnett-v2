@@ -17,11 +17,14 @@ export default class Chart extends Component {
     var data       = nextProps.dataSet.map(element => element[1]);
 
     if (JSON.stringify(this.props.dataSet) !== JSON.stringify(nextProps.dataSet)) {
+      const dataSet = nextProps.dataSet;
+      const title = nextProps.title;
+
       this.setState({
-        dataSet: nextProps.dataSet,
-        title: nextProps.title,
-        nameLabels: nameLabels,
-        data: data
+        dataSet,
+        title,
+        nameLabels,
+        data
       });
     }
   }

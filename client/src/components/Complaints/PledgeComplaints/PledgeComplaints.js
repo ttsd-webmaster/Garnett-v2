@@ -28,12 +28,12 @@ export default class PledgeComplaints extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let fullName = this.props.state.displayName;
-        let firebase = window.firebase;
-        let complaintsRef = firebase.database().ref('/users/' + fullName + '/Complaints/');
+        const { displayName } = this.props.state;
+        const { firebase } = window;
+        const complaintsRef = firebase.database().ref('/users/' + displayName + '/Complaints/');
 
         complaintsRef.on('value', (snapshot) => {
-          let complaints = this.state.complaints;
+          let { complaints } = this.state;
 
           if (snapshot.val()) {
             complaints = Object.keys(snapshot.val()).map(function(key) {
@@ -48,15 +48,13 @@ export default class PledgeComplaints extends Component {
 
           this.setState({
             loaded: true,
-            complaints: complaints
+            complaints
           });
         });
       });
     }
     else {
-      this.setState({
-        loaded: true
-      });
+      this.setState({ loaded: true });
     }
   }
 
@@ -67,9 +65,7 @@ export default class PledgeComplaints extends Component {
       reverse = false;
     }
 
-    this.setState({
-      reverse: reverse
-    });
+    this.setState({ reverse });
   }
 
   render() {

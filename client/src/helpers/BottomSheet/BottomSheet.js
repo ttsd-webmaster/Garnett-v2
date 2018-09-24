@@ -8,9 +8,7 @@ import { Paper } from 'material-ui'
  */
 export default class BottomSheet extends Component {
   getStyles () {
-    const {
-      open
-    } = this.props
+    const { open } = this.props;
 
     return {
       root: {

@@ -9,7 +9,7 @@ import IconButton from 'material-ui/IconButton';
 
 export default function MyChalkboards(props) {
   let toggleIcon = "icon-down-open-mini";
-  let filter = props.filter;
+  const { filter } = props;
   let label;
 
   let myHostingChalkboards = sortChalkboards(props.myHostingChalkboards, filter);

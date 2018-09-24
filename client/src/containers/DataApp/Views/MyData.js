@@ -16,10 +16,14 @@ export default class MyData extends Component {
   }
 
   componentWillMount() {
-    API.getMyData(this.props.state.name)
+    const { name } = this.props.state;
+
+    API.getMyData(name)
     .then((res) => {
+      const myData = res.data;
+
       this.setState({
-        myData: res.data,
+        myData,
         loaded: true
       });
     });

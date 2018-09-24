@@ -70,17 +70,15 @@ export default class HandleChalkboardDialog extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      chalkboard: nextProps.chalkboard,
-      index: 0
-    });
+    const chalkboard = nextProps.chalkboard;
+
+    this.setState({ chalkboard, index: 0 });
   }
 
   // Joins the chalkboard
   join = (chalkboard) => {
     if (navigator.onLine) {
-      let name = this.props.state.name;
-      let photoURL = this.props.state.photoURL;
+      const { name, photoURL } = this.props.state;
 
       API.joinChalkboard(name, photoURL, chalkboard)
       .then((res) => {
@@ -107,7 +105,7 @@ export default class HandleChalkboardDialog extends Component {
   // Removes the chalkboard
   remove = (chalkboard) => {
     if (navigator.onLine) {
-      let displayName = this.props.state.displayName;
+      const { displayName } = this.props.state;
 
       API.removeChalkboard(displayName, chalkboard)
       .then((res) => {
@@ -129,7 +127,7 @@ export default class HandleChalkboardDialog extends Component {
   // Leaves the chalkboard
   leave = (chalkboard) => {
     if (navigator.onLine) {
-      let name = this.props.state.name;
+      const { name } = this.props.state;
 
       API.leaveChalkboard(name, chalkboard)
       .then((res) => {
@@ -155,11 +153,11 @@ export default class HandleChalkboardDialog extends Component {
 
   // Updates the chalkboard information displayed
   updateChalkboardInfo = () => {
-    API.getChalkboardInfo(this.state.chalkboard.title)
+    const { title } = this.state.chalkboard;
+    API.getChalkboardInfo(title)
     .then((res) => {
-      this.setState({
-        chalkboard: res.data.chalkboard
-      });
+      const { chalkboard } = res.data;
+      this.setState({ chalkboard });
     })
     .catch((error) => {
       console.log('Error: ', error);
@@ -168,9 +166,7 @@ export default class HandleChalkboardDialog extends Component {
 
   // Updates the navigation tab index
   handleChange = (value) => {
-    this.setState({
-      index: value
-    });
+    this.setState({ index: value });
   }
 
   // Opens the edit dialog if user is hosting chalkboard
@@ -193,10 +189,7 @@ export default class HandleChalkboardDialog extends Component {
           }
         }
 
-        this.setState({
-          open: true,
-          field: field
-        });
+        this.setState({ field, open: true });
       }
     }
     else {
@@ -231,14 +224,15 @@ export default class HandleChalkboardDialog extends Component {
   render() {
     let label;
 
-    if (this.props.type === 'hosting') {
-      label = 'Remove';
-    }
-    else if (this.props.type === 'attending') {
-      label = 'Leave';
-    }
-    else {
-      label = 'Join';
+    switch (this.props.type) {
+      case 'hosting':
+        label = 'Remove';
+        break;
+      case 'attending':
+        label = 'Leave';
+        break;
+      default:
+        label = 'Join';
     }
 
     const actions = [

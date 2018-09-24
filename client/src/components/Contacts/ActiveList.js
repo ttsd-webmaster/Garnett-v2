@@ -10,17 +10,19 @@ export default class ActiveList extends Component {
   checkCondition(active) {
     let condition = false;
 
-    if (this.props.filter === 'firstName' || this.props.filter === 'lastName') {
-      condition = active[this.props.filter].startsWith(this.props.label);
-    }
-    else if (this.props.filter === 'activeClass') {
-      condition = active.status !== 'alumni' && active.class === this.props.label;
-    }
-    else if (this.props.filter === 'alumni') {
-      condition = active.status === 'alumni' && active.class === this.props.label;
-    }
-    else {
-      condition = active[this.props.filter] === this.props.label;
+    switch (this.props.filter) {
+      case 'firstName':
+      case 'lastName':
+        condition = active[this.props.filter].startsWith(this.props.label);
+        break;
+      case 'activeClass':
+        condition = active.status !== 'alumni' && active.class === this.props.label;
+        break;
+      case 'alumni':
+        condition = active.status === 'alumni' && active.class === this.props.label;
+        break;
+      default:
+        condition = active[this.props.filter] === this.props.label;
     }
 
     return condition;

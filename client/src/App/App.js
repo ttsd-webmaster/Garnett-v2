@@ -81,13 +81,11 @@ class App extends Component {
   }
 
   componentWillMount() {
-    let data = JSON.parse(localStorage.getItem('data'));
-    let firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
-    let route = localStorage.getItem('route');
+    const data = JSON.parse(localStorage.getItem('data'));
+    const firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
+    const route = localStorage.getItem('route');
 
-    this.setState({
-      route: route
-    });
+    this.setState({ route });
 
     if (navigator.onLine) {
       if (data !== null) {
@@ -95,7 +93,7 @@ class App extends Component {
 
         loadFirebase('auth')
         .then(() => {
-          let firebase = window.firebase;
+          const { firebase } = window;
 
           firebase.auth().onAuthStateChanged((user) => {
             if (user) {
@@ -105,17 +103,13 @@ class App extends Component {
               });
             }
             else {
-              this.setState({
-                loaded: true
-              });
+              this.setState({ loaded: true });
             }
           });
         });
       }
       else {
-        this.setState({
-          loaded: true
-        });
+        this.setState({ loaded: true });
       }
     }
     else {
@@ -123,15 +117,13 @@ class App extends Component {
         this.setData(data);
       }
       else {
-        this.setState({
-          loaded: true
-        });
+        this.setState({ loaded: true });
       }
     }
   }
 
   componentDidMount() {
-    let sw_msg = localStorage.getItem('sw_msg');
+    const sw_msg = localStorage.getItem('sw_msg');
 
     if (sw_msg) {
       localStorage.removeItem('sw_msg');
@@ -142,7 +134,7 @@ class App extends Component {
   }
 
   loginCallBack = (user) => {
-    let displayName = user.firstName + user.lastName;
+    const displayName = user.firstName + user.lastName;
     const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
@@ -156,8 +148,8 @@ class App extends Component {
       .then((registration) => {
         loadFirebase('messaging')
         .then(() => {
-          let firebase = window.firebase;
-          let messaging = firebase.messaging();
+          const { firebase } = window;
+          const messaging = firebase.messaging();
           messaging.useServiceWorker(registration);
 
           messaging.requestPermission()
@@ -203,9 +195,9 @@ class App extends Component {
     if (user.photoURL === defaultPhoto && user.status !== 'alumni') {
       loadFirebase('storage')
       .then(() => {
-        let firebase = window.firebase;
-        let displayName = user.firstName + user.lastName;
-        let storage = firebase.storage().ref(`${displayName}.jpg`);
+        const { firebase } = window;
+        const displayName = user.firstName + user.lastName;
+        const storage = firebase.storage().ref(`${displayName}.jpg`);
 
         storage.getDownloadURL()
         .then((url) => {
@@ -215,10 +207,14 @@ class App extends Component {
 
             this.setData(res.data);
           })
-          .catch(err => console.log(err));
+          .catch((error) => {
+            console.log(error);
+
+            this.setData(user);
+          });
         })
         .catch((error) => {
-          let storage = firebase.storage.ref(`${displayName}.JPG`);
+          const storage = firebase.storage.ref(`${displayName}.JPG`);
 
           storage.getDownloadURL()
           .then((url) => {
@@ -270,15 +266,13 @@ class App extends Component {
 
   handleRequestOpen = (message) => {
     this.setState({
+      message,
       open: true,
-      message: message
     });
   }
 
   handleRequestClose = () => {
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
   }
 
   render() {

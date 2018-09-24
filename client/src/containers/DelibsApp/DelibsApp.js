@@ -44,9 +44,9 @@ export default class DelibsApp extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let firebase = window.firebase;
-        let displayName = this.props.state.displayName;
-        let rusheesRef = firebase.database().ref('/rushees');
+        const { firebase } = window;
+        const { displayName } = this.props.state;
+        const rusheesRef = firebase.database().ref('/rushees');
 
         rusheesRef.on('value', (snapshot) => {
           if (snapshot.val()) {
@@ -72,21 +72,17 @@ export default class DelibsApp extends Component {
             
             this.setState({
               loaded: true,
-              rushees: rushees
+              rushees
             });
           }
           else {
-            this.setState({
-              loaded: true
-            });
+            this.setState({ loaded: true });
           }
         });
       });
     }
     else {
-      this.setState({
-        loaded: true
-      });
+      this.setState({ loaded: true });
     }
   }
 
@@ -101,10 +97,10 @@ export default class DelibsApp extends Component {
   }
 
   updateInteraction = (rushee) => {
-    let displayName = this.props.state.displayName;
+    let { displayName } = this.props.state;
     let rusheeName = rushee.name.replace(/ /g,'');
-    let interacted = rushee.interacted;
-    let totalInteractions = rushee.totalInteractions;
+    let { interacted } = rushee;
+    let { totalInteractions } = rushee;
 
     API.updateInteraction(displayName, rusheeName, interacted, totalInteractions)
     .then((res) => {

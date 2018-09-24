@@ -1,7 +1,7 @@
 const commitmentOptions = [
   {
     value: 'Short',
-    label: 'Short (Less than 1 hour)'
+    label: 'Short (< 1 hour)'
   },
   {
     value: 'Medium',
@@ -9,7 +9,7 @@ const commitmentOptions = [
   },
   {
     value: 'Long',
-    label: 'Long (More than 4 hours)'
+    label: 'Long (> 4 hours)'
   },
 ];
 

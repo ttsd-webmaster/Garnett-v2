@@ -59,9 +59,7 @@ export default class MyComplaints extends Component {
       window.onpopstate = () => {};
     }
     
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
   }
 
   render() {

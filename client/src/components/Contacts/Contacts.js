@@ -39,21 +39,20 @@ export default class Contacts extends Component {
   }
 
   componentWillMount() {
+    const labels = filters.activeClass;
+
     if (navigator.onLine) {
       API.getActives()
       .then(res => {
+        const actives = res.data;
+
         localStorage.setItem('activeArray', JSON.stringify(res.data));
 
-        this.setState({
-          actives: res.data,
-          labels: filters.activeClass
-        });
+        this.setState({ actives, labels });
       });
     }
     else {
-      this.setState({
-        labels: filters.activeClass
-      });
+      this.setState({ labels });
     }
   }
 
@@ -75,8 +74,8 @@ export default class Contacts extends Component {
     }
 
     this.setState({
-      open: true,
-      active: active
+      active,
+      open: true
     });
   }
 
@@ -85,9 +84,7 @@ export default class Contacts extends Component {
       window.onpopstate = () => {};
     }
 
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
   }
 
   openPopover = (event) => {
@@ -96,14 +93,12 @@ export default class Contacts extends Component {
 
     this.setState({
       openPopover: true,
-      anchorEl: event.currentTarget,
+      anchorEl: event.currentTarget
     });
   };
 
   closePopover = () => {
-    this.setState({
-      openPopover: false,
-    });
+    this.setState({ openPopover: false });
   };
 
   setFilter = (filterName) => {
@@ -126,11 +121,13 @@ export default class Contacts extends Component {
       labelFilter = 'mbti';
     }
 
+    const labels = filters[labelFilter];
+
     this.setState({
+      filter,
+      filterName,
+      labels,
       openPopover: false,
-      labels: filters[labelFilter],
-      filter: filter,
-      filterName: filterName,
       reverse: false
     });
   }
@@ -143,10 +140,7 @@ export default class Contacts extends Component {
       reverse = false;
     }
 
-    this.setState({
-      labels: labels,
-      reverse: reverse
-    });
+    this.setState({ labels, reverse });
   }
 
   render() {

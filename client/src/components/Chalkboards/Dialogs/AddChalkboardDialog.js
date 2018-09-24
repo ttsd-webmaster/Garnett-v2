@@ -46,13 +46,13 @@ export default class AddChalkboardDialog extends Component {
   }
 
   addChalkboard = () => {
-    let title = this.state.title;
-    let description = this.state.description;
-    let date = this.state.date;
-    let time = this.state.time;
-    let location = this.state.location;
-    let timeCommitment = this.state.timeCommitment;
-    let amount = this.state.amount;
+    const { title, 
+            description,
+            date,
+            time,
+            location,
+            timeCommitment,
+            amount } = this.state;
     let titleValidation = true;
     let descriptionValidation = true;
     let dateValidation = true;
@@ -86,22 +86,22 @@ export default class AddChalkboardDialog extends Component {
         }
 
         this.setState({
-          titleValidation: titleValidation,
-          descriptionValidation: descriptionValidation,
-          dateValidation: dateValidation,
-          timeValidation: timeValidation,
-          locationValidation: locationValidation,
-          timeCommitmentValidation: timeCommitmentValidation
+          titleValidation,
+          descriptionValidation,
+          dateValidation,
+          timeValidation,
+          locationValidation,
+          timeCommitmentValidation
         });
       }
       else {
-        let displayName = this.props.state.displayName;
-        let activeName = this.props.state.name;
-        let photoURL = this.props.state.photoURL;
-        let parsedDate = this.formatDate(date);
-        let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const { displayName,
+                name,
+                photoURL } = this.props.state;
+        const parsedDate = this.formatDate(date);
+        const parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-        API.createChalkboard(displayName, activeName, photoURL, title, description, parsedDate, parsedTime, location, timeCommitment, amount)
+        API.createChalkboard(displayName, name, photoURL, title, description, parsedDate, parsedTime, location, timeCommitment, amount)
         .then((res) => {
           console.log(res);
           this.handleClose();
@@ -126,12 +126,12 @@ export default class AddChalkboardDialog extends Component {
   }
 
   disableDates(date) {
-    let today = new Date();
+    const today = new Date();
     return date < today;
   }
 
   handleChange = (label, value) => {
-    let validationLabel = [label] + 'Validation';
+    const validationLabel = [label] + 'Validation';
 
     this.setState({
       [label]: value,

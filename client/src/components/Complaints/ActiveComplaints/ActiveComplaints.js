@@ -44,8 +44,8 @@ export default class ActiveComplaints extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let firebase = window.firebase;
-        let dbRef = firebase.database().ref('/');
+        const { firebase } = window;
+        const dbRef = firebase.database().ref('/');
 
         dbRef.on('value', (snapshot) => {
           let complaints = [];
@@ -92,18 +92,16 @@ export default class ActiveComplaints extends Component {
 
           this.setState({
             loaded: true,
-            complaints: complaints,
-            pendingComplaints: pendingComplaints,
-            approvedComplaints: approvedComplaints
+            complaints,
+            pendingComplaints,
+            approvedComplaints
           });
         });
       })
       .catch(err => console.log(err));
     }
     else {
-      this.setState({
-        loaded: true
-      });
+      this.setState({ loaded: true });
     }
   }
 
@@ -126,12 +124,11 @@ export default class ActiveComplaints extends Component {
 
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
-    let scrollPosition1 = this.state.scrollPosition1;
-    let scrollPosition2 = this.state.scrollPosition2;
+    let { scrollPosition1, scrollPosition2 } = this.state;
     let contentContainer = document.querySelector('.content-container');
-    let scrollPosition = contentContainer.childNodes[3].scrollTop;
-    let myComplaints = document.getElementById('my-complaints');
-    let pastComplaints = document.getElementById('past-complaints');
+    const scrollPosition = contentContainer.childNodes[3].scrollTop;
+    const myComplaints = document.getElementById('my-complaints');
+    const pastComplaints = document.getElementById('past-complaints');
     let scrolled;
 
     if (previousIndex !== index) {
@@ -159,17 +156,15 @@ export default class ActiveComplaints extends Component {
 
       this.setState({
         selectedIndex: index,
-        scrollPosition1: scrollPosition1,
-        scrollPosition2: scrollPosition2
+        scrollPosition1,
+        scrollPosition2
       });
     }
   }
 
   handleOpen = () => {
     if (navigator.onLine) {
-      this.setState({
-        open: true
-      });
+      this.setState({ open: true });
 
       // Handles android back button
       if (/android/i.test(navigator.userAgent)) {
@@ -197,9 +192,7 @@ export default class ActiveComplaints extends Component {
       window.onpopstate = () => {};
     }
 
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
   }
 
   reverse = () => {
@@ -209,9 +202,7 @@ export default class ActiveComplaints extends Component {
       reverse = false;
     }
 
-    this.setState({
-      reverse: reverse
-    });
+    this.setState({ reverse });
   }
 
   render() {

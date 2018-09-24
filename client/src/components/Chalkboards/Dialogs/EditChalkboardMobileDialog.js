@@ -24,14 +24,14 @@ export default class MobileEditChalkboardDialog extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.field === 'Description') {
-      this.setState({
-        newValue: nextProps.chalkboard.description
-      });
+      const newValue = nextProps.chalkboard.description;
+
+      this.setState({ newValue });
     }
   }
 
   edit = (newValue) => {
-    let field = this.props.field;
+    const { field } = this.props;
 
     if (field === 'Date' && invalidSafariVersion()) {
       this.handleClose();
@@ -44,8 +44,7 @@ export default class MobileEditChalkboardDialog extends Component {
         });
       }
       else {
-        let displayName = this.props.state.displayName;
-        let chalkboard = this.props.chalkboard;
+        const { displayName, chalkboard } = this.props.state;
         let value = newValue;
 
         if (field === 'Date') {
@@ -81,7 +80,7 @@ export default class MobileEditChalkboardDialog extends Component {
   }
 
   disableDates(date) {
-    let today = new Date();
+    const today = new Date();
     return date < today;
   }
 
@@ -104,88 +103,89 @@ export default class MobileEditChalkboardDialog extends Component {
   render() {
     let EditField;
 
-    if (this.props.field === 'Date') {
-      EditField = (
-        <DatePicker
-          className="garnett-input"
-          textFieldStyle={{display:'block',margin:'0 auto'}}
-          floatingLabelText="Date"
-          value={this.state.newValue}
-          disableYearSelection
-          firstDayOfWeek={0}
-          formatDate={this.formatDate}
-          shouldDisableDate={this.disableDates}
-          onChange={this.handleChange}
-          errorText={!this.state.newValueValidation && 'Select a date.'}
-        />
-      );
-    }
-    else if (this.props.field === 'Time') {
-      EditField = (
-        <TimePicker
-          className="garnett-input"
-          textFieldStyle={{display:'block'}}
-          floatingLabelText="Time"
-          value={this.state.newValue}
-          minutesStep={5}
-          onChange={this.handleChange}
-          errorText={!this.state.newValueValidation && 'Enter a time.'}
-        />
-      );
-    }
-    else if (this.props.field === 'Amount') {
-      EditField = (
-        <div style={{width:'256px',margin:'20px auto 0'}}>
-          <span>
-            Amount: {this.state.newValue}
-          </span>
-          <Slider
-            sliderStyle={{marginBottom:0}}
-            name="Amount"
-            min={0}
-            max={100}
-            step={5}
+    switch (this.props.field) {
+      case 'Date':
+        EditField = (
+          <DatePicker
+            className="garnett-input"
+            textFieldStyle={{display:'block',margin:'0 auto'}}
+            floatingLabelText="Date"
+            value={this.state.newValue}
+            disableYearSelection
+            firstDayOfWeek={0}
+            formatDate={this.formatDate}
+            shouldDisableDate={this.disableDates}
+            onChange={this.handleChange}
+            errorText={!this.state.newValueValidation && 'Select a date.'}
+          />
+        );
+        break;
+      case 'Time':
+        EditField = (
+          <TimePicker
+            className="garnett-input"
+            textFieldStyle={{display:'block'}}
+            floatingLabelText="Time"
+            value={this.state.newValue}
+            minutesStep={5}
+            onChange={this.handleChange}
+            errorText={!this.state.newValueValidation && 'Enter a time.'}
+          />
+        );
+        break;
+      case 'Amount':
+        EditField = (
+          <div style={{width:'256px',margin:'20px auto 0'}}>
+            <span>
+              Amount: {this.state.newValue}
+            </span>
+            <Slider
+              sliderStyle={{marginBottom:0}}
+              name="Amount"
+              min={0}
+              max={100}
+              step={5}
+              value={this.state.newValue}
+              onChange={this.handleChange}
+            />
+          </div>
+        );
+        break;
+      case 'Time Commitment':
+        EditField = (
+          <SelectField
+            className="garnett-input"
+            value={this.state.newValue}
+            floatingLabelText="Time Commitment"
+            onChange={this.handleChange}
+            errorText={!this.state.newValueValidation && 'Enter a time commitment.'}
+          >
+            {commitmentOptions.map((option, i) => (
+              <MenuItem
+                key={i}
+                value={option}
+                primaryText={option.label}
+                insetChildren
+                checked={option === this.state.newValue}
+              />
+            ))}
+          </SelectField>
+        );
+        break;
+      default:
+        EditField = (
+          <TextField
+            className="garnett-input"
+            style={{display:'block'}}
+            type="text"
+            floatingLabelText={this.props.field}
+            multiLine={true}
+            rowsMax={3}
             value={this.state.newValue}
             onChange={this.handleChange}
+            errorText={(!this.state.newValueValidation && 'Enter a new value')}
           />
-        </div>
-      );
-    }
-    else if (this.props.field === 'Time Commitment') {
-      EditField = (
-        <SelectField
-          className="garnett-input"
-          value={this.state.newValue}
-          floatingLabelText="Time Commitment"
-          onChange={this.handleChange}
-          errorText={!this.state.newValueValidation && 'Enter a time commitment.'}
-        >
-          {commitmentOptions.map((option, i) => (
-            <MenuItem
-              key={i}
-              value={option}
-              primaryText={option.label}
-              insetChildren
-              checked={option === this.state.newValue}
-            />
-          ))}
-        </SelectField>
-      );
-    }
-    else {
-      EditField = (
-        <TextField
-          className="garnett-input"
-          style={{display:'block'}}
-          type="text"
-          floatingLabelText={this.props.field}
-          multiLine={true}
-          rowsMax={3}
-          value={this.state.newValue}
-          onChange={this.handleChange}
-          errorText={(!this.state.newValueValidation && 'Enter a new value')}
-        />
-      );
+        );
     }
 
     const actions = [

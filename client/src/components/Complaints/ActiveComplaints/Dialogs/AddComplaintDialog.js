@@ -25,18 +25,15 @@ export default class AddComplaintDialog extends Component {
     if (navigator.onLine) {
       API.getPledgesForComplaints()
       .then((res) => {
-        let pledges = res.data;
+        const pledges = res.data;
 
-        this.setState({
-          pledges: pledges
-        });
+        this.setState({ pledges });
       });
     }
   }
 
   complain = () => {
-    let pledge = this.state.pledge;
-    let description = this.state.description;
+    const { pledge, description } = this.state;
     let descriptionValidation = true;
     let pledgeValidation = true;
 
@@ -49,18 +46,16 @@ export default class AddComplaintDialog extends Component {
       }
 
       this.setState({
-        pledgeValidation: pledgeValidation,
-        descriptionValidation: descriptionValidation
+        pledgeValidation,
+        descriptionValidation
       });
     }
     else {
-      let status = this.props.state.status;
-      let displayName = this.props.state.displayName;
-      let activeName = this.props.state.name;
-      let date = getDate();
-      let complaint = {
+      let { status, displayName, name } = this.props.state;
+      const date = getDate();
+      const complaint = {
         activeDisplayName: displayName,
-        activeName: activeName,
+        activeName: name,
         pledgeDisplayName: pledge.value,
         pledgeName: pledge.label,
         description: description,
@@ -97,7 +92,7 @@ export default class AddComplaintDialog extends Component {
   }
 
   handleChange = (label, value) => {
-    let validationLabel = [label] + 'Validation';
+    const validationLabel = [label] + 'Validation';
 
     this.setState({
       [label]: value,

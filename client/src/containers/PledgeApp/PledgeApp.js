@@ -66,7 +66,6 @@ export default class PledgeApp extends Component {
     this.state = {
       title: 'Merit Book',
       slideIndex: 0,
-      previousIndex: 0,
       scrollPosition1: 0,
       scrollPosition2: 0,
       scrollPosition3: 0,
@@ -91,28 +90,26 @@ export default class PledgeApp extends Component {
   componentWillMount() {
     console.log('Pledge app mount: ', this.props.state.name)
 
-    let data = JSON.parse(localStorage.getItem('data'));
+    const data = JSON.parse(localStorage.getItem('data'));
 
     localStorage.setItem('route', 'pledge-app');
 
     if (navigator.onLine) {
-      this.setState({
-        loaded: true
-      });
+      this.setState({ loaded: true });
     }
     else {
-      let activeArray = JSON.parse(localStorage.getItem('activeArray'));
-      let myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards'));
-      let myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards'));
-      let upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards'));
-      let completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards'));
+      const activeArray = JSON.parse(localStorage.getItem('activeArray'));
+      const myAttendingChalkboards = JSON.parse(localStorage.getItem('myAttendingChalkboards'));
+      const myCompletedChalkboards = JSON.parse(localStorage.getItem('myCompletedChalkboards'));
+      const upcomingChalkboards = JSON.parse(localStorage.getItem('upcomingChalkboards'));
+      const completedChalkboards = JSON.parse(localStorage.getItem('completedChalkboards'));
 
       if (data.status !== 'pledge') {
-        let pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
-        let myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
-        let activeComplaints = JSON.parse(localStorage.getItem('activeComplaints'));
-        let pendingComplaints = JSON.parse(localStorage.getItem('pendingComplaints'));
-        let approvedComplaints = JSON.parse(localStorage.getItem('approvedComplaints'));
+        const pledgeArray = JSON.parse(localStorage.getItem('pledgeArray'));
+        const myHostingChalkboards = JSON.parse(localStorage.getItem('myHostingChalkboards'));
+        const activeComplaints = JSON.parse(localStorage.getItem('activeComplaints'));
+        const pendingComplaints = JSON.parse(localStorage.getItem('pendingComplaints'));
+        const approvedComplaints = JSON.parse(localStorage.getItem('approvedComplaints'));
 
         this.setState({
           loaded: true,
@@ -129,9 +126,9 @@ export default class PledgeApp extends Component {
         });
       }
       else {
-        let meritArray = JSON.parse(localStorage.getItem('meritArray'));
-        let pledgeComplaints = JSON.parse(localStorage.getItem('pledgeComplaints'));
-        let totalMerits = localStorage.getItem('totalMerits');
+        const meritArray = JSON.parse(localStorage.getItem('meritArray'));
+        const pledgeComplaints = JSON.parse(localStorage.getItem('pledgeComplaints'));
+        const totalMerits = localStorage.getItem('totalMerits');
 
         this.setState({
           loaded: true,
@@ -209,7 +206,7 @@ export default class PledgeApp extends Component {
   }
 
   componentDidUpdate() {
-    let index = this.state.slideIndex;
+    const index = this.state.slideIndex;
     // let pullToRefresh = document.querySelector('.ptr--ptr');
     let contentContainer = document.querySelector('.content-container');
     
@@ -232,14 +229,14 @@ export default class PledgeApp extends Component {
 
   // Changes touch action of view if scroll is at top of view for mobile
   onScroll = () => {
-    let tabs = document.getElementById('pledge-app-tabs').firstChild;
-    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-    let appBar = document.querySelector('.app-header');
-    let contentContainer = document.querySelector('.content-container');
-    let index = this.state.slideIndex;
-    let view = contentContainer.childNodes[index];
-    let body = document.body;
-    let scrollTop = view.scrollTop;
+    const tabs = document.getElementById('pledge-app-tabs').firstChild;
+    const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    const appBar = document.querySelector('.app-header');
+    const contentContainer = document.querySelector('.content-container');
+    const { slideIndex } = this.state;
+    const view = contentContainer.childNodes[slideIndex];
+    const { body } = document;
+    const { scrollTop } = view;
 
     // if (view.scrollTop >= 1) {
     //   view.style.touchAction = 'auto';
@@ -271,19 +268,19 @@ export default class PledgeApp extends Component {
 
   handleChange = (index) => {
     let title;
-    let previousIndex = this.state.previousIndex;
-    let scrollPosition1 = this.state.scrollPosition1;
-    let scrollPosition2 = this.state.scrollPosition2;
-    let scrollPosition3 = this.state.scrollPosition3;
-    let scrollPosition4 = this.state.scrollPosition4;
-    let scrollPosition5 = this.state.scrollPosition5;
-    let tabs = document.getElementById('pledge-app-tabs').firstChild;
-    let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-    let appBar = document.querySelector('.app-header');
-    let contentContainer = document.querySelector('.content-container');
+    let { slideIndex,
+          scrollPosition1,
+          scrollPosition2,
+          scrollPosition3,
+          scrollPosition4,
+          scrollPosition5 } = this.state;
+    const tabs = document.getElementById('pledge-app-tabs').firstChild;
+    const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+    const appBar = document.querySelector('.app-header');
+    const contentContainer = document.querySelector('.content-container');
     let view = contentContainer.childNodes[index];
-    let body = document.body;
-    let scrollPosition = contentContainer.childNodes[previousIndex].scrollTop;;
+    const { body } = document;
+    const scrollPosition = contentContainer.childNodes[slideIndex].scrollTop;;
     let scrolled;
 
     // Hides and shows the app bar if scrolled for that view for mobile
@@ -318,16 +315,16 @@ export default class PledgeApp extends Component {
     }
 
     // Updates the previous scroll position based on the previous index
-    if (previousIndex === 0) {
+    if (slideIndex === 0) {
       scrollPosition1 = scrollPosition;
     }
-    else if (previousIndex === 1) {
+    else if (slideIndex === 1) {
       scrollPosition2 = scrollPosition;
     }
-    else if (previousIndex === 2) {
+    else if (slideIndex === 2) {
       scrollPosition3 = scrollPosition;
     }
-    else if (previousIndex === 3) {
+    else if (slideIndex === 3) {
       scrollPosition4 = scrollPosition;
     }
     else {
@@ -338,14 +335,13 @@ export default class PledgeApp extends Component {
     view.scrollTop = scrolled;
 
     this.setState({
-      title: title,
-      slideIndex: index,
-      previousIndex: index,
-      scrollPosition1: scrollPosition1,
-      scrollPosition2: scrollPosition2,
-      scrollPosition3: scrollPosition3,
-      scrollPosition4: scrollPosition4,
-      scrollPosition5: scrollPosition5
+      title,
+      scrollPosition1,
+      scrollPosition2,
+      scrollPosition3,
+      scrollPosition4,
+      scrollPosition5,
+      slideIndex: index
     });
   };
 

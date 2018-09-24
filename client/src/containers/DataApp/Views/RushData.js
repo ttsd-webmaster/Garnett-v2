@@ -17,17 +17,22 @@ export default class RushData extends Component {
   }
 
   componentDidMount() {
+    let dataSet = rushData[0][1];
+    let title = rushData[0][0];
+
     this.setState({
-      dataSet: rushData[0][1],
-      title: rushData[0][0]
+      dataSet,
+      title
     });
   }
 
   filterData = (value) => {
+    let dataSet = rushData[value][1];
+    let title = rushData[value][0];
     this.setState({
-      dataSet: rushData[value][1],
-      title: rushData[value][0],
-      value: value
+      dataSet,
+      title,
+      value
     })
   }
 

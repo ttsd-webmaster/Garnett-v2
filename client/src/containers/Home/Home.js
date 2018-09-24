@@ -15,9 +15,7 @@ export default class Home extends Component {
   componentWillMount() {
     localStorage.setItem('route', 'home');
     
-    this.setState({
-      loaded: true
-    });
+    this.setState({ loaded: true });
   }
 
   logout = () => {

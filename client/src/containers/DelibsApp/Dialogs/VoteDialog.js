@@ -18,22 +18,22 @@ export default class VoteDialog extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let firebase = window.firebase;
-        let voteRef = firebase.database().ref('/delibsVoting');
+        const { firebase } = window;
+        const voteRef = firebase.database().ref('/delibsVoting');
 
         voteRef.on('value', (snapshot) => {
-          this.setState({
-            open: snapshot.val().open,
-            rushee: snapshot.val().rushee
-          });
+          const open = snapshot.val().open;
+          const rushee = snapshot.val().rushee;
+
+          this.setState({ open, rushee });
         });
       });
     }
   }
 
   handleChange = (e, value) => {
-    let displayName = this.props.state.displayName;
-    let rushee = this.state.rushee;
+    const { displayName } = this.props.state;
+    const { rushee } = this.state;
 
     API.voteForRushee(displayName, rushee, value)
     .then((res) => {

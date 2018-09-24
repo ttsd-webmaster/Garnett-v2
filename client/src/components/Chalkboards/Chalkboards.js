@@ -64,9 +64,9 @@ export default class Chalkboards extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let firebase = window.firebase;
+        const { firebase } = window;
+        const chalkboardsRef = firebase.database().ref('/chalkboards');
         let chalkboards = [];
-        let chalkboardsRef = firebase.database().ref('/chalkboards');
 
         chalkboardsRef.on('value', (snap) => {
           let myHostingChalkboards = [];
@@ -77,7 +77,7 @@ export default class Chalkboards extends Component {
           
           // Checks if there are any chalkboards
           if (snap.val()) {
-            let today = getDate();
+            const today = getDate();
 
             // Converts object to array
             chalkboards = Object.keys(snap.val()).map(function(key) {
@@ -146,19 +146,17 @@ export default class Chalkboards extends Component {
 
           this.setState({
             loaded: true,
-            upcomingChalkboards: upcomingChalkboards,
-            completedChalkboards: completedChalkboards,
-            myHostingChalkboards: myHostingChalkboards,
-            myAttendingChalkboards: myAttendingChalkboards,
-            myCompletedChalkboards: myCompletedChalkboards
+            upcomingChalkboards,
+            completedChalkboards,
+            myHostingChalkboards,
+            myAttendingChalkboards,
+            myCompletedChalkboards
           });
         });
       });
     }
     else {
-      this.setState({
-        loaded: true
-      });
+      this.setState({ loaded: true });
     }
   }
 
@@ -185,12 +183,11 @@ export default class Chalkboards extends Component {
 
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
-    let scrollPosition1 = this.state.scrollPosition1;
-    let scrollPosition2 = this.state.scrollPosition2;
+    let { scrollPosition1, scrollPosition2 } = this.state;
     let contentContainer = document.querySelector('.content-container');
-    let scrollPosition = contentContainer.childNodes[2].scrollTop;
-    let myChalkboards = document.getElementById('my-chalkboards');
-    let allChalkboards = document.getElementById('all-chalkboards');
+    const scrollPosition = contentContainer.childNodes[2].scrollTop;
+    const myChalkboards = document.getElementById('my-chalkboards');
+    const allChalkboards = document.getElementById('all-chalkboards');
     let scrolled;
 
     if (previousIndex !== index) {
@@ -218,8 +215,8 @@ export default class Chalkboards extends Component {
 
       this.setState({
         selectedIndex: index,
-        scrollPosition1: scrollPosition1,
-        scrollPosition2: scrollPosition2
+        scrollPosition1,
+        scrollPosition2
       });
     }
   }
@@ -227,7 +224,7 @@ export default class Chalkboards extends Component {
   addOpen = () => {
     if (navigator.onLine) {
       if (isMobileDevice()) {
-        let contentContainer = document.querySelector('.content-container').childNodes[2];
+        const contentContainer = document.querySelector('.content-container').childNodes[2];
         let tabs = document.getElementById('pledge-app-tabs').firstChild;
         let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
         let appBar = document.querySelector('.app-header');
@@ -239,9 +236,7 @@ export default class Chalkboards extends Component {
         appBar.style.zIndex = 0;
       }
 
-      this.setState({
-        openAdd: true
-      });
+      this.setState({ openAdd: true });
 
       // Handles android back button
       if (/android/i.test(navigator.userAgent)) {
@@ -266,7 +261,7 @@ export default class Chalkboards extends Component {
 
   addClose = () => {
     if (isMobileDevice()) {
-      let contentContainer = document.querySelector('.content-container').childNodes[2];
+      const contentContainer = document.querySelector('.content-container').childNodes[2];
       let tabs = document.getElementById('pledge-app-tabs').firstChild;
       let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
       let appBar = document.querySelector('.app-header');
@@ -287,9 +282,7 @@ export default class Chalkboards extends Component {
       window.onpopstate = () => {};
     }
 
-    this.setState({
-      openAdd: false
-    });
+    this.setState({ openAdd: false });
   }
 
   handleOpen = (chalkboard, type) => {
@@ -355,9 +348,7 @@ export default class Chalkboards extends Component {
       window.onpopstate = () => {};
     }
 
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
   }
 
   openPopover = (event) => {
@@ -371,9 +362,7 @@ export default class Chalkboards extends Component {
   };
 
   closePopover = () => {
-    this.setState({
-      openPopover: false,
-    });
+    this.setState({ openPopover: false });
   };
 
   setFilter = (filterName) => {
@@ -381,8 +370,8 @@ export default class Chalkboards extends Component {
     filter = filter[0].toLowerCase() + filter.substr(1);
 
     this.setState({
-      filter: filter,
-      filterName: filterName,
+      filter,
+      filterName,
       reverse: false,
       openPopover: false
     });
@@ -412,9 +401,7 @@ export default class Chalkboards extends Component {
       reverse = false;
     }
 
-    this.setState({
-      reverse: reverse
-    });
+    this.setState({ reverse });
   }
 
   render() {

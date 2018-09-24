@@ -1,6 +1,6 @@
 var fs = require('fs');
 const admin = require("firebase-admin");
-var serviceAccount = require("../../serviceAccountKey.json");
+var serviceAccount = require("../../../serviceAccountKey.json");
 var NuData = require('./data/RushFall15.json');
 var XiData = require('./data/RushSpring16.json');
 var OmicronData = require('./data/RushFall16.json');

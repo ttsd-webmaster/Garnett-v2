@@ -4,7 +4,8 @@ import axios from 'axios';
 export default {
   // Pledge App
   getAuthStatus: function(user) {
-    return axios.post('/api/', {user});
+    let body = {user};
+    return axios.post('/api/', body);
   },
   getFirebaseData: function() {
     return axios.post('/api/getfirebasedata');
@@ -14,13 +15,15 @@ export default {
     return axios.post('/api/signup', body);
   },
   forgotPassword: function(email) {
-    return axios.post('/api/forgotpassword', {email});
+    let body = {email};
+    return axios.post('/api/forgotpassword', body);
   },
   logout: function() {
     return axios.post('/api/logout');
   },
   setPhoto: function(displayName, url) {
-    return axios.post('/api/setphoto', {displayName, url});
+    let body = {displayName, url};
+    return axios.post('/api/setphoto', body);
   },
   getPledges: function() {
     return axios.post('/api/pledges');
@@ -29,13 +32,16 @@ export default {
     return axios.post('/api/actives');
   },
   getPledgeData: function(displayName) {
-    return axios.post('/api/pledgedata', {displayName});
+    let body = {displayName};
+    return axios.post('/api/pledgedata', body);
   },
   getPledgeMerits: function(pledgeName) {
-    return axios.post('/api/pledgemerits', {pledgeName});
+    let body = {pledgeName};
+    return axios.post('/api/pledgemerits', body);
   },
   getPledgeComplaints: function(pledgeName) {
-    return axios.post('/api/pledgecomplaints', {pledgeName});
+    let body = {pledgeName};
+    return axios.post('/api/pledgecomplaints', body);
   },
   // Merit Book
   merit: function(displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status) {
@@ -47,25 +53,32 @@ export default {
     return axios.post('/api/meritAsPledge', body);
   },
   removeMerit: function(displayName, merit) {
-    return axios.post('/api/removeMeritAsPledge', {displayName, merit});
+    let body = {displayName, merit};
+    return axios.post('/api/removeMeritAsPledge', body);
   },
   getMeritsRemaining: function(displayName, pledgeName) {
-    return axios.post('/api/meritsRemaining', {displayName, pledgeName});
+    let body = {displayName, pledgeName};
+    return axios.post('/api/meritsRemaining', body);
   },
   getPledgesForMerit: function(displayName) {
-    return axios.post('/api/pledgesForMerit', {displayName});
+    let body = {displayName};
+    return axios.post('/api/pledgesForMerit', body);
   },
   getActivesForMerit: function(displayName) {
-    return axios.post('/api/activesForMerit', {displayName});
+    let body = {displayName};
+    return axios.post('/api/activesForMerit', body);
   },
   getAlumniForMerit: function(displayName) {
-    return axios.post('/api/alumniForMerit', {displayName});
+    let body = {displayName};
+    return axios.post('/api/alumniForMerit', body);
   },
   getChalkboardsForMerit: function(fullName) {
-    return axios.post('/api/chalkboardsForMerit', {fullName});
+    let body = {fullName};
+    return axios.post('/api/chalkboardsForMerit', body);
   },
   getPbros: function(displayName) {
-    return axios.post('/api/getPbros', {displayName});
+    let body = {displayName};
+    return axios.post('/api/getPbros', body);
   },
   // Chalkboards
   createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount) {
@@ -73,85 +86,109 @@ export default {
     return axios.post('/api/createchalkboard', body);
   },
   editChalkboard: function(displayName, chalkboard, description, date, time, location, timeCommitment, amount) {
-    return axios.post('/api/editchalkboard', {displayName, chalkboard, description, date, time, location, timeCommitment, amount});
+    let body = {displayName, chalkboard, description, date, time, location, timeCommitment, amount};
+    return axios.post('/api/editchalkboard', body);
   },
   editChalkboardMobile: function(displayName, chalkboard, field, value) {
-    return axios.post('/api/editchalkboardmobile', {displayName, chalkboard, field, value});
+    let body = {displayName, chalkboard, field, value};
+    return axios.post('/api/editchalkboardmobile', body);
   },
   joinChalkboard: function(name, photoURL, chalkboard) {
-    return axios.post('/api/joinchalkboard', {name, photoURL, chalkboard});
+    let body = {name, photoURL, chalkboard};
+    return axios.post('/api/joinchalkboard', body);
   },
   removeChalkboard: function(displayName, chalkboard) {
-    return axios.post('/api/removechalkboard', {displayName, chalkboard});
+    let body = {displayName, chalkboard};
+    return axios.post('/api/removechalkboard', body);
   },
   leaveChalkboard: function(name, chalkboard) {
-    return axios.post('/api/leavechalkboard', {name, chalkboard});
+    let body = {name, chalkboard};
+    return axios.post('/api/leavechalkboard', body);
   },
   getChalkboardInfo: function(title) {
-    return axios.post('/api/getchalkboardinfo', {title});
+    let body = {title};
+    return axios.post('/api/getchalkboardinfo', body);
   },
   getAttendees: function(chalkboard) {
-    return axios.post('/api/getattendees', {chalkboard});
+    let body = {chalkboard};
+    return axios.post('/api/getattendees', body);
   },
   // Complaints
   complain: function(complaint, status) {
-    return axios.post('/api/complain', {complaint, status});
+    let body = {complaint, status};
+    return axios.post('/api/complain', body);
   },
   removeComplaint: function(complaint) {
-    return axios.post('/api/removecomplaint', {complaint});
+    let body = {complaint};
+    return axios.post('/api/removecomplaint', body);
   },
   approveComplaint: function(complaint) {
-    return axios.post('/api/approvecomplaint', {complaint});
+    let body = {complaint};
+    return axios.post('/api/approvecomplaint', body);
   },
   getPledgesForComplaints: function() {
     return axios.post('/api/pledgesForComplaints');
   },
   // Notification Messaging
   saveMessagingToken: function(displayName, token) {
-    return axios.post('/api/savemessagetoken', {displayName, token});
+    let body = {displayName, token};
+    return axios.post('/api/savemessagetoken', body);
   },
   sendActiveMeritNotification: function(activeName, pledges, amount) {
-    return axios.post('/api/sendActiveMeritNotification', {activeName, pledges, amount});
+    let body = {activeName, pledges, amount};
+    return axios.post('/api/sendActiveMeritNotification', body);
   },
   sendPledgeMeritNotification: function(pledgeName, actives, amount) {
-    return axios.post('/api/sendPledgeMeritNotification', {pledgeName, actives, amount});
+    let body = {pledgeName, actives, amount};
+    return axios.post('/api/sendPledgeMeritNotification', body);
   },
   sendCreatedChalkboardNotification: function(chalkboardTitle) {
-    return axios.post('/api/sendCreatedChalkboardNotification', {chalkboardTitle});
+    let body = {chalkboardTitle};
+    return axios.post('/api/sendCreatedChalkboardNotification', body);
   },
   sendEditedChalkboardNotification: function(chalkboard) {
-    return axios.post('/api/sendEditedChalkboardNotification', {chalkboard});
+    let body = {chalkboard};
+    return axios.post('/api/sendEditedChalkboardNotification', body);
   },
   sendJoinedChalkboardNotification: function(name, chalkboard) {
-    return axios.post('/api/sendJoinedChalkboardNotification', {name, chalkboard});
+    let body = {name, chalkboard};
+    return axios.post('/api/sendJoinedChalkboardNotification', body);
   },
   sendLeftChalkboardNotification: function(name, chalkboard) {
-    return axios.post('/api/sendLeftChalkboardNotification', {name, chalkboard});
+    let body = {name, chalkboard};
+    return axios.post('/api/sendLeftChalkboardNotification', body);
   },
   sendPendingComplaintNotification: function(complaint) {
-    return axios.post('/api/sendPendingComplaintNotification', {complaint});
+    let body = {complaint};
+    return axios.post('/api/sendPendingComplaintNotification', body);
   },
   sendApprovedComplaintNotification: function(complaint) {
-    return axios.post('/api/sendApprovedComplaintNotification', {complaint});
+    let body = {complaint};
+    return axios.post('/api/sendApprovedComplaintNotification', body);
   },
   // Delibs App
   updateInteraction: function(displayName, rusheeName, interacted, totalInteractions) {
-    return axios.post('/api/updateinteraction', {displayName, rusheeName, interacted, totalInteractions});
+    let body = {displayName, rusheeName, interacted, totalInteractions};
+    return axios.post('/api/updateinteraction', body);
   },
   startVote: function(rusheeName) {
-    return axios.post('/api/startvote', {rusheeName});
+    let body = {rusheeName};
+    return axios.post('/api/startvote', body);
   },
   endVote: function() {
     return axios.post('/api/endvote');
   },
   voteForRushee: function(displayName, rushee, vote) {
-    return axios.post('/api/vote', {displayName, rushee, vote});
+    let body = {displayName, rushee, vote};
+    return axios.post('/api/vote', body);
   },
   // Data App
   getPhotos: function(data) {
-    return axios.post('/api/getphotos', {data});
+    let body = {data};
+    return axios.post('/api/getphotos', body);
   },
   getMyData: function(fullName) {
-    return axios.post('/api/getmydata', {fullName});
+    let body = {fullName};
+    return axios.post('/api/getmydata', body);
   }
 };

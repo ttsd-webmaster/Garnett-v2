@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 
 export default class Complaints extends Component {
   render() {
-    let status = this.props.state.status;
+    const { status } = this.props.state;
     
     return (
       status === 'pledge' ? (

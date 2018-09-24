@@ -33,31 +33,35 @@ export default class EditChalkboardDialog extends Component {
 
   // Updates the state based on the selected chalkboard
   componentWillReceiveProps(nextProps) {
-    let year = new Date().getFullYear();
-    let date = new Date(nextProps.chalkboard.date);
+    const description = nextProps.chalkboard.description;
+    const location = nextProps.chalkboard.location;
+    const timeCommitment = nextProps.chalkboard.timeCommitment;
+    const amount = nextProps.chalkboard.amount;
+    const year = new Date().getFullYear();
+    const date = new Date(nextProps.chalkboard.date);
     date.setYear(year);
-    let time = new Date();
-    let parsedTime = nextProps.chalkboard.time;
+    const time = new Date();
+    const parsedTime = nextProps.chalkboard.time;
     time.setHours(parsedTime.substr(0, parsedTime.indexOf(":")));
     time.setMinutes(parsedTime.substr(parsedTime.indexOf(":") + 1, parsedTime.indexOf(":") + 1));
 
     this.setState({
-      description: nextProps.chalkboard.description,
-      date: date,
-      time: time,
-      location: nextProps.chalkboard.location,
-      timeCommitment: nextProps.chalkboard.timeCommitment,
-      amount: nextProps.chalkboard.amount
+      description,
+      date,
+      time,
+      location,
+      timeCommitment,
+      amount
     });
   }
 
   editChalkboard = () => {
-    let description = this.state.description;
-    let date = this.state.date;
-    let time = this.state.time;
-    let location = this.state.location;
-    let timeCommitment = this.state.timeCommitment;
-    let amount = this.state.amount;
+    const { description,
+            date,
+            time,
+            location,
+            timeCommitment,
+            amount } = this.state;
     let descriptionValidation = true;
     let dateValidation = true;
     let timeValidation = true;
@@ -87,18 +91,17 @@ export default class EditChalkboardDialog extends Component {
         }
 
         this.setState({
-          descriptionValidation: descriptionValidation,
-          dateValidation: dateValidation,
-          timeValidation: timeValidation,
-          locationValidation: locationValidation,
-          timeCommitmentValidation: timeCommitmentValidation
+          descriptionValidation,
+          dateValidation,
+          timeValidation,
+          locationValidation,
+          timeCommitmentValidation
         });
       }
       else {
-        let displayName = this.props.state.displayName;
-        let chalkboard = this.props.chalkboard;
-        let parsedDate = this.formatDate(date);
-        let parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const { displayName, chalkboard } = this.props.state;
+        const parsedDate = this.formatDate(date);
+        const parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
         API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location, timeCommitment, amount)
         .then((res) => {
@@ -126,12 +129,12 @@ export default class EditChalkboardDialog extends Component {
   }
 
   disableDates(date) {
-    let today = new Date();
+    const today = new Date();
     return date < today;
   }
 
   handleChange = (label, value) => {
-    let validationLabel = [label] + 'Validation';
+    const validationLabel = [label] + 'Validation';
 
     this.setState({
       [label]: value,

@@ -71,7 +71,7 @@ export default class RusheeProfile extends Component {
   }
 
   componentWillMount() {
-    let rusheeName = this.props.history.location.state;
+    const rusheeName = this.props.history.location.state;
 
     if (!this.props.history.location.state) {
       this.props.history.push('/delibs-app');
@@ -80,27 +80,25 @@ export default class RusheeProfile extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let firebase = window.firebase;
-        let rusheesRef = firebase.database().ref('/rushees/' + rusheeName);
+        const { firebase } = window;
+        const rusheesRef = firebase.database().ref('/rushees/' + rusheeName);
 
         rusheesRef.on('value', (snapshot) => {
-          this.setState({
-            rushee: snapshot.val()
-          });
+          const rushee = snapshot.val();
+
+          this.setState({ rushee });
         });
       });
     }
   }
 
   startVote = () => {
-    let rusheeName = this.state.rushee.name;
+    const rusheeName = this.state.rushee.name;
 
     API.startVote(rusheeName)
     .then((res) => {
       console.log('Started Vote');
-      this.setState({
-        openEndVote: true
-      });
+      this.setState({ openEndVote: true });
     })
     .catch((error) => {
       console.log('Error: ', error);
@@ -108,9 +106,7 @@ export default class RusheeProfile extends Component {
   }
 
   closeEndVote = () => {
-    this.setState({
-      openEndVote: false
-    });
+    this.setState({ openEndVote: false });
   }
 
   viewResource = (resource) => {
@@ -133,7 +129,7 @@ export default class RusheeProfile extends Component {
     this.setState({
       sheetOpen: false,
       openResource: true,
-      resource: resource
+      resource
     });
   }
 
@@ -142,9 +138,7 @@ export default class RusheeProfile extends Component {
       window.onpopstate = () => {};
     }
 
-    this.setState({
-      openResource: false
-    });
+    this.setState({ openResource: false });
   }
 
   viewInterview = () => {
@@ -184,9 +178,7 @@ export default class RusheeProfile extends Component {
       window.onpopstate = () => {};
     }
 
-    this.setState({
-      openInterview: false
-    });
+    this.setState({ openInterview: false });
   }
 
   render() {

@@ -31,7 +31,7 @@ export default class Login extends Component {
       signPassword: '',
       firstName: '',
       lastName: '',
-      class: '',
+      className: '',
       major: '',
       year: '',
       phone: '',
@@ -140,22 +140,21 @@ export default class Login extends Component {
   }
 
   login = () => {
-    let email = this.state.signEmail;
-    let password = this.state.signPassword;
-    let emailValidation = true;
-    let passwordValidation = true;
+    const { signEmail, signPassword } = this.state;
+    let signEmailValidation = true;
+    let signPasswordValidation = true;
 
-    if (!email || !validateEmail(email) || !password) {
-      if (!email || !validateEmail(email)) {
-        emailValidation = false;
+    if (!signEmail || !validateEmail(signEmail) || !signPassword) {
+      if (!signEmail || !validateEmail(signEmail)) {
+        signEmailValidation = false;
       }
-      if (!password) {
-        passwordValidation = false;
+      if (!signPassword) {
+        signPasswordValidation = false;
       }
 
       this.setState({
-        signEmailValidation: emailValidation,
-        signPasswordValidation: passwordValidation,
+        signEmailValidation,
+        signPasswordValidation
       });
     }
     else {
@@ -170,18 +169,18 @@ export default class Login extends Component {
 
         loadFirebase('auth')
         .then(() => {
-          let firebase= window.firebase;
+          const firebase= window.firebase;
 
-          firebase.auth().signInWithEmailAndPassword(email, password)
+          firebase.auth().signInWithEmailAndPassword(signEmail, signPassword)
           .then((user) => {
             if (user && user.emailVerified) {
               loadFirebase('database')
               .then(() => {
-                const fullName = user.displayName;
-                let userRef = firebase.database().ref('/users/' + fullName);
+                const { displayName } = user;
+                const userRef = firebase.database().ref('/users/' + displayName);
 
                 userRef.once('value', (snapshot) => {
-                  let user = snapshot.val();
+                  const user = snapshot.val();
                   localStorage.setItem('data', JSON.stringify(user));
 
                   this.props.loginCallBack(user);
@@ -189,21 +188,17 @@ export default class Login extends Component {
               });
             }
             else {
-              let message = 'Email is not verified.';
+              const message = 'Email is not verified.';
 
-              this.setState({
-                openCompletingTask: false
-              });
+              this.setState({ openCompletingTask: false });
               this.handleRequestOpen(message);
             }
           })
           .catch((error) => {
             console.log('Error: ', error);
-            let message = 'Email or password is incorrect.';
+            const message = 'Email or password is incorrect.';
 
-            this.setState({
-              openCompletingTask: false
-            });
+            this.setState({ openCompletingTask: false });
             this.handleRequestOpen(message);
           });
         });
@@ -212,16 +207,16 @@ export default class Login extends Component {
   }
 
   signUp = () => {
-    let firstName = this.state.firstName;
-    let lastName = this.state.lastName;
-    let className = this.state.class;
-    let majorName = this.state.major;
-    let year = this.state.year;
-    let phone = this.state.phone;
-    let email = this.state.email;
-    let code = this.state.code.toLowerCase();
-    let password = this.state.password;
-    let confirmation = this.state.confirmation;
+    const { firstName,
+            lastName,
+            className,
+            major,
+            year,
+            phone,
+            email,
+            password,
+            confirmation } = this.state;
+    const code = this.state.code.toLowerCase();
     let firstNameValidation = true;
     let lastNameValidation = true;
     let classValidation = true;
@@ -233,7 +228,7 @@ export default class Login extends Component {
     let passwordValidation = true;
     let confirmationValidation = true;
 
-    if (!firstName || !lastName || !className || !majorName || !year || !validateEmail(email) ||
+    if (!firstName || !lastName || !className || !major || !year || !validateEmail(email) ||
         phone.length !== 10 || !code || (code !== activeCode && code !== pledgeCode) || 
         password.length < 8 || confirmation !== password) {
       if (!firstName) {
@@ -245,7 +240,7 @@ export default class Login extends Component {
       if (!className) {
         classValidation = false;
       }
-      if (!majorName) {
+      if (!major) {
         majorValidation = false;
       }
       if (!year) {
@@ -268,23 +263,23 @@ export default class Login extends Component {
       }
       
       this.setState({
-        firstNameValidation: firstNameValidation,
-        lastNameValidation: lastNameValidation,
-        classValidation: classValidation,
-        majorValidation: majorValidation,
-        yearValidation: yearValidation,
-        phoneValidation: phoneValidation,
-        emailValidation: emailValidation,
-        codeValidation: codeValidation,
-        passwordValidation: passwordValidation,
-        confirmationValidation: confirmationValidation,
+        firstNameValidation,
+        lastNameValidation,
+        classValidation,
+        majorValidation,
+        yearValidation,
+        phoneValidation,
+        emailValidation,
+        codeValidation,
+        passwordValidation,
+        confirmationValidation
       });
     }
     else {
-      API.signUp(email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode)
+      API.signUp(email, password, firstName, lastName, className, major, year, phone, code, pledgeCode)
       .then(res => {
         if (res.status === 200) {
-          let message = res.data;
+          const message = res.data;
 
           document.getElementById('sign-in').click();
           this.handleRequestOpen(message);
@@ -292,7 +287,7 @@ export default class Login extends Component {
           this.setState({
             firstName: '',
             lastName: '',
-            class: '',
+            className: '',
             major: '',
             year: '',
             phone: '',
@@ -304,7 +299,7 @@ export default class Login extends Component {
         }
       })
       .catch((error) => {
-        let message = error.response.data;
+        const message = error.response.data;
 
         console.log(message);
 
@@ -314,23 +309,23 @@ export default class Login extends Component {
   }
 
   forgotPassword = () => {
-    let email = this.state.forgotEmail;
+    const { forgotEmail } = this.state;
 
-    if (!email || !validateEmail(email)) {
+    if (!forgotEmail || !validateEmail(forgotEmail)) {
       this.setState({
         forgotEmailValidation: false
       });
     }
     else {
-      API.forgotPassword(email)
+      API.forgotPassword(forgotEmail)
       .then(res => {
-        let message = res.data;
+        const message = res.data;
 
         document.getElementById('sign-in').click();
         this.handleRequestOpen(message);
       })
       .catch(error => {
-        let message = error.response.data;
+        const message = error.response.data;
 
         this.handleRequestOpen(message);
       });
@@ -338,7 +333,7 @@ export default class Login extends Component {
   }
 
   handleChange = (label, newValue) => {
-    let validationLabel = [label] + 'Validation';
+    const validationLabel = [label] + 'Validation';
 
     this.setState({
       [label]: newValue,
@@ -348,15 +343,13 @@ export default class Login extends Component {
 
   handleRequestOpen = (message) => {
     this.setState({
-      open: true,
-      message: message
+      message,
+      open: true
     });
   }
 
   handleRequestClose = () => {
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
   }
 
   render() {
@@ -403,7 +396,7 @@ export default class Login extends Component {
         <SignUp
           firstName={this.state.firstName}
           lastName={this.state.lastName}
-          class={this.state.class}
+          class={this.state.className}
           major={this.state.major}
           year={this.state.year}
           phone={this.state.phone}

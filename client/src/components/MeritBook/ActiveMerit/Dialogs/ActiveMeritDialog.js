@@ -38,20 +38,16 @@ export default class ActiveMeritDialog extends Component {
     if (navigator.onLine && this.props !== nextProps) {
       API.getPledgesForMerit(nextProps.state.displayName)
       .then((res) => {
-        let pledges = res.data;
+        const pledges = res.data;
 
-        this.setState({
-          pledges: pledges
-        });
+        this.setState({ pledges });
       });
     }
   }
 
   merit = (type) => {
-    let pledges = this.state.selectedPledges;
-    let description = this.state.description;
-    let amount = this.state.amount;
-    let photoURL = this.props.state.photoURL;
+    let { selectedPledges, description, amount } = this.state;
+    const { photoURL } = this.props.state;
     let pledgeValidation = true;
     let descriptionValidation = true;
 
@@ -59,8 +55,8 @@ export default class ActiveMeritDialog extends Component {
       description = description.title;
     }
 
-    if (pledges.length === 0 || !description || description.length > 50 || amount === 0) {
-      if (pledges.length === 0) {
+    if (selectedPledges.length === 0 || !description || description.length > 50 || amount === 0) {
+      if (selectedPledges.length === 0) {
         pledgeValidation = false;
       }
       if (!description || description.length > 50) {
@@ -68,17 +64,15 @@ export default class ActiveMeritDialog extends Component {
       }
 
       this.setState({
-        pledgeValidation: pledgeValidation,
-        descriptionValidation: descriptionValidation
+        pledgeValidation,
+        descriptionValidation
       });
     }
     else {
-      let displayName = this.props.state.displayName;
-      let activeName = this.props.state.name;
-      let status = this.props.state.status;
-      let isChalkboard = this.state.isChalkboard;
+      const { displayName, name, status } = this.props.state;
+      const { isChalkboard } = this.state;
       let action = 'Merited';
-      let date = getDate();
+      const date = getDate();
 
       if (type === 'demerit') {
         amount = -amount;
@@ -93,7 +87,7 @@ export default class ActiveMeritDialog extends Component {
         completingTaskMessage: 'Meriting pledges...'
       });
 
-      API.merit(displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status)
+      API.merit(displayName, name, selectedPledges, description, amount, photoURL, date, isChalkboard, status)
       .then(res => {
         console.log(res);
         this.handleClose();
@@ -101,7 +95,7 @@ export default class ActiveMeritDialog extends Component {
           openCompletingTask: false
         });
 
-        API.sendActiveMeritNotification(activeName, pledges, amount)
+        API.sendActiveMeritNotification(name, selectedPledges, amount)
         .then(res => {
           this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
         })
@@ -109,7 +103,7 @@ export default class ActiveMeritDialog extends Component {
       })
       .catch((error) => {
         console.log(error)
-        let pledge = error.response.data;
+        const pledge = error.response.data;
 
         console.log('Not enough merits for ', pledge);
         this.handleClose();
@@ -122,64 +116,68 @@ export default class ActiveMeritDialog extends Component {
   }
 
   handleChange = (label, newValue) => {
-    let validationLabel = [label] + 'Validation';
+    const validationLabel = [label] + 'Validation';
     let value = newValue;
+    let { amount } = this.state;
 
-    if (label === 'amount') {
-      value = parseInt(newValue, 10)
-    }
-    else if (label === 'isChalkboard') {  
-      let amount = this.state.amount;
+    switch (label) {
+      case 'amount':
+        value = parseInt(newValue, 10);
+        break;
+      case 'isChalkboard':
+        let maxAmount;
 
-      if (newValue === true) {
-        let fullName = this.props.state.name;
+        if (newValue === true) {
+          const { name } = this.props.state;
 
-        if (this.props.state.status === 'pipm') {
-          let maxAmount = 100;
+          if (this.props.state.status === 'pipm') {
+            maxAmount = 100;
+
+            if (amount > maxAmount) {
+              amount = maxAmount;
+              this.setState({ amount });
+            }
+          }
+
+          API.getChalkboardsForMerit(name)
+          .then((res) => {
+            let chalkboards = res.data;
+
+            this.setState({
+              chalkboards,
+              description: ''
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+        }
+        else {
+          maxAmount = 35;
+
+          if (this.props.state.status === 'alumni') {
+            maxAmount = 50;
+          }
 
           if (amount > maxAmount) {
-            this.setState({
-              amount: maxAmount
-            });
+            amount = maxAmount;
           }
-        }
-
-        API.getChalkboardsForMerit(fullName)
-        .then((res) => {
-          let chalkboards = res.data;
 
           this.setState({
-            chalkboards: chalkboards,
+            amount,
             description: ''
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-      }
-      else {
-        let maxAmount = 35;
-
-        if (this.props.state.status === 'alumni') {
-          maxAmount = 50;
         }
+        break;
+      case 'description':
+        if (this.state.isChalkboard) {
+          value = newValue;
+          amount = newValue.amount;
 
-        if (amount > maxAmount) {
-          amount = maxAmount;
+          this.setState({ amount });
         }
-
-        this.setState({
-          description: '',
-          amount: amount
-        });
-      }
-    }
-    else if (label === 'description' && this.state.isChalkboard) {
-      value = newValue;
-
-      this.setState({
-        amount: newValue.amount
-      });
+        break;
+      default:
     }
 
     this.setState({

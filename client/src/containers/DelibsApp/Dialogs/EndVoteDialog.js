@@ -17,21 +17,20 @@ export default class EndVoteDialog extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let rusheeName = this.props.rushee.replace(/ /g,'');
-        let firebase = window.firebase;
-        let rusheeRef = firebase.database().ref('/rushees/' + rusheeName);
+        const rusheeName = this.props.rushee.replace(/ /g,'');
+        const { firebase } = window;
+        const rusheeRef = firebase.database().ref('/rushees/' + rusheeName);
 
         rusheeRef.on('value', (snapshot) => {
-          this.setState({
-            totalVotes: snapshot.val().totalVotes
-          });
+          const totalVotes = snapshot.val().totalVotes;
+          this.setState({ totalVotes });
         });
       });
     }
   }
 
   endVote = () => {
-    let rushee = this.props.rushee;
+    const { rushee } = this.props;
     
     API.endVote()
     .then((res) => {

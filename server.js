@@ -1492,14 +1492,16 @@ app.post('/api/vote', function(req, res) {
         rusheeRef.update({
           totalVotes: rushee.val().totalVotes + 1
         });
+        activeRef.update({
+          voted: true
+        });
       }
 
       rusheeRef.update({
         votes: votes
       });
       activeRef.update({
-        vote: req.body.vote,
-        voted: true
+        vote: req.body.vote
       });
 
       res.sendStatus(200);

@@ -47,23 +47,25 @@ export default function PastComplaints(props) {
               </div>
             }
           >
-            <Divider className="garnett-divider large" inset={true} />
-            <ListItem
-              className="garnett-list-item large"
-              leftAvatar={<Avatar className="garnett-image large" size={70} src={complaint.photoURL} />}
-              primaryText={
-                <p className="garnett-name"> {complaint.pledgeName} </p>
-              }
-              secondaryText={
-                <p className="garnett-description">
-                  {complaint.description}
-                </p>
-              }
-              secondaryTextLines={2}
-            >
-              <p className="garnett-date"> {complaint.date} </p>
-            </ListItem>
-            <Divider className="garnett-divider large" inset={true} />
+            <div>
+              <Divider className="garnett-divider large" inset={true} />
+              <ListItem
+                className="garnett-list-item large"
+                leftAvatar={<Avatar className="garnett-image large" size={70} src={complaint.photoURL} />}
+                primaryText={
+                  <p className="garnett-name"> {complaint.pledgeName} </p>
+                }
+                secondaryText={
+                  <p className="garnett-description">
+                    {complaint.description}
+                  </p>
+                }
+                secondaryTextLines={2}
+              >
+                <p className="garnett-date"> {complaint.date} </p>
+              </ListItem>
+              <Divider className="garnett-divider large" inset={true} />
+            </div>
           </LazyLoad>
         ))}
       </List>

@@ -1,14 +1,6 @@
-const tabStyle = {
-  default: {
-    color: 'var(--secondary-light)'
-  },
-  active: {
-    color: 'var(--primary-color)'
-  }
-};
-
+// Used to get tab color for Pledge App
 function getTabStyle(isActive) {
-  return isActive ? tabStyle.active : tabStyle.default
+  return {color: isActive ? 'var(--primary-color)' : 'var(--secondary-light)'};
 }
 
 function isMobileDevice() {

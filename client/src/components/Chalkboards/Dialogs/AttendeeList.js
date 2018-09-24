@@ -18,9 +18,9 @@ export default class AttendeeList extends Component {
     if (navigator.onLine) {
       API.getAttendees(this.props.chalkboard)
       .then((res) => {
-        this.setState({
-          attendees: res.data
-        });
+        const attendees = res.data;
+
+        this.setState({ attendees });
       })
       .catch((error) => {
         console.log('Error: ', error);
