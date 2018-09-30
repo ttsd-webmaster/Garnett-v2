@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const http = require('http');
 const path = require('path');
 const shrinkRay = require('shrink-ray');
 const app = express();
@@ -9,8 +8,8 @@ const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
 require('@firebase/messaging');
 const admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKey.json");
-var port = process.env.PORT || 4000;
+const serviceAccount = require("./serviceAccountKey.json");
+const port = process.env.PORT || 4000;
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
 require('dotenv').config();
@@ -23,20 +22,20 @@ firebase.initializeApp({
   projectId: "garnett-42475",
   storageBucket: "garnett-42475.appspot.com",
   messagingSenderId: "741733387760"
-})
+});
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://garnett-42475.firebaseio.com",
   projectId: "garnett-42475"
-})
+});
 
 // Redirect all HTTP traffic to HTTPS
 function ensureSecure(req, res, next){
   if (req.headers["x-forwarded-proto"] === "https") {
     // OK, continue
     return next();
-  };
+  }
   res.redirect('https://'+ req.hostname + req.url);
 };
 
@@ -57,8 +56,8 @@ app.get('*', (req, res) => {
 // Retrieving Authentication Status Route
 app.post('/api', function(req, res) {
   // Send back user's info to the client
-  let fullName = req.body.user.displayName;
-  let userRef = admin.database().ref('/users/' + fullName);
+  const fullName = req.body.user.displayName;
+  const userRef = admin.database().ref('/users/' + fullName);
   console.log(fullName)
 
   userRef.once('value', (user) => {
@@ -81,13 +80,13 @@ app.post('/api/getfirebasedata', function(req, res) {
 
 // Signup Route
 app.post('/api/signup', function(req, res) {
-  let usersRef = admin.database().ref('/users');
+  const usersRef = admin.database().ref('/users');
   let firstName = req.body.firstName.replace(/ /g,'');
   let lastName = req.body.lastName.replace(/ /g,'');
   firstName = firstName[0].toUpperCase() + firstName.substr(1);
   lastName = lastName[0].toUpperCase() + lastName.substr(1);
-  let fullName = firstName + lastName;
-  let checkRef = admin.database().ref('/users/' + fullName);
+  const fullName = firstName + lastName;
+  const checkRef = admin.database().ref('/users/' + fullName);
 
   checkRef.once('value', (snapshot) => {
     if (req.body.year === 'Alumni') {
@@ -100,7 +99,7 @@ app.post('/api/signup', function(req, res) {
               displayName: fullName
             })
             .then(function() {
-              let userRef = usersRef.child(user.displayName);
+              const userRef = usersRef.child(user.displayName);
 
               userRef.update({
                 firstName: req.body.firstName.trim(),
@@ -116,7 +115,7 @@ app.post('/api/signup', function(req, res) {
               usersRef.once('value', (users) => {
                 users.forEach((child) => {
                   if (child.val().status === 'pledge') {
-                    let pledgeName = child.key;
+                    const pledgeName = child.key;
 
                     userRef.child('/Pledges/' + pledgeName).set({
                       merits: 200
@@ -132,8 +131,8 @@ app.post('/api/signup', function(req, res) {
             })
             .catch(function(error) {
               // Handle errors here.
-              let errorCode = error.code;
-              let errorMessage = error.message;
+              const errorCode = error.code;
+              const errorMessage = error.message;
 
               console.log(errorCode, errorMessage);
               res.status(400).send('Something went wrong on the server.');
@@ -142,8 +141,8 @@ app.post('/api/signup', function(req, res) {
         })
         .catch(function(error) {
           // Handle errors here.
-          let errorCode = error.code;
-          let errorMessage = error.message;
+          const errorCode = error.code;
+          const errorMessage = error.message;
 
           console.log(errorCode, errorMessage);
           res.status(400).send('Email has already been taken.');
@@ -166,7 +165,7 @@ app.post('/api/signup', function(req, res) {
               displayName: fullName
             })
             .then(function() {
-              let userRef = usersRef.child(user.displayName);
+              const userRef = usersRef.child(user.displayName);
 
               userRef.set({
                 firstName: req.body.firstName.trim(),
@@ -187,7 +186,7 @@ app.post('/api/signup', function(req, res) {
 
                 usersRef.once('value', (users) => {
                   users.forEach((child) => {
-                    let pledgeName = user.displayName;
+                    const pledgeName = user.displayName;
                     
                     if (child.val().status === 'alumni') {
                       child.ref.child('/Pledges/' + pledgeName).set({
@@ -215,7 +214,7 @@ app.post('/api/signup', function(req, res) {
                 usersRef.once('value', (users) => {
                   users.forEach((child) => {
                     if (child.val().status === 'pledge') {
-                      let pledgeName = child.key;
+                      const pledgeName = child.key;
 
                       userRef.child('/Pledges/' + pledgeName).set({
                         merits: 100
@@ -232,8 +231,8 @@ app.post('/api/signup', function(req, res) {
             })
             .catch(function(error) {
               // Handle errors here.
-              let errorCode = error.code;
-              let errorMessage = error.message;
+              const errorCode = error.code;
+              const errorMessage = error.message;
 
               console.log(errorCode, errorMessage);
               res.status(400).send('Something went wrong on the server.');
@@ -242,8 +241,8 @@ app.post('/api/signup', function(req, res) {
         })
         .catch(function(error) {
           // Handle errors here.
-          let errorCode = error.code;
-          let errorMessage = error.message;
+          const errorCode = error.code;
+          const errorMessage = error.message;
 
           console.log(errorCode, errorMessage);
           res.status(400).send('Email has already been taken.');
@@ -278,8 +277,8 @@ app.post('/api/logout', function(req, res) {
 
 // Sets the user photo
 app.post('/api/setphoto', function(req, res) {
-  let fullName = req.body.displayName;
-  let userRef = admin.database().ref('/users/' + fullName);
+  const fullName = req.body.displayName;
+  const userRef = admin.database().ref('/users/' + fullName);
 
   userRef.update({
     photoURL: req.body.url
@@ -293,7 +292,7 @@ app.post('/api/setphoto', function(req, res) {
 
 // Query for pledges data
 app.post('/api/pledges', function(req, res) {
-  let usersRef = admin.database().ref('/users');
+  const usersRef = admin.database().ref('/users');
   let pledgeArray = [];
 
   usersRef.once('value', (users) => {
@@ -314,7 +313,7 @@ app.post('/api/pledges', function(req, res) {
 
 // Query for active data
 app.post('/api/actives', function(req, res) {
-  let usersRef = admin.database().ref('/users');
+  const usersRef = admin.database().ref('/users');
   let activeArray = [];
 
   usersRef.once('value', (users) => {
@@ -335,14 +334,13 @@ app.post('/api/actives', function(req, res) {
 
 // Query for merit data on Pledge App
 app.post('/api/pledgedata', function(req, res) {
-  let fullName = req.body.displayName;
-  let userRef = admin.database().ref('/users/' + fullName);
-  let totalMerits;
+  const fullName = req.body.displayName;
+  const userRef = admin.database().ref('/users/' + fullName);
   let meritArray = [];
   let complaintsArray = [];
 
   userRef.once('value', (user) => {
-    totalMerits = user.val().totalMerits;
+    const totalMerits = user.val().totalMerits;
 
     if (user.val().Merits) {
       meritArray = Object.keys(user.val().Merits).map(function(key) {
@@ -371,8 +369,8 @@ app.post('/api/pledgedata', function(req, res) {
 
 // Query for the specified pledge's merits
 app.post('/api/pledgemerits', function(req, res) {
-  let pledgeName = req.body.pledgeName;
-  let meritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
+  const pledgeName = req.body.pledgeName;
+  const meritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
   let merits = [];
 
   meritsRef.once('value', (snapshot) => {
@@ -390,8 +388,8 @@ app.post('/api/pledgemerits', function(req, res) {
 
 // Query for the specified pledge's complaints
 app.post('/api/pledgecomplaints', function(req, res) {
-  let pledgeName = req.body.pledgeName;
-  let complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+  const pledgeName = req.body.pledgeName;
+  const complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
   let complaints = [];
 
   complaintsRef.once('value', (snapshot) => {
@@ -410,25 +408,25 @@ app.post('/api/pledgecomplaints', function(req, res) {
 // Post merit data as active
 app.post('/api/merit', function(req, res) {
   let counter = 0;
-  let pledges = req.body.pledges;
+  const pledges = req.body.pledges;
 
   pledges.forEach((child) => {
-    let fullName = req.body.displayName;
-    let activeRef = admin.database().ref('/users/' + fullName + '/Pledges/' + child.value);
-    let pledgeRef = admin.database().ref('/users/' + child.value);
+    const fullName = req.body.displayName;
+    const activeRef = admin.database().ref('/users/' + fullName + '/Pledges/' + child.value);
+    const pledgeRef = admin.database().ref('/users/' + child.value);
 
     activeRef.once('value', (active) => {
       if (req.body.status !== 'pipm' && !req.body.isChalkboard) {
-        let remainingMerits = active.val().merits;
+        const remainingMerits = active.val().merits - req.body.amount;
 
         if (req.body.amount > 0 && 
-            remainingMerits - req.body.amount < 0 && 
+            remainingMerits < 0 && 
             !res.headersSent) {
           res.sendStatus(400).send(child.label);
         }
         else {
           activeRef.update({
-            merits: remainingMerits - req.body.amount
+            merits: remainingMerits
           });
         }
       }
@@ -459,27 +457,27 @@ app.post('/api/merit', function(req, res) {
 // Post merit data as pledge
 app.post('/api/meritAsPledge', function(req, res) {
   let counter = 0;
-  let actives = req.body.actives;
-  let fullName = req.body.displayName;
-  let pledgeRef = admin.database().ref('/users/' + fullName);
+  const actives = req.body.actives;
+  const fullName = req.body.displayName;
+  const pledgeRef = admin.database().ref('/users/' + fullName);
 
   actives.forEach((child) => {
-    let activeRef = admin.database().ref('/users/' + child.value);
+    const activeRef = admin.database().ref('/users/' + child.value);
 
     activeRef.once('value', (active) => {
-      let remainingMerits = active.val().Pledges[fullName].merits;
-
       if (active.val().status !== 'pipm' && !req.body.isChalkboard) {
+        const remainingMerits = active.val().Pledges[fullName].merits - req.body.amount;
+
         if (req.body.amount > 0 && 
-            remainingMerits - req.body.amount < 0 && 
+            remainingMerits < 0 && 
             !res.headersSent) {
           res.sendStatus(400).send(child.label);
         }
         else {
-          let activePledgeRef = active.ref.child('/Pledges/' + fullName);
+          const activePledgeRef = active.ref.child('/Pledges/' + fullName);
 
           activePledgeRef.update({
-            merits: remainingMerits - req.body.amount
+            merits: remainingMerits
           });
         }
       }
@@ -509,10 +507,10 @@ app.post('/api/meritAsPledge', function(req, res) {
 
 // Removes merit as pledge
 app.post('/api/removeMeritAsPledge', function(req, res) {
-  let pledgeName = req.body.displayName;
-  let activeName = req.body.merit.name.replace(/ /g,'');
-  let pledgeRef = admin.database().ref('/users/' + pledgeName);
-  let activeRef = admin.database().ref('/users/' + activeName + '/Pledges/' + pledgeName);
+  const pledgeName = req.body.displayName;
+  const activeName = req.body.merit.name.replace(/ /g,'');
+  const pledgeRef = admin.database().ref('/users/' + pledgeName);
+  const activeRef = admin.database().ref('/users/' + activeName + '/Pledges/' + pledgeName);
 
   pledgeRef.once('value', (pledge) => {
     pledgeRef.update({
@@ -541,9 +539,9 @@ app.post('/api/removeMeritAsPledge', function(req, res) {
 
 // Get merits remaining for pledge
 app.post('/api/meritsRemaining', function(req, res) {
-  let displayName = req.body.displayName;
-  let pledgeName = req.body.pledgeName;
-  let pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
+  const displayName = req.body.displayName;
+  const pledgeName = req.body.pledgeName;
+  const pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
 
   pledgeRef.once('value', (active) => {
     res.json(active.val().merits);
@@ -552,8 +550,8 @@ app.post('/api/meritsRemaining', function(req, res) {
 
 // Gets all the pledges for meriting as active
 app.post('/api/pledgesForMerit', function(req, res) {
-  let displayName = req.body.displayName;
-  let pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
+  const displayName = req.body.displayName;
+  const pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
 
   pledgesRef.once('value', (snapshot) => {
     let pledges = [];
@@ -573,8 +571,8 @@ app.post('/api/pledgesForMerit', function(req, res) {
 
 // Gets all the actives for meriting as pledge
 app.post('/api/activesForMerit', function(req, res) {
-  let displayName = req.body.displayName;
-  let usersRef = admin.database().ref('/users');
+  const displayName = req.body.displayName;
+  const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (snapshot) => {
     let actives = [];
@@ -595,8 +593,8 @@ app.post('/api/activesForMerit', function(req, res) {
 
 // Gets all the alumni for meriting as pledge
 app.post('/api/alumniForMerit', function(req, res) {
-  let displayName = req.body.displayName;
-  let usersRef = admin.database().ref('/users');
+  const displayName = req.body.displayName;
+  const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (snapshot) => {
     let alumni = [];
@@ -617,12 +615,12 @@ app.post('/api/alumniForMerit', function(req, res) {
 
 // Gets all the chalkboards for merit
 app.post('/api/chalkboardsForMerit', function(req, res) {
-  let fullName = req.body.fullName;
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const fullName = req.body.fullName;
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (snapshot) => {
     let myChalkboards = [];
-    let chalkboards = Object.keys(snapshot.val()).map(function(key) {
+    const chalkboards = Object.keys(snapshot.val()).map(function(key) {
       return snapshot.val()[key];
     });
 
@@ -635,7 +633,7 @@ app.post('/api/chalkboardsForMerit', function(req, res) {
       }
       else {
         if (chalkboard.attendees) {
-          let attendees = Object.keys(chalkboard.attendees).map(function(key) {
+          const attendees = Object.keys(chalkboard.attendees).map(function(key) {
             return chalkboard.attendees[key];
           });
 
@@ -658,8 +656,8 @@ app.post('/api/chalkboardsForMerit', function(req, res) {
 // Get Pbros data for pledges
 app.post('/api/getPbros', function(req, res) {
   let pbros = [];
-  let displayName = req.body.displayName;
-  let usersRef = admin.database().ref('/users');
+  const displayName = req.body.displayName;
+  const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (users) => {
     users.forEach((user) => {
@@ -674,7 +672,7 @@ app.post('/api/getPbros', function(req, res) {
 
 // Creates a chalkboard
 app.post('/api/createchalkboard', function(req, res) {
-  let chalkboardInfo = {
+  const chalkboardInfo = {
     displayName: req.body.displayName,
     activeName: req.body.activeName,
     photoURL: req.body.photoURL,
@@ -686,7 +684,6 @@ app.post('/api/createchalkboard', function(req, res) {
     timeCommitment: req.body.timeCommitment,
     amount: req.body.amount
   };
-  let fullName = req.body.displayName;
   let chalkboardsRef = admin.database().ref('/chalkboards');
   let counter = 0;
 
@@ -718,8 +715,7 @@ app.post('/api/createchalkboard', function(req, res) {
 
 // Edits chalkboard for desktop
 app.post('/api/editchalkboard', function(req, res) {
-  let fullName = req.body.displayName;
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
@@ -743,9 +739,8 @@ app.post('/api/editchalkboard', function(req, res) {
 
 // Edits chalkboard for mobile devices
 app.post('/api/editchalkboardmobile', function(req, res) {
-  let editedField = req.body.field.toLowerCase();
-  let fullName = req.body.displayName;
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const editedField = req.body.field.toLowerCase();
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
@@ -764,7 +759,7 @@ app.post('/api/editchalkboardmobile', function(req, res) {
 
 // Joins chalkboard as an attendee
 app.post('/api/joinchalkboard', function(req, res) {
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
@@ -784,8 +779,7 @@ app.post('/api/joinchalkboard', function(req, res) {
 
 // Removes chalkboard from both user's list and general list
 app.post('/api/removechalkboard', function(req, res) {
-  let fullName = req.body.displayName;
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
@@ -801,8 +795,8 @@ app.post('/api/removechalkboard', function(req, res) {
 
 // Leaves chalkboard as an attendee
 app.post('/api/leavechalkboard', function(req, res) {
-  let name = req.body.name;
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const name = req.body.name;
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
@@ -826,7 +820,7 @@ app.post('/api/leavechalkboard', function(req, res) {
 
 // Gets the chalkboard information
 app.post('/api/getchalkboardinfo', function(req, res) {
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   // Searches for the chalkboard by checking title
   chalkboardsRef.once('value', (chalkboards) => {
@@ -842,14 +836,15 @@ app.post('/api/getchalkboardinfo', function(req, res) {
 
 // Retrieves all the attendees of the chalkboard
 app.post('/api/getattendees', function(req, res) {
-  let attendeesArray = [];
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
       if (req.body.chalkboard.title === chalkboard.val().title) {
         chalkboard.ref.child('attendees').once('value', (attendees) => {
+          let attendeesArray = [];
+
           // Finds the attendees if there are any
           if (attendees.val()) {
             attendeesArray = Object.keys(attendees.val()).map(function(key) {
@@ -874,7 +869,7 @@ app.post('/api/complain', function(req, res) {
     complaintsRef.push(req.body.complaint);
   }
   else {
-    let pledgeName = req.body.complaint.pledgeDisplayName;
+    const pledgeName = req.body.complaint.pledgeDisplayName;
     let complaintsRef = admin.database().ref('/approvedComplaints');
     let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
 
@@ -889,7 +884,7 @@ app.post('/api/complain', function(req, res) {
 
 // Removes complaint for active
 app.post('/api/removecomplaint', function(req, res) {
-  let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
+  const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
   pendingComplaintsRef.once('value', (complaints) => {
     complaints.forEach((complaint) => {
@@ -905,10 +900,10 @@ app.post('/api/removecomplaint', function(req, res) {
 
 // Approves complaint for PI/PM
 app.post('/api/approvecomplaint', function(req, res) {
-  let pledgeName = req.body.complaint.pledgeDisplayName;
+  const pledgeName = req.body.complaint.pledgeDisplayName;
   let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
   let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
-  let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
+  const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
   pendingComplaintsRef.once('value', (complaints) => {
     complaints.forEach((complaint) => {
@@ -929,7 +924,7 @@ app.post('/api/approvecomplaint', function(req, res) {
 
 // Gets all the pledges for complaints
 app.post('/api/pledgesForComplaints', function(req, res) {
-  let usersRef = admin.database().ref('/users');
+  const usersRef = admin.database().ref('/users');
 
   // Loop through all users for pledges
   usersRef.once('value', (users) => {
@@ -957,8 +952,8 @@ app.post('/api/pledgesForComplaints', function(req, res) {
 
 // Save message token from server
 app.post('/api/savemessagetoken', function(req, res) {
-  let fullName = req.body.displayName;
-  let userRef = admin.database().ref('/users/' + fullName);
+  const fullName = req.body.displayName;
+  const userRef = admin.database().ref('/users/' + fullName);
 
   userRef.update({
     registrationToken: req.body.token
@@ -969,7 +964,7 @@ app.post('/api/savemessagetoken', function(req, res) {
 
 // Send active merit notification to pledges
 app.post('/api/sendActiveMeritNotification', function(req, res) {
-  let pledges = req.body.pledges;
+  const pledges = req.body.pledges;
   let counter = 0;
   let merits;
 
@@ -981,14 +976,14 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
   }
 
   pledges.forEach((pledge) => {
-    let pledgeRef = admin.database().ref('/users/' + pledge.value);
+    const pledgeRef = admin.database().ref('/users/' + pledge.value);
 
     pledgeRef.once('value', (snapshot) => {
-      let registrationToken = snapshot.val().registrationToken;
-      let amount = Math.abs(req.body.amount);
+      const registrationToken = snapshot.val().registrationToken;
+      const amount = Math.abs(req.body.amount);
       counter++;
 
-      let message = {
+      const message = {
         webpush: {
           notification: {
             title: 'Garnett',
@@ -1027,7 +1022,7 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
 
 // Send pledge merit notification to actives
 app.post('/api/sendPledgeMeritNotification', function(req, res) {
-  let actives = req.body.actives;
+  const actives = req.body.actives;
   let counter = 0;
   let merits;
 
@@ -1039,14 +1034,14 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
   }
 
   actives.forEach((active) => {
-    let activeRef = admin.database().ref('/users/' + active.value);
+    const activeRef = admin.database().ref('/users/' + active.value);
 
     activeRef.once('value', (snapshot) => {
-      let registrationToken = snapshot.val().registrationToken;
-      let amount = Math.abs(req.body.amount);
+      const registrationToken = snapshot.val().registrationToken;
+      const amount = Math.abs(req.body.amount);
       counter++;
 
-      let message = {
+      const message = {
         webpush: {
           notification: {
             title: 'Garnett',
@@ -1085,16 +1080,16 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
 
 // Send created chalkboard notification to pledges
 app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
-  let usersRef = admin.database().ref('/users');
+  const usersRef = admin.database().ref('/users');
   let counter = 0;
 
   usersRef.once('value', (users) => {
     users.forEach((user) => {
       if (user.val().status !== 'alumni') {
-        let registrationToken = user.val().registrationToken;
+        const registrationToken = user.val().registrationToken;
         counter++;
 
-        let message = {
+        const message = {
           webpush: {
             notification: {
               title: 'Garnett',
@@ -1134,20 +1129,20 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
 
 // Send edited chalkboard notification to attendees
 app.post('/api/sendEditedChalkboardNotification', function(req, res) {
-  let chalkboard = req.body.chalkboard;
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const chalkboard = req.body.chalkboard;
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((child) => {
       if (equal(chalkboard, child.val())) {
         child.ref.child('attendees').once('value', (attendees) => {
           attendees.forEach((attendee) => {
-            let attendeeName = attendee.val().name.replace(/ /g,'');
-            let attendeeRef = admin.database().ref('/users/' + attendeeName);
+            const attendeeName = attendee.val().name.replace(/ /g,'');
+            const attendeeRef = admin.database().ref('/users/' + attendeeName);
 
             attendeeRef.once('value', (snapshot) => {
-              let registrationToken = snapshot.val().registrationToken;
-              let message = {
+              const registrationToken = snapshot.val().registrationToken;
+              const message = {
                 webpush: {
                   notification: {
                     title: 'Garnett',
@@ -1189,18 +1184,18 @@ app.post('/api/sendEditedChalkboardNotification', function(req, res) {
 });
 
 function sendAttendeesNotification(chalkboard, message, res) {
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((child) => {
       if (equal(chalkboard, child.val())) {
         child.ref.child('attendees').once('value', (attendees) => {
           attendees.forEach((attendee) => {
-            let attendeeName = attendee.val().name.replace(/ /g,'');
-            let attendeeRef = admin.database().ref('/users/' + attendeeName);
+            const attendeeName = attendee.val().name.replace(/ /g,'');
+            const attendeeRef = admin.database().ref('/users/' + attendeeName);
 
             attendeeRef.once('value', (snapshot) => {
-              let registrationToken = snapshot.val().registrationToken;
+              const registrationToken = snapshot.val().registrationToken;
 
               if (registrationToken) {
                 admin.messaging().send(message)
@@ -1232,14 +1227,14 @@ function sendAttendeesNotification(chalkboard, message, res) {
 
 // Send joined chalkboard notification to active
 app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
-  let chalkboard = req.body.chalkboard;
-  let activeName = chalkboard.displayName;
-  let name = req.body.name;
-  let activeRef = admin.database().ref('/users/' + activeName);
+  const chalkboard = req.body.chalkboard;
+  const activeName = chalkboard.displayName;
+  const name = req.body.name;
+  const activeRef = admin.database().ref('/users/' + activeName);
 
   activeRef.once('value', (active) => {
-    let registrationToken = active.val().registrationToken;
-    let message = {
+    const registrationToken = active.val().registrationToken;
+    const message = {
       webpush: {
         notification: {
           title: 'Garnett',
@@ -1279,15 +1274,14 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
 
 // Send left chalkboard notification to active
 app.post('/api/sendLeftChalkboardNotification', function(req, res) {
-  let chalkboard = req.body.chalkboard;
-  let activeName = chalkboard.displayName;
-  let name = req.body.name;
-  let chalkboardsRef = admin.database().ref('/chalkboards');
-  let activeRef = admin.database().ref('/users/' + activeName);
+  const chalkboard = req.body.chalkboard;
+  const activeName = chalkboard.displayName;
+  const name = req.body.name;
+  const activeRef = admin.database().ref('/users/' + activeName);
 
   activeRef.once('value', (active) => {
-    let registrationToken = active.val().registrationToken;
-    let message = {
+    const registrationToken = active.val().registrationToken;
+    const message = {
       webpush: {
         notification: {
           title: 'Garnett',
@@ -1327,14 +1321,14 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
 
 // Send complaint notification to pipm
 app.post('/api/sendPendingComplaintNotification', function(req, res) {
-  let complaint = req.body.complaint;
-  let usersRef = admin.database().ref('/users');
+  const complaint = req.body.complaint;
+  const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (users) => {
     users.forEach((user) => {
       if (user.val().status === 'pipm') {
-        let registrationToken = user.val().registrationToken;
-        let message = {
+        const registrationToken = user.val().registrationToken;
+        const message = {
           webpush: {
             notification: {
               title: 'Garnett',
@@ -1374,12 +1368,12 @@ app.post('/api/sendPendingComplaintNotification', function(req, res) {
 
 // Send complaint notification to pledge
 app.post('/api/sendApprovedComplaintNotification', function(req, res) {
-  let complaint = req.body.complaint;
-  let pledgeRef = admin.database().ref('/users/' + complaint.pledgeDisplayName);
+  const complaint = req.body.complaint;
+  const pledgeRef = admin.database().ref('/users/' + complaint.pledgeDisplayName);
 
   pledgeRef.once('value', (pledge) => {
-    let registrationToken = pledge.val().registrationToken;
-    let message = {
+    const registrationToken = pledge.val().registrationToken;
+    const message = {
       webpush: {
         notification: {
           title: 'Garnett',
@@ -1411,11 +1405,11 @@ app.post('/api/sendApprovedComplaintNotification', function(req, res) {
 
 // Update interaction for rushee
 app.post('/api/updateinteraction', function(req, res) {
+  const rusheeName = req.body.rusheeName;
+  const displayName = req.body.displayName;
+  const rusheeRef = admin.database().ref('/rushees/' + rusheeName);
+  const activeRef = rusheeRef.child('Actives/' + displayName);
   let totalInteractions = req.body.totalInteractions;
-  let rusheeName = req.body.rusheeName;
-  let displayName = req.body.displayName;
-  let rusheeRef = admin.database().ref('/rushees/' + rusheeName);
-  let activeRef = rusheeRef.child('Actives/' + displayName);
 
   if (!req.body.interacted == true) {
     totalInteractions++;
@@ -1437,7 +1431,7 @@ app.post('/api/updateinteraction', function(req, res) {
 
 // Start vote for rushee
 app.post('/api/startvote', function(req, res) {
-  let delibsRef = admin.database().ref('/delibsVoting');
+  const delibsRef = admin.database().ref('/delibsVoting');
 
   delibsRef.update({
     open: true,
@@ -1449,7 +1443,7 @@ app.post('/api/startvote', function(req, res) {
 
 // End vote for rushee
 app.post('/api/endvote', function(req, res) {
-  let delibsRef = admin.database().ref('/delibsVoting');
+  const delibsRef = admin.database().ref('/delibsVoting');
 
   delibsRef.update({
     open: false,
@@ -1461,10 +1455,10 @@ app.post('/api/endvote', function(req, res) {
 
 // Voting for rushee
 app.post('/api/vote', function(req, res) {
-  let rusheeName = req.body.rushee.replace(/ /g,'');
-  let rusheeRef = admin.database().ref('/rushees/' + rusheeName);
-  let fullName = req.body.displayName;
-  let activeRef = admin.database().ref('/rushees/' + rusheeName + '/Actives/' + fullName);
+  const rusheeName = req.body.rushee.replace(/ /g,'');
+  const fullName = req.body.displayName;
+  const rusheeRef = admin.database().ref('/rushees/' + rusheeName);
+  const activeRef = admin.database().ref('/rushees/' + rusheeName + '/Actives/' + fullName);
   let vote;
 
   activeRef.once('value', (active) => {
@@ -1486,7 +1480,7 @@ app.post('/api/vote', function(req, res) {
     }
 
     rusheeRef.once('value', (rushee) => {
-      let votes = rushee.val().votes + vote;
+      const votes = rushee.val().votes + vote;
 
       if (active.val().voted === false) {
         rusheeRef.update({
@@ -1511,9 +1505,8 @@ app.post('/api/vote', function(req, res) {
 
 // Get photo for data app
 app.post('/api/getphotos', function(req, res) {
-  let namesMap = req.body.data;
+  const namesMap = req.body.data;
   let photoMap = new Map();
-  let max = 0;
 
   namesMap.forEach((set) => {
     [...new Map(set[1])].forEach((entry) => {
@@ -1521,14 +1514,14 @@ app.post('/api/getphotos', function(req, res) {
     });
   });
 
-  max = photoMap.size;
+  let max = photoMap.size;
   photoMap.clear();
   
   namesMap.forEach((set) => {
     [...new Map(set[1])].forEach((entry) => {
       if (photoMap.get(entry[0]) === undefined) {
-        let name = entry[0].replace(/ /g,'');;
-        let userRef = admin.database().ref('/users/' + name);
+        const name = entry[0].replace(/ /g,'');;
+        const userRef = admin.database().ref('/users/' + name);
 
         userRef.once('value', (user) => {
           photoMap.set(entry[0], user.val().photoURL);
@@ -1544,9 +1537,9 @@ app.post('/api/getphotos', function(req, res) {
 
 // Get my data for data app
 app.post('/api/getmydata', function(req, res) {
-  let fullName = req.body.fullName;
-  let usersRef = admin.database().ref('/users');
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+  const fullName = req.body.fullName;
+  const usersRef = admin.database().ref('/users');
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
   usersRef.once('value', (users) => {
     let totalMeritInstances = 0;
