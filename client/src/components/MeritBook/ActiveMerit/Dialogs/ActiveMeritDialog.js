@@ -27,6 +27,7 @@ export default class ActiveMeritDialog extends Component {
       selectedPledges: [],
       description: '',
       isChalkboard: false,
+      isPCGreet: false,
       allPledges: false,
       amount: 0,
       chalkboards: null,
@@ -47,8 +48,8 @@ export default class ActiveMeritDialog extends Component {
   }
 
   merit = (type) => {
-    let { selectedPledges, description, amount } = this.state;
-    const { photoURL } = this.props.state;
+    const { selectedPledges } = this.state;
+    let { description, amount } = this.state;
     let pledgeValidation = true;
     let descriptionValidation = true;
 
@@ -56,7 +57,10 @@ export default class ActiveMeritDialog extends Component {
       description = description.title;
     }
 
-    if (selectedPledges.length === 0 || !description || description.length > 50 || amount === 0) {
+    if (selectedPledges.length === 0 || 
+        !description || 
+        description.length > 50 || 
+        amount === 0) {
       if (selectedPledges.length === 0) {
         pledgeValidation = false;
       }
@@ -70,8 +74,8 @@ export default class ActiveMeritDialog extends Component {
       });
     }
     else {
-      const { displayName, name, status } = this.props.state;
-      const { isChalkboard } = this.state;
+      const { displayName, name, photoURL, status } = this.props.state;
+      const { isChalkboard, isPCGreet } = this.state;
       let action = 'Merited';
       const date = getDate();
 
@@ -80,7 +84,7 @@ export default class ActiveMeritDialog extends Component {
         action = 'Demerited';
       }
       if (isChalkboard) {
-        description = 'Chalkboard: ' + description;
+        description = `Chalkboard: ${description}`;
       }
 
       this.setState({
@@ -88,7 +92,9 @@ export default class ActiveMeritDialog extends Component {
         completingTaskMessage: 'Meriting pledges...'
       });
 
-      API.merit(displayName, name, selectedPledges, description, amount, photoURL, date, isChalkboard, status)
+      const merit = { name, description, amount, photoURL, date };
+
+      API.merit(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status)
       .then(res => {
         console.log(res);
         this.handleClose();
@@ -100,18 +106,18 @@ export default class ActiveMeritDialog extends Component {
         .then(res => {
           this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
         })
-        .catch(err => console.log(err));
+        .catch(error => console.log(`Error: ${error}`));
       })
       .catch((error) => {
         console.log(error)
         const pledge = error.response.data;
 
-        console.log('Not enough merits for ', pledge);
+        console.log(`Not enough merits for ${pledge}`);
         this.handleClose();
         this.setState({
           openCompletingTask: false
         });
-        this.props.handleRequestOpen(`Not enough merits for ${pledge}.`);
+        this.props.handleRequestOpen(`Not enough merits for ${pledge}`);
       });
     }
   }
@@ -119,6 +125,7 @@ export default class ActiveMeritDialog extends Component {
   handleChange = (label, newValue) => {
     const validationLabel = [label] + 'Validation';
     let value = newValue;
+    const { pledges, isChalkboard, allPledges } = this.state;
     let { amount } = this.state;
 
     switch (label) {
@@ -131,6 +138,7 @@ export default class ActiveMeritDialog extends Component {
         if (newValue === true) {
           const { name } = this.props.state;
 
+          // Only affects pipm since their max merit cap is 500
           if (this.props.state.status === 'pipm') {
             maxAmount = 100;
 
@@ -146,11 +154,12 @@ export default class ActiveMeritDialog extends Component {
 
             this.setState({
               chalkboards,
-              description: ''
+              description: '',
+              isPCGreet: false
             });
           })
-          .catch((err) => {
-            console.log(err);
+          .catch((error) => {
+            console.log(`Error: ${error}`);
           })
         }
         else {
@@ -171,18 +180,24 @@ export default class ActiveMeritDialog extends Component {
         }
         break;
       case 'description':
-        if (this.state.isChalkboard) {
+        if (isChalkboard) {
           value = newValue;
           amount = newValue.amount;
 
           this.setState({ amount });
         }
         break;
+      case 'isPCGreet':
+        this.setState({
+          amount: 5,
+          isChalkboard: false
+        });
+        break;
       case 'allPledges':
         let selectedPledges = [];
 
-        if (this.state.allPledges === false) {
-          selectedPledges = this.state.pledges;
+        if (allPledges === false) {
+          selectedPledges = pledges;
         }
 
         this.setState({ selectedPledges });
@@ -195,9 +210,10 @@ export default class ActiveMeritDialog extends Component {
       [validationLabel]: true
     }, () => {
       if (label === 'selectedPledges') {
+        const { selectedPledges } = this.state;
         let allPledges = false;
 
-        if (this.state.pledges.length === this.state.selectedPledges.length) {
+        if (pledges.length === selectedPledges.length) {
           allPledges = true;
         }
 
@@ -264,7 +280,7 @@ export default class ActiveMeritDialog extends Component {
           floatingLabelText="Pledge Name"
           maxHeight={345}
           multiple={true}
-          onChange={(e, key, newValues) => this.handleChange('selectedPledges', newValues)}
+          onChange={(e, key, newValue) => this.handleChange('selectedPledges', newValue)}
           errorText={!this.state.pledgeValidation && 'Please select a pledge.'}
         >
           {this.state.pledges.map((pledge, i) => (
@@ -319,12 +335,13 @@ export default class ActiveMeritDialog extends Component {
             Amount: {this.state.amount} merits
           </span>
           <Slider
-            sliderStyle={{marginBottom:0}}
+            sliderStyle={{ marginBottom: 0 }}
             name="Amount"
             min={0}
             max={maxAmount}
             step={5}
             value={this.state.amount}
+            disabled={this.state.isPCGreet}
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>
@@ -333,6 +350,12 @@ export default class ActiveMeritDialog extends Component {
           label="Chalkboard"
           checked={this.state.isChalkboard}
           onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
+        />
+        <Checkbox
+          style={checkboxStyle}
+          label="PC Greet"
+          checked={this.state.isPCGreet}
+          onCheck={(e, newValue) => this.handleChange('isPCGreet', newValue)}
         />
         <Checkbox
           style={checkboxStyle}

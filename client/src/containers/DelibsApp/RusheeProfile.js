@@ -101,7 +101,7 @@ export default class RusheeProfile extends Component {
       this.setState({ openEndVote: true });
     })
     .catch((error) => {
-      console.log('Error: ', error);
+      console.log(`Error: ${error}`);
     });
   }
 

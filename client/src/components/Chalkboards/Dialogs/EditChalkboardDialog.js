@@ -70,7 +70,7 @@ export default class EditChalkboardDialog extends Component {
 
     if (invalidSafariVersion()) {
       this.handleClose();
-      this.props.handleRequestOpen('Please update to Safari version 10 or above.');
+      this.props.handleRequestOpen('Please update to Safari version 10 or above');
     }
     else {
       if (!description || !date || !time || !location || !timeCommitment || amount === 0) {
@@ -113,10 +113,10 @@ export default class EditChalkboardDialog extends Component {
           .then(res => {
             this.props.handleRequestOpen('Edited chalkboard');            
           })
-          .catch(err => console.log(err));
+          .catch(error => console.log(`Error: ${error}`));
         })
         .catch((error) => {
-          console.log('Error: ', error);
+          console.log(`Error: ${error}`);
           this.handleClose();
           this.props.handleRequestOpen('Error editing chalkboard');
         });

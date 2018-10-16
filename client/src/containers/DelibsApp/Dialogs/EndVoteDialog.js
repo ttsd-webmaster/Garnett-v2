@@ -39,7 +39,7 @@ export default class EndVoteDialog extends Component {
       this.props.handleRequestOpen(`Ended vote on ${rushee}`);
     })
     .catch((error) => {
-      console.log('Error: ', error);
+      console.log(`Error: ${error}`);
       this.props.handleClose();
       this.props.handleRequestOpen(`Error ending vote on ${rushee}`);
     });

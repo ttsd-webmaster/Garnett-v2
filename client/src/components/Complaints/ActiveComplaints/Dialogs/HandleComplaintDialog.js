@@ -16,10 +16,10 @@ export default class HandleComplaintDialog extends Component {
       .then(res => {
         this.props.handleRequestOpen(`Approved complaint for ${complaint.pledgeName}`);
       })
-      .catch(err => console.log(err));
+      .catch(error => console.log(`Error: ${error}`));
     })
     .catch((error) => {
-      console.log('Error: ', error);
+      console.log(`Error: ${error}`);
       this.props.handleClose();
       this.props.handleRequestOpen('Error approving complaint');
     });
@@ -33,7 +33,7 @@ export default class HandleComplaintDialog extends Component {
       this.props.handleRequestOpen(`Removed complaint for ${complaint.pledgeName}`);
     })
     .catch((error) => {
-      console.log('Error: ', error);
+      console.log(`Error: ${error}`);
       this.props.handleClose();
       this.props.handleRequestOpen('Error removing complaint');
     });

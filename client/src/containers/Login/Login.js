@@ -195,7 +195,7 @@ export default class Login extends Component {
             }
           })
           .catch((error) => {
-            console.log('Error: ', error);
+            console.log(`Error: ${error}`);
             const message = 'Email or password is incorrect.';
 
             this.setState({ openCompletingTask: false });

@@ -43,7 +43,7 @@ export default class PledgeComplaints extends Component {
             });
           }
 
-          console.log('Complaints Array: ', complaints);
+          console.log(`Complaints Array: ${complaints}`);
           localStorage.setItem('pledgeComplaints', JSON.stringify(complaints));
 
           this.setState({

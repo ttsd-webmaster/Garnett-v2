@@ -73,18 +73,18 @@ export default class AddComplaintDialog extends Component {
           .then(res => {
             this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
           })
-          .catch(err => console.log(err));
+          .catch(error => console.log(`Error: ${error}`));
         }
         else {
           API.sendPendingComplaintNotification(complaint)
           .then(res => {
             this.props.handleRequestOpen(`Created a complaint for ${pledge.label}`);
           })
-          .catch(err => console.log(err));
+          .catch(error => console.log(`Error: ${error}`));
         }
       })
       .catch((error) => {
-        console.log('Error: ', error);
+        console.log(`Error: ${error}`);
         this.handleClose();
         this.props.handleRequestOpen('Error creating complaint');
       });

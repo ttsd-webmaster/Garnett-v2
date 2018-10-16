@@ -19,6 +19,8 @@ usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
     let userRef = admin.database().ref('/users/' + user.key);
 
+    console.log(`Reset data for ${user.key}`)
+
     if (user.val().status === 'pledge') {
       userRef.update({
         Merits: null,

@@ -82,9 +82,9 @@ export default class ActiveComplaints extends Component {
             }
           }
 
-          console.log('Complaints: ', complaints);
-          console.log('Pending Complaints: ', pendingComplaints);
-          console.log('Approved Complaints: ', approvedComplaints);
+          console.log(`Complaints: ${complaints}`);
+          console.log(`Pending Complaints: ${pendingComplaints}`);
+          console.log(`Approved Complaints: ${approvedComplaints}`);
 
           localStorage.setItem('activeComplaints', JSON.stringify(complaints));
           localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
@@ -98,7 +98,7 @@ export default class ActiveComplaints extends Component {
           });
         });
       })
-      .catch(err => console.log(err));
+      .catch(error => console.log(`Error: ${error}`));
     }
     else {
       this.setState({ loaded: true });
@@ -183,7 +183,7 @@ export default class ActiveComplaints extends Component {
       }
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 

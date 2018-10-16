@@ -132,11 +132,11 @@ export default class Chalkboards extends Component {
             });
           }
 
-          console.log('My Hosting Chalkboards: ', myHostingChalkboards);
-          console.log('My Attending Chalkboards: ', myAttendingChalkboards);
-          console.log('My Completed Chalkboards: ', myCompletedChalkboards);
-          console.log('Upcoming Chalkboards: ', upcomingChalkboards);
-          console.log('Completed Upcoming Chalkboards: ', completedChalkboards);
+          console.log(`My Hosting Chalkboards: ${myHostingChalkboards}`);
+          console.log(`My Attending Chalkboards: ${myAttendingChalkboards}`);
+          console.log(`My Completed Chalkboards: ${myCompletedChalkboards}`);
+          console.log(`Upcoming Chalkboards: ${upcomingChalkboards}`);
+          console.log(`Completed Upcoming Chalkboards: ${completedChalkboards}`);
 
           localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
           localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
@@ -255,7 +255,7 @@ export default class Chalkboards extends Component {
       }
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 

@@ -29,7 +29,7 @@ export default class MeritsList extends Component {
       .catch(err => console.log('err', err));
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 

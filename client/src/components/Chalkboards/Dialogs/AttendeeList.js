@@ -23,12 +23,12 @@ export default class AttendeeList extends Component {
         this.setState({ attendees });
       })
       .catch((error) => {
-        console.log('Error: ', error);
+        console.log(`Error: ${error}`);
         this.props.handleRequestOpen('There was an error retrieving the attendees');
       });
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 

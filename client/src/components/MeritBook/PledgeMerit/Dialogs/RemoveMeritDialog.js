@@ -16,7 +16,7 @@ export default class RemoveMeritDialog extends Component {
       this.props.handleRequestOpen(`Removed merit from ${merit.name}`);
     })
     .catch((error) => {
-      console.log('Error: ', error);
+      console.log(`Error: ${error}`);
       this.props.handleRemoveClose();
       this.props.handleRequestOpen('Error removing merit');
     });

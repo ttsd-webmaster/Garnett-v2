@@ -167,7 +167,7 @@ class App extends Component {
                   console.log(messageRes);
                   this.checkPhoto(user);
                 })
-                .catch(err => console.log(err));
+                .catch(error => console.log(`Error: ${error}`));
               } 
               else {
                 // Show permission request.
@@ -203,12 +203,12 @@ class App extends Component {
         .then((url) => {
           API.setPhoto(displayName, url)
           .then((res) => {
-            console.log(res.data)
+            console.log(res.data);
 
             this.setData(res.data);
           })
           .catch((error) => {
-            console.log(error);
+            console.log(`Error: ${error}`);
 
             this.setData(user);
           });
@@ -220,14 +220,14 @@ class App extends Component {
           .then((url) => {
             API.setPhoto(displayName, url)
             .then((res) => {
-              console.log(res.data)
+              console.log(res.data);
 
               this.setData(res.data);
             })
-            .catch(err => console.log(err));
+            .catch(error => console.log(`Error: ${error}`));
           })
           .catch((error) => {
-            console.log(error);
+            console.log(`Error: ${error}`);
 
             this.setData(user);
           });

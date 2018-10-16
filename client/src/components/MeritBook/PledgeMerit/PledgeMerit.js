@@ -65,7 +65,7 @@ export default class PledgeMerit extends Component {
         userRef.on('value', (user) => {
           let totalMerits = user.val().totalMerits;
 
-          console.log('Total Merits: ', totalMerits);
+          console.log(`Total Merits: ${totalMerits}`);
           localStorage.setItem('totalMerits', totalMerits);
 
           userRef.child('Merits').on('value', (snapshot) => {
@@ -79,7 +79,7 @@ export default class PledgeMerit extends Component {
               });
             }
 
-            console.log('Merit array: ', merits);
+            console.log(`Merit array: ${merits}`);
             localStorage.setItem('meritArray', JSON.stringify(merits));
             localStorage.setItem('totalMerits', totalMerits);
 
@@ -137,7 +137,7 @@ export default class PledgeMerit extends Component {
       }
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 
@@ -175,7 +175,7 @@ export default class PledgeMerit extends Component {
       }
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 
@@ -200,7 +200,7 @@ export default class PledgeMerit extends Component {
           pbros: res.data
         });
       })
-      .catch(err => console.log(err));
+      .catch(error => console.log(`Error: ${error}`));
     }
     else {
       this.setState({

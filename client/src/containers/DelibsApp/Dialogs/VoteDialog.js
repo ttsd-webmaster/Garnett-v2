@@ -38,10 +38,10 @@ export default class VoteDialog extends Component {
     API.voteForRushee(displayName, rushee, value)
     .then((res) => {
       console.log('Vote submitted');
-      this.props.handleRequestOpen('Vote Submitted');
+      this.props.handleRequestOpen('Vote submitted');
     })
     .catch((error) => {
-      console.log('Error: ', error);
+      console.log(`Error: ${error}`);
       this.props.handleRequestOpen('Error submitting vote');
     });
   }

@@ -81,7 +81,7 @@ export default class ActiveMerit extends Component {
             });
           }
 
-          console.log('Pledge array: ', pledges);
+          console.log(`Pledge array: ${pledges}`);
 
           localStorage.setItem('pledgeArray', JSON.stringify(pledges));
           
@@ -202,7 +202,7 @@ export default class ActiveMerit extends Component {
       }
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 
@@ -323,11 +323,11 @@ export default class ActiveMerit extends Component {
             ))}
           </List>
 
-            <Portal>
-              <FloatingActionButton className="fixed-button active-merit" onClick={this.handleMeritOpen}>
-                <i className="icon-pencil"></i>
-              </FloatingActionButton>
-            </Portal>
+          <Portal>
+            <FloatingActionButton className="fixed-button active-merit" onClick={this.handleMeritOpen}>
+              <i className="icon-pencil"></i>
+            </FloatingActionButton>
+          </Portal>
 
           <Popover
             open={this.state.openPopover}

@@ -66,7 +66,7 @@ export default class DelibsApp extends Component {
               rushee['interacted'] = interactions[i];
             });
 
-            console.log('Rushees array: ', rushees);
+            console.log(`Rushees array: ${rushees}`);
 
             localStorage.setItem('rusheesArray', JSON.stringify(rushees));
             
@@ -106,8 +106,8 @@ export default class DelibsApp extends Component {
     .then((res) => {
       console.log(res);
     })
-    .catch((err) => {
-      console.log('Error: ', err);
+    .catch((error) => {
+      console.log(`Error: ${error}`);
     });
   }
 

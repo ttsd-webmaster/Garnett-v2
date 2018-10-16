@@ -26,7 +26,7 @@ export default class Home extends Component {
         this.props.logoutCallBack();
         this.props.history.push('/');
       })
-      .catch(err => console.log('err', err));
+      .catch(error => console.log(`Error: ${error}`));
     }
     else {
       this.props.logoutCallBack();

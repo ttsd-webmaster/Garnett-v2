@@ -408,18 +408,18 @@ app.post('/api/pledgecomplaints', function(req, res) {
 // Post merit data as active
 app.post('/api/merit', function(req, res) {
   let counter = 0;
-  const pledges = req.body.pledges;
+  const selectedPledges = req.body.selectedPledges;
 
-  pledges.forEach((child) => {
+  selectedPledges.forEach((child) => {
     const fullName = req.body.displayName;
     const activeRef = admin.database().ref('/users/' + fullName + '/Pledges/' + child.value);
     const pledgeRef = admin.database().ref('/users/' + child.value);
 
     activeRef.once('value', (active) => {
-      if (req.body.status !== 'pipm' && !req.body.isChalkboard) {
-        const remainingMerits = active.val().merits - req.body.amount;
+      if (req.body.status !== 'pipm' && !req.body.isChalkboard && !req.body.isPCGreet) {
+        const remainingMerits = active.val().merits - req.body.merit.amount;
 
-        if (req.body.amount > 0 && 
+        if (req.body.merit.amount > 0 && 
             remainingMerits < 0 && 
             !res.headersSent) {
           res.sendStatus(400).send(child.label);
@@ -435,18 +435,12 @@ app.post('/api/merit', function(req, res) {
         counter++;
 
         pledgeRef.update({
-          totalMerits: pledge.val().totalMerits + req.body.amount
+          totalMerits: pledge.val().totalMerits + req.body.merit.amount
         });
 
-        pledge.ref.child('Merits').push({
-          name: req.body.activeName,
-          description: req.body.description,
-          amount: req.body.amount,
-          photoURL: req.body.photoURL,
-          date: req.body.date
-        });
+        pledge.ref.child('Merits').push(req.body.merit);
 
-        if (!res.headersSent && counter === pledges.length) {
+        if (!res.headersSent && counter === selectedPledges.length) {
           res.sendStatus(200);
         }
       });
@@ -457,15 +451,23 @@ app.post('/api/merit', function(req, res) {
 // Post merit data as pledge
 app.post('/api/meritAsPledge', function(req, res) {
   let counter = 0;
-  const actives = req.body.actives;
+  const selectedActives = req.body.selectedActives;
   const fullName = req.body.displayName;
   const pledgeRef = admin.database().ref('/users/' + fullName);
 
-  actives.forEach((child) => {
+  selectedActives.forEach((child) => {
     const activeRef = admin.database().ref('/users/' + child.value);
 
     activeRef.once('value', (active) => {
-      if (active.val().status !== 'pipm' && !req.body.isChalkboard) {
+      const merit = {
+        name: `${active.val().firstName} ${active.val().lastName}`,
+        description: req.body.merit.description,
+        amount: req.body.merit.amount,
+        photoURL: active.val().photoURL,
+        date: req.body.merit.date
+      }
+
+      if (active.val().status !== 'pipm' && !req.body.isChalkboard && !req.body.isPCGreet) {
         const remainingMerits = active.val().Pledges[fullName].merits - req.body.amount;
 
         if (req.body.amount > 0 && 
@@ -485,17 +487,11 @@ app.post('/api/meritAsPledge', function(req, res) {
       pledgeRef.once('value', (pledge) => {
         counter++;
 
-        pledge.ref.child('Merits').push({
-          name: `${active.val().firstName} ${active.val().lastName}`,
-          description: req.body.description,
-          amount: req.body.amount,
-          photoURL: active.val().photoURL,
-          date: req.body.date
-        });
+        pledge.ref.child('Merits').push(merit);
 
-        if (!res.headersSent && counter === actives.length) {
+        if (!res.headersSent && counter === selectedActives.length) {
           pledgeRef.update({
-            totalMerits: pledge.val().totalMerits + (req.body.amount * actives.length)
+            totalMerits: pledge.val().totalMerits + (req.body.amount * selectedActives.length)
           });
           
           res.sendStatus(200);
@@ -620,35 +616,38 @@ app.post('/api/chalkboardsForMerit', function(req, res) {
 
   chalkboardsRef.once('value', (snapshot) => {
     let myChalkboards = [];
-    const chalkboards = Object.keys(snapshot.val()).map(function(key) {
-      return snapshot.val()[key];
-    });
 
-    chalkboards.forEach((chalkboard) => {
-      if (chalkboard.activeName === fullName) {
-        myChalkboards.push({
-          title: chalkboard.title,
-          amount: chalkboard.amount
-        });
-      }
-      else {
-        if (chalkboard.attendees) {
-          const attendees = Object.keys(chalkboard.attendees).map(function(key) {
-            return chalkboard.attendees[key];
-          });
+    if (snapshot.val()) {
+      const chalkboards = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      });
 
-          attendees.forEach((attendee) => {
-            if (attendee.name === fullName) {
-              myChalkboards.push({
-                title: chalkboard.title,
-                amount: chalkboard.amount
-              });
-            }
+      chalkboards.forEach((chalkboard) => {
+        if (chalkboard.activeName === fullName) {
+          myChalkboards.push({
+            title: chalkboard.title,
+            amount: chalkboard.amount
           });
         }
-      }
-    });
-    
+        else {
+          if (chalkboard.attendees) {
+            const attendees = Object.keys(chalkboard.attendees).map(function(key) {
+              return chalkboard.attendees[key];
+            });
+
+            attendees.forEach((attendee) => {
+              if (attendee.name === fullName) {
+                myChalkboards.push({
+                  title: chalkboard.title,
+                  amount: chalkboard.amount
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+
     res.json(myChalkboards);
   });
 });

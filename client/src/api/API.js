@@ -44,12 +44,12 @@ export default {
     return axios.post('/api/pledgecomplaints', body);
   },
   // Merit Book
-  merit: function(displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status) {
-    let body = {displayName, activeName, pledges, description, amount, photoURL, date, isChalkboard, status};
+  merit: function(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status) {
+    let body = {displayName, selectedPledges, merit, isChalkboard, isPCGreet, status};
     return axios.post('/api/merit', body);
   },
-  meritAsPledge: function(displayName, actives, description, amount, date, isChalkboard) {
-    let body = {displayName, actives, description, amount, date, isChalkboard};
+  meritAsPledge: function(displayName, selectedActives, merit, isChalkboard, isPCGreet) {
+    let body = {displayName, selectedActives, merit, isChalkboard, isPCGreet};
     return axios.post('/api/meritAsPledge', body);
   },
   removeMerit: function(displayName, merit) {

@@ -89,16 +89,16 @@ export default class HandleChalkboardDialog extends Component {
         .then(res => {
           this.props.handleRequestOpen(`Joined ${chalkboard.title}`);
         })
-        .catch(err => console.log(err));
+        .catch(error => console.log(`Error: ${error}`));
       })
       .catch((error) => {
-        console.log('Error: ', error);
+        console.log(`Error: ${error}`);
         this.props.handleClose();
         this.props.handleRequestOpen('Error joining chalkboard');
       });
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 
@@ -114,13 +114,13 @@ export default class HandleChalkboardDialog extends Component {
         this.props.handleRequestOpen(`Removed ${chalkboard.title}`);
       })
       .catch((error) => {
-        console.log('Error: ', error);
+        console.log(`Error: ${error}`);
         this.props.handleClose();
         this.props.handleRequestOpen('Error removing chalkboard');
       });
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 
@@ -138,16 +138,16 @@ export default class HandleChalkboardDialog extends Component {
         .then(res => {
           this.props.handleRequestOpen(`Left ${chalkboard.title}`);
         })
-        .catch(err => console.log(err));
+        .catch(error => console.log(`Error: ${error}`));
       })
       .catch((error) => {
-        console.log('Error: ', error);
+        console.log(`Error: ${error}`);
         this.props.handleClose();
         this.props.handleRequestOpen('Error leaving chalkboard');
       });
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 
@@ -160,7 +160,7 @@ export default class HandleChalkboardDialog extends Component {
       this.setState({ chalkboard });
     })
     .catch((error) => {
-      console.log('Error: ', error);
+      console.log(`Error: ${error}`);
     });
   }
 
@@ -193,7 +193,7 @@ export default class HandleChalkboardDialog extends Component {
       }
     }
     else {
-      this.props.handleRequestOpen('You are offline.');
+      this.props.handleRequestOpen('You are offline');
     }
   }
 

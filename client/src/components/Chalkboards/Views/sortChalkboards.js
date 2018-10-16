@@ -12,13 +12,10 @@ export default function sortChalkboards(chalkboards, filter) {
           chalkboard2 = b[filter];
         }
         return Object.keys(chalkboard1).length > Object.keys(chalkboard2).length ? 1 : -1;
-        break;
       case 'timeCommitment':
         return a[filter].value < b[filter].value ? 1 : -1;
-        break;
       case 'date':
         return new Date(a.date) - new Date(b.date);
-        break;
       default:
         return a[filter] > b[filter] ? 1 : -1;
     }

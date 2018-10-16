@@ -35,7 +35,7 @@ export default class MobileEditChalkboardDialog extends Component {
 
     if (field === 'Date' && invalidSafariVersion()) {
       this.handleClose();
-      this.props.handleRequestOpen('Please update to Safari version 10 or above.');
+      this.props.handleRequestOpen('Please update to Safari version 10 or above');
     }
     else {
       if (!newValue) {
@@ -51,7 +51,7 @@ export default class MobileEditChalkboardDialog extends Component {
           value = this.formatDate(newValue);
         }
         else if (field === 'Time') {
-          value = newValue.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+          value = newValue.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
         }
 
         API.editChalkboardMobile(displayName, chalkboard, field, value)
@@ -64,10 +64,10 @@ export default class MobileEditChalkboardDialog extends Component {
           .then(res => {
             this.props.handleRequestOpen(`Edited ${field} for ${chalkboard.title}`);         
           })
-          .catch(err => console.log(err));
+          .catch(error => console.log(`Error: ${error}`));
         })
         .catch((error) => {
-          console.log('Error: ', error);
+          console.log(`Error: ${error}`);
           this.handleClose();
           this.props.handleRequestOpen(`Error editing ${field} for ${chalkboard.title}`);
         });

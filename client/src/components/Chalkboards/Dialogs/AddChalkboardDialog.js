@@ -62,7 +62,7 @@ export default class AddChalkboardDialog extends Component {
 
     if (invalidSafariVersion()) {
       this.handleClose();
-      this.props.handleRequestOpen('Please update to Safari version 10 or above.');
+      this.props.handleRequestOpen('Please update to Safari version 10 or above');
     }
     else {
       if (!title || title.length > 40 || !description || !date || !time || !location || !timeCommitment || amount === 0) {
@@ -110,10 +110,10 @@ export default class AddChalkboardDialog extends Component {
           .then(res => {
             this.props.handleRequestOpen(`Created chalkboard, ${title}`);
           })
-          .catch(err => console.log(err));
+          .catch(error => console.log(`Error: ${error}`));
         })
         .catch((error) => {
-          console.log('Error: ', error);
+          console.log(`Error: ${error}`);
           this.handleClose();
           this.props.handleRequestOpen('Error: Chalkboard title is already taken');
         });

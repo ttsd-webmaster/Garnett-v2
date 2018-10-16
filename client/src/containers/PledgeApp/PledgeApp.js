@@ -88,7 +88,7 @@ export default class PledgeApp extends Component {
   }
 
   componentWillMount() {
-    console.log('Pledge app mount: ', this.props.state.name)
+    console.log(`Pledge app mount: ${this.props.state.name}`)
 
     const data = JSON.parse(localStorage.getItem('data'));
 
@@ -167,7 +167,7 @@ export default class PledgeApp extends Component {
     //             pledgeArray: res.data
     //           });
     //         })
-    //         .catch(err => console.log(err));
+    //         .catch(error => console.log(`Error: ${error}`));
     //       }
     //       else {
     //         let displayName = this.props.state.displayName;
@@ -179,7 +179,7 @@ export default class PledgeApp extends Component {
     //             complaintsArray: res.data.complaintsArray
     //           });
     //         })
-    //         .catch(err => console.log(err)); 
+    //         .catch(error => console.log(`Error: ${error}`)); 
     //       }
     //     }
     //   },
