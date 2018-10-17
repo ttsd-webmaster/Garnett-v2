@@ -44,7 +44,7 @@ export default class Login extends Component {
       signPasswordValidation: true,
       firstNameValidation: true,
       lastNameValidation: true,
-      classValidation: true,
+      classNameValidation: true,
       majorValidation: true,
       yearValidation: true,
       phoneValidation: true,
@@ -127,7 +127,7 @@ export default class Login extends Component {
       signPasswordValidation: true,
       firstNameValidation: true,
       lastNameValidation: true,
-      classValidation: true,
+      classNameValidation: true,
       majorValidation: true,
       yearValidation: true,
       phoneValidation: true,
@@ -207,19 +207,21 @@ export default class Login extends Component {
   }
 
   signUp = () => {
-    const { firstName,
-            lastName,
-            className,
-            major,
-            year,
-            phone,
-            email,
-            password,
-            confirmation } = this.state;
+    const {
+      firstName,
+      lastName,
+      className,
+      major,
+      year,
+      phone,
+      email,
+      password,
+      confirmation
+    } = this.state;
     const code = this.state.code.toLowerCase();
     let firstNameValidation = true;
     let lastNameValidation = true;
-    let classValidation = true;
+    let classNameValidation = true;
     let majorValidation = true;
     let yearValidation = true;
     let phoneValidation = true;
@@ -238,7 +240,7 @@ export default class Login extends Component {
         lastNameValidation = false;
       }
       if (!className) {
-        classValidation = false;
+        classNameValidation = false;
       }
       if (!major) {
         majorValidation = false;
@@ -265,7 +267,7 @@ export default class Login extends Component {
       this.setState({
         firstNameValidation,
         lastNameValidation,
-        classValidation,
+        classNameValidation,
         majorValidation,
         yearValidation,
         phoneValidation,
@@ -396,7 +398,7 @@ export default class Login extends Component {
         <SignUp
           firstName={this.state.firstName}
           lastName={this.state.lastName}
-          class={this.state.className}
+          className={this.state.className}
           major={this.state.major}
           year={this.state.year}
           phone={this.state.phone}
@@ -406,7 +408,7 @@ export default class Login extends Component {
           confirmation={this.state.confirmation}
           firstNameValidation={this.state.firstNameValidation}
           lastNameValidation={this.state.lastNameValidation}
-          classValidation={this.state.classValidation}
+          classNameValidation={this.state.classNameValidation}
           majorValidation={this.state.majorValidation}
           yearValidation={this.state.yearValidation}
           phoneValidation={this.state.phoneValidation}

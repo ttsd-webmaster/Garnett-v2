@@ -1,6 +1,6 @@
 const activeCode = 'garnett';
 
-const pledgeCode = 'sigmaclass';
+const pledgeCode = 'tauclass';
 
 const formData1 = [
   {
@@ -20,13 +20,13 @@ const formData1 = [
 const selectData = [
   {
     name: 'Class',
-    value: 'class',
+    value: 'className',
     errorText: 'Please select a class.',
     options: [ 'Charter', 'Alpha', 'Beta', 'Gamma', 
                'Delta', 'Epsilon', 'Zeta', 'Eta', 
                'Theta', 'Iota', 'Kappa', 'Lambda', 
                'Mu', 'Nu', 'Xi', 'Omicron', 
-               'Pi', 'Rho', 'Sigma'
+               'Pi', 'Rho', 'Sigma', 'Tau'
              ],
   },
   {

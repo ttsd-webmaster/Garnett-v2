@@ -196,7 +196,8 @@ class App extends Component {
       loadFirebase('storage')
       .then(() => {
         const { firebase } = window;
-        const displayName = user.firstName + user.lastName;
+        let displayName = user.firstName + user.lastName;
+        displayName = displayName.replace(/\s/g, '');
         const storage = firebase.storage().ref(`${displayName}.jpg`);
 
         storage.getDownloadURL()
@@ -214,7 +215,7 @@ class App extends Component {
           });
         })
         .catch((error) => {
-          const storage = firebase.storage.ref(`${displayName}.JPG`);
+          const storage = firebase.storage().ref(`${displayName}.JPG`);
 
           storage.getDownloadURL()
           .then((url) => {
@@ -240,11 +241,15 @@ class App extends Component {
   }
 
   setData = (user) => {
+    const name = `${user.firstName} ${user.lastName}`;
+    let displayName = user.firstName + user.lastName;
+    displayName = displayName.replace(/\s/g, '');
+
     this.setState({
-      name: `${user.firstName} ${user.lastName}`,
+      name,
+      displayName,
       firstName: user.firstName,
       lastName: user.lastName,
-      displayName: user.firstName + user.lastName,
       phone: user.phone,
       email: user.email,
       class: user.class,
