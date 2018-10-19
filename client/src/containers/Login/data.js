@@ -1,6 +1,6 @@
 const activeCode = 'garnett';
 
-const pledgeCode = 'tauclass';
+const pledgeCode = 'taupledge';
 
 const formData1 = [
   {
@@ -22,40 +22,40 @@ const selectData = [
     name: 'Class',
     value: 'className',
     errorText: 'Please select a class.',
-    options: [ 'Charter', 'Alpha', 'Beta', 'Gamma', 
-               'Delta', 'Epsilon', 'Zeta', 'Eta', 
-               'Theta', 'Iota', 'Kappa', 'Lambda', 
-               'Mu', 'Nu', 'Xi', 'Omicron', 
-               'Pi', 'Rho', 'Sigma', 'Tau'
-             ],
+    options: ['Charter', 'Alpha', 'Beta', 'Gamma',
+      'Delta', 'Epsilon', 'Zeta', 'Eta',
+      'Theta', 'Iota', 'Kappa', 'Lambda',
+      'Mu', 'Nu', 'Xi', 'Omicron',
+      'Pi', 'Rho', 'Sigma', 'Tau'
+    ],
   },
   {
     name: 'Major',
     value: 'major',
     errorText: 'Please select a major.',
-    options: [ 'Aerospace Engineering',
-               'Bioengineering',
-               'Chemical Engineering',
-               'Computer Engineering',
-               'Computer Science',
-               'Electrical Engineering',
-               'Environmental Engineering',
-               'Mechanical Engineering',
-               'Nanoengineering',
-               'Structural Engineering'
-             ]
+    options: ['Aerospace Engineering',
+      'Bioengineering',
+      'Chemical Engineering',
+      'Computer Engineering',
+      'Computer Science',
+      'Electrical Engineering',
+      'Environmental Engineering',
+      'Mechanical Engineering',
+      'Nanoengineering',
+      'Structural Engineering'
+    ]
   },
   {
     name: 'Year',
     value: 'year',
     errorText: 'Please select an year.',
-    options: [ '1st Year',
-               '2nd Year',
-               '3rd Year',
-               '4th Year',
-               '5th Year',
-               'Alumni'
-             ]
+    options: ['1st Year',
+      '2nd Year',
+      '3rd Year',
+      '4th Year',
+      '5th Year',
+      'Alumni'
+    ]
   }
 ];
 
@@ -92,4 +92,4 @@ const formData2 = [
   },
 ];
 
-export {activeCode, pledgeCode, formData1, selectData, formData2};
+export { activeCode, pledgeCode, formData1, selectData, formData2 };
