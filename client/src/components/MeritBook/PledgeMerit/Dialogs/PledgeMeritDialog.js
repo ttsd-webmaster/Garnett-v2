@@ -74,15 +74,11 @@ export default class PledgeMeritDialog extends Component {
       const { displayName } = this.props.state;
       const { isChalkboard, isPCGreet } = this.state;
       let action = 'Merited';
-      let date;
+      let date = this.formatDate(this.state.date);
 
       if (invalidSafariVersion()) {
         date = getDate();
       }
-      else {
-        date = this.formatDate(this.state.date);
-      }
-
       if (type === 'demerit') {
         amount = -amount;
         action = 'Demerited';
