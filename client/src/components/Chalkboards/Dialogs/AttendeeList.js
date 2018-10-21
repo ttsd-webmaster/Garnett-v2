@@ -16,7 +16,7 @@ export default class AttendeeList extends Component {
 
   componentWillMount() {
     if (navigator.onLine) {
-      API.getAttendees(this.props.chalkboard)
+      API.getAttendees(this.props.chalkboard.title)
       .then((res) => {
         const attendees = res.data;
 

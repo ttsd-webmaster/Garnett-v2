@@ -94,7 +94,7 @@ export default class ActiveMeritDialog extends Component {
 
       const merit = { name, description, amount, photoURL, date };
 
-      API.merit(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status)
+      API.meritAsActive(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status)
       .then(res => {
         console.log(res);
         this.handleClose();
