@@ -451,9 +451,14 @@ app.post('/api/merit', function(req, res) {
 // Post merit data as pledge
 app.post('/api/meritAsPledge', function(req, res) {
   let counter = 0;
-  const selectedActives = req.body.selectedActives;
-  const fullName = req.body.displayName;
-  const pledgeRef = admin.database().ref('/users/' + fullName);
+  const {
+    displayName,
+    selectedActives,
+    merit,
+    isChalkboard,
+    isPCGreet
+  } = req.body
+  const pledgeRef = admin.database().ref('/users/' + displayName);
 
   selectedActives.forEach((child) => {
     const activeRef = admin.database().ref('/users/' + child.value);
@@ -461,22 +466,22 @@ app.post('/api/meritAsPledge', function(req, res) {
     activeRef.once('value', (active) => {
       const merit = {
         name: `${active.val().firstName} ${active.val().lastName}`,
-        description: req.body.merit.description,
-        amount: req.body.merit.amount,
+        description: merit.description,
+        amount: merit.amount,
         photoURL: active.val().photoURL,
-        date: req.body.merit.date
+        date: merit.date
       }
 
-      if (active.val().status !== 'pipm' && !req.body.isChalkboard && !req.body.isPCGreet) {
-        const remainingMerits = active.val().Pledges[fullName].merits - req.body.amount;
+      if (active.val().status !== 'pipm' && !isChalkboard && !isPCGreet) {
+        const remainingMerits = active.val().Pledges[displayName].merits - merit.amount;
 
-        if (req.body.amount > 0 && 
+        if (merit.amount > 0 && 
             remainingMerits < 0 && 
             !res.headersSent) {
           res.sendStatus(400).send(child.label);
         }
         else {
-          const activePledgeRef = active.ref.child('/Pledges/' + fullName);
+          const activePledgeRef = active.ref.child('/Pledges/' + displayName);
 
           activePledgeRef.update({
             merits: remainingMerits
@@ -491,7 +496,7 @@ app.post('/api/meritAsPledge', function(req, res) {
 
         if (!res.headersSent && counter === selectedActives.length) {
           pledgeRef.update({
-            totalMerits: pledge.val().totalMerits + (req.body.amount * selectedActives.length)
+            totalMerits: pledge.val().totalMerits + (merit.amount * selectedActives.length)
           });
           
           res.sendStatus(200);
