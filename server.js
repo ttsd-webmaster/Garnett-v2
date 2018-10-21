@@ -457,7 +457,7 @@ app.post('/api/meritAsPledge', function(req, res) {
     merit,
     isChalkboard,
     isPCGreet
-  } = req.body;
+  } = req.body
   const pledgeRef = admin.database().ref('/users/' + displayName);
 
   selectedActives.forEach((child) => {
