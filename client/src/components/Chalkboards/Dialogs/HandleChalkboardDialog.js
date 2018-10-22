@@ -80,7 +80,7 @@ export default class HandleChalkboardDialog extends Component {
     if (navigator.onLine) {
       const { name, photoURL } = this.props.state;
 
-      API.joinChalkboard(name, photoURL, chalkboard)
+      API.joinChalkboard(name, photoURL, chalkboard.title)
       .then((res) => {
         console.log('Joined chalkboard');
         this.props.handleClose();
@@ -102,21 +102,19 @@ export default class HandleChalkboardDialog extends Component {
     }
   }
 
-  // Removes the chalkboard
-  remove = (chalkboard) => {
+  // Deletes the chalkboard
+  delete = (chalkboard) => {
     if (navigator.onLine) {
-      const { displayName } = this.props.state;
-
-      API.removeChalkboard(displayName, chalkboard)
+      API.deleteChalkboard(chalkboard.title)
       .then((res) => {
-        console.log('Removed chalkboard');
+        console.log('Deleted chalkboard');
         this.props.handleClose();
-        this.props.handleRequestOpen(`Removed ${chalkboard.title}`);
+        this.props.handleRequestOpen(`Deleted ${chalkboard.title}`);
       })
       .catch((error) => {
         console.log(`Error: ${error}`);
         this.props.handleClose();
-        this.props.handleRequestOpen('Error removing chalkboard');
+        this.props.handleRequestOpen('Error deleting chalkboard');
       });
     }
     else {
@@ -129,7 +127,7 @@ export default class HandleChalkboardDialog extends Component {
     if (navigator.onLine) {
       const { name } = this.props.state;
 
-      API.leaveChalkboard(name, chalkboard)
+      API.leaveChalkboard(name, chalkboard.title)
       .then((res) => {
         console.log('Left chalkboard');
         this.props.handleClose();
@@ -226,7 +224,7 @@ export default class HandleChalkboardDialog extends Component {
 
     switch (this.props.type) {
       case 'hosting':
-        label = 'Remove';
+        label = 'Delete';
         break;
       case 'attending':
         label = 'Leave';
@@ -246,7 +244,7 @@ export default class HandleChalkboardDialog extends Component {
         primary={true}
         onClick={() => {
           if (this.props.type === 'hosting') {
-            this.remove(this.state.chalkboard);
+            this.delete(this.state.chalkboard);
           }
           else if (this.props.type === 'attending') {
             this.leave(this.state.chalkboard);
@@ -264,7 +262,7 @@ export default class HandleChalkboardDialog extends Component {
         primary={true}
         onClick={() => {
           if (this.props.type === 'hosting') {
-            this.remove(this.state.chalkboard);
+            this.delete(this.state.chalkboard);
           }
           else if (this.props.type === 'attending') {
             this.leave(this.state.chalkboard);

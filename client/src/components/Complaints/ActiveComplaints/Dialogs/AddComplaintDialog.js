@@ -63,7 +63,7 @@ export default class AddComplaintDialog extends Component {
         date: date
       };
       
-      API.complain(complaint, status)
+      API.createComplaint(complaint, status)
       .then((res) => {
         console.log(res);
         this.handleClose();

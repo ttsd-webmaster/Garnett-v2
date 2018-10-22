@@ -15,8 +15,8 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
-const LoadableRemoveMeritDialog = Loadable({
-  loader: () => import('./Dialogs/RemoveMeritDialog'),
+const LoadableDeleteMeritDialog = Loadable({
+  loader: () => import('./Dialogs/DeleteMeritDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -47,7 +47,7 @@ export default class PledgeMerit extends Component {
       previousTotalMerits: 0,
       pbros: this.props.pbros,
       merit: null,
-      openRemove: false,
+      openDelete: false,
       openMerit: false,
       openPbros: false,
       reverse: false
@@ -113,10 +113,10 @@ export default class PledgeMerit extends Component {
     }
   }
 
-  handleRemoveOpen = (merit) => {
+  handleDeleteOpen = (merit) => {
     if (navigator.onLine) {
       this.setState({
-        openRemove: true,
+        openDelete: true,
         merit: merit
       });
 
@@ -132,7 +132,7 @@ export default class PledgeMerit extends Component {
 
         window.history.pushState(null, null, path + window.location.pathname);
         window.onpopstate = () => {
-          this.handleRemoveClose();
+          this.handleDeleteClose();
         }
       }
     }
@@ -141,13 +141,13 @@ export default class PledgeMerit extends Component {
     }
   }
 
-  handleRemoveClose = () => {
+  handleDeleteClose = () => {
     if (/android/i.test(navigator.userAgent)) {
       window.onpopstate = () => {};
     }
 
     this.setState({
-      openRemove: false,
+      openDelete: false,
       merit: null
     });
   }
@@ -276,7 +276,7 @@ export default class PledgeMerit extends Component {
                       <p> {merit.description} </p>
                     }
                     secondaryTextLines={2}
-                    onClick={() => this.handleRemoveOpen(merit)}
+                    onClick={() => this.handleDeleteOpen(merit)}
                   >
                     <div className="merit-amount-container">
                       <p className="merit-date"> {merit.date} </p>
@@ -303,11 +303,11 @@ export default class PledgeMerit extends Component {
             openBottomSheet={this.openBottomSheet}
           />
 
-          <LoadableRemoveMeritDialog
-            open={this.state.openRemove}
+          <LoadableDeleteMeritDialog
+            open={this.state.openDelete}
             state={this.props.state}
             merit={this.state.merit}
-            handleRemoveClose={this.handleRemoveClose}
+            handleDeleteClose={this.handleDeleteClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
 

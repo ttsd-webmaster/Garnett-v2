@@ -46,13 +46,15 @@ export default class AddChalkboardDialog extends Component {
   }
 
   addChalkboard = () => {
-    const { title, 
-            description,
-            date,
-            time,
-            location,
-            timeCommitment,
-            amount } = this.state;
+    const {
+      title, 
+      description,
+      date,
+      time,
+      location,
+      timeCommitment,
+      amount
+    } = this.state;
     let titleValidation = true;
     let descriptionValidation = true;
     let dateValidation = true;
@@ -95,13 +97,28 @@ export default class AddChalkboardDialog extends Component {
         });
       }
       else {
-        const { displayName,
-                name,
-                photoURL } = this.props.state;
+        const {
+          displayName,
+          name,
+          photoURL
+        } = this.props.state;
         const parsedDate = this.formatDate(date);
         const parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-        API.createChalkboard(displayName, name, photoURL, title, description, parsedDate, parsedTime, location, timeCommitment, amount)
+        const chalkboard = {
+          displayName,
+          activeName: name,
+          photoURL,
+          title,
+          description,
+          date: parsedDate,
+          time: parsedTime,
+          location,
+          timeCommitment,
+          amount
+        };
+
+        API.createChalkboard(chalkboard)
         .then((res) => {
           console.log(res);
           this.handleClose();

@@ -26,7 +26,7 @@ export default class HandleComplaintDialog extends Component {
   }
 
   remove = (complaint) => {
-    API.removeComplaint(complaint)
+    API.deleteComplaint(complaint)
     .then((res) => {
       console.log('Removed complaint');
       this.props.handleClose();

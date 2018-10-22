@@ -44,7 +44,7 @@ export default class MobileEditChalkboardDialog extends Component {
         });
       }
       else {
-        const { displayName, chalkboard } = this.props.state;
+        const { chalkboard } = this.props.state;
         let value = newValue;
 
         if (field === 'Date') {
@@ -54,13 +54,13 @@ export default class MobileEditChalkboardDialog extends Component {
           value = newValue.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
         }
 
-        API.editChalkboardMobile(displayName, chalkboard, field, value)
+        API.updateChalkboardMobile(chalkboard.title, field, value)
         .then((res) => {
           console.log(`Edited ${field} for ${chalkboard.title}`);
           this.props.updateChalkboardInfo();
           this.handleClose();
           
-          API.sendEditedChalkboardNotification(chalkboard)
+          API.sendUpdatedChalkboardNotification(chalkboard)
           .then(res => {
             this.props.handleRequestOpen(`Edited ${field} for ${chalkboard.title}`);         
           })

@@ -5,20 +5,20 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class RemoveMeritDialog extends Component {
-  remove = (merit) => {
+export default class DeleteMeritDialog extends Component {
+  delete = (merit) => {
     let displayName = this.props.state.displayName;
 
-    API.removeMerit(displayName, merit)
+    API.deleteMerit(displayName, merit)
     .then((res) => {
-      console.log('Removed merit');
-      this.props.handleRemoveClose();
-      this.props.handleRequestOpen(`Removed merit from ${merit.name}`);
+      console.log('Deleted merit');
+      this.props.handleDeleteClose();
+      this.props.handleRequestOpen(`Deleted merit from ${merit.name}`);
     })
     .catch((error) => {
       console.log(`Error: ${error}`);
-      this.props.handleRemoveClose();
-      this.props.handleRequestOpen('Error removing merit');
+      this.props.handleDeleteClose();
+      this.props.handleRequestOpen('Error deleting merit');
     });
   }
 
@@ -27,12 +27,12 @@ export default class RemoveMeritDialog extends Component {
       <FlatButton
         label="Close"
         primary={true}
-        onClick={this.props.handleRemoveClose}
+        onClick={this.props.handleDeleteClose}
       />,
       <RaisedButton
-        label="Remove"
+        label="Delete"
         primary={true}
-        onClick={() => this.remove(this.props.merit)}
+        onClick={() => this.delete(this.props.merit)}
       />,
     ];
 
@@ -41,10 +41,10 @@ export default class RemoveMeritDialog extends Component {
         actions={actions}
         modal={false}
         open={this.props.open}
-        onRequestClose={this.props.handleRemoveClose}
+        onRequestClose={this.props.handleDeleteClose}
         autoScrollBodyContent={true}
       >
-        Remove Merit?
+        Delete Merit?
       </Dialog>
     )
   }

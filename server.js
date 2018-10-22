@@ -54,7 +54,7 @@ app.get('/', (req, res) => {
 });
 
 // Retrieving Authentication Status Route
-app.get('/api', function(req, res) {
+app.get('/api/auth', function(req, res) {
   // Send back user's info to the client
   const { displayName } = req.query;
   const userRef = admin.database().ref('/users/' + displayName);
@@ -66,7 +66,7 @@ app.get('/api', function(req, res) {
 });
 
 // Get Firebase Data Route
-app.get('/api/firebaseData', function(req, res) {
+app.get('/api/firebase', function(req, res) {
   const firebaseData = {
     apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
     authDomain: 'garnett-42475.firebaseapp.com',
@@ -121,7 +121,7 @@ app.get('/api/actives', function(req, res) {
 });
 
 // Query for merit data on Pledge App
-app.get('/api/pledgeData', function(req, res) {
+app.get('/api/pledges', function(req, res) {
   const { displayName } = req.query;
   const userRef = admin.database().ref('/users/' + displayName);
   let meritArray = [];
@@ -156,7 +156,7 @@ app.get('/api/pledgeData', function(req, res) {
 });
 
 // Query for the specified pledge's merits
-app.get('/api/pledgeMerits', function(req, res) {
+app.get('/api/pledge/merits', function(req, res) {
   const { pledgeName } = req.query;
   const meritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
   let merits = [];
@@ -175,7 +175,7 @@ app.get('/api/pledgeMerits', function(req, res) {
 });
 
 // Query for the specified pledge's complaints
-app.get('/api/pledgeComplaints', function(req, res) {
+app.get('/api/pledge/complaints', function(req, res) {
   const { pledgeName } = req.query;
   const complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
   let complaints = [];
@@ -368,7 +368,7 @@ app.put('/api/signup', function(req, res) {
 });
 
 // Forgot Password Route
-app.put('/api/forgotPassword', function(req, res) {
+app.put('/api/forgotpassword', function(req, res) {
   firebase.auth().sendPasswordResetEmail(req.body.email).then(function() {
     res.status(200).send('Email to reset password has been sent.');
   }).catch(function(error) {
@@ -391,7 +391,7 @@ app.put('/api/logout', function(req, res) {
 });
 
 // Sets the user photo
-app.put('/api/setPhoto', function(req, res) {
+app.put('/api/photo/update', function(req, res) {
   const fullName = req.body.displayName;
   const userRef = admin.database().ref('/users/' + fullName);
 
@@ -406,7 +406,7 @@ app.put('/api/setPhoto', function(req, res) {
 });
 
 // Get merits remaining for pledge
-app.get('/api/meritsRemaining', function(req, res) {
+app.get('/api/merit/active/remaining', function(req, res) {
   const { displayName, pledgeName } = req.query;
   const pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
 
@@ -416,7 +416,7 @@ app.get('/api/meritsRemaining', function(req, res) {
 });
 
 // Gets all the pledges for meriting as active
-app.get('/api/pledgesForMerit', function(req, res) {
+app.get('/api/merit/active/pledges', function(req, res) {
   const { displayName } = req.query;
   const pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
 
@@ -437,7 +437,7 @@ app.get('/api/pledgesForMerit', function(req, res) {
 });
 
 // Gets all the actives for meriting as pledge
-app.get('/api/activesForMerit', function(req, res) {
+app.get('/api/merit/pledge/actives', function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
 
@@ -459,7 +459,7 @@ app.get('/api/activesForMerit', function(req, res) {
 });
 
 // Gets all the alumni for meriting as pledge
-app.get('/api/alumniForMerit', function(req, res) {
+app.get('/api/merit/pledge/alumni', function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
 
@@ -481,7 +481,7 @@ app.get('/api/alumniForMerit', function(req, res) {
 });
 
 // Gets all the chalkboards for merit
-app.get('/api/chalkboardsForMerit', function(req, res) {
+app.get('/api/merit/chalkboards', function(req, res) {
   const { fullName } = req.query;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
@@ -524,7 +524,7 @@ app.get('/api/chalkboardsForMerit', function(req, res) {
 });
 
 // Get Pbros data for pledges
-app.get('/api/getPbros', function(req, res) {
+app.get('/api/merit/pledge/pbros', function(req, res) {
   let pbros = [];
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
@@ -541,7 +541,7 @@ app.get('/api/getPbros', function(req, res) {
 });
 
 // Put merit data as active
-app.put('/api/meritAsActive', function(req, res) {
+app.put('/api/merit/active/create', function(req, res) {
   let counter = 0;
   const selectedPledges = req.body.selectedPledges;
 
@@ -584,7 +584,7 @@ app.put('/api/meritAsActive', function(req, res) {
 });
 
 // Put merit data as pledge
-app.put('/api/meritAsPledge', function(req, res) {
+app.put('/api/merit/pledge/create', function(req, res) {
   let counter = 0;
   const {
     displayName,
@@ -599,7 +599,7 @@ app.put('/api/meritAsPledge', function(req, res) {
     const activeRef = admin.database().ref('/users/' + child.value);
 
     activeRef.once('value', (active) => {
-      const merit = {
+      const meritInfo = {
         name: `${active.val().firstName} ${active.val().lastName}`,
         description: merit.description,
         amount: merit.amount,
@@ -627,7 +627,7 @@ app.put('/api/meritAsPledge', function(req, res) {
       pledgeRef.once('value', (pledge) => {
         counter++;
 
-        pledge.ref.child('Merits').push(merit);
+        pledge.ref.child('Merits').push(meritInfo);
 
         if (!res.headersSent && counter === selectedActives.length) {
           pledgeRef.update({
@@ -641,8 +641,8 @@ app.put('/api/meritAsPledge', function(req, res) {
   });
 });
 
-// Removes merit as pledge
-app.put('/api/removeMeritAsPledge', function(req, res) {
+// Deletes merit as pledge
+app.put('/api/merit/pledge/delete', function(req, res) {
   const pledgeName = req.body.displayName;
   const activeName = req.body.merit.name.replace(/ /g,'');
   const pledgeRef = admin.database().ref('/users/' + pledgeName);
@@ -674,7 +674,7 @@ app.put('/api/removeMeritAsPledge', function(req, res) {
 });
 
 // Gets the chalkboard information
-app.get('/api/chalkboardInfo', function(req, res) {
+app.get('/api/chalkboard', function(req, res) {
   const { title } = req.query;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
@@ -691,7 +691,7 @@ app.get('/api/chalkboardInfo', function(req, res) {
 });
 
 // Retrieves all the attendees of the chalkboard
-app.get('/api/attendees', function(req, res) {
+app.get('/api/chalkboard/attendees', function(req, res) {
   const { title } = req.query
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
@@ -717,20 +717,9 @@ app.get('/api/attendees', function(req, res) {
 });
 
 // Creates a chalkboard
-app.put('/api/createChalkboard', function(req, res) {
-  const chalkboardInfo = {
-    displayName: req.body.displayName,
-    activeName: req.body.activeName,
-    photoURL: req.body.photoURL,
-    title: req.body.title,
-    description: req.body.description,
-    date: req.body.date,
-    time: req.body.time,
-    location: req.body.location,
-    timeCommitment: req.body.timeCommitment,
-    amount: req.body.amount
-  };
-  let chalkboardsRef = admin.database().ref('/chalkboards');
+app.put('/api/chalkboard/create', function(req, res) {
+  const { chalkboard } = req.body;
+  const chalkboardsRef = admin.database().ref('/chalkboards');
   let counter = 0;
 
   // Adds chalkboards to general chalkboards and user's chalkboards
@@ -739,12 +728,12 @@ app.put('/api/createChalkboard', function(req, res) {
       chalkboards.forEach((chalkboard) => {
         counter++;
 
-        if (req.body.title === chalkboard.val().title) {
+        if (chalkboard.title === chalkboard.val().title) {
           res.sendStatus(400);
         }
         else {
           if (!res.headersSent && counter === chalkboards.numChildren()) {
-            chalkboardsRef.push(chalkboardInfo);
+            chalkboardsRef.push(chalkboard);
 
             res.sendStatus(200);
           }
@@ -752,7 +741,7 @@ app.put('/api/createChalkboard', function(req, res) {
       });
     }
     else {
-      chalkboardsRef.push(chalkboardInfo);
+      chalkboardsRef.push(chalkboard);
 
       res.sendStatus(200);
     }
@@ -760,22 +749,16 @@ app.put('/api/createChalkboard', function(req, res) {
 });
 
 // Edits chalkboard for desktop
-app.put('/api/editChalkboard', function(req, res) {
+app.put('/api/chalkboard/update', function(req, res) {
+  const { chalkboard } = req.body;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
-      if (req.body.chalkboard.title === chalkboard.val().title) {
+      if (chalkboard.title === chalkboard.val().title) {
         // Updates the chalkboard
-        chalkboard.ref.update({
-          description: req.body.description,
-          date: req.body.date,
-          time: req.body.time,
-          location: req.body.location,
-          timeCommitment: req.body.timeCommitment,
-          amount: req.body.amount
-        });
+        chalkboard.ref.update(chalkboard);
 
         res.sendStatus(200);
       }
@@ -784,17 +767,18 @@ app.put('/api/editChalkboard', function(req, res) {
 });
 
 // Edits chalkboard for mobile devices
-app.put('/api/editChalkboardMobile', function(req, res) {
-  const editedField = req.body.field.toLowerCase();
+app.put('/api/chalkboard/mobile/update', function(req, res) {
+  const { title, field, value } = req.body;
+  const editedField = field.toLowerCase();
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
-      if (req.body.chalkboard.title === chalkboard.val().title) {
+      if (title === chalkboard.val().title) {
         // Updates the chalkboard
         chalkboard.ref.update({
-          [editedField]: req.body.value
+          [editedField]: value
         });
 
         res.sendStatus(200);
@@ -804,17 +788,18 @@ app.put('/api/editChalkboardMobile', function(req, res) {
 });
 
 // Joins chalkboard as an attendee
-app.put('/api/joinChalkboard', function(req, res) {
+app.put('/api/chalkboard/join', function(req, res) {
+  const { name, photoURL, title } = req.body;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
-      if (req.body.chalkboard.title === chalkboard.val().title) {
+      if (title === chalkboard.val().title) {
         // Adds the user to the Attendees ref
         chalkboard.ref.child('attendees').push({
-          name: req.body.name,
-          photoURL: req.body.photoURL
+          name,
+          photoURL
         });
         
         res.sendStatus(200);
@@ -824,13 +809,14 @@ app.put('/api/joinChalkboard', function(req, res) {
 });
 
 // Removes chalkboard from both user's list and general list
-app.put('/api/removeChalkboard', function(req, res) {
+app.put('/api/chalkboard/delete', function(req, res) {
+  const { title } = req.body;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       // Removes chalkboard in the chalkboards ref
-      if (req.body.chalkboard.title === chalkboard.val().title) {
+      if (title === chalkboard.val().title) {
         chalkboard.ref.remove(() => {
           res.sendStatus(200);
         });
@@ -840,14 +826,14 @@ app.put('/api/removeChalkboard', function(req, res) {
 });
 
 // Leaves chalkboard as an attendee
-app.put('/api/leaveChalkboard', function(req, res) {
-  const name = req.body.name;
+app.put('/api/chalkboard/leave', function(req, res) {
+  const { name, title } = req.body;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
     chalkboards.forEach((chalkboard) => {
       // Looks for the chalkboard in the chalkboards ref
-      if (req.body.chalkboard.title === chalkboard.val().title) {
+      if (title === chalkboard.val().title) {
         chalkboard.ref.child('attendees').once('value', (attendees) => {
           attendees.forEach((attendee) => {
             // Checks if the user is an attendee
@@ -865,7 +851,7 @@ app.put('/api/leaveChalkboard', function(req, res) {
 });
 
 // Gets all the pledges for complaints
-app.get('/api/pledgesForComplaints', function(req, res) {
+app.get('/api/complaints/pledges', function(req, res) {
   const usersRef = admin.database().ref('/users');
 
   // Loop through all users for pledges
@@ -893,30 +879,31 @@ app.get('/api/pledgesForComplaints', function(req, res) {
 });
 
 // Put complaint data
-app.put('/api/complain', function(req, res) {
+app.put('/api/complaint/create', function(req, res) {
+  const { status, complaint } = req.body;
   // Check if active is PI/PM or not
-  if (req.body.status !== 'pipm') {
+  if (status !== 'pipm') {
     let complaintsRef = admin.database().ref('/pendingComplaints');
 
     // Add complaints to active's pending complaints list and the pending complaints list
-    complaintsRef.push(req.body.complaint);
+    complaintsRef.push(complaint);
   }
   else {
-    const pledgeName = req.body.complaint.pledgeDisplayName;
+    const { pledgeDisplayName } = complaint;
     let complaintsRef = admin.database().ref('/approvedComplaints');
-    let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+    let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeDisplayName + '/Complaints');
 
     // Add complaints to the approved complaints list and the specified pledge's complaints list
-    complaintsRef.push(req.body.complaint);
+    complaintsRef.push(complaint);
 
-    pledgeComplaintsRef.push(req.body.complaint);
+    pledgeComplaintsRef.push(complaint);
   }
 
   res.sendStatus(200);
 });
 
 // Removes complaint for active
-app.put('/api/removeComplaint', function(req, res) {
+app.put('/api/complaint/delete', function(req, res) {
   const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
   pendingComplaintsRef.once('value', (complaints) => {
@@ -932,8 +919,9 @@ app.put('/api/removeComplaint', function(req, res) {
 });
 
 // Approves complaint for PI/PM
-app.put('/api/approveComplaint', function(req, res) {
-  const pledgeName = req.body.complaint.pledgeDisplayName;
+app.put('/api/complaint/approve', function(req, res) {
+  const { complaint } = req.body;
+  const pledgeName = complaint.pledgeDisplayName;
   let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
   let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
   const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
@@ -941,12 +929,12 @@ app.put('/api/approveComplaint', function(req, res) {
   pendingComplaintsRef.once('value', (complaints) => {
     complaints.forEach((complaint) => {
       // Removes complaint from the pending complaints list
-      if (equal(req.body.complaint, complaint.val())) {
+      if (equal(complaint, complaint.val())) {
         complaint.ref.remove(() => {
           // Adds complaint to the approved complaints list
-          approvedComplaintsRef.push(req.body.complaint);
+          approvedComplaintsRef.push(complaint);
           // Adds complaint to the pledge's complaints list
-          pledgeComplaintsRef.push(req.body.complaint);
+          pledgeComplaintsRef.push(complaint);
 
           res.sendStatus(200);
         });
@@ -956,7 +944,7 @@ app.put('/api/approveComplaint', function(req, res) {
 });
 
 // Save message token from server
-app.put('/api/saveMessageToken', function(req, res) {
+app.put('/api/notification/saveMessageToken', function(req, res) {
   const fullName = req.body.displayName;
   const userRef = admin.database().ref('/users/' + fullName);
 
@@ -968,15 +956,12 @@ app.put('/api/saveMessageToken', function(req, res) {
 });
 
 // Send active merit notification to pledges
-app.put('/api/sendActiveMeritNotification', function(req, res) {
-  const pledges = req.body.pledges;
+app.put('/api/notification/merit/activeCreated', function(req, res) {
+  const { activeName, pledges, amount } = req.body;
   let counter = 0;
-  let merits;
+  let merits = 'merits';
 
-  if (req.body.amount > 0) {
-    merits = 'merits';
-  }
-  else {
+  if (amount <= 0) {
     merits = 'demerits';
   }
 
@@ -985,14 +970,14 @@ app.put('/api/sendActiveMeritNotification', function(req, res) {
 
     pledgeRef.once('value', (snapshot) => {
       const registrationToken = snapshot.val().registrationToken;
-      const amount = Math.abs(req.body.amount);
+      const meritAmount = Math.abs(amount);
       counter++;
 
       const message = {
         webpush: {
           notification: {
             title: 'Garnett',
-            body: `You have received ${amount} ${merits} from ${pledge.label}.`,
+            body: `You have received ${meritAmount} ${merits} from ${activeName}.`,
             click_action: 'https://garnett-app.herokuapp.com/pledge-app',
             icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
             vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
@@ -1026,15 +1011,12 @@ app.put('/api/sendActiveMeritNotification', function(req, res) {
 });
 
 // Send pledge merit notification to actives
-app.put('/api/sendPledgeMeritNotification', function(req, res) {
-  const actives = req.body.actives;
+app.put('/api/notification/merit/pledgeCreated', function(req, res) {
+  const { pledgeName, actives, amount } = req.body;
   let counter = 0;
-  let merits;
+  let merits = 'merits';
 
-  if (req.body.amount > 0) {
-    merits = 'merits';
-  }
-  else {
+  if (amount <= 0) {
     merits = 'demerits';
   }
 
@@ -1043,14 +1025,14 @@ app.put('/api/sendPledgeMeritNotification', function(req, res) {
 
     activeRef.once('value', (snapshot) => {
       const registrationToken = snapshot.val().registrationToken;
-      const amount = Math.abs(req.body.amount);
+      const meritAmount = Math.abs(amount);
       counter++;
 
       const message = {
         webpush: {
           notification: {
             title: 'Garnett',
-            body: `You have given ${amount} ${merits} to ${req.body.pledgeName}.`,
+            body: `You have given ${meritAmount} ${merits} to ${pledgeName}.`,
             click_action: 'https://garnett-app.herokuapp.com/pledge-app',
             icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
             vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
@@ -1084,7 +1066,7 @@ app.put('/api/sendPledgeMeritNotification', function(req, res) {
 });
 
 // Send created chalkboard notification to pledges
-app.put('/api/sendCreatedChalkboardNotification', function(req, res) {
+app.put('/api/notification/chalkboard/created', function(req, res) {
   const usersRef = admin.database().ref('/users');
   let counter = 0;
 
@@ -1133,8 +1115,8 @@ app.put('/api/sendCreatedChalkboardNotification', function(req, res) {
 });
 
 // Send edited chalkboard notification to attendees
-app.put('/api/sendEditedChalkboardNotification', function(req, res) {
-  const chalkboard = req.body.chalkboard;
+app.put('/api/notification/chalkboard/updated', function(req, res) {
+  const { chalkboard } = req.body;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
@@ -1231,10 +1213,9 @@ function sendAttendeesNotification(chalkboard, message, res) {
 }
 
 // Send joined chalkboard notification to active
-app.put('/api/sendJoinedChalkboardNotification', function(req, res) {
-  const chalkboard = req.body.chalkboard;
+app.put('/api/notification/chalkboard/joined', function(req, res) {
+  const { chalkboard, name } = req.body;
   const activeName = chalkboard.displayName;
-  const name = req.body.name;
   const activeRef = admin.database().ref('/users/' + activeName);
 
   activeRef.once('value', (active) => {
@@ -1278,10 +1259,9 @@ app.put('/api/sendJoinedChalkboardNotification', function(req, res) {
 });
 
 // Send left chalkboard notification to active
-app.put('/api/sendLeftChalkboardNotification', function(req, res) {
-  const chalkboard = req.body.chalkboard;
+app.put('/api/notification/chalkboard/left', function(req, res) {
+  const { chalkboard, name } = req.body;
   const activeName = chalkboard.displayName;
-  const name = req.body.name;
   const activeRef = admin.database().ref('/users/' + activeName);
 
   activeRef.once('value', (active) => {
@@ -1325,8 +1305,8 @@ app.put('/api/sendLeftChalkboardNotification', function(req, res) {
 });
 
 // Send complaint notification to pipm
-app.put('/api/sendPendingComplaintNotification', function(req, res) {
-  const complaint = req.body.complaint;
+app.put('/api/notification/complaint/pending', function(req, res) {
+  const { complaint } = req.body;
   const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (users) => {
@@ -1372,8 +1352,8 @@ app.put('/api/sendPendingComplaintNotification', function(req, res) {
 });
 
 // Send complaint notification to pledge
-app.put('/api/sendApprovedComplaintNotification', function(req, res) {
-  const complaint = req.body.complaint;
+app.put('/api/notification/complaint/approved', function(req, res) {
+  const { complaint } = req.body;
   const pledgeRef = admin.database().ref('/users/' + complaint.pledgeDisplayName);
 
   pledgeRef.once('value', (pledge) => {
@@ -1409,45 +1389,42 @@ app.put('/api/sendApprovedComplaintNotification', function(req, res) {
 });
 
 // Update interaction for rushee
-app.put('/api/updateInteraction', function(req, res) {
-  const rusheeName = req.body.rusheeName;
-  const displayName = req.body.displayName;
+app.put('/api/interaction/update', function(req, res) {
+  let { totalInteractions } = req.body;
+  const { rusheeName, displayName, interacted } = req.body;
   const rusheeRef = admin.database().ref('/rushees/' + rusheeName);
   const activeRef = rusheeRef.child('Actives/' + displayName);
-  let totalInteractions = req.body.totalInteractions;
 
-  if (!req.body.interacted == true) {
+  if (!interacted == true) {
     totalInteractions++;
   }
   else {
     totalInteractions--;
   }
 
-  rusheeRef.update({
-    totalInteractions: totalInteractions
-  });
+  rusheeRef.update({ totalInteractions });
 
   activeRef.update({
-    interacted: !req.body.interacted
+    interacted: !interacted
   });
 
   res.sendStatus(200);
 });
 
 // Start vote for rushee
-app.put('/api/startVote', function(req, res) {
+app.put('/api/vote/start', function(req, res) {
   const delibsRef = admin.database().ref('/delibsVoting');
 
   delibsRef.update({
     open: true,
-    rushee: req.body.rusheeName
+    rushee: rusheeName
   });
 
   res.sendStatus(200);
 });
 
 // End vote for rushee
-app.put('/api/endVote', function(req, res) {
+app.put('/api/vote/end', function(req, res) {
   const delibsRef = admin.database().ref('/delibsVoting');
 
   delibsRef.update({
@@ -1459,7 +1436,7 @@ app.put('/api/endVote', function(req, res) {
 });
 
 // Voting for rushee
-app.put('/api/vote', function(req, res) {
+app.put('/api/vote/create', function(req, res) {
   const rusheeName = req.body.rushee.replace(/ /g,'');
   const fullName = req.body.displayName;
   const rusheeRef = admin.database().ref('/rushees/' + rusheeName);
@@ -1543,7 +1520,7 @@ app.get('/api/photos', function(req, res) {
 });
 
 // Get my data for data app
-app.get('/api/myData', function(req, res) {
+app.get('/api/mydata', function(req, res) {
   const { fullName } = req.query;
   const usersRef = admin.database().ref('/users');
   const chalkboardsRef = admin.database().ref('/chalkboards');

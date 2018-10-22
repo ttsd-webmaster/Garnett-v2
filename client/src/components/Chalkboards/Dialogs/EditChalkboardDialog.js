@@ -99,26 +99,36 @@ export default class EditChalkboardDialog extends Component {
         });
       }
       else {
-        const { displayName, chalkboard } = this.props.state;
+        const { chalkboard } = this.props.state;
         const parsedDate = this.formatDate(date);
         const parsedTime = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-        API.editChalkboard(displayName, chalkboard, description, parsedDate, parsedTime, location, timeCommitment, amount)
+        const updatedChalkboard = {
+          title: chalkboard.title,
+          description,
+          date: parsedDate,
+          time: parsedTime,
+          location,
+          timeCommitment,
+          amount
+        }
+
+        API.updateChalkboard(updatedChalkboard)
         .then((res) => {
-          console.log('Edited chalkboard');
+          console.log('Updated chalkboard');
           this.props.updateChalkboardInfo();
           this.handleClose();
 
-          API.sendEditedChalkboardNotification(chalkboard)
+          API.sendUpdatedChalkboardNotification(chalkboard)
           .then(res => {
-            this.props.handleRequestOpen('Edited chalkboard');            
+            this.props.handleRequestOpen('Updated chalkboard');            
           })
           .catch(error => console.log(`Error: ${error}`));
         })
         .catch((error) => {
           console.log(`Error: ${error}`);
           this.handleClose();
-          this.props.handleRequestOpen('Error editing chalkboard');
+          this.props.handleRequestOpen('Error updating chalkboard');
         });
       }
     }

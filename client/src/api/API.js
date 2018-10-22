@@ -6,28 +6,25 @@ export default {
   // GET requests
   getAuthStatus: function(displayName) {
     const params = { displayName };
-    return axios.get('/api/', { params });
+    return axios.get('/api/auth', { params });
   },
   getFirebaseData: function() {
-    return axios.get('/api/firebaseData');
-  },
-  getPledges: function() {
-    return axios.get('/api/pledges');
+    return axios.get('/api/firebase');
   },
   getActives: function() {
     return axios.get('/api/actives');
   },
-  getPledgeData: function(displayName) {
+  getPledges: function(displayName) {
     const params = { displayName };
-    return axios.get('/api/pledgeData', { params });
+    return axios.get('/api/pledges', { params });
   },
   getPledgeMerits: function(pledgeName) {
     const params = { pledgeName };
-    return axios.get('/api/pledgeMerits', { params });
+    return axios.get('/api/pledge/merits', { params });
   },
   getPledgeComplaints: function(pledgeName) {
     const params = { pledgeName };
-    return axios.get('/api/pledgeComplaints', { params });
+    return axios.get('/api/pledge/complaints', { params });
   },
   // PUT requests
   signUp: function(email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode) {
@@ -36,165 +33,165 @@ export default {
   },
   forgotPassword: function(email) {
     const body = { email };
-    return axios.put('/api/forgotPassword', body);
+    return axios.put('/api/forgotpassword', body);
   },
   logout: function() {
     return axios.put('/api/logout');
   },
   setPhoto: function(displayName, url) {
     const body = { displayName, url };
-    return axios.put('/api/setPhoto', body);
+    return axios.put('/api/photo/update', body);
   },
 
   // Merit Book
   // GET requests
   getMeritsRemaining: function(displayName, pledgeName) {
     const params = { displayName, pledgeName };
-    return axios.get('/api/meritsRemaining', { params });
+    return axios.get('/api/merit/active/remaining', { params });
   },
   getPledgesForMerit: function(displayName) {
     const params = { displayName };
-    return axios.get('/api/pledgesForMerit', { params });
+    return axios.get('/api/merit/active/pledges', { params });
   },
   getActivesForMerit: function(displayName) {
     const params = { displayName };
-    return axios.get('/api/activesForMerit', { params });
+    return axios.get('/api/merit/pledge/actives', { params });
   },
   getAlumniForMerit: function(displayName) {
     const params = { displayName };
-    return axios.get('/api/alumniForMerit', { params });
+    return axios.get('/api/merit/pledge/alumni', { params });
   },
   getChalkboardsForMerit: function(fullName) {
     const params = { fullName };
-    return axios.get('/api/chalkboardsForMerit', { params });
+    return axios.get('/api/merit/chalkboards', { params });
   },
   getPbros: function(displayName) {
     const params = { displayName };
-    return axios.get('/api/getPbros', { params });
+    return axios.get('/api/merit/pledge/pbros', { params });
   },
   meritAsActive: function(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status) {
     const body = { displayName, selectedPledges, merit, isChalkboard, isPCGreet, status };
-    return axios.put('/api/meritAsActive', body);
+    return axios.put('/api/merit/active/create', body);
   },
   meritAsPledge: function(displayName, selectedActives, merit, isChalkboard, isPCGreet) {
     const body = { displayName, selectedActives, merit, isChalkboard, isPCGreet };
-    return axios.put('/api/meritAsPledge', body);
+    return axios.put('/api/merit/pledge/create', body);
   },
-  removeMerit: function(displayName, merit) {
+  deleteMerit: function(displayName, merit) {
     const body = { displayName, merit };
-    return axios.put('/api/removeMeritAsPledge', body);
+    return axios.put('/api/merit/pledge/delete', body);
   },
 
   // Chalkboards
   // GET requests
   getChalkboardInfo: function(title) {
     const params = { title };
-    return axios.get('/api/chalkboardInfo', { params });
+    return axios.get('/api/chalkboard', { params });
   },
   getAttendees: function(title) {
     const params = { title };
-    return axios.get('/api/attendees', { params });
+    return axios.get('/api/chalkboard/attendees', { params });
   },
   // PUT requests
-  createChalkboard: function(displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount) {
-    const body = { displayName, activeName, photoURL, title, description, date, time, location, timeCommitment, amount };
-    return axios.put('/api/createChalkboard', body);
+  createChalkboard: function(chalkboard) {
+    const body = { chalkboard };
+    return axios.put('/api/chalkboard/create', body);
   },
-  editChalkboard: function(displayName, chalkboard, description, date, time, location, timeCommitment, amount) {
-    const body = { displayName, chalkboard, description, date, time, location, timeCommitment, amount };
-    return axios.put('/api/editChalkboard', body);
+  updateChalkboard: function(chalkboard) {
+    const body = { chalkboard };
+    return axios.put('/api/chalkboard/update', body);
   },
-  editChalkboardMobile: function(displayName, chalkboard, field, value) {
-    const body = { displayName, chalkboard, field, value };
-    return axios.put('/api/editChalkboardMobile', body);
+  updateChalkboardMobile: function(title, field, value) {
+    const body = { title, field, value };
+    return axios.put('/api/chalkboard/mobile/update', body);
   },
-  joinChalkboard: function(name, photoURL, chalkboard) {
-    const body = { name, photoURL, chalkboard };
-    return axios.put('/api/joinChalkboard', body);
+  joinChalkboard: function(name, photoURL, title) {
+    const body = { name, photoURL, title };
+    return axios.put('/api/chalkboard/join', body);
   },
-  removeChalkboard: function(displayName, chalkboard) {
-    const body = { displayName, chalkboard };
-    return axios.put('/api/removeChalkboard', body);
+  deleteChalkboard: function(title) {
+    const body = { title };
+    return axios.put('/api/chalkboard/delete', body);
   },
-  leaveChalkboard: function(name, chalkboard) {
-    const body = { name, chalkboard };
-    return axios.put('/api/leaveChalkboard', body);
+  leaveChalkboard: function(name, title) {
+    const body = { name, title };
+    return axios.put('/api/chalkboard/leave', body);
   },
 
   // Complaints
   // GET requests
   getPledgesForComplaints: function() {
-    return axios.get('/api/pledgesForComplaints');
+    return axios.get('/api/complaint/pledges');
   },
   // PUT requests
-  complain: function(complaint, status) {
+  createComplaint: function(complaint, status) {
     const body = { complaint, status };
-    return axios.put('/api/complain', body);
+    return axios.put('/api/complaint/create', body);
   },
-  removeComplaint: function(complaint) {
+  deleteComplaint: function(complaint) {
     const body = { complaint };
-    return axios.put('/api/removeComplaint', body);
+    return axios.put('/api/complaint/delete', body);
   },
   approveComplaint: function(complaint) {
     const body = { complaint };
-    return axios.put('/api/approveComplaint', body);
+    return axios.put('/api/complaint/approve', body);
   },
 
   // Notification Messaging
   // PUT requests
   saveMessagingToken: function(displayName, token) {
     const body = { displayName, token };
-    return axios.put('/api/saveMessageToken', body);
+    return axios.put('/api/notification/saveMessageToken', body);
   },
-  sendActiveMeritNotification: function(activeName, pledges, amount) {
+  sendPledgeMeritNotification: function(activeName, pledges, amount) {
     const body = { activeName, pledges, amount };
-    return axios.put('/api/sendActiveMeritNotification', body);
+    return axios.put('/api/notification/merit/activeCreated', body);
   },
-  sendPledgeMeritNotification: function(pledgeName, actives, amount) {
+  sendActiveMeritNotification: function(pledgeName, actives, amount) {
     const body = { pledgeName, actives, amount };
-    return axios.put('/api/sendPledgeMeritNotification', body);
+    return axios.put('/api/notification/merit/pledgeCreated', body);
   },
   sendCreatedChalkboardNotification: function(chalkboardTitle) {
     const body = { chalkboardTitle };
-    return axios.put('/api/sendCreatedChalkboardNotification', body);
+    return axios.put('/api/notification/chalkboard/created', body);
   },
-  sendEditedChalkboardNotification: function(chalkboard) {
+  sendUpdatedChalkboardNotification: function(chalkboard) {
     const body = { chalkboard };
-    return axios.put('/api/sendEditedChalkboardNotification', body);
+    return axios.put('/api/notification/chalkboard/updated', body);
   },
   sendJoinedChalkboardNotification: function(name, chalkboard) {
     const body = { name, chalkboard };
-    return axios.put('/api/sendJoinedChalkboardNotification', body);
+    return axios.put('/api/notification/chalkboard/joined', body);
   },
   sendLeftChalkboardNotification: function(name, chalkboard) {
     const body = { name, chalkboard };
-    return axios.put('/api/sendLeftChalkboardNotification', body);
+    return axios.put('/api/notification/chalkboard/left', body);
   },
   sendPendingComplaintNotification: function(complaint) {
     const body = { complaint };
-    return axios.put('/api/sendPendingComplaintNotification', body);
+    return axios.put('/api/notification/complaint/pending', body);
   },
   sendApprovedComplaintNotification: function(complaint) {
     const body = { complaint };
-    return axios.put('/api/sendApprovedComplaintNotification', body);
+    return axios.put('/api/notification/complaint/approved', body);
   },
 
   // Delibs App
   // PUT requests
   updateInteraction: function(displayName, rusheeName, interacted, totalInteractions) {
     const body = { displayName, rusheeName, interacted, totalInteractions };
-    return axios.put('/api/updateInteraction', body);
+    return axios.put('/api/interaction/update', body);
   },
   startVote: function(rusheeName) {
     const body = { rusheeName };
-    return axios.put('/api/startVote', body);
+    return axios.put('/api/vote/start', body);
   },
   endVote: function() {
-    return axios.put('/api/endVote');
+    return axios.put('/api/vote/end');
   },
   voteForRushee: function(displayName, rushee, vote) {
     const body = { displayName, rushee, vote };
-    return axios.put('/api/vote', body);
+    return axios.put('/api/vote/create', body);
   },
 
   // Data App
@@ -205,6 +202,6 @@ export default {
   },
   getMyData: function(fullName) {
     const params = { fullName };
-    return axios.get('/api/myData', { params });
+    return axios.get('/api/mydata', { params });
   }
 };
