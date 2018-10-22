@@ -1,6 +1,6 @@
 import './Home.css';
-import {LoadingHome} from '../../helpers/loaders.js';
-import API from '../../api/API.js';
+import {LoadingHome} from 'helpers/loaders.js';
+import API from 'api/API.js';
 
 import React, {Component} from 'react';
 

@@ -1,6 +1,6 @@
 import '../Complaints.css';
-import {loadFirebase} from '../../../helpers/functions.js';
-import {LoadingComponent} from '../../../helpers/loaders.js';
+import {loadFirebase} from 'helpers/functions.js';
+import {LoadingComponent} from 'helpers/loaders.js';
 
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';

@@ -1,6 +1,6 @@
 import '../../MeritBook.css';
-import {getTabStyle, isMobileDevice} from '../../../../helpers/functions.js';
-import API from '../../../../api/API.js';
+import {getTabStyle, isMobileDevice} from 'helpers/functions.js';
+import API from 'api/API.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';

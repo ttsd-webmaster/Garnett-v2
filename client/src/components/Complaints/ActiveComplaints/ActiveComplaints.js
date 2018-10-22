@@ -1,8 +1,8 @@
 import '../Complaints.css';
 import MyComplaints from './Views/MyComplaints';
 import PastComplaints from './Views/PastComplaints';
-import {loadFirebase} from '../../../helpers/functions.js';
-import {LoadingComponent} from '../../../helpers/loaders.js';
+import {loadFirebase} from 'helpers/functions.js';
+import {LoadingComponent} from 'helpers/loaders.js';
 
 import React, {Component} from 'react';
 import {Portal} from 'react-portal';

@@ -1,8 +1,8 @@
 import './Chalkboards.css';
 import MyChalkboards from './Views/MyChalkboards';
 import AllChalkboards from './Views/AllChalkboards';
-import {loadFirebase, isMobileDevice, getDate} from '../../helpers/functions.js';
-import {LoadingComponent} from '../../helpers/loaders.js';
+import {loadFirebase, isMobileDevice, getDate} from 'helpers/functions.js';
+import {LoadingComponent} from 'helpers/loaders.js';
 
 import React, {Component} from 'react';
 import {Portal} from 'react-portal';

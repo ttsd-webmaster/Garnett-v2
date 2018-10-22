@@ -1,91 +1,31 @@
 import './App.css';
-import API from '../api/API.js';
-import {initializeFirebase, loadFirebase, iOSversion} from '../helpers/functions.js';
+import API from 'api/API.js';
+import { initializeFirebase, loadFirebase, iOSversion } from 'helpers/functions';
+import { LoadingLogin } from 'helpers/loaders'
 import {
-  LoadingLogin,
-  LoadingHome,
-  LoadingPledgeApp,
-  LoadingDelibsApp,
-  LoadingRusheeProfile,
-  LoadingDataApp
-} from '../helpers/loaders.js';
+  LoadableLogin,
+  LoadableHome,
+  LoadablePledgeApp,
+  LoadableDelibsApp,
+  LoadableRusheeProfile,
+  LoadableDataApp
+} from 'helpers/LoadableComponents';
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
-import Loadable from 'react-loadable';
 import Snackbar from 'material-ui/Snackbar';
 
-const LoadableLogin = Loadable({
-  loader: () => import('../containers/Login/Login'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingLogin
-});
-
-const LoadableHome = Loadable({
-  loader: () => import('../containers/Home/Home'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingHome
-});
-
-const LoadablePledgeApp = Loadable({
-  loader: () => import('../containers/PledgeApp/PledgeApp'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingPledgeApp
-});
-
-const LoadableDelibsApp = Loadable({
-  loader: () => import('../containers/DelibsApp/DelibsApp'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingDelibsApp
-});
-
-const LoadableRusheeProfile = Loadable({
-  loader: () => import('../containers/DelibsApp/RusheeProfile'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingRusheeProfile
-});
-
-const LoadableDataApp = Loadable({
-  loader: () => import('../containers/DataApp/DataApp'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingDataApp
-});
-
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isAuthenticated: false,
-      loaded: false,
-      open: false,
-      message: ''
-    };
+export default class App extends Component {
+  state = {
+    isAuthenticated: false,
+    loaded: false,
+    open: false,
+    message: ''
   }
 
   componentWillMount() {
     const data = JSON.parse(localStorage.getItem('data'));
     const firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
-    const route = localStorage.getItem('route');
-
-    this.setState({ route });
 
     if (navigator.onLine) {
       if (data !== null) {
@@ -280,115 +220,166 @@ class App extends Component {
     this.setState({ open: false });
   }
 
+  get rootPath() {
+    const route = localStorage.getItem('route');
+    if (this.state.isAuthenticated) {
+      if (this.state.status === 'pledge') {
+        return <Redirect to="/pledge-app" />
+      }
+      else {
+        switch (route) {
+          case 'pledge-app':
+            return <Redirect to="/pledge-app" />
+          case 'delibs-app':
+            return <Redirect to="/delibs-app" />
+          case 'data-app':
+            return <Redirect to="/data-app" />
+          default:
+            return <Redirect to="/home" />
+        }
+      }
+    }
+    else if (this.state.loaded) {
+      return (
+        <LoadableLogin 
+          state={this.state}
+          loginCallBack={this.loginCallBack}
+          handleRequestOpen={this.handleRequestOpen}
+        />
+      )
+    }
+    else {
+      return (
+        <LoadingLogin />
+      )
+    }
+  }
+
+  homePath(history) {
+    if (this.state.isAuthenticated) {
+      return (
+        <LoadableHome
+          state={this.state}
+          history={history}
+          logoutCallBack={this.logoutCallBack}
+        />
+      )
+    }
+    else if (this.state.loaded) {
+      return <Redirect to="/" />
+    }
+    else {
+      return <LoadingLogin />
+    }
+  }
+
+  pledgeAppPath(history) {
+    if (this.state.isAuthenticated) {
+      return (
+        <LoadablePledgeApp 
+          state={this.state}
+          history={history}
+          logoutCallBack={this.logoutCallBack}
+          handleRequestOpen={this.handleRequestOpen}
+        />
+      )
+    }
+    else if (this.state.loaded) {
+      return <Redirect to="/" />
+    }
+    else {
+      return <LoadingLogin />
+    }
+  }
+
+  delibsAppPath(history) {
+    if (this.state.isAuthenticated) {
+      return (
+        <LoadableDelibsApp
+          state={this.state}
+          history={history}
+          handleRequestOpen={this.handleRequestOpen}
+        />
+      )
+    }
+    else if (this.state.loaded) {
+      return <Redirect to="/" />
+    }
+    else {
+      return <LoadingLogin />
+    }
+  }
+
+  rusheeProfilePath(history) {
+    if (this.state.isAuthenticated) {
+      return (
+        <LoadableRusheeProfile
+          state={this.state}
+          history={history}
+          handleRequestOpen={this.handleRequestOpen}
+        />
+      )
+    }
+    else if (this.state.loaded) {
+      return <Redirect to="/" />
+    }
+    else {
+      return <LoadingLogin />
+    }
+  }
+
+  dataAppPath(history) {
+    if (this.state.isAuthenticated) {
+      return (
+        <LoadableDataApp
+          state={this.state}
+          history={history}
+          handleRequestOpen={this.handleRequestOpen}
+        />
+      )
+    }
+    else if (this.state.loaded) {
+      return <Redirect to="/" />
+    }
+    else {
+      return <LoadingLogin />
+    }
+  }
+
   render() {
     return (
       <Router>
         <div>
-          <Route exact path="/" render={() => (
-            this.state.isAuthenticated ? (
-              this.state.status === "pledge" || 
-              this.state.route === "pledge-app" ? (
-                <Redirect to="/pledge-app" />
-              ) : (
-                this.state.route === "delibs-app" ? (
-                  <Redirect to="/delibs-app" />
-                ) : (
-                  this.state.route === "data-app" ? (
-                    <Redirect to="/data-app" />
-                  ) : (
-                    <Redirect to="/home" />
-                  )
-                )
-              )
-            ) : (
-              this.state.loaded ? (
-                <LoadableLogin 
-                  state={this.state}
-                  loginCallBack={this.loginCallBack}
-                  handleRequestOpen={this.handleRequestOpen}
-                />
-              ) : (
-                <LoadingLogin />
-              )
-            )
-          )}/>
-          <Route exact path="/home" render={({history}) => (
-            this.state.isAuthenticated ? (
-              <LoadableHome
-                state={this.state}
-                history={history}
-                logoutCallBack={this.logoutCallBack}
-              />
-            ) : (
-              this.state.loaded ? (
-                <Redirect to="/" />
-              ) : (
-                <LoadingLogin />
-              )
-            )
-          )}/>
-          <Route exact path="/pledge-app" render={({history}) => (
-            this.state.isAuthenticated ? (
-              <LoadablePledgeApp 
-                state={this.state}
-                history={history}
-                logoutCallBack={this.logoutCallBack}
-                handleRequestOpen={this.handleRequestOpen}
-              />
-            ) : (
-              this.state.loaded ? (
-                <Redirect to="/" />
-              ) : (
-                <LoadingLogin />
-              )
-            )
-          )}/>
-          <Route exact path="/delibs-app" render={({history}) => (
-            this.state.isAuthenticated ? (
-              <LoadableDelibsApp
-                state={this.state}
-                history={history}
-                handleRequestOpen={this.handleRequestOpen}
-              />
-            ) : (
-              this.state.loaded ? (
-                <Redirect to="/" />
-              ) : (
-                <LoadingLogin />
-              )
-            )
-          )}/>
-          <Route exact path="/delibs-app/:id" render={({history}) => (
-            this.state.isAuthenticated ? (
-              <LoadableRusheeProfile
-                state={this.state}
-                history={history}
-                handleRequestOpen={this.handleRequestOpen}
-              />
-            ) : (
-              this.state.loaded ? (
-                <Redirect to="/" />
-              ) : (
-                <LoadingLogin />
-              )
-            )
-          )}/>
-          <Route exact path="/data-app" render={({history}) => (
-            this.state.isAuthenticated ? (
-              <LoadableDataApp
-                state={this.state}
-                history={history}
-                handleRequestOpen={this.handleRequestOpen}
-              />
-            ) : (
-              this.state.loaded ? (
-                <Redirect to="/" />
-              ) : (
-                <LoadingLogin />
-              )
-            )
-          )}/>
-
+          <Route
+            exact
+            path="/"
+            render={() => this.rootPath}
+          />
+          <Route
+            exact
+            path="/home"
+            render={({ history }) => this.homePath(history)}
+          />
+          <Route
+            exact
+            path="/pledge-app"
+            render={({ history }) => this.pledgeAppPath(history)}
+          />
+          <Route
+            exact
+            path="/delibs-app"
+            render={({ history }) => this.delibsAppPath(history)}
+          />
+          <Route
+            exact
+            path="/delibs-app/:id"
+            render={({ history }) => this.rusheeProfilePath(history)}
+          />
+          <Route
+            exact
+            path="/data-app"
+            render={({ history }) => this.dataAppPath(history)}
+          />
           <Snackbar
             open={this.state.open}
             message={this.state.message}
@@ -400,5 +391,3 @@ class App extends Component {
     );
   }
 }
-
-export default App;

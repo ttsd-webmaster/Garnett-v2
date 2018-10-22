@@ -3,8 +3,8 @@ import '../PledgeApp/PledgeApp.css';
 import PledgeData from './Views/PledgeData';
 import RushData from './Views/RushData';
 import MyData from './Views/MyData';
-import {LoadingDataApp} from '../../helpers/loaders.js';
-import API from '../../api/API.js';
+import {LoadingDataApp} from 'helpers/loaders.js';
+import API from 'api/API.js';
 import pledgeData from './data/pledgeData.json';
 
 import React, {Component} from 'react';

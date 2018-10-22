@@ -1,9 +1,9 @@
 import '../../MeritBook.css';
-import {getDate, invalidSafariVersion} from '../../../../helpers/functions.js';
-import {CompletingTaskDialog} from '../../../../helpers/loaders.js';
-import API from '../../../../api/API.js';
+import { getDate, invalidSafariVersion } from 'helpers/functions.js';
+import { CompletingTaskDialog } from 'helpers/loaders.js';
+import API from 'api/API.js';
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';

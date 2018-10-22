@@ -1,9 +1,9 @@
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
-import '../../components/Settings/Settings.css';
-import {loadFirebase} from '../../helpers/functions.js';
-import {LoadingRusheeProfile} from '../../helpers/loaders.js';
-import API from '../../api/API.js';
+import 'components/Settings/Settings.css';
+import {loadFirebase} from 'helpers/functions.js';
+import {LoadingRusheeProfile} from 'helpers/loaders.js';
+import API from 'api/API.js';
 import {rusheeInfo} from './data.js';
 
 import React, {Component} from 'react';
@@ -11,7 +11,7 @@ import Loadable from 'react-loadable';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
-import {BottomSheet} from '../../helpers/BottomSheet/index.js';
+import {BottomSheet} from 'helpers/BottomSheet/index.js';
 
 const LoadableEndVoteDialog = Loadable({
   loader: () => import('./Dialogs/EndVoteDialog'),

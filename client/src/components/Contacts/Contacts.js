@@ -1,7 +1,7 @@
 import filters from './data.js';
 import ActiveList from './ActiveList';
-import API from '../../api/API';
-import {LoadingComponent} from '../../helpers/loaders.js';
+import API from 'api/API';
+import {LoadingComponent} from 'helpers/loaders.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';

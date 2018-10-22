@@ -1,5 +1,5 @@
 import '../../MeritBook.css';
-import API from '../../../../api/API.js';
+import API from 'api/API.js';
 
 import React, {Component} from 'react';
 import {List, ListItem} from 'material-ui/List';

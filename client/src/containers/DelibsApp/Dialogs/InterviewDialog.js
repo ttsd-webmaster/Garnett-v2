@@ -1,4 +1,4 @@
-import {isMobileDevice} from '../../../helpers/functions.js';
+import {isMobileDevice} from 'helpers/functions.js';
 import {interviewResponses} from '../data.js';
 
 import React, {Component} from 'react';

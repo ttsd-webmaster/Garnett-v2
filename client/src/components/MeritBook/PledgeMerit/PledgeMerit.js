@@ -1,8 +1,8 @@
 import '../MeritBook.css';
 import TotalMeritsAndPledgeBrothers from './TotalMeritsAndPledgeBrothers';
-import {loadFirebase} from '../../../helpers/functions.js';
-import {LoadingComponent} from '../../../helpers/loaders.js';
-import API from '../../../api/API.js';
+import {loadFirebase} from 'helpers/functions.js';
+import {LoadingComponent} from 'helpers/loaders.js';
+import API from 'api/API.js';
 
 import React, {Component} from 'react';
 import {Portal} from 'react-portal';

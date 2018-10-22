@@ -1,12 +1,17 @@
 import './PledgeApp.css';
-import '../../fontello/css/fontello.css';
-// import API from '../../api/API.js';
-import {getTabStyle} from '../../helpers/functions.js';
-import {LoadingPledgeApp, LoadingComponent} from '../../helpers/loaders.js';
+import 'fontello/css/fontello.css';
+import { getTabStyle } from 'helpers/functions';
+import { LoadingPledgeApp } from 'helpers/loaders';
+import {
+  LoadableMeritBook,
+  LoadableContacts,
+  LoadableChalkboards,
+  LoadableComplaints,
+  LoadableSettings
+} from 'helpers/LoadableComponents';
 
-import React, {Component} from 'react';
-import Loadable from 'react-loadable';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import React, { Component } from 'react';
+import { Tabs, Tab } from 'material-ui/Tabs';
 
 let didScroll = false;
 let previousScrollTop = 0;
@@ -14,51 +19,6 @@ let previousScrollTop = 0;
 function watchScroll() {
   didScroll = true;
 }
-
-const LoadableMeritBook = Loadable({
-  loader: () => import('../../components/MeritBook/MeritBook'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingComponent
-});
-
-const LoadableContacts = Loadable({
-  loader: () => import('../../components/Contacts/Contacts'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingComponent
-});
-
-const LoadableChalkboards = Loadable({
-  loader: () => import('../../components/Chalkboards/Chalkboards'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingComponent
-});
-
-const LoadableComplaints = Loadable({
-  loader: () => import('../../components/Complaints/Complaints'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingComponent
-});
-
-const LoadableSettings = Loadable({
-  loader: () => import('../../components/Settings/Settings'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props} />;
-  },
-  loading: LoadingComponent
-});
 
 export default class PledgeApp extends Component {
   constructor(props) {
@@ -153,45 +113,6 @@ export default class PledgeApp extends Component {
         }
       }
     }, 100);
-
-    // Initializes Pull To Refresh
-    
-    // window.PullToRefresh.init({
-    //   mainElement: 'body',
-    //   onRefresh: () => {
-    //     if (navigator.onLine) {
-    //       if (this.props.state.status !== 'pledge') {
-    //         API.getPledges()
-    //         .then(res => {
-    //           this.setState({
-    //             pledgeArray: res.data
-    //           });
-    //         })
-    //         .catch(error => console.log(`Error: ${error}`));
-    //       }
-    //       else {
-    //         let displayName = this.props.state.displayName;
-
-    //         API.getPledgeData(displayName)
-    //         .then(res => {
-    //           this.setState({
-    //             meritArray: res.data.meritArray,
-    //             complaintsArray: res.data.complaintsArray
-    //           });
-    //         })
-    //         .catch(error => console.log(`Error: ${error}`)); 
-    //       }
-    //     }
-    //   },
-    //   shouldPullToRefresh: () => {
-    //     let contentContainer = document.querySelector('.content-container');
-    //     let index = this.state.slideIndex;
-
-    //     if (contentContainer) {
-    //       return contentContainer.childNodes[index].scrollTop === 0;
-    //     }
-    //   }
-    // });
   }
 
   componentDidMount() {
@@ -207,12 +128,7 @@ export default class PledgeApp extends Component {
 
   componentDidUpdate() {
     const index = this.state.slideIndex;
-    // let pullToRefresh = document.querySelector('.ptr--ptr');
     let contentContainer = document.querySelector('.content-container');
-    
-    // if (pullToRefresh) {
-    //   pullToRefresh.style.marginTop = '100px';
-    // }
 
     // Changes view margin if view is pledge merit book
     if (contentContainer) {
@@ -227,7 +143,6 @@ export default class PledgeApp extends Component {
     clearInterval(this.interval);
   }
 
-  // Changes touch action of view if scroll is at top of view for mobile
   onScroll = () => {
     const tabs = document.getElementById('pledge-app-tabs').firstChild;
     const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
@@ -237,13 +152,6 @@ export default class PledgeApp extends Component {
     const view = contentContainer.childNodes[slideIndex];
     const { body } = document;
     const { scrollTop } = view;
-
-    // if (view.scrollTop >= 1) {
-    //   view.style.touchAction = 'auto';
-    // } 
-    // else {
-    //   view.style.touchAction = 'pan-down';
-    // }
     
     // Hides and shows the app bar and the necessary components on scroll
     if (scrollTop > previousScrollTop) {

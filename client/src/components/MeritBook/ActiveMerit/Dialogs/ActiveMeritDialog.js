@@ -1,7 +1,7 @@
 import '../../MeritBook.css';
-import {getDate} from '../../../../helpers/functions.js';
-import {CompletingTaskDialog} from '../../../../helpers/loaders.js';
-import API from '../../../../api/API.js';
+import { getDate } from 'helpers/functions.js';
+import { CompletingTaskDialog } from 'helpers/loaders.js';
+import API from 'api/API.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';

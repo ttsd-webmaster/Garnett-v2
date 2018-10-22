@@ -1,5 +1,5 @@
-import {LoadingDataApp} from '../../../helpers/loaders.js';
-import API from '../../../api/API.js';
+import {LoadingDataApp} from 'helpers/loaders.js';
+import API from 'api/API.js';
 
 import React, {Component} from 'react';
 import {ListItem} from 'material-ui/List';

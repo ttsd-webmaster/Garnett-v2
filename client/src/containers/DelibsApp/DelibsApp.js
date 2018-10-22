@@ -1,8 +1,8 @@
 import './DelibsApp.css';
 import '../PledgeApp/PledgeApp.css';
-import {loadFirebase} from '../../helpers/functions.js';
-import {LoadingDelibsApp} from '../../helpers/loaders.js';
-import API from '../../api/API.js';
+import {loadFirebase} from 'helpers/functions.js';
+import {LoadingDelibsApp} from 'helpers/loaders.js';
+import API from 'api/API.js';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';

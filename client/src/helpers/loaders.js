@@ -25,9 +25,9 @@ const completingTaskDialog = {
   alignItems: 'center'
 };
 
-function LoadingLogin() {
-  return (
-    isMobileDevice() ? (
+export function LoadingLogin() {
+  if (isMobileDevice()) {
+    return (
       <div className="loading">
         <div className="line-scale-container">
           <div className="line-scale">
@@ -39,89 +39,80 @@ function LoadingLogin() {
           </div>
         </div>
       </div>
-    ) : (
+    )
+  } else {
+    return (
       <div className="loading">
         <div className="loading-image"></div>
       </div>
     )
-  )
+  }
 }
 
-function LoadingPledgeApp() {
-  return (
-    <div className="loading-container">
-      <div className="app-header">
-        <span> Merit Book </span>
-      </div>
-      <Tabs tabItemContainerStyle={tabContainerStyle}></Tabs>
+export const LoadingPledgeApp = () => (
+  <div className="loading-container">
+    <div className="app-header">
+      <span> Merit Book </span>
     </div>
-  )
-}
+    <Tabs tabItemContainerStyle={tabContainerStyle}></Tabs>
+  </div>
+)
 
-function LoadingComponent() {
-  return (
-    <div className="loader-container">
-      <div className="line-scale-container">
-        <div className="line-scale">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+export const LoadingComponent =  () => (
+  <div className="loader-container">
+    <div className="line-scale-container">
+      <div className="line-scale">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
-  )
-}
+  </div>
+)
 
-const loaderWrapper = (name) => (props) => {
+function LoadingPage(props) {
   return (
     <div className="loading-container">
       <div className="app-header no-tabs">
-        <span> {name} </span>
+        <span> {props.name} </span>
         <LoadingComponent />
       </div>
     </div>
   )
 }
 
-function CompletingTaskDialog(props) {
+export function CompletingTaskDialog(props) {
   return (
-    isMobileDevice() ? (
-      <Dialog
-        bodyStyle={completingTaskDialogMobile}
-        modal={true}
-        open={props.open}
-      >
-        <CircularProgress size={25} />
-        <span style={{margin:'auto'}}> {props.message} </span>
-      </Dialog>
-    ) : (
-      <Dialog
-        contentStyle={{maxWidth:'500px'}}
-        bodyStyle={completingTaskDialog}
-        modal={true}
-        open={props.open}
-      >
-        <CircularProgress size={90} thickness={5} />
-        <span style={{marginTop:'50px'}}> {props.message} </span>
-      </Dialog>
-    )
+    <Dialog
+      contentStyle={isMobileDevice() && {maxWidth: '500px'}}
+      bodyStyle={
+        isMobileDevice()
+          ? completingTaskDialogMobile 
+          : completingTaskDialog
+      }
+      modal={true}
+      open={props.open}
+    >
+      <CircularProgress
+        size={isMobileDevice() ? 25 : 90}
+        thickness={isMobileDevice() && 5}
+      />
+      <span
+        style={
+          isMobileDevice() 
+            ? { margin: 'auto' }
+            : { marginTop: '50px' }
+        }
+      > 
+        {props.message}
+      </span>
+    </Dialog>
   )
 }
 
-const LoadingHome = loaderWrapper('Home');
-const LoadingDelibsApp = loaderWrapper('Delibs App');
-const LoadingRusheeProfile = loaderWrapper('Rushee Profile');
-const LoadingDataApp = loaderWrapper('Data App');
-
-export {
-  LoadingLogin,
-  LoadingPledgeApp,
-  LoadingComponent,
-  CompletingTaskDialog,
-  LoadingHome,
-  LoadingDelibsApp,
-  LoadingRusheeProfile,
-  LoadingDataApp
-};
+export const LoadingHome =  () => <LoadingPage name="Home" />;
+export const LoadingDelibsApp =  () => <LoadingPage name="Delibs App" />;
+export const LoadingRusheeProfile =  () => <LoadingPage name="Rushee Profile" />;
+export const LoadingDataApp =  () => <LoadingPage name="Data App" />;

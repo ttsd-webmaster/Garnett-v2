@@ -1,4 +1,4 @@
-import API from "../../../../api/API.js";
+import API from "api/API.js";
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';

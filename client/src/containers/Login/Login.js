@@ -5,9 +5,9 @@ import {
   initializeFirebase,
   loadFirebase,
   validateEmail
-} from '../../helpers/functions.js';
-import {CompletingTaskDialog} from '../../helpers/loaders.js';
-import API from '../../api/API.js';
+} from 'helpers/functions.js';
+import {CompletingTaskDialog} from 'helpers/loaders.js';
+import API from 'api/API.js';
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import ForgotPassword from './ForgotPassword';

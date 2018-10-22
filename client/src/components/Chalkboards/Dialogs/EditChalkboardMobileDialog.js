@@ -1,6 +1,6 @@
 import {commitmentOptions} from '../data.js';
-import API from '../../../api/API.js';
-import {invalidSafariVersion} from '../../../helpers/functions.js';
+import API from 'api/API.js';
+import {invalidSafariVersion} from 'helpers/functions.js';
 
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
