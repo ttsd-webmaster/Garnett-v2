@@ -97,7 +97,7 @@ class App extends Component {
 
           firebase.auth().onAuthStateChanged((user) => {
             if (user) {
-              API.getAuthStatus(user)
+              API.getAuthStatus(user.displayName)
               .then((res) => {
                 this.loginCallBack(res.data);
               });

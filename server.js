@@ -49,16 +49,16 @@ app.use(express.static(path.join(__dirname, './client/build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
 });
 
 // Retrieving Authentication Status Route
-app.post('/api', function(req, res) {
+app.get('/api', function(req, res) {
   // Send back user's info to the client
-  const fullName = req.body.user.displayName;
-  const userRef = admin.database().ref('/users/' + fullName);
-  console.log(fullName)
+  const { displayName } = req.query;
+  const userRef = admin.database().ref('/users/' + displayName);
+  console.log(displayName)
 
   userRef.once('value', (user) => {
     res.json(user.val());
@@ -66,7 +66,7 @@ app.post('/api', function(req, res) {
 });
 
 // Get Firebase Data Route
-app.post('/api/getfirebasedata', function(req, res) {
+app.get('/api/firebaseData', function(req, res) {
   const firebaseData = {
     apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
     authDomain: 'garnett-42475.firebaseapp.com',
@@ -78,8 +78,123 @@ app.post('/api/getfirebasedata', function(req, res) {
   res.json(firebaseData);
 });
 
+// Query for pledges data
+app.get('/api/pledges', function(req, res) {
+  const usersRef = admin.database().ref('/users');
+  let pledgeArray = [];
+
+  usersRef.once('value', (users) => {
+    users.forEach((child) => {
+      if (child.val().status === 'pledge') {
+        pledgeArray.push(child.val());
+      }
+    });
+
+    pledgeArray.sort((a, b) => {
+      return a.lastName > b.lastName ? 1 : -1;
+    });
+
+    console.log("Pledge array: ", pledgeArray);
+    res.json(pledgeArray);
+  });
+});
+
+// Query for active data
+app.get('/api/actives', function(req, res) {
+  const usersRef = admin.database().ref('/users');
+  let activeArray = [];
+
+  usersRef.once('value', (users) => {
+    users.forEach((child) => {
+      if (child.val().status !== 'pledge') {
+        activeArray.push(child.val());
+      }
+    });
+
+    activeArray.sort((a, b) => {
+      return a.lastName > b.lastName ? 1 : -1;
+    });
+
+    console.log("Active array: ", activeArray);
+    res.json(activeArray);
+  });
+});
+
+// Query for merit data on Pledge App
+app.get('/api/pledgeData', function(req, res) {
+  const { displayName } = req.query;
+  const userRef = admin.database().ref('/users/' + displayName);
+  let meritArray = [];
+  let complaintsArray = [];
+
+  userRef.once('value', (user) => {
+    const totalMerits = user.val().totalMerits;
+
+    if (user.val().Merits) {
+      meritArray = Object.keys(user.val().Merits).map(function(key) {
+        return user.val().Merits[key];
+      });
+    }
+
+    if (user.val().Complaints) {
+      complaintsArray = Object.keys(user.val().Complaints).map(function(key) {
+        return user.val().Complaints[key];
+      });
+    }
+
+    console.log('Merit array: ', meritArray);
+    console.log('Complaints array: ', complaintsArray);
+
+    const data = {
+      totalMerits: totalMerits,
+      meritArray: meritArray.reverse(),
+      complaintsArray: complaintsArray
+    };
+
+    res.json(data);
+  });
+});
+
+// Query for the specified pledge's merits
+app.get('/api/pledgeMerits', function(req, res) {
+  const { pledgeName } = req.query;
+  const meritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
+  let merits = [];
+
+  meritsRef.once('value', (snapshot) => {
+    if (snapshot.val()) {
+      merits = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      }).sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+    }
+
+    res.json(merits);
+  });
+});
+
+// Query for the specified pledge's complaints
+app.get('/api/pledgeComplaints', function(req, res) {
+  const { pledgeName } = req.query;
+  const complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+  let complaints = [];
+
+  complaintsRef.once('value', (snapshot) => {
+    if (snapshot.val()) {
+      complaints = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      }).sort((a, b) => {
+        return new Date(b.date) - new Date(a.date);
+      });
+    }
+
+    res.json(complaints);
+  });
+});
+
 // Signup Route
-app.post('/api/signup', function(req, res) {
+app.put('/api/signup', function(req, res) {
   const usersRef = admin.database().ref('/users');
   let firstName = req.body.firstName.replace(/ /g,'');
   let lastName = req.body.lastName.replace(/ /g,'');
@@ -253,7 +368,7 @@ app.post('/api/signup', function(req, res) {
 });
 
 // Forgot Password Route
-app.post('/api/forgotpassword', function(req, res) {
+app.put('/api/forgotPassword', function(req, res) {
   firebase.auth().sendPasswordResetEmail(req.body.email).then(function() {
     res.status(200).send('Email to reset password has been sent.');
   }).catch(function(error) {
@@ -264,7 +379,7 @@ app.post('/api/forgotpassword', function(req, res) {
 });
 
 // Log Out Route
-app.post('/api/logout', function(req, res) {
+app.put('/api/logout', function(req, res) {
   firebase.auth().signOut()
   .then(function() {
     res.sendStatus(200);
@@ -276,7 +391,7 @@ app.post('/api/logout', function(req, res) {
 });
 
 // Sets the user photo
-app.post('/api/setphoto', function(req, res) {
+app.put('/api/setPhoto', function(req, res) {
   const fullName = req.body.displayName;
   const userRef = admin.database().ref('/users/' + fullName);
 
@@ -290,123 +405,143 @@ app.post('/api/setphoto', function(req, res) {
   });
 });
 
-// Query for pledges data
-app.post('/api/pledges', function(req, res) {
-  const usersRef = admin.database().ref('/users');
-  let pledgeArray = [];
+// Get merits remaining for pledge
+app.get('/api/meritsRemaining', function(req, res) {
+  const { displayName, pledgeName } = req.query;
+  const pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
 
-  usersRef.once('value', (users) => {
-    users.forEach((child) => {
-      if (child.val().status === 'pledge') {
-        pledgeArray.push(child.val());
+  pledgeRef.once('value', (active) => {
+    res.json(active.val().merits);
+  });
+});
+
+// Gets all the pledges for meriting as active
+app.get('/api/pledgesForMerit', function(req, res) {
+  const { displayName } = req.query;
+  const pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
+
+  pledgesRef.once('value', (snapshot) => {
+    let pledges = [];
+
+    if (snapshot.val()) {
+      pledges = Object.keys(snapshot.val()).map(function(key) {
+        return {'value': key,
+                'label': key.replace(/([a-z])([A-Z])/, '$1 $2'),
+                'meritsRemaining': snapshot.val()[key].merits
+               };
+      });
+    }
+
+    res.json(pledges);
+  });
+});
+
+// Gets all the actives for meriting as pledge
+app.get('/api/activesForMerit', function(req, res) {
+  const { displayName } = req.query;
+  const usersRef = admin.database().ref('/users');
+
+  usersRef.once('value', (snapshot) => {
+    let actives = [];
+
+    snapshot.forEach((active) => {
+      if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+        actives.push({
+          'value': active.key,
+          'label': `${active.val().firstName} ${active.val().lastName}`,
+          'meritsRemaining': active.val().Pledges[displayName].merits
+        });
       }
     });
 
-    pledgeArray.sort((a, b) => {
-      return a.lastName > b.lastName ? 1 : -1;
-    });
-
-    console.log("Pledge array: ", pledgeArray);
-    res.json(pledgeArray);
+    res.json(actives);
   });
 });
 
-// Query for active data
-app.post('/api/actives', function(req, res) {
+// Gets all the alumni for meriting as pledge
+app.get('/api/alumniForMerit', function(req, res) {
+  const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
-  let activeArray = [];
 
-  usersRef.once('value', (users) => {
-    users.forEach((child) => {
-      if (child.val().status !== 'pledge') {
-        activeArray.push(child.val());
+  usersRef.once('value', (snapshot) => {
+    let alumni = [];
+
+    snapshot.forEach((alumnus) => {
+      if (alumnus.val().status === 'alumni') {
+        alumni.push({
+          'value': alumnus.key,
+          'label': `${alumnus.val().firstName} ${alumnus.val().lastName}`,
+          'meritsRemaining': alumnus.val().Pledges[displayName].merits
+        });
       }
     });
 
-    activeArray.sort((a, b) => {
-      return a.lastName > b.lastName ? 1 : -1;
+    res.json(alumni);
+  });
+});
+
+// Gets all the chalkboards for merit
+app.get('/api/chalkboardsForMerit', function(req, res) {
+  const { fullName } = req.query;
+  const chalkboardsRef = admin.database().ref('/chalkboards');
+
+  chalkboardsRef.once('value', (snapshot) => {
+    let myChalkboards = [];
+
+    if (snapshot.val()) {
+      const chalkboards = Object.keys(snapshot.val()).map(function(key) {
+        return snapshot.val()[key];
+      });
+
+      chalkboards.forEach((chalkboard) => {
+        if (chalkboard.activeName === fullName) {
+          myChalkboards.push({
+            title: chalkboard.title,
+            amount: chalkboard.amount
+          });
+        }
+        else {
+          if (chalkboard.attendees) {
+            const attendees = Object.keys(chalkboard.attendees).map(function(key) {
+              return chalkboard.attendees[key];
+            });
+
+            attendees.forEach((attendee) => {
+              if (attendee.name === fullName) {
+                myChalkboards.push({
+                  title: chalkboard.title,
+                  amount: chalkboard.amount
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+
+    res.json(myChalkboards);
+  });
+});
+
+// Get Pbros data for pledges
+app.get('/api/getPbros', function(req, res) {
+  let pbros = [];
+  const { displayName } = req.query;
+  const usersRef = admin.database().ref('/users');
+
+  usersRef.once('value', (users) => {
+    users.forEach((user) => {
+      if (user.val().status === 'pledge' && user.key !== displayName) {
+        pbros.push(user.val());
+      }
     });
 
-    console.log("Active array: ", activeArray);
-    res.json(activeArray);
+    res.json(pbros);
   });
 });
 
-// Query for merit data on Pledge App
-app.post('/api/pledgedata', function(req, res) {
-  const fullName = req.body.displayName;
-  const userRef = admin.database().ref('/users/' + fullName);
-  let meritArray = [];
-  let complaintsArray = [];
-
-  userRef.once('value', (user) => {
-    const totalMerits = user.val().totalMerits;
-
-    if (user.val().Merits) {
-      meritArray = Object.keys(user.val().Merits).map(function(key) {
-        return user.val().Merits[key];
-      });
-    }
-
-    if (user.val().Complaints) {
-      complaintsArray = Object.keys(user.val().Complaints).map(function(key) {
-        return user.val().Complaints[key];
-      });
-    }
-
-    console.log('Merit array: ', meritArray);
-    console.log('Complaints array: ', complaintsArray);
-
-    const data = {
-      totalMerits: totalMerits,
-      meritArray: meritArray.reverse(),
-      complaintsArray: complaintsArray
-    };
-
-    res.json(data);
-  });
-});
-
-// Query for the specified pledge's merits
-app.post('/api/pledgemerits', function(req, res) {
-  const pledgeName = req.body.pledgeName;
-  const meritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
-  let merits = [];
-
-  meritsRef.once('value', (snapshot) => {
-    if (snapshot.val()) {
-      merits = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      }).sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-    }
-
-    res.json(merits);
-  });
-});
-
-// Query for the specified pledge's complaints
-app.post('/api/pledgecomplaints', function(req, res) {
-  const pledgeName = req.body.pledgeName;
-  const complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
-  let complaints = [];
-
-  complaintsRef.once('value', (snapshot) => {
-    if (snapshot.val()) {
-      complaints = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      }).sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
-    }
-
-    res.json(complaints);
-  });
-});
-
-// Post merit data as active
-app.post('/api/merit', function(req, res) {
+// Put merit data as active
+app.put('/api/meritAsActive', function(req, res) {
   let counter = 0;
   const selectedPledges = req.body.selectedPledges;
 
@@ -448,8 +583,8 @@ app.post('/api/merit', function(req, res) {
   })
 });
 
-// Post merit data as pledge
-app.post('/api/meritAsPledge', function(req, res) {
+// Put merit data as pledge
+app.put('/api/meritAsPledge', function(req, res) {
   let counter = 0;
   const {
     displayName,
@@ -457,7 +592,7 @@ app.post('/api/meritAsPledge', function(req, res) {
     merit,
     isChalkboard,
     isPCGreet
-  } = req.body
+  } = req.body;
   const pledgeRef = admin.database().ref('/users/' + displayName);
 
   selectedActives.forEach((child) => {
@@ -507,7 +642,7 @@ app.post('/api/meritAsPledge', function(req, res) {
 });
 
 // Removes merit as pledge
-app.post('/api/removeMeritAsPledge', function(req, res) {
+app.put('/api/removeMeritAsPledge', function(req, res) {
   const pledgeName = req.body.displayName;
   const activeName = req.body.merit.name.replace(/ /g,'');
   const pledgeRef = admin.database().ref('/users/' + pledgeName);
@@ -538,144 +673,51 @@ app.post('/api/removeMeritAsPledge', function(req, res) {
   });
 });
 
-// Get merits remaining for pledge
-app.post('/api/meritsRemaining', function(req, res) {
-  const displayName = req.body.displayName;
-  const pledgeName = req.body.pledgeName;
-  const pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
-
-  pledgeRef.once('value', (active) => {
-    res.json(active.val().merits);
-  });
-});
-
-// Gets all the pledges for meriting as active
-app.post('/api/pledgesForMerit', function(req, res) {
-  const displayName = req.body.displayName;
-  const pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
-
-  pledgesRef.once('value', (snapshot) => {
-    let pledges = [];
-
-    if (snapshot.val()) {
-      pledges = Object.keys(snapshot.val()).map(function(key) {
-        return {'value': key,
-                'label': key.replace(/([a-z])([A-Z])/, '$1 $2'),
-                'meritsRemaining': snapshot.val()[key].merits
-               };
-      });
-    }
-
-    res.json(pledges);
-  });
-});
-
-// Gets all the actives for meriting as pledge
-app.post('/api/activesForMerit', function(req, res) {
-  const displayName = req.body.displayName;
-  const usersRef = admin.database().ref('/users');
-
-  usersRef.once('value', (snapshot) => {
-    let actives = [];
-
-    snapshot.forEach((active) => {
-      if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
-        actives.push({
-          'value': active.key,
-          'label': `${active.val().firstName} ${active.val().lastName}`,
-          'meritsRemaining': active.val().Pledges[displayName].merits
-        });
-      }
-    });
-
-    res.json(actives);
-  });
-});
-
-// Gets all the alumni for meriting as pledge
-app.post('/api/alumniForMerit', function(req, res) {
-  const displayName = req.body.displayName;
-  const usersRef = admin.database().ref('/users');
-
-  usersRef.once('value', (snapshot) => {
-    let alumni = [];
-
-    snapshot.forEach((alumnus) => {
-      if (alumnus.val().status === 'alumni') {
-        alumni.push({
-          'value': alumnus.key,
-          'label': `${alumnus.val().firstName} ${alumnus.val().lastName}`,
-          'meritsRemaining': alumnus.val().Pledges[displayName].merits
-        });
-      }
-    });
-
-    res.json(alumni);
-  });
-});
-
-// Gets all the chalkboards for merit
-app.post('/api/chalkboardsForMerit', function(req, res) {
-  const fullName = req.body.fullName;
+// Gets the chalkboard information
+app.get('/api/chalkboardInfo', function(req, res) {
+  const { title } = req.query;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
-  chalkboardsRef.once('value', (snapshot) => {
-    let myChalkboards = [];
-
-    if (snapshot.val()) {
-      const chalkboards = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      });
-
-      chalkboards.forEach((chalkboard) => {
-        if (chalkboard.activeName === fullName) {
-          myChalkboards.push({
-            title: chalkboard.title,
-            amount: chalkboard.amount
-          });
-        }
-        else {
-          if (chalkboard.attendees) {
-            const attendees = Object.keys(chalkboard.attendees).map(function(key) {
-              return chalkboard.attendees[key];
-            });
-
-            attendees.forEach((attendee) => {
-              if (attendee.name === fullName) {
-                myChalkboards.push({
-                  title: chalkboard.title,
-                  amount: chalkboard.amount
-                });
-              }
-            });
-          }
-        }
-      });
-    }
-
-    res.json(myChalkboards);
+  // Searches for the chalkboard by checking title
+  chalkboardsRef.once('value', (chalkboards) => {
+    chalkboards.forEach((chalkboard) => {
+      if (title === chalkboard.val().title) {
+        res.json({
+          chalkboard: chalkboard.val()
+        });
+      }
+    });
   });
 });
 
-// Get Pbros data for pledges
-app.post('/api/getPbros', function(req, res) {
-  let pbros = [];
-  const displayName = req.body.displayName;
-  const usersRef = admin.database().ref('/users');
+// Retrieves all the attendees of the chalkboard
+app.get('/api/attendees', function(req, res) {
+  const { title } = req.query
+  const chalkboardsRef = admin.database().ref('/chalkboards');
 
-  usersRef.once('value', (users) => {
-    users.forEach((user) => {
-      if (user.val().status === 'pledge' && user.key !== displayName) {
-        pbros.push(user.val());
+  chalkboardsRef.once('value', (chalkboards) => {
+    chalkboards.forEach((chalkboard) => {
+      // Looks for the chalkboard in the chalkboards ref
+      if (title === chalkboard.val().title) {
+        chalkboard.ref.child('attendees').once('value', (attendees) => {
+          let attendeesArray = [];
+
+          // Finds the attendees if there are any
+          if (attendees.val()) {
+            attendeesArray = Object.keys(attendees.val()).map(function(key) {
+              return attendees.val()[key];
+            });
+          }
+
+          res.json(attendeesArray);
+        });
       }
     });
-
-    res.json(pbros);
   });
 });
 
 // Creates a chalkboard
-app.post('/api/createchalkboard', function(req, res) {
+app.put('/api/createChalkboard', function(req, res) {
   const chalkboardInfo = {
     displayName: req.body.displayName,
     activeName: req.body.activeName,
@@ -718,7 +760,7 @@ app.post('/api/createchalkboard', function(req, res) {
 });
 
 // Edits chalkboard for desktop
-app.post('/api/editchalkboard', function(req, res) {
+app.put('/api/editChalkboard', function(req, res) {
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
@@ -742,7 +784,7 @@ app.post('/api/editchalkboard', function(req, res) {
 });
 
 // Edits chalkboard for mobile devices
-app.post('/api/editchalkboardmobile', function(req, res) {
+app.put('/api/editChalkboardMobile', function(req, res) {
   const editedField = req.body.field.toLowerCase();
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
@@ -762,7 +804,7 @@ app.post('/api/editchalkboardmobile', function(req, res) {
 });
 
 // Joins chalkboard as an attendee
-app.post('/api/joinchalkboard', function(req, res) {
+app.put('/api/joinChalkboard', function(req, res) {
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
@@ -782,7 +824,7 @@ app.post('/api/joinchalkboard', function(req, res) {
 });
 
 // Removes chalkboard from both user's list and general list
-app.post('/api/removechalkboard', function(req, res) {
+app.put('/api/removeChalkboard', function(req, res) {
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (chalkboards) => {
@@ -798,7 +840,7 @@ app.post('/api/removechalkboard', function(req, res) {
 });
 
 // Leaves chalkboard as an attendee
-app.post('/api/leavechalkboard', function(req, res) {
+app.put('/api/leaveChalkboard', function(req, res) {
   const name = req.body.name;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
@@ -822,112 +864,8 @@ app.post('/api/leavechalkboard', function(req, res) {
   });
 });
 
-// Gets the chalkboard information
-app.post('/api/getchalkboardinfo', function(req, res) {
-  const chalkboardsRef = admin.database().ref('/chalkboards');
-
-  // Searches for the chalkboard by checking title
-  chalkboardsRef.once('value', (chalkboards) => {
-    chalkboards.forEach((chalkboard) => {
-      if (req.body.title === chalkboard.val().title) {
-        res.json({
-          chalkboard: chalkboard.val()
-        });
-      }
-    });
-  });
-});
-
-// Retrieves all the attendees of the chalkboard
-app.post('/api/getattendees', function(req, res) {
-  const chalkboardsRef = admin.database().ref('/chalkboards');
-
-  chalkboardsRef.once('value', (chalkboards) => {
-    chalkboards.forEach((chalkboard) => {
-      // Looks for the chalkboard in the chalkboards ref
-      if (req.body.chalkboard.title === chalkboard.val().title) {
-        chalkboard.ref.child('attendees').once('value', (attendees) => {
-          let attendeesArray = [];
-
-          // Finds the attendees if there are any
-          if (attendees.val()) {
-            attendeesArray = Object.keys(attendees.val()).map(function(key) {
-              return attendees.val()[key];
-            });
-          }
-
-          res.json(attendeesArray);
-        });
-      }
-    });
-  });
-});
-
-// Post complaint data
-app.post('/api/complain', function(req, res) {
-  // Check if active is PI/PM or not
-  if (req.body.status !== 'pipm') {
-    let complaintsRef = admin.database().ref('/pendingComplaints');
-
-    // Add complaints to active's pending complaints list and the pending complaints list
-    complaintsRef.push(req.body.complaint);
-  }
-  else {
-    const pledgeName = req.body.complaint.pledgeDisplayName;
-    let complaintsRef = admin.database().ref('/approvedComplaints');
-    let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
-
-    // Add complaints to the approved complaints list and the specified pledge's complaints list
-    complaintsRef.push(req.body.complaint);
-
-    pledgeComplaintsRef.push(req.body.complaint);
-  }
-
-  res.sendStatus(200);
-});
-
-// Removes complaint for active
-app.post('/api/removecomplaint', function(req, res) {
-  const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
-
-  pendingComplaintsRef.once('value', (complaints) => {
-    complaints.forEach((complaint) => {
-      // Removes complaint from the pending complaints list
-      if (equal(req.body.complaint, complaint.val())) {
-        complaint.ref.remove(() => {
-          res.sendStatus(200);
-        });
-      }
-    });
-  });
-});
-
-// Approves complaint for PI/PM
-app.post('/api/approvecomplaint', function(req, res) {
-  const pledgeName = req.body.complaint.pledgeDisplayName;
-  let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
-  let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
-  const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
-
-  pendingComplaintsRef.once('value', (complaints) => {
-    complaints.forEach((complaint) => {
-      // Removes complaint from the pending complaints list
-      if (equal(req.body.complaint, complaint.val())) {
-        complaint.ref.remove(() => {
-          // Adds complaint to the approved complaints list
-          approvedComplaintsRef.push(req.body.complaint);
-          // Adds complaint to the pledge's complaints list
-          pledgeComplaintsRef.push(req.body.complaint);
-
-          res.sendStatus(200);
-        });
-      }
-    });
-  });
-});
-
 // Gets all the pledges for complaints
-app.post('/api/pledgesForComplaints', function(req, res) {
+app.get('/api/pledgesForComplaints', function(req, res) {
   const usersRef = admin.database().ref('/users');
 
   // Loop through all users for pledges
@@ -954,8 +892,71 @@ app.post('/api/pledgesForComplaints', function(req, res) {
   });
 });
 
+// Put complaint data
+app.put('/api/complain', function(req, res) {
+  // Check if active is PI/PM or not
+  if (req.body.status !== 'pipm') {
+    let complaintsRef = admin.database().ref('/pendingComplaints');
+
+    // Add complaints to active's pending complaints list and the pending complaints list
+    complaintsRef.push(req.body.complaint);
+  }
+  else {
+    const pledgeName = req.body.complaint.pledgeDisplayName;
+    let complaintsRef = admin.database().ref('/approvedComplaints');
+    let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+
+    // Add complaints to the approved complaints list and the specified pledge's complaints list
+    complaintsRef.push(req.body.complaint);
+
+    pledgeComplaintsRef.push(req.body.complaint);
+  }
+
+  res.sendStatus(200);
+});
+
+// Removes complaint for active
+app.put('/api/removeComplaint', function(req, res) {
+  const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
+
+  pendingComplaintsRef.once('value', (complaints) => {
+    complaints.forEach((complaint) => {
+      // Removes complaint from the pending complaints list
+      if (equal(req.body.complaint, complaint.val())) {
+        complaint.ref.remove(() => {
+          res.sendStatus(200);
+        });
+      }
+    });
+  });
+});
+
+// Approves complaint for PI/PM
+app.put('/api/approveComplaint', function(req, res) {
+  const pledgeName = req.body.complaint.pledgeDisplayName;
+  let pledgeComplaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+  let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
+  const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
+
+  pendingComplaintsRef.once('value', (complaints) => {
+    complaints.forEach((complaint) => {
+      // Removes complaint from the pending complaints list
+      if (equal(req.body.complaint, complaint.val())) {
+        complaint.ref.remove(() => {
+          // Adds complaint to the approved complaints list
+          approvedComplaintsRef.push(req.body.complaint);
+          // Adds complaint to the pledge's complaints list
+          pledgeComplaintsRef.push(req.body.complaint);
+
+          res.sendStatus(200);
+        });
+      }
+    });
+  });
+});
+
 // Save message token from server
-app.post('/api/savemessagetoken', function(req, res) {
+app.put('/api/saveMessageToken', function(req, res) {
   const fullName = req.body.displayName;
   const userRef = admin.database().ref('/users/' + fullName);
 
@@ -967,7 +968,7 @@ app.post('/api/savemessagetoken', function(req, res) {
 });
 
 // Send active merit notification to pledges
-app.post('/api/sendActiveMeritNotification', function(req, res) {
+app.put('/api/sendActiveMeritNotification', function(req, res) {
   const pledges = req.body.pledges;
   let counter = 0;
   let merits;
@@ -1025,7 +1026,7 @@ app.post('/api/sendActiveMeritNotification', function(req, res) {
 });
 
 // Send pledge merit notification to actives
-app.post('/api/sendPledgeMeritNotification', function(req, res) {
+app.put('/api/sendPledgeMeritNotification', function(req, res) {
   const actives = req.body.actives;
   let counter = 0;
   let merits;
@@ -1083,7 +1084,7 @@ app.post('/api/sendPledgeMeritNotification', function(req, res) {
 });
 
 // Send created chalkboard notification to pledges
-app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
+app.put('/api/sendCreatedChalkboardNotification', function(req, res) {
   const usersRef = admin.database().ref('/users');
   let counter = 0;
 
@@ -1132,7 +1133,7 @@ app.post('/api/sendCreatedChalkboardNotification', function(req, res) {
 });
 
 // Send edited chalkboard notification to attendees
-app.post('/api/sendEditedChalkboardNotification', function(req, res) {
+app.put('/api/sendEditedChalkboardNotification', function(req, res) {
   const chalkboard = req.body.chalkboard;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
@@ -1230,7 +1231,7 @@ function sendAttendeesNotification(chalkboard, message, res) {
 }
 
 // Send joined chalkboard notification to active
-app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
+app.put('/api/sendJoinedChalkboardNotification', function(req, res) {
   const chalkboard = req.body.chalkboard;
   const activeName = chalkboard.displayName;
   const name = req.body.name;
@@ -1277,7 +1278,7 @@ app.post('/api/sendJoinedChalkboardNotification', function(req, res) {
 });
 
 // Send left chalkboard notification to active
-app.post('/api/sendLeftChalkboardNotification', function(req, res) {
+app.put('/api/sendLeftChalkboardNotification', function(req, res) {
   const chalkboard = req.body.chalkboard;
   const activeName = chalkboard.displayName;
   const name = req.body.name;
@@ -1324,7 +1325,7 @@ app.post('/api/sendLeftChalkboardNotification', function(req, res) {
 });
 
 // Send complaint notification to pipm
-app.post('/api/sendPendingComplaintNotification', function(req, res) {
+app.put('/api/sendPendingComplaintNotification', function(req, res) {
   const complaint = req.body.complaint;
   const usersRef = admin.database().ref('/users');
 
@@ -1371,7 +1372,7 @@ app.post('/api/sendPendingComplaintNotification', function(req, res) {
 });
 
 // Send complaint notification to pledge
-app.post('/api/sendApprovedComplaintNotification', function(req, res) {
+app.put('/api/sendApprovedComplaintNotification', function(req, res) {
   const complaint = req.body.complaint;
   const pledgeRef = admin.database().ref('/users/' + complaint.pledgeDisplayName);
 
@@ -1408,7 +1409,7 @@ app.post('/api/sendApprovedComplaintNotification', function(req, res) {
 });
 
 // Update interaction for rushee
-app.post('/api/updateinteraction', function(req, res) {
+app.put('/api/updateInteraction', function(req, res) {
   const rusheeName = req.body.rusheeName;
   const displayName = req.body.displayName;
   const rusheeRef = admin.database().ref('/rushees/' + rusheeName);
@@ -1434,7 +1435,7 @@ app.post('/api/updateinteraction', function(req, res) {
 });
 
 // Start vote for rushee
-app.post('/api/startvote', function(req, res) {
+app.put('/api/startVote', function(req, res) {
   const delibsRef = admin.database().ref('/delibsVoting');
 
   delibsRef.update({
@@ -1446,7 +1447,7 @@ app.post('/api/startvote', function(req, res) {
 });
 
 // End vote for rushee
-app.post('/api/endvote', function(req, res) {
+app.put('/api/endVote', function(req, res) {
   const delibsRef = admin.database().ref('/delibsVoting');
 
   delibsRef.update({
@@ -1458,7 +1459,7 @@ app.post('/api/endvote', function(req, res) {
 });
 
 // Voting for rushee
-app.post('/api/vote', function(req, res) {
+app.put('/api/vote', function(req, res) {
   const rusheeName = req.body.rushee.replace(/ /g,'');
   const fullName = req.body.displayName;
   const rusheeRef = admin.database().ref('/rushees/' + rusheeName);
@@ -1508,21 +1509,23 @@ app.post('/api/vote', function(req, res) {
 });
 
 // Get photo for data app
-app.post('/api/getphotos', function(req, res) {
-  const namesMap = req.body.data;
+app.get('/api/photos', function(req, res) {
+  const { data: namesMap } = req.query;
   let photoMap = new Map();
 
   namesMap.forEach((set) => {
-    [...new Map(set[1])].forEach((entry) => {
+    const parsedSet = JSON.parse(set);
+    [...new Map(parsedSet[1])].forEach((entry) => {
       photoMap.set(entry[0], 0);
     });
   });
 
-  let max = photoMap.size;
+  const max = photoMap.size;
   photoMap.clear();
   
   namesMap.forEach((set) => {
-    [...new Map(set[1])].forEach((entry) => {
+    const parsedSet = JSON.parse(set);
+    [...new Map(parsedSet[1])].forEach((entry) => {
       if (photoMap.get(entry[0]) === undefined) {
         const name = entry[0].replace(/ /g,'');;
         const userRef = admin.database().ref('/users/' + name);
@@ -1540,8 +1543,8 @@ app.post('/api/getphotos', function(req, res) {
 });
 
 // Get my data for data app
-app.post('/api/getmydata', function(req, res) {
-  const fullName = req.body.fullName;
+app.get('/api/myData', function(req, res) {
+  const { fullName } = req.query;
   const usersRef = admin.database().ref('/users');
   const chalkboardsRef = admin.database().ref('/chalkboards');
 

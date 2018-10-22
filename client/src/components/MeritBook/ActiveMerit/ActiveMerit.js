@@ -58,11 +58,11 @@ export default class ActiveMerit extends Component {
       loadFirebase('database')
       .then(() => {
         let pledges = [];
-        let firebase = window.firebase;
-        let dbRef = firebase.database().ref('/users');
+        const firebase = window.firebase;
+        const dbRef = firebase.database().ref('/users');
 
         dbRef.on('value', (snapshot) => {
-          let filter = this.state.filter;
+          const { filter } = this.state;
 
           pledges = Object.keys(snapshot.val()).map(function(key) {
             return snapshot.val()[key];
@@ -81,8 +81,6 @@ export default class ActiveMerit extends Component {
             });
           }
 
-          console.log(`Pledge array: ${pledges}`);
-
           localStorage.setItem('pledgeArray', JSON.stringify(pledges));
           
           this.setState({
@@ -100,7 +98,7 @@ export default class ActiveMerit extends Component {
   }
 
   componentDidUpdate() {
-    let meritButton = document.querySelector('.fixed-button.active-merit');
+    const meritButton = document.querySelector('.fixed-button.active-merit');
 
     if (meritButton) {
       if (this.props.index === 0) {
@@ -114,10 +112,10 @@ export default class ActiveMerit extends Component {
 
   handleOpen = (pledge) => {
     if (isMobileDevice()) {
-      let contentContainer = document.querySelector('.content-container').firstChild;
-      let tabs = document.getElementById('pledge-app-tabs').firstChild;
-      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-      let appBar = document.querySelector('.app-header');
+      const contentContainer = document.querySelector('.content-container').firstChild;
+      const tabs = document.getElementById('pledge-app-tabs').firstChild;
+      const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+      const appBar = document.querySelector('.app-header');
 
       contentContainer.style.setProperty('overflow', 'visible', 'important');
       contentContainer.style.WebkitOverflowScrolling = 'auto';
@@ -128,18 +126,16 @@ export default class ActiveMerit extends Component {
     }
 
     this.setState({
-      open: true,
-      pledge: pledge
+      pledge,
+      open: true
     });
 
     // Handles android back button
     if (/android/i.test(navigator.userAgent)) {
-      let path;
+      let path = 'https://garnett-app.herokuapp.com';
+
       if (process.env.NODE_ENV === 'development') {
         path = 'http://localhost:3000';
-      }
-      else {
-        path = 'https://garnett-app.herokuapp.com';
       }
 
       window.history.pushState(null, null, path + window.location.pathname);
@@ -151,10 +147,10 @@ export default class ActiveMerit extends Component {
 
   handleClose = () => {
     if (isMobileDevice()) {
-      let contentContainer = document.querySelector('.content-container').firstChild;
-      let tabs = document.getElementById('pledge-app-tabs').firstChild;
-      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-      let appBar = document.querySelector('.app-header');
+      const contentContainer = document.querySelector('.content-container').firstChild;
+      const tabs = document.getElementById('pledge-app-tabs').firstChild;
+      const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+      const appBar = document.querySelector('.app-header');
 
       if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
         contentContainer.style.setProperty('overflow', 'scroll', 'important');
@@ -187,12 +183,10 @@ export default class ActiveMerit extends Component {
 
       // Handles android back button
       if (/android/i.test(navigator.userAgent)) {
-        let path;
+        let path = 'https://garnett-app.herokuapp.com';
+
         if (process.env.NODE_ENV === 'development') {
           path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
         }
 
         window.history.pushState(null, null, path + window.location.pathname);
@@ -236,23 +230,20 @@ export default class ActiveMerit extends Component {
   setFilter = (filterName) => {
     let filter = filterName.replace(/ /g,'');
     filter = filter[0].toLowerCase() + filter.substr(1);
-    let pledges;
+    let pledges = this.state.pledges.sort(function(a, b) {
+      return a[filter] > b[filter] ? 1 : -1;
+    });
 
     if (filterName === 'Total Merits') {
       pledges = this.state.pledges.sort(function(a, b) {
         return a[filter] < b[filter] ? 1 : -1;
       });
     }
-    else {
-      pledges = this.state.pledges.sort(function(a, b) {
-        return a[filter] > b[filter] ? 1 : -1;
-      });
-    }
 
     this.setState({
-      pledges: pledges,
-      filter: filter,
-      filterName: filterName,
+      pledges,
+      filter,
+      filterName,
       reverse: false,
       openPopover: false
     });
