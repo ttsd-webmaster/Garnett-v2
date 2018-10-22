@@ -142,7 +142,7 @@ export default class App extends Component {
 
         storage.getDownloadURL()
         .then((url) => {
-          API.setPhoto(displayName, url)
+          API.updatePhoto(displayName, url)
           .then((res) => {
             console.log(res.data);
 
@@ -159,7 +159,7 @@ export default class App extends Component {
 
           storage.getDownloadURL()
           .then((url) => {
-            API.setPhoto(displayName, url)
+            API.updatePhoto(displayName, url)
             .then((res) => {
               console.log(res.data);
 

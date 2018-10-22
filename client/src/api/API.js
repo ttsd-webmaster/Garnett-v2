@@ -38,9 +38,20 @@ export default {
   logout: function() {
     return axios.put('/api/logout');
   },
-  setPhoto: function(displayName, url) {
+  updatePhoto: function(displayName, url) {
     const body = { displayName, url };
     return axios.put('/api/photo/update', body);
+  },
+
+  // Data App
+  // GET requests
+  getPhotos: function(data) {
+    const params = { data };
+    return axios.get('/api/photos', { params });
+  },
+  getMyData: function(fullName) {
+    const params = { fullName };
+    return axios.get('/api/mydata', { params });
   },
 
   // Merit Book
@@ -192,16 +203,5 @@ export default {
   voteForRushee: function(displayName, rushee, vote) {
     const body = { displayName, rushee, vote };
     return axios.put('/api/vote/create', body);
-  },
-
-  // Data App
-  // GET requests
-  getPhotos: function(data) {
-    const params = { data };
-    return axios.get('/api/photos', { params });
-  },
-  getMyData: function(fullName) {
-    const params = { fullName };
-    return axios.get('/api/mydata', { params });
   }
 };
