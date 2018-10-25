@@ -1,3 +1,5 @@
+const firebase = require('@firebase/app').firebase;
+require('@firebase/auth');
 const admin = require("firebase-admin");
 
 // Retrieving Authentication Status Route

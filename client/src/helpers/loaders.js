@@ -86,7 +86,7 @@ function LoadingPage(props) {
 export function CompletingTaskDialog(props) {
   return (
     <Dialog
-      contentStyle={isMobileDevice() && {maxWidth: '500px'}}
+      contentStyle={isMobileDevice() ? null : {maxWidth: '500px'}}
       bodyStyle={
         isMobileDevice()
           ? completingTaskDialogMobile 
@@ -97,7 +97,7 @@ export function CompletingTaskDialog(props) {
     >
       <CircularProgress
         size={isMobileDevice() ? 25 : 90}
-        thickness={isMobileDevice() && 5}
+        thickness={isMobileDevice() ? 3.5 : 5}
       />
       <span
         style={

@@ -11,8 +11,6 @@ const notificationRouter = require('./routes/notification');
 const delibsRouter = require('./routes/delibs');
 const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
-require('@firebase/auth');
-require('@firebase/messaging');
 const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
 const port = process.env.PORT || 4000;
@@ -33,7 +31,8 @@ firebase.initializeApp({
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://garnett-42475.firebaseio.com",
-  projectId: "garnett-42475"
+  projectId: "garnett-42475",
+  messagingSenderId: "741733387760"
 });
 
 // Redirect all HTTP traffic to HTTPS

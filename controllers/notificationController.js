@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+require('@firebase/messaging');
 const equal = require('deep-equal');
 
 // Save message token from server
