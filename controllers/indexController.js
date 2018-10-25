@@ -381,25 +381,27 @@ exports.get_my_data = function(req, res) {
 
     users.forEach((user) => {
       if (user.val().status === 'pledge') {
-        let merits = Object.keys(user.val().Merits).map(function(key) {
-          return user.val().Merits[key];
-        });
+        if (user.val().Merits) {
+          let merits = Object.keys(user.val().Merits).map(function(key) {
+            return user.val().Merits[key];
+          });
 
-        merits.forEach((merit) => {
-          if (merit.name === fullName) {
-            if (merit.amount > 0) {
-              meritInstances += 1;
-              meritAmount += merit.amount;
-            }
-            else {
-              demeritInstances += 1;
-              demeritAmount += merit.amount;
-            }
+          merits.forEach((merit) => {
+            if (merit.name === fullName) {
+              if (merit.amount > 0) {
+                meritInstances += 1;
+                meritAmount += merit.amount;
+              }
+              else {
+                demeritInstances += 1;
+                demeritAmount += merit.amount;
+              }
 
-            totalMeritInstances += 1;
-            totalMeritAmount += merit.amount;
-          }
-        });
+              totalMeritInstances += 1;
+              totalMeritAmount += merit.amount;
+            }
+          });
+        }
       }
     });
 
@@ -407,22 +409,24 @@ exports.get_my_data = function(req, res) {
       let chalkboardsCreated = 0;
       let chalkboardsAttended = 0;
 
-      chalkboards.forEach((chalkboard) => {
-        if (chalkboard.val().activeName === fullName) {
-          chalkboardsCreated += 1;
-        }
-        else {
-          let attendees = Object.keys(chalkboard.val().attendees).map(function(key) {
-            return chalkboard.val().attendees[key];
-          });
+      if (chalkboards.val()) {
+        chalkboards.forEach((chalkboard) => {
+          if (chalkboard.val().activeName === fullName) {
+            chalkboardsCreated += 1;
+          }
+          else {
+            let attendees = Object.keys(chalkboard.val().attendees).map(function(key) {
+              return chalkboard.val().attendees[key];
+            });
 
-          attendees.forEach((attendee) => {
-            if (attendee.name === fullName) {
-              chalkboardsAttended += 1;
-            }
-          });
-        }
-      });
+            attendees.forEach((attendee) => {
+              if (attendee.name === fullName) {
+                chalkboardsAttended += 1;
+              }
+            });
+          }
+        });
+      }
 
       res.json([
         ['Total Merit Instances', totalMeritInstances],
