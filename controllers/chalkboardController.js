@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const equal = require('deep-equal');
 
 // Gets the chalkboard information
 exports.get_chalkboard = function(req, res) {

@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const equal = require('deep-equal');
 
 // Get merits remaining for pledge
 exports.get_merits_remaining = function(req, res) {

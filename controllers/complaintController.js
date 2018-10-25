@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const equal = require('deep-equal');
 
 // Gets all the pledges for complaints
 exports.get_pledges_as_active = function(req, res) {
