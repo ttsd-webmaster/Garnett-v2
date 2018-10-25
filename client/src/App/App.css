@@ -5,31 +5,17 @@
   font-style: normal;
 }
 
-/* Not working after router change */
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
+@media(min-width: 800px) {
+  #App {
+    display: none;
+  }
 }
 
 body {
   background-color: #2e2f33;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   --primary-color: #960018;
   --primary-light: crimson;
   --primary-dark: #610301;

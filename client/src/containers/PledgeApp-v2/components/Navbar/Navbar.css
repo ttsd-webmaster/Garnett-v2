@@ -1,0 +1,22 @@
+#navbar {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 280px;
+  order: 1;
+  align-items: center;
+  background-color: #c0001f;
+  width: 280px;
+  position: sticky;
+  z-index: 2;
+  bottom: 0;
+  padding-top: 70px;
+  padding-bottom: 46px;
+}
+
+#navbar-photo {
+  height: 66px;
+  width: 66px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  object-fit: cover;
+}
