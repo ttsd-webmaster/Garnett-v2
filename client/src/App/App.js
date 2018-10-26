@@ -1,4 +1,5 @@
 import './App.css';
+import 'fontello/css/fontello.css';
 import API from 'api/API.js';
 import { initializeFirebase, loadFirebase, iOSversion } from 'helpers/functions';
 import { LoadingLogin } from 'helpers/loaders'
@@ -276,7 +277,7 @@ export default class App extends Component {
 
   pledgeAppPath(history) {
     if (this.state.isAuthenticated) {
-      if (window.innerWidth > 768) {
+      if (window.innerWidth > 768 && this.state.status === 'pledge') {
         return (
           <PledgeApp2 
             state={this.state}
@@ -373,7 +374,6 @@ export default class App extends Component {
             render={({ history }) => this.homePath(history)}
           />
           <Route
-            exact
             path="/pledge-app"
             render={({ history }) => this.pledgeAppPath(history)}
           />

@@ -1,5 +1,4 @@
 import './PledgeApp.css';
-import 'fontello/css/fontello.css';
 import { getTabStyle } from 'helpers/functions';
 import { LoadingPledgeApp } from 'helpers/loaders';
 import {
