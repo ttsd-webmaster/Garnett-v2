@@ -1,4 +1,5 @@
 import './App.css';
+import 'fontello/css/fontello.css';
 import API from 'api/API.js';
 import { initializeFirebase, loadFirebase, iOSversion } from 'helpers/functions';
 import { LoadingLogin } from 'helpers/loaders'
@@ -10,6 +11,7 @@ import {
   LoadableRusheeProfile,
   LoadableDataApp
 } from 'helpers/LoadableComponents';
+import { PledgeApp2 } from 'containers/PledgeApp-v2/PledgeApp-v2'
 
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
@@ -275,14 +277,25 @@ export default class App extends Component {
 
   pledgeAppPath(history) {
     if (this.state.isAuthenticated) {
-      return (
-        <LoadablePledgeApp 
-          state={this.state}
-          history={history}
-          logoutCallBack={this.logoutCallBack}
-          handleRequestOpen={this.handleRequestOpen}
-        />
-      )
+      if (window.innerWidth > 768 && this.state.status === 'pledge') {
+        return (
+          <PledgeApp2 
+            state={this.state}
+            history={history}
+            logoutCallBack={this.logoutCallBack}
+            handleRequestOpen={this.handleRequestOpen}
+          />
+        )
+      } else {
+        return (
+          <LoadablePledgeApp 
+            state={this.state}
+            history={history}
+            logoutCallBack={this.logoutCallBack}
+            handleRequestOpen={this.handleRequestOpen}
+          />
+        )
+      }
     }
     else if (this.state.loaded) {
       return <Redirect to="/" />
@@ -361,7 +374,6 @@ export default class App extends Component {
             render={({ history }) => this.homePath(history)}
           />
           <Route
-            exact
             path="/pledge-app"
             render={({ history }) => this.pledgeAppPath(history)}
           />
