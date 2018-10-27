@@ -71,7 +71,7 @@ export default class PledgeInfoDialog extends Component {
       if (navigator.onLine) {
         const { displayName } = nextProps.state;
 
-        API.getMeritsRemaining(displayName, pledgeName)
+        API.getMeritsRemaining(displayName, pledgeDisplayName)
         .then((res) => {
           const meritsRemaining = res.data;
 
