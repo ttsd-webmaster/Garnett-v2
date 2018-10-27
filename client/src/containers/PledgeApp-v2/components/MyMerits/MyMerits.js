@@ -180,7 +180,13 @@ export class MyMerits extends Component {
                   >
                     <div className="merit-amount-container">
                       <p className="merit-date"> {merit.date} </p>
-                      <p className="merit-amount"> {merit.amount} </p>
+                      <p className={
+                        merit.amount > 0
+                          ? "merit-amount green"
+                          : "merit-amount red"
+                      }>
+                        {merit.amount}
+                      </p>
                     </div>
                   </ListItem>
                   <Divider className="garnett-divider large" inset={true} />
