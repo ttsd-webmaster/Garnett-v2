@@ -17,6 +17,10 @@ usersRef.once('value', (snapshot) => {
 
       console.log(fullName)
 
+      active.ref.child('Merits').remove(() => {
+        console.log('Removed merits');
+      });
+
       snapshot.forEach((pledge) => {
         if (pledge.val().status === 'pledge') {
           const merits = Object.keys(pledge.val().Merits).map(function(key) {
@@ -25,6 +29,7 @@ usersRef.once('value', (snapshot) => {
 
           merits.forEach((merit) => {
             if (merit.name === fullName) {
+              merit.photoURL = pledge.val().photoURL;
               active.ref.child('Merits').push(merit);
             }
           })

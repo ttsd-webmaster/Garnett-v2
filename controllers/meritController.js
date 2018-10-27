@@ -143,11 +143,11 @@ exports.merit_as_active = function(req, res) {
   const {
     displayName,
     selectedPledges,
-    merit,
     isChalkboard,
     isPCGreet,
     status
   } = req.body;
+  let { merit } = req.body;
 
   selectedPledges.forEach((child) => {
     const activeRef = admin.database().ref('/users/' + displayName);
@@ -178,6 +178,8 @@ exports.merit_as_active = function(req, res) {
         });
 
         pledge.ref.child('Merits').push(merit);
+
+        merit.photoURL = pledge.val().photoURL;
         activeRef.child('Merits').push(merit);
 
         if (!res.headersSent && counter === selectedPledges.length) {
@@ -204,7 +206,7 @@ exports.merit_as_pledge = function(req, res) {
     const pledgeRef = admin.database().ref('/users/' + displayName);
 
     activeRef.once('value', (active) => {
-      const meritInfo = {
+      let meritInfo = {
         name: `${active.val().firstName} ${active.val().lastName}`,
         description: merit.description,
         amount: merit.amount,
@@ -233,6 +235,8 @@ exports.merit_as_pledge = function(req, res) {
         counter++;
 
         pledge.ref.child('Merits').push(meritInfo);
+
+        meritInfo.photoURL = pledge.val().photoURL;
         active.ref.child('Merits').push(meritInfo);
 
         if (!res.headersSent && counter === selectedActives.length) {
