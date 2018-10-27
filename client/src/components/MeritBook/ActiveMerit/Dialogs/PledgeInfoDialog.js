@@ -58,7 +58,7 @@ export default class PledgeInfoDialog extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.pledge) {
-      const pledgeName = `${this.state.pledge.firstName} ${this.state.pledge.lastName}`;
+      const pledgeName = `${nextProps.pledge.firstName} ${nextProps.pledge.lastName}`;
       const pledgeDisplayName = nextProps.pledge.firstName + nextProps.pledge.lastName;
 
       this.setState({
