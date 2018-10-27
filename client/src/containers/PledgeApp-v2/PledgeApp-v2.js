@@ -2,7 +2,6 @@ import 'containers/PledgeApp/PledgeApp.css';
 import './PledgeApp-v2.css';
 import { loadFirebase } from 'helpers/functions.js';
 import {
-  LoadableMeritBook,
   LoadableContacts,
 } from 'helpers/LoadableComponents';
 
@@ -10,6 +9,7 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { Navbar } from './components/Navbar/Navbar';
+import { MyMerits } from './components/MyMerits/MyMerits';
 import { Pledges } from './components/Pledges/Pledges';
 
 const routes = [
@@ -18,10 +18,7 @@ const routes = [
     exact: true,
     content: props => (
       <div id="content">
-        <LoadableMeritBook
-          state={props.state}
-          handleRequestOpen={props.handleRequestOpen}
-        />
+        <MyMerits state={props.state} />
       </div>
     )
   },
@@ -78,35 +75,19 @@ export class PledgeApp2 extends Component {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
-        let firebase = window.firebase;
-        let fullName = this.props.state.displayName;
-        let userRef = firebase.database().ref('/users/' + fullName);
+        const { firebase } = window;
+        const { displayName } = this.props.state;
+        const userRef = firebase.database().ref('/users/' + displayName);
 
         userRef.on('value', (user) => {
-          let totalMerits = user.val().totalMerits;
+          const { totalMerits } = user.val();
 
           console.log(`Total Merits: ${totalMerits}`);
           localStorage.setItem('totalMerits', totalMerits);
 
-          userRef.child('Merits').on('value', (snapshot) => {
-            let merits = [];
-
-            if (snapshot.val()) {
-              merits = Object.keys(snapshot.val()).map(function(key) {
-                return snapshot.val()[key];
-              }).sort((a, b) => {
-                return new Date(b.date) - new Date(a.date);
-              });
-            }
-
-            console.log(`Merit array: ${merits}`);
-            localStorage.setItem('meritArray', JSON.stringify(merits));
-            localStorage.setItem('totalMerits', totalMerits);
-
-            this.setState({
-              totalMerits: totalMerits,
-              previousTotalMerits: this.state.totalMerits
-            });
+          this.setState({
+            totalMerits: totalMerits,
+            previousTotalMerits: this.state.totalMerits
           });
         });
       });
