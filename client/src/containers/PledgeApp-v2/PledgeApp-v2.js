@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { Navbar } from './components/Navbar/Navbar';
-import { PledgeBrothers } from './components/PledgeBrothers/PledgeBrothers';
+import { Pledges } from './components/Pledges/Pledges';
 
 const routes = [
   {
@@ -30,7 +30,7 @@ const routes = [
     exact: true,
     content: props => (
       <div id="content">
-        <PledgeBrothers pbros={props.pbros} />
+        <Pledges state={props.state} />
       </div>
     )
   },
@@ -46,7 +46,18 @@ const routes = [
 ];
 
 const LoadablePledgeMeritDialog = Loadable({
-  loader: () => import('components/MeritBook/PledgeMerit/Dialogs/PledgeMeritDialog'),
+  loader: () => import('./components/Dialogs/PledgeMeritDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>
+  }
+});
+
+const LoadableActiveMeritDialog = Loadable({
+  loader: () => import('./components/Dialogs/ActiveMeritDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -150,6 +161,7 @@ export class PledgeApp2 extends Component {
             previousTotalMerits={this.state.previousTotalMerits}
             openMerit={this.handleMeritOpen}
             logOut={this.props.logoutCallBack}
+            handleRequestOpen={this.props.handleRequestOpen}
           />
           <Switch>
             {routes.map((route, index) => (
@@ -162,8 +174,15 @@ export class PledgeApp2 extends Component {
             ))}
             <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
           </Switch>
-          {this.props.state.status === 'pledge' && (
+          {this.props.state.status === 'pledge' ? (
             <LoadablePledgeMeritDialog
+              open={this.state.openMerit}
+              state={this.props.state}
+              handleMeritClose={this.handleMeritClose}
+              handleRequestOpen={this.props.handleRequestOpen}
+            />
+          ) : (
+            <LoadableActiveMeritDialog
               open={this.state.openMerit}
               state={this.props.state}
               handleMeritClose={this.handleMeritClose}

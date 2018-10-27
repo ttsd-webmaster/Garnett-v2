@@ -40,6 +40,7 @@ export default class DeleteMeritDialog extends Component {
       <Dialog
         actions={actions}
         modal={false}
+        contentClassName="garnett-dialog-content"
         open={this.props.open}
         onRequestClose={this.props.handleDeleteClose}
         autoScrollBodyContent={true}

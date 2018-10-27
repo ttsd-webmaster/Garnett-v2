@@ -140,24 +140,31 @@ exports.get_pbros_as_pledge = function(req, res) {
 // Put merit data as active
 exports.merit_as_active = function(req, res) {
   let counter = 0;
-  const selectedPledges = req.body.selectedPledges;
+  const {
+    displayName,
+    selectedPledges,
+    merit,
+    isChalkboard,
+    isPCGreet,
+    status
+  } = req.body;
 
   selectedPledges.forEach((child) => {
-    const fullName = req.body.displayName;
-    const activeRef = admin.database().ref('/users/' + fullName + '/Pledges/' + child.value);
+    const activeRef = admin.database().ref('/users/' + displayName);
+    const activePledgeRef = activeRef.child('/Pledges/' + child.value);
     const pledgeRef = admin.database().ref('/users/' + child.value);
 
-    activeRef.once('value', (active) => {
-      if (req.body.status !== 'pipm' && !req.body.isChalkboard && !req.body.isPCGreet) {
-        const remainingMerits = active.val().merits - req.body.merit.amount;
+    activePledgeRef.once('value', (active) => {
+      if (status !== 'pipm' && !isChalkboard && !isPCGreet) {
+        const remainingMerits = active.val().merits - merit.amount;
 
-        if (req.body.merit.amount > 0 && 
+        if (merit.amount > 0 && 
             remainingMerits < 0 && 
             !res.headersSent) {
           res.sendStatus(400).send(child.label);
         }
         else {
-          activeRef.update({
+          activePledgeRef.update({
             merits: remainingMerits
           });
         }
@@ -167,10 +174,11 @@ exports.merit_as_active = function(req, res) {
         counter++;
 
         pledgeRef.update({
-          totalMerits: pledge.val().totalMerits + req.body.merit.amount
+          totalMerits: pledge.val().totalMerits + merit.amount
         });
 
-        pledge.ref.child('Merits').push(req.body.merit);
+        pledge.ref.child('Merits').push(merit);
+        activeRef.child('Merits').push(merit);
 
         if (!res.headersSent && counter === selectedPledges.length) {
           res.sendStatus(200);
@@ -190,10 +198,10 @@ exports.merit_as_pledge = function(req, res) {
     isChalkboard,
     isPCGreet
   } = req.body;
-  const pledgeRef = admin.database().ref('/users/' + displayName);
 
   selectedActives.forEach((child) => {
     const activeRef = admin.database().ref('/users/' + child.value);
+    const pledgeRef = admin.database().ref('/users/' + displayName);
 
     activeRef.once('value', (active) => {
       const meritInfo = {
@@ -225,6 +233,7 @@ exports.merit_as_pledge = function(req, res) {
         counter++;
 
         pledge.ref.child('Merits').push(meritInfo);
+        active.ref.child('Merits').push(meritInfo);
 
         if (!res.headersSent && counter === selectedActives.length) {
           pledgeRef.update({

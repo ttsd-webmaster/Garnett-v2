@@ -1,6 +1,7 @@
 import '../MeritBook.css';
 import {loadFirebase, isMobileDevice} from 'helpers/functions.js';
 import {LoadingComponent} from 'helpers/loaders.js';
+import { Filter } from './Filter.js';
 
 import React, {Component} from 'react';
 import {Portal} from 'react-portal';
@@ -10,9 +11,6 @@ import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 
 const LoadablePledgeInfoDialog = Loadable({
@@ -332,47 +330,13 @@ export default class ActiveMerit extends Component {
             </FloatingActionButton>
           </Portal>
 
-          <Popover
+          <Filter
             open={this.state.openPopover}
             anchorEl={this.state.anchorEl}
-            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this.closePopover}
-            animation={PopoverAnimationVertical}
-          >
-            <Menu>
-              <MenuItem
-                primaryText="Last Name"
-                insetChildren
-                checked={this.state.filterName === 'Last Name'}
-                onClick={() => this.setFilter('Last Name')}
-              />
-              <MenuItem
-                primaryText="First Name"
-                insetChildren
-                checked={this.state.filterName === 'First Name'}
-                onClick={() => this.setFilter('First Name')}
-              />
-              <MenuItem
-                primaryText="Year"
-                insetChildren
-                checked={this.state.filterName === 'Year'}
-                onClick={() => this.setFilter('Year')}
-              />
-              <MenuItem
-                primaryText="Major"
-                insetChildren
-                checked={this.state.filterName === 'Major'}
-                onClick={() => this.setFilter('Major')}
-              />
-              <MenuItem
-                primaryText="Total Merits"
-                insetChildren
-                checked={this.state.filterName === 'Total Merits'}
-                onClick={() => this.setFilter('Total Merits')}
-              />
-            </Menu>
-          </Popover>
+            filterName={this.state.filterName}
+            closePopover={this.closePopover}
+            setFilter={this.setFilter}
+          />
           
           <LoadablePledgeInfoDialog
             open={this.state.open}

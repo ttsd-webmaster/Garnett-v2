@@ -1,9 +1,46 @@
 import './Navbar.css';
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 export class Navbar extends Component {
+  state = {
+    open: false
+  }
+
+  handleLogoutOpen = () => {
+    if (navigator.onLine) {
+      this.setState({ open: true });
+
+      // Handles android back button
+      if (/android/i.test(navigator.userAgent)) {
+        let path = 
+          process.env.NODE_ENV === 'development' 
+            ? 'http://localhost:3000'
+            : 'https://garnett-app.herokuapp.com';
+
+        window.history.pushState(null, null, path + window.location.pathname);
+        window.onpopstate = () => {
+          this.handleLogoutClose();
+        }
+      }
+    }
+    else {
+      this.props.handleRequestOpen('You are offline');
+    }
+  }
+
+  handleLogoutClose = () => {
+    if (/android/i.test(navigator.userAgent)) {
+      window.onpopstate = () => {};
+    }
+
+    this.setState({ open: false });
+  }
+
   render() {
     const {
       name,
@@ -15,6 +52,19 @@ export class Navbar extends Component {
       totalMerits,
       logOut
     } = this.props;
+
+    const actions = [
+      <FlatButton
+        label="Just Kidding"
+        primary={true}
+        onClick={this.handleLogoutClose}
+      />,
+      <RaisedButton
+        label="Log Out"
+        primary={true}
+        onClick={logOut}
+      />,
+    ];
 
     return (
       <div id="navbar">
@@ -36,18 +86,33 @@ export class Navbar extends Component {
           </Link>
           <Link className="nav-item" to="/pledge-app/pledge-brothers">
             <i className="icon-users"></i>
-            Pledge Brothers
+            {status === 'pledge' ? (
+              <Fragment>Pledge Brothers</Fragment>
+            ) : (
+              <Fragment>Pledges</Fragment>
+            )}
           </Link>
           <Link className="nav-item" to="/pledge-app/brothers">
             <i className="icon-address-book"></i>
             Brothers
           </Link>
-          <a className="nav-item" onClick={logOut}>
+          <a className="nav-item" onClick={this.handleLogoutOpen}>
             <i className="icon-cog"></i>
             Log Out
           </a>
           <div id="merit-button" onClick={this.props.openMerit}>Merit</div>
         </nav>
+
+        <Dialog
+          actions={actions}
+          modal={false}
+          contentClassName="garnett-dialog-content"
+          open={this.state.open}
+          onRequestClose={this.handleLogoutClose}
+          autoScrollBodyContent={true}
+        >
+          Are you sure you want to log out?
+        </Dialog>
       </div>
     )
   }
