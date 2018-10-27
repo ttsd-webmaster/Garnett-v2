@@ -237,7 +237,7 @@ export default class ActiveMeritDialog extends Component {
   }
 
   render() {
-    let maxAmount = 50;
+    let maxAmount = 100;
 
     if (this.state.isChalkboard) {
       maxAmount = 100;

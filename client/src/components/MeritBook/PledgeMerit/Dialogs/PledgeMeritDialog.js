@@ -238,7 +238,7 @@ export default class PledgeMeritDialog extends Component {
   }
 
   render() {
-    let maxAmount = 50;
+    let maxAmount = 100;
     let selectLabel = 'Active Name';
 
     if (this.state.isChalkboard) {
