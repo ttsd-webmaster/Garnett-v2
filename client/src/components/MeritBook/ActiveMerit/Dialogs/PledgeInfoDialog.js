@@ -46,39 +46,40 @@ const LoadableComplaintsList = Loadable({
   }
 });
 
-export default class ActiveMerit extends Component {
+export default class PledgeInfoDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pledge: null,
+      pledgeName: null,
       index: 0
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.pledge) {
+      const pledgeName = `${this.state.pledge.firstName} ${this.state.pledge.lastName}`;
+      const pledgeDisplayName = nextProps.pledge.firstName + nextProps.pledge.lastName;
+
       this.setState({
         pledge: nextProps.pledge,
+        pledgeName,
+        pledgeDisplayName,
         index: 0
       });
 
       if (navigator.onLine) {
-        let displayName = nextProps.state.displayName;
-        let pledgeName = nextProps.pledge.firstName + nextProps.pledge.lastName;
+        const { displayName } = nextProps.state;
 
         API.getMeritsRemaining(displayName, pledgeName)
         .then((res) => {
-          let meritsRemaining = res.data;
+          const meritsRemaining = res.data;
 
-          this.setState({
-            meritsRemaining: meritsRemaining
-          });
+          this.setState({ meritsRemaining });
         });
       }
       else {
-        this.setState({
-          meritsRemaining: 0
-        });
+        this.setState({ meritsRemaining: 0 });
       }
     }
   }
@@ -90,14 +91,6 @@ export default class ActiveMerit extends Component {
   }
 
   render() {
-    let pledgeName;
-    let pledgeDisplayName;
-
-    if (this.state.pledge) {
-      pledgeName = `${this.state.pledge.firstName} ${this.state.pledge.lastName}`;
-      pledgeDisplayName = this.state.pledge.firstName + this.state.pledge.lastName;
-    }
-
     const actions = (
       <FlatButton
         label="Close"
@@ -129,7 +122,7 @@ export default class ActiveMerit extends Component {
                   <ListItem
                     className="garnett-list-item"
                     primaryText="Name"
-                    secondaryText={pledgeName}
+                    secondaryText={this.state.pledgeName}
                     leftIcon={
                       <i className="icon-user garnett-icon"></i>
                     }
@@ -177,13 +170,13 @@ export default class ActiveMerit extends Component {
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
                 <LoadableMeritsList
-                  pledgeName={pledgeDisplayName}
+                  pledgeName={this.state.pledgeDisplayName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
               </Tab>
               <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
                 <LoadableComplaintsList
-                  pledgeName={pledgeDisplayName}
+                  pledgeName={this.state.pledgeDisplayName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
               </Tab>
@@ -215,7 +208,7 @@ export default class ActiveMerit extends Component {
                   <ListItem
                     className="garnett-list-item"
                     primaryText="Name"
-                    secondaryText={pledgeName}
+                    secondaryText={this.state.pledgeName}
                     leftIcon={
                       <i className="icon-user garnett-icon"></i>
                     }
@@ -263,13 +256,13 @@ export default class ActiveMerit extends Component {
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
                 <LoadableMeritsList
-                  pledgeName={pledgeDisplayName}
+                  pledgeName={this.state.pledgeDisplayName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
               </Tab>
               <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
                 <LoadableComplaintsList
-                  pledgeName={pledgeDisplayName}
+                  pledgeName={this.state.pledgeDisplayName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
               </Tab>

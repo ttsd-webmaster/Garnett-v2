@@ -1,6 +1,6 @@
 import './Navbar.css';
 
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 export class Navbar extends Component {
@@ -36,7 +36,11 @@ export class Navbar extends Component {
           </Link>
           <Link className="nav-item" to="/pledge-app/pledge-brothers">
             <i className="icon-users"></i>
-            Pledge Brothers
+            {status === 'pledge' ? (
+              <Fragment>Pledge Brothers</Fragment>
+            ) : (
+              <Fragment>Pledges</Fragment>
+            )}
           </Link>
           <Link className="nav-item" to="/pledge-app/brothers">
             <i className="icon-address-book"></i>

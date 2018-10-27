@@ -10,7 +10,7 @@ import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { Navbar } from './components/Navbar/Navbar';
-import { PledgeBrothers } from './components/PledgeBrothers/PledgeBrothers';
+import { Pledges } from './components/Pledges/Pledges';
 
 const routes = [
   {
@@ -30,7 +30,7 @@ const routes = [
     exact: true,
     content: props => (
       <div id="content">
-        <PledgeBrothers pbros={props.pbros} />
+        <Pledges state={props.state} />
       </div>
     )
   },
