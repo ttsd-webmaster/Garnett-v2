@@ -38,6 +38,8 @@ const LoadableActiveMeritDialog = Loadable({
 });
 
 export default class ActiveMerit extends Component {
+  _isMounted = false;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -53,8 +55,10 @@ export default class ActiveMerit extends Component {
     };
   }
 
-  componentWillMount() {
-    if (navigator.onLine) {
+  componentDidMount () {
+   this._isMounted = true
+
+   if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
         let pledges = [];
@@ -83,18 +87,26 @@ export default class ActiveMerit extends Component {
 
           localStorage.setItem('pledgeArray', JSON.stringify(pledges));
           
-          this.setState({
-            loaded: true,
-            pledges: pledges
-          });
+          if (this._isMounted) {
+            this.setState({
+              loaded: true,
+              pledges: pledges
+            });
+          }
         });
       });
     }
     else {
-      this.setState({
-        loaded: true
-      });
+      if (this._isMounted) {
+        this.setState({
+          loaded: true
+        });
+      }
     }
+  }
+
+  componentWillUnmount () {
+    this._isMounted = false
   }
 
   componentDidUpdate() {

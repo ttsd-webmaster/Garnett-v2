@@ -277,7 +277,7 @@ export default class App extends Component {
 
   pledgeAppPath(history) {
     if (this.state.isAuthenticated) {
-      if (window.innerWidth > 768 && this.state.status === 'pledge') {
+      if (window.innerWidth > 768) {
         return (
           <PledgeApp2 
             state={this.state}

@@ -8,14 +8,15 @@ import {
 
 import React, { Component } from 'react';
 import Loadable from 'react-loadable';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { Navbar } from './components/Navbar/Navbar';
 import { PledgeBrothers } from './components/PledgeBrothers/PledgeBrothers';
 
 const routes = [
   {
     path: '/pledge-app/my-merits',
-    content: (props) => (
+    exact: true,
+    content: props => (
       <div id="content">
         <LoadableMeritBook
           state={props.state}
@@ -26,7 +27,8 @@ const routes = [
   },
   {
     path: '/pledge-app/pledge-brothers',
-    content: (props) => (
+    exact: true,
+    content: props => (
       <div id="content">
         <PledgeBrothers pbros={props.pbros} />
       </div>
@@ -34,7 +36,8 @@ const routes = [
   },
   {
     path: '/pledge-app/brothers',
-    content: (props) => (
+    exact: true,
+    content: props => (
       <div id="content">
         <LoadableContacts state={props.state} />
       </div>
@@ -55,15 +58,12 @@ const LoadablePledgeMeritDialog = Loadable({
 
 export class PledgeApp2 extends Component {
   state = {
-    loaded: false,
     totalMerits: 0,
     previousTotalMerits: 0,
-    merits: [],
-    merit: null,
     openMerit: false
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
@@ -93,31 +93,13 @@ export class PledgeApp2 extends Component {
             localStorage.setItem('totalMerits', totalMerits);
 
             this.setState({
-              loaded: true,
               totalMerits: totalMerits,
-              previousTotalMerits: this.state.totalMerits,
-              merits: merits,
+              previousTotalMerits: this.state.totalMerits
             });
           });
         });
       });
     }
-    else {
-      this.setState({
-        loaded: true
-      });
-    }
-  }
-
-  handleDeleteClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
-    this.setState({
-      openDelete: false,
-      merit: null
-    });
   }
 
   handleMeritOpen = () => {
@@ -169,14 +151,17 @@ export class PledgeApp2 extends Component {
             openMerit={this.handleMeritOpen}
             logOut={this.props.logoutCallBack}
           />
-          {routes.map((route, index) => (
-            <Route
-              key={index}
-              exact
-              path={route.path}
-              component={() => route.content(this.props)}
-            />
-          ))}
+          <Switch>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                exact={route.exact}
+                path={route.path}
+                render={() => route.content(this.props)}
+              />
+            ))}
+            <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
+          </Switch>
           {this.props.state.status === 'pledge' && (
             <LoadablePledgeMeritDialog
               open={this.state.openMerit}
