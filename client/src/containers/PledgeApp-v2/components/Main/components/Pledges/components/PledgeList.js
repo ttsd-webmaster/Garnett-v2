@@ -25,7 +25,7 @@ export function PledgeList(props) {
               </p>
             }
             secondaryTextLines={2}
-            onClick={() => this.handleOpen(pledge)}
+            onClick={() => props.handleOpen(pledge)}
           >
             <p className="pledge-merits"> {pledge.totalMerits} </p>
           </ListItem>

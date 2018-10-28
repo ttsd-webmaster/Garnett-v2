@@ -158,7 +158,10 @@ export class Pledges extends Component {
             openPopover={this.openPopover}
             reverse={this.reverse}
           />
-          <PledgeList pledges={this.state.pledges} />
+          <PledgeList
+            pledges={this.state.pledges}
+            handleOpen={this.handleOpen}
+          />
           <LoadablePledgeInfoDialog
             open={this.state.open}
             state={this.props.state}
