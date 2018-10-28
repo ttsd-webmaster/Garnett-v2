@@ -1,4 +1,4 @@
-import 'components/MeritBook/MeritBook.css';
+import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import {loadFirebase} from 'helpers/functions.js';
 import {LoadingComponent} from 'helpers/loaders.js';
 
@@ -110,23 +110,14 @@ export class MyMerits extends Component {
   }
 
   reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
+    this.setState({ reverse: !this.state.reverse });
   }
 
   render() {
     let toggleIcon = "icon-down-open-mini";
+    let { merits, reverse } = this.state;
 
-    let merits = this.state.merits;
-
-    if (this.state.reverse) {
+    if (reverse) {
       merits = merits.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
@@ -180,13 +171,11 @@ export class MyMerits extends Component {
                   >
                     <div className="merit-amount-container">
                       <p className="merit-date"> {merit.date} </p>
-                      <p className={
-                        merit.amount > 0
-                          ? "merit-amount green"
-                          : "merit-amount red"
-                      }>
-                        {merit.amount}
-                      </p>
+                      {merit.amount > 0 ? (
+                        <p className="merit-amount green">+{merit.amount}</p>
+                      ) : (
+                        <p className="merit-amount red">{merit.amount}</p>
+                      )}
                     </div>
                   </ListItem>
                   <Divider className="garnett-divider large" inset={true} />

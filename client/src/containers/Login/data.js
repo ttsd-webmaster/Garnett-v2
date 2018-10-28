@@ -1,8 +1,8 @@
-const activeCode = 'garnett';
+export const activeCode = 'garnett';
 
-const pledgeCode = 'taupledge';
+export const pledgeCode = 'taupledge';
 
-const formData1 = [
+export const formData1 = [
   {
     name: 'First Name',
     value: 'firstName',
@@ -17,7 +17,7 @@ const formData1 = [
   },
 ];
 
-const selectData = [
+export const selectData = [
   {
     name: 'Class',
     value: 'className',
@@ -59,7 +59,7 @@ const selectData = [
   }
 ];
 
-const formData2 = [
+export const formData2 = [
   {
     name: 'Phone',
     value: 'phone',
@@ -91,5 +91,3 @@ const formData2 = [
     errorText: 'The confirmation password does not match.',
   },
 ];
-
-export { activeCode, pledgeCode, formData1, selectData, formData2 };

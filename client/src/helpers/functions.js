@@ -1,14 +1,14 @@
 // Used to get tab color for Pledge App
-function getTabStyle(isActive) {
+export function getTabStyle(isActive) {
   return {color: isActive ? 'var(--primary-color)' : 'var(--secondary-light)'};
 }
 
-function isMobileDevice() {
+export function isMobileDevice() {
   return (typeof window.orientation !== "undefined") || 
          (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
 
-function initializeFirebase(data) {
+export function initializeFirebase(data) {
   loadFirebase('app')
   .then(() => {
     let firebase = window.firebase;
@@ -24,7 +24,7 @@ function initializeFirebase(data) {
   });
 }
 
-function loadFirebase(module) {
+export function loadFirebase(module) {
   return new Promise(resolve => {
     const script = document.createElement('script');
     script.src = `https://www.gstatic.com/firebasejs/4.6.2/firebase-${module}.js`;
@@ -35,12 +35,12 @@ function loadFirebase(module) {
   });
 }
 
-function validateEmail(email) {
+export function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
 
-function getDate() {
+export function getDate() {
   let today = new Date();
   let day = today.getDate();
   let month = today.getMonth() + 1;
@@ -58,7 +58,7 @@ function getDate() {
   return today;
 }
 
-function mapsSelector(location) {
+export function mapsSelector(location) {
   /* if we're on iOS, open in Apple Maps */
   if ((navigator.platform.indexOf("iPhone") !== -1) || 
       (navigator.platform.indexOf("iPad") !== -1) || 
@@ -71,7 +71,7 @@ function mapsSelector(location) {
   }
 }
 
-function invalidSafariVersion() {
+export function invalidSafariVersion() {
   let nAgt = navigator.userAgent;
   let verOffset;
 
@@ -97,7 +97,7 @@ function invalidSafariVersion() {
   }
 }
 
-function iOSversion() {
+export function iOSversion() {
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
     // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
     var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
@@ -108,14 +108,57 @@ function iOSversion() {
   }
 }
 
-export {
-  isMobileDevice,
-  initializeFirebase,
-  loadFirebase,
-  validateEmail,
-  getDate,
-  mapsSelector,
-  invalidSafariVersion,
-  iOSversion,
-  getTabStyle
-};
+export function showHeader(index) {
+  const contentContainer = document.querySelector('.content-container').childNodes[index];
+  const tabs = document.getElementById('pledge-app-tabs').firstChild;
+  const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+  const appBar = document.querySelector('.app-header');
+
+  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+    contentContainer.style.setProperty('overflow', 'scroll', 'important');
+    contentContainer.style.WebkitOverflowScrolling = 'touch';
+  }
+  else {
+    contentContainer.style.setProperty('overflow', 'auto', 'important');
+  }
+
+  tabs.style.zIndex = 1;
+  inkBar.style.zIndex = 1;
+  appBar.style.zIndex = 1;
+}
+
+export function hideHeader(index) {
+  const contentContainer = document.querySelector('.content-container').childNodes[index];
+  const tabs = document.getElementById('pledge-app-tabs').firstChild;
+  const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
+  const appBar = document.querySelector('.app-header');
+
+  contentContainer.style.setProperty('overflow', 'visible', 'important');
+  contentContainer.style.WebkitOverflowScrolling = 'auto';
+  
+  tabs.style.zIndex = 0;
+  inkBar.style.zIndex = 0;
+  appBar.style.zIndex = 0;
+}
+
+// Handles android back button on dialog open
+export function androidBackOpen(callback) {
+  if (/android/i.test(navigator.userAgent)) {
+    let path = 'https://garnett-app.herokuapp.com';
+    if (process.env.NODE_ENV === 'development') {
+      path = 'http://localhost:3000';
+    }
+
+    window.history.pushState(null, null, path + window.location.pathname);
+    window.onpopstate = () => {
+      callback();
+    }
+  }
+}
+
+// Handles android back button on dialog close
+export function androidBackClose() {
+  if (/android/i.test(navigator.userAgent)) {
+    window.onpopstate = () => {};
+  }
+}

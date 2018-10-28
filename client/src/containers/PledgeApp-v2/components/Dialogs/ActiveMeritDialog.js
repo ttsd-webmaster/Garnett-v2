@@ -1,4 +1,4 @@
-import 'components/MeritBook/MeritBook.css';
+import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import { getDate } from 'helpers/functions.js';
 import { CompletingTaskDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';

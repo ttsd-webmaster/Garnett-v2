@@ -1,4 +1,4 @@
-const rusheeInfo = [
+export const rusheeInfo = [
   {
     label: 'Name',
     value: 'name'
@@ -41,7 +41,7 @@ const rusheeInfo = [
   },
 ];
 
-const interviewResponses = [
+export const interviewResponses = [
   {
     label: '1. General - In a couple of sentences, tell us about yourself.',
     value: 'question1'
@@ -107,5 +107,3 @@ const interviewResponses = [
     value: 'question13a'
   },
 ];
-
-export {rusheeInfo, interviewResponses};

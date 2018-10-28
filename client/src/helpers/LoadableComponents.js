@@ -65,7 +65,7 @@ export const LoadableDataApp = Loadable({
 });
 
 export const LoadableMeritBook = Loadable({
-  loader: () => import('components/MeritBook/MeritBook'),
+  loader: () => import('containers/PledgeApp/components/MeritBook/MeritBook'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;
@@ -74,7 +74,7 @@ export const LoadableMeritBook = Loadable({
 });
 
 export const LoadableContacts = Loadable({
-  loader: () => import('components/Contacts/Contacts'),
+  loader: () => import('containers/PledgeApp/components/Contacts/Contacts'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;
@@ -83,7 +83,7 @@ export const LoadableContacts = Loadable({
 });
 
 export const LoadableChalkboards = Loadable({
-  loader: () => import('components/Chalkboards/Chalkboards'),
+  loader: () => import('containers/PledgeApp/components/Chalkboards/Chalkboards'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;
@@ -92,7 +92,7 @@ export const LoadableChalkboards = Loadable({
 });
 
 export const LoadableComplaints = Loadable({
-  loader: () => import('components/Complaints/Complaints'),
+  loader: () => import('containers/PledgeApp/components/Complaints/Complaints'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;
@@ -101,7 +101,7 @@ export const LoadableComplaints = Loadable({
 });
 
 export const LoadableSettings = Loadable({
-  loader: () => import('components/Settings/Settings'),
+  loader: () => import('containers/PledgeApp/components/Settings/Settings'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;

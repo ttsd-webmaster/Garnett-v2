@@ -12,9 +12,8 @@ export default class Home extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     localStorage.setItem('route', 'home');
-    
     this.setState({ loaded: true });
   }
 

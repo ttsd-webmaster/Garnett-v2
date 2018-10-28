@@ -25,9 +25,17 @@ export default class App extends Component {
     message: ''
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const data = JSON.parse(localStorage.getItem('data'));
     const firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
+    const sw_msg = localStorage.getItem('sw_msg');
+
+    if (sw_msg) {
+      localStorage.removeItem('sw_msg');
+      setTimeout(() => {
+        this.handleRequestOpen(sw_msg);
+      }, 2000);
+    }
 
     if (navigator.onLine) {
       if (data !== null) {
@@ -61,17 +69,6 @@ export default class App extends Component {
       else {
         this.setState({ loaded: true });
       }
-    }
-  }
-
-  componentDidMount() {
-    const sw_msg = localStorage.getItem('sw_msg');
-
-    if (sw_msg) {
-      localStorage.removeItem('sw_msg');
-      setTimeout(() => {
-        this.handleRequestOpen(sw_msg);
-      }, 2000);
     }
   }
 

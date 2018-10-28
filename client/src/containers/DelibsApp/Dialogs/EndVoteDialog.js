@@ -13,7 +13,7 @@ export default class EndVoteDialog extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {

@@ -1,8 +1,8 @@
-import 'components/MeritBook/MeritBook.css';
+import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import API from 'api/API.js';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { Filter } from './Filter.js';
+import { Filter } from './components/Filter.js';
 
 import React, { Component, Fragment } from 'react';
 import Loadable from 'react-loadable';
@@ -13,7 +13,7 @@ import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
 const LoadablePledgeInfoDialog = Loadable({
-  loader: () => import('./Dialogs/PledgeInfoDialog'),
+  loader: () => import('./components/Dialogs/PledgeInfoDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;
@@ -168,22 +168,14 @@ export class Pledges extends Component {
   }
 
   reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
+    this.setState({ reverse: !this.state.reverse });
   }
 
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let pledges = this.state.pledges;
+    let { pledges, reverse } = this.state;
 
-    if (this.state.reverse) {
+    if (reverse) {
       pledges = pledges.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }

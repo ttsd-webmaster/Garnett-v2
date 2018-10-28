@@ -14,7 +14,7 @@ export default class VoteDialog extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (navigator.onLine) {
       loadFirebase('database')
       .then(() => {
