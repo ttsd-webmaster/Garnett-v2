@@ -1,7 +1,7 @@
 import './Sidebar.css';
 import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -64,7 +64,12 @@ export class Sidebar extends Component {
           <img id="sidebar-photo" src={photoURL} alt="User" />
           <h3 id="account-name">{name}</h3>
           <h4>
-            <CountUp className="total-merits" start={previousTotalMerits} end={totalMerits} useEasing />
+            <CountUp
+              className="total-merits"
+              start={previousTotalMerits}
+              end={totalMerits}
+              useEasing
+            />
             merits {status !== 'pledge' && 'merited'}
           </h4>
         </div>
@@ -76,9 +81,9 @@ export class Sidebar extends Component {
           <Link className="nav-item" to="/pledge-app/pledge-brothers">
             <i className="icon-users"></i>
             {status === 'pledge' ? (
-              <Fragment>Pledge Brothers</Fragment>
+              "Pledge Brothers"
             ) : (
-              <Fragment>Pledges</Fragment>
+              "Pledges"
             )}
           </Link>
           <Link className="nav-item" to="/pledge-app/brothers">
