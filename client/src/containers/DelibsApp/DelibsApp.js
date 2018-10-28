@@ -6,7 +6,6 @@ import API from 'api/API.js';
 import { LoadableVoteDialog } from './RusheeProfile/components/Dialogs';
 
 import React, {Component} from 'react';
-import Loadable from 'react-loadable';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
