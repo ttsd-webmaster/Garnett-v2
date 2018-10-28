@@ -1,3 +1,4 @@
+import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadableHandleComplaintDialog } from './Dialogs';
 
 import React, { Component } from 'react';
@@ -18,6 +19,7 @@ export default class MyComplaints extends Component {
 
   handleOpen = (complaint) => {
     if (navigator.onLine) {
+      androidBackOpen(this.handleClose);
       this.setState({
         open: true,
         selectedComplaint: complaint
@@ -26,29 +28,10 @@ export default class MyComplaints extends Component {
     else {
       this.props.handleRequestOpen('You are offline');
     }
-
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      let path;
-      if (process.env.NODE_ENV === 'development') {
-        path = 'http://localhost:3000';
-      }
-      else {
-        path = 'https://garnett-app.herokuapp.com';
-      }
-
-      window.history.pushState(null, null, path + window.location.pathname);
-      window.onpopstate = () => {
-        this.handleClose();
-      }
-    }
   }
 
   handleClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-    
+    androidBackClose();
     this.setState({ open: false });
   }
 

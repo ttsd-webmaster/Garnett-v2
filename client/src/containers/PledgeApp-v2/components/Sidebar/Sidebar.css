@@ -1,4 +1,4 @@
-#navbar {
+#sidebar {
   display: flex;
   flex-direction: column;
   flex: 0 0 280px;
@@ -14,7 +14,7 @@
   padding-bottom: 46px;
 }
 
-#navbar-photo {
+#sidebar-photo {
   object-fit: cover;
   height: 70px;
   width: 70px;

@@ -1,6 +1,6 @@
 import MyComplaints from './components/MyComplaints';
 import PastComplaints from './components/PastComplaints';
-import { loadFirebase } from 'helpers/functions.js';
+import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { LoadableAddComplaintDialog } from './components/Dialogs';
 
@@ -152,23 +152,8 @@ export default class ActiveComplaints extends Component {
 
   handleOpen = () => {
     if (navigator.onLine) {
+      androidBackOpen(this.handleClose);
       this.setState({ open: true });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path;
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
-        }
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleClose();
-        }
-      }
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -176,10 +161,7 @@ export default class ActiveComplaints extends Component {
   }
 
   handleClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({ open: false });
   }
 

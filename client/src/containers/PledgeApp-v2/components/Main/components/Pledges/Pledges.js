@@ -1,16 +1,12 @@
-import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import API from 'api/API.js';
-import { loadFirebase } from 'helpers/functions.js';
+import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { Filter } from './components/Filter.js';
+import { Header } from './components/Header';
+import { PledgeList } from './components/PledgeList';
+import { Filter } from './components/Filter';
 import { LoadablePledgeInfoDialog } from './components/Dialogs';
 
 import React, { Component, Fragment } from 'react';
-import Avatar from 'material-ui/Avatar';
-import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
-import IconButton from 'material-ui/IconButton';
 
 export class Pledges extends Component {
   constructor(props) {
@@ -87,32 +83,15 @@ export class Pledges extends Component {
   }
 
   handleOpen = (pledge) => {
+    androidBackOpen(this.handleClose);
     this.setState({
       pledge,
       open: true
     });
-
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      let path = 'https://garnett-app.herokuapp.com';
-
-      if (process.env.NODE_ENV === 'development') {
-        path = 'http://localhost:3000';
-      }
-
-      window.history.pushState(null, null, path + window.location.pathname);
-      window.onpopstate = () => {
-        this.handleClose();
-      }
-    }
   }
 
   handleClose = () => {
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({
       open: false
     });
@@ -172,53 +151,14 @@ export class Pledges extends Component {
     return (
       this.state.loaded ? (
         <Fragment>
-          <Subheader className="garnett-subheader">
-            {this.props.state.status === 'pledge' ? (
-              <Fragment>Pledge Brothers</Fragment>
-            ) : (
-              <Fragment>
-                <Fragment>Pledges</Fragment>
-                <span style={{float:'right'}}>
-                  <span className="garnett-filter" onClick={this.openPopover}> 
-                    {this.state.filterName}
-                  </span>
-                  <IconButton
-                    iconClassName={toggleIcon}
-                    className="reverse-toggle"
-                    onClick={this.reverse}
-                  />
-                </span>
-              </Fragment>
-            )}
-          </Subheader>
-
-          <List className="garnett-list">
-            {pledges.map((pledge, i) => (
-              <div key={i}>
-                <Divider className="garnett-divider large" inset={true} />
-                <ListItem
-                  className="garnett-list-item large"
-                  leftAvatar={<Avatar className="garnett-image large" size={70} src={pledge.photoURL} />}
-                  primaryText={
-                    <p className="garnett-name"> {pledge.firstName} {pledge.lastName} </p>
-                  }
-                  secondaryText={
-                    <p>
-                      {pledge.year}
-                      <br />
-                      {pledge.major}
-                    </p>
-                  }
-                  secondaryTextLines={2}
-                  onClick={() => this.handleOpen(pledge)}
-                >
-                  <p className="pledge-merits"> {pledge.totalMerits} </p>
-                </ListItem>
-                <Divider className="garnett-divider large" inset={true} />
-              </div>
-            ))}
-          </List>
-          
+          <Header
+            toggleIcon={toggleIcon}
+            state={this.props.state}
+            filterName={this.state.filterName}
+            openPopover={this.openPopover}
+            reverse={this.reverse}
+          />
+          <PledgeList pledges={this.state.pledges} />
           <LoadablePledgeInfoDialog
             open={this.state.open}
             state={this.props.state}
@@ -226,7 +166,6 @@ export class Pledges extends Component {
             handleClose={this.handleClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
-
           {this.props.state.status !== 'pledge' && (
             <Filter
               open={this.state.openPopover}

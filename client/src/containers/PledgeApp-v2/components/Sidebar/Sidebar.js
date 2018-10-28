@@ -1,4 +1,5 @@
-import './Navbar.css';
+import './Sidebar.css';
+import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
@@ -7,7 +8,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import CountUp from 'react-countup';
 
-export class Navbar extends Component {
+export class Sidebar extends Component {
   state = {
     open: false
   }
@@ -18,20 +19,8 @@ export class Navbar extends Component {
 
   handleLogoutOpen = () => {
     if (navigator.onLine) {
+      androidBackOpen(this.handleLogoutClose);
       this.setState({ open: true });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path = 
-          process.env.NODE_ENV === 'development' 
-            ? 'http://localhost:3000'
-            : 'https://garnett-app.herokuapp.com';
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleLogoutClose();
-        }
-      }
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -39,10 +28,7 @@ export class Navbar extends Component {
   }
 
   handleLogoutClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({ open: false });
   }
 
@@ -73,9 +59,9 @@ export class Navbar extends Component {
     ];
 
     return (
-      <div id="navbar">
+      <div id="sidebar">
         <div id="account-info">
-          <img id="navbar-photo" src={photoURL} alt="User" />
+          <img id="sidebar-photo" src={photoURL} alt="User" />
           <h3 id="account-name">{name}</h3>
           <h4>
             <CountUp className="total-merits" start={previousTotalMerits} end={totalMerits} useEasing />
