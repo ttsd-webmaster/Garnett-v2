@@ -10,13 +10,10 @@ export default class ActiveList extends Component {
       case 'firstName':
       case 'lastName':
         return active[this.props.filter].startsWith(this.props.label);
-        break;
       case 'activeClass':
         return active.status !== 'alumni' && active.class === this.props.label;
-        break;
       case 'alumni':
         return active.status === 'alumni' && active.class === this.props.label;
-        break;
       default:
         return active[this.props.filter] === this.props.label;
     }
