@@ -1,26 +1,15 @@
 import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import {loadFirebase} from 'helpers/functions.js';
 import {LoadingComponent} from 'helpers/loaders.js';
+import { LoadableDeleteMeritDialog } from './Dialogs';
 
 import React, {Component} from 'react';
-import Loadable from 'react-loadable';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
-
-const LoadableDeleteMeritDialog = Loadable({
-  loader: () => import('./Dialogs/DeleteMeritDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>
-  }
-});
 
 export class MyMerits extends Component {
   constructor(props) {

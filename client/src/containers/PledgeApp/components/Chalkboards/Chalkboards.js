@@ -11,38 +11,19 @@ import {
   androidBackClose
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
+import {
+  LoadableAddChalkboardDialog,
+  LoadableHandleChalkboardDialog,
+} from './components/Dialogs'; 
 
 import React, { Component } from 'react';
 import { Portal} from 'react-portal';
 import { forceCheck } from 'react-lazyload';
-import Loadable from 'react-loadable';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
-
-const LoadableAddChalkboardDialog = Loadable({
-  loader: () => import('./components/Dialogs/AddChalkboardDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
-
-const LoadableHandleChalkboardDialog = Loadable({
-  loader: () => import('./components/Dialogs/HandleChalkboardDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
 
 export default class Chalkboards extends Component {
   constructor(props) {

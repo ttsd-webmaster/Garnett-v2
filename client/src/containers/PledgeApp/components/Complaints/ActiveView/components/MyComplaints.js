@@ -1,21 +1,11 @@
+import { LoadableHandleComplaintDialog } from './Dialogs';
+
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
-
-const LoadableHandleComplaintDialog = Loadable({
-  loader: () => import('./Dialogs/HandleComplaintDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>;
-  }
-});
 
 export default class MyComplaints extends Component {
   constructor(props) {
