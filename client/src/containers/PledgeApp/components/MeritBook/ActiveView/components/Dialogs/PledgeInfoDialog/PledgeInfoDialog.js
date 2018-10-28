@@ -34,41 +34,37 @@ const LoadableMeritsList = Loadable({
   }
 });
 
-const LoadableComplaintsList = Loadable({
-  loader: () => import('./components/ComplaintsList'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div> Loading... </div>;
-  }
-});
+// const LoadableComplaintsList = Loadable({
+//   loader: () => import('./components/ComplaintsList'),
+//   render(loaded, props) {
+//     let Component = loaded.default;
+//     return <Component {...props}/>;
+//   },
+//   loading() {
+//     return <div> Loading... </div>;
+//   }
+// });
 
 export default class PledgeInfoDialog extends Component {
   constructor(props) {
     super(props);
     this.state = {
       pledge: null,
-      pledgeName: null,
+      meritsRemaining: 0,
       index: 0
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.pledge) {
-      const pledgeName = `${nextProps.pledge.firstName} ${nextProps.pledge.lastName}`;
-      const pledgeDisplayName = nextProps.pledge.firstName + nextProps.pledge.lastName;
-
       this.setState({
         pledge: nextProps.pledge,
-        pledgeName,
-        pledgeDisplayName,
         index: 0
       });
 
       if (navigator.onLine) {
         const { displayName } = nextProps.state;
+        const pledgeDisplayName = nextProps.pledge.firstName + nextProps.pledge.lastName;
 
         API.getMeritsRemaining(displayName, pledgeDisplayName)
         .then((res) => {
@@ -83,13 +79,25 @@ export default class PledgeInfoDialog extends Component {
     }
   }
 
-  handleChange = (value) => {
-    this.setState({
-      index: value
-    });
+  handleChange = (index) => {
+    this.setState({ index });
   }
 
   render() {
+    if (!this.state.pledge) {
+      return null;
+    }
+
+    const {
+      firstName,
+      lastName,
+      phone,
+      email,
+      major,
+      photoURL
+    } = this.state.pledge;
+    const pledgeName = `${firstName} ${lastName}`;
+
     const actions = (
       <FlatButton
         label="Close"
@@ -102,7 +110,7 @@ export default class PledgeInfoDialog extends Component {
       this.state.pledge && (
         isMobileDevice() ? (
           <FullscreenDialog
-            title="Pledge"
+            title={pledgeName}
             titleStyle={{fontSize:'22px'}}
             open={this.props.open}
             onRequestClose={this.props.handleClose}
@@ -114,24 +122,24 @@ export default class PledgeInfoDialog extends Component {
             >
               <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
                 <div style={{padding:'15px 0'}}>
-                  <img className="dialog-photo" src={this.state.pledge.photoURL} alt="User" />
+                  <img className="dialog-photo" src={photoURL} alt="User" />
                 </div>
                 <List>
                   <Divider />
                   <ListItem
                     className="garnett-list-item"
-                    primaryText="Name"
-                    secondaryText={this.state.pledgeName}
+                    primaryText="Merits Remaining"
+                    secondaryText={`${this.state.meritsRemaining} merits`}
                     leftIcon={
-                      <i className="icon-user garnett-icon"></i>
+                      <i className="icon-star garnett-icon"></i>
                     }
                   />
                   <Divider className="garnett-divider" inset={true} />
-                  <a style={activePhoneNumber} href={`tel:${this.state.pledge.phone}`}>
+                  <a style={activePhoneNumber} href={`tel:${phone}`}>
                     <ListItem
-                      className="contacts-list-item"
+                      className="garnett-list-item"
                       primaryText="Phone Number"
-                      secondaryText={this.state.pledge.phone}
+                      secondaryText={phone}
                       leftIcon={
                         <i className="icon-phone garnett-icon"></i>
                       }
@@ -141,7 +149,7 @@ export default class PledgeInfoDialog extends Component {
                   <ListItem
                     className="garnett-list-item"
                     primaryText="Email Address"
-                    secondaryText={this.state.pledge.email}
+                    secondaryText={email}
                     leftIcon={
                       <i className="icon-mail-alt garnett-icon"></i>
                     }
@@ -150,18 +158,9 @@ export default class PledgeInfoDialog extends Component {
                   <ListItem
                     className="garnett-list-item"
                     primaryText="Major"
-                    secondaryText={this.state.pledge.major}
+                    secondaryText={major}
                     leftIcon={
                       <i className="icon-graduation-cap garnett-icon"></i>
-                    }
-                  />
-                  <Divider className="garnett-divider" inset={true} />
-                  <ListItem
-                    className="garnett-list-item"
-                    primaryText="Merits Remaining"
-                    secondaryText={`${this.state.meritsRemaining} merits`}
-                    leftIcon={
-                      <i className="icon-star garnett-icon"></i>
                     }
                   />
                   <Divider className="garnett-divider" />
@@ -169,21 +168,21 @@ export default class PledgeInfoDialog extends Component {
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
                 <LoadableMeritsList
-                  pledgeName={this.state.pledgeDisplayName}
+                  pledgeName={firstName + lastName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
               </Tab>
-              <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
+              {/*<Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
                 <LoadableComplaintsList
-                  pledgeName={this.state.pledgeDisplayName}
+                  pledgeName={firstName + lastName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
-              </Tab>
+              </Tab>*/}
             </Tabs>
           </FullscreenDialog>
         ) : (
           <Dialog
-            title="Pledge"
+            title={pledgeName}
             titleClassName="garnett-dialog-title"
             actions={actions}
             modal={false}
@@ -200,24 +199,24 @@ export default class PledgeInfoDialog extends Component {
             >
               <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
                 <div style={{padding:'15px 0'}}>
-                  <img className="dialog-photo" src={this.state.pledge.photoURL} alt="User" />
+                  <img className="dialog-photo" src={photoURL} alt="User" />
                 </div>
                 <List>
                   <Divider />
                   <ListItem
                     className="garnett-list-item"
-                    primaryText="Name"
-                    secondaryText={this.state.pledgeName}
+                    primaryText="Merits Remaining"
+                    secondaryText={`${this.state.meritsRemaining} merits`}
                     leftIcon={
-                      <i className="icon-user garnett-icon"></i>
+                      <i className="icon-star garnett-icon"></i>
                     }
                   />
                   <Divider className="garnett-divider" inset={true} />
-                  <a style={activePhoneNumber} href={`tel:${this.state.pledge.phone}`}>
+                  <a style={activePhoneNumber} href={`tel:${phone}`}>
                     <ListItem
-                      className="contacts-list-item"
+                      className="garnett-list-item"
                       primaryText="Phone Number"
-                      secondaryText={this.state.pledge.phone}
+                      secondaryText={phone}
                       leftIcon={
                         <i className="icon-phone garnett-icon"></i>
                       }
@@ -227,7 +226,7 @@ export default class PledgeInfoDialog extends Component {
                   <ListItem
                     className="garnett-list-item"
                     primaryText="Email Address"
-                    secondaryText={this.state.pledge.email}
+                    secondaryText={email}
                     leftIcon={
                       <i className="icon-mail-alt garnett-icon"></i>
                     }
@@ -236,18 +235,9 @@ export default class PledgeInfoDialog extends Component {
                   <ListItem
                     className="garnett-list-item"
                     primaryText="Major"
-                    secondaryText={this.state.pledge.major}
+                    secondaryText={major}
                     leftIcon={
                       <i className="icon-graduation-cap garnett-icon"></i>
-                    }
-                  />
-                  <Divider className="garnett-divider" inset={true} />
-                  <ListItem
-                    className="garnett-list-item"
-                    primaryText="Merits Remaining"
-                    secondaryText={`${this.state.meritsRemaining} merits`}
-                    leftIcon={
-                      <i className="icon-star garnett-icon"></i>
                     }
                   />
                   <Divider className="garnett-divider" />
@@ -255,16 +245,16 @@ export default class PledgeInfoDialog extends Component {
               </Tab>
               <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
                 <LoadableMeritsList
-                  pledgeName={this.state.pledgeDisplayName}
+                  pledgeName={firstName + lastName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
               </Tab>
-              <Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
+              {/*<Tab style={getTabStyle(this.state.index === 2)} label="Complaints" value={2}>
                 <LoadableComplaintsList
-                  pledgeName={this.state.pledgeDisplayName}
+                  pledgeName={firstName + lastName}
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
-              </Tab>
+              </Tab>*/}
             </Tabs>
           </Dialog>
         )

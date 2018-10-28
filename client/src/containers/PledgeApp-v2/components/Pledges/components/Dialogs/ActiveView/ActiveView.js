@@ -1,10 +1,10 @@
-import {getTabStyle, isMobileDevice} from 'helpers/functions.js';
+import { getTabStyle, isMobileDevice } from 'helpers/functions.js';
 
 import React from 'react';
 import Loadable from 'react-loadable';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
@@ -34,13 +34,14 @@ export function ActiveView(props) {
     phone,
     email,
     major,
-    photoURL,
+    photoURL
   } = props.pledge;
+  const fullName = `${firstName} ${lastName}`;
 
   return (
     isMobileDevice() ? (
       <FullscreenDialog
-        title="Pledge"
+        title={fullName}
         titleStyle={{fontSize:'22px'}}
         open={props.open}
         onRequestClose={props.handleClose}
@@ -58,16 +59,16 @@ export function ActiveView(props) {
               <Divider />
               <ListItem
                 className="garnett-list-item"
-                primaryText="Name"
-                secondaryText={`${firstName} ${lastName}`}
+                primaryText="Merits Remaining"
+                secondaryText={`${props.meritsRemaining} merits`}
                 leftIcon={
-                  <i className="icon-user garnett-icon"></i>
+                  <i className="icon-star garnett-icon"></i>
                 }
               />
               <Divider className="garnett-divider" inset={true} />
               <a style={props.phoneStyle} href={`tel:${phone}`}>
                 <ListItem
-                  className="contacts-list-item"
+                  className="garnett-list-item"
                   primaryText="Phone Number"
                   secondaryText={phone}
                   leftIcon={
@@ -93,15 +94,6 @@ export function ActiveView(props) {
                   <i className="icon-graduation-cap garnett-icon"></i>
                 }
               />
-              <Divider className="garnett-divider" inset={true} />
-              <ListItem
-                className="garnett-list-item"
-                primaryText="Merits Remaining"
-                secondaryText={`${props.meritsRemaining} merits`}
-                leftIcon={
-                  <i className="icon-star garnett-icon"></i>
-                }
-              />
               <Divider className="garnett-divider" />
             </List>
           </Tab>
@@ -115,7 +107,7 @@ export function ActiveView(props) {
       </FullscreenDialog>
     ) : (
       <Dialog
-        title="Pledge"
+        title={fullName}
         titleClassName="garnett-dialog-title"
         actions={props.actions}
         modal={false}
@@ -138,16 +130,16 @@ export function ActiveView(props) {
               <Divider />
               <ListItem
                 className="garnett-list-item"
-                primaryText="Name"
-                secondaryText={`${firstName} ${lastName}`}
+                primaryText="Merits Remaining"
+                secondaryText={`${props.meritsRemaining} merits`}
                 leftIcon={
-                  <i className="icon-user garnett-icon"></i>
+                  <i className="icon-star garnett-icon"></i>
                 }
               />
               <Divider className="garnett-divider" inset={true} />
               <a style={props.phoneStyle} href={`tel:${phone}`}>
                 <ListItem
-                  className="contacts-list-item"
+                  className="garnett-list-item"
                   primaryText="Phone Number"
                   secondaryText={phone}
                   leftIcon={
@@ -171,15 +163,6 @@ export function ActiveView(props) {
                 secondaryText={major}
                 leftIcon={
                   <i className="icon-graduation-cap garnett-icon"></i>
-                }
-              />
-              <Divider className="garnett-divider" inset={true} />
-              <ListItem
-                className="garnett-list-item"
-                primaryText="Merits Remaining"
-                secondaryText={`${props.meritsRemaining} merits`}
-                leftIcon={
-                  <i className="icon-star garnett-icon"></i>
                 }
               />
               <Divider className="garnett-divider" />

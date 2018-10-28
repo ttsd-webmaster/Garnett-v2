@@ -1,6 +1,6 @@
 import './Complaints.css';
-import ActiveComplaints from './ActiveComplaints/ActiveComplaints';
-import PledgeComplaints from './PledgeComplaints/PledgeComplaints';
+import ActiveComplaints from './ActiveView/ActiveComplaints';
+import PledgeComplaints from './PledgeView/PledgeComplaints';
 
 import React, { Component } from 'react';
 
@@ -10,7 +10,7 @@ export default class Complaints extends Component {
     
     return (
       status === 'pledge' ? (
-        <PledgeComplaints 
+        <PledgeComplaints
           state={this.props.state}
           complaints={this.props.pledgeComplaints}
         />

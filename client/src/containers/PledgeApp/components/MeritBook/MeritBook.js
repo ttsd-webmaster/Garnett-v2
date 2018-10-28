@@ -1,6 +1,6 @@
 import './MeritBook.css';
-import ActiveMerit from './ActiveMerit/ActiveMerit';
-import PledgeMerit from './PledgeMerit/PledgeMerit';
+import ActiveMerit from './ActiveView/ActiveMerit';
+import PledgeMerit from './PledgeView/PledgeMerit';
 
 import React, {Component} from 'react';
 

@@ -17,10 +17,6 @@
   text-align: left;
 }
 
-.contacts-list-item > div > div {
-  background-color: #fff;
-}
-
 .contacts-dialog-body {
   background-color: #fafafa;
   padding: 0 0 24px !important;

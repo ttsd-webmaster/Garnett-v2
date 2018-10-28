@@ -1,7 +1,15 @@
 import './Chalkboards.css';
 import MyChalkboards from './components/MyChalkboards';
 import AllChalkboards from './components/AllChalkboards';
-import { loadFirebase, isMobileDevice, getDate } from 'helpers/functions.js';
+import {
+  loadFirebase,
+  isMobileDevice,
+  getDate,
+  showHeader,
+  hideHeader,
+  androidBackOpen,
+  androidBackClose
+} from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 
 import React, { Component } from 'react';
@@ -224,35 +232,11 @@ export default class Chalkboards extends Component {
   addOpen = () => {
     if (navigator.onLine) {
       if (isMobileDevice()) {
-        const contentContainer = document.querySelector('.content-container').childNodes[2];
-        let tabs = document.getElementById('pledge-app-tabs').firstChild;
-        let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-        let appBar = document.querySelector('.app-header');
-
-        contentContainer.style.setProperty('overflow', 'visible', 'important');
-
-        tabs.style.zIndex = 0;
-        inkBar.style.zIndex = 0;
-        appBar.style.zIndex = 0;
+        hideHeader(2);
+        androidBackOpen(this.addClose);
       }
 
       this.setState({ openAdd: true });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path;
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
-        }
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.addClose();
-        }
-      }
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -261,25 +245,8 @@ export default class Chalkboards extends Component {
 
   addClose = () => {
     if (isMobileDevice()) {
-      const contentContainer = document.querySelector('.content-container').childNodes[2];
-      let tabs = document.getElementById('pledge-app-tabs').firstChild;
-      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-      let appBar = document.querySelector('.app-header');
-
-      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-        contentContainer.style.setProperty('overflow', 'scroll', 'important');
-      }
-      else {
-        contentContainer.style.setProperty('overflow', 'auto', 'important');
-      }
-
-      tabs.style.zIndex = 1;
-      inkBar.style.zIndex = 1;
-      appBar.style.zIndex = 1;
-    }
-    
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
+      showHeader(2);
+      androidBackClose();
     }
 
     this.setState({ openAdd: false });
@@ -287,17 +254,8 @@ export default class Chalkboards extends Component {
 
   handleOpen = (chalkboard, type) => {
     if (isMobileDevice()) {
-      let contentContainer = document.querySelector('.content-container').childNodes[2];
-      let tabs = document.getElementById('pledge-app-tabs').firstChild;
-      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-      let appBar = document.querySelector('.app-header');
-
-      contentContainer.style.setProperty('overflow', 'visible', 'important');
-      contentContainer.style.WebkitOverflowScrolling = 'auto';
-      
-      tabs.style.zIndex = 0;
-      inkBar.style.zIndex = 0;
-      appBar.style.zIndex = 0;
+      hideHeader(2);
+      androidBackOpen(this.handleClose);
     }
 
     this.setState({
@@ -305,47 +263,12 @@ export default class Chalkboards extends Component {
       selectedChalkboard: chalkboard,
       chalkboardType: type
     });
-
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      let path;
-      if (process.env.NODE_ENV === 'development') {
-        path = 'http://localhost:3000';
-      }
-      else {
-        path = 'https://garnett-app.herokuapp.com';
-      }
-
-      window.history.pushState(null, null, path + window.location.pathname);
-      window.onpopstate = () => {
-        this.handleClose();
-      }
-    }
   }
 
   handleClose = () => {
     if (isMobileDevice()) {
-      let contentContainer = document.querySelector('.content-container').childNodes[2];
-      let tabs = document.getElementById('pledge-app-tabs').firstChild;
-      let inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-      let appBar = document.querySelector('.app-header');
-
-      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-        contentContainer.style.setProperty('overflow', 'scroll', 'important');
-        contentContainer.style.WebkitOverflowScrolling = 'touch';
-      }
-      else {
-        contentContainer.style.setProperty('overflow', 'auto', 'important');
-      }
-      
-      tabs.style.zIndex = 1;
-      inkBar.style.zIndex = 1;
-      appBar.style.zIndex = 1;
-    }
-
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
+      showHeader(2);
+      androidBackClose();
     }
 
     this.setState({ open: false });

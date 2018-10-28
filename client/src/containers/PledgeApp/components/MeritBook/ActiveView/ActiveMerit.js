@@ -1,4 +1,11 @@
-import { loadFirebase, isMobileDevice } from 'helpers/functions.js';
+import {
+  loadFirebase,
+  isMobileDevice,
+  showHeader,
+  hideHeader,
+  androidBackOpen,
+  androidBackClose
+} from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter } from './components/Filter.js';
 
@@ -12,17 +19,6 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
-const LoadablePledgeInfoDialog = Loadable({
-  loader: () => import('./components/Dialogs/PledgeInfoDialog/PledgeInfoDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
-
 const LoadableActiveMeritDialog = Loadable({
   loader: () => import('./components/Dialogs/ActiveMeritDialog'),
   render(loaded, props) {
@@ -31,6 +27,17 @@ const LoadableActiveMeritDialog = Loadable({
   },
   loading() {
     return <div></div>
+  }
+});
+
+const LoadablePledgeInfoDialog = Loadable({
+  loader: () => import('./components/Dialogs/PledgeInfoDialog/PledgeInfoDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>;
   }
 });
 
@@ -121,88 +128,33 @@ export default class ActiveMerit extends Component {
 
   handleOpen = (pledge) => {
     if (isMobileDevice()) {
-      const contentContainer = document.querySelector('.content-container').firstChild;
-      const tabs = document.getElementById('pledge-app-tabs').firstChild;
-      const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-      const appBar = document.querySelector('.app-header');
-
-      contentContainer.style.setProperty('overflow', 'visible', 'important');
-      contentContainer.style.WebkitOverflowScrolling = 'auto';
-      
-      tabs.style.zIndex = 0;
-      inkBar.style.zIndex = 0;
-      appBar.style.zIndex = 0;
+      const meritButton = document.querySelector('.fixed-button.active-merit');
+      meritButton.style.display = 'none';
+      hideHeader(0);
+      androidBackOpen(this.handleClose);
     }
 
     this.setState({
       pledge,
       open: true
     });
-
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      let path = 'https://garnett-app.herokuapp.com';
-
-      if (process.env.NODE_ENV === 'development') {
-        path = 'http://localhost:3000';
-      }
-
-      window.history.pushState(null, null, path + window.location.pathname);
-      window.onpopstate = () => {
-        this.handleClose();
-      }
-    }
   }
 
   handleClose = () => {
     if (isMobileDevice()) {
-      const contentContainer = document.querySelector('.content-container').firstChild;
-      const tabs = document.getElementById('pledge-app-tabs').firstChild;
-      const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-      const appBar = document.querySelector('.app-header');
-
-      if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-        contentContainer.style.setProperty('overflow', 'scroll', 'important');
-        contentContainer.style.WebkitOverflowScrolling = 'touch';
-      }
-      else {
-        contentContainer.style.setProperty('overflow', 'auto', 'important');
-      }
-
-      tabs.style.zIndex = 1;
-      inkBar.style.zIndex = 1;
-      appBar.style.zIndex = 1;
+      const meritButton = document.querySelector('.fixed-button.active-merit');
+      meritButton.style.display = 'inline-block';
+      showHeader(0);
+      androidBackClose();
     }
 
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
-    this.setState({
-      open: false
-    });
+    this.setState({ open: false });
   }
 
   handleMeritOpen = () => {
     if (navigator.onLine) {
-      this.setState({
-        openMerit: true
-      });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path = 'https://garnett-app.herokuapp.com';
-
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleMeritClose();
-        }
-      }
+      androidBackOpen(this.handleMeritClose);
+      this.setState({ openMerit: true });
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -210,11 +162,7 @@ export default class ActiveMerit extends Component {
   }
 
   handleMeritClose = () => {
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({
       openMerit: false
     });
@@ -329,18 +277,18 @@ export default class ActiveMerit extends Component {
             setFilter={this.setFilter}
           />
           
+          <LoadableActiveMeritDialog
+            open={this.state.openMerit}
+            state={this.props.state}
+            handleMeritClose={this.handleMeritClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+          
           <LoadablePledgeInfoDialog
             open={this.state.open}
             state={this.props.state}
             pledge={this.state.pledge}
             handleClose={this.handleClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
-
-          <LoadableActiveMeritDialog
-            open={this.state.openMerit}
-            state={this.props.state}
-            handleMeritClose={this.handleMeritClose}
             handleRequestOpen={this.props.handleRequestOpen}
           />
         </div>

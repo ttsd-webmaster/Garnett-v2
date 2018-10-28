@@ -90,13 +90,11 @@ export default class MeritsList extends Component {
                 >
                   <div className="merit-amount-container">
                     <p className="merit-date"> {merit.date} </p>
-                    <p className={
-                      merit.amount > 0
-                        ? "merit-amount green"
-                        : "merit-amount red"
-                    }>
-                      {merit.amount}
-                    </p>
+                    {merit.amount > 0 ? (
+                      <p className="merit-amount green">+{merit.amount}</p>
+                    ) : (
+                      <p className="merit-amount red">{merit.amount}</p>
+                    )}
                   </div>
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />

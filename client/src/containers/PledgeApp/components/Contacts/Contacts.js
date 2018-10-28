@@ -1,8 +1,15 @@
 import './Contacts.css';
 import filters from './data.js';
-import ActiveList from './components/ActiveList';
 import API from 'api/API';
+import {
+  isMobileDevice,
+  showHeader,
+  hideHeader,
+  androidBackOpen,
+  androidBackClose
+} from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
+import ActiveList from './components/ActiveList';
 
 import React, { Component } from 'react';
 import Loadable from 'react-loadable';
@@ -57,20 +64,9 @@ export default class Contacts extends Component {
   }
 
   handleOpen = (active) => {
-    // Handles android back button
-    if (/android/i.test(navigator.userAgent)) {
-      let path;
-      if (process.env.NODE_ENV === 'development') {
-        path = 'http://localhost:3000';
-      }
-      else {
-        path = 'https://garnett-app.herokuapp.com';
-      }
-
-      window.history.pushState(null, null, path + window.location.pathname);
-      window.onpopstate = () => {
-        this.handleClose();
-      }
+    if (isMobileDevice()) {
+      hideHeader(1);
+      androidBackOpen(this.handleClose);
     }
 
     this.setState({
@@ -80,8 +76,9 @@ export default class Contacts extends Component {
   }
 
   handleClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
+    if (isMobileDevice()) {
+      showHeader(1);
+      androidBackClose();
     }
 
     this.setState({ open: false });
@@ -238,11 +235,13 @@ export default class Contacts extends Component {
             </Menu>
           </Popover>
 
-          <LoadableContactsDialog
-            open={this.state.open}
-            active={this.state.active}
-            handleClose={this.handleClose}
-          />
+          {this.state.active && (
+            <LoadableContactsDialog
+              open={this.state.open}
+              active={this.state.active}
+              handleClose={this.handleClose}
+            />
+          )}
         </div>
       ) : (
         <LoadingComponent />

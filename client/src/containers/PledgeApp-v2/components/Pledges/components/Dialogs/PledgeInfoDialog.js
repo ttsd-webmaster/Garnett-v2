@@ -1,8 +1,8 @@
 import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import 'containers/PledgeApp/components/Contacts/Contacts.css';
 import API from 'api/API.js';
-import { PledgeView } from './PledgeView.js';
-import { ActiveView } from './ActiveView.js';
+import { PledgeView } from './PledgeView/PledgeView.js';
+import { ActiveView } from './ActiveView/ActiveView.js';
 
 import React, { Component } from 'react';
 import FlatButton from 'material-ui/FlatButton';
