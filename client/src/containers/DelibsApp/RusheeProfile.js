@@ -1,6 +1,6 @@
 import './DelibsApp.css';
-import '../PledgeApp/PledgeApp.css';
-import 'components/Settings/Settings.css';
+import 'containers/PledgeApp/PledgeApp.css';
+import 'containers/PledgeApp/components/Settings/Settings.css';
 import {loadFirebase} from 'helpers/functions.js';
 import {LoadingRusheeProfile} from 'helpers/loaders.js';
 import API from 'api/API.js';
@@ -70,7 +70,7 @@ export default class RusheeProfile extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const rusheeName = this.props.history.location.state;
 
     if (!this.props.history.location.state) {

@@ -17,13 +17,11 @@ export default class MeritsList extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (navigator.onLine) {
       API.getPledgeMerits(this.props.pledgeName)
       .then(res => {
-        this.setState({
-          merits: res.data
-        });
+        this.setState({ merits: res.data });
       })
       .catch(err => console.log('err', err));
     }
@@ -33,23 +31,14 @@ export default class MeritsList extends Component {
   }
 
   reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
+    this.setState({ reverse: !this.state.reverse });
   }
 
   render() {
     let toggleIcon = "icon-down-open-mini";
+    let { merits, reverse } = this.state;
 
-    let merits = this.state.merits;
-
-    if (this.state.reverse) {
+    if (reverse) {
       merits = merits.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }

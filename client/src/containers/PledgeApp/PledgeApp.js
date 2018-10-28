@@ -46,12 +46,19 @@ export default class PledgeApp extends Component {
     };
   }
 
-  componentWillMount() {
-    console.log(`Pledge app mount: ${this.props.state.name}`)
-
+  componentDidMount() {
     const data = JSON.parse(localStorage.getItem('data'));
+    let contentContainer = document.querySelector('.content-container');
 
+    console.log(`Pledge app mount: ${this.props.state.name}`)
     localStorage.setItem('route', 'pledge-app');
+
+    if (contentContainer) {
+      if (/android/i.test(navigator.userAgent)) {
+        contentContainer.firstChild.onscroll = watchScroll;
+        contentContainer.classList.add('android');
+      }
+    }
 
     if (navigator.onLine) {
       this.setState({ loaded: true });
@@ -112,17 +119,6 @@ export default class PledgeApp extends Component {
         }
       }
     }, 100);
-  }
-
-  componentDidMount() {
-    let contentContainer = document.querySelector('.content-container');
-
-    if (contentContainer) {
-      if (/android/i.test(navigator.userAgent)) {
-        contentContainer.firstChild.onscroll = watchScroll;
-        contentContainer.classList.add('android');
-      }
-    }
   }
 
   componentDidUpdate() {

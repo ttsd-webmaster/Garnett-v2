@@ -1,18 +1,18 @@
 import './Login.css';
-import {activeCode, pledgeCode} from './data.js';
+import { activeCode, pledgeCode } from './data.js';
 import {
   isMobileDevice,
   initializeFirebase,
   loadFirebase,
   validateEmail
 } from 'helpers/functions.js';
-import {CompletingTaskDialog} from 'helpers/loaders.js';
+import { CompletingTaskDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
-import SignIn from './SignIn';
-import SignUp from './SignUp';
-import ForgotPassword from './ForgotPassword';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
+import ForgotPassword from './components/ForgotPassword';
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Snackbar from 'material-ui/Snackbar';
 
 const snackbarBackground = {

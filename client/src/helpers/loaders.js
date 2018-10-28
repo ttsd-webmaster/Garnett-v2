@@ -1,9 +1,11 @@
+import 'containers/PledgeApp/PledgeApp.css';
 import {isMobileDevice} from './functions.js';
 
-import React from 'react';
+import React, { Fragment } from 'react';
 import {Tabs} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
+import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
 const tabContainerStyle = {
   position: 'fixed',
@@ -24,6 +26,17 @@ const completingTaskDialog = {
   flexDirection: 'column',
   alignItems: 'center'
 };
+
+function LoadingPage(props) {
+  return (
+    <div className="loading-container">
+      <div className="app-header no-tabs">
+        <span> {props.name} </span>
+        <LoadingComponent />
+      </div>
+    </div>
+  )
+}
 
 export function LoadingLogin() {
   if (isMobileDevice()) {
@@ -58,6 +71,29 @@ export const LoadingPledgeApp = () => (
   </div>
 )
 
+export const LoadingDataApp =  () => (
+  <Fragment>
+    <LoadingPage name="Data App" />
+    <BottomNavigation
+      className="bottom-tabs"
+      selectedIndex={0}
+    >
+      <BottomNavigationItem
+        label="Pledge Data"
+        icon={<div></div>}
+      />
+      <BottomNavigationItem
+        label="Rush Data"
+        icon={<div></div>}
+      />
+      <BottomNavigationItem
+        label="My Data"
+        icon={<div></div>}
+      />
+    </BottomNavigation>
+  </Fragment>
+)
+
 export const LoadingComponent =  () => (
   <div className="loader-container">
     <div className="line-scale-container">
@@ -72,47 +108,33 @@ export const LoadingComponent =  () => (
   </div>
 )
 
-function LoadingPage(props) {
-  return (
-    <div className="loading-container">
-      <div className="app-header no-tabs">
-        <span> {props.name} </span>
-        <LoadingComponent />
-      </div>
-    </div>
-  )
-}
-
-export function CompletingTaskDialog(props) {
-  return (
-    <Dialog
-      contentStyle={isMobileDevice() ? null : {maxWidth: '500px'}}
-      bodyStyle={
-        isMobileDevice()
-          ? completingTaskDialogMobile 
-          : completingTaskDialog
+export const CompletingTaskDialog = (props) => (
+  <Dialog
+    contentStyle={isMobileDevice() ? null : {maxWidth: '500px'}}
+    bodyStyle={
+      isMobileDevice()
+        ? completingTaskDialogMobile 
+        : completingTaskDialog
+    }
+    modal={true}
+    open={props.open}
+  >
+    <CircularProgress
+      size={isMobileDevice() ? 25 : 90}
+      thickness={isMobileDevice() ? 3.5 : 5}
+    />
+    <span
+      style={
+        isMobileDevice() 
+          ? { margin: 'auto' }
+          : { marginTop: '50px' }
       }
-      modal={true}
-      open={props.open}
-    >
-      <CircularProgress
-        size={isMobileDevice() ? 25 : 90}
-        thickness={isMobileDevice() ? 3.5 : 5}
-      />
-      <span
-        style={
-          isMobileDevice() 
-            ? { margin: 'auto' }
-            : { marginTop: '50px' }
-        }
-      > 
-        {props.message}
-      </span>
-    </Dialog>
-  )
-}
+    > 
+      {props.message}
+    </span>
+  </Dialog>
+)
 
 export const LoadingHome =  () => <LoadingPage name="Home" />;
 export const LoadingDelibsApp =  () => <LoadingPage name="Delibs App" />;
 export const LoadingRusheeProfile =  () => <LoadingPage name="Rushee Profile" />;
-export const LoadingDataApp =  () => <LoadingPage name="Data App" />;

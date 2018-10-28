@@ -1,0 +1,15 @@
+.filter {
+  flex: 1;
+  margin: 10px;
+  position: relative;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: center;
+}
+
+.graph {
+  flex: 5;
+  margin: 10px;
+}

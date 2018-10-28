@@ -1,4 +1,4 @@
-import 'components/MeritBook/MeritBook.css';
+import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import API from 'api/API.js';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
@@ -168,22 +168,14 @@ export class Pledges extends Component {
   }
 
   reverse = () => {
-    let reverse = true;
-
-    if (this.state.reverse) {
-      reverse = false;
-    }
-
-    this.setState({
-      reverse: reverse
-    });
+    this.setState({ reverse: !this.state.reverse });
   }
 
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let pledges = this.state.pledges;
+    let { pledges, reverse } = this.state;
 
-    if (this.state.reverse) {
+    if (reverse) {
       pledges = pledges.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }

@@ -1,14 +1,14 @@
 // Used to get tab color for Pledge App
-function getTabStyle(isActive) {
+export function getTabStyle(isActive) {
   return {color: isActive ? 'var(--primary-color)' : 'var(--secondary-light)'};
 }
 
-function isMobileDevice() {
+export function isMobileDevice() {
   return (typeof window.orientation !== "undefined") || 
          (navigator.userAgent.indexOf('IEMobile') !== -1);
 };
 
-function initializeFirebase(data) {
+export function initializeFirebase(data) {
   loadFirebase('app')
   .then(() => {
     let firebase = window.firebase;
@@ -24,7 +24,7 @@ function initializeFirebase(data) {
   });
 }
 
-function loadFirebase(module) {
+export function loadFirebase(module) {
   return new Promise(resolve => {
     const script = document.createElement('script');
     script.src = `https://www.gstatic.com/firebasejs/4.6.2/firebase-${module}.js`;
@@ -35,12 +35,12 @@ function loadFirebase(module) {
   });
 }
 
-function validateEmail(email) {
+export function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
 
-function getDate() {
+export function getDate() {
   let today = new Date();
   let day = today.getDate();
   let month = today.getMonth() + 1;
@@ -58,7 +58,7 @@ function getDate() {
   return today;
 }
 
-function mapsSelector(location) {
+export function mapsSelector(location) {
   /* if we're on iOS, open in Apple Maps */
   if ((navigator.platform.indexOf("iPhone") !== -1) || 
       (navigator.platform.indexOf("iPad") !== -1) || 
@@ -71,7 +71,7 @@ function mapsSelector(location) {
   }
 }
 
-function invalidSafariVersion() {
+export function invalidSafariVersion() {
   let nAgt = navigator.userAgent;
   let verOffset;
 
@@ -97,7 +97,7 @@ function invalidSafariVersion() {
   }
 }
 
-function iOSversion() {
+export function iOSversion() {
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
     // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
     var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
@@ -107,15 +107,3 @@ function iOSversion() {
     return false;
   }
 }
-
-export {
-  isMobileDevice,
-  initializeFirebase,
-  loadFirebase,
-  validateEmail,
-  getDate,
-  mapsSelector,
-  invalidSafariVersion,
-  iOSversion,
-  getTabStyle
-};

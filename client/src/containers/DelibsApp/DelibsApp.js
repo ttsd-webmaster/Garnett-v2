@@ -1,5 +1,5 @@
 import './DelibsApp.css';
-import '../PledgeApp/PledgeApp.css';
+import 'containers/PledgeApp/PledgeApp.css';
 import {loadFirebase} from 'helpers/functions.js';
 import {LoadingDelibsApp} from 'helpers/loaders.js';
 import API from 'api/API.js';
@@ -38,7 +38,7 @@ export default class DelibsApp extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     localStorage.setItem('route', 'delibs-app');
     
     if (navigator.onLine) {
