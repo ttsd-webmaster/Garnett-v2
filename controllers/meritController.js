@@ -184,9 +184,10 @@ exports.merit_as_active = function(req, res) {
 
         pledge.ref.child('Merits').push(merit);
 
-        merit.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
-        merit.photoURL = pledge.val().photoURL;
-        activeRef.child('Merits').push(merit);
+        let meritForActive = merit;
+        meritForActive.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
+        meritForActive.photoURL = pledge.val().photoURL;
+        activeRef.child('Merits').push(meritForActive);
 
         if (!res.headersSent && counter === selectedPledges.length) {
           res.sendStatus(200);
@@ -246,9 +247,10 @@ exports.merit_as_pledge = function(req, res) {
 
         pledge.ref.child('Merits').push(meritInfo);
 
-        meritInfo.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
-        meritInfo.photoURL = pledge.val().photoURL;
-        active.ref.child('Merits').push(meritInfo);
+        let meritForActive = meritInfo;
+        meritForActive.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
+        meritForActive.photoURL = pledge.val().photoURL;
+        active.ref.child('Merits').push(meritForActive);
 
         if (!res.headersSent && counter === selectedActives.length) {
           pledgeRef.update({
