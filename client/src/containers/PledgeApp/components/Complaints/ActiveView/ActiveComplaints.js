@@ -2,24 +2,13 @@ import MyComplaints from './components/MyComplaints';
 import PastComplaints from './components/PastComplaints';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
+import { LoadableAddComplaintDialog } from './components/Dialogs';
 
 import React, { Component } from 'react';
 import { Portal } from 'react-portal';
 import { forceCheck } from 'react-lazyload';
-import Loadable from 'react-loadable';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-
-const LoadableAddComplaintDialog = Loadable({
-  loader: () => import('./components/Dialogs/AddComplaintDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
 
 export default class ActiveComplaints extends Component {
   constructor(props) {

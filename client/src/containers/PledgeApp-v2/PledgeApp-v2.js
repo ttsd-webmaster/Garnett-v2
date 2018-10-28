@@ -1,12 +1,10 @@
 import 'containers/PledgeApp/PledgeApp.css';
 import './PledgeApp-v2.css';
 import { loadFirebase } from 'helpers/functions.js';
-import {
-  LoadableContacts,
-} from 'helpers/LoadableComponents';
+import { LoadableContacts } from 'helpers/LoadableComponents';
+import { LoadablePledgeMeritDialog, LoadableActiveMeritDialog } from './components/Dialogs';
 
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import { Navbar } from './components/Navbar/Navbar';
 import { MyMerits } from './components/MyMerits/MyMerits';
@@ -16,53 +14,19 @@ const routes = [
   {
     path: '/pledge-app/my-merits',
     exact: true,
-    content: props => (
-      <div id="content">
-        <MyMerits state={props.state} />
-      </div>
-    )
+    content: props => <MyMerits state={props.state} />
   },
   {
     path: '/pledge-app/pledge-brothers',
     exact: true,
-    content: props => (
-      <div id="content">
-        <Pledges state={props.state} />
-      </div>
-    )
+    content: props => <Pledges state={props.state} />
   },
   {
     path: '/pledge-app/brothers',
     exact: true,
-    content: props => (
-      <div id="content">
-        <LoadableContacts state={props.state} />
-      </div>
-    )
+    content: props => <LoadableContacts state={props.state} />
   }
 ];
-
-const LoadablePledgeMeritDialog = Loadable({
-  loader: () => import('./components/Dialogs/PledgeMeritDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>
-  }
-});
-
-const LoadableActiveMeritDialog = Loadable({
-  loader: () => import('./components/Dialogs/ActiveMeritDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>
-  }
-});
 
 export class PledgeApp2 extends Component {
   state = {
@@ -145,17 +109,19 @@ export class PledgeApp2 extends Component {
             logOut={this.props.logoutCallBack}
             handleRequestOpen={this.props.handleRequestOpen}
           />
-          <Switch>
-            {routes.map((route, index) => (
-              <Route
-                key={index}
-                exact={route.exact}
-                path={route.path}
-                render={() => route.content(this.props)}
-              />
-            ))}
-            <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
-          </Switch>
+          <div id="content">
+            <Switch>
+              {routes.map((route, index) => (
+                <Route
+                  key={index}
+                  exact={route.exact}
+                  path={route.path}
+                  render={() => route.content(this.props)}
+                />
+              ))}
+              <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
+            </Switch>
+          </div>
           {this.props.state.status === 'pledge' ? (
             <LoadablePledgeMeritDialog
               open={this.state.openMerit}

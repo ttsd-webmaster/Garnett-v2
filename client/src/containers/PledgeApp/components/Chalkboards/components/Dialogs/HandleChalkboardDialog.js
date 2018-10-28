@@ -1,8 +1,12 @@
 import API from 'api/API.js';
 import { getTabStyle, isMobileDevice, mapsSelector } from 'helpers/functions.js';
+import {
+  LoadableAttendeeList,
+  LoadableEditChalkboardDialog,
+  LoadableEditChalkboardMobileDialog
+} from './index.js';
 
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import Dialog from 'material-ui/Dialog';
 import { Tabs, Tab} from 'material-ui/Tabs';
 import { List, ListItem } from 'material-ui/List';
@@ -19,42 +23,12 @@ const inkBarStyle = {
   zIndex: 2
 };
 
-const LoadableAttendeeList = Loadable({
-  loader: () => import('./AttendeeList'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
-
-let LoadableEditChalkboardDialog;
-
+let EditChalkboardDialog;
 if (isMobileDevice()) {
-  LoadableEditChalkboardDialog = Loadable({
-    loader: () => import('./EditChalkboardMobileDialog'),
-    render(loaded, props) {
-      let Component = loaded.default;
-      return <Component {...props}/>;
-    },
-    loading() {
-      return <div></div>;
-    }
-  });
+  EditChalkboardDialog = LoadableEditChalkboardMobileDialog;
 }
 else {
-  LoadableEditChalkboardDialog = Loadable({
-    loader: () => import('./EditChalkboardDialog'),
-    render(loaded, props) {
-      let Component = loaded.default;
-      return <Component {...props}/>;
-    },
-    loading() {
-      return <div></div>;
-    }
-  });
+  EditChalkboardDialog = LoadableEditChalkboardDialog;
 }
 
 export default class HandleChalkboardDialog extends Component {
@@ -508,7 +482,7 @@ export default class HandleChalkboardDialog extends Component {
             </Dialog>
           )}
 
-          <LoadableEditChalkboardDialog
+          <EditChalkboardDialog
             open={this.state.open}
             state={this.props.state}
             field={this.state.field}

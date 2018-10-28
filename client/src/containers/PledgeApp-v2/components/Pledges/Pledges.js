@@ -3,25 +3,14 @@ import API from 'api/API.js';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter } from './components/Filter.js';
+import { LoadablePledgeInfoDialog } from './components/Dialogs';
 
 import React, { Component, Fragment } from 'react';
-import Loadable from 'react-loadable';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
-
-const LoadablePledgeInfoDialog = Loadable({
-  loader: () => import('./components/Dialogs/PledgeInfoDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
 
 export class Pledges extends Component {
   constructor(props) {

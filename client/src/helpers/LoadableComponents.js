@@ -47,7 +47,7 @@ export const LoadableDelibsApp = Loadable({
 });
 
 export const LoadableRusheeProfile = Loadable({
-  loader: () => import('containers/DelibsApp/RusheeProfile'),
+  loader: () => import('containers/DelibsApp/RusheeProfile/RusheeProfile'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;

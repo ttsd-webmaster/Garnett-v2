@@ -3,6 +3,7 @@ import 'containers/PledgeApp/PledgeApp.css';
 import {loadFirebase} from 'helpers/functions.js';
 import {LoadingDelibsApp} from 'helpers/loaders.js';
 import API from 'api/API.js';
+import { LoadableVoteDialog } from './RusheeProfile/components/Dialogs';
 
 import React, {Component} from 'react';
 import Loadable from 'react-loadable';
@@ -17,17 +18,6 @@ const labelStyle = {
   left: '-8px',
   width: 'auto'
 };
-
-const LoadableVoteDialog = Loadable({
-  loader: () => import('./Dialogs/VoteDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>;
-  }
-});
 
 export default class DelibsApp extends Component {
   constructor(props) {
@@ -115,6 +105,52 @@ export default class DelibsApp extends Component {
     event.stopPropagation();
   }
 
+  interactedCheckbox = (rushee) => {
+    return (
+      <div className="checkbox-container" onClickCapture={this.handleClickCapture}>
+        <Checkbox
+          className="interactedCheckbox"
+          label="Met"
+          labelStyle={labelStyle}
+          checked={rushee.interacted}
+          onCheck={() => this.updateInteraction(rushee)}
+        />
+        <p className="interactedCount"> {rushee.totalInteractions} </p>
+      </div>
+    )
+  }
+
+  rusheeRow = (rushee) => {
+    return (
+      <div>
+        <Divider className="garnett-divider large" inset={true} />
+        <ListItem
+          className="garnett-list-item large"
+          leftAvatar={rushee.rotate ? (
+            <Avatar size={70} src={rushee.photo} className="garnett-image large rotate" />
+          ) : (
+            <Avatar size={70} src={rushee.photo} className="garnett-image large" />
+          )}
+          primaryText={
+            <p className="garnett-name"> {rushee.name} </p>
+          }
+          secondaryText={
+            <p>
+              {rushee.year}
+              <br />
+              {rushee.major}
+            </p>
+          }
+          secondaryTextLines={2}
+          onClick={() => this.openRushee(rushee)}
+        >
+          {this.interactedCheckbox(rushee)}
+        </ListItem>
+        <Divider className="garnett-divider large" inset={true} />
+      </div>
+    )
+  }
+
   render() {
     return (
       this.state.loaded ? (
@@ -143,41 +179,7 @@ export default class DelibsApp extends Component {
                     </div>
                   }
                 >
-                  <div>
-                    <Divider className="garnett-divider large" inset={true} />
-                    <ListItem
-                      className="garnett-list-item large"
-                      leftAvatar={rushee.rotate ? (
-                        <Avatar size={70} src={rushee.photo} className="garnett-image large rotate" />
-                      ) : (
-                        <Avatar size={70} src={rushee.photo} className="garnett-image large" />
-                      )}
-                      primaryText={
-                        <p className="garnett-name"> {rushee.name} </p>
-                      }
-                      secondaryText={
-                        <p>
-                          {rushee.year}
-                          <br />
-                          {rushee.major}
-                        </p>
-                      }
-                      secondaryTextLines={2}
-                      onClick={() => this.openRushee(rushee)}
-                    >
-                      <div className="checkbox-container" onClickCapture={this.handleClickCapture}>
-                        <Checkbox
-                          className="interactedCheckbox"
-                          label="Met"
-                          labelStyle={labelStyle}
-                          checked={rushee.interacted}
-                          onCheck={() => this.updateInteraction(rushee)}
-                        />
-                        <p className="interactedCount"> {rushee.totalInteractions} </p>
-                      </div>
-                    </ListItem>
-                    <Divider className="garnett-divider large" inset={true} />
-                  </div>
+                  {this.rusheeRow(rushee)}
                 </LazyLoad>
               ))}
             </List>

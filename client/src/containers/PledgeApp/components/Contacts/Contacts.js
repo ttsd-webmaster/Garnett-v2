@@ -10,26 +10,15 @@ import {
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import ActiveList from './components/ActiveList';
+import { LoadableContactsDialog } from './components/Dialogs';
 
 import React, { Component } from 'react';
-import Loadable from 'react-loadable';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
-
-const LoadableContactsDialog = Loadable({
-  loader: () => import('./components/Dialogs/ContactsDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>
-  }
-});
 
 export default class Contacts extends Component {
   constructor(props) {

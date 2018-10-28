@@ -1,9 +1,9 @@
-import {loadFirebase} from 'helpers/functions.js';
+import { loadFirebase } from 'helpers/functions.js';
 import API from 'api/API.js';
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
-import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 export default class VoteDialog extends Component {
   constructor(props) {

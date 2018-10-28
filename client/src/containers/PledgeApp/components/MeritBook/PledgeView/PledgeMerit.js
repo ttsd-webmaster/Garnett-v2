@@ -2,10 +2,13 @@ import TotalMeritsAndPledgeBrothers from './components/TotalMeritsAndPledgeBroth
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import API from 'api/API.js';
+import {
+  LoadablePledgeMeritDialog,
+  LoadableDeleteMeritDialog
+} from './components/Dialogs';
 
 import React, { Component } from 'react';
 import { Portal } from 'react-portal';
-import Loadable from 'react-loadable';
 import LazyLoad from 'react-lazyload';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Avatar from 'material-ui/Avatar';
@@ -14,27 +17,6 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
-const LoadableDeleteMeritDialog = Loadable({
-  loader: () => import('./components/Dialogs/DeleteMeritDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>
-  }
-});
-
-const LoadablePledgeMeritDialog = Loadable({
-  loader: () => import('./components/Dialogs/PledgeMeritDialog'),
-  render(loaded, props) {
-    let Component = loaded.default;
-    return <Component {...props}/>;
-  },
-  loading() {
-    return <div></div>
-  }
-});
 
 export default class PledgeMerit extends Component {
   constructor(props) {
