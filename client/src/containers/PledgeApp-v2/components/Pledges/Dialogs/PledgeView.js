@@ -7,6 +7,16 @@ import Divider from 'material-ui/Divider';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
 export function PledgeView(props) {
+  const {
+    firstName,
+    lastName,
+    phone,
+    email,
+    major,
+    totalMerits,
+    photoURL,
+  } = props.pledge;
+
   return (
     isMobileDevice() ? (
       <FullscreenDialog
@@ -16,24 +26,24 @@ export function PledgeView(props) {
         onRequestClose={props.handleClose}
       >
         <div style={{padding:'15px 0'}}>
-          <img className="dialog-photo" src={props.pledge.photoURL} alt="User" />
+          <img className="dialog-photo" src={photoURL} alt="User" />
         </div>
         <List>
           <Divider />
           <ListItem
             className="garnett-list-item"
             primaryText="Name"
-            secondaryText={props.pledgeName}
+            secondaryText={`${firstName} ${lastName}`}
             leftIcon={
               <i className="icon-user garnett-icon"></i>
             }
           />
           <Divider className="garnett-divider" inset={true} />
-          <a style={props.activePhoneNumber} href={`tel:${props.pledge.phone}`}>
+          <a style={props.phoneStyle} href={`tel:${phone}`}>
             <ListItem
               className="contacts-list-item"
               primaryText="Phone Number"
-              secondaryText={props.pledge.phone}
+              secondaryText={phone}
               leftIcon={
                 <i className="icon-phone garnett-icon"></i>
               }
@@ -43,7 +53,7 @@ export function PledgeView(props) {
           <ListItem
             className="garnett-list-item"
             primaryText="Email Address"
-            secondaryText={props.pledge.email}
+            secondaryText={email}
             leftIcon={
               <i className="icon-mail-alt garnett-icon"></i>
             }
@@ -52,7 +62,7 @@ export function PledgeView(props) {
           <ListItem
             className="garnett-list-item"
             primaryText="Major"
-            secondaryText={props.pledge.major}
+            secondaryText={major}
             leftIcon={
               <i className="icon-graduation-cap garnett-icon"></i>
             }
@@ -61,7 +71,7 @@ export function PledgeView(props) {
           <ListItem
             className="garnett-list-item"
             primaryText="Total Merits"
-            secondaryText={`${props.totalMerits} merits`}
+            secondaryText={`${totalMerits} merits`}
             leftIcon={
               <i className="icon-star garnett-icon"></i>
             }
@@ -79,23 +89,23 @@ export function PledgeView(props) {
         onRequestClose={props.handleClose}
         autoScrollBodyContent={true}
       >
-        <img className="contacts-photo" src={props.pledge.photoURL} alt="User" />
+        <img className="contacts-photo" src={photoURL} alt="User" />
         <List>
           <Divider />
           <ListItem
             className="contacts-list-item"
             primaryText="Name"
-            secondaryText={props.pledgeName}
+            secondaryText={`${firstName} ${lastName}`}
             leftIcon={
               <i className="icon-user garnett-icon"></i>
             }
           />
           <Divider className="garnett-divider" inset={true} />
-          <a style={props.activePhoneNumber} href={`tel:${props.pledge.phone}`}>
+          <a style={props.phoneStyle} href={`tel:${phone}`}>
             <ListItem
               className="contacts-list-item"
               primaryText="Phone Number"
-              secondaryText={props.pledge.phone}
+              secondaryText={phone}
               leftIcon={
                 <i className="icon-phone garnett-icon"></i>
               }
@@ -105,7 +115,7 @@ export function PledgeView(props) {
           <ListItem
             className="contacts-list-item"
             primaryText="Email Address"
-            secondaryText={props.pledge.email}
+            secondaryText={email}
             leftIcon={
               <i className="icon-mail-alt garnett-icon"></i>
             }
@@ -114,7 +124,7 @@ export function PledgeView(props) {
           <ListItem
             className="contacts-list-item"
             primaryText="Major"
-            secondaryText={props.pledge.major}
+            secondaryText={major}
             leftIcon={
               <i className="icon-graduation-cap garnett-icon"></i>
             }
@@ -123,7 +133,7 @@ export function PledgeView(props) {
           <ListItem
             className="contacts-list-item"
             primaryText="Total Merits"
-            secondaryText={`${props.pledge.totalMerits} merits`}
+            secondaryText={`${totalMerits} merits`}
             leftIcon={
               <i className="icon-star garnett-icon"></i>
             }

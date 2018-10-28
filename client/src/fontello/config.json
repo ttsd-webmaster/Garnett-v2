@@ -137,6 +137,12 @@
       "css": "edit",
       "code": 59403,
       "src": "fontawesome"
+    },
+    {
+      "uid": "0d20938846444af8deb1920dc85a29fb",
+      "css": "logout",
+      "code": 59404,
+      "src": "fontawesome"
     }
   ]
 }

@@ -7,8 +7,6 @@ admin.initializeApp({
 })
 
 let usersRef = admin.database().ref('/users/');
-let chalkboardsRef = admin.database().ref('/chalkboards');
-let complaintsRef = admin.database().ref('/approvedComplaints');
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((active) => {
@@ -17,24 +15,25 @@ usersRef.once('value', (snapshot) => {
 
       console.log(fullName)
 
-      active.ref.child('Merits').remove(() => {
-        console.log('Removed merits');
-      });
+      active.ref.child('Merits').remove();
 
       snapshot.forEach((pledge) => {
-        if (pledge.val().status === 'pledge') {
+        if (pledge.val().status === 'pledge' && pledge.val().Merits) {
           const merits = Object.keys(pledge.val().Merits).map(function(key) {
             return pledge.val().Merits[key];
           });
 
           merits.forEach((merit) => {
             if (merit.name === fullName) {
+              merit.name = `${pledge.val().firstName } ${pledge.val().lastName}`;
               merit.photoURL = pledge.val().photoURL;
               active.ref.child('Merits').push(merit);
             }
           })
         }
       })
+
+      console.log('Updated merits');
     }
   })
 })

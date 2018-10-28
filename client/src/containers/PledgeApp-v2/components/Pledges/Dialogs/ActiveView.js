@@ -28,6 +28,15 @@ const LoadableMeritsList = Loadable({
 });
 
 export function ActiveView(props) {
+  const {
+    firstName,
+    lastName,
+    phone,
+    email,
+    major,
+    photoURL,
+  } = props.pledge;
+
   return (
     isMobileDevice() ? (
       <FullscreenDialog
@@ -43,24 +52,24 @@ export function ActiveView(props) {
         >
           <Tab style={getTabStyle(props.index === 0)} label="Info" value={0}>
             <div style={{padding:'15px 0'}}>
-              <img className="dialog-photo" src={props.pledge.photoURL} alt="User" />
+              <img className="dialog-photo" src={photoURL} alt="User" />
             </div>
             <List>
               <Divider />
               <ListItem
                 className="garnett-list-item"
                 primaryText="Name"
-                secondaryText={props.pledgeName}
+                secondaryText={`${firstName} ${lastName}`}
                 leftIcon={
                   <i className="icon-user garnett-icon"></i>
                 }
               />
               <Divider className="garnett-divider" inset={true} />
-              <a style={props.activePhoneNumber} href={`tel:${props.pledge.phone}`}>
+              <a style={props.phoneStyle} href={`tel:${phone}`}>
                 <ListItem
                   className="contacts-list-item"
                   primaryText="Phone Number"
-                  secondaryText={props.pledge.phone}
+                  secondaryText={phone}
                   leftIcon={
                     <i className="icon-phone garnett-icon"></i>
                   }
@@ -70,7 +79,7 @@ export function ActiveView(props) {
               <ListItem
                 className="garnett-list-item"
                 primaryText="Email Address"
-                secondaryText={props.pledge.email}
+                secondaryText={email}
                 leftIcon={
                   <i className="icon-mail-alt garnett-icon"></i>
                 }
@@ -79,7 +88,7 @@ export function ActiveView(props) {
               <ListItem
                 className="garnett-list-item"
                 primaryText="Major"
-                secondaryText={props.pledge.major}
+                secondaryText={major}
                 leftIcon={
                   <i className="icon-graduation-cap garnett-icon"></i>
                 }
@@ -123,24 +132,24 @@ export function ActiveView(props) {
         >
           <Tab style={getTabStyle(props.index === 0)} label="Info" value={0}>
             <div style={{padding:'15px 0'}}>
-              <img className="dialog-photo" src={props.pledge.photoURL} alt="User" />
+              <img className="dialog-photo" src={photoURL} alt="User" />
             </div>
             <List>
               <Divider />
               <ListItem
                 className="garnett-list-item"
                 primaryText="Name"
-                secondaryText={props.pledgeName}
+                secondaryText={`${firstName} ${lastName}`}
                 leftIcon={
                   <i className="icon-user garnett-icon"></i>
                 }
               />
               <Divider className="garnett-divider" inset={true} />
-              <a style={props.activePhoneNumber} href={`tel:${props.pledge.phone}`}>
+              <a style={props.phoneStyle} href={`tel:${phone}`}>
                 <ListItem
                   className="contacts-list-item"
                   primaryText="Phone Number"
-                  secondaryText={props.pledge.phone}
+                  secondaryText={phone}
                   leftIcon={
                     <i className="icon-phone garnett-icon"></i>
                   }
@@ -150,7 +159,7 @@ export function ActiveView(props) {
               <ListItem
                 className="garnett-list-item"
                 primaryText="Email Address"
-                secondaryText={props.pledge.email}
+                secondaryText={email}
                 leftIcon={
                   <i className="icon-mail-alt garnett-icon"></i>
                 }
@@ -159,7 +168,7 @@ export function ActiveView(props) {
               <ListItem
                 className="garnett-list-item"
                 primaryText="Major"
-                secondaryText={props.pledge.major}
+                secondaryText={major}
                 leftIcon={
                   <i className="icon-graduation-cap garnett-icon"></i>
                 }
@@ -178,7 +187,7 @@ export function ActiveView(props) {
           </Tab>
           <Tab style={getTabStyle(props.index === 1)} label="Merits" value={1}>
             <LoadableMeritsList
-              pledgeName={props.pledgeDisplayName}
+              pledgeName={firstName + lastName}
               handleRequestOpen={props.handleRequestOpen}
             />
           </Tab>
