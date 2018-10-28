@@ -1,12 +1,12 @@
 import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
-import {loadFirebase} from 'helpers/functions.js';
-import {LoadingComponent} from 'helpers/loaders.js';
+import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
+import { LoadingComponent } from 'helpers/loaders.js';
 import { LoadableDeleteMeritDialog } from './Dialogs';
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
@@ -61,26 +61,11 @@ export class MyMerits extends Component {
 
   handleDeleteOpen = (merit) => {
     if (navigator.onLine) {
+      androidBackOpen(this.handleDeleteClose);
       this.setState({
         openDelete: true,
         merit: merit
       });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path;
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
-        }
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleDeleteClose();
-        }
-      }
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -88,10 +73,7 @@ export class MyMerits extends Component {
   }
 
   handleDeleteClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({
       openDelete: false,
       merit: null

@@ -1,32 +1,12 @@
 import 'containers/PledgeApp/PledgeApp.css';
 import './PledgeApp-v2.css';
-import { loadFirebase } from 'helpers/functions.js';
-import { LoadableContacts } from 'helpers/LoadableComponents';
+import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadablePledgeMeritDialog, LoadableActiveMeritDialog } from './components/Dialogs';
+import { Sidebar } from './components/Sidebar/Sidebar';
+import { Main } from './components/Main/Main';
 
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import { Navbar } from './components/Navbar/Navbar';
-import { MyMerits } from './components/MyMerits/MyMerits';
-import { Pledges } from './components/Pledges/Pledges';
-
-const routes = [
-  {
-    path: '/pledge-app/my-merits',
-    exact: true,
-    content: props => <MyMerits state={props.state} />
-  },
-  {
-    path: '/pledge-app/pledge-brothers',
-    exact: true,
-    content: props => <Pledges state={props.state} />
-  },
-  {
-    path: '/pledge-app/brothers',
-    exact: true,
-    content: props => <LoadableContacts state={props.state} />
-  }
-];
+import { BrowserRouter as Router } from 'react-router-dom';
 
 export class PledgeApp2 extends Component {
   state = {
@@ -60,25 +40,10 @@ export class PledgeApp2 extends Component {
 
   handleMeritOpen = () => {
     if (navigator.onLine) {
+      androidBackOpen(this.handleMeritClose);
       this.setState({
         openMerit: true
       });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path;
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
-        }
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleMeritClose();
-        }
-      }
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -86,10 +51,7 @@ export class PledgeApp2 extends Component {
   }
 
   handleMeritClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({
       openMerit: false
     });
@@ -99,7 +61,7 @@ export class PledgeApp2 extends Component {
     return (
       <Router>
         <div id="pledge-app-container">
-          <Navbar
+          <Sidebar
             history={this.props.history}
             user={this.props.state}
             merits={this.state.merits}
@@ -109,19 +71,7 @@ export class PledgeApp2 extends Component {
             logOut={this.props.logoutCallBack}
             handleRequestOpen={this.props.handleRequestOpen}
           />
-          <div id="content">
-            <Switch>
-              {routes.map((route, index) => (
-                <Route
-                  key={index}
-                  exact={route.exact}
-                  path={route.path}
-                  render={() => route.content(this.props)}
-                />
-              ))}
-              <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
-            </Switch>
-          </div>
+          <Main state={this.props.state} />
           {this.props.state.status === 'pledge' ? (
             <LoadablePledgeMeritDialog
               open={this.state.openMerit}

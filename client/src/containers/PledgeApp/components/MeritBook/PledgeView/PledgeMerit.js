@@ -1,5 +1,5 @@
 import TotalMeritsAndPledgeBrothers from './components/TotalMeritsAndPledgeBrothers';
-import { loadFirebase } from 'helpers/functions.js';
+import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import API from 'api/API.js';
 import {
@@ -96,26 +96,11 @@ export default class PledgeMerit extends Component {
 
   handleDeleteOpen = (merit) => {
     if (navigator.onLine) {
+      androidBackOpen(this.handleDeleteClose);
       this.setState({
         openDelete: true,
         merit: merit
       });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path;
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
-        }
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleDeleteClose();
-        }
-      }
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -123,10 +108,7 @@ export default class PledgeMerit extends Component {
   }
 
   handleDeleteClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({
       openDelete: false,
       merit: null
@@ -135,25 +117,10 @@ export default class PledgeMerit extends Component {
 
   handleMeritOpen = () => {
     if (navigator.onLine) {
+      androidBackOpen(this.handleMeritClose);
       this.setState({
         openMerit: true
       });
-
-      // Handles android back button
-      if (/android/i.test(navigator.userAgent)) {
-        let path;
-        if (process.env.NODE_ENV === 'development') {
-          path = 'http://localhost:3000';
-        }
-        else {
-          path = 'https://garnett-app.herokuapp.com';
-        }
-
-        window.history.pushState(null, null, path + window.location.pathname);
-        window.onpopstate = () => {
-          this.handleMeritClose();
-        }
-      }
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -161,10 +128,7 @@ export default class PledgeMerit extends Component {
   }
 
   handleMeritClose = () => {
-    if (/android/i.test(navigator.userAgent)) {
-      window.onpopstate = () => {};
-    }
-
+    androidBackClose();
     this.setState({
       openMerit: false
     });
