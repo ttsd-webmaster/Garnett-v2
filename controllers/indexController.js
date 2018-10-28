@@ -123,39 +123,82 @@ exports.get_pledge_complaints = function(req, res) {
 
 // Signup Route
 exports.signup = function(req, res) {
-  const usersRef = admin.database().ref('/users');
   let firstName = req.body.firstName.replace(/ /g,'');
   let lastName = req.body.lastName.replace(/ /g,'');
   firstName = firstName[0].toUpperCase() + firstName.substr(1);
   lastName = lastName[0].toUpperCase() + lastName.substr(1);
-  const fullName = firstName + lastName;
-  const checkRef = admin.database().ref('/users/' + fullName);
+  const displayName = firstName + lastName;
+  const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+  const usersRef = admin.database().ref('/users');
+  const userRef = admin.database().ref('/users/' + displayName);
 
-  checkRef.once('value', (snapshot) => {
-    if (req.body.year === 'Alumni') {
-      if (snapshot.val()) {
-        // Create user with email and password
-        firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
-        .then((user) => {
-          if (user && !user.emailVerified) {
-            user.updateProfile({
-              displayName: fullName
-            })
-            .then(function() {
-              const userRef = usersRef.child(user.displayName);
+  userRef.once('value', (snapshot) => {
+    if (snapshot.val() && req.body.year !== 'Alumni') {
+      res.status(400).send('This active is already signed up.');
+    }
+    else if (
+      (snapshot.val() && req.body.year === 'Alumni') || 
+      (!snapshot.val() && req.body.year !== 'Alumni')
+    ) {
+      // Create user with email and password
+      firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
+      .then((user) => {
+        if (user && !user.emailVerified) {
+          user.updateProfile({ displayName })
+          .then(function() {
+            let userInfo = {
+              firstName: req.body.firstName.trim(),
+              lastName: req.body.lastName.trim(),
+              class: req.body.className,
+              major: req.body.majorName,
+              year: req.body.year,
+              phone: req.body.phone,
+              email: req.body.email.trim(),
+              totalMerits: 0
+            };
 
-              userRef.update({
-                firstName: req.body.firstName.trim(),
-                lastName: req.body.lastName.trim(),
-                class: req.body.className,
-                major: req.body.majorName,
-                year: req.body.year,
-                phone: req.body.phone,
-                email: req.body.email.trim(),
-                status: 'alumni'
-              });
+            // Alumni
+            if (req.body.year === 'Alumni') {
+              userInfo.status = 'alumni';
+              userRef.update(userInfo);
+            }
+            else {
+              // Pledge
+              if (req.body.code === req.body.pledgeCode) {
+                userInfo.status = 'pledge';
+              }
+              // Active
+              else {
+                userInfo.photoURL = defaultPhoto
+                userInfo.status = 'active';
+              }
+              userRef.set(userInfo);
+            }
 
-              usersRef.once('value', (users) => {
+            // Set merits
+            usersRef.once('value', (users) => {
+              // Pledge
+              if (req.body.code === req.body.pledgeCode) {
+                users.forEach((child) => {
+                  if (child.val().status === 'alumni') {
+                    child.ref.child('/Pledges/' + displayName).set({
+                      merits: 200
+                    });
+                  }
+                  else if (child.val().status === 'pipm') {
+                    child.ref.child('/Pledges/' + displayName).set({
+                      merits: 'Unlimited'
+                    });
+                  }
+                  else if (child.val().status !== 'pledge') {
+                    child.ref.child('/Pledges/' + displayName).set({
+                      merits: 100
+                    });
+                  }
+                });
+              }
+              // Alumni
+              else if (req.body.year === 'Alumni') {
                 users.forEach((child) => {
                   if (child.val().status === 'pledge') {
                     const pledgeName = child.key;
@@ -165,135 +208,50 @@ exports.signup = function(req, res) {
                     });
                   }
                 });
-              });
+              }
+              // Active
+              else {
+                users.forEach((child) => {
+                  if (child.val().status === 'pledge') {
+                    const pledgeName = child.key;
 
-              user.sendEmailVerification()
-              .then(function() {
-                res.status(200).send('Verification email has been sent.');
-              });
-            })
-            .catch(function(error) {
-              // Handle errors here.
-              const errorCode = error.code;
-              const errorMessage = error.message;
-
-              console.log(errorCode, errorMessage);
-              res.status(400).send('Something went wrong on the server.');
+                    userRef.child('/Pledges/' + pledgeName).set({
+                      merits: 100
+                    });
+                  }
+                });
+              }
             });
-          }
-        })
-        .catch(function(error) {
-          // Handle errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
 
-          console.log(errorCode, errorMessage);
-          res.status(400).send('Email has already been taken.');
-        });
-      }
-      else {
-        res.status(400).send('This alumni does not exist in our database.');
-      }
+            user.sendEmailVerification()
+            .then(function() {
+              res.status(200).send('Verification email has been sent.');
+            });
+          })
+          .catch(function(error) {
+            // Handle errors here.
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            console.log(errorCode, errorMessage);
+            res.status(400).send('Something went wrong on the server.');
+          });
+        }
+      })
+      .catch(function(error) {
+        // Handle errors here.
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        console.log(errorCode, errorMessage);
+        res.status(400).send('Email has already been taken.');
+      });
     }
     else {
-      if (snapshot.val()) {
-        res.status(400).send('This active is already signed up.');
-      }
-      else {
-        // Create user with email and password
-        firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
-        .then((user) => {
-          if (user && !user.emailVerified) {
-            user.updateProfile({
-              displayName: fullName
-            })
-            .then(function() {
-              const userRef = usersRef.child(user.displayName);
-
-              userRef.set({
-                firstName: req.body.firstName.trim(),
-                lastName: req.body.lastName.trim(),
-                class: req.body.className,
-                major: req.body.majorName,
-                year: req.body.year,
-                phone: req.body.phone,
-                email: req.body.email.trim(),
-                photoURL: 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png',
-              });
-
-              if (req.body.code === req.body.pledgeCode) {
-                userRef.update({
-                  status: 'pledge',
-                  totalMerits: 0
-                });
-
-                usersRef.once('value', (users) => {
-                  users.forEach((child) => {
-                    const pledgeName = user.displayName;
-                    
-                    if (child.val().status === 'alumni') {
-                      child.ref.child('/Pledges/' + pledgeName).set({
-                        merits: 200
-                      });
-                    }
-                    else if (child.val().status === 'pipm') {
-                      child.ref.child('/Pledges/' + pledgeName).set({
-                        merits: 'Unlimited'
-                      });
-                    }
-                    else if (child.val().status !== 'pledge') {
-                      child.ref.child('/Pledges/' + pledgeName).set({
-                        merits: 100
-                      });
-                    }
-                  });
-                });
-              }
-              else {
-                userRef.update({
-                  status: 'active'
-                });
-
-                usersRef.once('value', (users) => {
-                  users.forEach((child) => {
-                    if (child.val().status === 'pledge') {
-                      const pledgeName = child.key;
-
-                      userRef.child('/Pledges/' + pledgeName).set({
-                        merits: 100
-                      });
-                    }
-                  });
-                });
-              }
-
-              user.sendEmailVerification()
-              .then(function() {
-                res.status(200).send('Verification email has been sent.');
-              });
-            })
-            .catch(function(error) {
-              // Handle errors here.
-              const errorCode = error.code;
-              const errorMessage = error.message;
-
-              console.log(errorCode, errorMessage);
-              res.status(400).send('Something went wrong on the server.');
-            });
-          }
-        })
-        .catch(function(error) {
-          // Handle errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-
-          console.log(errorCode, errorMessage);
-          res.status(400).send('Email has already been taken.');
-        });
-      }
+      res.status(400).send('This active is already signed up.');
     }
-  });
-};
+  })
+}
 
 // Forgot Password Route
 exports.forgot_password = function(req, res) {
@@ -320,8 +278,8 @@ exports.logout = function(req, res) {
 
 // Sets the user photo
 exports.update_photo = function(req, res) {
-  const fullName = req.body.displayName;
-  const userRef = admin.database().ref('/users/' + fullName);
+  const { displayName } = req.body;
+  const userRef = admin.database().ref('/users/' + displayName);
 
   userRef.update({
     photoURL: req.body.url

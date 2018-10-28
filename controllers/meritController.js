@@ -151,12 +151,11 @@ exports.merit_as_active = function(req, res) {
 
   selectedPledges.forEach((child) => {
     const activeRef = admin.database().ref('/users/' + displayName);
-    const activePledgeRef = activeRef.child('/Pledges/' + child.value);
     const pledgeRef = admin.database().ref('/users/' + child.value);
 
-    activePledgeRef.once('value', (active) => {
+    activeRef.once('value', (active) => {
       if (status !== 'pipm' && !isChalkboard && !isPCGreet) {
-        const remainingMerits = active.val().merits - merit.amount;
+        const remainingMerits = active.val().Pledges[displayName].merits - merit.amount;
 
         if (merit.amount > 0 && 
             remainingMerits < 0 && 
@@ -164,9 +163,15 @@ exports.merit_as_active = function(req, res) {
           res.sendStatus(400).send(child.label);
         }
         else {
+          const activePledgeRef = active.ref.child('/Pledges/' + child.value);
+
           activePledgeRef.update({
             merits: remainingMerits
           });
+
+          activeRef.update({
+            totalMerits: active.val().totalMerits + merit.amount
+          })
         }
       }
 
@@ -179,6 +184,7 @@ exports.merit_as_active = function(req, res) {
 
         pledge.ref.child('Merits').push(merit);
 
+        merit.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
         merit.photoURL = pledge.val().photoURL;
         activeRef.child('Merits').push(merit);
 
@@ -228,6 +234,10 @@ exports.merit_as_pledge = function(req, res) {
           activePledgeRef.update({
             merits: remainingMerits
           });
+
+          activeRef.update({
+            totalMerits: active.val().totalMerits + merit.amount
+          })
         }
       }
 
@@ -236,6 +246,7 @@ exports.merit_as_pledge = function(req, res) {
 
         pledge.ref.child('Merits').push(meritInfo);
 
+        meritInfo.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
         meritInfo.photoURL = pledge.val().photoURL;
         active.ref.child('Merits').push(meritInfo);
 

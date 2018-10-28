@@ -5,10 +5,15 @@ import { Link } from 'react-router-dom';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
+import CountUp from 'react-countup';
 
 export class Navbar extends Component {
   state = {
     open: false
+  }
+
+  goHome =() => {
+    this.props.history.push('/home');
   }
 
   handleLogoutOpen = () => {
@@ -50,6 +55,7 @@ export class Navbar extends Component {
 
     const {
       totalMerits,
+      previousTotalMerits,
       logOut
     } = this.props;
 
@@ -71,13 +77,10 @@ export class Navbar extends Component {
         <div id="account-info">
           <img id="navbar-photo" src={photoURL} alt="User" />
           <h3 id="account-name">{name}</h3>
-          {status === 'pledge' && (
-            <h4>
-              Merit Count:
-              <span id="total-merits">{totalMerits}</span>
-              merits
-            </h4>
-          )}
+          <h4>
+            <CountUp className="total-merits" start={previousTotalMerits} end={totalMerits} useEasing />
+            merits {status !== 'pledge' && 'merited'}
+          </h4>
         </div>
         <nav id="nav-items">
           <Link className="nav-item" to="/pledge-app/my-merits">
@@ -96,10 +99,18 @@ export class Navbar extends Component {
             <i className="icon-address-book"></i>
             Brothers
           </Link>
-          <a className="nav-item" onClick={this.handleLogoutOpen}>
-            <i className="icon-cog"></i>
-            Log Out
-          </a>
+          {status === 'pledge' ? (
+            <a className="nav-item" onClick={this.handleLogoutOpen}>
+              <i className="icon-cog"></i>
+              Log Out
+            </a>
+          ) : (
+            <a className="nav-item" onClick={this.goHome}>
+              <i className="icon-logout"></i>
+              Home
+            </a>
+          )}
+          
           <div id="merit-button" onClick={this.props.openMerit}>Merit</div>
         </nav>
 

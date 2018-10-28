@@ -136,6 +136,7 @@ export class PledgeApp2 extends Component {
       <Router>
         <div id="pledge-app-container">
           <Navbar
+            history={this.props.history}
             user={this.props.state}
             merits={this.state.merits}
             totalMerits={this.state.totalMerits}
