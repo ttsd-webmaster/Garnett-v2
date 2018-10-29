@@ -1,3 +1,4 @@
+import './AccountInfo.css';
 import { loadFirebase } from 'helpers/functions.js';
 
 import React, { PureComponent } from 'react';
@@ -41,7 +42,7 @@ export class AccountInfo extends PureComponent {
       <div id="account-info">
         <img id="sidebar-photo" src={photoURL} alt="User" />
         <h3 id="account-name">{name}</h3>
-        <h4>
+        <h4 id="merit-count">
           <CountUp
             className="total-merits"
             start={this.state.previousTotalMerits}
