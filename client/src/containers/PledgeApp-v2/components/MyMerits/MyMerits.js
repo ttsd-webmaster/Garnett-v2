@@ -16,6 +16,7 @@ import {
 
 import React, { PureComponent, Fragment } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+import CountUp from 'react-countup';
 
 export class MyMerits extends PureComponent {
   state = {
@@ -95,10 +96,18 @@ export class MyMerits extends PureComponent {
 
     return (
       this.state.loaded ? (
-        <div
-          id="my-merits"
-          className={`animate-in${this.props.hidden ? " hidden" : ""}`}
-        >
+        <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+          {isMobileDevice() && (
+            <div className="total-merits-container">
+              <CountUp
+                className="total-merits"
+                start={this.props.previousTotalMerits}
+                end={this.props.totalMerits}
+                useEasing
+              />
+              merits {this.props.state.status !== 'pledge' && 'merited'}
+            </div>
+          )}
           <FilterHeader
             title="Recent"
             toggleIcon={toggleIcon}

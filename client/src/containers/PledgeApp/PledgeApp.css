@@ -5,8 +5,16 @@
 /* For Android when tabs are hidden */
 .content-container .animate-in {
   position: relative;
-  height: calc(100vh - 55px);
+  max-height: 100vh;
+  padding-bottom: 55px;
   overflow: auto;
+}
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .content-container .animate-in {
+    overflow: scroll !important;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 .fixed-button {

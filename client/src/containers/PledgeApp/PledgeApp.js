@@ -1,21 +1,23 @@
 import './PledgeApp.css';
-import { getTabStyle, androidBackOpen, androidBackClose } from 'helpers/functions';
+import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions';
 import {
   LoadableContacts,
   LoadableSettings
 } from 'helpers/LoadableComponents';
 import { MyMerits } from 'containers/PledgeApp-v2/components/MyMerits/MyMerits';
 import { Pledges } from 'containers/PledgeApp-v2/components/Pledges/Pledges';
+import { Navbar } from './components/Navbar';
 
 import React, { PureComponent } from 'react';
-import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
 export default class PledgeApp extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'My Merits',
+      title: 'Merits',
       index: 0,
+      totalMerits: 0,
+      previousTotalMerits: 0,
       openMerit: false
     };
   }
@@ -23,6 +25,25 @@ export default class PledgeApp extends PureComponent {
   componentDidMount() {
     console.log(`Pledge app mount: ${this.props.state.name}`)
     localStorage.setItem('route', 'pledge-app');
+
+    if (navigator.onLine) {
+      loadFirebase('database')
+      .then(() => {
+        const { firebase } = window;
+        const { displayName } = this.props.state;
+        const userRef = firebase.database().ref('/users/' + displayName);
+
+        userRef.on('value', (user) => {
+          const { totalMerits } = user.val();
+
+          localStorage.setItem('totalMerits', totalMerits);
+          this.setState({
+            totalMerits: totalMerits,
+            previousTotalMerits: this.state.totalMerits
+          });
+        });
+      });
+    }
   }
 
   handleChange = (index) => {
@@ -52,6 +73,8 @@ export default class PledgeApp extends PureComponent {
     return (
       <div className="content-container">
         <MyMerits
+          totalMerits={this.state.totalMerits}
+          previousTotalMerits={this.state.previousTotalMerits}
           openMerit={this.state.openMerit}
           state={this.props.state}
           handleMeritOpen={this.handleMeritOpen}
@@ -74,57 +97,11 @@ export default class PledgeApp extends PureComponent {
           history={this.props.history}
           hidden={this.state.index !== 3}
         />
-        
-        <BottomNavigation
-          className="bottom-tabs"
-          selectedIndex={this.state.index}
-          onChange={this.handleChange}
-        >
-          <BottomNavigationItem
-            label="My Merits"
-            icon={
-              <i
-                style={getTabStyle(this.state.index === 0)}
-                className="icon-star"
-              />
-            }
-            onClick={() => this.handleChange(0)}
-          />
-          <BottomNavigationItem
-            label={
-              this.props.state.status === 'pledge'
-                ? 'Pbros'
-                : 'Pledges'
-            }
-            icon={
-              <i
-                style={getTabStyle(this.state.index === 1)}
-                className="icon-users"
-              />
-            }
-            onClick={() => this.handleChange(1)}
-          />
-          <BottomNavigationItem
-            label="Brothers"
-            icon={
-              <i
-                style={getTabStyle(this.state.index === 2)}
-                className="icon-address-book"
-              />
-            }
-            onClick={() => this.handleChange(2)}
-          />
-          <BottomNavigationItem
-            label="Settings"
-            icon={
-              <i
-                style={getTabStyle(this.state.index === 3)}
-                className="icon-cog"
-              />
-            }
-            onClick={() => this.handleChange(3)}
-          />
-        </BottomNavigation>
+        <Navbar
+          status={this.props.state.status}
+          index={this.state.index}
+          handleChange={this.handleChange}
+        />
       </div>
     )
   }
