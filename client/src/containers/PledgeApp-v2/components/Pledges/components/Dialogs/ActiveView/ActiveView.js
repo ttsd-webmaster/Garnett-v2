@@ -99,7 +99,7 @@ export function ActiveView(props) {
           </Tab>
           <Tab style={getTabStyle(props.index === 1)} label="Merits" value={1}>
             <LoadableMeritsList
-              pledgeName={props.pledgeDisplayName}
+              pledgeName={firstName + lastName}
               handleRequestOpen={props.handleRequestOpen}
             />
           </Tab>

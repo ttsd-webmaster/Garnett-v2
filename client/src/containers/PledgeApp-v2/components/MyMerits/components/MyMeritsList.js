@@ -1,4 +1,3 @@
-import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import { PlaceholderMerit } from 'helpers/Placeholders.js';
 
 import React from 'react';

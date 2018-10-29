@@ -40,7 +40,7 @@ export default class Settings extends PureComponent {
 
     return (
       photoURL ? (
-        <div>
+        <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
           <img className="user-photo" src={photoURL} alt="User" />
           <List className="garnett-list">
             <Divider />

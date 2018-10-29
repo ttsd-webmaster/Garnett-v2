@@ -1,3 +1,5 @@
+import '../MyMerits/MyMerits.css';
+
 import API from 'api/API.js';
 import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
@@ -6,7 +8,7 @@ import { PledgeList } from './components/PledgeList';
 import { Filter } from './components/Filter';
 import { LoadablePledgeInfoDialog } from './components/Dialogs';
 
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 
 export class Pledges extends PureComponent {
   state = {
@@ -147,7 +149,7 @@ export class Pledges extends PureComponent {
 
     return (
       this.state.loaded ? (
-        <Fragment>
+        <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
           <FilterHeader
             title="Pledges"
             toggleIcon={toggleIcon}
@@ -176,7 +178,7 @@ export class Pledges extends PureComponent {
               setFilter={this.setFilter}
             />
           )}
-        </Fragment>
+        </div>
       ) : (
         <LoadingComponent />
       )

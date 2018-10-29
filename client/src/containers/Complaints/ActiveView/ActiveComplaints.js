@@ -21,9 +21,9 @@ export default class ActiveComplaints extends Component {
       scrollPosition2: 0,
       pledge: null,
       description: '',
-      complaints: this.props.complaints,
-      pendingComplaints: this.props.pendingComplaints,
-      approvedComplaints: this.props.approvedComplaints,
+      complaints: [],
+      pendingComplaints: [],
+      approvedComplaints: [],
       reverse: false
     };
   }
@@ -70,10 +70,6 @@ export default class ActiveComplaints extends Component {
             }
           }
 
-          console.log(`Complaints: ${complaints}`);
-          console.log(`Pending Complaints: ${pendingComplaints}`);
-          console.log(`Approved Complaints: ${approvedComplaints}`);
-
           localStorage.setItem('activeComplaints', JSON.stringify(complaints));
           localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
           localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
@@ -89,7 +85,15 @@ export default class ActiveComplaints extends Component {
       .catch(error => console.log(`Error: ${error}`));
     }
     else {
-      this.setState({ loaded: true });
+      const activeComplaints = localStorage.getItem('activeComplaints');
+      const pendingComplaints = localStorage.getItem('pendingComplaints');
+      const approvedComplaints = localStorage.getItem('approvedComplaints');
+      this.setState({
+        loaded: true,
+        complaints,
+        pendingComplaints,
+        approvedComplaints
+      });
     }
   }
 

@@ -1,79 +1,12 @@
-/* Pledge App Tabs */
-#pledge-app-tabs > div:first-child {
-  position: fixed;
-  top: 52px;
-  background-color: #fff !important;
-  /*border-bottom: 1px solid #ccc;*/
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
-  z-index: 1;
-  transition: top 0.2s ease-in-out;
-}
-#pledge-app-tabs > div:first-child [class^="icon-"] {
-  -webkit-animation: fadeIn 0.25s ease-in;
-  animation: fadeIn 0.25s ease-in;
-}
-/* Pledge App Tabs Ink Bar */
-#pledge-app-tabs > div:nth-child(2) > div {
-  position: fixed !important;
-  top: 100px;
-  background-color: var(--primary-color) !important;
-  z-index: 1;
-  transition: left 1s cubic-bezier(0.23, 1, 0.32, 1) 0ms, top 0.2s ease-in-out !important;
-  -webkit-animation: fadeIn 0.25s ease-in;
-  animation: fadeIn 0.25s ease-in;
-}
-
-/* Hide on scroll for app bar, tabs, and body */
-.hide-tabs {
-  top: 0px !important;
-}
-.hide-app-bar {
-  top: -52px;
-}
-.hide-content-container {
-  top: 48px !important;
-}
+/* Hide button */
 .hide-buttons .fixed-button{
   transform: scale(0);
 }
 /* For Android when tabs are hidden */
-.content-container.android > div {
-  height: calc(100% - 48px);
-}
-
-/* Pull To Refresh version */
-/*.content-container > div {
-  background-color: #fafafa;
-  height: calc(100% - 100px);
-  overflow: scroll !important;
-  touch-action: pan-down;
-  z-index: 0;
-}*/
-
-/* The container for the content for each tab */
-.content-container {
+.content-container .animate-in {
   position: relative;
-  background-color: #fafafa;
-  z-index: 0;
-}
-.content-container > div {
-  position: fixed !important;
-  background-color: #fafafa;
-  top: 100px;
-  height: calc(100% - 100px);
-  overflow: auto !important;
-  z-index: 0;
-  transition: top 0.2s ease-in-out;
-}
-.content-container > div > div {
-  margin-bottom: 48px;
-}
-@supports (-webkit-overflow-scrolling: touch) {
-  /* CSS specific to iOS devices */ 
-  .content-container > div {
-    overflow: scroll !important;
-    -webkit-overflow-scrolling: touch;
-  }
+  height: calc(100vh - 55px);
+  overflow: auto;
 }
 
 .fixed-button {

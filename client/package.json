@@ -56,8 +56,7 @@
     "react-lazyload": "^2.3.0",
     "react-loadable": "^5.3.1",
     "react-portal": "^4.1.5",
-    "react-router-dom": "^4.2.2",
-    "react-swipeable-bottom-sheet": "^1.1.1"
+    "react-router-dom": "^4.2.2"
   },
   "scripts": {
     "start": "NODE_PATH=src/ node scripts/start.js",

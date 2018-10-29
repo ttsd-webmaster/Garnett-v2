@@ -115,6 +115,10 @@ div, a {
   cursor: pointer;
 }
 
+.hidden {
+  display: none;
+}
+
 /* Placeholder skeleton for list items */
 .placeholder-skeleton {
   position: relative;
