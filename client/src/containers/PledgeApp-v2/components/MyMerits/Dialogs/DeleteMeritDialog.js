@@ -1,13 +1,13 @@
 import API from 'api/API.js';
 
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class DeleteMeritDialog extends Component {
+export default class DeleteMeritDialog extends PureComponent {
   delete = (merit) => {
-    let displayName = this.props.state.displayName;
+    const { displayName } = this.props.state;
 
     API.deleteMerit(displayName, merit)
     .then((res) => {

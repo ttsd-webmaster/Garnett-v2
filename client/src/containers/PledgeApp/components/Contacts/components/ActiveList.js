@@ -1,12 +1,12 @@
 import { PlaceholderContacts } from 'helpers/Placeholders.js';
 
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
-import {ListItem} from 'material-ui/List';
+import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export default class ActiveList extends Component {
+export class ActiveList extends PureComponent {
   checkCondition(active) {
     switch (this.props.filter) {
       case 'firstName':

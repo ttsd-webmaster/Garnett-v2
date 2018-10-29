@@ -2,11 +2,11 @@ import './Settings.css';
 import API from 'api/API.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export default class Settings extends Component {
+export default class Settings extends PureComponent {
   goHome = () => {
     this.props.history.push('/home');
   }
@@ -28,16 +28,26 @@ export default class Settings extends Component {
   }
 
   render() {
+    const {
+      name,
+      phone,
+      email,
+      class: className,
+      major,
+      status,
+      photoURL
+    } = this.props.state;
+
     return (
-      this.props.state.photoURL ? (
+      photoURL ? (
         <div>
-          <img className="user-photo" src={this.props.state.photoURL} alt="User" />
+          <img className="user-photo" src={photoURL} alt="User" />
           <List className="garnett-list">
             <Divider />
             <ListItem
               className="garnett-list-item settings"
               primaryText="Name"
-              secondaryText={this.props.state.name}
+              secondaryText={name}
               leftIcon={
                 <i className="icon-user garnett-icon"></i>
               }
@@ -46,7 +56,7 @@ export default class Settings extends Component {
             <ListItem
               className="garnett-list-item settings"
               primaryText="Phone Number"
-              secondaryText={this.props.state.phone}
+              secondaryText={phone}
               leftIcon={
                 <i className="icon-phone garnett-icon"></i>
               }
@@ -55,7 +65,7 @@ export default class Settings extends Component {
             <ListItem
               className="garnett-list-item settings"
               primaryText="Email Address"
-              secondaryText={this.props.state.email}
+              secondaryText={email}
               leftIcon={
                 <i className="icon-mail-alt garnett-icon"></i>
               }
@@ -64,7 +74,7 @@ export default class Settings extends Component {
             <ListItem
               className="garnett-list-item settings"
               primaryText="Class"
-              secondaryText={this.props.state.class}
+              secondaryText={className}
               leftIcon={
                 <i className="icon-users garnett-icon"></i>
               }
@@ -73,7 +83,7 @@ export default class Settings extends Component {
             <ListItem
               className="garnett-list-item settings"
               primaryText="Major"
-              secondaryText={this.props.state.major}
+              secondaryText={major}
               leftIcon={
                 <i className="icon-graduation-cap garnett-icon"></i>
               }
@@ -81,7 +91,7 @@ export default class Settings extends Component {
             <Divider />
           </List>
 
-          {this.props.state.status !== 'pledge' ? (
+          {status !== 'pledge' ? (
             <span className="logout-button" onClick={this.goHome}> Back Home </span>
           ) : (
             <div className="logout-button" onClick={this.logout}> Log Out </div>

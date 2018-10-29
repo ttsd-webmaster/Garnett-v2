@@ -9,18 +9,15 @@ import {
   androidBackClose
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import ActiveList from './components/ActiveList';
+import { Header } from './components/Header';
+import { ActiveList } from './components/ActiveList';
+import { Filter } from './components/Filter';
 import { LoadableContactsDialog } from './components/Dialogs';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import Popover, { PopoverAnimationVertical } from 'material-ui/Popover';
-import Menu from 'material-ui/Menu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
 
-export default class Contacts extends Component {
+export default class Contacts extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -136,23 +133,16 @@ export default class Contacts extends Component {
     return (
       this.state.labels ? (
         <div>
-          {this.state.labels.map((label, i) => (
-            <div key={i}>
-              <Subheader className="garnett-subheader contacts">
-                {label}
-                {i === 0 && (
-                  <span style={{float:'right'}}>
-                    <span className="garnett-filter" onClick={this.openPopover}> 
-                      {this.state.filterName}
-                    </span>
-                    <IconButton
-                      iconClassName={toggleIcon}
-                      className="reverse-toggle"
-                      onClick={this.reverse}
-                    />
-                  </span>
-                )}
-              </Subheader>
+          {this.state.labels.map((label, index) => (
+            <div key={index}>
+              <Header
+                index={index}
+                label={label}
+                toggleIcon={toggleIcon}
+                filterName={this.state.filterName}
+                openPopover={this.openPopover}
+                reverse={this.reverse}
+              />
               <List className="garnett-list">
                 <ActiveList 
                   actives={this.state.actives}
@@ -163,67 +153,13 @@ export default class Contacts extends Component {
               </List>
             </div>
           ))}
-
-          <Popover
+          <Filter
             open={this.state.openPopover}
             anchorEl={this.state.anchorEl}
-            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this.closePopover}
-            animation={PopoverAnimationVertical}
-          >
-            <Menu>
-              <MenuItem
-                primaryText="Active"
-                insetChildren
-                checked={this.state.filterName === 'Active'}
-                onClick={() => this.setFilter('Active')}
-              />
-              <MenuItem
-                primaryText="Alumni"
-                insetChildren
-                checked={this.state.filterName === 'Alumni'}
-                onClick={() => this.setFilter('Alumni')}
-              />
-              <MenuItem
-                primaryText="Class"
-                insetChildren
-                checked={this.state.filterName === 'Class'}
-                onClick={() => this.setFilter('Class')}
-              />
-              <MenuItem
-                primaryText="Major"
-                insetChildren
-                checked={this.state.filterName === 'Major'}
-                onClick={() => this.setFilter('Major')}
-              />
-              <MenuItem
-                primaryText="Year"
-                insetChildren
-                checked={this.state.filterName === 'Year'}
-                onClick={() => this.setFilter('Year')}
-              />
-              <MenuItem
-                primaryText="First Name"
-                insetChildren
-                checked={this.state.filterName === 'First Name'}
-                onClick={() => this.setFilter('First Name')}
-              />
-              <MenuItem
-                primaryText="Last Name"
-                insetChildren
-                checked={this.state.filterName === 'Last Name'}
-                onClick={() => this.setFilter('Last Name')}
-              />
-              <MenuItem
-                primaryText="Personality Type"
-                insetChildren
-                checked={this.state.filterName === 'Personality Type'}
-                onClick={() => this.setFilter('Personality Type')}
-              />
-            </Menu>
-          </Popover>
-
+            filterName={this.state.filterName}
+            closePopover={this.closePopover}
+            setFilter={this.setFilter}
+          />
           {this.state.active && (
             <LoadableContactsDialog
               open={this.state.open}

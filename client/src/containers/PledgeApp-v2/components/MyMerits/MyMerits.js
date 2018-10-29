@@ -1,18 +1,16 @@
 import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { PlaceholderMerit } from 'helpers/Placeholders.js';
+import { FilterHeader } from 'components/FilterHeader';
+import { MyMeritsList } from './components/MyMeritsList';
 import { LoadableDeleteMeritDialog } from './Dialogs';
 
-import React, { Component } from 'react';
-import LazyLoad from 'react-lazyload';
+import React, { PureComponent } from 'react';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import IconButton from 'material-ui/IconButton';
 
-export class MyMerits extends Component {
+export class MyMerits extends PureComponent {
   state = {
     loaded: false,
     merits: this.props.merits,
@@ -91,55 +89,17 @@ export class MyMerits extends Component {
     return (
       this.state.loaded ? (
         <div id="pledge-meritbook" className="animate-in">
-          <Subheader className="garnett-subheader">
-            Recent
-            <IconButton
-              style={{float:'right',cursor:'pointer'}}
-              iconClassName={toggleIcon}
-              className="reverse-toggle"
-              onClick={this.reverse}
-            />
-          </Subheader>
-
-          <List className="animate-in garnett-list">
-            {merits.map((merit, i) => (
-              <LazyLoad
-                height={88}
-                offset={window.innerHeight}
-                once
-                overflow
-                key={i}
-                placeholder={PlaceholderMerit()}
-              >
-                <div>
-                  <Divider className="garnett-divider large" inset={true} />
-                  <ListItem
-                    className="garnett-list-item large"
-                    leftAvatar={<Avatar size={70} src={merit.photoURL} className="garnett-image large" />}
-                    primaryText={
-                      <p className="garnett-name"> {merit.name} </p>
-                    }
-                    secondaryText={
-                      <p> {merit.description} </p>
-                    }
-                    secondaryTextLines={2}
-                    onClick={() => this.handleDeleteOpen(merit)}
-                  >
-                    <div className="merit-amount-container">
-                      <p className="merit-date"> {merit.date} </p>
-                      {merit.amount > 0 ? (
-                        <p className="merit-amount green">+{merit.amount}</p>
-                      ) : (
-                        <p className="merit-amount red">{merit.amount}</p>
-                      )}
-                    </div>
-                  </ListItem>
-                  <Divider className="garnett-divider large" inset={true} />
-                </div>
-              </LazyLoad>
-            ))}
-          </List>
-
+          <FilterHeader
+            title="Recent"
+            toggleIcon={toggleIcon}
+            filterName={this.state.filterName}
+            openPopover={this.openPopover}
+            reverse={this.reverse}
+          />
+          <MyMeritsList
+            merits={merits}
+            handleDeleteOpen={this.handleDeleteOpen}
+          />
           {this.props.state.status === 'pledge' && (
             <LoadableDeleteMeritDialog
               open={this.state.openDelete}

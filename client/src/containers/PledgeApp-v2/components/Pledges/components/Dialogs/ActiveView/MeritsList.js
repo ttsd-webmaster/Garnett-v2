@@ -1,15 +1,14 @@
 import API from 'api/API.js';
 import { PlaceholderMerit } from 'helpers/Placeholders.js';
+import { FilterHeader } from 'components/FilterHeader';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import IconButton from 'material-ui/IconButton';
 
-export default class MeritsList extends Component {
+export default class MeritsList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,15 +45,13 @@ export default class MeritsList extends Component {
 
     return (
       <div>
-        <Subheader className="garnett-subheader dialog">
-          Recent
-          <IconButton
-            style={{float:'right',cursor:'pointer'}}
-            iconClassName={toggleIcon}
-            className="reverse-toggle"
-            onClick={this.reverse}
-          />
-        </Subheader>
+        <FilterHeader
+          title="Recent"
+          toggleIcon={toggleIcon}
+          filterName={this.state.filterName}
+          openPopover={this.openPopover}
+          reverse={this.reverse}
+        />
 
         <List className="garnett-list dialog pledge">
           {merits.map((merit, i) => (

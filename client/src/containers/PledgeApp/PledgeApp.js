@@ -9,7 +9,7 @@ import {
   LoadableSettings
 } from 'helpers/LoadableComponents';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 
 let didScroll = false;
@@ -19,7 +19,7 @@ function watchScroll() {
   didScroll = true;
 }
 
-export default class PledgeApp extends Component {
+export default class PledgeApp extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

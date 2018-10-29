@@ -1,14 +1,14 @@
 import API from 'api/API.js';
 import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { Header } from './components/Header';
+import { FilterHeader } from 'components/FilterHeader';
 import { PledgeList } from './components/PledgeList';
 import { Filter } from './components/Filter';
 import { LoadablePledgeInfoDialog } from './components/Dialogs';
 
-import React, { Component, Fragment } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 
-export class Pledges extends Component {
+export class Pledges extends PureComponent {
   state = {
     loaded: false,
     pledges: this.props.pledges,
@@ -148,7 +148,8 @@ export class Pledges extends Component {
     return (
       this.state.loaded ? (
         <Fragment>
-          <Header
+          <FilterHeader
+            title="Pledges"
             toggleIcon={toggleIcon}
             state={this.props.state}
             filterName={this.state.filterName}
