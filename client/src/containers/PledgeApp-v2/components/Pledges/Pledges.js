@@ -9,20 +9,17 @@ import { LoadablePledgeInfoDialog } from './components/Dialogs';
 import React, { Component, Fragment } from 'react';
 
 export class Pledges extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: false,
-      pledges: this.props.pledges,
-      pledge: null,
-      filter: 'lastName',
-      filterName: 'Last Name',
-      reverse: false,
-      open: false,
-      openMerit: false,
-      openPopover: false
-    };
-  }
+  state = {
+    loaded: false,
+    pledges: this.props.pledges,
+    pledge: null,
+    filter: 'lastName',
+    filterName: 'Last Name',
+    reverse: false,
+    open: false,
+    openMerit: false,
+    openPopover: false
+  };
 
   componentDidMount() {
     if (navigator.onLine) {
@@ -159,7 +156,7 @@ export class Pledges extends Component {
             reverse={this.reverse}
           />
           <PledgeList
-            pledges={this.state.pledges}
+            pledges={pledges}
             handleOpen={this.handleOpen}
           />
           <LoadablePledgeInfoDialog

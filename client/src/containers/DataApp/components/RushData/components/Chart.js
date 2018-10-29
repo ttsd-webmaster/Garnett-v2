@@ -1,7 +1,8 @@
-import React , { Component } from 'react';
+import React , { PureComponent } from 'react';
 import { Bar } from 'react-chartjs-2';
+import Paper from 'material-ui/Paper';
 
-export default class Chart extends Component {
+export default class Chart extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,25 +14,18 @@ export default class Chart extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    var nameLabels = nextProps.dataSet.map(element => element[0]);
-    var data       = nextProps.dataSet.map(element => element[1]);
+    const nameLabels = nextProps.dataSet.map(element => element[0]);
+    const data = nextProps.dataSet.map(element => element[1]);
 
     if (JSON.stringify(this.props.dataSet) !== JSON.stringify(nextProps.dataSet)) {
-      const dataSet = nextProps.dataSet;
-      const title = nextProps.title;
-
-      this.setState({
-        dataSet,
-        title,
-        nameLabels,
-        data
-      });
+      const { dataSet, title } = nextProps;
+      this.setState({ dataSet, title, nameLabels, data });
     }
   }
 
   render() {
     return (
-      <div>
+      <Paper className="graph">
         <Bar
           data={{ labels: this.state.nameLabels,
             datasets: [{
@@ -115,7 +109,7 @@ export default class Chart extends Component {
             }
           }}
         />
-      </div>
+      </Paper>
     )
   }
 }

@@ -103,7 +103,6 @@ export default class App extends Component {
 
                 API.saveMessagingToken(displayName, currentToken)
                 .then(messageRes => {
-                  console.log(messageRes);
                   this.checkPhoto(user);
                 })
                 .catch(error => console.log(`Error: ${error}`));
@@ -283,7 +282,8 @@ export default class App extends Component {
             handleRequestOpen={this.handleRequestOpen}
           />
         )
-      } else {
+      }
+      else {
         return (
           <LoadablePledgeApp 
             state={this.state}

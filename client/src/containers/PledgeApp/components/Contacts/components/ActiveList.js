@@ -1,3 +1,5 @@
+import { PlaceholderContacts } from 'helpers/Placeholders.js';
+
 import React, {Component} from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
@@ -29,16 +31,7 @@ export default class ActiveList extends Component {
             once
             overflow
             key={i}
-            placeholder={
-              <div className="placeholder-skeleton">
-                <Divider className="garnett-divider large" inset={true} />
-                <div className="placeholder-avatar"></div>
-                <div className="placeholder-name"></div>
-                <div className="placeholder-year"></div>
-                <div className="placeholder-major"></div>
-                <Divider className="garnett-divider large" inset={true} />
-              </div>
-            }
+            placeholder={PlaceholderContacts()}
           >
             <div>
               <Divider className="garnett-divider large" inset={true} />

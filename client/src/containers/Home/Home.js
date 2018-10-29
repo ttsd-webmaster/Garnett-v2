@@ -1,36 +1,12 @@
 import './Home.css';
-import {LoadingHome} from 'helpers/loaders.js';
-import API from 'api/API.js';
+import { Header } from 'components/Header';
+import { GarnettApp } from './components/GarnettApp';
 
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 
-export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: false
-    };
-  }
-
+export default class Home extends PureComponent {
   componentDidMount() {
     localStorage.setItem('route', 'home');
-    this.setState({ loaded: true });
-  }
-
-  logout = () => {
-    if (navigator.onLine) {
-      API.logout()
-      .then(res => {
-        console.log(res);
-        this.props.logoutCallBack();
-        this.props.history.push('/');
-      })
-      .catch(error => console.log(`Error: ${error}`));
-    }
-    else {
-      this.props.logoutCallBack();
-      this.props.history.push('/');
-    }
   }
 
   goTo = (route) => {
@@ -39,48 +15,31 @@ export default class Home extends Component {
 
   render() {
     return (
-      this.state.loaded ? (
-        <div className="loading-container">
-          <div className="app-header no-tabs">
-            <span> Home </span>
-            <span className="back-button" onClick={this.logout}> Log Out </span>
-          </div>
-          <div className="icon-container animate-in">
-            <div className="app-icon" onClick={() => this.goTo('pledge-app')}>
-              <div className="app-icon-image-container">
-                <img 
-                  className="app-icon-image"
-                  src={require('./images/pledge-app.png')}
-                  alt="Pledge App"
-                />
-              </div>
-              <p> Pledge App </p>
-            </div>
-            <div className="app-icon" onClick={() => this.goTo('delibs-app')}>
-              <div className="app-icon-image-container">
-                <img 
-                  className="app-icon-image"
-                  src={require('./images/delibs-app.png')}
-                  alt="Delibs App"
-                />
-              </div>
-              <p> Delibs App </p>
-            </div>
-            <div className="app-icon" onClick={() => this.goTo('data-app')}>
-              <div className="app-icon-image-container">
-                <img 
-                  className="app-icon-image"
-                  src={require('./images/data-app.png')}
-                  alt="Data App"
-                />
-              </div>
-              <p> Data App </p>
-            </div>
-          </div>
+      <div className="loading-container">
+        <Header
+          title="Home"
+          noTabs
+          history={this.props.history}
+          logoutCallBack={this.props.logoutCallBack}
+        />
+        <div className="icon-container animate-in">
+          <GarnettApp
+            title="Pledge App"
+            value="pledge-app"
+            goTo={() => this.goTo('pledge-app')}
+          />
+          <GarnettApp
+            title="Delibs App"
+            value="delibs-app"
+            goTo={() => this.goTo('delibs-app')}
+          />
+          <GarnettApp
+            title="Data App"
+            value="data-app"
+            goTo={() => this.goTo('data-app')}
+          />
         </div>
-      ) : (
-        <LoadingHome />
-      )
+      </div>
     )
   }
 }

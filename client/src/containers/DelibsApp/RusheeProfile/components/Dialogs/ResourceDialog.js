@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -11,7 +11,7 @@ const contentStyle = {
   width: '100vw'
 };
 
-export default class ResourceDialog extends Component {
+export default class ResourceDialog extends PureComponent {
   render() {
     const actions = [
       <FlatButton

@@ -1,14 +1,14 @@
 import { isMobileDevice } from 'helpers/functions.js';
 import { interviewResponses } from '../../data.js';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
-export default class InterviewDialog extends Component {
+export default class InterviewDialog extends PureComponent {
   render() {
     const actions = (
       <FlatButton

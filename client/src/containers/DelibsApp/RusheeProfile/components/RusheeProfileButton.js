@@ -7,13 +7,11 @@ import {
   LoadableResourceDialog,
   LoadableInterviewDialog
 } from './Dialogs';
+import { RusheeBottomSheet } from './RusheeBottomSheet';
 
-import React, { Component } from 'react';
-import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import { BottomSheet } from 'helpers/BottomSheet/index.js';
+import React, { PureComponent } from 'react';
 
-export class RusheeProfileButton extends Component {
+export class RusheeProfileButton extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -77,12 +75,19 @@ export class RusheeProfileButton extends Component {
     this.setState({ openInterview: false });
   }
 
+  openBottomSheet = () => {
+    this.setState({ sheetOpen: true });
+  }
+
+  closeBottomSheet = () => {
+    this.setState({ sheetOpen: false });
+  }
+
   render() {
     return (
       this.props.state.status === 'regent' ? (
         <div>
           <div className="logout-button" onClick={this.startVote}> Start Vote </div>
-
           <LoadableEndVoteDialog
             open={this.state.openEndVote}
             rushee={this.props.rushee.name}
@@ -92,29 +97,19 @@ export class RusheeProfileButton extends Component {
         </div>
       ) : (
         <div>
-          <BottomSheet
-            open={this.state.sheetOpen}
-            onRequestClose={() => this.setState({sheetOpen: false})}
-          >
-            <Subheader> Open </Subheader>
-            <List>
-              <ListItem primaryText="Resume" onClick={() => this.viewResource('resume')} />
-              <ListItem primaryText="Degree Audit" onClick={() => this.viewResource('degreeAudit')} />
-              <ListItem primaryText="Schedule" onClick={() => this.viewResource('schedule')} />
-              <ListItem primaryText="Interview Responses" onClick={this.viewInterview} />
-              <a style={{textDecoration:'none'}} href={this.props.rushee.preDelibs} target="_blank">
-                <ListItem primaryText="Pre-Delibs Sheet"/>
-              </a>
-            </List>
-          </BottomSheet>
-
+          <RusheeBottomSheet
+            sheetOpen={this.state.sheetOpen}
+            preDelibs={this.props.rushee.preDelibs}
+            viewResource={this.viewResource}
+            viewInterview={this.viewInterview}
+            closeBottomSheet={this.closeBottomSheet}
+          />
           <div 
             className="logout-button"
-            onClick={() => this.setState({sheetOpen: true})}
+            onClick={this.openBottomSheet}
           >
             Resources 
           </div>
-          
           <LoadableResourceDialog
             open={this.state.openResource}
             resource={this.props.rushee.resources[this.state.resource]}

@@ -2,14 +2,13 @@ import '../DelibsApp.css';
 import 'containers/PledgeApp/PledgeApp.css';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingRusheeProfile } from 'helpers/loaders.js';
-import { rusheeInfo} from './data.js';
+import { Header } from 'components/Header';
+import { RusheeInfo } from './components/RusheeInfo';
 import { RusheeProfileButton } from './components/RusheeProfileButton';
 
-import React, { Component } from 'react';
-import { List, ListItem } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+import React, { PureComponent } from 'react';
 
-export default class RusheeProfile extends Component {
+export class RusheeProfile extends PureComponent {
   state = { rushee: null }
 
   componentDidMount() {
@@ -36,45 +35,18 @@ export default class RusheeProfile extends Component {
     return (
       this.state.rushee ? (
         <div className="loading-container">
-          <div className="app-header no-tabs">
-            <span> Rushee Profile </span>
-            <span
-              className="back-button"
-              onClick={this.props.history.goBack}
-            > 
-              Back 
-            </span>
-          </div>
-
+          <Header
+            title="Rushee Profile"
+            noTabs
+            history={this.props.history}
+          />
           <div className="animate-in delibs-app rushee">
-            {this.state.rushee.rotate ? (
-              <img
-                className="user-photo rotate"
-                src={this.state.rushee.photo}
-                alt="Rushee"
-              />
-            ) : (
-              <img
-                className="user-photo"
-                src={this.state.rushee.photo}
-                alt="Rushee"
-              />
-            )}
-
-            <List className="garnett-list">
-              {rusheeInfo.map((info, i) => (
-                <div key={i}>
-                  <Divider />
-                  <ListItem
-                    className="garnett-list-item rushee long"
-                    primaryText={info.label}
-                    secondaryText={this.state.rushee[info.value]}
-                  />
-                  <Divider />
-                </div>
-              ))}
-            </List>
-
+            <img
+              className={`user-photo ${this.state.rushee.rotate && "rotate"}`}
+              src={this.state.rushee.photo}
+              alt="Rushee"
+            />
+            <RusheeInfo rushee={this.state.rushee} />
             <RusheeProfileButton
               state={this.props.state}
               rushee={this.state.rushee}

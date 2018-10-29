@@ -1,6 +1,7 @@
 import TotalMeritsAndPledgeBrothers from './components/TotalMeritsAndPledgeBrothers';
 import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
+import { PlaceholderMerit } from 'helpers/Placeholders.js';
 import API from 'api/API.js';
 import {
   LoadablePledgeMeritDialog,
@@ -188,17 +189,7 @@ export default class PledgeMerit extends Component {
                 once
                 overflow
                 key={i}
-                placeholder={
-                  <div className="placeholder-skeleton">
-                    <Divider className="garnett-divider large" inset={true} />
-                    <div className="placeholder-avatar"></div>
-                    <div className="placeholder-name"></div>
-                    <div className="placeholder-year"></div>
-                    <div className="placeholder-date"></div>
-                    <div className="placeholder-merits"></div>
-                    <Divider className="garnett-divider large" inset={true} />
-                  </div>
-                }
+                placeholder={PlaceholderMerit()}
               >
                 <div>
                   <Divider className="garnett-divider large" inset={true} />
