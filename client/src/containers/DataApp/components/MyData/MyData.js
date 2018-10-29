@@ -2,29 +2,22 @@ import './MyData.css';
 import { LoadingDataApp } from 'helpers/loaders.js';
 import API from 'api/API.js';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
 const categories = ['Merit', 'Chalkboard'];
 
-export class MyData extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: false
-    };
-  }
+export class MyData extends PureComponent {
+  state = { loaded: false }
 
   componentDidMount() {
     const { name } = this.props.state;
 
     API.getMyData(name)
     .then((res) => {
-      const myData = res.data;
-
       this.setState({
-        myData,
+        myData: res.data,
         loaded: true
       });
     });

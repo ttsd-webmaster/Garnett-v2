@@ -3,8 +3,8 @@ import { LoadableContacts } from 'helpers/LoadableComponents';
 
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { MyMerits } from './components/MyMerits/MyMerits';
-import { Pledges } from './components/Pledges/Pledges';
+import { MyMerits } from '../MyMerits/MyMerits';
+import { Pledges } from '../Pledges/Pledges';
 
 const routes = [
   {

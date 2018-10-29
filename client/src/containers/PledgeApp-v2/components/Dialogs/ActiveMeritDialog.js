@@ -150,10 +150,8 @@ export default class ActiveMeritDialog extends Component {
 
           API.getChalkboardsForMerit(name)
           .then((res) => {
-            let chalkboards = res.data;
-
             this.setState({
-              chalkboards,
+              chalkboards: res.data,
               description: '',
               isPCGreet: false
             });
@@ -180,7 +178,7 @@ export default class ActiveMeritDialog extends Component {
         }
         break;
       case 'description':
-        if (isChalkboard) {
+        if (isChalkboard && newValue.amount) {
           value = newValue;
           amount = newValue.amount;
 
@@ -305,7 +303,7 @@ export default class ActiveMeritDialog extends Component {
             onChange={(e, key, newValue) => this.handleChange('description', newValue)}
             errorText={!this.state.descriptionValidation && 'Please select a chalkboard.'}
           >
-            {this.state.chalkboards && (
+            {this.state.chalkboards && this.state.chalkboards.length > 0 ? (
               this.state.chalkboards.map((chalkboard, i) => (
                 <MenuItem
                   key={i}
@@ -315,6 +313,8 @@ export default class ActiveMeritDialog extends Component {
                   checked={chalkboard === this.state.description}
                 />
               ))
+            ) : (
+              <MenuItem value="None" primaryText="None" />
             )}
           </SelectField>
         ) : (
@@ -345,12 +345,12 @@ export default class ActiveMeritDialog extends Component {
             onChange={(e, newValue) => this.handleChange('amount', newValue)}
           />
         </div>
-        <Checkbox
+        {/*<Checkbox
           style={checkboxStyle}
           label="Chalkboard"
           checked={this.state.isChalkboard}
           onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
-        />
+        />*/}
         <Checkbox
           style={checkboxStyle}
           label="PC Greet"

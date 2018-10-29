@@ -3,12 +3,12 @@ import pledgeData from './data/pledgeData.json';
 import API from 'api/API.js';
 import { LoadingDataApp } from 'helpers/loaders.js';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Avatar from 'material-ui/Avatar';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export class PledgeData extends Component {
+export class PledgeData extends PureComponent {
   state = {
     photoMap: [],
     loaded: false

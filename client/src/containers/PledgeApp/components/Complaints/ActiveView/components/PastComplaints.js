@@ -1,3 +1,5 @@
+import { PlaceholderMerit } from 'helpers/Placeholders.js';
+
 import React from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
@@ -35,16 +37,7 @@ export default function PastComplaints(props) {
             once
             overflow
             key={i}
-            placeholder={
-              <div className="placeholder-skeleton">
-                <Divider className="garnett-divider large" inset={true} />
-                <div className="placeholder-avatar"></div>
-                <div className="placeholder-name"></div>
-                <div className="placeholder-year"></div>
-                <div className="placeholder-merits"></div>
-                <Divider className="garnett-divider large" inset={true} />
-              </div>
-            }
+            placeholder={PlaceholderMerit()}
           >
             <div>
               <Divider className="garnett-divider large" inset={true} />

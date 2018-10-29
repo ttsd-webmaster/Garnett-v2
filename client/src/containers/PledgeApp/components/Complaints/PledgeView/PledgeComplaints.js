@@ -1,5 +1,6 @@
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
+import { PlaceholderPledgeComplaint } from 'helpers/Placeholders.js';
 
 import React, { Component } from 'react';
 import LazyLoad from 'react-lazyload';
@@ -92,13 +93,7 @@ export default class PledgeComplaints extends Component {
                 once
                 overflow
                 key={i}
-                placeholder={
-                  <div className="placeholder-skeleton">
-                    <Divider />
-                    <div className="placeholder-description"></div>
-                    <Divider />
-                  </div>
-                }
+                placeholder={PlaceholderPledgeComplaint()}
               >
                 <div>
                   <Divider />

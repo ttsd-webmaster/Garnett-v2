@@ -1,19 +1,17 @@
 import './Sidebar.css';
 import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
+import { AccountInfo } from './components/AccountInfo';
+import { NavItems } from './components/NavItems';
 
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
-import CountUp from 'react-countup';
 
-export class Sidebar extends Component {
-  state = {
-    open: false
-  }
+export class Sidebar extends PureComponent {
+  state = { open: false }
 
-  goHome =() => {
+  goHome = () => {
     this.props.history.push('/home');
   }
 
@@ -33,18 +31,6 @@ export class Sidebar extends Component {
   }
 
   render() {
-    const {
-      name,
-      status,
-      photoURL
-    } = this.props.user;
-
-    const {
-      totalMerits,
-      previousTotalMerits,
-      logOut
-    } = this.props;
-
     const actions = [
       <FlatButton
         label="Just Kidding"
@@ -54,57 +40,19 @@ export class Sidebar extends Component {
       <RaisedButton
         label="Log Out"
         primary={true}
-        onClick={logOut}
+        onClick={this.props.logOut}
       />,
     ];
 
     return (
       <div id="sidebar">
-        <div id="account-info">
-          <img id="sidebar-photo" src={photoURL} alt="User" />
-          <h3 id="account-name">{name}</h3>
-          <h4>
-            <CountUp
-              className="total-merits"
-              start={previousTotalMerits}
-              end={totalMerits}
-              useEasing
-            />
-            merits {status !== 'pledge' && 'merited'}
-          </h4>
-        </div>
-        <nav id="nav-items">
-          <Link className="nav-item" to="/pledge-app/my-merits">
-            <i className="icon-star"></i>
-            My Merits
-          </Link>
-          <Link className="nav-item" to="/pledge-app/pledge-brothers">
-            <i className="icon-users"></i>
-            {status === 'pledge' ? (
-              "Pledge Brothers"
-            ) : (
-              "Pledges"
-            )}
-          </Link>
-          <Link className="nav-item" to="/pledge-app/brothers">
-            <i className="icon-address-book"></i>
-            Brothers
-          </Link>
-          {status === 'pledge' ? (
-            <a className="nav-item" onClick={this.handleLogoutOpen}>
-              <i className="icon-cog"></i>
-              Log Out
-            </a>
-          ) : (
-            <a className="nav-item" onClick={this.goHome}>
-              <i className="icon-logout"></i>
-              Home
-            </a>
-          )}
-          
-          <div id="merit-button" onClick={this.props.openMerit}>Merit</div>
-        </nav>
-
+        <AccountInfo user={this.props.user} />
+        <NavItems
+          status={this.props.user.status}
+          goHome={this.goHome}
+          openMerit={this.props.openMerit}
+          handleLogoutOpen={this.handleLogoutOpen}
+        />
         <Dialog
           actions={actions}
           modal={false}

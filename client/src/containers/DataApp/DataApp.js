@@ -3,24 +3,25 @@ import 'containers/PledgeApp/PledgeApp.css';
 import { PledgeData } from './components/PledgeData/PledgeData';
 import { RushData } from './components/RushData/RushData';
 import { MyData } from './components/MyData/MyData';
+import { Header } from 'components/Header';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
-export default class DataApp extends Component {
+export default class DataApp extends PureComponent {
   state = { selectedIndex: 0 }
 
   componentDidMount() {
     localStorage.setItem('route', 'data-app');
   }
 
-  select = (index) => {
+  select = (selectedIndex) => {
     let previousIndex = this.state.selectedIndex;
     let pledgeData = document.getElementById('pledge-data');
     let rushData = document.getElementById('rush-data');
     let myData = document.getElementById('my-data');
 
-    if (previousIndex !== index) {
+    if (previousIndex !== selectedIndex) {
       if (pledgeData)
         pledgeData.classList.remove('active');
       if (rushData)
@@ -28,19 +29,20 @@ export default class DataApp extends Component {
       if (myData)
         myData.classList.remove('active');
 
-      if (index === 0) {
-        pledgeData.classList.add('active');
-      }
-      else if (index === 1) {
-        rushData.classList.add('active');
-      }
-      else {
-        myData.classList.add('active');
+      switch (selectedIndex) {
+        case 0:
+          pledgeData.classList.add('active');
+          break;
+        case 1:
+          rushData.classList.add('active');
+          break;
+        case 2:
+          myData.classList.add('active');
+          break;
+        default:
       }
 
-      this.setState({
-        selectedIndex: index
-      });
+      this.setState({ selectedIndex });
     }
   }
 
@@ -51,15 +53,10 @@ export default class DataApp extends Component {
   render() {
     return (
       <div className="loading-container" id="data-app">
-        <div className="app-header no-tabs">
-          <span> Data App </span>
-          <span className="back-button" onClick={this.goHome}> Home </span>
-        </div>
-
-        <PledgeData photoMap={this.state.photoMap} />
+        <Header title="Data App" noTabs history={this.props.history} />
+        <PledgeData />
         <RushData />
         <MyData state={this.props.state} />
-
         <BottomNavigation
           className="bottom-tabs"
           selectedIndex={this.state.selectedIndex}

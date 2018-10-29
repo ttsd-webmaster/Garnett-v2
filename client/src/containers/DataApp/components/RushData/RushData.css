@@ -1,12 +1,7 @@
-.filter {
-  flex: 1;
-  margin: 10px;
-  position: relative;
-}
-
 .filter-container {
   display: flex;
   justify-content: center;
+  margin: 10px;
 }
 
 .graph {

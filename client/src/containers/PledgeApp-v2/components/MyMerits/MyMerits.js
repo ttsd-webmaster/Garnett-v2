@@ -1,6 +1,7 @@
 import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
 import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
+import { PlaceholderMerit } from 'helpers/Placeholders.js';
 import { LoadableDeleteMeritDialog } from './Dialogs';
 
 import React, { Component } from 'react';
@@ -12,15 +13,12 @@ import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
 export class MyMerits extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loaded: false,
-      merits: this.props.merits,
-      merit: null,
-      openDelete: false,
-      reverse: false
-    }
+  state = {
+    loaded: false,
+    merits: this.props.merits,
+    merit: null,
+    openDelete: false,
+    reverse: false
   }
 
   componentDidMount() {
@@ -42,20 +40,17 @@ export class MyMerits extends Component {
             });
           }
 
-          console.log(`Merit array: ${merits}`);
           localStorage.setItem('meritArray', JSON.stringify(merits));
 
           this.setState({
-            loaded: true,
-            merits: merits,
+            merits,
+            loaded: true
           });
         });
       });
     }
     else {
-      this.setState({
-        loaded: true
-      });
+      this.setState({ loaded: true });
     }
   }
 
@@ -63,8 +58,8 @@ export class MyMerits extends Component {
     if (navigator.onLine) {
       androidBackOpen(this.handleDeleteClose);
       this.setState({
-        openDelete: true,
-        merit: merit
+        merit,
+        openDelete: true
       });
     }
     else {
@@ -114,17 +109,7 @@ export class MyMerits extends Component {
                 once
                 overflow
                 key={i}
-                placeholder={
-                  <div className="placeholder-skeleton">
-                    <Divider className="garnett-divider large" inset={true} />
-                    <div className="placeholder-avatar"></div>
-                    <div className="placeholder-name"></div>
-                    <div className="placeholder-year"></div>
-                    <div className="placeholder-date"></div>
-                    <div className="placeholder-merits"></div>
-                    <Divider className="garnett-divider large" inset={true} />
-                  </div>
-                }
+                placeholder={PlaceholderMerit()}
               >
                 <div>
                   <Divider className="garnett-divider large" inset={true} />

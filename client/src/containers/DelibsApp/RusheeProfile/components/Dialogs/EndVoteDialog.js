@@ -1,11 +1,11 @@
 import { loadFirebase } from 'helpers/functions.js';
 import API from 'api/API.js';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class EndVoteDialog extends Component {
+export default class EndVoteDialog extends PureComponent {
   state = { totalVotes: null }
 
   componentDidMount() {

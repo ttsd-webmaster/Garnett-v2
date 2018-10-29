@@ -12,7 +12,7 @@ import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import ForgotPassword from './components/ForgotPassword';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Snackbar from 'material-ui/Snackbar';
 
 const snackbarBackground = {
@@ -23,7 +23,7 @@ const snackbarText = {
   color: 'var(--secondary-dark)'
 };
 
-export default class Login extends Component {
+export default class Login extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
