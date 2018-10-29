@@ -2,19 +2,9 @@ import 'containers/PledgeApp/PledgeApp.css';
 import {isMobileDevice} from './functions.js';
 
 import React, { Fragment } from 'react';
-import {Tabs} from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
-
-const tabContainerStyle = {
-  position: 'fixed',
-  top: 52,
-  backgroundColor: '#fff',
-  borderBottom: '1px solid #e0e0e0',
-  boxShadow: 'rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px',
-  zIndex: 1
-};
 
 const completingTaskDialogMobile = {
   display: 'flex',
@@ -62,12 +52,9 @@ export function LoadingLogin() {
   }
 }
 
-export const LoadingPledgeApp = () => (
+export const LoadingPledgeApp = (props) => (
   <div className="loading-container">
-    <div className="app-header">
-      <span> Merit Book </span>
-    </div>
-    <Tabs tabItemContainerStyle={tabContainerStyle}></Tabs>
+    <BottomNavigation className="bottom-tabs" />
   </div>
 )
 

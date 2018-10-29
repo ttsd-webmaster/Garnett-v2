@@ -19,7 +19,7 @@ export default class PledgeComplaints extends Component {
     super(props);
     this.state = {
       loaded: false,
-      complaints: this.props.complaints,
+      complaints: [],
       reverse: false
     }
   }
@@ -54,7 +54,11 @@ export default class PledgeComplaints extends Component {
       });
     }
     else {
-      this.setState({ loaded: true });
+      const complaints = localStorage.getItem('pledgeComplaints');
+      this.setState({
+        loaded: true,
+        complaints
+      });
     }
   }
 

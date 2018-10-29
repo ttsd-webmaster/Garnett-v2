@@ -1,5 +1,3 @@
-import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
-
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';

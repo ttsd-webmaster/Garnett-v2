@@ -1,14 +1,22 @@
-import 'containers/PledgeApp/components/MeritBook/MeritBook.css';
-import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
+import './MyMerits.css';
+import {
+  isMobileDevice,
+  loadFirebase,
+  androidBackOpen,
+  androidBackClose
+} from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader } from 'components/FilterHeader';
 import { MyMeritsList } from './components/MyMeritsList';
 import { LoadableDeleteMeritDialog } from './Dialogs';
+import {
+  LoadablePledgeMeritDialog,
+  LoadableActiveMeritDialog
+} from '../Dialogs';
 
-import React, { PureComponent } from 'react';
-import Avatar from 'material-ui/Avatar';
-import { List, ListItem } from 'material-ui/List';
-import Divider from 'material-ui/Divider';
+import React, { PureComponent, Fragment } from 'react';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import CountUp from 'react-countup';
 
 export class MyMerits extends PureComponent {
   state = {
@@ -88,7 +96,18 @@ export class MyMerits extends PureComponent {
 
     return (
       this.state.loaded ? (
-        <div id="pledge-meritbook" className="animate-in">
+        <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+          {isMobileDevice() && (
+            <div className="total-merits-container">
+              <CountUp
+                className="total-merits"
+                start={this.props.previousTotalMerits}
+                end={this.props.totalMerits}
+                useEasing
+              />
+              merits {this.props.state.status !== 'pledge' && 'merited'}
+            </div>
+          )}
           <FilterHeader
             title="Recent"
             toggleIcon={toggleIcon}
@@ -100,6 +119,28 @@ export class MyMerits extends PureComponent {
             merits={merits}
             handleDeleteOpen={this.handleDeleteOpen}
           />
+          {isMobileDevice() && (
+            <Fragment>
+              {this.props.state.status === 'pledge' ? (
+                <LoadablePledgeMeritDialog
+                  open={this.props.openMerit}
+                  state={this.props.state}
+                  handleMeritClose={this.props.handleMeritClose}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
+              ) : (
+                <LoadableActiveMeritDialog
+                  open={this.props.openMerit}
+                  state={this.props.state}
+                  handleMeritClose={this.props.handleMeritClose}
+                  handleRequestOpen={this.props.handleRequestOpen}
+                />
+              )}
+              <FloatingActionButton className="fixed-button active-merit" onClick={this.props.handleMeritOpen}>
+                <i className="icon-pencil"></i>
+              </FloatingActionButton>
+            </Fragment>
+          )}
           {this.props.state.status === 'pledge' && (
             <LoadableDeleteMeritDialog
               open={this.state.openDelete}

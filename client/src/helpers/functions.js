@@ -108,39 +108,6 @@ export function iOSversion() {
   }
 }
 
-export function showHeader(index) {
-  const contentContainer = document.querySelector('.content-container').childNodes[index];
-  const tabs = document.getElementById('pledge-app-tabs').firstChild;
-  const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-  const appBar = document.querySelector('.app-header');
-
-  if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
-    contentContainer.style.setProperty('overflow', 'scroll', 'important');
-    contentContainer.style.WebkitOverflowScrolling = 'touch';
-  }
-  else {
-    contentContainer.style.setProperty('overflow', 'auto', 'important');
-  }
-
-  tabs.style.zIndex = 1;
-  inkBar.style.zIndex = 1;
-  appBar.style.zIndex = 1;
-}
-
-export function hideHeader(index) {
-  const contentContainer = document.querySelector('.content-container').childNodes[index];
-  const tabs = document.getElementById('pledge-app-tabs').firstChild;
-  const inkBar = document.getElementById('pledge-app-tabs').childNodes[1].firstChild;
-  const appBar = document.querySelector('.app-header');
-
-  contentContainer.style.setProperty('overflow', 'visible', 'important');
-  contentContainer.style.WebkitOverflowScrolling = 'auto';
-  
-  tabs.style.zIndex = 0;
-  inkBar.style.zIndex = 0;
-  appBar.style.zIndex = 0;
-}
-
 // Handles android back button on dialog open
 export function androidBackOpen(callback) {
   if (/android/i.test(navigator.userAgent)) {

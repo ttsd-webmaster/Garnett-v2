@@ -1,0 +1,40 @@
+#sidebar-photo {
+  object-fit: cover;
+  height: 70px;
+  width: 70px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+#account-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 158px;
+}
+@media(max-height: 660px) {
+  #account-info {
+    margin-bottom: 20px;
+  }
+}
+#account-info > #account-name,
+#account-info > #merit-count {
+  font-weight: 400;
+}
+#account-info > #account-name {
+  margin: 0;
+}
+#account-info > #merit-count {
+  display: flex;
+  align-items: center;
+  margin: 15px auto 0;
+}
+
+#account-info .total-merits {
+  font-family: 'LeagueSpartan-Bold';
+  font-size: 24px;
+  color: #fff;
+  margin-right: 5px;
+}

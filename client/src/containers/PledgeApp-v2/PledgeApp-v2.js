@@ -1,7 +1,10 @@
 import 'containers/PledgeApp/PledgeApp.css';
 import './PledgeApp-v2.css';
 import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
-import { LoadablePledgeMeritDialog, LoadableActiveMeritDialog } from './components/Dialogs';
+import {
+  LoadablePledgeMeritDialog,
+  LoadableActiveMeritDialog
+} from './components/Dialogs';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Main } from './components/Main/Main';
 

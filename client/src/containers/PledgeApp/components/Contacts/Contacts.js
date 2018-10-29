@@ -3,8 +3,6 @@ import filters from './data.js';
 import API from 'api/API';
 import {
   isMobileDevice,
-  showHeader,
-  hideHeader,
   androidBackOpen,
   androidBackClose
 } from 'helpers/functions.js';
@@ -21,7 +19,7 @@ export default class Contacts extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      actives: this.props.actives,
+      actives: [],
       active: null,
       filter: 'activeClass',
       filterName: 'Active',
@@ -45,13 +43,13 @@ export default class Contacts extends PureComponent {
       });
     }
     else {
-      this.setState({ labels });
+      const actives = localStorage.getItem('activeArray');
+      this.setState({ actives, labels });
     }
   }
 
   handleOpen = (active) => {
     if (isMobileDevice()) {
-      hideHeader(1);
       androidBackOpen(this.handleClose);
     }
 
@@ -63,7 +61,6 @@ export default class Contacts extends PureComponent {
 
   handleClose = () => {
     if (isMobileDevice()) {
-      showHeader(1);
       androidBackClose();
     }
 
@@ -132,7 +129,7 @@ export default class Contacts extends PureComponent {
 
     return (
       this.state.labels ? (
-        <div>
+        <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
           {this.state.labels.map((label, index) => (
             <div key={index}>
               <Header

@@ -5,8 +5,6 @@ import {
   loadFirebase,
   isMobileDevice,
   getDate,
-  showHeader,
-  hideHeader,
   androidBackOpen,
   androidBackClose
 } from 'helpers/functions.js';
@@ -35,11 +33,11 @@ export default class Chalkboards extends Component {
       selectedIndex: 0,
       scrollPosition1: 0,
       scrollPosition2: 0,
-      myHostingChalkboards: this.props.myHostingChalkboards,
-      myAttendingChalkboards: this.props.myAttendingChalkboards,
-      myCompletedChalkboards: this.props.myCompletedChalkboards,
-      upcomingChalkboards: this.props.upcomingChalkboards,
-      completedChalkboards: this.props.completedChalkboards,
+      myHostingChalkboards: [],
+      myAttendingChalkboards: [],
+      myCompletedChalkboards: [],
+      upcomingChalkboards: [],
+      completedChalkboards: [],
       selectedChalkboard: null,
       chalkboardType: '',
       openPopover: false,
@@ -121,12 +119,6 @@ export default class Chalkboards extends Component {
             });
           }
 
-          console.log(`My Hosting Chalkboards: ${myHostingChalkboards}`);
-          console.log(`My Attending Chalkboards: ${myAttendingChalkboards}`);
-          console.log(`My Completed Chalkboards: ${myCompletedChalkboards}`);
-          console.log(`Upcoming Chalkboards: ${upcomingChalkboards}`);
-          console.log(`Completed Upcoming Chalkboards: ${completedChalkboards}`);
-
           localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
           localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
           localStorage.setItem('myHostingChalkboards', JSON.stringify(myHostingChalkboards));
@@ -145,7 +137,19 @@ export default class Chalkboards extends Component {
       });
     }
     else {
-      this.setState({ loaded: true });
+      const upcomingChalkboards = localStorage.getItem('upcomingChalkboards');
+      const completedChalkboards = localStorage.getItem('completedChalkboards');
+      const myHostingChalkboards = localStorage.getItem('myHostingChalkboards');
+      const myAttendingChalkboards = localStorage.getItem('myAttendingChalkboards');
+      const myCompletedChalkboards = localStorage.getItem('myCompletedChalkboards');
+      this.setState({
+        loaded: true,
+        upcomingChalkboards,
+        completedChalkboards,
+        myHostingChalkboards,
+        myAttendingChalkboards,
+        myCompletedChalkboards
+      });
     }
   }
 
@@ -213,7 +217,6 @@ export default class Chalkboards extends Component {
   addOpen = () => {
     if (navigator.onLine) {
       if (isMobileDevice()) {
-        hideHeader(2);
         androidBackOpen(this.addClose);
       }
 
@@ -226,7 +229,6 @@ export default class Chalkboards extends Component {
 
   addClose = () => {
     if (isMobileDevice()) {
-      showHeader(2);
       androidBackClose();
     }
 
@@ -235,7 +237,6 @@ export default class Chalkboards extends Component {
 
   handleOpen = (chalkboard, type) => {
     if (isMobileDevice()) {
-      hideHeader(2);
       androidBackOpen(this.handleClose);
     }
 
@@ -248,7 +249,6 @@ export default class Chalkboards extends Component {
 
   handleClose = () => {
     if (isMobileDevice()) {
-      showHeader(2);
       androidBackClose();
     }
 
