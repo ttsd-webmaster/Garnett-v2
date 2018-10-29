@@ -4,7 +4,7 @@ import API from 'api/API.js';
 import { PledgeView } from './PledgeView/PledgeView.js';
 import { ActiveView } from './ActiveView/ActiveView.js';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 
 const phoneStyle = {
@@ -12,7 +12,7 @@ const phoneStyle = {
   textDecoration: 'none'
 }
 
-export default class PledgeInfoDialog extends Component {
+export default class PledgeInfoDialog extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

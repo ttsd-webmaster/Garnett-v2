@@ -3,7 +3,7 @@ import { getDate, invalidSafariVersion } from 'helpers/functions.js';
 import { CompletingTaskDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
@@ -20,7 +20,7 @@ const checkboxStyle = {
   transform: 'translateX(-130px)'
 };
 
-export default class PledgeMeritDialog extends Component {
+export default class PledgeMeritDialog extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

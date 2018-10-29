@@ -2,9 +2,9 @@ import './MeritBook.css';
 import ActiveMerit from './ActiveView/ActiveMerit';
 import PledgeMerit from './PledgeView/PledgeMerit';
 
-import React, {Component} from 'react';
+import React, { PureComponent } from 'react';
 
-export default class MeritBook extends Component {
+export default class MeritBook extends PureComponent {
   render() {
     const { status } = this.props.state;
     

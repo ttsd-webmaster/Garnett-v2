@@ -3,6 +3,7 @@ import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functio
 import { LoadingComponent } from 'helpers/loaders.js';
 import { PlaceholderMerit } from 'helpers/Placeholders.js';
 import API from 'api/API.js';
+import { FilterHeader } from 'components/FilterHeader';
 import {
   LoadablePledgeMeritDialog,
   LoadableDeleteMeritDialog
@@ -14,10 +15,7 @@ import LazyLoad from 'react-lazyload';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import IconButton from 'material-ui/IconButton';
-
 
 export default class PledgeMerit extends Component {
   constructor(props) {
@@ -171,15 +169,13 @@ export default class PledgeMerit extends Component {
     return (
       this.state.loaded ? (
         <div id="pledge-meritbook" className="animate-in">
-          <Subheader className="garnett-subheader">
-            Recent
-            <IconButton
-              style={{float:'right',cursor:'pointer'}}
-              iconClassName={toggleIcon}
-              className="reverse-toggle"
-              onClick={this.reverse}
-            />
-          </Subheader>
+          <FilterHeader
+            title="Recent"
+            toggleIcon={toggleIcon}
+            filterName={this.state.filterName}
+            openPopover={this.openPopover}
+            reverse={this.reverse}
+          />
 
           <List className="animate-in garnett-list">
             {merits.map((merit, i) => (

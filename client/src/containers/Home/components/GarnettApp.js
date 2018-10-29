@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 
 export function GarnettApp(props) {
   const { title, value, goTo } = props;
