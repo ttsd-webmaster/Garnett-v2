@@ -28,6 +28,12 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+  min-height: 158px;
+}
+@media(max-height: 660px) {
+  #account-info {
+    margin-bottom: 20px;
+  }
 }
 #account-info h3,
 #account-info h4 {
@@ -69,6 +75,11 @@
   padding: 10px 0;
   margin-bottom: 30px;
   text-decoration: none;
+}
+@media(max-height: 660px) {
+  .nav-item {
+    margin-bottom: 10px;
+  }
 }
 .nav-item > i {
   font-size: 22px;
