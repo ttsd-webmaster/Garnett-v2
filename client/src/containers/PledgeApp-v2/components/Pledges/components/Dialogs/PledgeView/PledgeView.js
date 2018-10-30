@@ -26,9 +26,7 @@ export function PledgeView(props) {
         open={props.open}
         onRequestClose={props.handleClose}
       >
-        <div style={{padding:'15px 0'}}>
-          <img className="dialog-photo" src={photoURL} alt="User" />
-        </div>
+        <img className="dialog-photo" src={photoURL} alt="User" />
         <List>
           <Divider />
           <ListItem
@@ -83,7 +81,7 @@ export function PledgeView(props) {
         onRequestClose={props.handleClose}
         autoScrollBodyContent={true}
       >
-        <img className="contacts-photo" src={photoURL} alt="User" />
+        <img className="dialog-photo" src={photoURL} alt="User" />
         <List>
           <Divider />
           <ListItem
