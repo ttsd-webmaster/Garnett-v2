@@ -3,7 +3,7 @@ import { getTabStyle } from 'helpers/functions';
 import React from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
-export function Navbar(props) {
+export function MobileNavbar(props) {
   return (
     <BottomNavigation
       className="bottom-tabs"

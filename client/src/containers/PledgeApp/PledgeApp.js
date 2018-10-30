@@ -6,7 +6,8 @@ import {
 } from 'helpers/LoadableComponents';
 import { MyMerits } from 'containers/PledgeApp-v2/components/MyMerits/MyMerits';
 import { Pledges } from 'containers/PledgeApp-v2/components/Pledges/Pledges';
-import { Navbar } from './components/Navbar';
+import { MobileHeader } from './components/MobileHeader';
+import { MobileNavbar } from './components/MobileNavbar';
 
 import React, { PureComponent } from 'react';
 
@@ -72,9 +73,13 @@ export default class PledgeApp extends PureComponent {
   render() {
     return (
       <div className="content-container">
-        <MyMerits
+        <MobileHeader
+          status={this.props.state.status}
+          index={this.state.index}
           totalMerits={this.state.totalMerits}
           previousTotalMerits={this.state.previousTotalMerits}
+        />
+        <MyMerits
           openMerit={this.state.openMerit}
           state={this.props.state}
           handleMeritOpen={this.handleMeritOpen}
@@ -97,7 +102,7 @@ export default class PledgeApp extends PureComponent {
           history={this.props.history}
           hidden={this.state.index !== 3}
         />
-        <Navbar
+        <MobileNavbar
           status={this.props.state.status}
           index={this.state.index}
           handleChange={this.handleChange}

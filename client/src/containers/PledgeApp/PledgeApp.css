@@ -2,13 +2,24 @@
 .hide-buttons .fixed-button{
   transform: scale(0);
 }
-/* For Android when tabs are hidden */
+
+/* Container */
+.content-container {
+  height: 100vh;
+  overflow: hidden;
+}
+/* Mobile slide view */
 .content-container .animate-in {
   position: relative;
-  min-height: calc(100vh - 103px);
+  min-height: calc(100vh - 162px);
   max-height: 100vh;
   padding-bottom: 55px;
   overflow: auto;
+}
+@media(max-width: 768px) {
+  .content-container .animate-in {
+    padding-top: 55px;
+  }
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */ 
@@ -169,7 +180,6 @@
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
   background-color: #fff !important;
-  /*border-bottom: 1px solid #ccc;*/
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   z-index: 2;
 }
@@ -193,7 +203,7 @@
   flex-direction: column;
   background-color: #fff;
   padding-bottom: 44px !important;
-  border-bottom: 1px solid rgb(224, 224, 224) !important;
+  border-bottom: 1px solid #e0e0e0 !important;
 }
 .garnett-dialog-body.grey {
   background-color: #fafafa;
@@ -219,7 +229,8 @@
 .bottom-tabs {
   position: fixed !important;
   bottom: 0;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #e0e0e0;
+  z-index: 10;
 }
 
 /* Photo for mobile dialog */
