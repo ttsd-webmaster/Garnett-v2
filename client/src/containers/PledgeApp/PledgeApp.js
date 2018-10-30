@@ -1,55 +1,18 @@
+import './MobilePledgeApp.css';
 import './PledgeApp.css';
-import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions';
+import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import {
-  LoadableContacts,
-  LoadableSettings
-} from 'helpers/LoadableComponents';
-import { MyMerits } from 'containers/PledgeApp-v2/components/MyMerits/MyMerits';
-import { Pledges } from 'containers/PledgeApp-v2/components/Pledges/Pledges';
-import { MobileHeader } from './components/MobileHeader';
-import { MobileNavbar } from './components/MobileNavbar';
+  LoadablePledgeMeritDialog,
+  LoadableActiveMeritDialog
+} from './components/Dialogs';
+import { Sidebar } from './components/Sidebar/Sidebar';
+import { Main } from './components/Main/Main';
 
 import React, { PureComponent } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
 
-export default class PledgeApp extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      title: 'Merits',
-      index: 0,
-      totalMerits: 0,
-      previousTotalMerits: 0,
-      openMerit: false
-    };
-  }
-
-  componentDidMount() {
-    console.log(`Pledge app mount: ${this.props.state.name}`)
-    localStorage.setItem('route', 'pledge-app');
-
-    if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const { displayName } = this.props.state;
-        const userRef = firebase.database().ref('/users/' + displayName);
-
-        userRef.on('value', (user) => {
-          const { totalMerits } = user.val();
-
-          localStorage.setItem('totalMerits', totalMerits);
-          this.setState({
-            totalMerits: totalMerits,
-            previousTotalMerits: this.state.totalMerits
-          });
-        });
-      });
-    }
-  }
-
-  handleChange = (index) => {
-    this.setState({ index })
-  };
+export class PledgeApp extends PureComponent {
+  state = { openMerit: false }
 
   handleMeritOpen = () => {
     if (navigator.onLine) {
@@ -72,42 +35,33 @@ export default class PledgeApp extends PureComponent {
 
   render() {
     return (
-      <div className="content-container">
-        <MobileHeader
-          status={this.props.state.status}
-          index={this.state.index}
-          totalMerits={this.state.totalMerits}
-          previousTotalMerits={this.state.previousTotalMerits}
-        />
-        <MyMerits
-          openMerit={this.state.openMerit}
-          state={this.props.state}
-          handleMeritOpen={this.handleMeritOpen}
-          handleMeritClose={this.handleMeritClose}
-          handleRequestOpen={this.props.handleRequestOpen}
-          hidden={this.state.index !== 0}
-        />
-        <Pledges
-          state={this.props.state}
-          hidden={this.state.index !== 1}
-        />
-        <LoadableContacts
-          state={this.props.state}
-          actives={this.state.activeArray}
-          hidden={this.state.index !== 2}
-        />
-        <LoadableSettings
-          state={this.props.state} 
-          logoutCallBack={this.props.logoutCallBack} 
-          history={this.props.history}
-          hidden={this.state.index !== 3}
-        />
-        <MobileNavbar
-          status={this.props.state.status}
-          index={this.state.index}
-          handleChange={this.handleChange}
-        />
-      </div>
+      <Router>
+        <div id="pledge-app-container">
+          <Sidebar
+            history={this.props.history}
+            user={this.props.state}
+            openMerit={this.handleMeritOpen}
+            logOut={this.props.logoutCallBack}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+          <Main state={this.props.state} />
+          {this.props.state.status === 'pledge' ? (
+            <LoadablePledgeMeritDialog
+              open={this.state.openMerit}
+              state={this.props.state}
+              handleMeritClose={this.handleMeritClose}
+              handleRequestOpen={this.props.handleRequestOpen}
+            />
+          ) : (
+            <LoadableActiveMeritDialog
+              open={this.state.openMerit}
+              state={this.props.state}
+              handleMeritClose={this.handleMeritClose}
+              handleRequestOpen={this.props.handleRequestOpen}
+            />
+          )}
+        </div>
+      </Router>
     )
   }
 }

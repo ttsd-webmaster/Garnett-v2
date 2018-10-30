@@ -1,5 +1,5 @@
-import 'containers/PledgeApp/PledgeApp.css';
-import {isMobileDevice} from './functions.js';
+import 'containers/PledgeApp/MobilePledgeApp.css';
+import { isMobileDevice } from './functions.js';
 
 import React, { Fragment } from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -52,7 +52,7 @@ export function LoadingLogin() {
   }
 }
 
-export const LoadingPledgeApp = (props) => (
+export const LoadingMobilePledgeApp = (props) => (
   <div className="loading-container">
     <BottomNavigation className="bottom-tabs" />
   </div>

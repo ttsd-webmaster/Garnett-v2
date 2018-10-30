@@ -1,5 +1,5 @@
 import '../DelibsApp.css';
-import 'containers/PledgeApp/PledgeApp.css';
+import 'containers/PledgeApp/MobilePledgeApp.css';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingRusheeProfile } from 'helpers/loaders.js';
 import { Header } from 'components/Header';

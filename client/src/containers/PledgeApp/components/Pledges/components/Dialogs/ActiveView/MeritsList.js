@@ -1,5 +1,5 @@
 import API from 'api/API.js';
-import { PlaceholderMerit } from 'helpers/Placeholders.js';
+import { PlaceholderMerit } from 'components/Placeholders.js';
 import { FilterHeader } from 'components/FilterHeader';
 
 import React, { PureComponent } from 'react';

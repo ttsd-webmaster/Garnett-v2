@@ -1,5 +1,5 @@
 import './Main.css';
-import { LoadableContacts } from 'helpers/LoadableComponents';
+import { LoadableContacts } from 'components/LoadableComponents';
 
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
