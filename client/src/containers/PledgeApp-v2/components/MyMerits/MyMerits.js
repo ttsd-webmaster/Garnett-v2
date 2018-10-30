@@ -136,7 +136,7 @@ export class MyMerits extends PureComponent {
                   handleRequestOpen={this.props.handleRequestOpen}
                 />
               )}
-              <FloatingActionButton className="fixed-button active-merit" onClick={this.props.handleMeritOpen}>
+              <FloatingActionButton className="fixed-button" onClick={this.props.handleMeritOpen}>
                 <i className="icon-pencil"></i>
               </FloatingActionButton>
             </Fragment>
