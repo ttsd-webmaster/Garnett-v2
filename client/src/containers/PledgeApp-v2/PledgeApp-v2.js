@@ -40,7 +40,6 @@ export class PledgeApp2 extends PureComponent {
           <Sidebar
             history={this.props.history}
             user={this.props.state}
-            merits={this.state.merits}
             openMerit={this.handleMeritOpen}
             logOut={this.props.logoutCallBack}
             handleRequestOpen={this.props.handleRequestOpen}

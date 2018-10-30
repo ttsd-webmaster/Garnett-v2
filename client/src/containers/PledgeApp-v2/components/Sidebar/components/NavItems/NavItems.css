@@ -17,6 +17,7 @@
   color: #fff;
   padding: 10px 0;
   margin-bottom: 30px;
+  opacity: 0.6;
   text-decoration: none;
 }
 @media(max-height: 660px) {
@@ -27,6 +28,9 @@
 .nav-item > i {
   font-size: 22px;
   margin-right: 14px;
+}
+.nav-item.active {
+  opacity: 1;
 }
 
 #merit-button {
