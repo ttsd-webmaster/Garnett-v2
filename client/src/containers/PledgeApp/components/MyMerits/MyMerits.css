@@ -60,14 +60,15 @@
   font-size: 18px;
   font-weight: 500;
   border-bottom: 1px solid #e0e0e0;
+  letter-spacing: 0.5px;
   z-index: 10;
 }
 .total-merits-container .total-merits {
   font-family: 'LeagueSpartan-Bold';
-  font-size: 20px;
+  font-size: 22px;
   color: rgba(0, 0, 0, 0.87);
-  margin-right: 5px;
-  margin-bottom: -5px;
+  margin-right: 5.7px;
+  margin-bottom: -3px;
 }
 
 /* Merit Dialog */
