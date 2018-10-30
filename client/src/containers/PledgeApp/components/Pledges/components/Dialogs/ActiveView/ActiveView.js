@@ -37,14 +37,14 @@ const LoadableMeritsList = Loadable({
 export class ActiveView extends PureComponent {
   state = { index: 0 }
 
-  handleChange = (index) => {
-    this.setState({ index });
+  componentWillReceiveProps(nextProps) {
+    if (this.props.pledge !== nextProps.pledge) {
+      this.setState({ index: 0 });
+    }
   }
 
-  handleClose = () => {
-    this.setState({ index: 0 }, () => {
-      this.props.handleClose();
-    });
+  handleChange = (index) => {
+    this.setState({ index });
   }
 
   render() {
@@ -64,7 +64,7 @@ export class ActiveView extends PureComponent {
           title={fullName}
           titleStyle={{fontSize:'22px'}}
           open={this.props.open}
-          onRequestClose={this.handleClose}
+          onRequestClose={this.props.handleClose}
         >
           <Tabs 
             className="garnett-dialog-tabs"
@@ -140,7 +140,7 @@ export class ActiveView extends PureComponent {
           bodyClassName="garnett-dialog-body tabs grey"
           contentClassName="garnett-dialog-content"
           open={this.props.open}
-          onRequestClose={this.handleClose}
+          onRequestClose={this.props.handleClose}
           autoScrollBodyContent={true}
         >
           <Tabs
