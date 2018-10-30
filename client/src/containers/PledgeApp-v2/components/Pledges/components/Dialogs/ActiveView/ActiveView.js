@@ -19,6 +19,7 @@ const inkBarStyle = {
 
 const slideContainer = {
   marginTop: '48px',
+  minHeight: 'calc(100vh - 112px)',
   WebkitOverflowScrolling: 'touch', // iOS momentum scrolling
 };
 
@@ -67,6 +68,7 @@ export class ActiveView extends PureComponent {
           <Tabs 
             className="garnett-dialog-tabs"
             inkBarStyle={inkBarStyle}
+            value={this.state.index}
             onChange={this.handleChange}
           >
             <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0} />
