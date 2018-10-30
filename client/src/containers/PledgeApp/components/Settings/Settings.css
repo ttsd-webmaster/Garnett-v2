@@ -13,12 +13,14 @@
   align-items: center;
   background-color: var(--primary-color);
   color: #fff;
-  height: 40px;
+  height: 48px;
   width: 40%;
   max-width: 576px;
-  font-size: 16px;
+  font-size: 18px;
+  font-weight: 700;
   margin: 30px auto;
-  border-radius: 20px;
+  border-radius: 500px;
+  letter-spacing: 2px;
   text-transform: uppercase;
   cursor: pointer;
 }
