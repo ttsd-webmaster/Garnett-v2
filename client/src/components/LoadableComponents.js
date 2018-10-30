@@ -2,7 +2,7 @@ import React from 'react';
 import {
   LoadingLogin,
   LoadingHome,
-  LoadingPledgeApp,
+  LoadingMobilePledgeApp,
   LoadingDelibsApp,
   LoadingRusheeProfile,
   LoadingDataApp,
@@ -28,13 +28,13 @@ export const LoadableHome = Loadable({
   loading: LoadingHome
 });
 
-export const LoadablePledgeApp = Loadable({
-  loader: () => import('containers/PledgeApp/PledgeApp'),
+export const LoadableMobilePledgeApp = Loadable({
+  loader: () => import('containers/PledgeApp/MobilePledgeApp'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props} />;
   },
-  loading: LoadingPledgeApp
+  loading: LoadingMobilePledgeApp
 });
 
 export const LoadableDelibsApp = Loadable({

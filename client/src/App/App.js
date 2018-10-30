@@ -6,12 +6,12 @@ import { LoadingLogin } from 'helpers/loaders'
 import {
   LoadableLogin,
   LoadableHome,
-  LoadablePledgeApp,
+  LoadableMobilePledgeApp,
   LoadableDelibsApp,
   LoadableRusheeProfile,
   LoadableDataApp
-} from 'helpers/LoadableComponents';
-import { PledgeApp2 } from 'containers/PledgeApp-v2/PledgeApp-v2'
+} from 'components/LoadableComponents';
+import { PledgeApp } from 'containers/PledgeApp/PledgeApp'
 
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
@@ -275,7 +275,7 @@ export default class App extends Component {
     if (this.state.isAuthenticated) {
       if (window.innerWidth > 768) {
         return (
-          <PledgeApp2 
+          <PledgeApp
             state={this.state}
             history={history}
             logoutCallBack={this.logoutCallBack}
@@ -285,7 +285,7 @@ export default class App extends Component {
       }
       else {
         return (
-          <LoadablePledgeApp 
+          <LoadableMobilePledgeApp 
             state={this.state}
             history={history}
             logoutCallBack={this.logoutCallBack}
