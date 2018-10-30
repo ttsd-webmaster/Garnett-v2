@@ -1,4 +1,3 @@
-import 'containers/PledgeApp/components/Contacts/Contacts.css';
 import API from 'api/API.js';
 import { PledgeView } from './PledgeView/PledgeView.js';
 import { ActiveView } from './ActiveView/ActiveView.js';
@@ -12,25 +11,17 @@ const phoneStyle = {
 }
 
 export default class PledgeInfoDialog extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pledge: null,
-      index: 0
-    };
-  }
+  state = { pledge: null }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.pledge) {
-      this.setState({
-        pledge: nextProps.pledge,
-        index: 0
-      });
+    const { pledge, state } = nextProps;
+    if (pledge) {
+      this.setState({ pledge });
 
-      if (nextProps.state.status !== 'pledge') {
+      if (state.status !== 'pledge') {
         if (navigator.onLine) {
           const { displayName } = nextProps.state;
-          const pledgeDisplayName = nextProps.pledge.firstName + nextProps.pledge.lastName;
+          const pledgeDisplayName = pledge.firstName + pledge.lastName;
 
           API.getMeritsRemaining(displayName, pledgeDisplayName)
           .then((res) => {
@@ -44,12 +35,6 @@ export default class PledgeInfoDialog extends PureComponent {
         }
       }
     }
-  }
-
-  handleChange = (value) => {
-    this.setState({
-      index: value
-    });
   }
 
   render() {
@@ -76,10 +61,8 @@ export default class PledgeInfoDialog extends PureComponent {
             open={this.props.open}
             pledge={this.state.pledge}
             meritsRemaining={this.state.meritsRemaining}
-            index={this.state.index}
             phoneStyle={phoneStyle}
             handleClose={this.props.handleClose}
-            handleChange={this.handleChange}
             handleRequestOpen={this.props.handleRequestOpen}
             actions={actions}
           />
