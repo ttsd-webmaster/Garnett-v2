@@ -290,15 +290,16 @@ div, a {
 
 /* Loader */
 .loader-container {
-  height: calc(100vh - 100px);
+  height: calc(100vh - 110px);
   max-width: 100vw;
 }
 
 .line-scale-container {
   position: relative;
-  top: calc(50% - 75px);
-  left: calc(50% - 20px);
+  top: 50%;
+  left: 50%;
   width: max-content;
+  transform: translate(-50%, -50%);
 }
 .loading .line-scale-container {
   top: calc(50% - 50px);
