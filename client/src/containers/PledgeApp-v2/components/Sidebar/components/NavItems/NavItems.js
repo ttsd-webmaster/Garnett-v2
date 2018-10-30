@@ -1,23 +1,38 @@
 import './NavItems.css';
 
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 export function NavItems(props) {
   return (
     <nav id="nav-items">
-      <Link className="nav-item" to="/pledge-app/my-merits">
+      <NavLink
+        className="nav-item"
+        activeClassName="active"
+        to="/pledge-app/my-merits"
+        exact
+      >
         <i className="icon-star"></i>
         My Merits
-      </Link>
-      <Link className="nav-item" to="/pledge-app/pledge-brothers">
+      </NavLink>
+      <NavLink
+        className="nav-item"
+        activeClassName="active"
+        to="/pledge-app/pledges"
+        exact
+      >
         <i className="icon-users"></i>
         {props.status === 'pledge' ? "Pledge Brothers" : "Pledges"}
-      </Link>
-      <Link className="nav-item" to="/pledge-app/brothers">
+      </NavLink>
+      <NavLink
+        className="nav-item"
+        activeClassName="active"
+        to="/pledge-app/brothers"
+        exact
+      >
         <i className="icon-address-book"></i>
         Brothers
-      </Link>
+      </NavLink>
       {props.status === 'pledge' ? (
         <a className="nav-item" onClick={props.handleLogoutOpen}>
           <i className="icon-cog"></i>

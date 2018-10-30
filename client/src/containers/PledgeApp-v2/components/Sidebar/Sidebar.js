@@ -3,12 +3,12 @@ import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { AccountInfo } from './components/AccountInfo/AccountInfo';
 import { NavItems } from './components/NavItems/NavItems';
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export class Sidebar extends PureComponent {
+export class Sidebar extends Component {
   state = { open: false }
 
   goHome = () => {

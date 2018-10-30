@@ -13,7 +13,7 @@ const routes = [
     content: props => <MyMerits state={props.state} />
   },
   {
-    path: '/pledge-app/pledge-brothers',
+    path: '/pledge-app/pledges',
     exact: true,
     content: props => <Pledges state={props.state} />
   },
