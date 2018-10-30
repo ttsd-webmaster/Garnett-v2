@@ -157,8 +157,8 @@ exports.merit_as_active = function(req, res) {
       if (status !== 'pipm' && !isChalkboard && !isPCGreet) {
         const remainingMerits = active.val().Pledges[pledge.value].merits - merit.amount;
 
-        if (merit.amount > 0 && 
-            remainingMerits < 0 && 
+        if (merit.amount > 0 &&
+            remainingMerits < 0 &&
             !res.headersSent) {
           res.sendStatus(400).send(pledge.label);
         }
