@@ -149,21 +149,21 @@ exports.merit_as_active = function(req, res) {
   } = req.body;
   let { merit } = req.body;
 
-  selectedPledges.forEach((child) => {
+  selectedPledges.forEach((pledge) => {
     const activeRef = admin.database().ref('/users/' + displayName);
-    const pledgeRef = admin.database().ref('/users/' + child.value);
+    const pledgeRef = admin.database().ref('/users/' + pledge.value);
 
     activeRef.once('value', (active) => {
       if (status !== 'pipm' && !isChalkboard && !isPCGreet) {
-        const remainingMerits = active.val().Pledges[displayName].merits - merit.amount;
+        const remainingMerits = active.val().Pledges[pledge.value].merits - merit.amount;
 
         if (merit.amount > 0 && 
             remainingMerits < 0 && 
             !res.headersSent) {
-          res.sendStatus(400).send(child.label);
+          res.sendStatus(400).send(pledge.label);
         }
         else {
-          const activePledgeRef = active.ref.child('/Pledges/' + child.value);
+          const activePledgeRef = active.ref.child('/Pledges/' + pledge.value);
 
           activePledgeRef.update({
             merits: remainingMerits
