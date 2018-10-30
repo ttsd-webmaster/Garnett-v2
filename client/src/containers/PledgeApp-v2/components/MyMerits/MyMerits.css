@@ -48,6 +48,8 @@
 
 /* Total Merits for Pledges */
 .total-merits-container {
+  position: fixed;
+  top: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,14 +57,17 @@
   color: #777;
   height: 55px;
   width: 100%;
-  font-size: 18px;
-  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+  font-weight: 500;
+  border-bottom: 1px solid #e0e0e0;
+  z-index: 10;
 }
-.total-merits {
+.total-merits-container .total-merits {
   font-family: 'LeagueSpartan-Bold';
-  font-size: 24px;
+  font-size: 20px;
   color: rgba(0, 0, 0, 0.87);
   margin-right: 5px;
+  margin-bottom: -5px;
 }
 
 /* Merit Dialog */
