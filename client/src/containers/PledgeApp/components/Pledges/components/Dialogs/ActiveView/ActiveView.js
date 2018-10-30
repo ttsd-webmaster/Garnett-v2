@@ -42,8 +42,9 @@ export class ActiveView extends PureComponent {
   }
 
   handleClose = () => {
-    this.props.handleClose();
-    this.setState({ index: 0 });
+    this.setState({ index: 0 }, () => {
+      this.props.handleClose();
+    });
   }
 
   render() {
