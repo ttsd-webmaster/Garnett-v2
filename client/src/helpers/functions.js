@@ -66,24 +66,21 @@ export function registerNotificationToken(user, callback) {
 
             API.saveMessagingToken(displayName, currentToken)
             .then(messageRes => {
-              callback(user)
+              console.log(messageRes)
             })
             .catch(error => console.log(`Error: ${error}`));
           } 
           else {
             // Show permission request.
             console.log('No Instance ID token available. Request permission to generate one.');
-            callback(user)
           }
         })
         .catch((err) => {
           console.log('An error occurred while retrieving token. ', err);
-          callback(user)
         });
       })
       .catch((err) => {
         console.log('Unable to get permission to notify.', err);
-        callback(user)
       });
     });
   });
@@ -91,10 +88,10 @@ export function registerNotificationToken(user, callback) {
 
 export function loginCheck() {
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  return (isSafari || iOSversion()[0] < 11 ||
-          document.documentMode ||
-          /Edge/.test(navigator.userAgent) ||
-          process.env.NODE_ENV === 'development')
+  return (!isSafari || iOSversion()[0] > 11 ||
+          !document.documentMode ||
+          !/Edge/.test(navigator.userAgent) ||
+          process.env.NODE_ENV === 'production')
 }
 
 export function validateEmail(email) {
