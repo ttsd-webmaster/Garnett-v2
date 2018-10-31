@@ -23,7 +23,7 @@ const snackbarText = {
   color: 'var(--secondary-dark)'
 };
 
-export default class Login extends PureComponent {
+export class Login extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -163,46 +163,43 @@ export default class Login extends PureComponent {
         completingTaskMessage: 'Logging in...'
       });
 
-      API.getFirebaseData()
-      .then(res => {
-        initializeFirebase(res.data);
+      initializeFirebase();
 
-        loadFirebase('auth')
-        .then(() => {
-          const firebase= window.firebase;
+      loadFirebase('auth')
+      .then(() => {
+        const firebase= window.firebase;
 
-          firebase.auth().signInWithEmailAndPassword(signEmail, signPassword)
-          .then((user) => {
-            if (user && user.emailVerified) {
-              loadFirebase('database')
-              .then(() => {
-                const { displayName } = user;
-                const userRef = firebase.database().ref('/users/' + displayName);
+        firebase.auth().signInWithEmailAndPassword(signEmail, signPassword)
+        .then((user) => {
+          if (user && user.emailVerified) {
+            loadFirebase('database')
+            .then(() => {
+              const { displayName } = user;
+              const userRef = firebase.database().ref('/users/' + displayName);
 
-                userRef.once('value', (snapshot) => {
-                  const user = snapshot.val();
-                  localStorage.setItem('data', JSON.stringify(user));
+              userRef.once('value', (snapshot) => {
+                const user = snapshot.val();
 
-                  this.props.loginCallBack(user);
-                });
+                localStorage.setItem('data', JSON.stringify(user));
+                this.props.loginCallBack(user);
               });
-            }
-            else {
-              const message = 'Email is not verified.';
-
-              this.setState({ openCompletingTask: false });
-              this.handleRequestOpen(message);
-            }
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-            const message = 'Email or password is incorrect.';
+            });
+          }
+          else {
+            const message = 'Email is not verified.';
 
             this.setState({ openCompletingTask: false });
             this.handleRequestOpen(message);
-          });
+          }
+        })
+        .catch((error) => {
+          console.log(`Error: ${error}`);
+          const message = 'Email or password is incorrect.';
+
+          this.setState({ openCompletingTask: false });
+          this.handleRequestOpen(message);
         });
-      })
+      });
     }
   }
 
@@ -356,19 +353,19 @@ export default class Login extends PureComponent {
 
   render() {
     return (
-      <div className="login">
-        <div className="animate-in">
-          {!isMobileDevice() && (
-            <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
-              <img className="logo" src={require('./images/logo.png')} alt="logo"/>
-            </a>
-          )}
+      <div className="login animate-in">
+        {!isMobileDevice() && (
+          <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
+            <img className="logo" src={require('./images/logo.png')} alt="logo"/>
+          </a>
+        )}
 
-          <div className="login-logo">
-            <img src={require('./images/garnett.svg')} alt="garnett"/>
-            <h1> Garne<span className="tt">tt</span> </h1>
-          </div>
+        <div className="login-logo">
+          <img src={require('./images/garnett.svg')} alt="garnett"/>
+          <h1> Garne<span className="tt">tt</span> </h1>
+        </div>
 
+        <div className="login-container">
           <div className="sign-options">
             <span className="sign-in underline"
               id="sign-in"
@@ -383,50 +380,49 @@ export default class Login extends PureComponent {
               Sign Up
             </span>
           </div>
+          <SignIn
+            signEmail={this.state.signEmail}
+            signPassword={this.state.signPassword}
+            signEmailValidation={this.state.signEmailValidation}
+            signPasswordValidation={this.state.signPasswordValidation}
+            login={this.login}
+            handleChange={this.handleChange}
+            handleRequestOpen={this.handleRequestOpen}
+            active={this.active}
+          />
+          <SignUp
+            firstName={this.state.firstName}
+            lastName={this.state.lastName}
+            className={this.state.className}
+            major={this.state.major}
+            year={this.state.year}
+            phone={this.state.phone}
+            email={this.state.email}
+            code={this.state.code}
+            password={this.state.password}
+            confirmation={this.state.confirmation}
+            firstNameValidation={this.state.firstNameValidation}
+            lastNameValidation={this.state.lastNameValidation}
+            classNameValidation={this.state.classNameValidation}
+            majorValidation={this.state.majorValidation}
+            yearValidation={this.state.yearValidation}
+            phoneValidation={this.state.phoneValidation}
+            emailValidation={this.state.emailValidation}
+            codeValidation={this.state.codeValidation}
+            passwordValidation={this.state.passwordValidation}
+            confirmationValidation={this.state.confirmationValidation}
+            signUp={this.signUp}
+            handleChange={this.handleChange}
+            handleRequestOpen={this.handleRequestOpen} 
+          />
+          <ForgotPassword
+            forgotEmail={this.state.forgotEmail}
+            forgotEmailValidation={this.state.forgotEmailValidation}
+            forgotPassword={this.forgotPassword}
+            handleChange={this.handleChange}
+            handleRequestOpen={this.handleRequestOpen}
+          />
         </div>
-
-        <SignIn
-          signEmail={this.state.signEmail}
-          signPassword={this.state.signPassword}
-          signEmailValidation={this.state.signEmailValidation}
-          signPasswordValidation={this.state.signPasswordValidation}
-          login={this.login}
-          handleChange={this.handleChange}
-          handleRequestOpen={this.handleRequestOpen}
-          active={this.active}
-        />
-        <SignUp
-          firstName={this.state.firstName}
-          lastName={this.state.lastName}
-          className={this.state.className}
-          major={this.state.major}
-          year={this.state.year}
-          phone={this.state.phone}
-          email={this.state.email}
-          code={this.state.code}
-          password={this.state.password}
-          confirmation={this.state.confirmation}
-          firstNameValidation={this.state.firstNameValidation}
-          lastNameValidation={this.state.lastNameValidation}
-          classNameValidation={this.state.classNameValidation}
-          majorValidation={this.state.majorValidation}
-          yearValidation={this.state.yearValidation}
-          phoneValidation={this.state.phoneValidation}
-          emailValidation={this.state.emailValidation}
-          codeValidation={this.state.codeValidation}
-          passwordValidation={this.state.passwordValidation}
-          confirmationValidation={this.state.confirmationValidation}
-          signUp={this.signUp}
-          handleChange={this.handleChange}
-          handleRequestOpen={this.handleRequestOpen} 
-        />
-        <ForgotPassword
-          forgotEmail={this.state.forgotEmail}
-          forgotEmailValidation={this.state.forgotEmailValidation}
-          forgotPassword={this.forgotPassword}
-          handleChange={this.handleChange}
-          handleRequestOpen={this.handleRequestOpen}
-        />
 
         <Snackbar
           bodyStyle={snackbarBackground}

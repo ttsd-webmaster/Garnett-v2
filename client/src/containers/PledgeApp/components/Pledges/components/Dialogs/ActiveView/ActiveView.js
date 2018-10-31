@@ -58,8 +58,8 @@ export class ActiveView extends PureComponent {
     } = this.props.pledge;
     const fullName = `${firstName} ${lastName}`;
 
-    return (
-      isMobileDevice() ? (
+    if (isMobileDevice()) {
+      return (
         <FullscreenDialog
           title={fullName}
           titleStyle={{fontSize:'22px'}}
@@ -131,76 +131,78 @@ export class ActiveView extends PureComponent {
             />
           </SwipeableViews>
         </FullscreenDialog>
-      ) : (
-        <Dialog
-          title={fullName}
-          titleClassName="garnett-dialog-title"
-          actions={this.props.actions}
-          modal={false}
-          bodyClassName="garnett-dialog-body tabs grey"
-          contentClassName="garnett-dialog-content"
-          open={this.props.open}
-          onRequestClose={this.props.handleClose}
-          autoScrollBodyContent={true}
-        >
-          <Tabs
-            className="garnett-dialog-tabs"
-            inkBarStyle={inkBarStyle}
-            onChange={this.handleChange}
-          >
-            <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
-              <img className="dialog-photo" src={photoURL} alt="User" />
-              <List>
-                <Divider />
-                <ListItem
-                  className="garnett-list-item"
-                  primaryText="Merits Remaining"
-                  secondaryText={`${this.props.meritsRemaining} merits`}
-                  leftIcon={
-                    <i className="icon-star garnett-icon"></i>
-                  }
-                />
-                <Divider className="garnett-divider" inset={true} />
-                <a style={this.props.phoneStyle} href={`tel:${phone}`}>
-                  <ListItem
-                    className="garnett-list-item"
-                    primaryText="Phone Number"
-                    secondaryText={phone}
-                    leftIcon={
-                      <i className="icon-phone garnett-icon"></i>
-                    }
-                  />
-                </a>
-                <Divider className="garnett-divider" inset={true} />
-                <ListItem
-                  className="garnett-list-item"
-                  primaryText="Email Address"
-                  secondaryText={email}
-                  leftIcon={
-                    <i className="icon-mail-alt garnett-icon"></i>
-                  }
-                />
-                <Divider className="garnett-divider" inset={true} />
-                <ListItem
-                  className="garnett-list-item"
-                  primaryText="Major"
-                  secondaryText={major}
-                  leftIcon={
-                    <i className="icon-graduation-cap garnett-icon"></i>
-                  }
-                />
-                <Divider className="garnett-divider" />
-              </List>
-            </Tab>
-            <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
-              <LoadableMeritsList
-                pledgeName={firstName + lastName}
-                handleRequestOpen={this.props.handleRequestOpen}
-              />
-            </Tab>
-          </Tabs>
-        </Dialog>
       )
+    }
+
+    return (
+      <Dialog
+        title={fullName}
+        titleClassName="garnett-dialog-title"
+        actions={this.props.actions}
+        modal={false}
+        bodyClassName="garnett-dialog-body tabs grey"
+        contentClassName="garnett-dialog-content"
+        open={this.props.open}
+        onRequestClose={this.props.handleClose}
+        autoScrollBodyContent={true}
+      >
+        <Tabs
+          className="garnett-dialog-tabs"
+          inkBarStyle={inkBarStyle}
+          onChange={this.handleChange}
+        >
+          <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
+            <img className="dialog-photo" src={photoURL} alt="User" />
+            <List>
+              <Divider />
+              <ListItem
+                className="garnett-list-item"
+                primaryText="Merits Remaining"
+                secondaryText={`${this.props.meritsRemaining} merits`}
+                leftIcon={
+                  <i className="icon-star garnett-icon"></i>
+                }
+              />
+              <Divider className="garnett-divider" inset={true} />
+              <a style={this.props.phoneStyle} href={`tel:${phone}`}>
+                <ListItem
+                  className="garnett-list-item"
+                  primaryText="Phone Number"
+                  secondaryText={phone}
+                  leftIcon={
+                    <i className="icon-phone garnett-icon"></i>
+                  }
+                />
+              </a>
+              <Divider className="garnett-divider" inset={true} />
+              <ListItem
+                className="garnett-list-item"
+                primaryText="Email Address"
+                secondaryText={email}
+                leftIcon={
+                  <i className="icon-mail-alt garnett-icon"></i>
+                }
+              />
+              <Divider className="garnett-divider" inset={true} />
+              <ListItem
+                className="garnett-list-item"
+                primaryText="Major"
+                secondaryText={major}
+                leftIcon={
+                  <i className="icon-graduation-cap garnett-icon"></i>
+                }
+              />
+              <Divider className="garnett-divider" />
+            </List>
+          </Tab>
+          <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
+            <LoadableMeritsList
+              pledgeName={firstName + lastName}
+              handleRequestOpen={this.props.handleRequestOpen}
+            />
+          </Tab>
+        </Tabs>
+      </Dialog>
     )
   }
 }

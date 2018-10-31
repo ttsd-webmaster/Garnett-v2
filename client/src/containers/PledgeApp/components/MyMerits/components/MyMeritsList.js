@@ -6,10 +6,10 @@ import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export function MyMeritsList(props) {
+export function MyMeritsList({ merits, handleDeleteOpen }) {
   return (
     <List className="animate-in garnett-list">
-      {props.merits.map((merit, i) => (
+      {merits.map((merit, i) => (
         <LazyLoad
           height={88}
           offset={window.innerHeight}
@@ -30,7 +30,7 @@ export function MyMeritsList(props) {
                 <p> {merit.description} </p>
               }
               secondaryTextLines={2}
-              onClick={() => props.handleDeleteOpen(merit)}
+              onClick={() => handleDeleteOpen(merit)}
             >
               <div className="merit-amount-container">
                 <p className="merit-date"> {merit.date} </p>

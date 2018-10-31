@@ -4,7 +4,7 @@ import React from 'react';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export function RusheeInfo(props) {
+export function RusheeInfo({ rushee }) {
   return (
     <List className="garnett-list">
       {rusheeInfo.map((info, i) => (
@@ -13,7 +13,7 @@ export function RusheeInfo(props) {
           <ListItem
             className="garnett-list-item rushee long"
             primaryText={info.label}
-            secondaryText={this.props.rushee[info.value]}
+            secondaryText={rushee[info.value]}
           />
           <Divider />
         </div>

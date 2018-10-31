@@ -174,59 +174,59 @@ export default class ActiveComplaints extends Component {
   }
 
   render() {
+    if (!this.state.loaded) {
+      return <LoadingComponent />
+    }
+    
     return (
-      this.state.loaded ? (
-        <div>
-          <MyComplaints
-            state={this.props.state}
-            approvedComplaints={this.state.approvedComplaints}
-            pendingComplaints={this.state.pendingComplaints}
-            handleRequestOpen={this.props.handleRequestOpen}
-            reverse={this.state.reverse}
-            reverseComplaints={this.reverse}
-          />
-          <PastComplaints
-            complaints={this.state.complaints}
-            reverse={this.state.reverse}
-            reverseComplaints={this.reverse}
-          />
+      <div>
+        <MyComplaints
+          state={this.props.state}
+          approvedComplaints={this.state.approvedComplaints}
+          pendingComplaints={this.state.pendingComplaints}
+          handleRequestOpen={this.props.handleRequestOpen}
+          reverse={this.state.reverse}
+          reverseComplaints={this.reverse}
+        />
+        <PastComplaints
+          complaints={this.state.complaints}
+          reverse={this.state.reverse}
+          reverseComplaints={this.reverse}
+        />
 
-          <Portal>
-            <BottomNavigation 
-              id="complaints-tabs" 
-              className="bottom-tabs"
-              style={{'display': 'none'}}
-              selectedIndex={this.state.selectedIndex}
-            >
-              <BottomNavigationItem
-                label="My Complaints"
-                icon={<div></div>}
-                onClick={() => this.select(0)}
-              />
-              <BottomNavigationItem
-                label="Past Complaints"
-                icon={<div></div>}
-                onClick={() => this.select(1)}
-              />
-            </BottomNavigation>
-          </Portal>
+        <Portal>
+          <BottomNavigation 
+            id="complaints-tabs" 
+            className="bottom-tabs"
+            style={{'display': 'none'}}
+            selectedIndex={this.state.selectedIndex}
+          >
+            <BottomNavigationItem
+              label="My Complaints"
+              icon={<div></div>}
+              onClick={() => this.select(0)}
+            />
+            <BottomNavigationItem
+              label="Past Complaints"
+              icon={<div></div>}
+              onClick={() => this.select(1)}
+            />
+          </BottomNavigation>
+        </Portal>
 
-          <Portal>
-            <FloatingActionButton id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
-              <i className="icon-pencil"></i>
-            </FloatingActionButton>
-          </Portal>
+        <Portal>
+          <FloatingActionButton id="add-complaint" className="fixed-button hidden" onClick={this.handleOpen}>
+            <i className="icon-pencil"></i>
+          </FloatingActionButton>
+        </Portal>
 
-          <LoadableAddComplaintDialog
-            open={this.state.open}
-            state={this.props.state}
-            handleClose={this.handleClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
-        </div>
-      ) : (
-        <LoadingComponent />
-      )
+        <LoadableAddComplaintDialog
+          open={this.state.open}
+          state={this.props.state}
+          handleClose={this.handleClose}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
+      </div>
     )
   }
 }

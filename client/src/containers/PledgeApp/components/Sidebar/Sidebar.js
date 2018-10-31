@@ -1,7 +1,6 @@
 import './Sidebar.css';
 import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
-import { AccountInfo } from './components/AccountInfo/AccountInfo';
-import { NavItems } from './components/NavItems/NavItems';
+import { AccountInfo, NavItems } from './components';
 
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';

@@ -6,9 +6,8 @@ import {
   androidBackClose
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { FilterHeader } from 'components/FilterHeader';
-import { MyMeritsList } from './components/MyMeritsList';
-import { LoadableDeleteMeritDialog } from './Dialogs';
+import { FilterHeader } from 'components';
+import { MyMeritsList, LoadableDeleteMeritDialog } from './components';
 import {
   LoadablePledgeMeritDialog,
   LoadableActiveMeritDialog
@@ -86,62 +85,62 @@ export class MyMerits extends PureComponent {
 
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let { merits, reverse } = this.state;
+    let { merits, reverse, loaded } = this.state;
 
     if (reverse) {
       merits = merits.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
 
+    if (!loaded) {
+      return <LoadingComponent />
+    }
+
     return (
-      this.state.loaded ? (
-        <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
-          <FilterHeader
-            title="Recent"
-            toggleIcon={toggleIcon}
-            filterName={this.state.filterName}
-            openPopover={this.openPopover}
-            reverse={this.reverse}
+      <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+        <FilterHeader
+          title="Recent"
+          toggleIcon={toggleIcon}
+          filterName={this.state.filterName}
+          openPopover={this.openPopover}
+          reverse={this.reverse}
+        />
+        <MyMeritsList
+          merits={merits}
+          handleDeleteOpen={this.handleDeleteOpen}
+        />
+        {isMobileDevice() && (
+          <Fragment>
+            {this.props.state.status === 'pledge' ? (
+              <LoadablePledgeMeritDialog
+                open={this.props.openMerit}
+                state={this.props.state}
+                handleMeritClose={this.props.handleMeritClose}
+                handleRequestOpen={this.props.handleRequestOpen}
+              />
+            ) : (
+              <LoadableActiveMeritDialog
+                open={this.props.openMerit}
+                state={this.props.state}
+                handleMeritClose={this.props.handleMeritClose}
+                handleRequestOpen={this.props.handleRequestOpen}
+              />
+            )}
+            <FloatingActionButton className="fixed-button" onClick={this.props.handleMeritOpen}>
+              <i className="icon-pencil"></i>
+            </FloatingActionButton>
+          </Fragment>
+        )}
+        {this.props.state.status === 'pledge' && (
+          <LoadableDeleteMeritDialog
+            open={this.state.openDelete}
+            state={this.props.state}
+            merit={this.state.merit}
+            handleDeleteClose={this.handleDeleteClose}
+            handleRequestOpen={this.props.handleRequestOpen}
           />
-          <MyMeritsList
-            merits={merits}
-            handleDeleteOpen={this.handleDeleteOpen}
-          />
-          {isMobileDevice() && (
-            <Fragment>
-              {this.props.state.status === 'pledge' ? (
-                <LoadablePledgeMeritDialog
-                  open={this.props.openMerit}
-                  state={this.props.state}
-                  handleMeritClose={this.props.handleMeritClose}
-                  handleRequestOpen={this.props.handleRequestOpen}
-                />
-              ) : (
-                <LoadableActiveMeritDialog
-                  open={this.props.openMerit}
-                  state={this.props.state}
-                  handleMeritClose={this.props.handleMeritClose}
-                  handleRequestOpen={this.props.handleRequestOpen}
-                />
-              )}
-              <FloatingActionButton className="fixed-button" onClick={this.props.handleMeritOpen}>
-                <i className="icon-pencil"></i>
-              </FloatingActionButton>
-            </Fragment>
-          )}
-          {this.props.state.status === 'pledge' && (
-            <LoadableDeleteMeritDialog
-              open={this.state.openDelete}
-              state={this.props.state}
-              merit={this.state.merit}
-              handleDeleteClose={this.handleDeleteClose}
-              handleRequestOpen={this.props.handleRequestOpen}
-            />
-          )}
-        </div>
-      ) : (
-        <LoadingComponent />
-      )
+        )}
+      </div>
     )
   }
 }

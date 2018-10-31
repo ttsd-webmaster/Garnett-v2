@@ -24,37 +24,37 @@ export class MyData extends PureComponent {
   }
 
   render() {
+    if (!this.state.loaded) {
+      return <LoadingDataApp />
+    }
+
     return (
       <div id="my-data">
-        {this.state.loaded ? (
-          <div style={{animation: 'fadeIn .25s ease-in forwards'}}>
-            <img className="user-photo" src={this.props.state.photoURL} alt="User" />
+        <div style={{animation: 'fadeIn .25s ease-in forwards'}}>
+          <img className="user-photo" src={this.props.state.photoURL} alt="User" />
 
-            {categories.map((category, i) => (
-              <div className="data-card" key={i}>
-                <div className="data-title"> {category}s </div>
-                {[...new Map(this.state.myData)].map((data, j) => (
-                  (data[0].toLowerCase().includes(category.toLowerCase()) && (
-                    <div key={j}>
-                      <Divider className="garnett-divider" />
-                      <ListItem
-                        className="garnett-list-item"
-                        primaryText={
-                          <p className="data-key"> {data[0]} </p>
-                        }
-                      >
-                        <p className="data-value my-data"> {data[1]} </p>
-                      </ListItem>
-                      <Divider className="garnett-divider" />
-                    </div>
-                  ))
-                ))}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <LoadingDataApp />
-        )}
+          {categories.map((category, i) => (
+            <div className="data-card" key={i}>
+              <div className="data-title"> {category}s </div>
+              {[...new Map(this.state.myData)].map((data, j) => (
+                (data[0].toLowerCase().includes(category.toLowerCase()) && (
+                  <div key={j}>
+                    <Divider className="garnett-divider" />
+                    <ListItem
+                      className="garnett-list-item"
+                      primaryText={
+                        <p className="data-key"> {data[0]} </p>
+                      }
+                    >
+                      <p className="data-value my-data"> {data[1]} </p>
+                    </ListItem>
+                    <Divider className="garnett-divider" />
+                  </div>
+                ))
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     )
   }

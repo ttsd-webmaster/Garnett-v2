@@ -17,11 +17,11 @@ const completingTaskDialog = {
   alignItems: 'center'
 };
 
-function LoadingPage(props) {
+function LoadingPage({ name }) {
   return (
     <div className="loading-container">
       <div className="app-header no-tabs">
-        <span> {props.name} </span>
+        <span> {name} </span>
         <LoadingComponent />
       </div>
     </div>
@@ -31,7 +31,7 @@ function LoadingPage(props) {
 export function LoadingLogin() {
   if (isMobileDevice()) {
     return (
-      <div className="loading">
+      <div className="loading-container">
         <div className="line-scale-container">
           <div className="line-scale">
             <div></div>
@@ -45,18 +45,12 @@ export function LoadingLogin() {
     )
   } else {
     return (
-      <div className="loading">
+      <div className="loading-container">
         <div className="loading-image"></div>
       </div>
     )
   }
 }
-
-export const LoadingMobilePledgeApp = (props) => (
-  <div className="loading-container">
-    <BottomNavigation className="bottom-tabs" />
-  </div>
-)
 
 export const LoadingDataApp =  () => (
   <Fragment>

@@ -61,23 +61,22 @@ export class RusheeList extends PureComponent {
   }
 
   render() {
+    if (!this.state.loaded) {
+      return <LoadingComponent />
+    }
     return (
-      this.state.loaded ? (
-        <div className="animate-in delibs-app">
-          <Subheader className="garnett-subheader">Rushees</Subheader>
-          <List className="garnett-list">
-            {this.state.rushees.map((rushee) => (
-              <RusheeRow
-                rushee={rushee}
-                state={this.props.state}
-                history={this.props.history}
-              />
-            ))}
-          </List>
-        </div>
-      ) : (
-        <LoadingComponent />
-      ) 
+      <div className="animate-in delibs-app">
+        <Subheader className="garnett-subheader">Rushees</Subheader>
+        <List className="garnett-list">
+          {this.state.rushees.map((rushee) => (
+            <RusheeRow
+              rushee={rushee}
+              state={this.props.state}
+              history={this.props.history}
+            />
+          ))}
+        </List>
+      </div>
     )
   }
 }

@@ -3,46 +3,52 @@ import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
-export function Filter(props) {
+export function Filter({
+  open,
+  anchorEl,
+  closePopover,
+  filterName,
+  setFilter
+}) {
   return (
     <Popover
-      open={props.open}
-      anchorEl={props.anchorEl}
+      open={open}
+      anchorEl={anchorEl}
       anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
-      onRequestClose={props.closePopover}
+      onRequestClose={closePopover}
       animation={PopoverAnimationVertical}
     >
       <Menu>
         <MenuItem
           primaryText="Last Name"
           insetChildren
-          checked={props.filterName === 'Last Name'}
-          onClick={() => props.setFilter('Last Name')}
+          checked={filterName === 'Last Name'}
+          onClick={() => setFilter('Last Name')}
         />
         <MenuItem
           primaryText="First Name"
           insetChildren
-          checked={props.filterName === 'First Name'}
-          onClick={() => props.setFilter('First Name')}
+          checked={filterName === 'First Name'}
+          onClick={() => setFilter('First Name')}
         />
         <MenuItem
           primaryText="Year"
           insetChildren
-          checked={props.filterName === 'Year'}
-          onClick={() => props.setFilter('Year')}
+          checked={filterName === 'Year'}
+          onClick={() => setFilter('Year')}
         />
         <MenuItem
           primaryText="Major"
           insetChildren
-          checked={props.filterName === 'Major'}
-          onClick={() => props.setFilter('Major')}
+          checked={filterName === 'Major'}
+          onClick={() => setFilter('Major')}
         />
         <MenuItem
           primaryText="Total Merits"
           insetChildren
-          checked={props.filterName === 'Total Merits'}
-          onClick={() => props.setFilter('Total Merits')}
+          checked={filterName === 'Total Merits'}
+          onClick={() => setFilter('Total Merits')}
         />
       </Menu>
     </Popover>

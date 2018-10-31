@@ -3,10 +3,10 @@ import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export function PledgeList(props) {
+export function PledgeList({ pledges, handleOpen }) {
   return (
     <List className="garnett-list">
-      {props.pledges.map((pledge, i) => (
+      {pledges.map((pledge, i) => (
         <div key={i}>
           <Divider className="garnett-divider large" inset={true} />
           <ListItem
@@ -23,7 +23,7 @@ export function PledgeList(props) {
               </p>
             }
             secondaryTextLines={2}
-            onClick={() => props.handleOpen(pledge)}
+            onClick={() => handleOpen(pledge)}
           >
             <p className="pledge-merits"> {pledge.totalMerits} </p>
           </ListItem>

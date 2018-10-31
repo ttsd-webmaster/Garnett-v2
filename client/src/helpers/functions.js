@@ -1,3 +1,5 @@
+import API from 'api/API.js';
+
 // Used to get tab color for Pledge App
 export function getTabStyle(isActive) {
   return {color: isActive ? 'var(--primary-color)' : 'var(--secondary-light)'};
@@ -13,18 +15,18 @@ export function isMobileDevice() {
           navigator.userAgent.match(/Windows Phone/i))
 };
 
-export function initializeFirebase(data) {
+export function initializeFirebase() {
   loadFirebase('app')
   .then(() => {
-    let firebase = window.firebase;
-    let firebaseData = localStorage.getItem('firebaseData');
-
+    const { firebase } = window;
     if (!firebase.apps.length) {
-      firebase.initializeApp(data);
-
-      if (!firebaseData) {
-        localStorage.setItem('firebaseData', JSON.stringify(data));
-      }
+      firebase.initializeApp({
+        apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+        authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+        databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+        storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID
+      });
     }
   });
 }
@@ -38,6 +40,61 @@ export function loadFirebase(module) {
     script.onerror = () => { throw new Error(); };
     document.head.appendChild(script);
   });
+}
+
+export function registerNotificationToken(user, callback) {
+  const displayName = user.firstName + user.lastName;
+  const swUrl = 'service-worker.js';
+
+  navigator.serviceWorker.getRegistration(swUrl)
+  .then((registration) => {
+    loadFirebase('messaging')
+    .then(() => {
+      const { firebase } = window;
+      const messaging = firebase.messaging();
+      messaging.useServiceWorker(registration);
+
+      messaging.requestPermission()
+      .then(() => {
+        console.log('Notification permission granted.');
+        // Get Instance ID token. Initially this makes a network call, once retrieved
+        // subsequent calls to getToken will return from cache.
+        messaging.getToken()
+        .then((currentToken) => {
+          if (currentToken) {
+            localStorage.setItem('registrationToken', currentToken);
+
+            API.saveMessagingToken(displayName, currentToken)
+            .then(messageRes => {
+              callback()
+            })
+            .catch(error => console.log(`Error: ${error}`));
+          } 
+          else {
+            // Show permission request.
+            console.log('No Instance ID token available. Request permission to generate one.');
+            callback()
+          }
+        })
+        .catch((err) => {
+          console.log('An error occurred while retrieving token. ', err);
+          callback()
+        });
+      })
+      .catch((err) => {
+        console.log('Unable to get permission to notify.', err);
+        callback()
+      });
+    });
+  });
+}
+
+export function loginCheck() {
+  const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+  return (isSafari || iOSversion()[0] < 11 ||
+          document.documentMode ||
+          /Edge/.test(navigator.userAgent) ||
+          process.env.NODE_ENV === 'development')
 }
 
 export function validateEmail(email) {
@@ -77,15 +134,15 @@ export function mapsSelector(location) {
 }
 
 export function invalidSafariVersion() {
-  let nAgt = navigator.userAgent;
-  let verOffset;
+  const nAgt = navigator.userAgent;
+  let versionOffset = nAgt.indexOf('Safari');
 
-  if ((verOffset = nAgt.indexOf('Safari')) !== -1) {
-    let version;
-    version = nAgt.substring(verOffset + 7);
+  if (versionOffset !== -1) {
+    let version = nAgt.substring(versionOffset + 7);
+    versionOffset = nAgt.indexOf('Version');
 
-    if ((verOffset = nAgt.indexOf('Version')) !== -1) {
-      version = nAgt.substring(verOffset + 8);
+    if (versionOffset !== -1) {
+      version = nAgt.substring(versionOffset + 8);
     }
 
     version = version.split(".")[0];

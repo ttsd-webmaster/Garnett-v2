@@ -1,18 +1,22 @@
-import { Header } from 'components/Header';
+import { Header } from 'components';
 import { RusheeList } from './components/RusheeList';
 import { LoadableVoteDialog } from './RusheeProfile/components/Dialogs';
 
 import React from 'react';
 
-export default function DelibsApp(props) {
+export function DelibsApp({
+  history,
+  state,
+  handleRequestOpen
+}) {
   return (
     <div className="loading-container">
-      <Header title="Delibs App" noTabs history={props.history} />
-      <RusheeList state={props.state} />
-      {props.state.status !== 'regent' && (
+      <Header title="Delibs App" noTabs history={history} />
+      <RusheeList state={state} />
+      {state.status !== 'regent' && (
         <LoadableVoteDialog
-          state={props.state}
-          handleRequestOpen={props.handleRequestOpen}
+          state={state}
+          handleRequestOpen={handleRequestOpen}
         />
       )}
     </div>

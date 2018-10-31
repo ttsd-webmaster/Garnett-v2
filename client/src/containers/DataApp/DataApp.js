@@ -3,12 +3,12 @@ import 'containers/PledgeApp/MobilePledgeApp.css';
 import { PledgeData } from './components/PledgeData/PledgeData';
 import { RushData } from './components/RushData/RushData';
 import { MyData } from './components/MyData/MyData';
-import { Header } from 'components/Header';
+import { Header } from 'components';
 
 import React, { PureComponent } from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
-export default class DataApp extends PureComponent {
+export class DataApp extends PureComponent {
   state = { selectedIndex: 0 }
 
   componentDidMount() {
