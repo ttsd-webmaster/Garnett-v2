@@ -7,19 +7,17 @@ import React, { Component } from 'react';
 export default class Complaints extends Component {
   render() {
     const { status } = this.props.state;
+
+    if (status === 'pledge') {
+      return <PledgeComplaints state={this.props.state} />
+    }
     
     return (
-      status === 'pledge' ? (
-        <PledgeComplaints
-          state={this.props.state}
-        />
-      ) : (
-        <ActiveComplaints 
-          state={this.props.state}
-          index={this.props.index}
-          handleRequestOpen={this.props.handleRequestOpen}
-        />
-      )
+      <ActiveComplaints 
+        state={this.props.state}
+        index={this.props.index}
+        handleRequestOpen={this.props.handleRequestOpen}
+      />
     )
   }
 }

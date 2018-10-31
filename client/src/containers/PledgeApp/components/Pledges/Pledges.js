@@ -3,10 +3,8 @@ import '../MyMerits/MyMerits.css';
 import API from 'api/API.js';
 import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { FilterHeader } from 'components/FilterHeader';
-import { PledgeList } from './components/PledgeList';
-import { Filter } from './components/Filter';
-import { LoadablePledgeInfoDialog } from './components/Dialogs';
+import { FilterHeader } from 'components';
+import { PledgeList, Filter, LoadablePledgeInfoDialog } from './components';
 
 import React, { PureComponent } from 'react';
 
@@ -140,48 +138,48 @@ export class Pledges extends PureComponent {
 
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let { pledges, reverse } = this.state;
+    let { pledges, reverse, loaded } = this.state;
 
     if (reverse) {
       pledges = pledges.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
 
+    if (!loaded) {
+      return <LoadingComponent />
+    }
+
     return (
-      this.state.loaded ? (
-        <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
-          <FilterHeader
-            title="Pledges"
-            toggleIcon={toggleIcon}
-            state={this.props.state}
+      <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+        <FilterHeader
+          title="Pledges"
+          toggleIcon={toggleIcon}
+          state={this.props.state}
+          filterName={this.state.filterName}
+          openPopover={this.openPopover}
+          reverse={this.reverse}
+        />
+        <PledgeList
+          pledges={pledges}
+          handleOpen={this.handleOpen}
+        />
+        <LoadablePledgeInfoDialog
+          open={this.state.open}
+          state={this.props.state}
+          pledge={this.state.pledge}
+          handleClose={this.handleClose}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
+        {this.props.state.status !== 'pledge' && (
+          <Filter
+            open={this.state.openPopover}
+            anchorEl={this.state.anchorEl}
             filterName={this.state.filterName}
-            openPopover={this.openPopover}
-            reverse={this.reverse}
+            closePopover={this.closePopover}
+            setFilter={this.setFilter}
           />
-          <PledgeList
-            pledges={pledges}
-            handleOpen={this.handleOpen}
-          />
-          <LoadablePledgeInfoDialog
-            open={this.state.open}
-            state={this.props.state}
-            pledge={this.state.pledge}
-            handleClose={this.handleClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
-          {this.props.state.status !== 'pledge' && (
-            <Filter
-              open={this.state.openPopover}
-              anchorEl={this.state.anchorEl}
-              filterName={this.state.filterName}
-              closePopover={this.closePopover}
-              setFilter={this.setFilter}
-            />
-          )}
-        </div>
-      ) : (
-        <LoadingComponent />
-      )
+        )}
+      </div>
     )
   }
 }

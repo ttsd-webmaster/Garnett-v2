@@ -33,115 +33,119 @@ export default class ContactsDialog extends PureComponent {
       />,
     ];
 
-    return (
-      this.props.active && (
-        isMobileDevice() ? (
-          <FullscreenDialog
-            title={fullName}
-            titleStyle={{fontSize:'22px'}}
-            open={this.props.open}
-            onRequestClose={this.props.handleClose}
-          >
-            <img className="contacts-photo" src={photoURL} alt="User" />
-            <List className="contacts-list">
-              <Divider />
+    if (!this.props.active) {
+      return null
+    }
+
+    if (isMobileDevice()) {
+      return (
+        <FullscreenDialog
+          title={fullName}
+          titleStyle={{fontSize:'22px'}}
+          open={this.props.open}
+          onRequestClose={this.props.handleClose}
+        >
+          <img className="contacts-photo" src={photoURL} alt="User" />
+          <List className="contacts-list">
+            <Divider />
+            <ListItem
+              className="garnett-list-item"
+              primaryText="Class"
+              secondaryText={className}
+              leftIcon={
+                <i className="icon-users garnett-icon"></i>
+              }
+            />
+            <Divider className="garnett-divider" inset={true} />
+            <a style={activePhoneNumber} href={`tel:${phone}`}>
               <ListItem
                 className="garnett-list-item"
-                primaryText="Class"
-                secondaryText={className}
+                primaryText="Phone Number"
+                secondaryText={phone}
                 leftIcon={
-                  <i className="icon-users garnett-icon"></i>
+                  <i className="icon-phone garnett-icon"></i>
                 }
               />
-              <Divider className="garnett-divider" inset={true} />
-              <a style={activePhoneNumber} href={`tel:${phone}`}>
-                <ListItem
-                  className="garnett-list-item"
-                  primaryText="Phone Number"
-                  secondaryText={phone}
-                  leftIcon={
-                    <i className="icon-phone garnett-icon"></i>
-                  }
-                />
-              </a>
-              <Divider className="garnett-divider" inset={true} />
-              <ListItem
-                className="garnett-list-item"
-                primaryText="Email Address"
-                secondaryText={email}
-                leftIcon={
-                  <i className="icon-mail-alt garnett-icon"></i>
-                }
-              />
-              <Divider className="garnett-divider" inset={true} />
-              <ListItem
-                className="garnett-list-item"
-                primaryText="Major"
-                secondaryText={major}
-                leftIcon={
-                  <i className="icon-graduation-cap garnett-icon"></i>
-                }
-              />
-              <Divider className="garnett-divider" />
-            </List>
-          </FullscreenDialog>
-        ) : (
-          <Dialog
-            title={fullName}
-            titleClassName="garnett-dialog-title"
-            actions={actions}
-            modal={false}
-            bodyClassName="contacts-dialog-body"
-            contentClassName="garnett-dialog-content"
-            open={this.props.open}
-            onRequestClose={this.props.handleClose}
-            autoScrollBodyContent={true}
-          >
-            <img className="contacts-photo" src={photoURL} alt="User" />
-            <List className="contacts-list">
-              <Divider />
-              <ListItem
-                className="garnett-list-item"
-                primaryText="Class"
-                secondaryText={className}
-                leftIcon={
-                  <i className="icon-users garnett-icon"></i>
-                }
-              />
-              <Divider className="garnett-divider" inset={true} />
-              <a style={activePhoneNumber} href={`tel:${phone}`}>
-                <ListItem
-                  className="garnett-list-item"
-                  primaryText="Phone Number"
-                  secondaryText={phone}
-                  leftIcon={
-                    <i className="icon-phone garnett-icon"></i>
-                  }
-                />
-              </a>
-              <Divider className="garnett-divider" inset={true} />
-              <ListItem
-                className="garnett-list-item"
-                primaryText="Email Address"
-                secondaryText={email}
-                leftIcon={
-                  <i className="icon-mail-alt garnett-icon"></i>
-                }
-              />
-              <Divider className="garnett-divider" inset={true} />
-              <ListItem
-                className="garnett-list-item"
-                primaryText="Major"
-                secondaryText={major}
-                leftIcon={
-                  <i className="icon-graduation-cap garnett-icon"></i>
-                }
-              />
-              <Divider className="garnett-divider" />
-            </List>
-          </Dialog>
-        )
+            </a>
+            <Divider className="garnett-divider" inset={true} />
+            <ListItem
+              className="garnett-list-item"
+              primaryText="Email Address"
+              secondaryText={email}
+              leftIcon={
+                <i className="icon-mail-alt garnett-icon"></i>
+              }
+            />
+            <Divider className="garnett-divider" inset={true} />
+            <ListItem
+              className="garnett-list-item"
+              primaryText="Major"
+              secondaryText={major}
+              leftIcon={
+                <i className="icon-graduation-cap garnett-icon"></i>
+              }
+            />
+            <Divider className="garnett-divider" />
+          </List>
+        </FullscreenDialog>
       )
+    }
+
+    return (
+      <Dialog
+        title={fullName}
+        titleClassName="garnett-dialog-title"
+        actions={actions}
+        modal={false}
+        bodyClassName="contacts-dialog-body"
+        contentClassName="garnett-dialog-content"
+        open={this.props.open}
+        onRequestClose={this.props.handleClose}
+        autoScrollBodyContent={true}
+      >
+        <img className="contacts-photo" src={photoURL} alt="User" />
+        <List className="contacts-list">
+          <Divider />
+          <ListItem
+            className="garnett-list-item"
+            primaryText="Class"
+            secondaryText={className}
+            leftIcon={
+              <i className="icon-users garnett-icon"></i>
+            }
+          />
+          <Divider className="garnett-divider" inset={true} />
+          <a style={activePhoneNumber} href={`tel:${phone}`}>
+            <ListItem
+              className="garnett-list-item"
+              primaryText="Phone Number"
+              secondaryText={phone}
+              leftIcon={
+                <i className="icon-phone garnett-icon"></i>
+              }
+            />
+          </a>
+          <Divider className="garnett-divider" inset={true} />
+          <ListItem
+            className="garnett-list-item"
+            primaryText="Email Address"
+            secondaryText={email}
+            leftIcon={
+              <i className="icon-mail-alt garnett-icon"></i>
+            }
+          />
+          <Divider className="garnett-divider" inset={true} />
+          <ListItem
+            className="garnett-list-item"
+            primaryText="Major"
+            secondaryText={major}
+            leftIcon={
+              <i className="icon-graduation-cap garnett-icon"></i>
+            }
+          />
+          <Divider className="garnett-divider" />
+        </List>
+      </Dialog>
     )
   }
 }

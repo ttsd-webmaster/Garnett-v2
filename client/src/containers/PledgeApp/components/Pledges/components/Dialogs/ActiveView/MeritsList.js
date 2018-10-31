@@ -1,6 +1,6 @@
 import API from 'api/API.js';
 import { PlaceholderMerit } from 'components/Placeholders.js';
-import { FilterHeader } from 'components/FilterHeader';
+import { FilterHeader } from 'components';
 
 import React, { PureComponent } from 'react';
 import LazyLoad from 'react-lazyload';

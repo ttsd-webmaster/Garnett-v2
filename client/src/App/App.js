@@ -1,33 +1,65 @@
 import './App.css';
 import 'fontello/css/fontello.css';
 import API from 'api/API.js';
-import { initializeFirebase, loadFirebase, iOSversion } from 'helpers/functions';
-import { LoadingLogin } from 'helpers/loaders'
 import {
-  LoadableLogin,
-  LoadableHome,
-  LoadableMobilePledgeApp,
-  LoadableDelibsApp,
-  LoadableRusheeProfile,
-  LoadableDataApp
-} from 'components/LoadableComponents';
-import { PledgeApp } from 'containers/PledgeApp/PledgeApp'
+  initializeFirebase,
+  loadFirebase,
+  registerNotificationToken,
+  loginCheck
+} from 'helpers/functions';
+import { 
+  Login,
+  Home,
+  DelibsApp,
+  RusheeProfile,
+  DataApp,
+  PledgeApp,
+  MobilePledgeApp
+} from 'containers';
+import { PublicRoute, PrivateRoute } from 'components/Routes';
 
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
 import Snackbar from 'material-ui/Snackbar';
+
+const routes = [
+  {
+    path: '/home',
+    exact: true,
+    component: Home
+  },
+  {
+    path: '/pledge-app',
+    exact: false,
+    component: window.innerWidth > 768 ? PledgeApp : MobilePledgeApp
+  },
+  {
+    path: '/delibs-app',
+    exact: true,
+    component: DelibsApp
+  },
+  {
+    path: '/delibs-app/:id',
+    exact: true,
+    component: RusheeProfile
+  },
+  {
+    path: '/data-app',
+    exact: true,
+    component: DataApp
+  }
+];
 
 export default class App extends Component {
   state = {
-    isAuthenticated: false,
-    loaded: false,
+    authenticated: false,
+    loading: true,
     open: false,
     message: ''
   }
 
   componentDidMount() {
     const data = JSON.parse(localStorage.getItem('data'));
-    const firebaseData = JSON.parse(localStorage.getItem('firebaseData'));
     const sw_msg = localStorage.getItem('sw_msg');
 
     if (sw_msg) {
@@ -39,7 +71,7 @@ export default class App extends Component {
 
     if (navigator.onLine) {
       if (data !== null) {
-        initializeFirebase(firebaseData);
+        initializeFirebase();
 
         loadFirebase('auth')
         .then(() => {
@@ -51,130 +83,30 @@ export default class App extends Component {
               .then((res) => {
                 this.loginCallBack(res.data);
               });
-            }
-            else {
-              this.setState({ loaded: true });
+            } else {
+              this.setState({ loading: false });
             }
           });
         });
-      }
-      else {
-        this.setState({ loaded: true });
+      } else {
+        this.setState({ loading: false });
       }
     }
     else {
       if (data !== null) {
         this.setData(data);
-      }
-      else {
-        this.setState({ loaded: true });
+      } else {
+        this.setState({ loading: false });
       }
     }
   }
 
   loginCallBack = (user) => {
-    const displayName = user.firstName + user.lastName;
-    const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-
     /* Checks if browser is Safari, iOS version < 11, IE, Edge, or in development */
-    if (isSafari || iOSversion()[0] < 11 || document.documentMode ||
-        /Edge/.test(navigator.userAgent) || process.env.NODE_ENV === 'development') {
-      this.checkPhoto(user);
-    }
-    else {
-      navigator.serviceWorker.getRegistration(swUrl)
-      .then((registration) => {
-        loadFirebase('messaging')
-        .then(() => {
-          const { firebase } = window;
-          const messaging = firebase.messaging();
-          messaging.useServiceWorker(registration);
-
-          messaging.requestPermission()
-          .then(() => {
-            console.log('Notification permission granted.');
-            // Get Instance ID token. Initially this makes a network call, once retrieved
-            // subsequent calls to getToken will return from cache.
-            messaging.getToken()
-            .then((currentToken) => {
-              if (currentToken) {
-                localStorage.setItem('registrationToken', currentToken);
-
-                API.saveMessagingToken(displayName, currentToken)
-                .then(messageRes => {
-                  this.checkPhoto(user);
-                })
-                .catch(error => console.log(`Error: ${error}`));
-              } 
-              else {
-                // Show permission request.
-                console.log('No Instance ID token available. Request permission to generate one.');
-                this.checkPhoto(user);
-              }
-            })
-            .catch((err) => {
-              console.log('An error occurred while retrieving token. ', err);
-              this.checkPhoto(user);
-            });
-          })
-          .catch((err) => {
-            console.log('Unable to get permission to notify.', err);
-            this.checkPhoto(user);
-          });
-        });
-      });
-    }
-  }
-
-  checkPhoto = (user) => {
-    const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-
-    if (user.photoURL === defaultPhoto && user.status !== 'alumni') {
-      loadFirebase('storage')
-      .then(() => {
-        const { firebase } = window;
-        let displayName = user.firstName + user.lastName;
-        displayName = displayName.replace(/\s/g, '');
-        const storage = firebase.storage().ref(`${displayName}.jpg`);
-
-        storage.getDownloadURL()
-        .then((url) => {
-          API.updatePhoto(displayName, url)
-          .then((res) => {
-            console.log(res.data);
-
-            this.setData(res.data);
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-
-            this.setData(user);
-          });
-        })
-        .catch((error) => {
-          const storage = firebase.storage().ref(`${displayName}.JPG`);
-
-          storage.getDownloadURL()
-          .then((url) => {
-            API.updatePhoto(displayName, url)
-            .then((res) => {
-              console.log(res.data);
-
-              this.setData(res.data);
-            })
-            .catch(error => console.log(`Error: ${error}`));
-          })
-          .catch((error) => {
-            console.log(`Error: ${error}`);
-
-            this.setData(user);
-          });
-        });
-      });
-    }
-    else {
+    if (loginCheck()) {
       this.setData(user);
+    } else {
+      registerNotificationToken(user, () => this.setState(user));
     }
   }
 
@@ -194,23 +126,22 @@ export default class App extends Component {
       major: user.major,
       status: user.status,
       photoURL: user.photoURL,
-      isAuthenticated: true
+      authenticated: true,
+      loading: false
     });
   }
 
   logoutCallBack = () => {
     localStorage.clear();
-
     this.setState({
-      isAuthenticated: false,
-      loaded: true
+      authenticated: false
     });
   }
 
   handleRequestOpen = (message) => {
     this.setState({
       message,
-      open: true,
+      open: true
     });
   }
 
@@ -220,175 +151,60 @@ export default class App extends Component {
 
   get rootPath() {
     const route = localStorage.getItem('route');
-    if (this.state.isAuthenticated) {
-      if (this.state.status === 'pledge') {
-        return <Redirect to="/pledge-app" />
+    if (this.state.status === 'pledge') {
+      return <Redirect to="/pledge-app" />
+    } else {
+      switch (route) {
+        case 'pledge-app':
+          return <Redirect to="/pledge-app" />
+        case 'delibs-app':
+          return <Redirect to="/delibs-app" />
+        case 'data-app':
+          return <Redirect to="/data-app" />
+        default:
+          return <Redirect to="/home" />
       }
-      else {
-        switch (route) {
-          case 'pledge-app':
-            return <Redirect to="/pledge-app" />
-          case 'delibs-app':
-            return <Redirect to="/delibs-app" />
-          case 'data-app':
-            return <Redirect to="/data-app" />
-          default:
-            return <Redirect to="/home" />
-        }
-      }
-    }
-    else if (this.state.loaded) {
-      return (
-        <LoadableLogin 
-          state={this.state}
-          loginCallBack={this.loginCallBack}
-          handleRequestOpen={this.handleRequestOpen}
-        />
-      )
-    }
-    else {
-      return (
-        <LoadingLogin />
-      )
-    }
-  }
-
-  homePath(history) {
-    if (this.state.isAuthenticated) {
-      return (
-        <LoadableHome
-          state={this.state}
-          history={history}
-          logoutCallBack={this.logoutCallBack}
-        />
-      )
-    }
-    else if (this.state.loaded) {
-      return <Redirect to="/" />
-    }
-    else {
-      return <LoadingLogin />
-    }
-  }
-
-  pledgeAppPath(history) {
-    if (this.state.isAuthenticated) {
-      if (window.innerWidth > 768) {
-        return (
-          <PledgeApp
-            state={this.state}
-            history={history}
-            logoutCallBack={this.logoutCallBack}
-            handleRequestOpen={this.handleRequestOpen}
-          />
-        )
-      }
-      else {
-        return (
-          <LoadableMobilePledgeApp 
-            state={this.state}
-            history={history}
-            logoutCallBack={this.logoutCallBack}
-            handleRequestOpen={this.handleRequestOpen}
-          />
-        )
-      }
-    }
-    else if (this.state.loaded) {
-      return <Redirect to="/" />
-    }
-    else {
-      return <LoadingLogin />
-    }
-  }
-
-  delibsAppPath(history) {
-    if (this.state.isAuthenticated) {
-      return (
-        <LoadableDelibsApp
-          state={this.state}
-          history={history}
-          handleRequestOpen={this.handleRequestOpen}
-        />
-      )
-    }
-    else if (this.state.loaded) {
-      return <Redirect to="/" />
-    }
-    else {
-      return <LoadingLogin />
-    }
-  }
-
-  rusheeProfilePath(history) {
-    if (this.state.isAuthenticated) {
-      return (
-        <LoadableRusheeProfile
-          state={this.state}
-          history={history}
-          handleRequestOpen={this.handleRequestOpen}
-        />
-      )
-    }
-    else if (this.state.loaded) {
-      return <Redirect to="/" />
-    }
-    else {
-      return <LoadingLogin />
-    }
-  }
-
-  dataAppPath(history) {
-    if (this.state.isAuthenticated) {
-      return (
-        <LoadableDataApp
-          state={this.state}
-          history={history}
-          handleRequestOpen={this.handleRequestOpen}
-        />
-      )
-    }
-    else if (this.state.loaded) {
-      return <Redirect to="/" />
-    }
-    else {
-      return <LoadingLogin />
     }
   }
 
   render() {
+    const { authenticated, loading } = this.state;
+
+    if (loading) {
+      return null;
+    }
+
     return (
       <Router>
         <div>
-          <Route
+          <PrivateRoute
             exact
             path="/"
-            render={() => this.rootPath}
+            authenticated={authenticated}
+            component={() => this.rootPath}
           />
-          <Route
+          <PublicRoute
             exact
-            path="/home"
-            render={({ history }) => this.homePath(history)}
+            path="/login"
+            state={this.state}
+            authenticated={authenticated}
+            loginCallBack={this.loginCallBack}
+            component={Login}
           />
-          <Route
-            path="/pledge-app"
-            render={({ history }) => this.pledgeAppPath(history)}
-          />
-          <Route
-            exact
-            path="/delibs-app"
-            render={({ history }) => this.delibsAppPath(history)}
-          />
-          <Route
-            exact
-            path="/delibs-app/:id"
-            render={({ history }) => this.rusheeProfilePath(history)}
-          />
-          <Route
-            exact
-            path="/data-app"
-            render={({ history }) => this.dataAppPath(history)}
-          />
+          <Switch>
+            {routes.map((route, index) => (
+              <PrivateRoute
+                key={index}
+                exact={route.exact}
+                path={route.path}
+                state={this.state}
+                authenticated={authenticated}
+                component={route.component}
+                logoutCallBack={this.logoutCallBack}
+              />
+            ))}
+            <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
+          </Switch>
           <Snackbar
             open={this.state.open}
             message={this.state.message}

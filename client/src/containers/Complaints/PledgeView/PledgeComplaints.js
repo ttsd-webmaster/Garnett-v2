@@ -68,58 +68,58 @@ export default class PledgeComplaints extends Component {
 
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let { complaints, reverse } = this.state;
+    let { complaints, reverse, loaded } = this.state;
 
     if (reverse) {
       complaints = complaints.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
 
-    return (
-      this.state.loaded ? (
-        <div id="pledge-complaints">
-          <Subheader className="garnett-subheader">
-            Recent
-            <IconButton
-              style={{float:'right',cursor:'pointer'}}
-              iconClassName={toggleIcon}
-              className="reverse-toggle"
-              onClick={this.reverse}
-            >
-            </IconButton>
-          </Subheader>
+    if (!loaded) {
+      return <LoadingComponent />
+    }
 
-          <List className="garnett-list">
-            {complaints.map((complaint, i) => (
-              <LazyLoad
-                height={88}
-                offset={window.innerHeight}
-                once
-                overflow
-                key={i}
-                placeholder={PlaceholderPledgeComplaint()}
-              >
-                <div>
-                  <Divider />
-                  <ListItem
-                    innerDivStyle={listItemStyle}
-                    primaryText={
-                      <p className="garnett-description">
-                        {complaint.description}
-                      </p>
-                    }
-                  >
-                    <p className="garnett-date"> {complaint.date} </p>
-                  </ListItem>
-                  <Divider />
-                </div>
-              </LazyLoad>
-            ))}
-          </List>
-        </div>
-      ) : (
-        <LoadingComponent />
-      )
+    return (
+      <div id="pledge-complaints">
+        <Subheader className="garnett-subheader">
+          Recent
+          <IconButton
+            style={{float:'right',cursor:'pointer'}}
+            iconClassName={toggleIcon}
+            className="reverse-toggle"
+            onClick={this.reverse}
+          >
+          </IconButton>
+        </Subheader>
+
+        <List className="garnett-list">
+          {complaints.map((complaint, i) => (
+            <LazyLoad
+              height={88}
+              offset={window.innerHeight}
+              once
+              overflow
+              key={i}
+              placeholder={PlaceholderPledgeComplaint()}
+            >
+              <div>
+                <Divider />
+                <ListItem
+                  innerDivStyle={listItemStyle}
+                  primaryText={
+                    <p className="garnett-description">
+                      {complaint.description}
+                    </p>
+                  }
+                >
+                  <p className="garnett-date"> {complaint.date} </p>
+                </ListItem>
+                <Divider />
+              </div>
+            </LazyLoad>
+          ))}
+        </List>
+      </div>
     )
   }
 }

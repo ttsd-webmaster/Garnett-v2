@@ -84,8 +84,8 @@ export class RusheeProfileButton extends PureComponent {
   }
 
   render() {
-    return (
-      this.props.state.status === 'regent' ? (
+    if (this.props.state.status === 'regent') {
+      return (
         <div>
           <div className="logout-button" onClick={this.startVote}> Start Vote </div>
           <LoadableEndVoteDialog
@@ -95,38 +95,40 @@ export class RusheeProfileButton extends PureComponent {
             handleRequestOpen={this.props.handleRequestOpen}
           />
         </div>
-      ) : (
-        <div>
-          <RusheeBottomSheet
-            sheetOpen={this.state.sheetOpen}
-            preDelibs={this.props.rushee.preDelibs}
-            viewResource={this.viewResource}
-            viewInterview={this.viewInterview}
-            closeBottomSheet={this.closeBottomSheet}
-          />
-          <div 
-            className="logout-button"
-            onClick={this.openBottomSheet}
-          >
-            Resources 
-          </div>
-          <LoadableResourceDialog
-            open={this.state.openResource}
-            resource={this.props.rushee.resources[this.state.resource]}
-            resourceName={this.state.resource}
-            handleClose={this.closeResource}
-          />
-          <LoadableInterviewDialog
-            open={this.state.openInterview}
-            rushee={this.props.rushee}
-            handleClose={this.closeInterview}
-          />
-          <LoadableVoteDialog
-            state={this.props.state}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
-        </div>
       )
+    }
+    
+    return (
+      <div>
+        <RusheeBottomSheet
+          sheetOpen={this.state.sheetOpen}
+          preDelibs={this.props.rushee.preDelibs}
+          viewResource={this.viewResource}
+          viewInterview={this.viewInterview}
+          closeBottomSheet={this.closeBottomSheet}
+        />
+        <div 
+          className="logout-button"
+          onClick={this.openBottomSheet}
+        >
+          Resources 
+        </div>
+        <LoadableResourceDialog
+          open={this.state.openResource}
+          resource={this.props.rushee.resources[this.state.resource]}
+          resourceName={this.state.resource}
+          handleClose={this.closeResource}
+        />
+        <LoadableInterviewDialog
+          open={this.state.openInterview}
+          rushee={this.props.rushee}
+          handleClose={this.closeInterview}
+        />
+        <LoadableVoteDialog
+          state={this.props.state}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
+      </div>
     )
   }
 }

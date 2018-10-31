@@ -2,7 +2,7 @@ import '../DelibsApp.css';
 import 'containers/PledgeApp/MobilePledgeApp.css';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingRusheeProfile } from 'helpers/loaders.js';
-import { Header } from 'components/Header';
+import { Header } from 'components';
 import { RusheeInfo } from './components/RusheeInfo';
 import { RusheeProfileButton } from './components/RusheeProfileButton';
 
@@ -32,30 +32,30 @@ export class RusheeProfile extends PureComponent {
   }
 
   render() {
+    if (!this.state.rushee) {
+      return <LoadingRusheeProfile />
+    }
+    
     return (
-      this.state.rushee ? (
-        <div className="loading-container">
-          <Header
-            title="Rushee Profile"
-            noTabs
-            history={this.props.history}
+      <div className="loading-container">
+        <Header
+          title="Rushee Profile"
+          noTabs
+          history={this.props.history}
+        />
+        <div className="animate-in delibs-app rushee">
+          <img
+            className={`user-photo ${this.state.rushee.rotate && "rotate"}`}
+            src={this.state.rushee.photo}
+            alt="Rushee"
           />
-          <div className="animate-in delibs-app rushee">
-            <img
-              className={`user-photo ${this.state.rushee.rotate && "rotate"}`}
-              src={this.state.rushee.photo}
-              alt="Rushee"
-            />
-            <RusheeInfo rushee={this.state.rushee} />
-            <RusheeProfileButton
-              state={this.props.state}
-              rushee={this.state.rushee}
-            />
-          </div>
+          <RusheeInfo rushee={this.state.rushee} />
+          <RusheeProfileButton
+            state={this.props.state}
+            rushee={this.state.rushee}
+          />
         </div>
-      ) : (
-        <LoadingRusheeProfile />
-      )
+      </div>
     )
   }
 }

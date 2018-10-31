@@ -26,15 +26,13 @@
     -->
     <style>
       body {
-        background-color: #2e2f33;
+        background-color: #fafafa;
       }
     </style>
     <title>Garnett</title>
   </head>
   <body>
     <div id="root"></div>
-    
-    <div class="loading" id="loading"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -60,9 +58,6 @@
       window.onload = function() {
         // Removes focus from input after touching on background for IOS
         document.body.firstElementChild.tabIndex = 1;
-        document.body.style.backgroundColor = "#fafafa";
-        document.getElementById("loading").style.display = "none";
-
         if (iOSversion()[0] >= 11) {
           document.body.style.height = 'calc(100% + 20px)';
         }

@@ -1,6 +1,7 @@
 {
   "name": "garnett",
   "version": "0.1.0",
+  "homepage": "./",
   "private": true,
   "devDependencies": {
     "autoprefixer": "7.1.6",
@@ -60,9 +61,9 @@
     "react-swipeable-views": "^0.13.0"
   },
   "scripts": {
-    "start": "NODE_PATH=src/ node scripts/start.js",
-    "build": "NODE_PATH=src/ node scripts/build.js",
-    "test": "NODE_PATH=src/ node scripts/test.js --env=jsdom"
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js --env=jsdom"
   },
   "proxy": {
     "api": {
