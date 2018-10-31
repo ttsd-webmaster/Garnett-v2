@@ -3,7 +3,12 @@ import './NavItems.css';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-export function NavItems(props) {
+export function NavItems({
+  status,
+  openMerit,
+  goHome,
+  handleLogoutOpen
+}) {
   return (
     <nav id="nav-items">
       <NavLink
@@ -22,7 +27,7 @@ export function NavItems(props) {
         exact
       >
         <i className="icon-users"></i>
-        {props.status === 'pledge' ? "Pledge Brothers" : "Pledges"}
+        {status === 'pledge' ? "Pledge Brothers" : "Pledges"}
       </NavLink>
       <NavLink
         className="nav-item"
@@ -33,18 +38,18 @@ export function NavItems(props) {
         <i className="icon-address-book"></i>
         Brothers
       </NavLink>
-      {props.status === 'pledge' ? (
-        <a className="nav-item" onClick={props.handleLogoutOpen}>
+      {status === 'pledge' ? (
+        <a className="nav-item" onClick={handleLogoutOpen}>
           <i className="icon-cog"></i>
           Log Out
         </a>
       ) : (
-        <a className="nav-item" onClick={props.goHome}>
+        <a className="nav-item" onClick={goHome}>
           <i className="icon-logout"></i>
           Home
         </a>
       )}
-      <div id="merit-button" onClick={props.openMerit}>Merit</div>
+      <div id="merit-button" onClick={openMerit}>Merit</div>
     </nav>
   )
 }

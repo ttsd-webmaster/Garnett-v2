@@ -3,55 +3,59 @@ import { getTabStyle } from 'helpers/functions';
 import React from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
-export function MobileNavbar(props) {
+export function MobileNavbar({
+  index,
+  status,
+  handleChange
+}) {
   return (
     <BottomNavigation
       className="bottom-tabs"
-      selectedIndex={props.index}
+      selectedIndex={index}
     >
       <BottomNavigationItem
         label="Merits"
         icon={
           <i
-            style={getTabStyle(props.index === 0)}
+            style={getTabStyle(index === 0)}
             className="icon-star"
           />
         }
-        onClick={() => props.handleChange(0)}
+        onClick={() => handleChange(0)}
       />
       <BottomNavigationItem
         label={
-          props.status === 'pledge'
+          status === 'pledge'
             ? 'Pbros'
             : 'Pledges'
         }
         icon={
           <i
-            style={getTabStyle(props.index === 1)}
+            style={getTabStyle(index === 1)}
             className="icon-users"
           />
         }
-        onClick={() => props.handleChange(1)}
+        onClick={() => handleChange(1)}
       />
       <BottomNavigationItem
         label="Brothers"
         icon={
           <i
-            style={getTabStyle(props.index === 2)}
+            style={getTabStyle(index === 2)}
             className="icon-address-book"
           />
         }
-        onClick={() => props.handleChange(2)}
+        onClick={() => handleChange(2)}
       />
       <BottomNavigationItem
         label="Settings"
         icon={
           <i
-            style={getTabStyle(props.index === 3)}
+            style={getTabStyle(index === 3)}
             className="icon-cog"
           />
         }
-        onClick={() => props.handleChange(3)}
+        onClick={() => handleChange(3)}
       />
     </BottomNavigation>
   )

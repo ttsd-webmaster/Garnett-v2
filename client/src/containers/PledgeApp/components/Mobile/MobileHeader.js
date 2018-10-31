@@ -1,26 +1,31 @@
 import React, { Fragment } from 'react';
 import CountUp from 'react-countup';
 
-export function MobileHeader(props) {
+export function MobileHeader({
+  index,
+  totalMerits,
+  previousTotalMerits,
+  status
+}) {
   let header;
-  switch (props.index) {
+  switch (index) {
     case 0:
       header = (
         <Fragment>
           <CountUp
             className="total-merits"
-            start={props.previousTotalMerits}
-            end={props.totalMerits}
+            start={previousTotalMerits}
+            end={totalMerits}
             useEasing
           />
           <span>
-            merits {props.status !== 'pledge' && 'merited'}
+            merits {status !== 'pledge' && 'merited'}
           </span>
         </Fragment>
       )
       break;
     case 1:
-      if (props.status === 'pledge') {
+      if (status === 'pledge') {
         header = "Pledge Brothers"
       } else {
         header = "Pledges"
@@ -36,7 +41,7 @@ export function MobileHeader(props) {
   }
 
   return (
-    <div className="total-merits-container">
+    <div id="mobile-header">
       {header}
     </div>
   )

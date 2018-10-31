@@ -8,10 +8,12 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
-export default function PastComplaints(props) {
+export default function PastComplaints({
+  complaints,
+  reverse,
+  reverseComplaints
+}) {
   let toggleIcon = "icon-down-open-mini";
-  let { complaints, reverse, reverseComplaints } = props;
-
   if (reverse) {
     complaints = complaints.slice().reverse();
     toggleIcon = "icon-up-open-mini";

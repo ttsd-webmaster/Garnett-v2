@@ -4,19 +4,25 @@ import { BottomSheet } from 'helpers/BottomSheet/index.js';
 
 import React from 'react';
 
-export function RusheeBottomSheet(props) {
+export function RusheeBottomSheet({
+  sheetOpen,
+  closeBottomSheet,
+  viewResource,
+  viewInterview,
+  preDelibs
+}) {
   return (
     <BottomSheet
-      open={props.sheetOpen}
-      onRequestClose={props.closeBottomSheet}
+      open={sheetOpen}
+      onRequestClose={closeBottomSheet}
     >
       <Subheader>Open</Subheader>
       <List>
-        <ListItem primaryText="Resume" onClick={() => props.viewResource('resume')} />
-        <ListItem primaryText="Degree Audit" onClick={() => props.viewResource('degreeAudit')} />
-        <ListItem primaryText="Schedule" onClick={() => props.viewResource('schedule')} />
-        <ListItem primaryText="Interview Responses" onClick={props.viewInterview} />
-        <a style={{ textDecoration:'none' }} href={props.preDelibs} target="_blank">
+        <ListItem primaryText="Resume" onClick={() => viewResource('resume')} />
+        <ListItem primaryText="Degree Audit" onClick={() => viewResource('degreeAudit')} />
+        <ListItem primaryText="Schedule" onClick={() => viewResource('schedule')} />
+        <ListItem primaryText="Interview Responses" onClick={viewInterview} />
+        <a style={{ textDecoration:'none' }} href={preDelibs} target="_blank">
           <ListItem primaryText="Pre-Delibs Sheet"/>
         </a>
       </List>

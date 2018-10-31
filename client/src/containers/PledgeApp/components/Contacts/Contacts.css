@@ -18,7 +18,7 @@
 }
 
 .contacts-dialog-body {
-  background-color: #fafafa;
+  background-color: var(--background-color);
   padding: 0 0 24px !important;
 }
 
@@ -32,7 +32,7 @@
     position: sticky;
     top: 0;
     line-height: 47px !important;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--secondary-light);
     z-index: 1;
   }
 }

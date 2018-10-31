@@ -8,9 +8,6 @@ export default {
     const params = { displayName };
     return axios.get('/api/auth', { params });
   },
-  getFirebaseData: function() {
-    return axios.get('/api/firebase');
-  },
   getActives: function() {
     return axios.get('/api/actives');
   },
@@ -37,10 +34,6 @@ export default {
   },
   logout: function() {
     return axios.put('/api/logout');
-  },
-  updatePhoto: function(displayName, url) {
-    const body = { displayName, url };
-    return axios.put('/api/photo/update', body);
   },
 
   // Data App

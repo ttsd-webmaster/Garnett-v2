@@ -2,19 +2,26 @@ import React from 'react';
 import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 
-export function Header(props) {
+export function Header({
+  label,
+  index,
+  openPopover,
+  filterName,
+  toggleIcon,
+  reverse
+}) {
   return (
     <Subheader className="garnett-subheader contacts">
-      {props.label}
-      {props.index === 0 && (
+      {label}
+      {index === 0 && (
         <span style={{float:'right'}}>
-          <span className="garnett-filter" onClick={props.openPopover}> 
-            {props.filterName}
+          <span className="garnett-filter" onClick={openPopover}> 
+            {filterName}
           </span>
           <IconButton
-            iconClassName={props.toggleIcon}
+            iconClassName={toggleIcon}
             className="reverse-toggle"
-            onClick={props.reverse}
+            onClick={reverse}
           />
         </span>
       )}

@@ -303,121 +303,121 @@ export default class Chalkboards extends Component {
   }
 
   render() {
+    if (!this.state.loaded) {
+      return <LoadingComponent />
+    }
+    
     return (
-      this.state.loaded ? (
-        <div>
-          <MyChalkboards
-            state={this.props.state}
-            myHostingChalkboards={this.state.myHostingChalkboards}
-            myAttendingChalkboards={this.state.myAttendingChalkboards}
-            myCompletedChalkboards={this.state.myCompletedChalkboards}
-            filter={this.state.filter}
-            filterName={this.state.filterName}
-            reverse={this.state.reverse}
-            reverseChalkboards={this.reverse}
-            setFilter={this.setFilter}
-            filterCount={this.filterCount}
-            openPopover={this.openPopover}
-            handleOpen={this.handleOpen}
-          />
-          <AllChalkboards
-            upcomingChalkboards={this.state.upcomingChalkboards}
-            completedChalkboards={this.state.completedChalkboards}
-            filter={this.state.filter}
-            filterName={this.state.filterName}
-            reverse={this.state.reverse}
-            reverseChalkboards={this.reverse}
-            setFilter={this.setFilter}
-            filterCount={this.filterCount}
-            openPopover={this.openPopover}
-            handleOpen={this.handleOpen}
-          />
+      <div>
+        <MyChalkboards
+          state={this.props.state}
+          myHostingChalkboards={this.state.myHostingChalkboards}
+          myAttendingChalkboards={this.state.myAttendingChalkboards}
+          myCompletedChalkboards={this.state.myCompletedChalkboards}
+          filter={this.state.filter}
+          filterName={this.state.filterName}
+          reverse={this.state.reverse}
+          reverseChalkboards={this.reverse}
+          setFilter={this.setFilter}
+          filterCount={this.filterCount}
+          openPopover={this.openPopover}
+          handleOpen={this.handleOpen}
+        />
+        <AllChalkboards
+          upcomingChalkboards={this.state.upcomingChalkboards}
+          completedChalkboards={this.state.completedChalkboards}
+          filter={this.state.filter}
+          filterName={this.state.filterName}
+          reverse={this.state.reverse}
+          reverseChalkboards={this.reverse}
+          setFilter={this.setFilter}
+          filterCount={this.filterCount}
+          openPopover={this.openPopover}
+          handleOpen={this.handleOpen}
+        />
 
-          <Portal>
-            <BottomNavigation 
-              id="chalkboards-tabs" 
-              className="bottom-tabs"
-              style={{'display': 'none'}}
-              selectedIndex={this.state.selectedIndex}
-            >
-              <BottomNavigationItem
-                label="My Chalkboards"
-                icon={<div></div>}
-                onClick={() => this.select(0)}
-              />
-              <BottomNavigationItem
-                label="All Chalkboards"
-                icon={<div></div>}
-                onClick={() => this.select(1)}
-              />
-            </BottomNavigation>
-          </Portal>
-
-          <Popover
-            open={this.state.openPopover}
-            anchorEl={this.state.anchorEl}
-            anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'left', vertical: 'top'}}
-            onRequestClose={this.closePopover}
-            animation={PopoverAnimationVertical}
+        <Portal>
+          <BottomNavigation 
+            id="chalkboards-tabs" 
+            className="bottom-tabs"
+            style={{'display': 'none'}}
+            selectedIndex={this.state.selectedIndex}
           >
-            <Menu>
-              <MenuItem
-                primaryText="Date"
-                insetChildren
-                checked={this.state.filterName === 'Date'}
-                onClick={() => this.setFilter('Date')}
-              />
-              <MenuItem
-                primaryText="Amount"
-                insetChildren
-                checked={this.state.filterName === 'Amount'}
-                onClick={() => this.setFilter('Amount')}
-              />
-              <MenuItem
-                primaryText="Time Commitment"
-                insetChildren
-                checked={this.state.filterName === 'Time Commitment'}
-                onClick={() => this.setFilter('Time Commitment')}
-              />
-              <MenuItem
-                primaryText="Attendees"
-                insetChildren
-                checked={this.state.filterName === 'Attendees'}
-                onClick={() => this.setFilter('Attendees')}
-              />
-            </Menu>
-          </Popover>
+            <BottomNavigationItem
+              label="My Chalkboards"
+              icon={<div></div>}
+              onClick={() => this.select(0)}
+            />
+            <BottomNavigationItem
+              label="All Chalkboards"
+              icon={<div></div>}
+              onClick={() => this.select(1)}
+            />
+          </BottomNavigation>
+        </Portal>
 
-          {this.props.state.status !== 'pledge' && (
-            <Portal>
-              <FloatingActionButton id="add-chalkboard" className="fixed-button hidden" onClick={this.addOpen}>
-                <i className="icon-calendar-plus-o"></i>
-              </FloatingActionButton>
+        <Popover
+          open={this.state.openPopover}
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          onRequestClose={this.closePopover}
+          animation={PopoverAnimationVertical}
+        >
+          <Menu>
+            <MenuItem
+              primaryText="Date"
+              insetChildren
+              checked={this.state.filterName === 'Date'}
+              onClick={() => this.setFilter('Date')}
+            />
+            <MenuItem
+              primaryText="Amount"
+              insetChildren
+              checked={this.state.filterName === 'Amount'}
+              onClick={() => this.setFilter('Amount')}
+            />
+            <MenuItem
+              primaryText="Time Commitment"
+              insetChildren
+              checked={this.state.filterName === 'Time Commitment'}
+              onClick={() => this.setFilter('Time Commitment')}
+            />
+            <MenuItem
+              primaryText="Attendees"
+              insetChildren
+              checked={this.state.filterName === 'Attendees'}
+              onClick={() => this.setFilter('Attendees')}
+            />
+          </Menu>
+        </Popover>
 
-              <LoadableAddChalkboardDialog
-                open={this.state.openAdd}
-                state={this.props.state}
-                handleClose={this.addClose}
-                handleRequestOpen={this.props.handleRequestOpen}
-              />
-            </Portal>
-          )}
-
+        {this.props.state.status !== 'pledge' && (
           <Portal>
-            <LoadableHandleChalkboardDialog
-              open={this.state.open}
+            <FloatingActionButton id="add-chalkboard" className="fixed-button hidden" onClick={this.addOpen}>
+              <i className="icon-calendar-plus-o"></i>
+            </FloatingActionButton>
+
+            <LoadableAddChalkboardDialog
+              open={this.state.openAdd}
               state={this.props.state}
-              type={this.state.chalkboardType}
-              chalkboard={this.state.selectedChalkboard}
-              handleClose={this.handleClose}
+              handleClose={this.addClose}
               handleRequestOpen={this.props.handleRequestOpen}
             />
           </Portal>
-        </div>
-      ) : (
-        <LoadingComponent />
-      )
+        )}
+
+        <Portal>
+          <LoadableHandleChalkboardDialog
+            open={this.state.open}
+            state={this.props.state}
+            type={this.state.chalkboardType}
+            chalkboard={this.state.selectedChalkboard}
+            handleClose={this.handleClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+        </Portal>
+      </div>
     )
   }
 }

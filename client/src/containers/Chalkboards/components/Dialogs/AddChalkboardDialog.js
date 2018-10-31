@@ -198,8 +198,8 @@ export default class AddChalkboardDialog extends Component {
       />
     )
 
-    return (
-      isMobileDevice() ? (
+    if (isMobileDevice()) {
+      return (
         <FullscreenDialog
           title="New Chalkboard"
           titleStyle={{fontSize:'22px'}}
@@ -291,103 +291,105 @@ export default class AddChalkboardDialog extends Component {
             />
           </div>
         </FullscreenDialog>
-      ) : (
-        <Dialog
-          title="New Chalkboard"
-          titleClassName="garnett-dialog-title"
-          actions={actions}
-          modal={false}
-          bodyClassName="garnett-dialog-body"
-          contentClassName="garnett-dialog-content"
-          open={this.props.open}
-          onRequestClose={this.handleClose}
-          autoScrollBodyContent={true}
-        >
-          <TextField
-            className="garnett-input"
-            type="text"
-            floatingLabelText="Title"
-            multiLine={true}
-            rowsMax={3}
-            value={this.state.title}
-            onChange={(e, newValue) => this.handleChange('title', newValue)}
-            errorText={!this.state.descriptionValidation && 'Enter a title that has less than two lines.'}
-          />
-          <TextField
-            className="garnett-input"
-            type="text"
-            floatingLabelText="Description"
-            multiLine={true}
-            rowsMax={3}
-            value={this.state.description}
-            onChange={(e, newValue) => this.handleChange('description', newValue)}
-            errorText={!this.state.descriptionValidation && 'Enter a description.'}
-          />
-          <DatePicker
-            className="garnett-input"
-            textFieldStyle={{display:'block',margin:'0 auto'}}
-            floatingLabelText="Date"
-            value={this.state.date}
-            disableYearSelection
-            firstDayOfWeek={0}
-            formatDate={this.formatDate}
-            shouldDisableDate={this.disableDates}
-            onChange={(e, newValue) => this.handleChange('date', newValue)}
-            errorText={!this.state.dateValidation && 'Select a date.'}
-          />
-          <TimePicker
-            className="garnett-input"
-            textFieldStyle={{display:'block'}}
-            floatingLabelText="Time"
-            value={this.state.time}
-            defaultTime={defaultTime}
-            minutesStep={5}
-            onChange={(e, newValue) => this.handleChange('time', newValue)}
-            errorText={!this.state.timeValidation && 'Enter a time.'}
-          />
-          <TextField
-            className="garnett-input"
-            type="text"
-            floatingLabelText="Location"
-            multiLine={true}
-            rowsMax={3}
-            value={this.state.location}
-            onChange={(e, newValue) => this.handleChange('location', newValue)}
-            errorText={!this.state.locationValidation && 'Enter a location.'}
-          />
-          <SelectField
-            className="garnett-input"
-            value={this.state.timeCommitment}
-            floatingLabelText="Time Commitment"
-            onChange={(e, key, newValue) => this.handleChange('timeCommitment', newValue)}
-            errorText={!this.state.timeCommitmentValidation && 'Enter a time commitment.'}
-          >
-            {commitmentOptions.map((option, i) => (
-              <MenuItem
-                key={i}
-                value={option}
-                primaryText={option.label}
-                insetChildren
-                checked={option === this.state.timeCommitment}
-              />
-            ))}
-          </SelectField>
-          <div style={{width:'256px',margin:'20px auto 0'}}>
-            <span>
-              Amount: {this.state.amount} merits
-            </span>
-            <Slider
-              sliderStyle={{marginBottom:0}}
-              name="Amount"
-              min={0}
-              max={100}
-              step={5}
-              value={this.state.amount}
-              onChange={(e, newValue) => this.handleChange('amount', newValue)}
-            />
-          </div>
-        </Dialog>
       )
+    }
+
+    return (
+      <Dialog
+        title="New Chalkboard"
+        titleClassName="garnett-dialog-title"
+        actions={actions}
+        modal={false}
+        bodyClassName="garnett-dialog-body"
+        contentClassName="garnett-dialog-content"
+        open={this.props.open}
+        onRequestClose={this.handleClose}
+        autoScrollBodyContent={true}
+      >
+        <TextField
+          className="garnett-input"
+          type="text"
+          floatingLabelText="Title"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.title}
+          onChange={(e, newValue) => this.handleChange('title', newValue)}
+          errorText={!this.state.descriptionValidation && 'Enter a title that has less than two lines.'}
+        />
+        <TextField
+          className="garnett-input"
+          type="text"
+          floatingLabelText="Description"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.description}
+          onChange={(e, newValue) => this.handleChange('description', newValue)}
+          errorText={!this.state.descriptionValidation && 'Enter a description.'}
+        />
+        <DatePicker
+          className="garnett-input"
+          textFieldStyle={{display:'block',margin:'0 auto'}}
+          floatingLabelText="Date"
+          value={this.state.date}
+          disableYearSelection
+          firstDayOfWeek={0}
+          formatDate={this.formatDate}
+          shouldDisableDate={this.disableDates}
+          onChange={(e, newValue) => this.handleChange('date', newValue)}
+          errorText={!this.state.dateValidation && 'Select a date.'}
+        />
+        <TimePicker
+          className="garnett-input"
+          textFieldStyle={{display:'block'}}
+          floatingLabelText="Time"
+          value={this.state.time}
+          defaultTime={defaultTime}
+          minutesStep={5}
+          onChange={(e, newValue) => this.handleChange('time', newValue)}
+          errorText={!this.state.timeValidation && 'Enter a time.'}
+        />
+        <TextField
+          className="garnett-input"
+          type="text"
+          floatingLabelText="Location"
+          multiLine={true}
+          rowsMax={3}
+          value={this.state.location}
+          onChange={(e, newValue) => this.handleChange('location', newValue)}
+          errorText={!this.state.locationValidation && 'Enter a location.'}
+        />
+        <SelectField
+          className="garnett-input"
+          value={this.state.timeCommitment}
+          floatingLabelText="Time Commitment"
+          onChange={(e, key, newValue) => this.handleChange('timeCommitment', newValue)}
+          errorText={!this.state.timeCommitmentValidation && 'Enter a time commitment.'}
+        >
+          {commitmentOptions.map((option, i) => (
+            <MenuItem
+              key={i}
+              value={option}
+              primaryText={option.label}
+              insetChildren
+              checked={option === this.state.timeCommitment}
+            />
+          ))}
+        </SelectField>
+        <div style={{width:'256px',margin:'20px auto 0'}}>
+          <span>
+            Amount: {this.state.amount} merits
+          </span>
+          <Slider
+            sliderStyle={{marginBottom:0}}
+            name="Amount"
+            min={0}
+            max={100}
+            step={5}
+            value={this.state.amount}
+            onChange={(e, newValue) => this.handleChange('amount', newValue)}
+          />
+        </div>
+      </Dialog>
     )
   }
 }

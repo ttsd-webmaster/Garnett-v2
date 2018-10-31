@@ -5,14 +5,14 @@ import MenuItem from 'material-ui/MenuItem';
 import SelectField from 'material-ui/SelectField';
 import Paper from 'material-ui/Paper';
 
-export default function Filter(props) {
+export default function Filter({ value, filterData }) {
   return (
     <Paper className="filter-container">
       <SelectField
         style={{margin:'10px'}}
         floatingLabelText="Filters"
-        value={props.value}
-        onChange={(event, index, value) => props.filterData(value)}
+        value={value}
+        onChange={(event, index, value) => filterData(value)}
       >
         {filters.map((filter, i) => (
           <MenuItem

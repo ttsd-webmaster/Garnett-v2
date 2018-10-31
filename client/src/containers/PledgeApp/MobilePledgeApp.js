@@ -1,17 +1,16 @@
 import './MobilePledgeApp.css';
 import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions';
 import {
-  LoadableContacts,
-  LoadableSettings
-} from 'components/LoadableComponents';
-import { MyMerits } from './components/MyMerits/MyMerits';
-import { Pledges } from './components/Pledges/Pledges';
-import { MobileHeader } from './components/Mobile/MobileHeader';
-import { MobileNavbar } from './components/Mobile/MobileNavbar';
+  MyMerits,
+  Pledges,
+  Contacts,
+  Settings
+} from './components';
+import { MobileHeader, MobileNavbar } from './components/Mobile';
 
 import React, { PureComponent } from 'react';
 
-export default class MobilePledgeApp extends PureComponent {
+export class MobilePledgeApp extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,12 +90,12 @@ export default class MobilePledgeApp extends PureComponent {
           state={this.props.state}
           hidden={this.state.index !== 1}
         />
-        <LoadableContacts
+        <Contacts
           state={this.props.state}
           actives={this.state.activeArray}
           hidden={this.state.index !== 2}
         />
-        <LoadableSettings
+        <Settings
           state={this.props.state} 
           logoutCallBack={this.props.logoutCallBack} 
           history={this.props.history}

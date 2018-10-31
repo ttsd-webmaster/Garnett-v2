@@ -1,10 +1,10 @@
 import './Home.css';
-import { Header } from 'components/Header';
+import { Header } from 'components';
 import { GarnettApp } from './components/GarnettApp';
 
 import React, { PureComponent } from 'react';
 
-export default class Home extends PureComponent {
+export class Home extends PureComponent {
   componentDidMount() {
     localStorage.setItem('route', 'home');
   }

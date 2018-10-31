@@ -2,22 +2,30 @@ import React, { Fragment } from 'react';
 import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 
-export function FilterHeader(props) {
+export function FilterHeader({
+  state,
+  title,
+  filterName,
+  openPopover,
+  toggleIcon,
+  reverse,
+  ...rest
+}) {
   return (
-    <Subheader className="garnett-subheader">
-      {props.state && props.state.status === 'pledge' ? (
+    <Subheader className="garnett-subheader" {...rest}>
+      {state && state.status === 'pledge' ? (
         "Pledge Brothers"
       ) : (
         <Fragment>
-          {props.title}
+          {title}
           <span style={{ float:'right' }}>
-            <span className="garnett-filter" onClick={props.openPopover}> 
-              {props.filterName}
+            <span className="garnett-filter" onClick={openPopover}> 
+              {filterName}
             </span>
             <IconButton
-              iconClassName={props.toggleIcon}
+              iconClassName={toggleIcon}
               className="reverse-toggle"
-              onClick={props.reverse}
+              onClick={reverse}
             />
           </span>
         </Fragment>

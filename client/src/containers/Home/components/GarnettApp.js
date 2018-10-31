@@ -1,7 +1,6 @@
 import React from 'react';
 
-export function GarnettApp(props) {
-  const { title, value, goTo } = props;
+export function GarnettApp({ title, value, goTo }) {
   return (
     <div className="app-icon" onClick={goTo}>
       <div className="app-icon-image-container">

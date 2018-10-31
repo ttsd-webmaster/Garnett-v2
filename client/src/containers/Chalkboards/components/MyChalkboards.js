@@ -7,15 +7,26 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
-export default function MyChalkboards(props) {
-  const { filter } = props;
-  let myHostingChalkboards = sortChalkboards(props.myHostingChalkboards, filter);
-  let myAttendingChalkboards = sortChalkboards(props.myAttendingChalkboards, filter);
-  let myCompletedChalkboards = sortChalkboards(props.myCompletedChalkboards, filter);
+export default function MyChalkboards({
+  myHostingChalkboards,
+  myAttendingChalkboards,
+  myCompletedChalkboards,
+  state,
+  reverse,
+  filter,
+  filterName,
+  openPopover,
+  reverseChalkboards,
+  handleOpen,
+  filterCount
+}) {
+  let myHostingChalkboards = sortChalkboards(myHostingChalkboards, filter);
+  let myAttendingChalkboards = sortChalkboards(myAttendingChalkboards, filter);
+  let myCompletedChalkboards = sortChalkboards(myCompletedChalkboards, filter);
   let toggleIcon = "icon-down-open-mini";
   let label;
 
-  if (props.reverse) {
+  if (reverse) {
     myHostingChalkboards = myHostingChalkboards.slice().reverse();
     myAttendingChalkboards = myAttendingChalkboards.slice().reverse();
     myCompletedChalkboards = myCompletedChalkboards.slice().reverse();
@@ -31,18 +42,18 @@ export default function MyChalkboards(props) {
 
   return (
     <div id="my-chalkboards" className="active">
-      {props.state.status !== 'pledge' && (
+      {state.status !== 'pledge' && (
         <div>
           <Subheader className="garnett-subheader">
             Hosting
             <span style={{float:'right', height:'48px'}}>
-              <span className="garnett-filter" onClick={props.openPopover}> 
-                {props.filterName}
+              <span className="garnett-filter" onClick={openPopover}> 
+                {filterName}
               </span>
               <IconButton
                 iconClassName={toggleIcon}
                 className="reverse-toggle"
-                onClick={props.reverseChalkboards}
+                onClick={reverseChalkboards}
               />
             </span>
           </Subheader>
@@ -63,10 +74,10 @@ export default function MyChalkboards(props) {
                     </p>
                   }
                   secondaryTextLines={2}
-                  onClick={() => props.handleOpen(chalkboard, 'hosting')}
+                  onClick={() => handleOpen(chalkboard, 'hosting')}
                 >
                   <p className="garnett-date">
-                    {props.filterCount(chalkboard, filter)} {label}
+                    {filterCount(chalkboard, filter)} {label}
                   </p>
                 </ListItem>
                 <Divider className="garnett-divider large" inset={true} />
@@ -80,15 +91,15 @@ export default function MyChalkboards(props) {
 
       <Subheader className="garnett-subheader">
         Attending
-        {props.state.status === 'pledge' && (
+        {state.status === 'pledge' && (
           <span style={{float:'right'}}>
-            <span className="garnett-filter" onClick={props.openPopover}> 
-              {props.filterName}
+            <span className="garnett-filter" onClick={openPopover}> 
+              {filterName}
             </span>
             <IconButton
               iconClassName={toggleIcon}
               className="reverse-toggle"
-              onClick={props.reverseChalkboards}
+              onClick={reverseChalkboards}
             >
             </IconButton>
           </span>
@@ -111,10 +122,10 @@ export default function MyChalkboards(props) {
                 </p>
               }
               secondaryTextLines={2}
-              onClick={() => props.handleOpen(chalkboard, 'attending')}
+              onClick={() => handleOpen(chalkboard, 'attending')}
             >
               <p className="garnett-date">
-                {props.filterCount(chalkboard, filter)} {label}
+                {filterCount(chalkboard, filter)} {label}
               </p>
             </ListItem>
             <Divider className="garnett-divider large" inset={true} />
@@ -141,10 +152,10 @@ export default function MyChalkboards(props) {
                 </p>
               }
               secondaryTextLines={2}
-              onClick={() => props.handleOpen(chalkboard, 'attending')}
+              onClick={() => handleOpen(chalkboard, 'attending')}
             >
               <p className="garnett-date">
-                {props.filterCount(chalkboard, filter)} {label}
+                {filterCount(chalkboard, filter)} {label}
               </p>
             </ListItem>
             <Divider className="garnett-divider large" inset={true} />

@@ -1,10 +1,8 @@
 import './Main.css';
-import { LoadableContacts } from 'components/LoadableComponents';
 
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { MyMerits } from '../MyMerits/MyMerits';
-import { Pledges } from '../Pledges/Pledges';
+import { MyMerits, Pledges, Contacts } from 'containers/PledgeApp/components';
 
 const routes = [
   {
@@ -20,7 +18,7 @@ const routes = [
   {
     path: '/pledge-app/brothers',
     exact: true,
-    content: props => <LoadableContacts state={props.state} />
+    content: props => <Contacts state={props.state} />
   }
 ];
 

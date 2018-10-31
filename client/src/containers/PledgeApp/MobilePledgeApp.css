@@ -57,7 +57,6 @@
 .garnett-subheader {
   max-width: 700px;
   width: 100%;
-  background-color: #fafafa;
   margin: auto !important;
 }
 .garnett-subheader.dialog {
@@ -203,10 +202,10 @@
   flex-direction: column;
   background-color: #fff;
   padding-bottom: 44px !important;
-  border-bottom: 1px solid #e0e0e0 !important;
+  border-bottom: 1px solid var(--secondary-light) !important;
 }
 .garnett-dialog-body.grey {
-  background-color: #fafafa;
+  background-color: var(--background-color);
 }
 .garnett-dialog-body.tabs {
   min-height: 320px;
@@ -229,7 +228,7 @@
 .bottom-tabs {
   position: fixed !important;
   bottom: 0;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--secondary-light);
   z-index: 10;
 }
 
@@ -247,4 +246,29 @@
     height: 80px;
     width: 80px;
   }
+}
+
+/* Mobile Header */
+#mobile-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  background-color: #fff;
+  color: #777;
+  height: 55px;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--secondary-light);
+  letter-spacing: 0.5px;
+  z-index: 10;
+}
+#mobile-header .total-merits {
+  font-family: 'LeagueSpartan-Bold';
+  font-size: 22px;
+  color: rgba(0, 0, 0, 0.87);
+  margin-right: 5.7px;
+  margin-bottom: -3px;
 }
