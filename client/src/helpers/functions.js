@@ -46,6 +46,7 @@ export function registerNotificationToken(user, callback) {
   const displayName = user.firstName + user.lastName;
   const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
+  console.log(swUrl)
   navigator.serviceWorker.getRegistration(swUrl)
   .then((registration) => {
     loadFirebase('messaging')
