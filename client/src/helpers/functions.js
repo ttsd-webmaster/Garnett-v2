@@ -66,24 +66,24 @@ export function registerNotificationToken(user, callback) {
 
             API.saveMessagingToken(displayName, currentToken)
             .then(messageRes => {
-              callback()
+              callback(user)
             })
             .catch(error => console.log(`Error: ${error}`));
           } 
           else {
             // Show permission request.
             console.log('No Instance ID token available. Request permission to generate one.');
-            callback()
+            callback(user)
           }
         })
         .catch((err) => {
           console.log('An error occurred while retrieving token. ', err);
-          callback()
+          callback(user)
         });
       })
       .catch((err) => {
         console.log('Unable to get permission to notify.', err);
-        callback()
+        callback(user)
       });
     });
   });
