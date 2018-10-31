@@ -10,7 +10,7 @@ var SigmaData = require('./data/RushSpring18.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://garnett-42475.firebaseio.com"
+  databaseURL: process.env.FIREBASE_DATABASE_URL
 });
 
 var classes = ['Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma'];

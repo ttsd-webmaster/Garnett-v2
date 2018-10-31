@@ -44,7 +44,7 @@ export function loadFirebase(module) {
 
 export function registerNotificationToken(user, callback) {
   const displayName = user.firstName + user.lastName;
-  const swUrl = 'service-worker.js';
+  const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
   navigator.serviceWorker.getRegistration(swUrl)
   .then((registration) => {

@@ -3,7 +3,7 @@ var serviceAccount = require("../../../serviceAccountKey.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://garnett-42475.firebaseio.com"
+  databaseURL: process.env.FIREBASE_DATABASE_URL
 })
 
 function verifyAllUsers(nextPageToken) {

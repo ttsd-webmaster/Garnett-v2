@@ -1,6 +1,7 @@
+const admin = require("firebase-admin");
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
-const admin = require("firebase-admin");
+require('@firebase/storage');
 
 // Retrieving Authentication Status Route
 exports.get_auth_status = function(req, res) {
@@ -12,19 +13,6 @@ exports.get_auth_status = function(req, res) {
   userRef.once('value', (user) => {
     res.json(user.val());
   });
-};
-
-// Get Firebase Data Route
-exports.get_firebase_data = function(req, res) {
-  const firebaseData = {
-    apiKey: 'AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc',
-    authDomain: 'garnett-42475.firebaseapp.com',
-    databaseURL: 'https://garnett-42475.firebaseio.com',
-    storageBucket: 'garnett-42475.appspot.com',
-    messagingSenderId: '741733387760'
-  }
-
-  res.json(firebaseData);
 };
 
 // Query for active data
@@ -128,7 +116,6 @@ exports.signup = function(req, res) {
   firstName = firstName[0].toUpperCase() + firstName.substr(1);
   lastName = lastName[0].toUpperCase() + lastName.substr(1);
   const displayName = firstName + lastName;
-  const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
   const usersRef = admin.database().ref('/users');
   const userRef = admin.database().ref('/users/' + displayName);
 
@@ -156,25 +143,43 @@ exports.signup = function(req, res) {
               email: req.body.email.trim(),
               totalMerits: 0
             };
-
             // Alumni
             if (req.body.year === 'Alumni') {
               userInfo.status = 'alumni';
               userRef.update(userInfo);
             }
             else {
+              const storage = firebase.storage().ref(`${displayName}.jpg`);
               // Pledge
               if (req.body.code === req.body.pledgeCode) {
                 userInfo.status = 'pledge';
               }
               // Active
               else {
-                userInfo.photoURL = defaultPhoto
                 userInfo.status = 'active';
               }
-              userRef.set(userInfo);
+              // Sets user photo here
+              // Checks first if the .jpg file is in firebase storage
+              storage.getDownloadURL()
+              .then((url) => {
+                userInfo.photoURL = url;
+                userRef.set(userInfo);
+              })
+              .catch((error) => {
+                // Checks if the .JPG file is in firebase storage
+                const storage = firebase.storage().ref(`${displayName}.JPG`);
+                storage.getDownloadURL()
+                .then((url) => {
+                  userInfo.photoURL = url;
+                  userRef.set(userInfo);
+                })
+                .catch((error) => {
+                  const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+                  userInfo.photoURL = defaultPhoto
+                  userRef.set(userInfo)
+                });
+              });
             }
-
             // Set merits
             usersRef.once('value', (users) => {
               // Pledge
@@ -273,21 +278,6 @@ exports.logout = function(req, res) {
   .catch(function(error) {
     console.log(error);
     res.status(400).send(error);
-  });
-};
-
-// Sets the user photo
-exports.update_photo = function(req, res) {
-  const { displayName } = req.body;
-  const userRef = admin.database().ref('/users/' + displayName);
-
-  userRef.update({
-    photoURL: req.body.url
-  });
-
-  // Sends back new user data with updated photo
-  userRef.once('value', (user) => {
-    res.json(user.val());
   });
 };
 

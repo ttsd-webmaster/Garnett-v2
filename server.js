@@ -20,19 +20,19 @@ require('dotenv').config();
 
 // Firebase Config
 firebase.initializeApp({
-  apiKey: "AIzaSyAR48vz5fVRMkPE4R3jS-eI8JRnqEVlBNc",
-  authDomain: "garnett-42475.firebaseapp.com",
-  databaseURL: "https://garnett-42475.firebaseio.com",
-  projectId: "garnett-42475",
-  storageBucket: "garnett-42475.appspot.com",
-  messagingSenderId: "741733387760"
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 });
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://garnett-42475.firebaseio.com",
-  projectId: "garnett-42475",
-  messagingSenderId: "741733387760"
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID
 });
 
 // Redirect all HTTP traffic to HTTPS
