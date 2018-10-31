@@ -105,9 +105,10 @@ export default class App extends Component {
   loginCallBack = (user) => {
     /* Checks if browser is Safari, iOS version < 11, IE, Edge, or in development */
     if (loginCheck()) {
-      registerNotificationToken(user);
+      this.setData(user);
+    } else {
+      registerNotificationToken(user, () => this.setData(user));
     }
-    this.setState(user);
   }
 
   setData = (user) => {
