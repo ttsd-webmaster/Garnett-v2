@@ -1,7 +1,6 @@
 {
   "name": "garnett",
   "version": "0.1.0",
-  "homepage": "./",
   "private": true,
   "devDependencies": {
     "autoprefixer": "7.1.6",
