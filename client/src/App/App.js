@@ -107,8 +107,7 @@ export default class App extends Component {
     if (loginCheck()) {
       this.setData(user);
     } else {
-      this.setData(user);
-      // registerNotificationToken(user, () => this.setState(user));
+      registerNotificationToken(user, this.setState(user));
     }
   }
 
