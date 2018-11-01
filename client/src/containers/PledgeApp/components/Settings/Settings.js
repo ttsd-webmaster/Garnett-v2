@@ -9,7 +9,7 @@ import Toggle from 'material-ui/Toggle';
 
 const toggleStyles = {
   toggle: {
-    right: 20
+    right: 30
   },
   thumbSwitched: {
     backgroundColor: 'var(--accent-color)'
@@ -127,9 +127,9 @@ export class Settings extends PureComponent {
                 thumbSwitchedStyle={toggleStyles.thumbSwitched}
                 trackSwitchedStyle={toggleStyles.trackSwitched}
                 toggled={this.state.isDarkMode}
-                onToggle={this.onToggle}
               />
             }
+            onClick={this.onToggle}
           />
         </List>
 
