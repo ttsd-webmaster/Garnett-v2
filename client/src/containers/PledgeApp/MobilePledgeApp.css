@@ -1,15 +1,31 @@
+/* Dark Mode */
+#content-container.dark {
+  background-color: var(--background-color);
+  --background-color: #131313;
+  --list-color: #292929;
+  --primary-color: crimson;
+  --secondary-color: #ccc;
+  --border-color: #363636;
+  --text-color: #e0e0e0;
+  --text-dark: #fafafa;
+  --icon-color: var(--text-color);
+  --icon-dark: #777;
+  --dialog-button: var(--text-color);
+  --label-color: #777;
+}
+
 /* Hide button */
 .hide-buttons .fixed-button{
   transform: scale(0);
 }
 
 /* Container */
-.content-container {
+#content-container {
   height: 100vh;
   overflow: hidden;
 }
 /* Mobile slide view */
-.content-container .animate-in {
+#content-container .animate-in {
   position: relative;
   min-height: calc(100vh - 162px);
   max-height: 100vh;
@@ -17,13 +33,13 @@
   overflow: auto;
 }
 @media(max-width: 768px) {
-  .content-container .animate-in {
+  #content-container .animate-in {
     padding-top: 55px;
   }
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */ 
-  .content-container .animate-in {
+  #content-container .animate-in {
     overflow: scroll !important;
     -webkit-overflow-scrolling: touch;
   }
@@ -57,6 +73,8 @@
 .garnett-subheader {
   max-width: 700px;
   width: 100%;
+  background-color: var(--background-color);
+  color: var(--text-color) !important;
   margin: auto !important;
 }
 .garnett-subheader.dialog {
@@ -72,6 +90,10 @@
 }
 .reverse-toggle .icon-down-open-mini {
   top: 4px;
+}
+.icon-down-open-mini,
+.icon-up-open-mini {
+  color: var(--text-dark) !important;
 }
 
 .garnett-list {
@@ -92,7 +114,7 @@
 }
 
 .garnett-list-item > div > div {
-  background-color: #fff;
+  background-color: var(--list-color);
 }
 .garnett-list-item.large > div > div {
   min-height: 48px;
@@ -100,9 +122,6 @@
 }
 .garnett-list-item.small > div > div {
   padding: 8px 16px !important;
-}
-.garnett-list-item.settings > div > div {
-  z-index: -1;
 }
 .garnett-list-item.long > div > div > div:last-child {
   height: fit-content !important;
@@ -127,7 +146,7 @@
 
 .garnett-icon {
   font-size: 1.4em;
-  color: var(--primary-color);
+  color: var(--icon-color);
 }
 
 .garnett-name {
@@ -137,24 +156,27 @@
   -webkit-box-orient: vertical;
   height: 16px;
   font-weight: 700;
+  color: var(--text-dark);
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .garnett-description {
+  color: var(--text-color) !important;
   word-wrap: break-word;
 }
 
 .garnett-date {
   float: right;
-  color: var(--secondary-color);
+  color: var(--secondary-color) !important;
   font-size: 14px;
   margin-left: 20px;
 }
 
 .garnett-divider {
   position: relative;
+  background-color: var(--border-color) !important;
 }
 @media(min-width: 366px) {
   .garnett-divider.large {
@@ -174,11 +196,14 @@
   width: 90% !important;
   max-width: 450px !important;
 }
+.garnett-dialog-content > div {
+  background-color: var(--list-color) !important;
+}
 
 /* The actual tabs */
 .garnett-dialog-tabs > div:first-child {
   position: fixed;
-  background-color: #fff !important;
+  background-color: var(--list-color) !important;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
   z-index: 2;
 }
@@ -200,9 +225,9 @@
 .garnett-dialog-body {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--list-color);
   padding-bottom: 44px !important;
-  border-bottom: 1px solid var(--secondary-light) !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
 .garnett-dialog-body.grey {
   background-color: var(--background-color);
@@ -223,12 +248,24 @@
   margin: 0 auto;
   flex: 0 0 auto;
 }
+.garnett-input > label {
+  color: var(--label-color) !important;
+}
+.garnett-input textarea,
+.garnett-input div {
+  color: var(--text-dark) !important;
+}
+
+.garnett-button {
+  color: var(--dialog-button) !important;
+}
 
 /* Bottom Navigation */
 .bottom-tabs {
   position: fixed !important;
   bottom: 0;
-  border-top: 1px solid var(--secondary-light);
+  background-color: var(--list-color) !important;
+  border-top: 1px solid var(--border-color);
   z-index: 10;
 }
 
@@ -255,20 +292,20 @@
   align-items: center;
   position: fixed;
   top: 0;
-  background-color: #fff;
+  background-color: var(--list-color);
   color: var(--secondary-color);
   height: 55px;
   width: 100%;
   font-size: 18px;
   font-weight: 500;
-  border-bottom: 1px solid var(--secondary-light);
+  border-bottom: 1px solid var(--border-color);
   letter-spacing: 0.5px;
   z-index: 10;
 }
 #mobile-header .total-merits {
   font-family: 'LeagueSpartan-Bold';
   font-size: 22px;
-  color: rgba(0, 0, 0, 0.87);
+  color: var(--text-dark);
   margin-right: 5.7px;
   margin-bottom: -3px;
 }

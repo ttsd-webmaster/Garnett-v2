@@ -249,11 +249,13 @@ export default class ActiveMeritDialog extends PureComponent {
 
     const actions = [
       <FlatButton
+        className="garnett-button"
         label="Demerit"
         primary={true}
         onClick={() => this.merit('demerit')}
       />,
       <FlatButton
+        className="garnett-button"
         label="Merit"
         primary={true}
         onClick={() => this.merit('merit')}
@@ -331,7 +333,7 @@ export default class ActiveMeritDialog extends PureComponent {
         )}
 
         <div style={{width:'256px',margin:'20px auto 0'}}>
-          <span>
+          <span style={{ color: 'var(--text-color)' }}>
             Amount: {this.state.amount} merits
           </span>
           <Slider
@@ -353,12 +355,14 @@ export default class ActiveMeritDialog extends PureComponent {
         />*/}
         <Checkbox
           style={checkboxStyle}
+          labelStyle={{ color: 'var(--text-color)' }}
           label="PC Greet"
           checked={this.state.isPCGreet}
           onCheck={(e, newValue) => this.handleChange('isPCGreet', newValue)}
         />
         <Checkbox
           style={checkboxStyle}
+          labelStyle={{ color: 'var(--text-color)' }}
           label="All Pledges"
           checked={this.state.allPledges}
           onCheck={(e, newValue) => this.handleChange('allPledges', newValue)}

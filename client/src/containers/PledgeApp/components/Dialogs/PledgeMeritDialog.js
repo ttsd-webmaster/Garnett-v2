@@ -353,7 +353,7 @@ export default class PledgeMeritDialog extends PureComponent {
         )}
 
         <div style={{width:'256px',margin:'20px auto 0'}}>
-          <span>
+          <span style={{ color: 'var(--text-color)' }}>
             Amount: {this.state.amount} merits
           </span>
           <Slider
@@ -369,12 +369,14 @@ export default class PledgeMeritDialog extends PureComponent {
         </div>
         {/*<Checkbox
           style={checkboxStyle}
+          labelStyle={{ color: 'var(--text-color)' }}
           label="Chalkboard"
           checked={this.state.isChalkboard}
           onCheck={(e, newValue) => this.handleChange('isChalkboard', newValue)}
         />*/}
         <Checkbox
           style={checkboxStyle}
+          labelStyle={{ color: 'var(--text-color)' }}
           label="PC Greet"
           checked={this.state.isPCGreet}
           onCheck={(e, newValue) => this.handleChange('isPCGreet', newValue)}

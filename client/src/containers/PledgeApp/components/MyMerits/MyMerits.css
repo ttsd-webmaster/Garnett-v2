@@ -8,6 +8,7 @@
   float: right;
   font-family: 'LeagueSpartan-Bold';
   font-size: 16px;
+  color: var(--text-dark);
   margin-right: 10px;
 }
 
@@ -38,7 +39,7 @@
 }
 
 .merit-date {
-  color: rgba(0, 0, 0, 0.54);
+  color: var(--text-color);
   font-size: 14px;
   margin: 0;
 }

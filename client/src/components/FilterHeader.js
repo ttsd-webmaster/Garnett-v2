@@ -19,9 +19,11 @@ export function FilterHeader({
         <Fragment>
           {title}
           <span style={{ float:'right' }}>
-            <span className="garnett-filter" onClick={openPopover}> 
-              {filterName}
-            </span>
+            {filterName && openPopover && (
+              <span className="garnett-filter" onClick={openPopover}> 
+                {filterName}
+              </span>
+            )}
             <IconButton
               iconClassName={toggleIcon}
               className="reverse-toggle"

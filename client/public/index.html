@@ -44,6 +44,12 @@
       To create a production bundle, use `npm run build`.
     -->
     <script>
+      const isDarkMode = localStorage.getItem('darkMode')
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+      }
+    </script>
+    <script>
       function iOSversion() {
         if (/iP(hone|od|ad)/.test(navigator.platform)) {
           // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>

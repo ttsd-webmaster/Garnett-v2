@@ -7,6 +7,10 @@
   border-radius: 50%;
 }
 
+.garnett-list.my-info {
+  margin-bottom: 30px;
+}
+
 .logout-button {
   display: flex;
   justify-content: center;

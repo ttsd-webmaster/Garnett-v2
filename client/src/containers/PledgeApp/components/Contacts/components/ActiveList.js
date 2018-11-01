@@ -39,10 +39,10 @@ export class ActiveList extends PureComponent {
                 className="garnett-list-item large"
                 leftAvatar={<Avatar className="garnett-image large" size={70} src={active.photoURL} />}
                 primaryText={
-                  <p className="active-name"> {active.firstName} {active.lastName}</p>
+                  <p className="garnett-name"> {active.firstName} {active.lastName}</p>
                 }
                 secondaryText={
-                  <p>
+                  <p className="garnett-description">
                     {active.year}
                     <br />
                     {active.major}
