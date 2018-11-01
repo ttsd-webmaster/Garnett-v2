@@ -117,7 +117,7 @@ export default class ActiveComplaints extends Component {
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
     let { scrollPosition1, scrollPosition2 } = this.state;
-    let contentContainer = document.querySelector('.content-container');
+    let contentContainer = document.getElementById('content-container');
     const scrollPosition = contentContainer.childNodes[3].scrollTop;
     const myComplaints = document.getElementById('my-complaints');
     const pastComplaints = document.getElementById('past-complaints');

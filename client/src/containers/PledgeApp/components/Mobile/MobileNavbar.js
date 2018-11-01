@@ -14,7 +14,7 @@ export function MobileNavbar({
       selectedIndex={index}
     >
       <BottomNavigationItem
-        label="Merits"
+        label={<span style={getTabStyle(index === 0)}>Merits</span>}
         icon={
           <i
             style={getTabStyle(index === 0)}
@@ -24,10 +24,9 @@ export function MobileNavbar({
         onClick={() => handleChange(0)}
       />
       <BottomNavigationItem
-        label={
-          status === 'pledge'
-            ? 'Pbros'
-            : 'Pledges'
+        label={status === 'pledge' ? 
+          (<span style={getTabStyle(index === 1)}>Pbros</span>) : 
+          (<span style={getTabStyle(index === 1)}>Pledges</span>)
         }
         icon={
           <i
@@ -38,7 +37,7 @@ export function MobileNavbar({
         onClick={() => handleChange(1)}
       />
       <BottomNavigationItem
-        label="Brothers"
+        label={<span style={getTabStyle(index === 2)}>Brothers</span>}
         icon={
           <i
             style={getTabStyle(index === 2)}
@@ -48,7 +47,7 @@ export function MobileNavbar({
         onClick={() => handleChange(2)}
       />
       <BottomNavigationItem
-        label="Settings"
+        label={<span style={getTabStyle(index === 3)}>Settings</span>}
         icon={
           <i
             style={getTabStyle(index === 3)}

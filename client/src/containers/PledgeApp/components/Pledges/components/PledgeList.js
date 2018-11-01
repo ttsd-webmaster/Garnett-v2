@@ -16,7 +16,7 @@ export function PledgeList({ pledges, handleOpen }) {
               <p className="garnett-name"> {pledge.firstName} {pledge.lastName} </p>
             }
             secondaryText={
-              <p>
+              <p className="garnett-description">
                 {pledge.year}
                 <br />
                 {pledge.major}

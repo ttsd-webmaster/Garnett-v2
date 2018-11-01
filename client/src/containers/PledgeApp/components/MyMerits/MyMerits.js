@@ -101,8 +101,6 @@ export class MyMerits extends PureComponent {
         <FilterHeader
           title="Recent"
           toggleIcon={toggleIcon}
-          filterName={this.state.filterName}
-          openPopover={this.openPopover}
           reverse={this.reverse}
         />
         <MyMeritsList

@@ -1,38 +1,14 @@
-.contacts-photo {
-  object-fit: cover;
-  display: block;
-  height: 125px;
-  width: 125px;
-  margin: 15px auto;
-  border-radius: 50%;
-}
-@media(max-width: 374px) {
-  .contacts-photo {
-    height: 100px;
-    width: 100px;
-  }
-}
-
-.contacts-list {
-  text-align: left;
-}
-
 .contacts-dialog-body {
   background-color: var(--background-color);
   padding: 0 0 24px !important;
 }
 
-.active-name {
-  font-weight: 700;
-  margin: 0;
-}
-
 @media(max-width: 700px) {
   .garnett-subheader.contacts {
     position: sticky;
-    top: 0;
+    top: 55px;
     line-height: 47px !important;
-    border-bottom: 1px solid var(--secondary-light);
+    border-bottom: 1px solid var(--border-color);
     z-index: 1;
   }
 }

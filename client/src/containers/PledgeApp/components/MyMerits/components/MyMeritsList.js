@@ -23,11 +23,9 @@ export function MyMeritsList({ merits, handleDeleteOpen }) {
             <ListItem
               className="garnett-list-item large"
               leftAvatar={<Avatar size={70} src={merit.photoURL} className="garnett-image large" />}
-              primaryText={
-                <p className="garnett-name"> {merit.name} </p>
-              }
+              primaryText={<p className="garnett-name"> {merit.name} </p>}
               secondaryText={
-                <p> {merit.description} </p>
+                <p className="garnett-description"> {merit.description} </p>
               }
               secondaryTextLines={2}
               onClick={() => handleDeleteOpen(merit)}

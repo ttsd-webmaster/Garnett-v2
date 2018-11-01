@@ -48,8 +48,6 @@ export default class MeritsList extends PureComponent {
         <FilterHeader
           title="Recent"
           toggleIcon={toggleIcon}
-          filterName={this.state.filterName}
-          openPopover={this.openPopover}
           reverse={this.reverse}
         />
 
@@ -67,12 +65,16 @@ export default class MeritsList extends PureComponent {
                 <Divider className="garnett-divider large" inset={true} />
                 <ListItem
                   className="garnett-list-item large"
-                  leftAvatar={<Avatar className="garnett-image large" size={70} src={merit.photoURL} />}
-                  primaryText={
-                    <p className="garnett-name"> {merit.name} </p>
+                  leftAvatar={
+                    <Avatar
+                      className="garnett-image large"
+                      size={70}
+                      src={merit.photoURL}
+                    />
                   }
+                  primaryText={<p className="garnett-name"> {merit.name} </p>}
                   secondaryText={
-                    <p> {merit.description} </p>
+                    <p className="garnett-description"> {merit.description} </p>
                   }
                   secondaryTextLines={2}
                 >

@@ -2,7 +2,7 @@ import API from 'api/API.js';
 
 // Used to get tab color for Pledge App
 export function getTabStyle(isActive) {
-  return { color: isActive ? 'var(--primary-color)' : 'var(--secondary-color)' };
+  return { color: isActive ? 'var(--icon-color)' : 'var(--icon-dark)' };
 }
 
 export function isMobileDevice() {

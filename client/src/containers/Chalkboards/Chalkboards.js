@@ -177,7 +177,7 @@ export default class Chalkboards extends Component {
   select = (index) => {
     let previousIndex = this.state.selectedIndex;
     let { scrollPosition1, scrollPosition2 } = this.state;
-    let contentContainer = document.querySelector('.content-container');
+    let contentContainer = document.getElementById('content-container');
     const scrollPosition = contentContainer.childNodes[2].scrollTop;
     const myChalkboards = document.getElementById('my-chalkboards');
     const allChalkboards = document.getElementById('all-chalkboards');

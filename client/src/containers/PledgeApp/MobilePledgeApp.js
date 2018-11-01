@@ -23,8 +23,14 @@ export class MobilePledgeApp extends PureComponent {
   }
 
   componentDidMount() {
+    const isDarkMode = localStorage.getItem('darkMode')
+
     console.log(`Pledge app mount: ${this.props.state.name}`)
     localStorage.setItem('route', 'pledge-app');
+
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    }
 
     if (navigator.onLine) {
       loadFirebase('database')
@@ -71,7 +77,7 @@ export class MobilePledgeApp extends PureComponent {
 
   render() {
     return (
-      <div className="content-container">
+      <div id="content-container">
         <MobileHeader
           status={this.props.state.status}
           index={this.state.index}
