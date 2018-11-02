@@ -38,7 +38,7 @@ body {
 /* Dark Mode */
 body.dark-mode {
   background-color: var(--background-color);
-  --background-color: #131313;
+  --background-color: #1a1a1a;
   --list-color: #292929;
   --primary-color: crimson;
   --secondary-color: #ccc;
