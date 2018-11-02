@@ -126,6 +126,7 @@
 
 .garnett-icon {
   font-size: 1.4em;
+  color: var(--icon-color);
 }
 
 .garnett-name {

@@ -44,13 +44,25 @@
       To create a production bundle, use `npm run build`.
     -->
     <script>
-      const hours = new Date().getHours();
-      if (hours < 6 || hours > 17) {
-        localStorage.setItem('darkMode', true);
-        document.body.classList.add('dark-mode');
-      } else {
-        localStorage.setItem('darkMode', false);
-        document.body.classList.remove('dark-mode');
+      function isMobileDevice() {
+        return (navigator.userAgent.match(/Android/i) || 
+                navigator.userAgent.match(/webOS/i) || 
+                navigator.userAgent.match(/iPhone/i) || 
+                navigator.userAgent.match(/iPad/i) || 
+                navigator.userAgent.match(/iPod/i) || 
+                navigator.userAgent.match(/BlackBerry/i) || 
+                navigator.userAgent.match(/Windows Phone/i))
+      };
+
+      if (isMobileDevice()) {
+        const hours = new Date().getHours();
+        if (hours < 6 || hours > 17) {
+          localStorage.setItem('darkMode', true);
+          document.body.classList.add('dark-mode');
+        } else {
+          localStorage.setItem('darkMode', false);
+          document.body.classList.remove('dark-mode');
+        }
       }
     </script>
     <script>
