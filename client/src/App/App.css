@@ -26,12 +26,13 @@ body {
   --border-color: #e0e0e0;
   --accent-color: #00967e;
   --accent-dark: #1d796a;
-  --text-color: rgba(0, 0, 0, 0.54);
-  --text-dark: rgba(0, 0, 0, 0.87);
+  --text-color: rgba(0, 0, 0, 0.87);
+  --text-light: rgba(0, 0, 0, 0.54);
   --icon-color: var(--primary-color);
   --icon-dark: var(--secondary-color);
   --dialog-button: var(--primary-color);
   --label-color: rgba(0, 0, 0, 0.3);
+  --placeholder-color: #e0e0e0;
 }
 
 /* Dark Mode */
@@ -42,12 +43,13 @@ body.dark-mode {
   --primary-color: crimson;
   --secondary-color: #ccc;
   --border-color: #363636;
-  --text-color: #e0e0e0;
-  --text-dark: #fafafa;
+  --text-color: #fafafa;
+  --text-light: #e0e0e0;
   --icon-color: var(--text-color);
   --icon-dark: #777;
   --dialog-button: var(--text-color);
   --label-color: #777;
+  --placeholder-color: #363636;
 }
 
 @media(max-width: 410px) {
@@ -146,7 +148,7 @@ div, a {
 .placeholder-skeleton {
   position: relative;
   height: 88px;
-  background-color: #fff;
+  background-color: var(--list-color);
   z-index: -1;
 }
 .placeholder-avatar {
@@ -155,7 +157,7 @@ div, a {
   left: 16px;
   height: 70px;
   width: 70px;
-  background-color: #eee;
+  background-color: var(--placeholder-color);
   border-radius: 50%;
 }
 .placeholder-name {
@@ -164,7 +166,7 @@ div, a {
   left: 102px;
   height: 16px;
   width: 100px;
-  background-color: #eee;
+  background-color: var(--placeholder-color);
 }
 .placeholder-year {
   position: absolute;
@@ -172,7 +174,7 @@ div, a {
   left: 102px;
   height: 10px;
   width: 60px;
-  background-color: #eee;
+  background-color: var(--placeholder-color);
 }
 .placeholder-major {
   position: absolute;
@@ -180,7 +182,7 @@ div, a {
   left: 102px;
   height: 10px;
   width: 120px;
-  background-color: #eee;
+  background-color: var(--placeholder-color);
 }
 .placeholder-date {
   position: absolute;
@@ -188,7 +190,7 @@ div, a {
   right: 30px;
   height: 10px;
   width: 34px;
-  background-color: #eee;
+  background-color: var(--placeholder-color);
 }
 .placeholder-merits {
   position: absolute;
@@ -196,7 +198,7 @@ div, a {
   right: 30px;
   height: 16px;
   width: 34px;
-  background-color: #eee;
+  background-color: var(--placeholder-color);
 }
 .placeholder-description {
   position: absolute;
@@ -204,7 +206,7 @@ div, a {
   left: 16px;
   height: 16px;
   width: 120px;
-  background-color: #eee;
+  background-color: var(--placeholder-color);
 }
 
 /* TT Logo to go back to website */

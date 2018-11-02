@@ -1,4 +1,4 @@
-import { PlaceholderRusheeList } from 'components/Placeholders.js';
+import { PlaceholderRusheeList } from 'components/Placeholders';
 import { InteractedCheckbox } from './InteractedCheckbox';
 
 import React, { PureComponent } from 'react';

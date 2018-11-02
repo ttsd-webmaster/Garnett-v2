@@ -8,7 +8,7 @@
   float: right;
   font-family: 'LeagueSpartan-Bold';
   font-size: 16px;
-  color: var(--text-dark);
+  color: var(--text-color);
   margin-right: 10px;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .merit-date {
-  color: var(--text-color);
+  color: var(--text-light);
   font-size: 14px;
   margin: 0;
 }
@@ -50,10 +50,6 @@
 /* Merit Dialog */
 #remaining-merits {
   font-size: 14px;
-  color: var(--text-color);
+  color: var(--text-light);
   margin: 20px auto 0;
-}
-.garnett-list.dialog.pledge {
-  padding-bottom: 24px !important;
-  margin-top: 0;
 }

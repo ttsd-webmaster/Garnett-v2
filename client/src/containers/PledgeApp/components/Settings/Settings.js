@@ -7,24 +7,11 @@ import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Toggle from 'material-ui/Toggle';
 
-const toggleStyles = {
-  toggle: {
-    right: 30
-  },
-  thumbSwitched: {
-    backgroundColor: 'var(--accent-color)'
-  },
-  trackSwitched: {
-    backgroundColor: 'var(--accent-dark)'
-  }
-}
+const toggleStyle = { right: 30 };
+const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
 export class Settings extends PureComponent {
-  constructor(props) {
-    super(props);
-    const isDarkMode = localStorage.getItem('darkMode') === 'true'
-    this.state = { isDarkMode };
-  }
+  state = { isDarkMode };
 
   onToggle = () => {
     const { isDarkMode } = this.state;
@@ -122,12 +109,7 @@ export class Settings extends PureComponent {
               </p>
             }
             rightIcon={
-              <Toggle 
-                style={toggleStyles.toggle}
-                thumbSwitchedStyle={toggleStyles.thumbSwitched}
-                trackSwitchedStyle={toggleStyles.trackSwitched}
-                toggled={this.state.isDarkMode}
-              />
+              <Toggle  style={toggleStyle} toggled={this.state.isDarkMode} />
             }
             onClick={this.onToggle}
           />

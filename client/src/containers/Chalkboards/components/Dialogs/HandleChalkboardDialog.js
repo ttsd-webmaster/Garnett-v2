@@ -19,7 +19,6 @@ const inkBarStyle = {
   position: 'fixed',
   bottom: 'auto',
   marginTop: '46px',
-  backgroundColor: 'var(--primary-color)',
   zIndex: 2
 };
 

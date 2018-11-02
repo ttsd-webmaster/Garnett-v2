@@ -14,7 +14,6 @@ const inkBarStyle = {
   position: 'fixed',
   bottom: 'auto',
   marginTop: '46px',
-  backgroundColor: 'var(--icon-color)',
   zIndex: 2
 };
 
@@ -39,9 +38,7 @@ export class ActiveView extends PureComponent {
   state = { index: 0 }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.pledge !== nextProps.pledge) {
-      this.setState({ index: 0 });
-    }
+    this.setState({ index: 0 });
   }
 
   handleChange = (index) => {
@@ -153,6 +150,7 @@ export class ActiveView extends PureComponent {
         <Tabs
           className="garnett-dialog-tabs"
           inkBarStyle={inkBarStyle}
+          value={this.state.index}
           onChange={this.handleChange}
         >
           <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>

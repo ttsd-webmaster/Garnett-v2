@@ -28,8 +28,8 @@ export function PledgeView({
     return (
       <FullscreenDialog
         title={fullName}
-        titleStyle={{fontSize:'22px'}}
-        style={{ backgroundColor: 'var(--background-color' }}
+        titleStyle={{ fontSize:'22px' }}
+        style={{ backgroundColor: 'var(--background-color)' }}
         open={open}
         onRequestClose={handleClose}
       >

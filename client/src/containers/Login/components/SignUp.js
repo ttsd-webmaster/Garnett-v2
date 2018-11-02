@@ -12,10 +12,9 @@ export default function SignUp(props) {
         <TextField
           className="login-input"
           type={form.type}
-          inputStyle={{color: '#fff'}}
+          inputStyle={{ color: '#fff' }}
           floatingLabelText={form.name}
-          floatingLabelStyle={{color: '#888'}}
-          floatingLabelFocusStyle={{color: 'var(--primary-color'}}
+          floatingLabelStyle={{ color: '#888' }}
           value={props[`${form.value}`]}
           onChange={(e, newValue) => props.handleChange(form.value, newValue)}
           errorText={!props[`${form.value + 'Validation'}`] && form.errorText}
@@ -28,8 +27,8 @@ export default function SignUp(props) {
           className="login-input"
           value={props[`${select.value}`]}
           floatingLabelText={select.name}
-          floatingLabelStyle={{color: '#888'}}
-          labelStyle={{color: '#fff'}}
+          floatingLabelStyle={{ color: '#888' }}
+          labelStyle={{ color: '#fff' }}
           onChange={(e, key, newValue) => props.handleChange(select.value, newValue)}
           errorText={!props[`${select.value + 'Validation'}`] && select.errorText}
           key={i}
@@ -50,10 +49,9 @@ export default function SignUp(props) {
         <TextField
           className="login-input"
           type={form.type}
-          inputStyle={{color: '#fff'}}
+          inputStyle={{ color: '#fff' }}
           floatingLabelText={form.name}
-          floatingLabelStyle={{color: '#888'}}
-          floatingLabelFocusStyle={{color: 'var(--primary-color'}}
+          floatingLabelStyle={{ color: '#888' }}
           value={props[`${form.value}`]}
           onChange={(e, newValue) => props.handleChange(form.value, newValue)}
           errorText={!props[`${form.value + 'Validation'}`] && form.errorText}
