@@ -12,10 +12,9 @@ export default function SignIn({
       <TextField
         className="login-input"
         type="email"
-        inputStyle={{color: '#fff'}}
+        inputStyle={{ color: '#fff' }}
         floatingLabelText="Email"
-        floatingLabelStyle={{color: '#888'}}
-        floatingLabelFocusStyle={{color: 'var(--primary-color)'}}
+        floatingLabelStyle={{ color: '#888' }}
         value={forgotEmail}
         onChange={(e, newValue) => handleChange('forgotEmail', newValue)}
         errorText={!forgotEmailValidation && 'Please enter a valid email.'}

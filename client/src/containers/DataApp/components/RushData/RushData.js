@@ -1,7 +1,7 @@
 import './RushData.css';
 import rushData from './data/rushData.json';
-import Filter from './components/Filter.js';
-import Chart from './components/Chart.js';
+import Filter from './components/Filter';
+import Chart from './components/Chart';
 
 import React, { PureComponent } from 'react';
 

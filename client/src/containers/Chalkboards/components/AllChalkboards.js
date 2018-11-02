@@ -1,5 +1,5 @@
 import sortChalkboards from './helpers/sortChalkboards.js';
-import { PlaceholderMerit } from 'components/Placeholders.js';
+import { PlaceholderMerit } from 'components/Placeholders';
 
 import React from 'react';
 import LazyLoad from 'react-lazyload';

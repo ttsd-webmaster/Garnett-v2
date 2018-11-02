@@ -23,7 +23,7 @@ export class MobilePledgeApp extends PureComponent {
   }
 
   componentDidMount() {
-    const isDarkMode = localStorage.getItem('darkMode')
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
 
     console.log(`Pledge app mount: ${this.props.state.name}`)
     localStorage.setItem('route', 'pledge-app');

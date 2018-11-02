@@ -15,10 +15,9 @@ export default function SignIn({
       <TextField
         className="login-input"
         type="email"
-        inputStyle={{color: '#fff'}}
+        inputStyle={{ color: '#fff' }}
         floatingLabelText="Email"
-        floatingLabelStyle={{color: '#888'}}
-        floatingLabelFocusStyle={{color: 'var(--primary-color)'}}
+        floatingLabelStyle={{ color: '#888' }}
         value={signEmail}
         onChange={(e, newValue) => handleChange('signEmail', newValue)}
         errorText={!signEmailValidation && 'Please enter a valid email.'}
@@ -34,10 +33,9 @@ export default function SignIn({
       <TextField
         className="login-input"
         type="password"
-        inputStyle={{color: '#fff'}}
+        inputStyle={{ color: '#fff' }}
         floatingLabelText="Password"
-        floatingLabelStyle={{color: '#888'}}
-        floatingLabelFocusStyle={{color: 'var(--primary-color'}}
+        floatingLabelStyle={{ color: '#888' }}
         value={signPassword}
         onChange={(e, newValue) => handleChange('signPassword', newValue)}
         errorText={!signPasswordValidation && 'Please enter a password.'}

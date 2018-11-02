@@ -1,6 +1,6 @@
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { PlaceholderPledgeComplaint } from 'components/Placeholders.js';
+import { PlaceholderPledgeComplaint } from 'components/Placeholders';
 
 import React, { Component } from 'react';
 import LazyLoad from 'react-lazyload';

@@ -15,14 +15,6 @@ import ForgotPassword from './components/ForgotPassword';
 import React, { PureComponent } from 'react';
 import Snackbar from 'material-ui/Snackbar';
 
-const snackbarBackground = {
-  backgroundColor: '#fff'
-};
-
-const snackbarText = {
-  color: 'var(--secondary-dark)'
-};
-
 export class Login extends PureComponent {
   constructor(props) {
     super(props);
@@ -425,8 +417,6 @@ export class Login extends PureComponent {
         </div>
 
         <Snackbar
-          bodyStyle={snackbarBackground}
-          contentStyle={snackbarText}
           open={this.state.open}
           message={this.state.message}
           autoHideDuration={4000}

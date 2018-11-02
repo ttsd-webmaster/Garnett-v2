@@ -1,6 +1,6 @@
 import API from 'api/API.js';
-import { PledgeView } from './PledgeView/PledgeView.js';
-import { ActiveView } from './ActiveView/ActiveView.js';
+import { PledgeView } from './PledgeView/PledgeView';
+import { ActiveView } from './ActiveView/ActiveView';
 
 import React, { PureComponent } from 'react';
 import FlatButton from 'material-ui/FlatButton';

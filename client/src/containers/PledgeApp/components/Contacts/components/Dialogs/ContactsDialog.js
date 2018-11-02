@@ -42,7 +42,7 @@ export default class ContactsDialog extends PureComponent {
         <FullscreenDialog
           title={fullName}
           titleStyle={{ fontSize:'22px' }}
-          style={{ backgroundColor: 'var(--background-color' }}
+          style={{ backgroundColor: 'var(--background-color)' }}
           open={this.props.open}
           onRequestClose={this.props.handleClose}
         >
@@ -96,7 +96,7 @@ export default class ContactsDialog extends PureComponent {
         onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
       >
-        <img className="contacts-photo" src={photoURL} alt="User" />
+        <img className="dialog-photo" src={photoURL} alt="User" />
         <List>
           <Divider />
           <ListItem

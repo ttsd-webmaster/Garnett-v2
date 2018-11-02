@@ -1,3 +1,8 @@
 .react-swipeable-view-container {
   background-color: var(--background-color);  
 }
+
+.garnett-list.dialog.pledge {
+  padding-bottom: 48px !important;
+  margin-top: 0;
+}

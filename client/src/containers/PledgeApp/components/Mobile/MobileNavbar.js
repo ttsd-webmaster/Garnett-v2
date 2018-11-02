@@ -2,6 +2,7 @@ import { getTabStyle } from 'helpers/functions';
 
 import React from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
+import FontIcon from 'material-ui/FontIcon';
 
 export function MobileNavbar({
   index,
@@ -16,7 +17,7 @@ export function MobileNavbar({
       <BottomNavigationItem
         label={<span style={getTabStyle(index === 0)}>Merits</span>}
         icon={
-          <i
+          <FontIcon
             style={getTabStyle(index === 0)}
             className="icon-star"
           />
@@ -29,7 +30,7 @@ export function MobileNavbar({
           (<span style={getTabStyle(index === 1)}>Pledges</span>)
         }
         icon={
-          <i
+          <FontIcon
             style={getTabStyle(index === 1)}
             className="icon-users"
           />
@@ -39,7 +40,7 @@ export function MobileNavbar({
       <BottomNavigationItem
         label={<span style={getTabStyle(index === 2)}>Brothers</span>}
         icon={
-          <i
+          <FontIcon
             style={getTabStyle(index === 2)}
             className="icon-address-book"
           />
@@ -49,7 +50,7 @@ export function MobileNavbar({
       <BottomNavigationItem
         label={<span style={getTabStyle(index === 3)}>Settings</span>}
         icon={
-          <i
+          <FontIcon
             style={getTabStyle(index === 3)}
             className="icon-cog"
           />

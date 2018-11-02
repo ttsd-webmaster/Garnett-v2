@@ -1,4 +1,4 @@
-import { PlaceholderContacts } from 'components/Placeholders.js';
+import { PlaceholderContacts } from 'components/Placeholders';
 
 import React, { PureComponent } from 'react';
 import LazyLoad from 'react-lazyload';

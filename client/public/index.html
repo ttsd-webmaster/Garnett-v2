@@ -44,9 +44,13 @@
       To create a production bundle, use `npm run build`.
     -->
     <script>
-      const isDarkMode = localStorage.getItem('darkMode')
-      if (isDarkMode) {
+      const hours = new Date().getHours();
+      if (hours < 6 || hours > 17) {
+        localStorage.setItem('darkMode', true);
         document.body.classList.add('dark-mode');
+      } else {
+        localStorage.setItem('darkMode', false);
+        document.body.classList.remove('dark-mode');
       }
     </script>
     <script>
