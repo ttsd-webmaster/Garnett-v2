@@ -46,7 +46,7 @@ export default class MeritsList extends PureComponent {
     return (
       <div>
         <FilterHeader
-          title="Recent"
+          title={reverse ? "Oldest" : "Recent"}
           toggleIcon={toggleIcon}
           reverse={this.reverse}
         />

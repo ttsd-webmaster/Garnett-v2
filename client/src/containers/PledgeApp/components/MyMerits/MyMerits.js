@@ -1,13 +1,7 @@
 import './MyMerits.css';
-import {
-  isMobileDevice,
-  loadFirebase,
-  androidBackOpen,
-  androidBackClose
-} from 'helpers/functions.js';
-import { LoadingComponent } from 'helpers/loaders.js';
+import { isMobileDevice } from 'helpers/functions.js';
 import { FilterHeader } from 'components';
-import { MyMeritsList, LoadableDeleteMeritDialog } from './components';
+import { MyMeritsList, AllMeritsList, ToggleViewHeader } from './components';
 import {
   LoadablePledgeMeritDialog,
   LoadableActiveMeritDialog
@@ -18,73 +12,12 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 export class MyMerits extends PureComponent {
   state = {
-    loaded: false,
-    myMerits: [],
-    merit: null,
-    openDelete: false,
+    allMeritsView: false,
     reverse: false
   }
 
-  componentDidMount() {
-    if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const { displayName } = this.props.state;
-        const userRef = firebase.database().ref('/users/' + displayName);
-        const meritsRef = firebase.database().ref('/merits');
-
-        userRef.child('Merits').on('value', (userMerits) => {
-          if (userMerits.val()) {
-            meritsRef.once('value', (merits) => {
-              let myMerits = [];
-
-              myMerits = Object.keys(userMerits.val()).map(function(key) {
-                return merits.val()[userMerits.val()[key]];
-              }).sort((a, b) => {
-                return new Date(b.date) - new Date(a.date);
-              });
-
-              localStorage.setItem('meritArray', JSON.stringify(myMerits));
-
-              this.setState({
-                myMerits,
-                loaded: true
-              });
-            });
-          } else {
-            this.setState({
-              myMerits: [],
-              loaded: true
-            })
-          }
-        });
-      });
-    }
-    else {
-      this.setState({ loaded: true });
-    }
-  }
-
-  handleDeleteOpen = (merit) => {
-    if (navigator.onLine) {
-      androidBackOpen(this.handleDeleteClose);
-      this.setState({
-        merit,
-        openDelete: true
-      });
-    }
-    else {
-      this.props.handleRequestOpen('You are offline');
-    }
-  }
-
-  handleDeleteClose = () => {
-    androidBackClose();
-    this.setState({
-      openDelete: false,
-      merit: null
-    });
+  setMeritsView = (value) => {
+    this.setState({ allMeritsView: value });
   }
 
   reverse = () => {
@@ -92,29 +25,32 @@ export class MyMerits extends PureComponent {
   }
 
   render() {
+    const { reverse } = this.state;
     let toggleIcon = "icon-down-open-mini";
-    let { myMerits, reverse, loaded } = this.state;
 
     if (reverse) {
-      myMerits = myMerits.slice().reverse();
       toggleIcon = "icon-up-open-mini";
-    }
-
-    if (!loaded) {
-      return <LoadingComponent />
     }
 
     return (
       <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+        <ToggleViewHeader setMeritsView={this.setMeritsView} />
         <FilterHeader
-          title="Recent"
+          style={{ marginTop: 5 }}
+          title={reverse ? "Oldest" : "Recent"}
           toggleIcon={toggleIcon}
           reverse={this.reverse}
         />
         <MyMeritsList
-          status={this.props.state.status}
-          myMerits={myMerits}
-          handleDeleteOpen={this.handleDeleteOpen}
+          hidden={this.state.allMeritsView}
+          state={this.props.state}
+          reverse={this.state.reverse}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
+        <AllMeritsList
+          hidden={!this.state.allMeritsView}
+          state={this.props.state}
+          reverse={this.state.reverse}
         />
         {isMobileDevice() && (
           <Fragment>
@@ -137,15 +73,6 @@ export class MyMerits extends PureComponent {
               <i className="icon-pencil"></i>
             </FloatingActionButton>
           </Fragment>
-        )}
-        {this.props.state.status === 'pledge' && (
-          <LoadableDeleteMeritDialog
-            open={this.state.openDelete}
-            state={this.props.state}
-            merit={this.state.merit}
-            handleDeleteClose={this.handleDeleteClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
         )}
       </div>
     )

@@ -58,11 +58,24 @@
   max-width: 700px;
   width: 100%;
   background-color: var(--background-color);
-  margin: auto !important;
+  margin: auto;
 }
-.garnett-subheader.dialog {
-  max-width: unset;
+.garnett-subheader.merit-view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: var(--list-color);
+  height: 48px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
 }
+
+.garnett-chip {
+  background-color: var(--chip-color);
+  margin: 10px !important;
+}
+
 .garnett-filter {
   position: relative;
   top: -3px;
@@ -139,6 +152,9 @@
   margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.garnett-name.all-merits {
+  font-size: 13px;
 }
 
 .garnett-description {
