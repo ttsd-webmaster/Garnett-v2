@@ -1,6 +1,7 @@
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { PlaceholderMerit } from 'components/Placeholders';
+import { FilterHeader } from 'components';
 
 import React, { PureComponent} from 'react';
 import LazyLoad from 'react-lazyload';
@@ -11,7 +12,8 @@ import Divider from 'material-ui/Divider';
 export class AllMeritsList extends PureComponent {
   state = {
     loaded: false,
-    allMerits: []
+    allMerits: [],
+    reverse: false
   }
 
   componentDidMount() {
@@ -51,14 +53,31 @@ export class AllMeritsList extends PureComponent {
     return `${firstName} ${lastName}.`;
   }
 
+  reverse = () => {
+    this.setState({ reverse: !this.state.reverse });
+  }
+
   render() {
+    let { allMerits, reverse } = this.state;
+    let toggleIcon = "icon-down-open-mini";
+
     if (!this.state.loaded) {
       return <LoadingComponent />
     }
 
+    if (reverse) {
+      toggleIcon = "icon-up-open-mini";
+      allMerits = allMerits.slice().reverse();
+    }
+
     return (
       <List className={`animate-in garnett-list${this.props.hidden ? " hidden" : ""}`}>
-        {this.state.allMerits.map((merit, i) => (
+        <FilterHeader
+          title={reverse ? "Oldest" : "Recent"}
+          toggleIcon={toggleIcon}
+          reverse={this.reverse}
+        />
+        {allMerits.map((merit, i) => (
           <LazyLoad
             height={88}
             offset={window.innerHeight}
