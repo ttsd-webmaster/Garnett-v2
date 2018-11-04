@@ -5,6 +5,7 @@ import {
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { PlaceholderMerit } from 'components/Placeholders';
+import { FilterHeader } from 'components';
 import { LoadableDeleteMeritDialog } from './index.js';
 
 import React, { PureComponent } from 'react';
@@ -18,7 +19,8 @@ export class MyMeritsList extends PureComponent {
     loaded: false,
     myMerits: [],
     selectedMerit: null,
-    openDelete: false
+    openDelete: false,
+    reverse: false
   }
 
   componentDidMount() {
@@ -83,19 +85,30 @@ export class MyMeritsList extends PureComponent {
     });
   }
 
+  reverse = () => {
+    this.setState({ reverse: !this.state.reverse });
+  }
+
   render() {
-    let { myMerits } = this.state;
+    let { myMerits, reverse } = this.state;
+    let toggleIcon = "icon-down-open-mini";
     
     if (!this.state.loaded) {
       return <LoadingComponent />;
     }
 
-    if (this.props.reverse) {
+    if (reverse) {
+      toggleIcon = "icon-up-open-mini";
       myMerits = myMerits.slice().reverse();
     }
 
     return (
       <List className={`animate-in garnett-list${this.props.hidden ? " hidden" : ""}`}>
+        <FilterHeader
+          title={reverse ? "Oldest" : "Recent"}
+          toggleIcon={toggleIcon}
+          reverse={this.reverse}
+        />
         {myMerits.map((merit, i) => {
           let name;
           let photoURL;

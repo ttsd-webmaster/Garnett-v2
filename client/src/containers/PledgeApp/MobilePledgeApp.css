@@ -68,7 +68,8 @@
   top: 0;
   background-color: var(--list-color);
   height: 48px;
-  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
+  border-bottom: 1px solid var(--border-color);
+  z-index: 10;
 }
 
 .garnett-chip {
