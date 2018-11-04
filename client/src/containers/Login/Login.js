@@ -1,62 +1,16 @@
 import './Login.css';
-import { activeCode, pledgeCode } from './data.js';
-import {
-  isMobileDevice,
-  initializeFirebase,
-  loadFirebase,
-  validateEmail
-} from 'helpers/functions.js';
+import { isMobileDevice } from 'helpers/functions.js';
 import { CompletingTaskDialog } from 'helpers/loaders.js';
-import API from 'api/API.js';
-import SignIn from './components/SignIn';
-import SignUp from './components/SignUp';
-import ForgotPassword from './components/ForgotPassword';
+import { SignIn } from './components/SignIn';
+import { SignUp } from './components/SignUp';
+import { ForgotPassword } from './components/ForgotPassword';
 
 import React, { PureComponent } from 'react';
-import Snackbar from 'material-ui/Snackbar';
 
 export class Login extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      signEmail: '',
-      signPassword: '',
-      firstName: '',
-      lastName: '',
-      className: '',
-      major: '',
-      year: '',
-      phone: '',
-      email: '',
-      code: '',
-      password: '',
-      confirmation: '',
-      forgotEmail: '',
-      signEmailValidation: true,
-      signPasswordValidation: true,
-      firstNameValidation: true,
-      lastNameValidation: true,
-      classNameValidation: true,
-      majorValidation: true,
-      yearValidation: true,
-      phoneValidation: true,
-      emailValidation: true,
-      codeValidation: true,
-      passwordValidation: true,
-      confirmationValidation: true,
-      forgotEmailValidation: true,
-      open: false,
-      message: '',
-    };
-  }
-
-  componentDidMount() {
-    console.log("Login js mount")
-    let pullToRefresh = document.querySelector('.ptr--ptr');
-
-    if (pullToRefresh) {
-      pullToRefresh.style.marginTop = 0;
-    }
+  state = {
+    open: false,
+    message: ''
   }
 
   active = (event) => {
@@ -113,234 +67,20 @@ export class Login extends PureComponent {
           .add('active');
       }
     }
+  }
 
+  openProgressDialog = (message) => {
     this.setState({
-      signEmailValidation: true,
-      signPasswordValidation: true,
-      firstNameValidation: true,
-      lastNameValidation: true,
-      classNameValidation: true,
-      majorValidation: true,
-      yearValidation: true,
-      phoneValidation: true,
-      emailValidation: true,
-      codeValidation: true,
-      passwordValidation: true,
-      confirmationValidation: true,
-      forgotEmailValidation: true,
+      open: true,
+      message
     });
   }
 
-  login = () => {
-    const { signEmail, signPassword } = this.state;
-    let signEmailValidation = true;
-    let signPasswordValidation = true;
-
-    if (!signEmail || !validateEmail(signEmail) || !signPassword) {
-      if (!signEmail || !validateEmail(signEmail)) {
-        signEmailValidation = false;
-      }
-      if (!signPassword) {
-        signPasswordValidation = false;
-      }
-
-      this.setState({
-        signEmailValidation,
-        signPasswordValidation
-      });
-    }
-    else {
-      this.setState({
-        openCompletingTask: true,
-        completingTaskMessage: 'Logging in...'
-      });
-
-      initializeFirebase();
-
-      loadFirebase('auth')
-      .then(() => {
-        const firebase= window.firebase;
-
-        firebase.auth().signInWithEmailAndPassword(signEmail, signPassword)
-        .then((user) => {
-          if (user && user.emailVerified) {
-            loadFirebase('database')
-            .then(() => {
-              const { displayName } = user;
-              const userRef = firebase.database().ref('/users/' + displayName);
-
-              userRef.once('value', (snapshot) => {
-                const user = snapshot.val();
-
-                localStorage.setItem('data', JSON.stringify(user));
-                this.props.loginCallBack(user);
-              });
-            });
-          }
-          else {
-            const message = 'Email is not verified.';
-
-            this.setState({ openCompletingTask: false });
-            this.handleRequestOpen(message);
-          }
-        })
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-          const message = 'Email or password is incorrect.';
-
-          this.setState({ openCompletingTask: false });
-          this.handleRequestOpen(message);
-        });
-      });
-    }
-  }
-
-  signUp = () => {
-    const {
-      firstName,
-      lastName,
-      className,
-      major,
-      year,
-      phone,
-      email,
-      password,
-      confirmation
-    } = this.state;
-    const code = this.state.code.toLowerCase();
-    let firstNameValidation = true;
-    let lastNameValidation = true;
-    let classNameValidation = true;
-    let majorValidation = true;
-    let yearValidation = true;
-    let phoneValidation = true;
-    let emailValidation = true;
-    let codeValidation = true;
-    let passwordValidation = true;
-    let confirmationValidation = true;
-
-    if (!firstName || !lastName || !className || !major || !year || !validateEmail(email) ||
-        phone.length !== 10 || !code || (code !== activeCode && code !== pledgeCode) || 
-        password.length < 8 || confirmation !== password) {
-      if (!firstName) {
-        firstNameValidation = false;
-      }
-      if (!lastName) {
-        lastNameValidation = false;
-      }
-      if (!className) {
-        classNameValidation = false;
-      }
-      if (!major) {
-        majorValidation = false;
-      }
-      if (!year) {
-        yearValidation = false;
-      }
-      if (phone.length !== 10) {
-        phoneValidation = false;
-      }
-      if (!email || !validateEmail(email)) {
-        emailValidation = false;
-      }
-      if (!code || (code !== activeCode && code !== pledgeCode)) {
-        codeValidation = false;
-      }
-      if (password.length < 8) {
-        passwordValidation = false;
-      }
-      if (confirmation !== password) {
-        confirmationValidation = false;
-      }
-      
-      this.setState({
-        firstNameValidation,
-        lastNameValidation,
-        classNameValidation,
-        majorValidation,
-        yearValidation,
-        phoneValidation,
-        emailValidation,
-        codeValidation,
-        passwordValidation,
-        confirmationValidation
-      });
-    }
-    else {
-      API.signUp(email, password, firstName, lastName, className, major, year, phone, code, pledgeCode)
-      .then(res => {
-        if (res.status === 200) {
-          const message = res.data;
-
-          document.getElementById('sign-in').click();
-          this.handleRequestOpen(message);
-
-          this.setState({
-            firstName: '',
-            lastName: '',
-            className: '',
-            major: '',
-            year: '',
-            phone: '',
-            email: '',
-            code: '',
-            password: '',
-            confirmation: ''
-          });
-        }
-      })
-      .catch((error) => {
-        const message = error.response.data;
-
-        console.log(message);
-
-        this.handleRequestOpen(message);
-      });
-    }
-  }
-
-  forgotPassword = () => {
-    const { forgotEmail } = this.state;
-
-    if (!forgotEmail || !validateEmail(forgotEmail)) {
-      this.setState({
-        forgotEmailValidation: false
-      });
-    }
-    else {
-      API.forgotPassword(forgotEmail)
-      .then(res => {
-        const message = res.data;
-
-        document.getElementById('sign-in').click();
-        this.handleRequestOpen(message);
-      })
-      .catch(error => {
-        const message = error.response.data;
-
-        this.handleRequestOpen(message);
-      });
-    }
-  }
-
-  handleChange = (label, newValue) => {
-    const validationLabel = [label] + 'Validation';
-
+  closeProgressDialog = () => {
     this.setState({
-      [label]: newValue,
-      [validationLabel]: true
+      open: false,
+      message: ''
     });
-  }
-
-  handleRequestOpen = (message) => {
-    this.setState({
-      message,
-      open: true
-    });
-  }
-
-  handleRequestClose = () => {
-    this.setState({ open: false });
   }
 
   render() {
@@ -373,62 +113,28 @@ export class Login extends PureComponent {
             </span>
           </div>
           <SignIn
-            signEmail={this.state.signEmail}
-            signPassword={this.state.signPassword}
-            signEmailValidation={this.state.signEmailValidation}
-            signPasswordValidation={this.state.signPasswordValidation}
-            login={this.login}
-            handleChange={this.handleChange}
-            handleRequestOpen={this.handleRequestOpen}
             active={this.active}
+            loginCallback={this.props.loginCallback}
+            openProgressDialog={this.openProgressDialog}
+            closeProgressDialog={this.closeProgressDialog}
+            handleRequestOpen={this.props.handleRequestOpen}
           />
           <SignUp
-            firstName={this.state.firstName}
-            lastName={this.state.lastName}
-            className={this.state.className}
-            major={this.state.major}
-            year={this.state.year}
-            phone={this.state.phone}
-            email={this.state.email}
-            code={this.state.code}
-            password={this.state.password}
-            confirmation={this.state.confirmation}
-            firstNameValidation={this.state.firstNameValidation}
-            lastNameValidation={this.state.lastNameValidation}
-            classNameValidation={this.state.classNameValidation}
-            majorValidation={this.state.majorValidation}
-            yearValidation={this.state.yearValidation}
-            phoneValidation={this.state.phoneValidation}
-            emailValidation={this.state.emailValidation}
-            codeValidation={this.state.codeValidation}
-            passwordValidation={this.state.passwordValidation}
-            confirmationValidation={this.state.confirmationValidation}
-            signUp={this.signUp}
-            handleChange={this.handleChange}
-            handleRequestOpen={this.handleRequestOpen} 
+            openProgressDialog={this.openProgressDialog}
+            closeProgressDialog={this.closeProgressDialog}
+            handleRequestOpen={this.props.handleRequestOpen} 
           />
           <ForgotPassword
-            forgotEmail={this.state.forgotEmail}
-            forgotEmailValidation={this.state.forgotEmailValidation}
-            forgotPassword={this.forgotPassword}
-            handleChange={this.handleChange}
-            handleRequestOpen={this.handleRequestOpen}
+            openProgressDialog={this.openProgressDialog}
+            closeProgressDialog={this.closeProgressDialog}
+            handleRequestOpen={this.props.handleRequestOpen}
           />
         </div>
 
-        <Snackbar
+        <CompletingTaskDialog
           open={this.state.open}
           message={this.state.message}
-          autoHideDuration={4000}
-          onRequestClose={this.handleRequestClose}
         />
-
-        {this.state.openCompletingTask &&
-          <CompletingTaskDialog
-            open={this.state.openCompletingTask}
-            message={this.state.completingTaskMessage}
-          />
-        }
       </div>
     );
   }

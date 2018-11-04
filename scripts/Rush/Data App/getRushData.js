@@ -7,6 +7,7 @@ var OmicronData = require('./data/RushFall16.json');
 var PiData = require('./data/RushSpring17.json');
 var RhoData = require('./data/RushFall17.json');
 var SigmaData = require('./data/RushSpring18.json');
+require('dotenv').config({ path: process.env.OLDPWD + '/.env' })
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

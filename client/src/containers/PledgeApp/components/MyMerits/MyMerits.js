@@ -19,7 +19,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 export class MyMerits extends PureComponent {
   state = {
     loaded: false,
-    merits: this.props.merits,
+    myMerits: [],
     merit: null,
     openDelete: false,
     reverse: false
@@ -32,24 +32,32 @@ export class MyMerits extends PureComponent {
         const { firebase } = window;
         const { displayName } = this.props.state;
         const userRef = firebase.database().ref('/users/' + displayName);
+        const meritsRef = firebase.database().ref('/merits');
 
-        userRef.child('Merits').on('value', (snapshot) => {
-          let merits = [];
+        userRef.child('Merits').on('value', (userMerits) => {
+          if (userMerits.val()) {
+            meritsRef.once('value', (merits) => {
+              let myMerits = [];
 
-          if (snapshot.val()) {
-            merits = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
-            }).sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
+              myMerits = Object.keys(userMerits.val()).map(function(key) {
+                return merits.val()[userMerits.val()[key]];
+              }).sort((a, b) => {
+                return new Date(b.date) - new Date(a.date);
+              });
+
+              localStorage.setItem('meritArray', JSON.stringify(myMerits));
+
+              this.setState({
+                myMerits,
+                loaded: true
+              });
             });
+          } else {
+            this.setState({
+              myMerits: [],
+              loaded: true
+            })
           }
-
-          localStorage.setItem('meritArray', JSON.stringify(merits));
-
-          this.setState({
-            merits,
-            loaded: true
-          });
         });
       });
     }
@@ -85,10 +93,10 @@ export class MyMerits extends PureComponent {
 
   render() {
     let toggleIcon = "icon-down-open-mini";
-    let { merits, reverse, loaded } = this.state;
+    let { myMerits, reverse, loaded } = this.state;
 
     if (reverse) {
-      merits = merits.slice().reverse();
+      myMerits = myMerits.slice().reverse();
       toggleIcon = "icon-up-open-mini";
     }
 
@@ -104,7 +112,8 @@ export class MyMerits extends PureComponent {
           reverse={this.reverse}
         />
         <MyMeritsList
-          merits={merits}
+          status={this.props.state.status}
+          myMerits={myMerits}
           handleDeleteOpen={this.handleDeleteOpen}
         />
         {isMobileDevice() && (

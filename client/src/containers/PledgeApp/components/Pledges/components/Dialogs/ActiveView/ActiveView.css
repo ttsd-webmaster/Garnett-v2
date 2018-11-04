@@ -3,6 +3,10 @@
 }
 
 .garnett-list.dialog.pledge {
-  padding-bottom: 48px !important;
   margin-top: 0;
+}
+@media(max-width: 420px) {
+  .garnett-list.dialog.pledge {
+    padding-bottom: 48px !important;
+  }
 }

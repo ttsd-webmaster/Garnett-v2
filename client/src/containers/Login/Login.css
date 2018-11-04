@@ -143,6 +143,7 @@
   border-radius: 500px;
   letter-spacing: 2px;
   text-transform: uppercase;
+  transition: all 0.2s;
   cursor: pointer;
 }
 @media(max-width: 767px) {
@@ -152,6 +153,10 @@
 }
 .login-button:hover {
   background-color: var(--primary-dark);
+}
+.login-button:disabled {
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 /* Forgot Password */

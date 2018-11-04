@@ -11,10 +11,6 @@ export default {
   getActives: function() {
     return axios.get('/api/actives');
   },
-  getPledges: function(displayName) {
-    const params = { displayName };
-    return axios.get('/api/pledges', { params });
-  },
   getPledgeMerits: function(pledgeName) {
     const params = { pledgeName };
     return axios.get('/api/pledge/merits', { params });

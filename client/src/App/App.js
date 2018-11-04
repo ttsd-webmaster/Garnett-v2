@@ -82,7 +82,7 @@ export default class App extends Component {
             if (user) {
               API.getAuthStatus(user.displayName)
               .then((res) => {
-                this.loginCallBack(res.data);
+                this.loginCallback(res.data);
               });
             } else {
               this.setState({ loading: false });
@@ -102,7 +102,7 @@ export default class App extends Component {
     }
   }
 
-  loginCallBack = (user) => {
+  loginCallback = (user) => {
     /* Checks if browser is Safari, iOS version < 11, IE, Edge, or in development */
     if (loginCheck()) {
       this.setData(user);
@@ -189,7 +189,8 @@ export default class App extends Component {
             path="/login"
             state={this.state}
             authenticated={authenticated}
-            loginCallBack={this.loginCallBack}
+            loginCallback={this.loginCallback}
+            handleRequestOpen={this.handleRequestOpen}
             component={Login}
           />
           <Switch>
@@ -202,6 +203,7 @@ export default class App extends Component {
                 authenticated={authenticated}
                 component={route.component}
                 logoutCallBack={this.logoutCallBack}
+                handleRequestOpen={this.handleRequestOpen}
               />
             ))}
             <Redirect from="/pledge-app" to="/pledge-app/my-merits" />

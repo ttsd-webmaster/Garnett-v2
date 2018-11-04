@@ -71,7 +71,11 @@ export default class PledgeMeritDialog extends PureComponent {
       });
     }
     else {
-      const { displayName } = this.props.state;
+      const {
+        displayName,
+        name: pledgeName,
+        photoURL: pledgePhoto
+      } = this.props.state;
       const { isChalkboard, isPCGreet } = this.state;
       let action = 'Merited';
       let date = this.formatDate(this.state.date);
@@ -87,35 +91,30 @@ export default class PledgeMeritDialog extends PureComponent {
         description = `Chalkboard: ${description}`;
       }
 
-      this.setState({
-        openCompletingTask: true,
-        completingTaskMessage: 'Meriting pledges...'
-      });
+      this.openProgressDialog();
 
-      const merit = { description, amount, date };
-
+      const merit = { pledgeName, description, amount, pledgePhoto, date };
       API.meritAsPledge(displayName, selectedActives, merit, isChalkboard, isPCGreet)
       .then(res => {
-        const { name } = this.props.state;
         const totalAmount = amount * selectedActives.length;
 
         console.log(res);
         this.handleClose();
-        this.setState({ openCompletingTask: false });
+        this.closeProgressDialog();
 
-        API.sendPledgeMeritNotification(name, selectedActives, amount)
+        API.sendPledgeMeritNotification(pledgeName, selectedActives, amount)
         .then(res => {
           this.props.handleRequestOpen(`${action} yourself ${totalAmount} merits`);
         })
         .catch(error => console.log(`Error: ${error}`));
       })
       .catch((error) => {
-        console.log(error)
         const active = error.response.data;
 
+        console.log(error)
         console.log(`Not enough merits for ${active}`);
         this.handleClose();
-        this.setState({ openCompletingTask: false });
+        this.closeProgressDialog();
         this.props.handleRequestOpen(`${active} does not have enough merits`);
       });
     }
@@ -235,6 +234,17 @@ export default class PledgeMeritDialog extends PureComponent {
       activeValidation: true,
       descriptionValidation: true
     });
+  }
+
+  openProgressDialog = () => {
+    this.setState({
+      openCompletingTask: true,
+      completingTaskMessage: 'Meriting pledges...'
+    });
+  }
+
+  closeProgressDialog = () => {
+    this.setState({ openCompletingTask: false });
   }
 
   render() {
@@ -386,12 +396,10 @@ export default class PledgeMeritDialog extends PureComponent {
           ))}
         </div>
 
-        {this.state.openCompletingTask &&
-          <CompletingTaskDialog
-            open={this.state.openCompletingTask}
-            message={this.state.completingTaskMessage}
-          />
-        }
+        <CompletingTaskDialog
+          open={this.state.openCompletingTask}
+          message={this.state.completingTaskMessage}
+        />
       </Dialog>
     )
   }
