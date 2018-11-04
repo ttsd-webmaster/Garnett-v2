@@ -34,7 +34,9 @@ export class MyMerits extends PureComponent {
 
     return (
       <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
-        <ToggleViewHeader setMeritsView={this.setMeritsView} />
+        {this.props.state.status !== 'pledge' && (
+          <ToggleViewHeader setMeritsView={this.setMeritsView} />
+        )}
         <FilterHeader
           style={{ marginTop: 5 }}
           title={reverse ? "Oldest" : "Recent"}
