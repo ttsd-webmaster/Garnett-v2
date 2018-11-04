@@ -1,74 +1,175 @@
-import { formData1, selectData, formData2 } from '../data.js';
+import {
+  activeCode,
+  pledgeCode,
+  formData1,
+  selectData,
+  formData2
+} from '../data.js';
+import API from 'api/API.js';
+import { validateEmail } from 'helpers/functions.js';
 
-import React from 'react';
+import React, { PureComponent } from 'react';
 import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-export default function SignUp(props) {
-  return (
-    <form className="login-form" id="sign-up-form">
-      {formData1.map((form, i) => (
-        <TextField
-          className="login-input"
-          type={form.type}
-          inputStyle={{ color: '#fff' }}
-          floatingLabelText={form.name}
-          floatingLabelStyle={{ color: '#888' }}
-          value={props[`${form.value}`]}
-          onChange={(e, newValue) => props.handleChange(form.value, newValue)}
-          errorText={!props[`${form.value + 'Validation'}`] && form.errorText}
-          key={i}
-        />
-      ))}
+export class SignUp extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      firstName: '',
+      lastName: '',
+      className: '',
+      major: '',
+      year: '',
+      phone: '',
+      email: '',
+      code: '',
+      password: '',
+      confirmation: ''
+    };
+  }
 
-      {selectData.map((select, i) => (
-        <SelectField
-          className="login-input"
-          value={props[`${select.value}`]}
-          floatingLabelText={select.name}
-          floatingLabelStyle={{ color: '#888' }}
-          labelStyle={{ color: '#fff' }}
-          onChange={(e, key, newValue) => props.handleChange(select.value, newValue)}
-          errorText={!props[`${select.value + 'Validation'}`] && select.errorText}
-          key={i}
+  get isFormInvalid() {
+    const {
+      firstName,
+      lastName,
+      className,
+      major,
+      year,
+      phone,
+      email,
+      password,
+      confirmation
+    } = this.state;
+    const code = this.state.code.toLowerCase();
+
+    if (firstName && lastName && className && major && year && email &&
+        validateEmail(email) && phone.length === 10 && code &&
+        (code === activeCode && code === pledgeCode) &&
+        password.length > 7 && confirmation === password) {
+      return false;
+    }
+    return true;
+  }
+
+  signUp = () => {
+    const {
+      firstName,
+      lastName,
+      className,
+      major,
+      year,
+      phone,
+      email,
+      password
+    } = this.state;
+    const code = this.state.code.toLowerCase();
+
+    this.props.openProgressDialog('Signing up...');
+
+    API.signUp(email, password, firstName, lastName, className, major, year, phone, code, pledgeCode)
+    .then(res => {
+      if (res.status === 200) {
+        const message = res.data;
+
+        document.getElementById('sign-in').click();
+        this.props.closeProgressDialog();
+        this.props.handleRequestOpen(message);
+
+        this.setState({
+          firstName: '',
+          lastName: '',
+          className: '',
+          major: '',
+          year: '',
+          phone: '',
+          email: '',
+          code: '',
+          password: '',
+          confirmation: ''
+        });
+      }
+    })
+    .catch((error) => {
+      const message = error.response.data;
+      console.log(message);
+      this.props.closeProgressDialog();
+      this.props.handleRequestOpen(message);
+    });
+  }
+
+  handleChange = (label, newValue) => {
+    this.setState({ [label]: newValue });
+  }
+
+  render() {
+    return (
+      <form className="login-form" id="sign-up-form">
+        {formData1.map((form, i) => (
+          <TextField
+            className="login-input"
+            type={form.type}
+            inputStyle={{ color: '#fff' }}
+            floatingLabelText={form.name}
+            floatingLabelStyle={{ color: '#888' }}
+            value={this.state[`${form.value}`]}
+            onChange={(e, newValue) => this.handleChange(form.value, newValue)}
+            key={i}
+          />
+        ))}
+
+        {selectData.map((select, i) => (
+          <SelectField
+            className="login-input"
+            value={this.state[`${select.value}`]}
+            floatingLabelText={select.name}
+            floatingLabelStyle={{ color: '#888' }}
+            labelStyle={{ color: '#fff' }}
+            onChange={(e, key, newValue) => this.handleChange(select.value, newValue)}
+            key={i}
+          >
+            {select.options.map((item, i) => (
+              <MenuItem
+                key={i}
+                value={item}
+                primaryText={item}
+                insetChildren
+                checked={item === this.state[`${select.value}`]}
+              />
+            ))}
+          </SelectField>
+        ))}
+
+        {formData2.map((form, i) => (
+          <TextField
+            className="login-input"
+            type={form.type}
+            inputStyle={{ color: '#fff' }}
+            floatingLabelText={form.name}
+            floatingLabelStyle={{ color: '#888' }}
+            value={this.state[`${form.value}`]}
+            onChange={(e, newValue) => this.handleChange(form.value, newValue)}
+            key={i}
+            onSubmit={this.signUp}
+            onKeyPress={(ev) => {
+              if (ev.key === 'Enter') {
+                this.signUp();
+                ev.preventDefault();
+              }
+            }}
+          />
+        ))}
+        
+        <button
+          type="button"
+          className="login-button"
+          disabled={this.isFormInvalid}
+          onClick={this.signUp}
         >
-          {select.options.map((item, i) => (
-            <MenuItem
-              key={i}
-              value={item}
-              primaryText={item}
-              insetChildren
-              checked={item === props[`${select.value}`]}
-            />
-          ))}
-        </SelectField>
-      ))}
-
-      {formData2.map((form, i) => (
-        <TextField
-          className="login-input"
-          type={form.type}
-          inputStyle={{ color: '#fff' }}
-          floatingLabelText={form.name}
-          floatingLabelStyle={{ color: '#888' }}
-          value={props[`${form.value}`]}
-          onChange={(e, newValue) => props.handleChange(form.value, newValue)}
-          errorText={!props[`${form.value + 'Validation'}`] && form.errorText}
-          key={i}
-          onSubmit={props.signUp}
-          onKeyPress={(ev) => {
-            if (ev.key === 'Enter') {
-              props.signUp();
-              ev.preventDefault();
-            }
-          }}
-        />
-      ))}
-      
-      <div className="login-button" onClick={props.signUp}>
-        Sign Up
-      </div>
-    </form>
-  )
+          Sign Up
+        </button>
+      </form>
+    )
+  }
 }

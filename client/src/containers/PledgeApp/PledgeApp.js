@@ -13,6 +13,10 @@ import React, { PureComponent } from 'react';
 export class PledgeApp extends PureComponent {
   state = { openMerit: false }
 
+  componentDidMount() {
+    localStorage.setItem('route', 'pledge-app');
+  }
+  
   handleMeritOpen = () => {
     if (navigator.onLine) {
       androidBackOpen(this.handleMeritClose);

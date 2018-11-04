@@ -36,57 +36,26 @@ exports.get_actives = function(req, res) {
   });
 };
 
-// Query for merit data on Pledge App
-exports.get_pledges = function(req, res) {
-  const { displayName } = req.query;
-  const userRef = admin.database().ref('/users/' + displayName);
-  let meritArray = [];
-  let complaintsArray = [];
-
-  userRef.once('value', (user) => {
-    const totalMerits = user.val().totalMerits;
-
-    if (user.val().Merits) {
-      meritArray = Object.keys(user.val().Merits).map(function(key) {
-        return user.val().Merits[key];
-      });
-    }
-
-    if (user.val().Complaints) {
-      complaintsArray = Object.keys(user.val().Complaints).map(function(key) {
-        return user.val().Complaints[key];
-      });
-    }
-
-    console.log('Merit array: ', meritArray);
-    console.log('Complaints array: ', complaintsArray);
-
-    const data = {
-      totalMerits: totalMerits,
-      meritArray: meritArray.reverse(),
-      complaintsArray: complaintsArray
-    };
-
-    res.json(data);
-  });
-};
-
 // Query for the specified pledge's merits
 exports.get_pledge_merits = function(req, res) {
   const { pledgeName } = req.query;
-  const meritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
-  let merits = [];
+  const pledgeMeritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
+  const meritsRef = admin.database().ref('/merits');
+  let pledgeMerits = [];
 
-  meritsRef.once('value', (snapshot) => {
-    if (snapshot.val()) {
-      merits = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      }).sort((a, b) => {
-        return new Date(b.date) - new Date(a.date);
-      });
+  pledgeMeritsRef.once('value', (userMerits) => {
+    if (userMerits.val()) {
+      meritsRef.once('value', (merits) => {
+        pledgeMerits = Object.keys(userMerits.val()).map(function(key) {
+          return merits.val()[userMerits.val()[key]];
+        }).sort((a, b) => {
+          return new Date(b.date) - new Date(a.date);
+        });
+        res.json(pledgeMerits);
+      })
+    } else {
+      res.json(pledgeMerits);
     }
-
-    res.json(merits);
   });
 };
 

@@ -69,10 +69,10 @@ export default class MeritsList extends PureComponent {
                     <Avatar
                       className="garnett-image large"
                       size={70}
-                      src={merit.photoURL}
+                      src={merit.activePhoto}
                     />
                   }
-                  primaryText={<p className="garnett-name"> {merit.name} </p>}
+                  primaryText={<p className="garnett-name"> {merit.activeName} </p>}
                   secondaryText={
                     <p className="garnett-description"> {merit.description} </p>
                   }

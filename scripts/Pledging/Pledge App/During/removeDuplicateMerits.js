@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const equal = require('deep-equal');
 var serviceAccount = require("../../../../serviceAccountKey.json");
+require('dotenv').config({ path: process.env.OLDPWD + '/.env' })
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

@@ -52,7 +52,7 @@ body.dark-mode {
   --placeholder-color: #363636;
 }
 
-@media(max-width: 410px) {
+@media(max-width: 420px) {
   h1 {
     font-size: 32px;
   }

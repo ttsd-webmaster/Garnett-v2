@@ -182,12 +182,13 @@ exports.merit_as_active = function(req, res) {
           totalMerits: pledge.val().totalMerits + merit.amount
         });
 
-        pledge.ref.child('Merits').push(merit);
+        merit.pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
+        merit.pledgePhoto = pledge.val().photoURL;
 
-        let meritForActive = merit;
-        meritForActive.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
-        meritForActive.photoURL = pledge.val().photoURL;
-        activeRef.child('Merits').push(meritForActive);
+        const meritsRef = admin.database().ref('/merits');
+        const key = meritsRef.push(merit).getKey();
+        pledge.ref.child('Merits').push(key);
+        activeRef.child('Merits').push(key);
 
         if (!res.headersSent && counter === selectedPledges.length) {
           res.sendStatus(200);
@@ -203,23 +204,18 @@ exports.merit_as_pledge = function(req, res) {
   const {
     displayName,
     selectedActives,
-    merit,
     isChalkboard,
     isPCGreet
   } = req.body;
+  let { merit } = req.body;
 
   selectedActives.forEach((child) => {
     const activeRef = admin.database().ref('/users/' + child.value);
     const pledgeRef = admin.database().ref('/users/' + displayName);
 
     activeRef.once('value', (active) => {
-      let meritInfo = {
-        name: `${active.val().firstName} ${active.val().lastName}`,
-        description: merit.description,
-        amount: merit.amount,
-        photoURL: active.val().photoURL,
-        date: merit.date
-      }
+      merit.activeName = `${active.val().firstName} ${active.val().lastName}`;
+      merit.activePhoto = active.val().photoURL;
 
       if (active.val().status !== 'pipm' && !isChalkboard && !isPCGreet) {
         const remainingMerits = active.val().Pledges[displayName].merits - merit.amount;
@@ -245,12 +241,10 @@ exports.merit_as_pledge = function(req, res) {
       pledgeRef.once('value', (pledge) => {
         counter++;
 
-        pledge.ref.child('Merits').push(meritInfo);
-
-        let meritForActive = meritInfo;
-        meritForActive.name = `${pledge.val().firstName} ${pledge.val().lastName}`;
-        meritForActive.photoURL = pledge.val().photoURL;
-        active.ref.child('Merits').push(meritForActive);
+        const meritsRef = admin.database().ref('/merits');
+        const key = meritsRef.push(merit).getKey();
+        pledge.ref.child('Merits').push(key);
+        active.ref.child('Merits').push(key);
 
         if (!res.headersSent && counter === selectedActives.length) {
           pledgeRef.update({

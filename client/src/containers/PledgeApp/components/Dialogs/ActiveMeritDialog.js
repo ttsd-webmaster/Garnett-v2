@@ -74,10 +74,15 @@ export default class ActiveMeritDialog extends PureComponent {
       });
     }
     else {
-      const { displayName, name, photoURL, status } = this.props.state;
+      const {
+        displayName,
+        name: activeName,
+        photoURL: activePhoto,
+        status
+      } = this.props.state;
       const { isChalkboard, isPCGreet } = this.state;
-      let action = 'Merited';
       const date = getDate();
+      let action = 'Merited';
 
       if (type === 'demerit') {
         amount = -amount;
@@ -87,22 +92,16 @@ export default class ActiveMeritDialog extends PureComponent {
         description = `Chalkboard: ${description}`;
       }
 
-      this.setState({
-        openCompletingTask: true,
-        completingTaskMessage: 'Meriting pledges...'
-      });
+      this.openProgressDialog();
 
-      const merit = { name, description, amount, photoURL, date };
-
+      const merit = { activeName, description, amount, activePhoto, date };
       API.meritAsActive(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status)
       .then(res => {
         console.log(res);
         this.handleClose();
-        this.setState({
-          openCompletingTask: false
-        });
+        this.closeProgressDialog();
 
-        API.sendActiveMeritNotification(name, selectedPledges, amount)
+        API.sendActiveMeritNotification(activeName, selectedPledges, amount)
         .then(res => {
           this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
         })
@@ -114,9 +113,7 @@ export default class ActiveMeritDialog extends PureComponent {
 
         console.log(`Not enough merits for ${pledge}`);
         this.handleClose();
-        this.setState({
-          openCompletingTask: false
-        });
+        this.closeProgressDialog();
         this.props.handleRequestOpen(`Not enough merits for ${pledge}`);
       });
     }
@@ -222,7 +219,6 @@ export default class ActiveMeritDialog extends PureComponent {
 
   handleClose = () => {
     this.props.handleMeritClose();
-
     this.setState({
       selectedPledges: [],
       description: '',
@@ -234,16 +230,24 @@ export default class ActiveMeritDialog extends PureComponent {
     });
   }
 
+  openProgressDialog = () => {
+    this.setState({
+      openCompletingTask: true,
+      completingTaskMessage: 'Meriting pledges...'
+    });
+  }
+
+  closeProgressDialog = () => {
+    this.setState({ openCompletingTask: false });
+  }
+
   render() {
     let maxAmount = 100;
-
     if (this.state.isChalkboard) {
       maxAmount = 100;
-    }
-    else if (this.props.state.status === 'pipm') {
+    } else if (this.props.state.status === 'pipm') {
       maxAmount = 500;
-    }
-    else if (this.props.state.status === 'alumni') {
+    } else if (this.props.state.status === 'alumni') {
       maxAmount = 100;
     }
 
@@ -372,12 +376,10 @@ export default class ActiveMeritDialog extends PureComponent {
           ))}
         </div>
 
-        {this.state.openCompletingTask &&
-          <CompletingTaskDialog
-            open={this.state.openCompletingTask}
-            message={this.state.completingTaskMessage}
-          />
-        }
+        <CompletingTaskDialog
+          open={this.state.openCompletingTask}
+          message={this.state.completingTaskMessage}
+        />
       </Dialog>
     )
   }
