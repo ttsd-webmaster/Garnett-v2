@@ -33,6 +33,7 @@ body {
   --dialog-button: var(--primary-color);
   --label-color: rgba(0, 0, 0, 0.3);
   --placeholder-color: #e0e0e0;
+  --chip-color: rgb(224, 224, 224);
 }
 
 /* Dark Mode */
@@ -50,6 +51,7 @@ body.dark-mode {
   --dialog-button: var(--text-color);
   --label-color: #777;
   --placeholder-color: #363636;
+  --chip-color: #1a1a1a;
 }
 
 @media(max-width: 420px) {
@@ -310,19 +312,20 @@ div, a {
 
 /* Loader */
 .loader-container {
-  height: calc(100vh - 110px);
+  position: absolute;
+  top: 55px;
+  left: 0;
+  height: calc(100vh - 163px);
+  width: 100vw;
   max-width: 100vw;
 }
 
 .line-scale-container {
-  position: relative;
+  position: absolute;
   top: 50%;
   left: 50%;
   width: max-content;
   transform: translate(-50%, -50%);
-}
-.loading .line-scale-container {
-  top: calc(50% - 50px);
 }
 
 @-webkit-keyframes line-scale {
