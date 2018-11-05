@@ -68,7 +68,8 @@
   top: 0;
   background-color: var(--list-color);
   height: 48px;
-  border-bottom: 1px solid var(--border-color);
+  border: 1px solid var(--border-color);
+  border-top: none;
   z-index: 10;
 }
 
@@ -111,9 +112,11 @@
   max-width: none;
   margin: 24px auto;
 }
-#merits-list > .garnett-list {
-  max-height: calc(100vh - 158px);
-  overflow: auto;
+@media(max-width: 420px) {
+  #merits-list > .garnett-list {
+    max-height: calc(100vh - 158px);
+    overflow: auto;
+  }
 }
 
 .garnett-list-item > div > div {
