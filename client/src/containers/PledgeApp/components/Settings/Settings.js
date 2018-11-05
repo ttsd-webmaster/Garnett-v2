@@ -9,15 +9,22 @@ import Toggle from 'material-ui/Toggle';
 
 const toggleStyle = { right: 30 };
 const isDarkMode = localStorage.getItem('darkMode') === 'true';
+const toggleDarkMode = localStorage.getItem('toggleDarkMode') === 'true';
 
 export class Settings extends PureComponent {
-  state = { isDarkMode };
+  state = { isDarkMode, toggleDarkMode };
 
-  onToggle = () => {
+  onDarkToggle = () => {
     const { isDarkMode } = this.state;
     localStorage.setItem('darkMode', !isDarkMode);
     document.body.classList.toggle('dark-mode');
     this.setState({ isDarkMode: !isDarkMode });
+  }
+
+  onAutoToggle = () => {
+    const { toggleDarkMode } = this.state;
+    localStorage.setItem('toggleDarkMode', !toggleDarkMode);
+    this.setState({ toggleDarkMode: !toggleDarkMode });
   }
 
   goHome = () => {
@@ -111,7 +118,21 @@ export class Settings extends PureComponent {
             rightIcon={
               <Toggle  style={toggleStyle} toggled={this.state.isDarkMode} />
             }
-            onClick={this.onToggle}
+            onClick={this.onDarkToggle}
+          />
+          <Divider className="garnett-divider" />
+          <ListItem
+            className="garnett-list-item"
+            primaryText={<p className="garnett-name">Auto toggle dark theme</p>}
+            secondaryText={
+              <p className="garnett-description">
+                Toggle dark theme on from 6PM to 6AM
+              </p>
+            }
+            rightIcon={
+              <Toggle  style={toggleStyle} toggled={this.state.toggleDarkMode} />
+            }
+            onClick={this.onAutoToggle}
           />
         </List>
 
