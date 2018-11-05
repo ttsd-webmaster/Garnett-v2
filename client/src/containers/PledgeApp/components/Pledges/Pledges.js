@@ -83,7 +83,7 @@ export class Pledges extends PureComponent {
     const isIPhone = navigator.userAgent.match(/iPhone/i);
 
     if (isIPhone) {
-      document.getElementById('mobile-header').style.zIndex = 0;
+      document.getElementById('mobile-header').style.zIndex = 'auto';
     }
 
     androidBackOpen(this.handleClose);
