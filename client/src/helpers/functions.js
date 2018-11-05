@@ -188,3 +188,17 @@ export function androidBackClose() {
     window.onpopstate = () => {};
   }
 }
+
+export function iosFullscreenDialogOpen() {
+  const isIPhone = navigator.userAgent.match(/iPhone/i);
+  if (isIPhone) {
+    document.getElementById('mobile-header').style.zIndex = 'auto';
+  }
+}
+
+export function iosFullscreenDialogClose() {
+  const isIPhone = navigator.userAgent.match(/iPhone/i);
+  if (isIPhone) {
+    document.getElementById('mobile-header').style.zIndex = 10;
+  }
+}

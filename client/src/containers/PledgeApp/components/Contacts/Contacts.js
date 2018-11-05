@@ -2,9 +2,10 @@ import './Contacts.css';
 import filters from './data.js';
 import API from 'api/API';
 import {
-  isMobileDevice,
   androidBackOpen,
-  androidBackClose
+  androidBackClose,
+  iosFullscreenDialogOpen,
+  iosFullscreenDialogClose
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import {
@@ -51,10 +52,8 @@ export class Contacts extends PureComponent {
   }
 
   handleOpen = (active) => {
-    if (isMobileDevice()) {
-      androidBackOpen(this.handleClose);
-    }
-
+    iosFullscreenDialogOpen();
+    androidBackOpen(this.handleClose);
     this.setState({
       active,
       open: true
@@ -62,17 +61,15 @@ export class Contacts extends PureComponent {
   }
 
   handleClose = () => {
-    if (isMobileDevice()) {
-      androidBackClose();
-    }
-
-    this.setState({ open: false });
+    androidBackClose();
+    this.setState({ open: false }, () => {
+      iosFullscreenDialogClose();
+    });
   }
 
   openPopover = (event) => {
     // This prevents ghost click.
     event.preventDefault();
-
     this.setState({
       openPopover: true,
       anchorEl: event.currentTarget
