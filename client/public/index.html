@@ -54,7 +54,13 @@
                 navigator.userAgent.match(/Windows Phone/i))
       };
 
-      if (isMobileDevice()) {
+      const toggleDarkMode = localStorage.getItem('toggleDarkMode');
+
+      if (!toggleDarkMode) {
+        localStorage.setItem('toggleDarkMode', true);
+      }
+
+      if (isMobileDevice() && toggleDarkMode === 'true') {
         const hours = new Date().getHours();
         if (hours < 6 || hours > 17) {
           localStorage.setItem('darkMode', true);

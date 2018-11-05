@@ -9,21 +9,21 @@
   overflow: hidden;
 }
 /* Mobile slide view */
-#content-container .animate-in {
+#content-container > .animate-in {
   position: relative;
-  min-height: calc(100vh - 162px);
+  height: 100vh;
   max-height: 100vh;
   padding-bottom: 55px;
   overflow: auto;
 }
 @media(max-width: 768px) {
-  #content-container .animate-in {
+  #content-container > .animate-in {
     padding-top: 55px;
   }
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */ 
-  #content-container .animate-in {
+  #content-container > .animate-in {
     overflow: scroll !important;
     -webkit-overflow-scrolling: touch;
   }
@@ -65,7 +65,7 @@
   justify-content: center;
   align-items: center;
   position: sticky;
-  top: 0;
+  top: 55px;
   background-color: var(--list-color);
   height: 48px;
   border-bottom: 1px solid var(--border-color);
