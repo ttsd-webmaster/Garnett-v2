@@ -25,7 +25,7 @@ export class Header extends PureComponent {
 
   render() {
     return (
-      <div className={`app-header ${this.props.noTabs && "no-tabs"}`}>
+      <div className={`app-header${this.props.noTabs ? " no-tabs" : ""}`}>
         <span>{this.props.title}</span>
         {this.props.logoutCallBack ? (
           <span className="back-button" onClick={this.logout}>Log Out</span>
