@@ -43,6 +43,7 @@ body.dark-mode {
   --list-color: #292929;
   --primary-color: crimson;
   --secondary-color: #ccc;
+  --secondary-dark: #e0e0e0;
   --border-color: #363636;
   --text-color: #fafafa;
   --text-light: #e0e0e0;

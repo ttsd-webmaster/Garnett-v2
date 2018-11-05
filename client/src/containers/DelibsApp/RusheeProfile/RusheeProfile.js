@@ -45,7 +45,7 @@ export class RusheeProfile extends PureComponent {
         />
         <div className="animate-in delibs-app rushee">
           <img
-            className={`user-photo ${this.state.rushee.rotate && "rotate"}`}
+            className={`user-photo${this.state.rushee.rotate ? " rotate" : ""}`}
             src={this.state.rushee.photo}
             alt="Rushee"
           />

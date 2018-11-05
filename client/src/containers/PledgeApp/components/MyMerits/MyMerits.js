@@ -18,9 +18,15 @@ export class MyMerits extends PureComponent {
 
   render() {
     return (
-      <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+      <div
+        id="merits-list"
+        className={`animate-in${this.props.hidden ? " hidden" : ""}`}
+      >
         {this.props.state.status !== 'pledge' && (
-          <ToggleViewHeader setMeritsView={this.setMeritsView} />
+          <ToggleViewHeader
+            allMeritsView={this.state.allMeritsView}
+            setMeritsView={this.setMeritsView}
+          />
         )}
         <MyMeritsList
           hidden={this.state.allMeritsView}
