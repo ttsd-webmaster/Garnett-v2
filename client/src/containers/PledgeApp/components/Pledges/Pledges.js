@@ -80,6 +80,12 @@ export class Pledges extends PureComponent {
   }
 
   handleOpen = (pledge) => {
+    const isIPhone = navigator.userAgent.match(/iPhone/i);
+
+    if (isIPhone) {
+      document.getElementById('mobile-header').style.zIndex = 'auto';
+    }
+
     androidBackOpen(this.handleClose);
     this.setState({
       pledge,
@@ -88,6 +94,12 @@ export class Pledges extends PureComponent {
   }
 
   handleClose = () => {
+    const isIPhone = navigator.userAgent.match(/iPhone/i);
+
+    if (isIPhone) {
+      document.getElementById('mobile-header').style.zIndex = 10;
+    }
+
     androidBackClose();
     this.setState({
       open: false
