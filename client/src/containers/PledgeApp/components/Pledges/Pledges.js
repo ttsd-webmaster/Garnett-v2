@@ -1,7 +1,13 @@
 import '../MyMerits/MyMerits.css';
 
 import API from 'api/API.js';
-import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
+import {
+  loadFirebase,
+  androidBackOpen,
+  androidBackClose,
+  iosFullscreenDialogOpen,
+  iosFullscreenDialogClose
+} from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader } from 'components';
 import { PledgeList, Filter, LoadablePledgeInfoDialog } from './components';
@@ -80,10 +86,7 @@ export class Pledges extends PureComponent {
   }
 
   handleOpen = (pledge) => {
-    const isIPhone = navigator.userAgent.match(/iPhone/i);
-    if (isIPhone) {
-      document.getElementById('mobile-header').style.zIndex = 'auto';
-    }
+    iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
     this.setState({
       pledge,
@@ -93,13 +96,8 @@ export class Pledges extends PureComponent {
 
   handleClose = () => {
     androidBackClose();
-    this.setState({
-      open: false
-    }, () => {
-      const isIPhone = navigator.userAgent.match(/iPhone/i);
-      if (isIPhone) {
-        document.getElementById('mobile-header').style.zIndex = 10;
-      }
+    this.setState({ open: false }, () => {
+      iosFullscreenDialogClose();
     });
   }
 
