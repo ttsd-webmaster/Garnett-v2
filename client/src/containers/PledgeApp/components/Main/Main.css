@@ -1,6 +1,7 @@
 #content {
   order: 1;
   flex: 1 0 auto;
+  position: relative;
   height: 100%;
   width: calc(100% - 280px);
   padding-bottom: 50px;

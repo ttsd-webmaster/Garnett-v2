@@ -93,7 +93,7 @@ export class AllMeritsList extends PureComponent {
                 leftAvatar={
                   <Avatar
                     size={70}
-                    src={merit.pledgePhoto}
+                    src={merit.activePhoto}
                     className="garnett-image large"
                   />
                 }
