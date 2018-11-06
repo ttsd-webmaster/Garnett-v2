@@ -16,6 +16,12 @@ const inkBarStyle = {
   zIndex: 2
 };
 
+const mobileInkBarStyle = {
+  position: 'sticky',
+  bottom: 'auto',
+  zIndex: 2
+};
+
 const slideContainer = {
   minHeight: 'calc(100vh - 112px)',
   WebkitOverflowScrolling: 'touch', // iOS momentum scrolling
@@ -63,17 +69,20 @@ export class ActiveView extends PureComponent {
     } = this.props;
     const fullName = `${firstName} ${lastName}`;
 
+    const isIPhone = navigator.userAgent.match(/iPhone/i);
+
     if (isMobileDevice()) {
       return (
         <FullscreenDialog
           title={fullName}
           titleStyle={{ fontSize:'22px' }}
+          containerStyle={isIPhone && { overflow: 'scroll' }}
           open={open}
           onRequestClose={handleClose}
         >
           <Tabs 
             className="garnett-tabs"
-            inkBarStyle={inkBarStyle}
+            inkBarStyle={isIPhone ? inkBarStyle : mobileInkBarStyle}
             value={this.state.index}
             onChange={this.handleChange}
           >
