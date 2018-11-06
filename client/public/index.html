@@ -32,7 +32,7 @@
     <title>Garnett</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root" tabindex="1"></div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
@@ -43,26 +43,6 @@
       To begin the development, run `npm start`.
       To create a production bundle, use `npm run build`.
     -->
-    <script>
-      function iOSversion() {
-        if (/iP(hone|od|ad)/.test(navigator.platform)) {
-          // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
-          var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
-          return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
-        }
-        else {
-          return -1;
-        }
-      }
-
-      window.onload = function() {
-        // Removes focus from input after touching on background for IOS
-        document.body.firstElementChild.tabIndex = 1;
-        if (iOSversion()[0] >= 11) {
-          document.body.style.maxHeight = '100vh';
-        }
-      }
-    </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107328054-2"></script>
     <script>
