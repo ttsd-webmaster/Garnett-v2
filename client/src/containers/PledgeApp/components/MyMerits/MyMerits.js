@@ -28,7 +28,7 @@ export class MyMerits extends PureComponent {
     
     return (
       <div
-        id={state.status !== 'pledge' ? "merits-list" : ""}
+        id={state.status !== 'pledge' ? "active-merits" : ""}
         className={`animate-in${hidden ? " hidden" : ""}`}
       >
         {state.status !== 'pledge' && (
