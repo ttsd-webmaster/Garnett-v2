@@ -192,20 +192,18 @@ export function androidBackClose() {
 export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
-    document.getElementById('pledges-container').style.overflow = 'hidden';
     document.getElementById('mobile-header').style.zIndex = 'auto';
-    document.querySelector('.bottom-tabs').style.zIndex = 'auto';
-    document.querySelector('.bottom-tabs').style.position = 'relative';
+    document.querySelector('#content-container > .animate-in').style.overflow = 'visible';
+    document.querySelector('.bottom-tabs').style.display = 'none';
   }
 }
 
 export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
-    document.getElementById('pledges-container').style.overflow = 'auto';
     document.getElementById('mobile-header').style.zIndex = 10;
-    document.querySelector('.bottom-tabs').style.zIndex = 10;
-    document.querySelector('.bottom-tabs').style.position = 'fixed';
+    document.querySelector('#content-container > .animate-in').style.overflow = 'auto';
+    document.querySelector('.bottom-tabs').style.display = 'flex';
   }
 }
 
