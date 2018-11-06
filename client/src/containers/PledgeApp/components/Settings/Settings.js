@@ -8,11 +8,15 @@ import Divider from 'material-ui/Divider';
 import Toggle from 'material-ui/Toggle';
 
 const toggleStyle = { right: 30 };
-const isDarkMode = localStorage.getItem('darkMode') === 'true';
-const toggleDarkMode = localStorage.getItem('toggleDarkMode') === 'true';
+
 
 export class Settings extends PureComponent {
-  state = { isDarkMode, toggleDarkMode };
+  constructor(props) {
+    super(props);
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    const toggleDarkMode = localStorage.getItem('toggleDarkMode') === 'true';
+    this.state = { isDarkMode, toggleDarkMode };
+  }
 
   onDarkToggle = () => {
     const { isDarkMode } = this.state;
