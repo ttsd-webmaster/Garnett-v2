@@ -213,7 +213,7 @@
 
 /* The actual tabs */
 @media(max-width: 420px) {
-  .garnett-dialog-tabs {
+  .garnett-tabs {
     position: sticky;
     top: 0;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
@@ -221,7 +221,7 @@
   }
 }
 @media(min-width: 420px) {
-  .garnett-dialog-tabs > div:first-child {
+  .garnett-tabs > div:first-child {
     position: sticky;
     top: 0;
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;

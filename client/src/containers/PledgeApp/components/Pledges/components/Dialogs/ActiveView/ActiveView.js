@@ -77,7 +77,7 @@ export class ActiveView extends PureComponent {
           onRequestClose={handleClose}
         >
           <Tabs 
-            className="garnett-dialog-tabs"
+            className="garnett-tabs"
             inkBarStyle={mobileInkBarStyle}
             value={this.state.index}
             onChange={this.handleChange}
@@ -151,7 +151,7 @@ export class ActiveView extends PureComponent {
         autoScrollBodyContent={true}
       >
         <Tabs
-          className="garnett-dialog-tabs"
+          className="garnett-tabs"
           inkBarStyle={inkBarStyle}
           value={this.state.index}
           onChange={this.handleChange}
