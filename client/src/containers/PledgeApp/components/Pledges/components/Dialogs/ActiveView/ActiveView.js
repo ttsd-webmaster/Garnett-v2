@@ -16,12 +16,6 @@ const inkBarStyle = {
   zIndex: 2
 };
 
-const mobileInkBarStyle = {
-  position: 'sticky',
-  bottom: 'auto',
-  zIndex: 2
-};
-
 const slideContainer = {
   minHeight: 'calc(100vh - 112px)',
   WebkitOverflowScrolling: 'touch', // iOS momentum scrolling
@@ -79,7 +73,7 @@ export class ActiveView extends PureComponent {
         >
           <Tabs 
             className="garnett-tabs"
-            inkBarStyle={mobileInkBarStyle}
+            inkBarStyle={inkBarStyle}
             value={this.state.index}
             onChange={this.handleChange}
           >
