@@ -193,6 +193,8 @@ export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
     document.getElementById('mobile-header').style.zIndex = 'auto';
+    document.querySelector('.bottom-tabs').style.zIndex = 'auto';
+    document.getElementById('pledges-container').style.zIndex = -1;
   }
 }
 
@@ -200,6 +202,8 @@ export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
     document.getElementById('mobile-header').style.zIndex = 10;
+    document.querySelector('.bottom-tabs').style.zIndex = 10;
+    document.getElementById('pledges-container').style.zIndex = 'auto';
   }
 }
 
