@@ -113,7 +113,7 @@
   margin: 24px auto;
 }
 @media(max-width: 420px) {
-  #merits-list > .garnett-list {
+  #active-merits > .garnett-list {
     max-height: calc(100vh - 158px);
     overflow: auto;
   }
