@@ -18,7 +18,6 @@ const inkBarStyle = {
 
 const mobileInkBarStyle = {
   position: 'sticky',
-  bottom: 'auto',
   zIndex: 2
 };
 
@@ -81,7 +80,7 @@ export class ActiveView extends PureComponent {
         >
           <Tabs 
             className="garnett-tabs"
-            inkBarStyle={isIPhone ? inkBarStyle : mobileInkBarStyle}
+            inkBarStyle={mobileInkBarStyle}
             value={this.state.index}
             onChange={this.handleChange}
           >
