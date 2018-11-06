@@ -23,6 +23,10 @@
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */ 
+  #content-container {
+    height: calc(100vh - 55px);
+  }
+  
   #content-container > .animate-in {
     overflow: scroll !important;
     -webkit-overflow-scrolling: touch;

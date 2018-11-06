@@ -116,6 +116,12 @@ div, a {
   height: 100vh;
   width: 100vw;
 }
+@supports (-webkit-overflow-scrolling: touch) {
+  /* CSS specific to iOS devices */ 
+  .loading-container {
+    height: calc(100vh - 52px);
+  }
+}
 
 .app-header {
   position: fixed;
