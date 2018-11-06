@@ -192,7 +192,7 @@ export function androidBackClose() {
 export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
-    document.getElementById('pledges-container').style.overflow = 'hidden';
+    // document.getElementById('pledges-container').style.overflow = 'hidden';
     document.getElementById('mobile-header').classList.add('hidden');
     document.querySelector('.bottom-tabs').classList.add('hidden');
   }
@@ -201,9 +201,9 @@ export function iosFullscreenDialogOpen() {
 export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
-    document.getElementById('pledges-container').style.overflow = 'auto';
-    document.getElementById('mobile-header').classList.add('remove');
-    document.querySelector('.bottom-tabs').classList.add('remove');
+    // document.getElementById('pledges-container').style.overflow = 'auto';
+    document.getElementById('mobile-header').classList.remove('hidden');
+    document.querySelector('.bottom-tabs').classList.remove('hidden');
   }
 }
 
