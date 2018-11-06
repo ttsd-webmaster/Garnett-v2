@@ -262,7 +262,7 @@ export default class HandleChalkboardDialog extends Component {
             onRequestClose={this.props.handleClose}
           >
             <Tabs 
-              className="garnett-dialog-tabs"
+              className="garnett-tabs"
               inkBarStyle={inkBarStyle}
               onChange={this.handleChange}
             >
@@ -389,7 +389,7 @@ export default class HandleChalkboardDialog extends Component {
             autoScrollBodyContent={true}
           >
             <Tabs 
-              className="garnett-dialog-tabs"
+              className="garnett-tabs"
               inkBarStyle={inkBarStyle}
               onChange={this.handleChange}
             >

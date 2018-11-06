@@ -13,12 +13,15 @@ import SwipeableViews from 'react-swipeable-views';
 const inkBarStyle = {
   position: 'fixed',
   bottom: 'auto',
-  marginTop: '46px',
+  zIndex: 2
+};
+
+const mobileInkBarStyle = {
+  position: 'sticky',
   zIndex: 2
 };
 
 const slideContainer = {
-  marginTop: '48px',
   minHeight: 'calc(100vh - 112px)',
   WebkitOverflowScrolling: 'touch', // iOS momentum scrolling
 };
@@ -74,8 +77,8 @@ export class ActiveView extends PureComponent {
           onRequestClose={handleClose}
         >
           <Tabs 
-            className="garnett-dialog-tabs"
-            inkBarStyle={inkBarStyle}
+            className="garnett-tabs"
+            inkBarStyle={mobileInkBarStyle}
             value={this.state.index}
             onChange={this.handleChange}
           >
@@ -148,7 +151,7 @@ export class ActiveView extends PureComponent {
         autoScrollBodyContent={true}
       >
         <Tabs
-          className="garnett-dialog-tabs"
+          className="garnett-tabs"
           inkBarStyle={inkBarStyle}
           value={this.state.index}
           onChange={this.handleChange}
