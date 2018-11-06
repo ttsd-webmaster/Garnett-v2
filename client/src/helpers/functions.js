@@ -192,16 +192,18 @@ export function androidBackClose() {
 export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
-    document.getElementById('mobile-header').style.zIndex = 'auto';
-    document.querySelector('.bottom-tabs').style.zIndex = 'auto';
+    document.getElementById('pledges-container').style.overflow = 'hidden';
+    document.getElementById('mobile-header').classList.add('hidden');
+    document.querySelector('.bottom-tabs').classList.add('hidden');
   }
 }
 
 export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
-    document.getElementById('mobile-header').style.zIndex = 10;
-    document.querySelector('.bottom-tabs').style.zIndex = 10;
+    document.getElementById('pledges-container').style.overflow = 'auto';
+    document.getElementById('mobile-header').classList.add('remove');
+    document.querySelector('.bottom-tabs').classList.add('remove');
   }
 }
 
