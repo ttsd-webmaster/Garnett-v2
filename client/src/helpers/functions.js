@@ -192,8 +192,8 @@ export function androidBackClose() {
 export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
+    document.getElementById('pledges-container').style.overflow = 'visible';
     document.getElementById('mobile-header').style.zIndex = 'auto';
-    document.querySelector('#content-container > .animate-in').style.overflow = 'visible';
     document.querySelector('.bottom-tabs').style.display = 'none';
   }
 }
@@ -201,8 +201,8 @@ export function iosFullscreenDialogOpen() {
 export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
+    document.getElementById('pledges-container').style.overflow = 'auto';
     document.getElementById('mobile-header').style.zIndex = 10;
-    document.querySelector('#content-container > .animate-in').style.overflow = 'auto';
     document.querySelector('.bottom-tabs').style.display = 'flex';
   }
 }

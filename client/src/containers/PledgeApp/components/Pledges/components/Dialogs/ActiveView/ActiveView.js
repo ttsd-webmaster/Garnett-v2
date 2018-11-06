@@ -18,6 +18,7 @@ const inkBarStyle = {
 
 const mobileInkBarStyle = {
   position: 'sticky',
+  bottom: 'auto',
   zIndex: 2
 };
 
