@@ -76,7 +76,6 @@ export class ActiveView extends PureComponent {
         <FullscreenDialog
           title={fullName}
           titleStyle={{ fontSize:'22px' }}
-          containerStyle={isIPhone && { overflow: 'scroll' }}
           open={open}
           onRequestClose={handleClose}
         >
@@ -91,6 +90,7 @@ export class ActiveView extends PureComponent {
           </Tabs>
           <SwipeableViews
             containerStyle={slideContainer}
+            slideStyle={isIPhone && { overflow: 'scroll' }}
             index={this.state.index}
             onChangeIndex={this.handleChange}
             animateHeight
