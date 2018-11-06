@@ -26,11 +26,10 @@ export class AllMeritsList extends PureComponent {
         meritsRef.once('value', (merits) => {
           let allMerits = [];
 
+          // Retrieves the 50 most recent merits
           allMerits = Object.keys(merits.val()).map(function(key) {
             return merits.val()[key];
-          }).sort((a, b) => {
-            return new Date(b.date) - new Date(a.date);
-          }).slice(0, 50);
+          }).reverse().slice(0, 50);
 
           localStorage.setItem('allMerits', JSON.stringify(allMerits));
 
@@ -62,7 +61,7 @@ export class AllMeritsList extends PureComponent {
     let toggleIcon = "icon-down-open-mini";
 
     if (!this.state.loaded) {
-      return <LoadingComponent />
+      return <LoadingComponent className={this.props.hidden ? "hidden" : ""} />;
     }
 
     if (reverse) {
