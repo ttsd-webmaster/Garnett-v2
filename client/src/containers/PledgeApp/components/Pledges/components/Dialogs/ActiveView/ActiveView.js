@@ -75,7 +75,7 @@ export class ActiveView extends PureComponent {
         >
           <Tabs
             className="garnett-tabs"
-            inkBarStyle={isIPhone ? inkBarStyle : {}}
+            inkBarStyle={isIPhone && inkBarStyle}
             value={this.state.index}
             onChange={this.handleChange}
           >
