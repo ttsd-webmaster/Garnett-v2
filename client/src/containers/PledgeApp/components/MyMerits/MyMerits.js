@@ -17,12 +17,21 @@ export class MyMerits extends PureComponent {
   }
 
   render() {
+    const {
+      state,
+      hidden,
+      openMerit,
+      handleMeritOpen,
+      handleMeritClose,
+      handleRequestOpen
+    } = this.props;
+    
     return (
       <div
-        id="merits-list"
-        className={`animate-in${this.props.hidden ? " hidden" : ""}`}
+        id={state.status !== 'pledge' ? "merits-list" : ""}
+        className={`animate-in${hidden ? " hidden" : ""}`}
       >
-        {this.props.state.status !== 'pledge' && (
+        {state.status !== 'pledge' && (
           <ToggleViewHeader
             allMeritsView={this.state.allMeritsView}
             setMeritsView={this.setMeritsView}
@@ -30,31 +39,31 @@ export class MyMerits extends PureComponent {
         )}
         <MyMeritsList
           hidden={this.state.allMeritsView}
-          state={this.props.state}
+          state={state}
           handleRequestOpen={this.props.handleRequestOpen}
         />
         <AllMeritsList
           hidden={!this.state.allMeritsView}
-          state={this.props.state}
+          state={state}
         />
         {isMobileDevice() && (
           <Fragment>
-            {this.props.state.status === 'pledge' ? (
+            {state.status === 'pledge' ? (
               <LoadablePledgeMeritDialog
-                open={this.props.openMerit}
-                state={this.props.state}
-                handleMeritClose={this.props.handleMeritClose}
-                handleRequestOpen={this.props.handleRequestOpen}
+                open={openMerit}
+                state={state}
+                handleMeritClose={handleMeritClose}
+                handleRequestOpen={handleRequestOpen}
               />
             ) : (
               <LoadableActiveMeritDialog
-                open={this.props.openMerit}
-                state={this.props.state}
-                handleMeritClose={this.props.handleMeritClose}
-                handleRequestOpen={this.props.handleRequestOpen}
+                open={openMerit}
+                state={state}
+                handleMeritClose={handleMeritClose}
+                handleRequestOpen={handleRequestOpen}
               />
             )}
-            <FloatingActionButton className="fixed-button" onClick={this.props.handleMeritOpen}>
+            <FloatingActionButton className="fixed-button" onClick={handleMeritOpen}>
               <i className="icon-pencil"></i>
             </FloatingActionButton>
           </Fragment>

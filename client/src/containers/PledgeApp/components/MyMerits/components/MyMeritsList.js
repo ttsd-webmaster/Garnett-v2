@@ -37,6 +37,8 @@ export class MyMeritsList extends PureComponent {
             meritsRef.once('value', (merits) => {
               let myMerits = [];
 
+              // Retrieves the user's merits by searching for the key in
+              // the Merits table
               myMerits = Object.keys(userMerits.val()).map(function(key) {
                 return merits.val()[userMerits.val()[key]];
               }).sort((a, b) => {
@@ -94,7 +96,7 @@ export class MyMeritsList extends PureComponent {
     let toggleIcon = "icon-down-open-mini";
     
     if (!this.state.loaded) {
-      return <LoadingComponent />;
+      return <LoadingComponent className={this.props.hidden ? "hidden" : ""} />;
     }
 
     if (reverse) {
