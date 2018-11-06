@@ -14,16 +14,13 @@
 }
 /* Mobile slide view */
 #content-container > .animate-in {
-  position: relative;
-  min-height: 100vh;
-  max-height: 100vh;
-  padding-bottom: 55px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 55px 0;
   overflow: auto;
-}
-@media(max-width: 768px) {
-  #content-container > .animate-in {
-    padding-top: 55px;
-  }
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
@@ -99,8 +96,6 @@
 }
 
 .garnett-list {
-  position: relative;
-  max-height: 100%;
   width: 100%;
   max-width: 700px;
   background-color: var(--background-color);
