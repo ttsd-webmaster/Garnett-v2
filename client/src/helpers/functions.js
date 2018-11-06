@@ -192,7 +192,8 @@ export function androidBackClose() {
 export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
-    document.getElementById('pledges-container').style.setProperty('overflow', 'visible', 'important');
+    document.getElementById('pledges-container').style.setProperty('overflow', 'hidden', 'important');
+    document.getElementById('pledges-container').style.setProperty('position', 'fixed', 'important');
     document.getElementById('mobile-header').style.zIndex = 'auto';
     document.querySelector('.bottom-tabs').style.display = 'none';
   }
@@ -202,6 +203,7 @@ export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   if (isIPhone) {
     document.getElementById('pledges-container').style.setProperty('overflow', 'auto', 'important');
+    document.getElementById('pledges-container').style.setProperty('position', 'absolute', 'important');
     document.getElementById('mobile-header').style.zIndex = 10;
     document.querySelector('.bottom-tabs').style.display = 'flex';
   }
