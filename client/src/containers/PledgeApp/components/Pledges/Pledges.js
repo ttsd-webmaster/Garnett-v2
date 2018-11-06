@@ -157,7 +157,10 @@ export class Pledges extends PureComponent {
     }
 
     return (
-      <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+      <div
+        id="pledges-container"
+        className={`animate-in${this.props.hidden ? " hidden" : ""}`}
+      >
         <FilterHeader
           title="Pledges"
           toggleIcon={toggleIcon}

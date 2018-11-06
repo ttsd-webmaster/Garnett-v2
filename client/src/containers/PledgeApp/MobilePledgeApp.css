@@ -69,9 +69,14 @@
   top: 0;
   background-color: var(--list-color);
   height: 48px;
-  border: 1px solid var(--border-color);
-  border-top: none;
+  border-bottom: 1px solid var(--border-color);
   z-index: 10;
+}
+@media(min-width: 420px) {
+  .garnett-subheader.merit-view {
+    border: 1px solid var(--border-color);
+    border-top: none;
+  }
 }
 
 .garnett-chip {
