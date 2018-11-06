@@ -44,52 +44,24 @@
       To create a production bundle, use `npm run build`.
     -->
     <script>
-      function isMobileDevice() {
-        return (navigator.userAgent.match(/Android/i) || 
-                navigator.userAgent.match(/webOS/i) || 
-                navigator.userAgent.match(/iPhone/i) || 
-                navigator.userAgent.match(/iPad/i) || 
-                navigator.userAgent.match(/iPod/i) || 
-                navigator.userAgent.match(/BlackBerry/i) || 
-                navigator.userAgent.match(/Windows Phone/i))
-      };
+      // function iOSversion() {
+      //   if (/iP(hone|od|ad)/.test(navigator.platform)) {
+      //     // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
+      //     var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+      //     return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+      //   }
+      //   else {
+      //     return -1;
+      //   }
+      // }
 
-      const toggleDarkMode = localStorage.getItem('toggleDarkMode');
-
-      if (!toggleDarkMode) {
-        localStorage.setItem('toggleDarkMode', true);
-      }
-
-      if (isMobileDevice() && toggleDarkMode === 'true') {
-        const hours = new Date().getHours();
-        if (hours < 6 || hours > 17) {
-          localStorage.setItem('darkMode', true);
-          document.body.classList.add('dark-mode');
-        } else {
-          localStorage.setItem('darkMode', false);
-          document.body.classList.remove('dark-mode');
-        }
-      }
-    </script>
-    <script>
-      function iOSversion() {
-        if (/iP(hone|od|ad)/.test(navigator.platform)) {
-          // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
-          var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
-          return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
-        }
-        else {
-          return -1;
-        }
-      }
-
-      window.onload = function() {
-        // Removes focus from input after touching on background for IOS
-        document.body.firstElementChild.tabIndex = 1;
-        if (iOSversion()[0] >= 11) {
-          document.body.style.height = 'calc(100% + 20px)';
-        }
-      }
+      // window.onload = function() {
+      //   // Removes focus from input after touching on background for IOS
+      //   document.body.firstElementChild.tabIndex = 1;
+      //   if (iOSversion()[0] >= 11) {
+      //     document.body.style.height = 'calc(100% + 20px)';
+      //   }
+      // }
     </script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-107328054-2"></script>

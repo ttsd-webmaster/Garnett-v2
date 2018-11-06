@@ -31,6 +31,7 @@ export default class ActiveMeritDialog extends PureComponent {
       allPledges: false,
       amount: 0,
       chalkboards: null,
+      openCompletingTask: false,
       pledgeValidation: true,
       descriptionValidation: true
     };

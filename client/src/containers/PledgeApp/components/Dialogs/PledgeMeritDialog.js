@@ -31,6 +31,7 @@ export default class PledgeMeritDialog extends PureComponent {
       isChalkboard: false,
       isPCGreet: false,
       amount: 0,
+      openCompletingTask: false,
       activeValidation: true,
       descriptionValidation: true
     };

@@ -202,3 +202,29 @@ export function iosFullscreenDialogClose() {
     document.getElementById('mobile-header').style.zIndex = 10;
   }
 }
+
+export function configureDarkMode() {
+  const toggleDarkMode = localStorage.getItem('toggleDarkMode');
+  if (!toggleDarkMode) {
+    localStorage.setItem('toggleDarkMode', true);
+  }
+
+  if (toggleDarkMode === 'true') {
+    const hours = new Date().getHours();
+    if (hours < 6 || hours > 17) {
+      localStorage.setItem('darkMode', true);
+      document.body.classList.add('dark-mode');
+    } else {
+      localStorage.setItem('darkMode', false);
+      document.body.classList.remove('dark-mode');
+    }
+  }
+  else {
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }
+}
