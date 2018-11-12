@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-const activePhoneNumber = {
+const phoneStyle = {
   display: 'block',
   textDecoration: 'none'
 }
@@ -58,7 +58,7 @@ export function UserInfo({
           leftIcon={<i className={`icon-${firstRowIcon} garnett-icon`}></i>}
         />
         <Divider className="garnett-divider" inset={true} />
-        <a style={activePhoneNumber} href={`tel:${phone}`}>
+        <a style={phoneStyle} href={`tel:${phone}`}>
           <ListItem
             className="garnett-list-item"
             primaryText={<p className="garnett-name">Phone Number</p>}

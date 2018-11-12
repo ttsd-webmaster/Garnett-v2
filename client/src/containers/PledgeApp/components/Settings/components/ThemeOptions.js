@@ -1,3 +1,4 @@
+import './ThemeOptions.css';
 import { configureThemeMode } from 'helpers/functions';
 
 import React, { PureComponent } from 'react';

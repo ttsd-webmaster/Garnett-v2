@@ -1,10 +1,12 @@
+import '../../../../MyMerits/MyMerits.css';
+import './ActiveView.css';
 import API from 'api/API.js';
 import { FilterHeader, MeritRow } from 'components';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
 
-export default class MeritsList extends PureComponent {
+export class MeritsList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

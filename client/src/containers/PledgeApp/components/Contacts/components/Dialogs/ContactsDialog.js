@@ -6,6 +6,11 @@ import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
+const fullscreenDialogStyle = {
+  backgroundColor: 'var(--background-color)',
+  overflow: 'auto'
+};
+
 export default function ContactsDialog({
   active,
   open,
@@ -39,7 +44,7 @@ export default function ContactsDialog({
       <FullscreenDialog
         title={fullName}
         titleStyle={{ fontSize:'22px' }}
-        style={{ backgroundColor: 'var(--background-color)' }}
+        style={fullscreenDialogStyle}
         open={open}
         onRequestClose={handleClose}
       >

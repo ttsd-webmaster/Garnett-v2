@@ -158,29 +158,31 @@ export class Contacts extends PureComponent {
 
     return (
       <div className="animate-in">
-        {this.state.labels.map((label, index) => (
-          <List className="garnett-list" key={index}>
-            {index === 0 ? (
-              <FilterHeader
-                className="garnett-subheader contacts"
-                title={label}
-                toggleIcon={toggleIcon}
-                filterName={this.state.filterName}
-                openPopover={this.openPopover}
-                reverse={this.reverse}
-              />
-            ) : (
-              <Subheader className="garnett-subheader contacts">
-                {label}
-              </Subheader>
-            )}
-            {this.state.actives.map((active, i) => (
-              this.checkCondition(active, label) && (
-                <UserRow key={i} user={active} handleOpen={this.handleOpen} />
-              )
-            ))}
-          </List>
-        ))}
+        <List className="garnett-list">
+          {this.state.labels.map((label, index) => (
+            <div key={index}>
+              {index === 0 ? (
+                <FilterHeader
+                  className="garnett-subheader contacts"
+                  title={label}
+                  toggleIcon={toggleIcon}
+                  filterName={this.state.filterName}
+                  openPopover={this.openPopover}
+                  reverse={this.reverse}
+                />
+              ) : (
+                <Subheader className="garnett-subheader contacts">
+                  {label}
+                </Subheader>
+              )}
+              {this.state.actives.map((active, i) => (
+                this.checkCondition(active, label) && (
+                  <UserRow key={i} user={active} handleOpen={this.handleOpen} />
+                )
+              ))}
+            </div>
+          ))}
+        </List>
         <Filter
           open={this.state.openPopover}
           anchorEl={this.state.anchorEl}

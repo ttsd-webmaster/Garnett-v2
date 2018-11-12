@@ -1,9 +1,12 @@
 import './Login.css';
 import { isMobileDevice } from 'helpers/functions.js';
 import { CompletingTaskDialog } from 'helpers/loaders.js';
-import { SignIn } from './components/SignIn';
-import { SignUp } from './components/SignUp';
-import { ForgotPassword } from './components/ForgotPassword';
+import {
+  LoginOptions,
+  SignIn,
+  SignUp,
+  ForgotPassword
+} from './components';
 
 import React, { PureComponent } from 'react';
 
@@ -98,20 +101,7 @@ export class Login extends PureComponent {
         </div>
 
         <div className="login-container">
-          <div className="sign-options">
-            <span className="sign-in underline"
-              id="sign-in"
-              onClick={this.active}
-            >
-              Sign In
-            </span>
-            <span className="sign-up"
-              id="sign-up"
-              onClick={this.active}
-            >
-              Sign Up
-            </span>
-          </div>
+          <LoginOptions active={this.active} />
           <SignIn
             active={this.active}
             loginCallback={this.props.loginCallback}

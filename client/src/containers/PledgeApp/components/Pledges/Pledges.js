@@ -1,4 +1,4 @@
-import '../MyMerits/MyMerits.css';
+import './Pledges.css';
 
 import API from 'api/API.js';
 import {

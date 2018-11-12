@@ -1,8 +1,3 @@
-/* Hide button */
-.hide-buttons .fixed-button{
-  transform: scale(0);
-}
-
 /* Container */
 #content-container {
   position: absolute;
@@ -12,6 +7,7 @@
   left: 0;
   overflow: hidden;
 }
+
 /* Mobile slide view */
 #content-container > .animate-in {
   position: absolute;
@@ -25,7 +21,6 @@
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
   #content-container > .animate-in {
-    overflow: scroll !important;
     -webkit-overflow-scrolling: touch;
   }
 }

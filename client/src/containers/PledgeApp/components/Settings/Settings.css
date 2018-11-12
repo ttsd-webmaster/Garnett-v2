@@ -7,53 +7,6 @@
   border-radius: 50%;
 }
 
-.garnett-list.my-info {
-  margin-bottom: 30px;
-}
-
-/************* Theme Options *************/
-.theme-options-container {
-  background-color: var(--list-color);
-  padding: 20px 0 16px;
-}
-
-.theme-label {
-  width: 90%;
-  color: var(--text-light);
-  margin: 0 auto 10px;
-}
-
-.theme-options {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
-  width: 90%;
-  font-size: 14px;
-  color: var(--accent-color);
-  margin: auto;
-  border: 1px solid;
-  border-radius: 50px;
-  overflow: hidden;
-}
-
-.theme-option {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 33.33%;
-  border-right: 1px solid var(--accent-color);
-}
-.theme-option:last-child {
-  border: none;
-}
-.theme-option.active {
-  background-color: var(--accent-color);
-  color: #fafafa;
-}
-
-/************ Logout Button ***************/
 .logout-button {
   display: flex;
   justify-content: center;

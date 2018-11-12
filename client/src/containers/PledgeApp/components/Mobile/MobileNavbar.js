@@ -26,7 +26,7 @@ export function MobileNavbar({
       />
       <BottomNavigationItem
         label={status === 'pledge' ? 
-          (<span style={getTabStyle(index === 1)}>Pbros</span>) : 
+          (<span style={getTabStyle(index === 1)}>Pbros</span>) :
           (<span style={getTabStyle(index === 1)}>Pledges</span>)
         }
         icon={
