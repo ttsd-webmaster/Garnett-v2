@@ -9,10 +9,19 @@ import {
   iosFullscreenDialogClose
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { FilterHeader } from 'components';
-import { PledgeList, Filter, LoadablePledgeInfoDialog } from './components';
+import { Filter, FilterHeader, UserRow } from 'components';
+import { LoadablePledgeInfoDialog } from './components';
 
 import React, { PureComponent } from 'react';
+import { List } from 'material-ui/List';
+
+const filterOptions = [
+  'Last Name',
+  'First Name',
+  'Year',
+  'Major',
+  'Total Merits'
+];
 
 export class Pledges extends PureComponent {
   state = {
@@ -147,32 +156,34 @@ export class Pledges extends PureComponent {
     let toggleIcon = "icon-down-open-mini";
     let { pledges, reverse, loaded } = this.state;
 
-    if (reverse) {
-      pledges = pledges.slice().reverse();
-      toggleIcon = "icon-up-open-mini";
+    if (this.props.hidden) {
+      return null;
     }
 
     if (!loaded) {
       return <LoadingComponent />
     }
 
+    if (reverse) {
+      pledges = pledges.slice().reverse();
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
-      <div
-        id="pledges-container"
-        className={`animate-in${this.props.hidden ? " hidden" : ""}`}
-      >
-        <FilterHeader
-          title="Pledges"
-          toggleIcon={toggleIcon}
-          state={this.props.state}
-          filterName={this.state.filterName}
-          openPopover={this.openPopover}
-          reverse={this.reverse}
-        />
-        <PledgeList
-          pledges={pledges}
-          handleOpen={this.handleOpen}
-        />
+      <div id="pledges-container" className="animate-in">
+        <List className="garnett-list">
+          <FilterHeader
+            title="Pledges"
+            toggleIcon={toggleIcon}
+            state={this.props.state}
+            filterName={this.state.filterName}
+            openPopover={this.openPopover}
+            reverse={this.reverse}
+          />
+          {pledges.map((pledge, i) => (
+            <UserRow key={i} user={pledge} handleOpen={this.handleOpen} />
+          ))}
+        </List>
         <LoadablePledgeInfoDialog
           open={this.state.open}
           state={this.props.state}
@@ -184,6 +195,7 @@ export class Pledges extends PureComponent {
           <Filter
             open={this.state.openPopover}
             anchorEl={this.state.anchorEl}
+            filters={filterOptions}
             filterName={this.state.filterName}
             closePopover={this.closePopover}
             setFilter={this.setFilter}

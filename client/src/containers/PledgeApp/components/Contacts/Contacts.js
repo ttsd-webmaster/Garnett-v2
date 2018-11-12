@@ -8,15 +8,23 @@ import {
   iosFullscreenDialogClose
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import {
-  Header,
-  ActiveList,
-  Filter,
-  LoadableContactsDialog
-} from './components';
+import { Filter, FilterHeader, UserRow } from 'components';
+import { LoadableContactsDialog } from './components';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+
+const filterOptions = [
+  'Active', 
+  'Alumni', 
+  'Class', 
+  'Major', 
+  'Year', 
+  'First Name', 
+  'Last Name', 
+  'Personality Type'
+];
 
 export class Contacts extends PureComponent {
   constructor(props) {
@@ -48,6 +56,20 @@ export class Contacts extends PureComponent {
     else {
       const actives = localStorage.getItem('activeArray');
       this.setState({ actives, labels });
+    }
+  }
+
+  checkCondition(active, label) {
+    switch (this.state.filter) {
+      case 'firstName':
+      case 'lastName':
+        return active[this.state.filter].startsWith(label);
+      case 'activeClass':
+        return active.status !== 'alumni' && active.class === label;
+      case 'alumni':
+        return active.status === 'alumni' && active.class === label;
+      default:
+        return active[this.state.filter] === label;
     }
   }
 
@@ -122,39 +144,47 @@ export class Contacts extends PureComponent {
   render() {
     let toggleIcon = "icon-down-open-mini";
 
-    if (this.state.reverse) {
-      toggleIcon = "icon-up-open-mini";
+    if (this.props.hidden) {
+      return null;
     }
 
     if (!this.state.labels) {
       return <LoadingComponent />
     }
 
+    if (this.state.reverse) {
+      toggleIcon = "icon-up-open-mini";
+    }
+
     return (
-      <div className={`animate-in${this.props.hidden ? " hidden" : ""}`}>
+      <div className="animate-in">
         {this.state.labels.map((label, index) => (
-          <div key={index}>
-            <Header
-              index={index}
-              label={label}
-              toggleIcon={toggleIcon}
-              filterName={this.state.filterName}
-              openPopover={this.openPopover}
-              reverse={this.reverse}
-            />
-            <List className="garnett-list">
-              <ActiveList 
-                actives={this.state.actives}
-                label={label}
-                filter={this.state.filter}
-                handleOpen={this.handleOpen}
+          <List className="garnett-list" key={index}>
+            {index === 0 ? (
+              <FilterHeader
+                className="garnett-subheader contacts"
+                title={label}
+                toggleIcon={toggleIcon}
+                filterName={this.state.filterName}
+                openPopover={this.openPopover}
+                reverse={this.reverse}
               />
-            </List>
-          </div>
+            ) : (
+              <Subheader className="garnett-subheader contacts">
+                {label}
+              </Subheader>
+            )}
+            {this.state.actives.map((active, i) => (
+              this.checkCondition(active, label) && (
+                <UserRow key={i} user={active} handleOpen={this.handleOpen} />
+              )
+            ))}
+          </List>
         ))}
         <Filter
           open={this.state.openPopover}
           anchorEl={this.state.anchorEl}
+          filters={filterOptions}
           filterName={this.state.filterName}
           closePopover={this.closePopover}
           setFilter={this.setFilter}

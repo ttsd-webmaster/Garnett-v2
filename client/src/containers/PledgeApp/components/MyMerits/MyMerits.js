@@ -25,11 +25,15 @@ export class MyMerits extends PureComponent {
       handleMeritClose,
       handleRequestOpen
     } = this.props;
+
+    if (hidden) {
+      return null;
+    }
     
     return (
       <div
         id={state.status !== 'pledge' ? "active-merits" : ""}
-        className={`animate-in${hidden ? " hidden" : ""}`}
+        className="animate-in"
       >
         {state.status !== 'pledge' && (
           <ToggleViewHeader

@@ -3,7 +3,7 @@ import {
   loadFirebase,
   androidBackOpen,
   androidBackClose,
-  configureDarkMode
+  configureThemeMode
 } from 'helpers/functions';
 import {
   MyMerits,
@@ -31,7 +31,7 @@ export class MobilePledgeApp extends PureComponent {
     console.log(`Pledge app mount: ${this.props.state.name}`)
     localStorage.setItem('route', 'pledge-app');
 
-    configureDarkMode();
+    configureThemeMode();
 
     if (navigator.onLine) {
       loadFirebase('database')

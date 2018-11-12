@@ -5,11 +5,6 @@ import { ActiveView } from './ActiveView/ActiveView';
 import React, { PureComponent } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 
-const phoneStyle = {
-  display: 'block',
-  textDecoration: 'none'
-}
-
 export default class PledgeInfoDialog extends PureComponent {
   state = { pledge: null }
 
@@ -55,7 +50,6 @@ export default class PledgeInfoDialog extends PureComponent {
         <PledgeView
           open={this.props.open}
           pledge={this.state.pledge}
-          phoneStyle={phoneStyle}
           handleClose={this.props.handleClose}
           actions={actions}
         />
@@ -67,7 +61,6 @@ export default class PledgeInfoDialog extends PureComponent {
         open={this.props.open}
         pledge={this.state.pledge}
         meritsRemaining={this.state.meritsRemaining}
-        phoneStyle={phoneStyle}
         handleClose={this.props.handleClose}
         handleRequestOpen={this.props.handleRequestOpen}
         actions={actions}

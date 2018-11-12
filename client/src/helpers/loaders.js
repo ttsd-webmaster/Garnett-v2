@@ -28,30 +28,6 @@ function LoadingPage({ name }) {
   )
 }
 
-export function LoadingLogin() {
-  if (isMobileDevice()) {
-    return (
-      <div className="loading-container">
-        <div className="line-scale-container">
-          <div className="line-scale">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-        </div>
-      </div>
-    )
-  } else {
-    return (
-      <div className="loading-container">
-        <div className="loading-image"></div>
-      </div>
-    )
-  }
-}
-
 export const LoadingDataApp =  () => (
   <Fragment>
     <LoadingPage name="Data App" />

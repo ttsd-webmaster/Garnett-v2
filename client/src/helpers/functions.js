@@ -191,9 +191,12 @@ export function androidBackClose() {
 
 export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
+  const pledgesContainer = document.getElementById('pledges-container');
   if (isIPhone) {
-    document.getElementById('pledges-container').style.setProperty('overflow', 'hidden', 'important');
-    document.getElementById('pledges-container').style.setProperty('position', 'fixed', 'important');
+    if (pledgesContainer) {
+      pledgesContainer.style.setProperty('overflow', 'hidden', 'important');
+      pledgesContainer.style.setProperty('position', 'fixed', 'important');
+    }
     document.getElementById('mobile-header').style.zIndex = 'auto';
     document.querySelector('.bottom-tabs').style.display = 'none';
   }
@@ -201,36 +204,33 @@ export function iosFullscreenDialogOpen() {
 
 export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
+  const pledgesContainer = document.getElementById('pledges-container');
   if (isIPhone) {
-    document.getElementById('pledges-container').style.setProperty('overflow', 'auto', 'important');
-    document.getElementById('pledges-container').style.setProperty('position', 'absolute', 'important');
+    if (pledgesContainer) {
+      pledgesContainer.style.setProperty('overflow', 'auto', 'important');
+      pledgesContainer.style.setProperty('position', 'absolute', 'important');
+    }
     document.getElementById('mobile-header').style.zIndex = 10;
     document.querySelector('.bottom-tabs').style.display = 'flex';
   }
 }
 
-export function configureDarkMode() {
-  const toggleDarkMode = localStorage.getItem('toggleDarkMode');
-  if (!toggleDarkMode) {
-    localStorage.setItem('toggleDarkMode', true);
-  }
-
-  if (toggleDarkMode === 'true') {
-    const hours = new Date().getHours();
-    if (hours < 6 || hours > 17) {
-      localStorage.setItem('darkMode', true);
-      document.body.classList.add('dark-mode');
-    } else {
-      localStorage.setItem('darkMode', false);
+export function configureThemeMode() {
+  const themeMode = localStorage.getItem('themeMode');
+  switch(themeMode) {
+    case 'day':
       document.body.classList.remove('dark-mode');
-    }
-  }
-  else {
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    if (isDarkMode) {
+      break;
+    case 'night':
       document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
-    }
+      break;
+    case 'automatic':
+    default:
+      const hours = new Date().getHours();
+      if (hours < 6 || hours > 17) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
   }
 }
