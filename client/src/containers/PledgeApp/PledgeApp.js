@@ -46,7 +46,10 @@ export class PledgeApp extends PureComponent {
           logOut={this.props.logoutCallBack}
           handleRequestOpen={this.props.handleRequestOpen}
         />
-        <Main state={this.props.state} />
+        <Main
+          state={this.props.state}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
         {this.props.state.status === 'pledge' ? (
           <LoadablePledgeMeritDialog
             open={this.state.openMerit}

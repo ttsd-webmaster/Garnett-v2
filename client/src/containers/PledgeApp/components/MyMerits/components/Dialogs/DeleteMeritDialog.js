@@ -13,7 +13,7 @@ export default class DeleteMeritDialog extends PureComponent {
     .then((res) => {
       console.log('Deleted merit');
       this.props.handleDeleteClose();
-      this.props.handleRequestOpen(`Deleted merit from ${merit.name}`);
+      this.props.handleRequestOpen(`Deleted merit from ${merit.activeName}`);
     })
     .catch((error) => {
       console.log(`Error: ${error}`);

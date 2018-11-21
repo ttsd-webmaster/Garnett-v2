@@ -1,7 +1,7 @@
 var urlExists = require('url-exists');
 const admin = require("firebase-admin");
 var serviceAccount = require("../../../../serviceAccountKey.json");
-require('dotenv').config({ path: process.env.OLDPWD + '/.env' })
+require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),

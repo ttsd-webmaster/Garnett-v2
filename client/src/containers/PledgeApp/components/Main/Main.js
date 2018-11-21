@@ -8,17 +8,32 @@ const routes = [
   {
     path: '/pledge-app/my-merits',
     exact: true,
-    content: props => <MyMerits state={props.state} />
+    content: props => (
+      <MyMerits
+        state={props.state}
+        handleRequestOpen={props.handleRequestOpen}
+      />
+    )
   },
   {
     path: '/pledge-app/pledges',
     exact: true,
-    content: props => <Pledges state={props.state} />
+    content: props => (
+      <Pledges
+        state={props.state}
+        handleRequestOpen={props.handleRequestOpen}
+      />
+    )
   },
   {
     path: '/pledge-app/brothers',
     exact: true,
-    content: props => <Contacts state={props.state} />
+    content: props => (
+      <Contacts
+        state={props.state}
+        handleRequestOpen={props.handleRequestOpen}
+      />
+    )
   }
 ];
 
