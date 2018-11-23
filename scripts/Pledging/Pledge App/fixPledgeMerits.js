@@ -12,7 +12,7 @@ let meritsRef = admin.database().ref('/merits');
 
 usersRef.once('value', (users) => {
   users.forEach((user) => {
-    if (user.val().status == 'pledge' && user.val().Merits) {
+    if (user.val().status === 'pledge' && user.val().Merits) {
       const merits = Object.keys(user.val().Merits).map(function(key) {
         return user.val().Merits[key];
       })

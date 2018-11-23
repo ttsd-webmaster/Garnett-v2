@@ -25,20 +25,16 @@ export class MyMeritsList extends PureComponent {
       .then(() => {
         const { firebase } = window;
         const { displayName } = this.props.state;
-        const userRef = firebase.database().ref('/users/' + displayName);
+        const userMeritsRef = firebase.database().ref('/users/' + displayName + '/Merits');
         const meritsRef = firebase.database().ref('/merits');
 
-        userRef.child('Merits').on('value', (userMerits) => {
+        userMeritsRef.on('value', (userMerits) => {
           if (userMerits.val()) {
-            meritsRef.once('value', (merits) => {
-              let myMerits = [];
-
+            meritsRef.orderByChild('date').once('value', (merits) => {
               // Retrieves the user's merits by searching for the key in
               // the Merits table
-              myMerits = Object.keys(userMerits.val()).map(function(key) {
+              const myMerits = Object.keys(userMerits.val()).map(function(key) {
                 return merits.val()[userMerits.val()[key]];
-              }).sort((a, b) => {
-                return new Date(b.date) - new Date(a.date);
               });
 
               localStorage.setItem('myMerits', JSON.stringify(myMerits));

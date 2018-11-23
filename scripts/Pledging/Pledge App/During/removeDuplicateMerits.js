@@ -8,27 +8,20 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 })
 
-let usersRef = admin.database().ref('/users/');
-let chalkboardsRef = admin.database().ref('/chalkboards');
-let complaintsRef = admin.database().ref('/approvedComplaints');
+const meritsRef = admin.database().ref('/merits');
 
-usersRef.once('value', (snapshot) => {
-  snapshot.forEach((user) => {
-    if (user.val().status === 'pledge') {
-      const result = [];
-      let merits = Object.keys(user.val().Merits).map(function(key) {
-        return user.val().Merits[key];
-      });
+meritsRef.once('value', (merits) => {
+  let updatedMerits = Object.keys(merits.val()).map(function(key) {
+    return merits.val()[key];
+  });
+  updatedMerits = updatedMerits.filter((merit, index, self) =>
+    index === self.findIndex((m) => (
+      m.description === merit.description &&
+      m.activeName === merit.activeName &&
+      m.pledgeName === merit.pledgeName &&
+      m.amount === merit.amount
+    ))
+  )
 
-      merits = merits.filter((merit, index, self) =>
-        index === self.findIndex((m) => (
-          m.description === merit.description && m.name === merit.name
-        ))
-      )
-
-      user.ref.update({
-        Merits: merits
-      });
-    }
-  })
+  meritsRef.set(updatedMerits);
 })

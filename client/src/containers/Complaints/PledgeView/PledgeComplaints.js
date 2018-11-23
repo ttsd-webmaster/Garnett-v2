@@ -32,14 +32,12 @@ export default class PledgeComplaints extends Component {
         const { firebase } = window;
         const complaintsRef = firebase.database().ref('/users/' + displayName + '/Complaints/');
 
-        complaintsRef.on('value', (snapshot) => {
+        complaintsRef.sortByChild('date').on('value', (snapshot) => {
           let { complaints } = this.state;
 
           if (snapshot.val()) {
             complaints = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
-            }).sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
             });
           }
 
