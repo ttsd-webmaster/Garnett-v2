@@ -1,12 +1,3 @@
-.user-photo {
-  object-fit: cover;
-  display: block;
-  height: 150px;
-  width: 150px;
-  margin: 30px auto;
-  border-radius: 50%;
-}
-
 .logout-button {
   display: flex;
   justify-content: center;

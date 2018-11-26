@@ -1,12 +1,3 @@
-.user-photo {
-  object-fit: cover;
-  display: block;
-  height: 150px;
-  width: 150px;
-  margin: 15px auto 23px;
-  border-radius: 50%;
-}
-
 .data-value.my-data {
   margin-top: 8px;
 }

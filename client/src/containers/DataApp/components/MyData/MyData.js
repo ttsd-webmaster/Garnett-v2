@@ -31,7 +31,9 @@ export class MyData extends PureComponent {
     return (
       <div id="my-data">
         <div style={{animation: 'fadeIn .25s ease-in forwards'}}>
-          <img className="user-photo" src={this.props.state.photoURL} alt="User" />
+          <div className="user-photo-container">
+            <img className="user-photo" src={this.props.state.photoURL} alt="User" />
+          </div>
 
           {categories.map((category, i) => (
             <div className="data-card" key={i}>

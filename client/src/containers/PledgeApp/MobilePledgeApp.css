@@ -49,7 +49,7 @@
   }
 }
 
-/* Garnett List, List Items, and Dividers */
+/*************** Garnett List, List Items, and Dividers ****************/
 .garnett-subheader {
   max-width: 700px;
   width: 100%;
@@ -74,15 +74,16 @@
   }
 }
 
+/* Chip for merits toggle header in MyMerits */
 .garnett-chip {
-  background-color: var(--chip-color);
   margin: 10px !important;
 }
 .garnett-chip.active {
-  background-color: var(--secondary-dark);
+  background-color: var(--text-color);
   color: var(--background-color);
 }
 
+/* Filter and reverse toggle in the subheader */
 .garnett-filter {
   position: relative;
   top: -3px;
@@ -95,6 +96,7 @@
   top: 4px;
 }
 
+/***************** Garnett List *******************/
 .garnett-list {
   width: 100%;
   max-width: 700px;
@@ -133,6 +135,7 @@
   white-space: pre-line !important;
 }
 
+/* Image for user and merit row */
 .garnett-image {
   object-fit: cover;
   top: 9px !important;
@@ -149,11 +152,13 @@
   }
 }
 
+/* Icon for bottom tabs and list items */
 .garnett-icon {
   font-size: 1.4em;
   color: var(--icon-color);
 }
 
+/* Primary text for list item */
 .garnett-name {
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -169,10 +174,12 @@
   font-size: 13px;
 }
 
+/* Secondary text for list item */
 .garnett-description {
   word-wrap: break-word;
 }
 
+/* Date for list item */
 .garnett-date {
   float: right;
   color: var(--secondary-color) !important;
@@ -195,7 +202,7 @@
   }
 }
 
-/* Garnett Dialog */
+/******************** Garnett Dialog *********************/
 
 /* Dialog container */
 .garnett-dialog-content {
@@ -255,7 +262,7 @@
   color: var(--dialog-button) !important;
 }
 
-/* Bottom Navigation */
+/******************* Bottom Navigation *******************/
 .bottom-tabs {
   position: fixed !important;
   bottom: 0;
@@ -263,23 +270,27 @@
   z-index: 10;
 }
 
-/* Photo for mobile dialog */
-.dialog-photo {
+/********** Photo for mobile dialog and settings **********/
+.user-photo-container {
+  padding: 15px 0;
+}
+
+.user-photo {
   object-fit: cover;
   display: block;
   height: 125px;
   width: 125px;
-  margin: 15px auto;
+  margin: auto;
   border-radius: 50%;
 }
 @media(max-width: 365px) {
-  .dialog-photo {
+  .user-photo {
     height: 80px;
     width: 80px;
   }
 }
 
-/* Mobile Header */
+/****************** Mobile Header *********************/
 #mobile-header {
   display: flex;
   justify-content: center;

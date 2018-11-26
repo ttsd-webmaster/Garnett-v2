@@ -33,7 +33,6 @@ body {
   --dialog-button: var(--primary-color);
   --label-color: rgba(0, 0, 0, 0.3);
   --placeholder-color: #e0e0e0;
-  --chip-color: rgb(224, 224, 224);
 }
 
 /* Dark Mode */
@@ -52,7 +51,6 @@ body.dark-mode {
   --dialog-button: var(--text-color);
   --label-color: #777;
   --placeholder-color: #363636;
-  --chip-color: #1a1a1a;
 }
 
 @media(max-width: 420px) {

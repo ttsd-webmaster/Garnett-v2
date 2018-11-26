@@ -48,7 +48,9 @@ export function UserInfo({
 
   return (
     <Fragment>
-      <img className="dialog-photo" src={photoURL} alt="User" />
+      <div className="user-photo-container">
+        <img className="user-photo" src={photoURL} alt="User" />
+      </div>
       <List>
         <Divider className="garnett-divider" />
         <ListItem
