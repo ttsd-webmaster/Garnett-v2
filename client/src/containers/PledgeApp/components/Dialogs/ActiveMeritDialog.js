@@ -93,9 +93,18 @@ export default class ActiveMeritDialog extends PureComponent {
         description = `Chalkboard: ${description}`;
       }
 
+      const merit = {
+        createdBy: displayName,
+        activeName,
+        description,
+        amount,
+        activePhoto,
+        date,
+        isPCGreet
+      };
+
       this.openProgressDialog();
 
-      const merit = { activeName, description, amount, activePhoto, date };
       API.meritAsActive(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status)
       .then(res => {
         console.log(res);

@@ -92,9 +92,18 @@ export default class PledgeMeritDialog extends PureComponent {
         description = `Chalkboard: ${description}`;
       }
 
+      const merit = {
+        createdBy: displayName,
+        pledgeName,
+        description,
+        amount,
+        pledgePhoto,
+        date,
+        isPCGreet
+      };
+
       this.openProgressDialog();
 
-      const merit = { pledgeName, description, amount, pledgePhoto, date };
       API.meritAsPledge(displayName, selectedActives, merit, isChalkboard, isPCGreet)
       .then(res => {
         const totalAmount = amount * selectedActives.length;

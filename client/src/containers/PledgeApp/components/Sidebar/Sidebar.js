@@ -1,6 +1,9 @@
 import './Sidebar.css';
-import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { AccountInfo, NavItems } from './components';
+import {
+  LoadablePledgeMeritDialog,
+  LoadableActiveMeritDialog
+} from '../Dialogs';
 
 import React, { Component } from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -8,7 +11,10 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 export class Sidebar extends Component {
-  state = { open: false }
+  state = {
+    openLogout: false,
+    openMerit: false
+  }
 
   goHome = () => {
     this.props.history.push('/home');
@@ -16,8 +22,7 @@ export class Sidebar extends Component {
 
   handleLogoutOpen = () => {
     if (navigator.onLine) {
-      androidBackOpen(this.handleLogoutClose);
-      this.setState({ open: true });
+      this.setState({ openLogout: true });
     }
     else {
       this.props.handleRequestOpen('You are offline');
@@ -25,8 +30,20 @@ export class Sidebar extends Component {
   }
 
   handleLogoutClose = () => {
-    androidBackClose();
-    this.setState({ open: false });
+    this.setState({ openLogout: false });
+  }
+
+  handleMeritOpen = () => {
+    if (navigator.onLine) {
+      this.setState({ openMerit: true });
+    }
+    else {
+      this.props.handleRequestOpen('You are offline');
+    }
+  }
+
+  handleMeritClose = () => {
+    this.setState({ openMerit: false });
   }
 
   render() {
@@ -49,19 +66,36 @@ export class Sidebar extends Component {
         <NavItems
           status={this.props.user.status}
           goHome={this.goHome}
-          openMerit={this.props.openMerit}
+          openMerit={this.handleMeritOpen}
           handleLogoutOpen={this.handleLogoutOpen}
         />
+        
         <Dialog
           actions={actions}
           modal={false}
           contentClassName="garnett-dialog-content"
-          open={this.state.open}
+          open={this.state.openLogout}
           onRequestClose={this.handleLogoutClose}
           autoScrollBodyContent={true}
         >
           Are you sure you want to log out?
         </Dialog>
+
+        {this.props.user.status === 'pledge' ? (
+          <LoadablePledgeMeritDialog
+            open={this.state.openMerit}
+            state={this.props.user}
+            handleMeritClose={this.handleMeritClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+        ) : (
+          <LoadableActiveMeritDialog
+            open={this.state.openMerit}
+            state={this.props.user}
+            handleMeritClose={this.handleMeritClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+        )}
       </div>
     )
   }
