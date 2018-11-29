@@ -10,7 +10,7 @@ import {
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter, FilterHeader, UserRow } from 'components';
-import { LoadablePledgeInfoDialog } from './components';
+import { LoadablePledgeInfoDialog } from './components/Dialogs';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
@@ -178,7 +178,11 @@ export class Pledges extends PureComponent {
             reverse={this.reverse}
           />
           {pledges.map((pledge, i) => (
-            <UserRow key={i} user={pledge} handleOpen={this.handleOpen} />
+            <UserRow
+              key={i}
+              user={pledge}
+              handleOpen={() => this.handleOpen(pledge)}
+            />
           ))}
         </List>
         <LoadablePledgeInfoDialog

@@ -1,8 +1,6 @@
 import './MobilePledgeApp.css';
 import {
   loadFirebase,
-  androidBackOpen,
-  androidBackClose,
   configureThemeMode
 } from 'helpers/functions';
 import {
@@ -19,11 +17,9 @@ export class MobilePledgeApp extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      title: 'Merits',
       index: 0,
       totalMerits: 0,
-      previousTotalMerits: 0,
-      openMerit: false
+      previousTotalMerits: 0
     };
   }
 
@@ -57,25 +53,6 @@ export class MobilePledgeApp extends PureComponent {
     this.setState({ index })
   };
 
-  handleMeritOpen = () => {
-    if (navigator.onLine) {
-      androidBackOpen(this.handleMeritClose);
-      this.setState({
-        openMerit: true
-      });
-    }
-    else {
-      this.props.handleRequestOpen('You are offline');
-    }
-  }
-
-  handleMeritClose = () => {
-    androidBackClose();
-    this.setState({
-      openMerit: false
-    });
-  }
-
   render() {
     return (
       <div id="content-container">
@@ -86,10 +63,7 @@ export class MobilePledgeApp extends PureComponent {
           previousTotalMerits={this.state.previousTotalMerits}
         />
         <MyMerits
-          openMerit={this.state.openMerit}
           state={this.props.state}
-          handleMeritOpen={this.handleMeritOpen}
-          handleMeritClose={this.handleMeritClose}
           handleRequestOpen={this.props.handleRequestOpen}
           hidden={this.state.index !== 0}
         />

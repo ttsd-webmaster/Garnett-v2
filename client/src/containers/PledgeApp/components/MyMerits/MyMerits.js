@@ -1,28 +1,46 @@
 import './MyMerits.css';
-import { isMobileDevice } from 'helpers/functions.js';
-import { MyMeritsList, AllMeritsList, ToggleViewHeader } from './components';
 import {
-  LoadablePledgeMeritDialog,
-  LoadableActiveMeritDialog
-} from '../Dialogs';
+  isMobileDevice,
+  androidBackOpen,
+  androidBackClose,
+  configureThemeMode
+} from 'helpers/functions.js';
+import { MyMeritsList, AllMeritsList, ToggleViewHeader } from './components';
+import { LoadableMobileMeritDialog } from './components/Dialogs';
 
 import React, { PureComponent, Fragment } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 export class MyMerits extends PureComponent {
-  state = { allMeritsView: false, }
+  state = {
+    allMeritsView: false,
+    openMerit: false
+  }
 
   setMeritsView = (value) => {
     this.setState({ allMeritsView: value });
+  }
+
+  handleMeritOpen = () => {
+    if (navigator.onLine) {
+      androidBackOpen(this.handleMeritClose);
+      this.setState({ openMerit: true });
+    }
+    else {
+      this.props.handleRequestOpen('You are offline');
+    }
+  }
+
+  handleMeritClose = () => {
+    androidBackClose();
+    configureThemeMode();
+    this.setState({ openMerit: false });
   }
 
   render() {
     const {
       state,
       hidden,
-      openMerit,
-      handleMeritOpen,
-      handleMeritClose,
       handleRequestOpen
     } = this.props;
 
@@ -44,7 +62,7 @@ export class MyMerits extends PureComponent {
         <MyMeritsList
           hidden={this.state.allMeritsView}
           state={state}
-          handleRequestOpen={this.props.handleRequestOpen}
+          handleRequestOpen={handleRequestOpen}
         />
         <AllMeritsList
           hidden={!this.state.allMeritsView}
@@ -52,22 +70,13 @@ export class MyMerits extends PureComponent {
         />
         {isMobileDevice() && (
           <Fragment>
-            {state.status === 'pledge' ? (
-              <LoadablePledgeMeritDialog
-                open={openMerit}
-                state={state}
-                handleMeritClose={handleMeritClose}
-                handleRequestOpen={handleRequestOpen}
-              />
-            ) : (
-              <LoadableActiveMeritDialog
-                open={openMerit}
-                state={state}
-                handleMeritClose={handleMeritClose}
-                handleRequestOpen={handleRequestOpen}
-              />
-            )}
-            <FloatingActionButton className="fixed-button" onClick={handleMeritOpen}>
+            <LoadableMobileMeritDialog
+              open={this.state.openMerit}
+              state={state}
+              handleMeritClose={this.handleMeritClose}
+              handleRequestOpen={handleRequestOpen}
+            />
+            <FloatingActionButton className="fixed-button" onClick={this.handleMeritOpen}>
               <i className="icon-pencil"></i>
             </FloatingActionButton>
           </Fragment>

@@ -66,10 +66,9 @@ export class Sidebar extends Component {
         <NavItems
           status={this.props.user.status}
           goHome={this.goHome}
-          openMerit={this.handleMeritOpen}
+          handleMeritOpen={this.handleMeritOpen}
           handleLogoutOpen={this.handleLogoutOpen}
         />
-        
         <Dialog
           actions={actions}
           modal={false}
@@ -80,7 +79,6 @@ export class Sidebar extends Component {
         >
           Are you sure you want to log out?
         </Dialog>
-
         {this.props.user.status === 'pledge' ? (
           <LoadablePledgeMeritDialog
             open={this.state.openMerit}

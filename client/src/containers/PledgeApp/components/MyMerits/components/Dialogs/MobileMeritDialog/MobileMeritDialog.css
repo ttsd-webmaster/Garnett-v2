@@ -1,0 +1,148 @@
+/* Used to unstyle close button for mobile merit fullscreen dialog */
+#active-merits svg {
+  fill: unset !important;
+}
+
+/*********** Create Amount View *************/
+#merit-create-amount-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: fadein 0.4s;
+}
+
+#merit-create-amount {
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+  grid-column: 1/4;
+  height: 50%;
+  color: var(--primary-color);
+  font-size: 110px;
+}
+
+#numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 0.3em;
+  height: calc(50% - 60px);
+  padding: 25px;
+}
+
+.grid-button {
+  background-color: #fff;
+  font-size: 25px;
+  border: none;
+  cursor: pointer;
+}
+.grid-button:focus {
+  outline: none;
+}
+
+#merit-create-buttons {
+  display: flex;
+  height: 60px;
+}
+
+.mobile-merit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  max-height: 60px;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-family: 'Helvetica Neue';
+  font-size: 18px;
+  padding: 0;
+  border: 0;
+  letter-spacing: 0.5px;
+}
+.mobile-merit-button:disabled {
+  opacity: 0.7;
+  cursor: auto;
+}
+
+.mobile-merit-button.merit {
+  border-left: 1px solid #fafafa;
+}
+
+.mobile-merit-button.confirm {
+  position: absolute;
+  bottom: 0;
+}
+
+/************* Select Users View **************/
+#merit-select-users-container {
+  height: 100%;
+  animation: fadeup 0.4s;
+}
+
+.garnett-list.merit-select {
+  max-height: calc(100% - 180px);
+  margin-bottom: 60px;
+  overflow: auto;
+}
+
+.garnett-chip.merit-select {
+  margin: 5px !important;
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.chips-container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+  overflow: auto;
+}
+
+.merit-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  width: 100%;
+  min-height: 60px;
+  font-size: 16px;
+  padding: 0 10px;
+  border: 0;
+  border-top: 1px solid var(--border-color);
+}
+
+#merit-users {
+  width: 100%;
+  height: 49px;
+  font-size: 16px;
+  padding: 0;
+  border: 0;
+}
+
+.merit-input::placeholder,
+#merit-users::placeholder {
+  font-weight: 300;
+  color: #ccc;
+}
+
+#merit-select-users-container .pledge-merits {
+  margin: 0;
+  margin-right: 10px;
+}
+
+/**************** Animations *****************/
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeup {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

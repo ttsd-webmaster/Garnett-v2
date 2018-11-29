@@ -9,7 +9,7 @@ import {
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter, FilterHeader, UserRow } from 'components';
-import { LoadableContactsDialog } from './components';
+import { LoadableContactsDialog } from './components/Dialogs';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
@@ -177,7 +177,11 @@ export class Contacts extends PureComponent {
               )}
               {this.state.actives.map((active, i) => (
                 this.checkCondition(active, label) && (
-                  <UserRow key={i} user={active} handleOpen={this.handleOpen} />
+                  <UserRow
+                    key={i}
+                    user={active}
+                    handleOpen={() => this.handleOpen(active)}
+                  />
                 )
               ))}
             </div>

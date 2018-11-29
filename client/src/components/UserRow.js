@@ -30,7 +30,7 @@ export function UserRow({
             </p>
           }
           secondaryTextLines={2}
-          onClick={() => handleOpen(user)}
+          onClick={handleOpen}
         >
           {user.status === 'pledge' && <p className="pledge-merits"> {user.totalMerits} </p>}
         </ListItem>
@@ -62,7 +62,7 @@ export function UserRow({
             </p>
           }
           secondaryTextLines={2}
-          onClick={() => handleOpen(user)}
+          onClick={handleOpen}
         >
           {user.status === 'pledge' && <p className="pledge-merits"> {user.totalMerits} </p>}
         </ListItem>

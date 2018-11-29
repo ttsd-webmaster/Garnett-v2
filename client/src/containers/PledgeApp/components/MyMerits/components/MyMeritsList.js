@@ -5,7 +5,7 @@ import {
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
-import { LoadableDeleteMeritDialog } from './index.js';
+import { LoadableDeleteMeritDialog } from './Dialogs';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
@@ -30,12 +30,12 @@ export class MyMeritsList extends PureComponent {
 
         userMeritsRef.on('value', (userMerits) => {
           if (userMerits.val()) {
-            meritsRef.orderByChild('date').once('value', (merits) => {
+            meritsRef.orderByChild('date').on('value', (merits) => {
               // Retrieves the user's merits by searching for the key in
               // the Merits table
               const myMerits = Object.keys(userMerits.val()).map(function(key) {
                 return merits.val()[userMerits.val()[key]];
-              });
+              }).reverse();
 
               localStorage.setItem('myMerits', JSON.stringify(myMerits));
 

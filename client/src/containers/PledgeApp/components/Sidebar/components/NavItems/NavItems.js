@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 export function NavItems({
   status,
-  openMerit,
+  handleMeritOpen,
   goHome,
   handleLogoutOpen
 }) {
@@ -49,7 +49,7 @@ export function NavItems({
           Home
         </a>
       )}
-      <div id="merit-button" onClick={openMerit}>Merit</div>
+      <div id="merit-button" onClick={handleMeritOpen}>Merit</div>
     </nav>
   )
 }

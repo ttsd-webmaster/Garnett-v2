@@ -33,6 +33,38 @@ exports.get_pledges_as_active = function(req, res) {
   });
 };
 
+// Gets all the pledges for meriting as active (MOBILE)
+exports.get_pledges_as_active_mobile = function(req, res) {
+  const { displayName } = req.query;
+  const usersRef = admin.database().ref('/users');
+  const userPledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
+
+  userPledgesRef.once('value', (pledges) => {
+    if (pledges.val()) {
+      let result = [];
+      let promises = [];
+      let remainingMerits = new Map();
+      pledges.forEach((pledge) => {
+        remainingMerits.set(pledge.key, pledge.val().merits);
+        promises.push(usersRef.child(pledge.key).once('value'))
+      });
+
+      Promise.all(promises).then((results) => {
+        results.forEach((user) => {
+          let currentPledge = {
+            firstName: user.val().firstName,
+            lastName: user.val().lastName,
+            photoURL: user.val().photoURL
+          };
+          currentPledge.remainingMerits = remainingMerits.get(user.key);
+          result.push(currentPledge);
+        })
+        res.json(result)
+      })
+    }
+  });
+};
+
 // Gets all the actives for meriting as pledge
 exports.get_actives_as_pledge = function(req, res) {
   const { displayName } = req.query;
@@ -55,6 +87,26 @@ exports.get_actives_as_pledge = function(req, res) {
   });
 };
 
+// Gets all the actives for meriting as pledge
+exports.get_actives_as_pledge_mobile = function(req, res) {
+  const { displayName } = req.query;
+  const usersRef = admin.database().ref('/users');
+
+  usersRef.once('value', (actives) => {
+    let result = [];
+
+    actives.forEach((active) => {
+      if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+        let currentActive = active.val();
+        currentActive.meritsRemaining = active.val().Pledges[displayName].merits;
+        result.push(currentActive);
+      }
+    });
+
+    res.json(result);
+  });
+};
+
 // Gets all the alumni for meriting as pledge
 exports.get_alumni_as_pledge = function(req, res) {
   const { displayName } = req.query;
@@ -74,6 +126,26 @@ exports.get_alumni_as_pledge = function(req, res) {
     });
 
     res.json(alumni);
+  });
+};
+
+// Gets all the alumni for meriting as pledge
+exports.get_alumni_as_pledge_mobile = function(req, res) {
+  const { displayName } = req.query;
+  const usersRef = admin.database().ref('/users');
+
+  usersRef.once('value', (alumni) => {
+    let result = [];
+
+    alumni.forEach((alumnus) => {
+      if (alumnus.val().status === 'alumni') {
+        let currentAlumnus = alumnus.val();
+        currentAlumnus.meritsRemaining = alumnus.val().Pledges[displayName].merits;
+        result.push(currentAlumnus);
+      }
+    });
+
+    res.json(result);
   });
 };
 
