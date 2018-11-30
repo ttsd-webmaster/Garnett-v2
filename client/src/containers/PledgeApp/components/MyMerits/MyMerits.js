@@ -3,6 +3,8 @@ import {
   isMobileDevice,
   androidBackOpen,
   androidBackClose,
+  iosFullscreenDialogOpen,
+  iosFullscreenDialogClose,
   configureThemeMode
 } from 'helpers/functions.js';
 import { MyMeritsList, AllMeritsList, ToggleViewHeader } from './components';
@@ -23,6 +25,7 @@ export class MyMerits extends PureComponent {
 
   handleMeritOpen = () => {
     if (navigator.onLine) {
+      iosFullscreenDialogOpen();
       androidBackOpen(this.handleMeritClose);
       this.setState({ openMerit: true });
     }
@@ -34,7 +37,9 @@ export class MyMerits extends PureComponent {
   handleMeritClose = () => {
     androidBackClose();
     configureThemeMode();
-    this.setState({ openMerit: false });
+    this.setState({ openMerit: false }, () => {
+      iosFullscreenDialogClose();
+    });
   }
 
   render() {
