@@ -3,11 +3,11 @@ import { getDate } from 'helpers/functions.js';
 import { CompletingTaskDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 import { MeritUserRow } from './MeritUserRow';
+import { FilterHeader } from 'components';
 
 import React, { Component } from 'react';
 import { List } from 'material-ui/List';
 import Chip from 'material-ui/Chip';
-import Subheader from 'material-ui/Subheader';
 
 export class MeritSelectActives extends Component {
   state = {
@@ -15,6 +15,7 @@ export class MeritSelectActives extends Component {
     selectedActives: [],
     name: '',
     description: '',
+    showAlumni: false,
     openCompletingTask: false
   }
 
@@ -64,6 +65,20 @@ export class MeritSelectActives extends Component {
       return currentActive !== active;
     })
     this.setState({ selectedActives });
+  }
+
+  toggleAlumniView = () => {
+    const { displayName } = this.props.state;
+    const { showAlumni } = this.state;
+    API.getActivesForMeritMobile(displayName, !showAlumni)
+    .then((res) => {
+      const actives = res.data;
+      this.setState({
+        actives,
+        selectedActives: [],
+        showAlumni: !showAlumni
+      });
+    });
   }
 
   merit = () => {
@@ -163,8 +178,12 @@ export class MeritSelectActives extends Component {
             value={this.state.description}
           />
         </div>
+        <FilterHeader
+          title={this.state.showAlumni ? 'Alumni' : 'Actives'}
+          filterName={this.state.showAlumni ? 'Actives' : 'Alumni'}
+          openPopover={this.toggleAlumniView}
+        />
         <List className="garnett-list">
-          <Subheader className="garnett-subheader">Actives</Subheader>
           {this.state.actives.map((active, i) => {
             const activeName = active.firstName.toLowerCase();
             const searchedName = this.state.name.toLowerCase();

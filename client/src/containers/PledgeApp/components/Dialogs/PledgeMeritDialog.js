@@ -28,6 +28,7 @@ export default class PledgeMeritDialog extends PureComponent {
       selectedActives: [],
       description: '',
       date: new Date(),
+      isAlumni: false,
       isChalkboard: false,
       isPCGreet: false,
       amount: 0,
@@ -152,30 +153,14 @@ export default class PledgeMeritDialog extends PureComponent {
         break;
       case 'isAlumni':
         const { displayName } = this.props.state;
-        let actives;
-
-        if (newValue === true) {
-          API.getAlumniForMerit(displayName)
-          .then((res) => {
-            actives = res.data;
-
-            this.setState({
-              actives,
-              selectedActives: []
-            });
+        API.getActivesForMerit(displayName, newValue)
+        .then((res) => {
+          const actives = res.data;
+          this.setState({
+            actives,
+            selectedActives: []
           });
-        }
-        else {
-          API.getActivesForMerit(displayName)
-          .then((res) => {
-            actives = res.data;
-
-            this.setState({
-              actives,
-              selectedActives: []
-            });
-          });
-        }
+        });
         break;
       case 'isChalkboard':
         if (newValue === true) {

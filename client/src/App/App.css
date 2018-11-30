@@ -119,6 +119,8 @@ div, a {
 }
 
 .app-header {
+  display: flex;
+  align-items: center;
   position: fixed;
   top: 0;
   background-color: var(--primary-color);
@@ -126,7 +128,6 @@ div, a {
   height: 52px;
   width: 100%;
   font-size: 20px;
-  padding-top: 15px;
   text-align: left;
   z-index: 1;
   transition: top 0.2s ease-in-out;
@@ -139,7 +140,7 @@ div, a {
 }
 
 .back-button {
-  float: right;
+  margin-left: auto;
   margin-right: 15px;
   cursor: pointer;
 }

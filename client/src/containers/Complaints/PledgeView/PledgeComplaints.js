@@ -1,11 +1,11 @@
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
+import { FilterHeader } from 'components';
 import { PlaceholderPledgeComplaint } from 'components/Placeholders';
 
 import React, { Component } from 'react';
 import LazyLoad from 'react-lazyload';
 import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
@@ -65,12 +65,10 @@ export default class PledgeComplaints extends Component {
   }
 
   render() {
-    let toggleIcon = "icon-down-open-mini";
     let { complaints, reverse, loaded } = this.state;
 
     if (reverse) {
       complaints = complaints.slice().reverse();
-      toggleIcon = "icon-up-open-mini";
     }
 
     if (!loaded) {
@@ -79,16 +77,11 @@ export default class PledgeComplaints extends Component {
 
     return (
       <div id="pledge-complaints">
-        <Subheader className="garnett-subheader">
-          Recent
-          <IconButton
-            style={{float:'right',cursor:'pointer'}}
-            iconClassName={toggleIcon}
-            className="reverse-toggle"
-            onClick={this.reverse}
-          >
-          </IconButton>
-        </Subheader>
+        <FilterHeader
+          title="Recent"
+          isReversed={reverse}
+          reverse={this.reverse}
+        />
 
         <List className="garnett-list">
           {complaints.map((complaint, i) => (

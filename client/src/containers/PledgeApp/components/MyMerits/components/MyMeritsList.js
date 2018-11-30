@@ -7,7 +7,7 @@ import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 import { LoadableDeleteMeritDialog } from './Dialogs';
 
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { List } from 'material-ui/List';
 
 export class MyMeritsList extends PureComponent {
@@ -85,7 +85,6 @@ export class MyMeritsList extends PureComponent {
 
   render() {
     let { myMerits, reverse } = this.state;
-    let toggleIcon = "icon-down-open-mini";
 
     if (this.props.hidden) {
       return null;
@@ -96,48 +95,49 @@ export class MyMeritsList extends PureComponent {
     }
 
     if (reverse) {
-      toggleIcon = "icon-up-open-mini";
       myMerits = myMerits.slice().reverse();
     }
 
     return (
-      <List className="animate-in garnett-list">
+      <Fragment>
         <FilterHeader
           title={reverse ? "Oldest" : "Recent"}
-          toggleIcon={toggleIcon}
+          isReversed={reverse}
           reverse={this.reverse}
         />
-        {myMerits.map((merit, i) => {
-          let name;
-          let photoURL;
-          if (this.props.state.status === 'pledge') {
-            name = merit.activeName;
-            photoURL = merit.activePhoto;
-          } else {
-            name = merit.pledgeName;
-            photoURL = merit.pledgePhoto;
-          }
+        <List className="animate-in garnett-list">
+          {myMerits.map((merit, i) => {
+            let name;
+            let photoURL;
+            if (this.props.state.status === 'pledge') {
+              name = merit.activeName;
+              photoURL = merit.activePhoto;
+            } else {
+              name = merit.pledgeName;
+              photoURL = merit.pledgePhoto;
+            }
 
-          return (
-            <MeritRow
-              key={i}
-              merit={merit}
-              photo={photoURL}
-              name={name}
-              handleDeleteOpen={this.handleDeleteOpen}
+            return (
+              <MeritRow
+                key={i}
+                merit={merit}
+                photo={photoURL}
+                name={name}
+                handleDeleteOpen={this.handleDeleteOpen}
+              />
+            )
+          })}
+          {this.props.state.status === 'pledge' && (
+            <LoadableDeleteMeritDialog
+              open={this.state.openDelete}
+              state={this.props.state}
+              merit={this.state.selectedMerit}
+              handleDeleteClose={this.handleDeleteClose}
+              handleRequestOpen={this.props.handleRequestOpen}
             />
-          )
-        })}
-        {this.props.state.status === 'pledge' && (
-          <LoadableDeleteMeritDialog
-            open={this.state.openDelete}
-            state={this.props.state}
-            merit={this.state.selectedMerit}
-            handleDeleteClose={this.handleDeleteClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
-        )}
-      </List>
+          )}
+        </List>
+      </Fragment>
     )
   }
 }

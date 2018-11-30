@@ -1,4 +1,5 @@
 import sortChalkboards from './helpers/sortChalkboards.js';
+import { FilterHeader } from 'components';
 import { PlaceholderMerit } from 'components/Placeholders';
 
 import React from 'react';
@@ -22,13 +23,11 @@ export default function AllChalkboards({
 }) {
   let upcomingChalkboards = sortChalkboards(upcomingChalkboards, filter);
   let completedChalkboards = sortChalkboards(completedChalkboards, filter);
-  let toggleIcon = 'icon-down-open-mini';
   let label;
 
   if (reverse) {
     upcomingChalkboards = upcomingChalkboards.slice().reverse();
     completedChalkboards = completedChalkboards.slice().reverse();
-    toggleIcon = "icon-up-open-mini";
   }
 
   if (filter === 'amount') {
@@ -40,19 +39,13 @@ export default function AllChalkboards({
 
   return (
     <div id="all-chalkboards">
-      <Subheader className="garnett-subheader">
-        Upcoming
-        <span style={{float:'right', height:'48px'}}>
-          <span style={{cursor:'pointer'}} onClick={openPopover}> 
-            {filterName}
-          </span>
-          <IconButton
-            iconClassName={toggleIcon}
-            className="reverse-toggle"
-            onClick={reverseChalkboards}
-          />
-        </span>
-      </Subheader>
+      <FilterHeader
+        title="Upcoming"
+        filterName={filterName}
+        openPopover={openPopover}
+        isReversed={reverse}
+        reverse={reverseChalkboards}
+      />
 
       <List className="garnett-list">
         {upcomingChalkboards.map((chalkboard, i) => (

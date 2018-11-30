@@ -1,10 +1,10 @@
+import { FilterHeader } from 'components';
 import { PlaceholderMerit } from 'components/Placeholders';
 
 import React from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import { List, ListItem } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
 
@@ -13,23 +13,17 @@ export default function PastComplaints({
   reverse,
   reverseComplaints
 }) {
-  let toggleIcon = "icon-down-open-mini";
   if (reverse) {
     complaints = complaints.slice().reverse();
-    toggleIcon = "icon-up-open-mini";
   }
 
   return (
     <div id="past-complaints">
-      <Subheader className="garnett-subheader">
-        Recent
-        <IconButton
-          style={{float:'right',cursor:'pointer'}}
-          iconClassName={toggleIcon}
-          className="reverse-toggle"
-          onClick={reverseComplaints}
-        />
-      </Subheader>
+      <FilterHeader
+        title="Recent"
+        isReversed={reverse}
+        reverse={reverseComplaints}
+      />
       
       <List className="garnett-list">
         {complaints.map((complaint, i) => (

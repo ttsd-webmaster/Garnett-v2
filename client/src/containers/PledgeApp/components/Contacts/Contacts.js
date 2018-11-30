@@ -142,8 +142,6 @@ export class Contacts extends PureComponent {
   }
 
   render() {
-    let toggleIcon = "icon-down-open-mini";
-
     if (this.props.hidden) {
       return null;
     }
@@ -152,29 +150,25 @@ export class Contacts extends PureComponent {
       return <LoadingComponent />
     }
 
-    if (this.state.reverse) {
-      toggleIcon = "icon-up-open-mini";
-    }
-
     return (
       <div className="animate-in">
-        <List className="garnett-list">
-          {this.state.labels.map((label, index) => (
-            <div key={index}>
-              {index === 0 ? (
-                <FilterHeader
-                  className="garnett-subheader contacts"
-                  title={label}
-                  toggleIcon={toggleIcon}
-                  filterName={this.state.filterName}
-                  openPopover={this.openPopover}
-                  reverse={this.reverse}
-                />
-              ) : (
-                <Subheader className="garnett-subheader contacts">
-                  {label}
-                </Subheader>
-              )}
+        {this.state.labels.map((label, index) => (
+          <div key={index}>
+            {index === 0 ? (
+              <FilterHeader
+                className="garnett-subheader contacts"
+                title={label}
+                filterName={this.state.filterName}
+                openPopover={this.openPopover}
+                isReversed={this.state.reverse}
+                reverse={this.reverse}
+              />
+            ) : (
+              <Subheader className="garnett-subheader contacts">
+                {label}
+              </Subheader>
+            )}
+            <List className="garnett-list">
               {this.state.actives.map((active, i) => (
                 this.checkCondition(active, label) && (
                   <UserRow
@@ -184,9 +178,9 @@ export class Contacts extends PureComponent {
                   />
                 )
               ))}
-            </div>
-          ))}
-        </List>
+            </List>
+          </div>
+        ))}
         <Filter
           open={this.state.openPopover}
           anchorEl={this.state.anchorEl}

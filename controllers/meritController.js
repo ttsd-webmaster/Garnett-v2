@@ -67,39 +67,30 @@ exports.get_pledges_as_active_mobile = function(req, res) {
 
 // Gets all the actives for meriting as pledge
 exports.get_actives_as_pledge = function(req, res) {
-  const { displayName } = req.query;
-  const usersRef = admin.database().ref('/users');
-
-  usersRef.once('value', (snapshot) => {
-    let actives = [];
-
-    snapshot.forEach((active) => {
-      if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
-        actives.push({
-          'value': active.key,
-          'label': `${active.val().firstName} ${active.val().lastName}`,
-          'meritsRemaining': active.val().Pledges[displayName].merits
-        });
-      }
-    });
-
-    res.json(actives);
-  });
-};
-
-// Gets all the actives for meriting as pledge
-exports.get_actives_as_pledge_mobile = function(req, res) {
-  const { displayName } = req.query;
+  const { displayName, showAlumni } = req.query;
   const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (actives) => {
     let result = [];
 
     actives.forEach((active) => {
-      if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
-        let currentActive = active.val();
-        currentActive.meritsRemaining = active.val().Pledges[displayName].merits;
-        result.push(currentActive);
+      if (showAlumni) {
+        if (active.val().status === 'alumni') {
+          result.push({
+            'value': active.key,
+            'label': `${active.val().firstName} ${active.val().lastName}`,
+            'meritsRemaining': active.val().Pledges[displayName].merits
+          });
+        }
+      }
+      else {
+        if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+          result.push({
+            'value': active.key,
+            'label': `${active.val().firstName} ${active.val().lastName}`,
+            'meritsRemaining': active.val().Pledges[displayName].merits
+          });
+        }
       }
     });
 
@@ -107,41 +98,28 @@ exports.get_actives_as_pledge_mobile = function(req, res) {
   });
 };
 
-// Gets all the alumni for meriting as pledge
-exports.get_alumni_as_pledge = function(req, res) {
-  const { displayName } = req.query;
+// Gets all the actives for meriting as pledge
+exports.get_actives_as_pledge_mobile = function(req, res) {
+  const { displayName, showAlumni } = req.query;
   const usersRef = admin.database().ref('/users');
 
-  usersRef.once('value', (snapshot) => {
-    let alumni = [];
-
-    snapshot.forEach((alumnus) => {
-      if (alumnus.val().status === 'alumni') {
-        alumni.push({
-          'value': alumnus.key,
-          'label': `${alumnus.val().firstName} ${alumnus.val().lastName}`,
-          'meritsRemaining': alumnus.val().Pledges[displayName].merits
-        });
-      }
-    });
-
-    res.json(alumni);
-  });
-};
-
-// Gets all the alumni for meriting as pledge
-exports.get_alumni_as_pledge_mobile = function(req, res) {
-  const { displayName } = req.query;
-  const usersRef = admin.database().ref('/users');
-
-  usersRef.once('value', (alumni) => {
+  usersRef.once('value', (actives) => {
     let result = [];
 
-    alumni.forEach((alumnus) => {
-      if (alumnus.val().status === 'alumni') {
-        let currentAlumnus = alumnus.val();
-        currentAlumnus.meritsRemaining = alumnus.val().Pledges[displayName].merits;
-        result.push(currentAlumnus);
+    actives.forEach((active) => {
+      if (showAlumni) {
+        if (active.val().status === 'alumni') {
+          let currentAlumnus = active.val();
+          currentAlumnus.meritsRemaining = active.val().Pledges[displayName].merits;
+          result.push(currentAlumnus);
+        }
+      }
+      else {
+        if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+          let currentActive = active.val();
+          currentActive.meritsRemaining = active.val().Pledges[displayName].merits;
+          result.push(currentActive);
+        }
       }
     });
 

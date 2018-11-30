@@ -51,15 +51,15 @@
 
 /*************** Garnett List, List Items, and Dividers ****************/
 .garnett-subheader {
+  display: flex;
+  align-items: center;
   max-width: 700px;
   width: 100%;
   background-color: var(--background-color);
   margin: auto;
 }
 .garnett-subheader.merit-view {
-  display: flex;
   justify-content: center;
-  align-items: center;
   position: sticky;
   top: 0;
   background-color: var(--list-color);
@@ -86,7 +86,8 @@
 /* Filter and reverse toggle in the subheader */
 .garnett-filter {
   position: relative;
-  top: -3px;
+  height: 48px;
+  margin-left: auto;
   cursor: pointer;
 }
 .reverse-toggle {

@@ -150,7 +150,6 @@ export class Pledges extends PureComponent {
   }
 
   render() {
-    let toggleIcon = "icon-down-open-mini";
     let { pledges, reverse, loaded } = this.state;
 
     if (this.props.hidden) {
@@ -163,20 +162,19 @@ export class Pledges extends PureComponent {
 
     if (reverse) {
       pledges = pledges.slice().reverse();
-      toggleIcon = "icon-up-open-mini";
     }
 
     return (
       <div id="pledges-container" className="animate-in">
+        <FilterHeader
+          title="Pledges"
+          status={this.props.state.status}
+          filterName={this.state.filterName}
+          openPopover={this.openPopover}
+          isReversed={reverse}
+          reverse={this.reverse}
+        />
         <List className="garnett-list">
-          <FilterHeader
-            title="Pledges"
-            toggleIcon={toggleIcon}
-            state={this.props.state}
-            filterName={this.state.filterName}
-            openPopover={this.openPopover}
-            reverse={this.reverse}
-          />
           {pledges.map((pledge, i) => (
             <UserRow
               key={i}

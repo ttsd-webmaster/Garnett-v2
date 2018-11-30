@@ -57,21 +57,13 @@ export default {
     const params = { displayName };
     return axios.get('/api/merit/active/pledges/mobile', { params });
   },
-  getActivesForMerit: function(displayName) {
-    const params = { displayName };
+  getActivesForMerit: function(displayName, showAlumni) {
+    const params = { displayName, showAlumni };
     return axios.get('/api/merit/pledge/actives', { params });
   },
-  getActivesForMeritMobile: function(displayName) {
-    const params = { displayName };
+  getActivesForMeritMobile: function(displayName, showAlumni) {
+    const params = { displayName, showAlumni };
     return axios.get('/api/merit/pledge/actives/mobile', { params });
-  },
-  getAlumniForMerit: function(displayName) {
-    const params = { displayName };
-    return axios.get('/api/merit/pledge/alumni', { params });
-  },
-  getAlumniForMeritMobile: function(displayName) {
-    const params = { displayName };
-    return axios.get('/api/merit/pledge/alumni/mobile', { params });
   },
   getChalkboardsForMerit: function(fullName) {
     const params = { fullName };

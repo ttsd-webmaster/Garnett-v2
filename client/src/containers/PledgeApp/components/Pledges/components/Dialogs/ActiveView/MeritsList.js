@@ -33,19 +33,17 @@ export class MeritsList extends PureComponent {
   }
 
   render() {
-    let toggleIcon = "icon-down-open-mini";
     let { merits, reverse } = this.state;
 
     if (reverse) {
       merits = merits.slice().reverse();
-      toggleIcon = "icon-up-open-mini";
     }
 
     return (
       <List className="garnett-list dialog pledge">
         <FilterHeader
           title={reverse ? "Oldest" : "Recent"}
-          toggleIcon={toggleIcon}
+          isReversed={reverse}
           reverse={this.reverse}
         />
         {merits.map((merit, i) => (

@@ -1,5 +1,6 @@
 import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadableHandleComplaintDialog } from './Dialogs';
+import { FilterHeader } from 'components';
 
 import React, { Component } from 'react';
 import Avatar from 'material-ui/Avatar';
@@ -36,26 +37,20 @@ export default class MyComplaints extends Component {
   }
 
   render() {
-    let toggleIcon = "icon-down-open-mini";
     let { approvedComplaints, pendingComplaints } = this.props;
 
     if (this.props.reverse) {
       approvedComplaints = approvedComplaints.slice().reverse();
       pendingComplaints = pendingComplaints.slice().reverse();
-      toggleIcon = "icon-up-open-mini";
     }
 
     return (
       <div id="my-complaints" className="active">
-        <Subheader className="garnett-subheader">
-          Approved
-          <IconButton
-            style={{float:'right',cursor:'pointer'}}
-            iconClassName={toggleIcon}
-            className="reverse-toggle"
-            onClick={this.props.reverseComplaints}
-          />
-        </Subheader>
+        <FilterHeader
+          title="Approved"
+          isReversed={this.props.reverse}
+          reverse={this.props.reverseComplaints}
+        />
         
         <List className="garnett-list">
           {approvedComplaints.map((complaint, i) => (

@@ -1,11 +1,12 @@
 import sortChalkboards from './helpers/sortChalkboards.js';
+import { FilterHeader } from 'components';
 
 import React from 'react';
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 import IconButton from 'material-ui/IconButton';
+import Subheader from 'material-ui/Subheader';
 
 export default function MyChalkboards({
   myHostingChalkboards,
@@ -23,14 +24,12 @@ export default function MyChalkboards({
   let myHostingChalkboards = sortChalkboards(myHostingChalkboards, filter);
   let myAttendingChalkboards = sortChalkboards(myAttendingChalkboards, filter);
   let myCompletedChalkboards = sortChalkboards(myCompletedChalkboards, filter);
-  let toggleIcon = "icon-down-open-mini";
   let label;
 
   if (reverse) {
     myHostingChalkboards = myHostingChalkboards.slice().reverse();
     myAttendingChalkboards = myAttendingChalkboards.slice().reverse();
     myCompletedChalkboards = myCompletedChalkboards.slice().reverse();
-    toggleIcon = "icon-up-open-mini";
   }
 
   if (filter === 'amount') {
@@ -44,19 +43,13 @@ export default function MyChalkboards({
     <div id="my-chalkboards" className="active">
       {state.status !== 'pledge' && (
         <div>
-          <Subheader className="garnett-subheader">
-            Hosting
-            <span style={{float:'right', height:'48px'}}>
-              <span className="garnett-filter" onClick={openPopover}> 
-                {filterName}
-              </span>
-              <IconButton
-                iconClassName={toggleIcon}
-                className="reverse-toggle"
-                onClick={reverseChalkboards}
-              />
-            </span>
-          </Subheader>
+          <FilterHeader
+            title="Hosting"
+            filterName={filterName}
+            openPopover={openPopover}
+            isReversed={reverse}
+            reverse={reverseChalkboards}
+          />
 
           <List className="garnett-list">
             {myHostingChalkboards.map((chalkboard, i) => (
@@ -89,22 +82,13 @@ export default function MyChalkboards({
         </div>
       )}
 
-      <Subheader className="garnett-subheader">
-        Attending
-        {state.status === 'pledge' && (
-          <span style={{float:'right'}}>
-            <span className="garnett-filter" onClick={openPopover}> 
-              {filterName}
-            </span>
-            <IconButton
-              iconClassName={toggleIcon}
-              className="reverse-toggle"
-              onClick={reverseChalkboards}
-            >
-            </IconButton>
-          </span>
-        )}
-      </Subheader>
+      <FilterHeader
+        title="Attending"
+        filterName={filterName}
+        openPopover={state.status === 'pledge' && openPopover}
+        isReversed={state.status === 'pledge' && reverse}
+        reverse={state.status === 'pledge' && reverseChalkboards}
+      />
       
       <List className="garnett-list">
         {myAttendingChalkboards.map((chalkboard, i) => (
