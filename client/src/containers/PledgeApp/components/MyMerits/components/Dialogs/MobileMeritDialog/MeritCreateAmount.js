@@ -14,7 +14,10 @@ export class MeritCreateAmount extends PureComponent {
     let { amount } = this.state;
 
     if (value === '←') {
-      if (amount.length === 1) {
+      if (amount === '0') {
+        return window.navigator.vibrate(150);
+      }
+      else if (amount.length === 1) {
         amount = '0';
       } else {
         amount = amount.slice(0, -1);
@@ -30,6 +33,9 @@ export class MeritCreateAmount extends PureComponent {
 
     if (this.amountValid(amount) || !parseInt(amount, 10)) {
       this.setState({ amount });
+    }
+    else {
+      window.navigator.vibrate(150);
     }
   }
 
