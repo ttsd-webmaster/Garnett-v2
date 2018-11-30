@@ -7,8 +7,7 @@ import React, { PureComponent } from 'react';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
 const fullscreenDialogStyle = {
-  backgroundColor: '#fff',
-  overflow: 'auto'
+  backgroundColor: '#fff'
 };
 
 const titleStyle = {
@@ -37,7 +36,6 @@ export default class MobileMeritDialog extends PureComponent {
     const parsedAmount = parseInt(value, 10);
     let header;
 
-    document.body.classList.remove('dark-mode');
     if (parsedAmount < 0) {
       header = `${value} demerits`;
     }

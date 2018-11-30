@@ -134,38 +134,38 @@ export class MeritSelectPledges extends Component {
         className={this.props.hidden ? 'hidden' : ''}
         id="merit-select-users-container"
       >
-        <div className="merit-input">
-          <div className="chips-container">
-            {this.state.selectedPledges.map((pledge, i) => (
-              <Chip
-                key={i}
-                className="garnett-chip merit-select"
-                onClick={() => this.deselectPledge(pledge)}
-              >
-                {pledge.firstName}
-              </Chip>
-            ))}
+        <div id="merit-inputs-container">
+          <div className="merit-input">
+            <div id="chips-container">
+              {this.state.selectedPledges.map((pledge, i) => (
+                <Chip
+                  key={i}
+                  className="garnett-chip merit-select"
+                  onClick={() => this.deselectPledge(pledge)}
+                >
+                  {pledge.firstName}
+                </Chip>
+              ))}
+            </div>
+            <input
+              id="merit-users"
+              type="text"
+              placeholder="Name"
+              onChange={(event) => this.updateValue('name', event.target.value)}
+              onKeyDown={this.onNameKeyDown}
+              value={this.state.name}
+            />
           </div>
           <input
-            id="merit-users"
+            className="merit-input"
             type="text"
-            placeholder="Name"
-            onChange={(event) => this.updateValue('name', event.target.value)}
-            onKeyDown={this.onNameKeyDown}
-            value={this.state.name}
-          >
-          </input>
+            placeholder="Description"
+            onChange={(event) => this.updateValue('description', event.target.value)}
+            value={this.state.description}
+          />
         </div>
-        <input
-          className="merit-input"
-          type="text"
-          placeholder="Description"
-          onChange={(event) => this.updateValue('description', event.target.value)}
-          value={this.state.description}
-        >
-        </input>
-        <List className="garnett-list merit-select">
-          <Subheader className="garnett-subheader">Pledges</Subheader>
+        <List className="garnett-list">
+          <Subheader className="garnett-subheader merit-select">Pledges</Subheader>
           {this.state.pledges.map((pledge, i) => {
             const pledgeName = pledge.firstName.toLowerCase();
             const searchedName = this.state.name.toLowerCase();

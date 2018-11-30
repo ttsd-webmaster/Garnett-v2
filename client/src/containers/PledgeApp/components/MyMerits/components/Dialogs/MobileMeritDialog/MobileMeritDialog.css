@@ -9,9 +9,9 @@
   flex-direction: column;
   position: absolute;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
   animation: fadein 0.4s;
 }
 @supports (-webkit-overflow-scrolling: touch) {
@@ -76,22 +76,28 @@
 }
 
 .mobile-merit-button.merit {
-  border-left: 1px solid #fafafa;
+  border-left: 1px solid #ff424a;
 }
 
 .mobile-merit-button.confirm {
-  position: absolute;
+  position: sticky;
   bottom: 0;
 }
 
 /************* Select Users View **************/
 #merit-select-users-container {
   position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
+  top: 64px;
   left: 0;
+  bottom: 0;
+  right: 0;
+  overflow: auto;
   animation: fadeup 0.4s;
+  --background-color: #fafafa;
+  --list-color: #fff;
+  --primary-color: #c0001f;
+  --border-color: #e0e0e0;
+  --text-color: rgba(0, 0, 0, 0.87);
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
@@ -100,23 +106,24 @@
   }
 }
 
-.garnett-list.merit-select {
-  max-height: calc(100% - 180px);
-  margin-bottom: 60px;
-  overflow: auto;
-}
-
 .garnett-chip.merit-select {
   margin: 5px !important;
   background-color: var(--primary-color);
   color: #fff;
 }
 
-.chips-container {
+#chips-container {
   display: flex;
   flex-wrap: wrap;
   height: 100%;
   overflow: auto;
+}
+
+#merit-inputs-container {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 1;
 }
 
 .merit-input {
@@ -126,9 +133,10 @@
   width: 100%;
   min-height: 60px;
   font-size: 16px;
+  background-color: #fff;
   padding: 0 10px;
   border: 0;
-  border-top: 1px solid var(--border-color);
+  border-top: 1px solid #e0e0e0;
 }
 
 #merit-users {

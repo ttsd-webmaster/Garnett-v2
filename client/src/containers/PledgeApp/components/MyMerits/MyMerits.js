@@ -4,8 +4,7 @@ import {
   androidBackOpen,
   androidBackClose,
   iosFullscreenDialogOpen,
-  iosFullscreenDialogClose,
-  configureThemeMode
+  iosFullscreenDialogClose
 } from 'helpers/functions.js';
 import { MyMeritsList, AllMeritsList, ToggleViewHeader } from './components';
 import { LoadableMobileMeritDialog } from './components/Dialogs';
@@ -36,7 +35,6 @@ export class MyMerits extends PureComponent {
 
   handleMeritClose = () => {
     androidBackClose();
-    configureThemeMode();
     this.setState({ openMerit: false }, () => {
       iosFullscreenDialogClose();
     });
