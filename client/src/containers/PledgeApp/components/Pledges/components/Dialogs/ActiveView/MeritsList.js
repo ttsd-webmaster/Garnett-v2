@@ -5,13 +5,15 @@ import { FilterHeader, MeritRow } from 'components';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
+import CircularProgress from 'material-ui/CircularProgress';
 
 export class MeritsList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       merits: [],
-      reverse: false
+      reverse: false,
+      loaded: false
     };
   }
 
@@ -19,7 +21,10 @@ export class MeritsList extends PureComponent {
     if (navigator.onLine) {
       API.getPledgeMerits(this.props.pledgeName)
       .then(res => {
-        this.setState({ merits: res.data });
+        this.setState({
+          merits: res.data,
+          loaded: true
+        });
       })
       .catch(err => console.log('err', err));
     }
@@ -33,10 +38,18 @@ export class MeritsList extends PureComponent {
   }
 
   render() {
-    let { merits, reverse } = this.state;
+    let { merits, reverse, loaded } = this.state;
 
     if (reverse) {
       merits = merits.slice().reverse();
+    }
+
+    if (!loaded) {
+      return (
+        <div className="loading-merits">
+          <CircularProgress />
+        </div>
+      )
     }
 
     return (

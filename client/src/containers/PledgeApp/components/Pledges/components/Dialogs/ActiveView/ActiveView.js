@@ -14,7 +14,7 @@ const fullscreenDialogStyle = {
 };
 
 const slideContainer = {
-  minHeight: 'calc(100vh - 112px)',
+  height: 'calc(100vh - 112px)',
   WebkitOverflowScrolling: 'touch' // iOS momentum scrolling
 };
 
@@ -76,6 +76,7 @@ export class ActiveView extends PureComponent {
             index={this.state.index}
             onChangeIndex={this.handleChange}
             animateHeight
+            disableLazyLoading
           >
             <div>
               <UserInfo

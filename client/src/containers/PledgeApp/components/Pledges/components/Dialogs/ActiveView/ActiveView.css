@@ -6,3 +6,7 @@
     padding-bottom: 48px !important;
   }
 }
+
+.react-swipeable-view-container > div {
+  overflow: auto !important;
+}

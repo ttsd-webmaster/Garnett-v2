@@ -5,3 +5,10 @@
   color: var(--text-color);
   margin-right: 10px;
 }
+
+.loading-merits {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}

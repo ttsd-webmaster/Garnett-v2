@@ -142,6 +142,7 @@ export class MeritSelectPledges extends Component {
                   key={i}
                   className="garnett-chip merit-select"
                   onClick={() => this.deselectPledge(pledge)}
+                  onRequestDelete={() => this.deselectPledge(pledge)}
                 >
                   {pledge.firstName}
                 </Chip>

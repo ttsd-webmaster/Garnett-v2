@@ -156,6 +156,7 @@ export class MeritSelectActives extends Component {
                   key={i}
                   className="garnett-chip merit-select"
                   onClick={() => this.deselectActive(active)}
+                  onRequestDelete={() => this.deselectActive(active)}
                 >
                   {active.firstName}
                 </Chip>

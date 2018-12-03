@@ -118,6 +118,9 @@
   background-color: var(--primary-color);
   color: #fff;
 }
+#active-merits .garnett-chip.merit-select > svg{
+  fill: #fff !important;
+}
 
 #chips-container {
   display: flex;
