@@ -183,7 +183,7 @@ export class MeritSelectActives extends Component {
           filterName={this.state.showAlumni ? 'Actives' : 'Alumni'}
           openPopover={this.toggleAlumniView}
         />
-        <List className="garnett-list">
+        <List className="garnett-list merit-select">
           {this.state.actives.map((active, i) => {
             const activeName = active.firstName.toLowerCase();
             const searchedName = this.state.name.toLowerCase();

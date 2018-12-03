@@ -164,7 +164,7 @@ export class MeritSelectPledges extends Component {
             value={this.state.description}
           />
         </div>
-        <List className="garnett-list">
+        <List className="garnett-list merit-select">
           <Subheader className="garnett-subheader merit-select">Pledges</Subheader>
           {this.state.pledges.map((pledge, i) => {
             const pledgeName = pledge.firstName.toLowerCase();
