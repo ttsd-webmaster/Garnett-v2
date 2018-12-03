@@ -32,6 +32,13 @@ export default class MobileMeritDialog extends PureComponent {
     amount: 0
   }
 
+  componentWillReceiveProps(nextProps) {
+    // Temporary fix for Android
+    if (this.props.open !== nextProps.open) {
+      this.resetView();
+    }
+  }
+
   changeView = (value) => {
     const parsedAmount = parseInt(value, 10);
     let header;
@@ -52,9 +59,14 @@ export default class MobileMeritDialog extends PureComponent {
 
   onClose = () => {
     this.props.handleMeritClose();
+    this.resetView();
+  }
+
+  resetView = () => {
     this.setState({
       view: 'amount',
       header: 'Merits',
+      isDemerit: false,
       amount: 0
     });
   }
