@@ -109,6 +109,11 @@ export class MyMeritsList extends PureComponent {
           {myMerits.map((merit, i) => {
             let name;
             let photoURL;
+
+            if (!merit) {
+              return null;
+            }
+
             if (this.props.state.status === 'pledge') {
               name = merit.activeName;
               photoURL = merit.activePhoto;
@@ -116,7 +121,7 @@ export class MyMeritsList extends PureComponent {
               name = merit.pledgeName;
               photoURL = merit.pledgePhoto;
             }
-
+            
             return (
               <MeritRow
                 key={i}
@@ -127,16 +132,14 @@ export class MyMeritsList extends PureComponent {
               />
             )
           })}
-          {this.props.state.status === 'pledge' && (
-            <LoadableDeleteMeritDialog
-              open={this.state.openDelete}
-              state={this.props.state}
-              merit={this.state.selectedMerit}
-              handleDeleteClose={this.handleDeleteClose}
-              handleRequestOpen={this.props.handleRequestOpen}
-            />
-          )}
         </List>
+        <LoadableDeleteMeritDialog
+          open={this.state.openDelete}
+          state={this.props.state}
+          merit={this.state.selectedMerit}
+          handleDeleteClose={this.handleDeleteClose}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
       </Fragment>
     )
   }
