@@ -14,12 +14,12 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 export class MyMerits extends PureComponent {
   state = {
-    allMeritsView: false,
+    view: 'allMerits',
     openMerit: false
   }
 
-  setMeritsView = (value) => {
-    this.setState({ allMeritsView: value });
+  setView = (value) => {
+    this.setState({ view: value });
   }
 
   handleMeritOpen = () => {
@@ -58,17 +58,17 @@ export class MyMerits extends PureComponent {
       >
         {state.status !== 'pledge' && (
           <ToggleViewHeader
-            allMeritsView={this.state.allMeritsView}
-            setMeritsView={this.setMeritsView}
+            view={this.state.view}
+            setView={this.setView}
           />
         )}
         <MyMeritsList
-          hidden={this.state.allMeritsView}
+          hidden={this.state.view === 'allMerits' && state.status !== 'pledge'}
           state={state}
           handleRequestOpen={handleRequestOpen}
         />
         <AllMeritsList
-          hidden={!this.state.allMeritsView}
+          hidden={this.state.view === 'myMerits'}
           state={state}
         />
         {isMobileDevice() && (
