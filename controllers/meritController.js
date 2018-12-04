@@ -1,5 +1,6 @@
-const admin = require("firebase-admin");
+const admin = require('firebase-admin');
 const equal = require('deep-equal');
+const useragent = require('useragent');
 
 // Get merits remaining for pledge
 exports.get_merits_remaining = function(req, res) {
@@ -189,7 +190,6 @@ exports.get_pbros_as_pledge = function(req, res) {
 
 // Put merit data as active
 exports.merit_as_active = function(req, res) {
-  let counter = 0;
   const {
     displayName,
     selectedPledges,
@@ -197,7 +197,9 @@ exports.merit_as_active = function(req, res) {
     isPCGreet,
     status
   } = req.body;
+  const platform = useragent.parse(req.headers['user-agent']).toString();
   let { merit } = req.body;
+  let counter = 0;
 
   selectedPledges.forEach((pledge) => {
     const activeRef = admin.database().ref('/users/' + displayName);
@@ -232,6 +234,7 @@ exports.merit_as_active = function(req, res) {
 
         merit.pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
         merit.pledgePhoto = pledge.val().photoURL;
+        merit.platform = platform;
 
         const meritsRef = admin.database().ref('/merits');
         const key = meritsRef.push(merit).getKey();
@@ -248,23 +251,21 @@ exports.merit_as_active = function(req, res) {
 
 // Put merit data as pledge
 exports.merit_as_pledge = function(req, res) {
-  let counter = 0;
   const {
     displayName,
     selectedActives,
     isChalkboard,
     isPCGreet
   } = req.body;
+  const platform = useragent.parse(req.headers['user-agent']).toString();
   let { merit } = req.body;
+  let counter = 0;
 
   selectedActives.forEach((child) => {
     const activeRef = admin.database().ref('/users/' + child.value);
     const pledgeRef = admin.database().ref('/users/' + displayName);
 
     activeRef.once('value', (active) => {
-      merit.activeName = `${active.val().firstName} ${active.val().lastName}`;
-      merit.activePhoto = active.val().photoURL;
-
       if (active.val().status !== 'pipm' && !isChalkboard && !isPCGreet) {
         const remainingMerits = active.val().Pledges[displayName].merits - merit.amount;
         if (merit.amount > 0 && 
@@ -286,6 +287,10 @@ exports.merit_as_pledge = function(req, res) {
 
       pledgeRef.once('value', (pledge) => {
         counter++;
+
+        merit.activeName = `${active.val().firstName} ${active.val().lastName}`;
+        merit.activePhoto = active.val().photoURL;
+        merit.platform = platform;
 
         const meritsRef = admin.database().ref('/merits');
         const key = meritsRef.push(merit).getKey();

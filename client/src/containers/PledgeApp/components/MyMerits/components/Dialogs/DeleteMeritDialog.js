@@ -11,7 +11,6 @@ export default class DeleteMeritDialog extends PureComponent {
 
     API.deleteMerit(displayName, merit)
     .then((res) => {
-      console.log('Deleted merit');
       this.props.handleDeleteClose();
       this.props.handleRequestOpen(`Deleted merit from ${merit.activeName}`);
     })

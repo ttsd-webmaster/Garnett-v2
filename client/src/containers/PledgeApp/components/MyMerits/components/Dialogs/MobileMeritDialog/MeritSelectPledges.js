@@ -96,7 +96,6 @@ export class MeritSelectPledges extends Component {
 
     API.meritAsActive(displayName, selectedPledges, merit, false, false, status)
     .then(res => {
-      console.log(res);
       this.props.handleClose();
       this.closeProgressDialog();
 
