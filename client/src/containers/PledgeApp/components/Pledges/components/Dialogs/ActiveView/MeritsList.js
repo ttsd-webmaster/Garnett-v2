@@ -47,7 +47,7 @@ export class MeritsList extends PureComponent {
     if (!loaded) {
       return (
         <div className="loading-merits">
-          <CircularProgress />
+          <CircularProgress color="var(--accent-color)" size={30} />
         </div>
       )
     }

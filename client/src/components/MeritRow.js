@@ -53,7 +53,7 @@ export function MeritRow({
   return (
     <LazyLoad
       height={88}
-      offset={window.innerHeight}
+      offset={window.screen.height}
       once
       overflow
       placeholder={PlaceholderMerit()}

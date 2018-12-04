@@ -75,7 +75,6 @@ export class ActiveView extends PureComponent {
             containerStyle={slideContainer}
             index={this.state.index}
             onChangeIndex={this.handleChange}
-            animateHeight
             disableLazyLoading
           >
             <div>
