@@ -211,7 +211,9 @@ export default class App extends Component {
           <Snackbar
             open={this.state.open}
             message={this.state.message}
+            action="Close"
             autoHideDuration={4000}
+            onActionClick={this.handleRequestClose}
             onRequestClose={this.handleRequestClose}
           />
         </div>
