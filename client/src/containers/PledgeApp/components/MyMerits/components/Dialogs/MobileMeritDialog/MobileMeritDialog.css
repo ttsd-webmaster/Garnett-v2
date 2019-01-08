@@ -23,7 +23,6 @@
 
 #merit-create-amount {
   display: flex;
-  flex-grow: 1;
   justify-content: center;
   align-items: center;
   grid-column: 1/4;
@@ -52,6 +51,8 @@
 
 #merit-create-buttons {
   display: flex;
+  position: sticky;
+  bottom: 0;
   height: 60px;
 }
 
