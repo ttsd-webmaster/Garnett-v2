@@ -55,6 +55,8 @@ exports.get_pledges_as_active_mobile = function(req, res) {
           let currentPledge = {
             firstName: user.val().firstName,
             lastName: user.val().lastName,
+            year: user.val().year,
+            major: user.val().major,
             photoURL: user.val().photoURL
           };
           currentPledge.remainingMerits = remainingMerits.get(user.key);
@@ -95,7 +97,7 @@ exports.get_actives_as_pledge = function(req, res) {
   });
 };
 
-// Gets all the actives for meriting as pledge
+// Gets all the actives for meriting as pledge (MOBILE)
 exports.get_actives_as_pledge_mobile = function(req, res) {
   const { displayName, showAlumni } = req.query;
   const usersRef = admin.database().ref('/users');

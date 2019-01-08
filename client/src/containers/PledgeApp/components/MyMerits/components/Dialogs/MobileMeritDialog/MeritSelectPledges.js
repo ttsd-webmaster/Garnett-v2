@@ -51,7 +51,7 @@ export class MeritSelectPledges extends Component {
         value: pledge.firstName + pledge.lastName,
         label: pledgeName
       });
-      this.setState({ selectedPledges });
+      this.setState({ selectedPledges, name: '' });
     }
     else {
       this.props.handleRequestOpen(`Not enough merits for ${pledgeName}.`)

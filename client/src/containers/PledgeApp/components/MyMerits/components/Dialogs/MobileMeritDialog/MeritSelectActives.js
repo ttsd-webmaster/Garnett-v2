@@ -52,7 +52,7 @@ export class MeritSelectActives extends Component {
         value: active.firstName + active.lastName,
         label: activeName
       });
-      this.setState({ selectedActives });
+      this.setState({ selectedActives, name: '' });
     }
     else {
       this.props.handleRequestOpen(`Not enough merits for ${activeName}.`)

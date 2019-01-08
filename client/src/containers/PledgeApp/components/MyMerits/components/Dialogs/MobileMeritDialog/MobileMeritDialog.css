@@ -101,6 +101,7 @@
   --primary-color: #c0001f;
   --border-color: #e0e0e0;
   --text-color: rgba(0, 0, 0, 0.87);
+  --text-light: rgba(0, 0, 0, 0.54);
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
