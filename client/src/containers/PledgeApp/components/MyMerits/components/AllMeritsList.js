@@ -19,7 +19,7 @@ export class AllMeritsList extends PureComponent {
         const { firebase } = window;
         const meritsRef = firebase.database().ref('/merits');
 
-        meritsRef.orderByChild('date').limitToLast(100).on('value', (merits) => {
+        meritsRef.limitToLast(100).on('value', (merits) => {
           let allMerits = [];
 
           // Retrieves the 50 most recent merits

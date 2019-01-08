@@ -30,7 +30,7 @@ export class MyMeritsList extends PureComponent {
 
         userMeritsRef.on('value', (userMerits) => {
           if (userMerits.val()) {
-            meritsRef.orderByChild('date').on('value', (merits) => {
+            meritsRef.on('value', (merits) => {
               // Retrieves the user's merits by searching for the key in
               // the Merits table
               const myMerits = Object.keys(userMerits.val()).map(function(key) {

@@ -48,9 +48,7 @@ exports.get_pledge_merits = function(req, res) {
       meritsRef.once('value', (merits) => {
         pledgeMerits = Object.keys(userMerits.val()).map(function(key) {
           return merits.val()[userMerits.val()[key]];
-        }).sort((a, b) => {
-          return new Date(b.date) - new Date(a.date);
-        });
+        }).reverse();
         res.json(pledgeMerits);
       })
     } else {
