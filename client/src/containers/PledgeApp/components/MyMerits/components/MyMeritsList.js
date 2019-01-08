@@ -84,14 +84,15 @@ export class MyMeritsList extends PureComponent {
   }
 
   render() {
-    let { myMerits, reverse } = this.state;
+    let { myMerits, reverse, loaded, openDelete, selectedMerit } = this.state;
+    const { hidden, state, handleRequestOpen } = this.props;
 
-    if (this.props.hidden) {
+    if (hidden) {
       return null;
     }
     
-    if (!this.state.loaded) {
-      return <LoadingComponent className={this.props.hidden ? "hidden" : ""} />;
+    if (!loaded) {
+      return <LoadingComponent className={hidden ? "hidden" : ""} />;
     }
 
     if (reverse) {
@@ -106,39 +107,25 @@ export class MyMeritsList extends PureComponent {
           reverse={this.reverse}
         />
         <List className="animate-in garnett-list">
-          {myMerits.map((merit, i) => {
-            let name;
-            let photoURL;
-
-            if (!merit) {
-              return null;
-            }
-
-            if (this.props.state.status === 'pledge') {
-              name = merit.activeName;
-              photoURL = merit.activePhoto;
-            } else {
-              name = merit.pledgeName;
-              photoURL = merit.pledgePhoto;
-            }
-            
+          {myMerits && myMerits.map((merit, i) => {
+            const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
             return (
               <MeritRow
                 key={i}
                 merit={merit}
-                photo={photoURL}
-                name={name}
+                photo={state.status === 'pledge' ? activePhoto : pledgePhoto}
+                name={state.status === 'pledge' ? activeName : pledgeName}
                 handleDeleteOpen={this.handleDeleteOpen}
               />
             )
           })}
         </List>
         <LoadableDeleteMeritDialog
-          open={this.state.openDelete}
-          state={this.props.state}
-          merit={this.state.selectedMerit}
+          open={openDelete}
+          state={state}
+          merit={selectedMerit}
           handleDeleteClose={this.handleDeleteClose}
-          handleRequestOpen={this.props.handleRequestOpen}
+          handleRequestOpen={handleRequestOpen}
         />
       </Fragment>
     )

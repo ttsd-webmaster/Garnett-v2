@@ -114,12 +114,6 @@
   max-width: none;
   margin: 24px auto;
 }
-@media(max-width: 420px) {
-  #active-merits > .garnett-list {
-    max-height: calc(100vh - 158px);
-    overflow: auto;
-  }
-}
 
 .garnett-list-item > div > div {
   background-color: var(--list-color);

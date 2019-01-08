@@ -189,8 +189,9 @@ export class MeritSelectActives extends Component {
             const activeName = active.firstName.toLowerCase();
             const searchedName = this.state.name.toLowerCase();
             const includesActive = this.state.selectedActives.find((selectedActive) => {
-              return selectedActive.firstName === active.firstName
-            })
+              return selectedActive.firstName === active.firstName;
+            });
+            
             if (includesActive || !activeName.startsWith(searchedName)) {
               return null;
             }

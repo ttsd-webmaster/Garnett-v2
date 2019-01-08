@@ -163,11 +163,6 @@
   color: #ccc;
 }
 
-#merit-select-users-container .pledge-merits {
-  margin: 0;
-  margin-right: 10px;
-}
-
 /**************** Animations *****************/
 @keyframes fadein {
   from { opacity: 0; }

@@ -23,9 +23,9 @@ exports.get_pledges_as_active = function(req, res) {
     if (snapshot.val()) {
       pledges = Object.keys(snapshot.val()).map(function(key) {
         return {
-          'value': key,
-          'label': key.replace(/([a-z])([A-Z])/, '$1 $2'),
-          'meritsRemaining': snapshot.val()[key].merits
+          value: key,
+          label: key.replace(/([a-z])([A-Z])/, '$1 $2'),
+          meritsRemaining: snapshot.val()[key].merits
         };
       });
     }
@@ -75,23 +75,19 @@ exports.get_actives_as_pledge = function(req, res) {
     let result = [];
 
     actives.forEach((active) => {
+      let currentActive = {
+        value: active.key,
+        label: `${active.val().firstName} ${active.val().lastName}`,
+        meritsRemaining: active.val().Pledges[displayName].merits
+      };
+
       if (showAlumni) {
         if (active.val().status === 'alumni') {
-          result.push({
-            'value': active.key,
-            'label': `${active.val().firstName} ${active.val().lastName}`,
-            'meritsRemaining': active.val().Pledges[displayName].merits
-          });
+          result.push(currentActive);
         }
       }
-      else {
-        if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
-          result.push({
-            'value': active.key,
-            'label': `${active.val().firstName} ${active.val().lastName}`,
-            'meritsRemaining': active.val().Pledges[displayName].merits
-          });
-        }
+      else if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+        result.push(currentActive);
       }
     });
 
@@ -108,19 +104,21 @@ exports.get_actives_as_pledge_mobile = function(req, res) {
     let result = [];
 
     actives.forEach((active) => {
+      let currentActive = {
+        firstName: active.val().firstName,
+        lastName: active.val().lastName,
+        year: active.val().year,
+        major: active.val().major,
+        photoURL: active.val().photoURL
+      };
+      currentActive.meritsRemaining = active.val().Pledges[displayName].merits;
+
       if (showAlumni) {
         if (active.val().status === 'alumni') {
-          let currentAlumnus = active.val();
-          currentAlumnus.meritsRemaining = active.val().Pledges[displayName].merits;
-          result.push(currentAlumnus);
-        }
-      }
-      else {
-        if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
-          let currentActive = active.val();
-          currentActive.meritsRemaining = active.val().Pledges[displayName].merits;
           result.push(currentActive);
         }
+      } else if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
+        result.push(currentActive);
       }
     });
 
@@ -142,27 +140,24 @@ exports.get_chalkboards_merit = function(req, res) {
       });
 
       chalkboards.forEach((chalkboard) => {
-        if (chalkboard.activeName === fullName) {
-          myChalkboards.push({
-            title: chalkboard.title,
-            amount: chalkboard.amount
-          });
-        }
-        else {
-          if (chalkboard.attendees) {
-            const attendees = Object.keys(chalkboard.attendees).map(function(key) {
-              return chalkboard.attendees[key];
-            });
+        let currentChalkboard = {
+          title: chalkboard.title,
+          amount: chalkboard.amount
+        };
 
-            attendees.forEach((attendee) => {
-              if (attendee.name === fullName) {
-                myChalkboards.push({
-                  title: chalkboard.title,
-                  amount: chalkboard.amount
-                });
-              }
-            });
-          }
+        if (chalkboard.activeName === fullName) {
+          myChalkboards.push(currentChalkboard);
+        }
+        else if (chalkboard.attendees) {
+          const attendees = Object.keys(chalkboard.attendees).map(function(key) {
+            return chalkboard.attendees[key];
+          });
+
+          attendees.forEach((attendee) => {
+            if (attendee.name === fullName) {
+              myChalkboards.push(currentChalkboard);
+            }
+          });
         }
       });
     }
