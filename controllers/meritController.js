@@ -57,9 +57,9 @@ exports.get_pledges_as_active_mobile = function(req, res) {
             lastName: user.val().lastName,
             year: user.val().year,
             major: user.val().major,
-            photoURL: user.val().photoURL
+            photoURL: user.val().photoURL,
+            remainingMerits: remainingMerits.get(user.key)
           };
-          currentPledge.remainingMerits = remainingMerits.get(user.key);
           result.push(currentPledge);
         })
         res.json(result)
@@ -73,23 +73,25 @@ exports.get_actives_as_pledge = function(req, res) {
   const { displayName, showAlumni } = req.query;
   const usersRef = admin.database().ref('/users');
 
-  usersRef.once('value', (actives) => {
+  usersRef.once('value', (users) => {
     let result = [];
 
-    actives.forEach((active) => {
-      let currentActive = {
-        value: active.key,
-        label: `${active.val().firstName} ${active.val().lastName}`,
-        meritsRemaining: active.val().Pledges[displayName].merits
-      };
+    users.forEach((user) => {
+      if (user.val().status !== 'pledge') {
+        let currentActive = {
+          value: user.key,
+          label: `${user.val().firstName} ${user.val().lastName}`,
+          meritsRemaining: user.val().Pledges[displayName].merits
+        };
 
-      if (showAlumni) {
-        if (active.val().status === 'alumni') {
+        if (showAlumni) {
+          if (user.val().status === 'alumni') {
+            result.push(currentActive);
+          }
+        }
+        else if (user.val().status !== 'alumni') {
           result.push(currentActive);
         }
-      }
-      else if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
-        result.push(currentActive);
       }
     });
 
@@ -102,25 +104,28 @@ exports.get_actives_as_pledge_mobile = function(req, res) {
   const { displayName, showAlumni } = req.query;
   const usersRef = admin.database().ref('/users');
 
-  usersRef.once('value', (actives) => {
+  usersRef.once('value', (users) => {
     let result = [];
 
-    actives.forEach((active) => {
-      let currentActive = {
-        firstName: active.val().firstName,
-        lastName: active.val().lastName,
-        year: active.val().year,
-        major: active.val().major,
-        photoURL: active.val().photoURL
-      };
-      currentActive.meritsRemaining = active.val().Pledges[displayName].merits;
+    users.forEach((user) => {
+      if (user.val().status !== 'pledge') {
+        let currentActive = {
+          firstName: user.val().firstName,
+          lastName: user.val().lastName,
+          year: user.val().year,
+          major: user.val().major,
+          photoURL: user.val().photoURL
+          remainingMerits: user.val().Pledges[displayName].merits
+        };
 
-      if (showAlumni) {
-        if (active.val().status === 'alumni') {
+        if (showAlumni) {
+          if (user.val().status === 'alumni') {
+            result.push(currentActive);
+          }
+        }
+        else if (user.val().status !== 'alumni') {
           result.push(currentActive);
         }
-      } else if (active.val().status !== 'alumni' && active.val().status !== 'pledge') {
-        result.push(currentActive);
       }
     });
 
