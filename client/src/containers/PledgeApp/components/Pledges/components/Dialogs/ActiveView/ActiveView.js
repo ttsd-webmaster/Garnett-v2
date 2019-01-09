@@ -47,7 +47,7 @@ export class ActiveView extends PureComponent {
 
     const {
       open,
-      meritsRemaining,
+      remainingMerits,
       handleClose,
       handleRequestOpen,
       actions
@@ -80,7 +80,7 @@ export class ActiveView extends PureComponent {
             <div>
               <UserInfo
                 photoURL={photoURL}
-                meritsRemaining={meritsRemaining}
+                remainingMerits={remainingMerits}
                 phone={phone}
                 email={email}
                 major={major}
@@ -116,7 +116,7 @@ export class ActiveView extends PureComponent {
           <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
             <UserInfo
               photoURL={photoURL}
-              meritsRemaining={meritsRemaining}
+              remainingMerits={remainingMerits}
               phone={phone}
               email={email}
               major={major}

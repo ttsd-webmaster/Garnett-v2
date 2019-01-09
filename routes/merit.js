@@ -6,7 +6,7 @@ var controller = require('../controllers/meritController');
 
 /// MERIT ROUTES ///
 // GET requests
-router.get('/active/remaining', controller.get_merits_remaining);
+router.get('/active/remainingMerits', controller.get_remaining_merits);
 router.get('/active/pledges', controller.get_pledges_as_active);
 router.get('/active/pledges/mobile', controller.get_pledges_as_active_mobile);
 router.get('/pledge/actives', controller.get_actives_as_pledge);

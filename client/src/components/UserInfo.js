@@ -12,7 +12,7 @@ export function UserInfo({
   name,
   className,
   totalMerits,
-  meritsRemaining,
+  remainingMerits,
   phone,
   email,
   major
@@ -37,9 +37,9 @@ export function UserInfo({
     firstRowIcon = 'star';
   }
   // Pledge Info Dialog (Active)
-  else if (meritsRemaining) {
+  else if (remainingMerits) {
     firstRowName = 'Merits Remaining';
-    firstRowDescription = meritsRemaining;
+    firstRowDescription = remainingMerits;
     firstRowIcon = 'star';
   }
   else {

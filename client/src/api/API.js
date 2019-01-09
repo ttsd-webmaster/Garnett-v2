@@ -45,9 +45,9 @@ export default {
 
   // Merit Book
   // GET requests
-  getMeritsRemaining: function(displayName, pledgeName) {
+  getRemainingMerits: function(displayName, pledgeName) {
     const params = { displayName, pledgeName };
-    return axios.get('/api/merit/active/remaining', { params });
+    return axios.get('/api/merit/active/remainingMerits', { params });
   },
   getPledgesForMerit: function(displayName) {
     const params = { displayName };

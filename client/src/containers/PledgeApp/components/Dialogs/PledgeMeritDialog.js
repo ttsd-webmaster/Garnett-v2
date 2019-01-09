@@ -387,7 +387,7 @@ export default class PledgeMeritDialog extends PureComponent {
 
         <div id="remaining-merits">
           {this.state.selectedActives.map((active, i) => (
-            <p key={i}> Merits remaining for {active.label}: {active.meritsRemaining} </p>
+            <p key={i}> Merits remaining for {active.label}: {active.remainingMerits} </p>
           ))}
         </div>
 

@@ -2,8 +2,8 @@ const admin = require('firebase-admin');
 const equal = require('deep-equal');
 const useragent = require('useragent');
 
-// Get merits remaining for pledge
-exports.get_merits_remaining = function(req, res) {
+// Get remaining merits for pledge
+exports.get_remaining_merits = function(req, res) {
   const { displayName, pledgeName } = req.query;
   const pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
 
@@ -25,7 +25,7 @@ exports.get_pledges_as_active = function(req, res) {
         return {
           value: key,
           label: key.replace(/([a-z])([A-Z])/, '$1 $2'),
-          meritsRemaining: snapshot.val()[key].merits
+          remainingMerits: snapshot.val()[key].merits
         };
       });
     }
@@ -81,7 +81,7 @@ exports.get_actives_as_pledge = function(req, res) {
         let currentActive = {
           value: user.key,
           label: `${user.val().firstName} ${user.val().lastName}`,
-          meritsRemaining: user.val().Pledges[displayName].merits
+          remainingMerits: user.val().Pledges[displayName].merits
         };
 
         if (showAlumni) {
@@ -114,7 +114,7 @@ exports.get_actives_as_pledge_mobile = function(req, res) {
           lastName: user.val().lastName,
           year: user.val().year,
           major: user.val().major,
-          photoURL: user.val().photoURL
+          photoURL: user.val().photoURL,
           remainingMerits: user.val().Pledges[displayName].merits
         };
 

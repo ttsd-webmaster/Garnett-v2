@@ -18,15 +18,15 @@ export default class PledgeInfoDialog extends PureComponent {
           const { displayName } = nextProps.state;
           const pledgeDisplayName = pledge.firstName + pledge.lastName;
 
-          API.getMeritsRemaining(displayName, pledgeDisplayName)
+          API.getRemainingMerits(displayName, pledgeDisplayName)
           .then((res) => {
-            const meritsRemaining = res.data;
+            const remainingMerits = res.data;
 
-            this.setState({ meritsRemaining });
+            this.setState({ remainingMerits });
           });
         }
         else {
-          this.setState({ meritsRemaining: 0 });
+          this.setState({ remainingMerits: 0 });
         }
       }
     }
@@ -60,7 +60,7 @@ export default class PledgeInfoDialog extends PureComponent {
       <ActiveView
         open={this.props.open}
         pledge={this.state.pledge}
-        meritsRemaining={this.state.meritsRemaining}
+        remainingMerits={this.state.remainingMerits}
         handleClose={this.props.handleClose}
         handleRequestOpen={this.props.handleRequestOpen}
         actions={actions}
