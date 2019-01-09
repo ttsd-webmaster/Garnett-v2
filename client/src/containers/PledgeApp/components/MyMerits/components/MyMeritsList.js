@@ -101,12 +101,12 @@ export class MyMeritsList extends PureComponent {
 
     return (
       <Fragment>
-        <FilterHeader
-          title={reverse ? "Oldest" : "Recent"}
-          isReversed={reverse}
-          reverse={this.reverse}
-        />
         <List className="animate-in garnett-list">
+          <FilterHeader
+            title={reverse ? "Oldest" : "Recent"}
+            isReversed={reverse}
+            reverse={this.reverse}
+          />
           {myMerits && myMerits.map((merit, i) => {
             const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
             return (

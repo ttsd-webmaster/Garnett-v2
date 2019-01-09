@@ -69,12 +69,12 @@ export class AllMeritsList extends PureComponent {
 
     return (
       <Fragment>
-        <FilterHeader
-          title={reverse ? "Oldest" : "Recent"}
-          isReversed={reverse}
-          reverse={this.reverse}
-        />
         <List className="animate-in garnett-list">
+          <FilterHeader
+            title={reverse ? "Oldest" : "Recent"}
+            isReversed={reverse}
+            reverse={this.reverse}
+          />
           {allMerits.map((merit, i) => (
             <MeritRow
               key={i}
