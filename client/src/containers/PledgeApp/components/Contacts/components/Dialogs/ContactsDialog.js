@@ -1,4 +1,4 @@
-import { isMobileDevice } from 'helpers/functions.js';
+import { isMobile } from 'helpers/functions.js';
 import { UserInfo } from 'components';
 
 import React from 'react';
@@ -39,7 +39,7 @@ export default function ContactsDialog({
     return null
   }
 
-  if (isMobileDevice()) {
+  if (isMobile()) {
     return (
       <FullscreenDialog
         title={fullName}

@@ -1,4 +1,4 @@
-import { isMobileDevice } from 'helpers/functions.js';
+import { isMobile } from 'helpers/functions.js';
 import { UserInfo } from 'components';
 
 import React from 'react';
@@ -22,7 +22,7 @@ export function PledgeView({
   } = pledge;
   const fullName = `${firstName} ${lastName}`;
 
-  if (isMobileDevice()) {
+  if (isMobile()) {
     return (
       <FullscreenDialog
         title={fullName}

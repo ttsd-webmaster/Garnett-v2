@@ -1,5 +1,5 @@
 import './Login.css';
-import { isMobileDevice } from 'helpers/functions.js';
+import { isMobile } from 'helpers/functions.js';
 import { CompletingTaskDialog } from 'helpers/loaders.js';
 import {
   LoginOptions,
@@ -89,7 +89,7 @@ export class Login extends PureComponent {
   render() {
     return (
       <div className="login animate-in">
-        {!isMobileDevice() && (
+        {!isMobile() && (
           <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
             <img className="logo" src={require('./images/logo.png')} alt="logo"/>
           </a>

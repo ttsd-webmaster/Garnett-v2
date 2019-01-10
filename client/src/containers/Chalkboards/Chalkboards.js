@@ -3,7 +3,7 @@ import MyChalkboards from './components/MyChalkboards';
 import AllChalkboards from './components/AllChalkboards';
 import {
   loadFirebase,
-  isMobileDevice,
+  isMobile,
   getDate,
   androidBackOpen,
   androidBackClose
@@ -216,7 +216,7 @@ export default class Chalkboards extends Component {
 
   addOpen = () => {
     if (navigator.onLine) {
-      if (isMobileDevice()) {
+      if (isMobile()) {
         androidBackOpen(this.addClose);
       }
 
@@ -228,7 +228,7 @@ export default class Chalkboards extends Component {
   }
 
   addClose = () => {
-    if (isMobileDevice()) {
+    if (isMobile()) {
       androidBackClose();
     }
 
@@ -236,7 +236,7 @@ export default class Chalkboards extends Component {
   }
 
   handleOpen = (chalkboard, type) => {
-    if (isMobileDevice()) {
+    if (isMobile()) {
       androidBackOpen(this.handleClose);
     }
 
@@ -248,7 +248,7 @@ export default class Chalkboards extends Component {
   }
 
   handleClose = () => {
-    if (isMobileDevice()) {
+    if (isMobile()) {
       androidBackClose();
     }
 

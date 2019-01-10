@@ -1,6 +1,6 @@
 import './MyMerits.css';
 import {
-  isMobileDevice,
+  isMobile,
   androidBackOpen,
   androidBackClose,
   iosFullscreenDialogOpen,
@@ -71,7 +71,7 @@ export class MyMerits extends PureComponent {
           hidden={this.state.view === 'myMerits'}
           state={state}
         />
-        {isMobileDevice() && (
+        {isMobile() && (
           <Fragment>
             <LoadableMobileMeritDialog
               open={this.state.openMerit}

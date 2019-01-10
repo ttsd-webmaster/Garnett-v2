@@ -1,4 +1,4 @@
-import { loadFirebase } from 'helpers/functions.js';
+import { isMobile, loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 
@@ -82,7 +82,9 @@ export class AllMeritsList extends PureComponent {
               photo={merit.activePhoto}
               primaryText={
                 <p className="garnett-name all-merits">
-                  {this.shortenedName(merit.activeName)}
+                  {isMobile()
+                    ? this.shortenedName(merit.activeName)
+                    : merit.activeName}
                   <span style={{ fontWeight: 400 }}>
                     {merit.amount > 0
                       ? " merited "

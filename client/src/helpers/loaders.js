@@ -1,5 +1,5 @@
 import 'containers/PledgeApp/MobilePledgeApp.css';
-import { isMobileDevice } from './functions.js';
+import { isMobile } from './functions.js';
 
 import React, { Fragment } from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -67,9 +67,9 @@ export const LoadingComponent =  () => (
 
 export const CompletingTaskDialog = (props) => (
   <Dialog
-    contentStyle={isMobileDevice() ? null : {maxWidth: '500px'}}
+    contentStyle={isMobile() ? null : {maxWidth: '500px'}}
     bodyStyle={
-      isMobileDevice()
+      isMobile()
         ? completingTaskDialogMobile 
         : completingTaskDialog
     }
@@ -77,16 +77,10 @@ export const CompletingTaskDialog = (props) => (
     open={props.open}
   >
     <CircularProgress
-      size={isMobileDevice() ? 25 : 90}
-      thickness={isMobileDevice() ? 3.5 : 5}
+      size={isMobile() ? 25 : 90}
+      thickness={isMobile() ? 3.5 : 5}
     />
-    <span
-      style={
-        isMobileDevice() 
-          ? { margin: 'auto' }
-          : { marginTop: '50px' }
-      }
-    > 
+    <span style={isMobile() ? { margin: 'auto' } : { marginTop: '50px' }}>
       {props.message}
     </span>
   </Dialog>

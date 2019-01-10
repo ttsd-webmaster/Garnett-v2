@@ -1,4 +1,4 @@
-import { getTabStyle, isMobileDevice } from 'helpers/functions.js';
+import { getTabStyle, isMobile } from 'helpers/functions.js';
 import { UserInfo } from 'components';
 import { MeritsList } from './MeritsList';
 
@@ -54,7 +54,7 @@ export class ActiveView extends PureComponent {
     } = this.props;
     const fullName = `${firstName} ${lastName}`;
 
-    if (isMobileDevice()) {
+    if (isMobile()) {
       return (
         <FullscreenDialog
           title={fullName}

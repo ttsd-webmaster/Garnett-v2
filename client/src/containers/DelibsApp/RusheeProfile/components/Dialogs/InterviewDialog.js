@@ -1,4 +1,4 @@
-import { isMobileDevice } from 'helpers/functions.js';
+import { isMobile } from 'helpers/functions.js';
 import { interviewResponses } from '../../data.js';
 
 import React, { PureComponent } from 'react';
@@ -18,7 +18,7 @@ export default class InterviewDialog extends PureComponent {
       />
     );
 
-    if (isMobileDevice()) {
+    if (isMobile()) {
       return (
         <FullscreenDialog
           title="Interview Responses"

@@ -5,7 +5,7 @@ export function getTabStyle(isActive) {
   return { color: isActive ? 'var(--icon-color)' : 'var(--icon-dark)' };
 }
 
-export function isMobileDevice() {
+export function isMobile() {
   return (navigator.userAgent.match(/Android/i) || 
           navigator.userAgent.match(/webOS/i) || 
           navigator.userAgent.match(/iPhone/i) || 

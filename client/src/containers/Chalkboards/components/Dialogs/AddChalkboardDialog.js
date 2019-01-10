@@ -1,6 +1,6 @@
 import { commitmentOptions } from './data.js';
 import API from 'api/API.js';
-import { isMobileDevice, invalidSafariVersion } from 'helpers/functions.js';
+import { isMobile, invalidSafariVersion } from 'helpers/functions.js';
 
 import React, { Component } from 'react';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
@@ -198,7 +198,7 @@ export default class AddChalkboardDialog extends Component {
       />
     )
 
-    if (isMobileDevice()) {
+    if (isMobile()) {
       return (
         <FullscreenDialog
           title="New Chalkboard"

@@ -2,7 +2,7 @@ import './App.css';
 import 'fontello/css/fontello.css';
 import API from 'api/API.js';
 import {
-  isMobileDevice,
+  isMobile,
   initializeFirebase,
   loadFirebase,
   registerNotificationToken,
@@ -32,7 +32,7 @@ const routes = [
   {
     path: '/pledge-app',
     exact: false,
-    component: isMobileDevice() ? MobilePledgeApp : PledgeApp
+    component: isMobile() ? MobilePledgeApp : PledgeApp
   },
   {
     path: '/delibs-app',

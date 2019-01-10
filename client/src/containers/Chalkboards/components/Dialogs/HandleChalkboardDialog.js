@@ -1,5 +1,5 @@
 import API from 'api/API.js';
-import { getTabStyle, isMobileDevice, mapsSelector } from 'helpers/functions.js';
+import { getTabStyle, isMobile, mapsSelector } from 'helpers/functions.js';
 import {
   LoadableAttendeeList,
   LoadableEditChalkboardDialog,
@@ -24,7 +24,7 @@ const inkBarStyle = {
 
 let EditChalkboardDialog;
 
-if (isMobileDevice()) {
+if (isMobile()) {
   EditChalkboardDialog = LoadableEditChalkboardMobileDialog;
 }
 else {
@@ -253,7 +253,7 @@ export default class HandleChalkboardDialog extends Component {
 
     return (
       <div>
-        {isMobileDevice() ? (
+        {isMobile() ? (
           <FullscreenDialog
             title="Chalkboard"
             titleStyle={{fontSize:'22px'}}
