@@ -223,10 +223,6 @@ exports.merit_as_active = function(req, res) {
         }
       }
 
-      activeRef.update({
-        totalMerits: active.val().totalMerits + merit.amount
-      });
-
       pledgeRef.once('value', (pledge) => {
         counter++;
 
@@ -244,6 +240,10 @@ exports.merit_as_active = function(req, res) {
         activeRef.child('Merits').push(key);
 
         if (!res.headersSent && counter === selectedPledges.length) {
+          activeRef.update({
+            totalMerits: active.val().totalMerits + (merit.amount * selectedPledges.length)
+          });
+
           res.sendStatus(200);
         }
       });
