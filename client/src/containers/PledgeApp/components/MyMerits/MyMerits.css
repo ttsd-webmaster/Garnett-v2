@@ -15,12 +15,6 @@
 .merit-amount.small {
   margin-top: 10px;
 }
-.merit-amount.green {
-  color: #37b074;
-}
-.merit-amount.red {
-  color: #f60027;
-}
 
 .merit-date {
   color: var(--text-light);

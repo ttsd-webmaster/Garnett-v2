@@ -24,6 +24,18 @@ export class PledgeData extends PureComponent {
     });
   }
 
+  dataValue(columnTitle, dataValue) {
+    if (columnTitle.includes('Amount')) {
+      if (dataValue > 0) {
+        return <p className="data-value green">+{dataValue}</p>;
+      } else {
+        return <p className="data-value red">{dataValue}</p>;
+      }
+    } else {
+      return <p className="data-value">{dataValue}</p>;
+    }
+  }
+
   render() {
     if (!this.state.loaded) {
       return <LoadingDataApp />
@@ -44,7 +56,7 @@ export class PledgeData extends PureComponent {
                     <p className="data-key"> {entry[0]} </p>
                   }
                 >
-                  <p className="data-value"> {entry[1]} </p>
+                  {this.dataValue(set[0], entry[1])}
                 </ListItem>
                 <Divider className="garnett-divider pledge-data" inset={true} />
               </div>

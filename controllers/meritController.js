@@ -5,10 +5,11 @@ const useragent = require('useragent');
 // Get remaining merits for pledge
 exports.get_remaining_merits = function(req, res) {
   const { displayName, pledgeName } = req.query;
-  const pledgeRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName);
+  const meritsRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName + '/merits');
 
-  pledgeRef.once('value', (active) => {
-    res.json(active.val().merits);
+  meritsRef.once('value', (merits) => {
+    console.log()
+    res.json(merits.val());
   });
 };
 

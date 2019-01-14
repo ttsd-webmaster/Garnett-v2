@@ -88,6 +88,14 @@ div, a {
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
+.green {
+  color: #37b074;
+}
+
+.red {
+  color: #f60027;
+}
+
 .loading-image {
   position: absolute;
   background-image: url('./gear.png');
