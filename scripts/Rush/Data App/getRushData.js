@@ -1,6 +1,5 @@
 var fs = require('fs');
 const admin = require("firebase-admin");
-var serviceAccount = require("../../../serviceAccountKey.json");
 var NuData = require('./data/RushFall15.json');
 var XiData = require('./data/RushSpring16.json');
 var OmicronData = require('./data/RushFall16.json');
@@ -10,9 +9,20 @@ var SigmaData = require('./data/RushSpring18.json');
 require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL
+  }),
   databaseURL: process.env.FIREBASE_DATABASE_URL
-});
+})
 
 var classes = ['Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma'];
 var NuMajors = new Map();

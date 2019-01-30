@@ -1,12 +1,22 @@
 var urlExists = require('url-exists');
 const admin = require("firebase-admin");
-var serviceAccount = require("../../../../serviceAccountKey.json");
 require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert({
+    type: process.env.FIREBASE_TYPE,
+    project_id: process.env.FIREBASE_PROJECT_ID,
+    private_key_id: process.env.FIREBASE_PRIVATE_KEY_ID,
+    private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    client_email: process.env.FIREBASE_CLIENT_EMAIL,
+    client_id: process.env.FIREBASE_CLIENT_ID,
+    auth_uri: process.env.FIREBASE_AUTH_URI,
+    token_uri: process.env.FIREBASE_TOKEN_URI,
+    auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
+    client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL
+  }),
   databaseURL: process.env.FIREBASE_DATABASE_URL
-});
+})
 
 let usersRef = admin.database().ref('/users');
 
@@ -14,7 +24,7 @@ usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
     let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
     let userRef = admin.database().ref('/users/' + user.key);
-    let bucket = admin.storage().bucket("garnett-42475.appspot.com");
+    let bucket = admin.storage().bucket("garnett-230209.appspot.com");
 
     bucket.file(`${user.key}.jpg`).getSignedUrl({
       action: 'read',

@@ -7,10 +7,10 @@ const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
 const admin = require('firebase-admin');
 const indexRouter = require('./routes/index');
-const meritRouter = require('./routes/merit');
-const chalkboardRouter = require('./routes/chalkboard');
-const complaintRouter = require('./routes/complaint');
-const notificationRouter = require('./routes/notification');
+const meritsRouter = require('./routes/merits');
+const chalkboardsRouter = require('./routes/chalkboards');
+const complaintsRouter = require('./routes/complaints');
+const notificationsRouter = require('./routes/notifications');
 const delibsRouter = require('./routes/delibs');
 const port = process.env.PORT || 4000;
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
@@ -65,10 +65,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', indexRouter);
-app.use('/api/merit', meritRouter);
-app.use('/api/chalkboard', chalkboardRouter);
-app.use('/api/complaint', complaintRouter);
-app.use('/api/notification', notificationRouter);
+app.use('/api/merit', meritsRouter);
+app.use('/api/chalkboard', chalkboardsRouter);
+app.use('/api/complaint', complaintsRouter);
+app.use('/api/notification', notificationsRouter);
 app.use('/api/delibs', delibsRouter);
 
 app.get('/', (req, res) => {

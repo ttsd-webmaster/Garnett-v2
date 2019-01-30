@@ -108,6 +108,9 @@ export class MyMeritsList extends PureComponent {
             reverse={this.reverse}
           />
           {myMerits && myMerits.map((merit, i) => {
+            if (!merit) {
+              return null
+            }
             const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
             return (
               <MeritRow

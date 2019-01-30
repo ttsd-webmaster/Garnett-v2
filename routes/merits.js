@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // Require controller modules.
-var controller = require('../controllers/meritController');
+var controller = require('../controllers/meritsController');
 
 /// MERIT ROUTES ///
 // GET requests

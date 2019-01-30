@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 // Require controller modules.
-var controller = require('../controllers/notificationController');
+var controller = require('../controllers/notificationsController');
 
 /// MERIT ROUTES ///
 // PUT requests
