@@ -1,6 +1,8 @@
+// @flow
+
 import './App.css';
 import 'fontello/css/fontello.css';
-import API from 'api/API.js';
+import API from 'api/API';
 import {
   isMobile,
   initializeFirebase,
@@ -18,6 +20,7 @@ import {
   MobilePledgeApp
 } from 'containers';
 import { PublicRoute, PrivateRoute } from 'components/Routes';
+import type { User } from 'api/models';
 
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Redirect, Switch } from 'react-router-dom';
@@ -51,16 +54,45 @@ const routes = [
   }
 ];
 
-export default class App extends Component {
+// TODO: use React Context instead of State
+type State = {
+  name: string,
+  displayName: string,
+  firstName: string,
+  lastName: string,
+  phone: string,
+  email: string,
+  class: string,
+  major: string,
+  status: string,
+  photoURL: string,
+  authenticated: boolean,
+  loading: boolean,
+  open: boolean,
+  message: string
+};
+
+export default class App extends Component<{}, State> {
   state = {
+    name: '',
+    displayName: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    email: '',
+    class: '',
+    major: '',
+    status: '',
+    photoURL: '',
     authenticated: false,
     loading: true,
     open: false,
     message: ''
-  }
+  };
 
   componentDidMount() {
-    const data = JSON.parse(localStorage.getItem('data'));
+    const storedData = localStorage.getItem('data')
+    const data = storedData ? JSON.parse(storedData) : null;
     const sw_msg = localStorage.getItem('sw_msg');
 
     if (sw_msg) {
@@ -71,7 +103,7 @@ export default class App extends Component {
     }
 
     if (navigator.onLine) {
-      if (data !== null) {
+      if (data) {
         initializeFirebase();
 
         loadFirebase('auth')
@@ -94,7 +126,7 @@ export default class App extends Component {
       }
     }
     else {
-      if (data !== null) {
+      if (data) {
         this.setData(data);
       } else {
         this.setState({ loading: false });
@@ -102,7 +134,7 @@ export default class App extends Component {
     }
   }
 
-  loginCallback = (user) => {
+  loginCallback = (user: User) => {
     /* Checks if browser is Safari, iOS version < 11, IE, Edge, or in development */
     if (loginCheck()) {
       this.setData(user);
@@ -111,7 +143,7 @@ export default class App extends Component {
     }
   }
 
-  setData = (user) => {
+  setData = (user: User) => {
     const name = `${user.firstName} ${user.lastName}`;
     let displayName = user.firstName + user.lastName;
     displayName = displayName.replace(/\s/g, '');
@@ -139,7 +171,7 @@ export default class App extends Component {
     });
   }
 
-  handleRequestOpen = (message) => {
+  handleRequestOpen = (message: string) => {
     this.setState({
       message,
       open: true

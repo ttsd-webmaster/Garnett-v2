@@ -1,32 +1,34 @@
+// @flow
+
 import axios from 'axios';
+
+import type { SignUpParams, Merit, MeritInfo } from 'api/models'
 
 //Search functions to connect with back-end
 export default {
   // Pledge App:
   // GET requests
-  getAuthStatus: function(displayName) {
+  getAuthStatus: function(displayName: string) {
     const params = { displayName };
     return axios.get('/api/auth', { params });
   },
   getActives: function() {
     return axios.get('/api/actives');
   },
-  getPledgeMerits: function(pledgeName) {
+  getPledgeMerits: function(pledgeName: string) {
     const params = { pledgeName };
     return axios.get('/api/pledge/merits', { params });
   },
-  getPledgeComplaints: function(pledgeName) {
+  getPledgeComplaints: function(pledgeName: string) {
     const params = { pledgeName };
     return axios.get('/api/pledge/complaints', { params });
   },
   // PUT requests
-  signUp: function(email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode) {
-    const body = { email, password, firstName, lastName, className, majorName, year, phone, code, pledgeCode };
-    return axios.put('/api/signup', body);
+  signUp: function(params: SignUpParams) {
+    return axios.put('/api/signup', params);
   },
-  forgotPassword: function(email) {
-    const body = { email };
-    return axios.put('/api/forgotpassword', body);
+  forgotPassword: function(email: string) {
+    return axios.put('/api/forgotpassword', { email });
   },
   logout: function() {
     return axios.put('/api/logout');
@@ -34,92 +36,85 @@ export default {
 
   // Data App
   // GET requests
-  getPhotos: function(data) {
+  getPhotos: function(data: Object) {
     const params = { data };
     return axios.get('/api/photos', { params });
   },
-  getMyData: function(fullName) {
+  getMyData: function(fullName: string) {
     const params = { fullName };
     return axios.get('/api/mydata', { params });
   },
 
   // Merit Book
   // GET requests
-  getRemainingMerits: function(displayName, pledgeName) {
+  getRemainingMerits: function(displayName: string, pledgeName: string) {
     const params = { displayName, pledgeName };
     return axios.get('/api/merit/active/remainingMerits', { params });
   },
-  getPledgesForMerit: function(displayName) {
+  getPledgesForMerit: function(displayName: string) {
     const params = { displayName };
     return axios.get('/api/merit/active/pledges', { params });
   },
-  getPledgesForMeritMobile: function(displayName) {
+  getPledgesForMeritMobile: function(displayName: string) {
     const params = { displayName };
     return axios.get('/api/merit/active/pledges/mobile', { params });
   },
-  getActivesForMerit: function(displayName, showAlumni) {
+  getActivesForMerit: function(displayName: string, showAlumni: boolean) {
     const params = { displayName, showAlumni };
     return axios.get('/api/merit/pledge/actives', { params });
   },
-  getActivesForMeritMobile: function(displayName, showAlumni) {
+  getActivesForMeritMobile: function(displayName: string, showAlumni: boolean) {
     const params = { displayName, showAlumni };
     return axios.get('/api/merit/pledge/actives/mobile', { params });
   },
-  getChalkboardsForMerit: function(fullName) {
+  getChalkboardsForMerit: function(fullName: string) {
     const params = { fullName };
     return axios.get('/api/merit/chalkboards', { params });
   },
-  getPbros: function(displayName) {
+  getPbros: function(displayName: string) {
     const params = { displayName };
     return axios.get('/api/merit/pledge/pbros', { params });
   },
-  meritAsActive: function(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status) {
-    const body = { displayName, selectedPledges, merit, isChalkboard, isPCGreet, status };
-    return axios.put('/api/merit/active/create', body);
+  meritAsActive: function(params: MeritInfo) {
+    return axios.put('/api/merit/active/create', params);
   },
-  meritAsPledge: function(displayName, selectedActives, merit, isChalkboard, isPCGreet) {
-    const body = { displayName, selectedActives, merit, isChalkboard, isPCGreet };
-    return axios.put('/api/merit/pledge/create', body);
+  meritAsPledge: function(params: MeritInfo) {
+    return axios.put('/api/merit/pledge/create', params);
   },
-  deleteMerit: function(displayName, merit) {
-    const body = { displayName, merit };
-    return axios.put('/api/merit/pledge/delete', body);
+  deleteMerit: function(displayName: string, merit: Merit) {
+    return axios.put('/api/merit/pledge/delete', { displayName, merit });
   },
 
   // Chalkboards
   // GET requests
-  getChalkboardInfo: function(title) {
+  getChalkboardInfo: function(title: string) {
     const params = { title };
     return axios.get('/api/chalkboard', { params });
   },
-  getAttendees: function(title) {
+  getAttendees: function(title: string) {
     const params = { title };
     return axios.get('/api/chalkboard/attendees', { params });
   },
   // PUT requests
-  createChalkboard: function(chalkboard) {
-    const body = { chalkboard };
-    return axios.put('/api/chalkboard/create', body);
+  createChalkboard: function(chalkboard: Object) {
+    return axios.put('/api/chalkboard/create', { chalkboard });
   },
-  updateChalkboard: function(chalkboard) {
-    const body = { chalkboard };
-    return axios.put('/api/chalkboard/update', body);
+  updateChalkboard: function(chalkboard: Object) {
+    return axios.put('/api/chalkboard/update', { chalkboard });
   },
-  updateChalkboardMobile: function(title, field, value) {
+  updateChalkboardMobile: function(title: string, field: string, value: any) {
     const body = { title, field, value };
     return axios.put('/api/chalkboard/mobile/update', body);
   },
-  joinChalkboard: function(name, photoURL, title) {
+  joinChalkboard: function(name: string, photoURL: string, title: string) {
     const body = { name, photoURL, title };
     return axios.put('/api/chalkboard/join', body);
   },
-  deleteChalkboard: function(title) {
-    const body = { title };
-    return axios.put('/api/chalkboard/delete', body);
+  deleteChalkboard: function(title: string) {
+    return axios.put('/api/chalkboard/delete', { title });
   },
-  leaveChalkboard: function(name, title) {
-    const body = { name, title };
-    return axios.put('/api/chalkboard/leave', body);
+  leaveChalkboard: function(name: string, title: string) {
+    return axios.put('/api/chalkboard/leave', { name, title });
   },
 
   // Complaints
@@ -128,73 +123,78 @@ export default {
     return axios.get('/api/complaint/pledges');
   },
   // PUT requests
-  createComplaint: function(complaint, status) {
-    const body = { complaint, status };
-    return axios.put('/api/complaint/create', body);
+  createComplaint: function(complaint: Object, status: string) {
+    return axios.put('/api/complaint/create', { complaint, status });
   },
-  deleteComplaint: function(complaint) {
-    const body = { complaint };
-    return axios.put('/api/complaint/delete', body);
+  deleteComplaint: function(complaint: Object) {
+    return axios.put('/api/complaint/delete', { complaint });
   },
-  approveComplaint: function(complaint) {
-    const body = { complaint };
-    return axios.put('/api/complaint/approve', body);
+  approveComplaint: function(complaint: Object) {
+    return axios.put('/api/complaint/approve', { complaint });
   },
 
   // Notification Messaging
   // PUT requests
-  saveMessagingToken: function(displayName, token) {
+  saveMessagingToken: function(displayName: string, token: string) {
     const body = { displayName, token };
     return axios.put('/api/notification/saveMessageToken', body);
   },
-  sendPledgeMeritNotification: function(activeName, pledges, amount) {
+  sendPledgeMeritNotification: function(
+    activeName: string,
+    pledges: Array<Object>,
+    amount: number
+  ) {
     const body = { activeName, pledges, amount };
     return axios.put('/api/notification/merit/activeCreated', body);
   },
-  sendActiveMeritNotification: function(pledgeName, actives, amount) {
+  sendActiveMeritNotification: function(
+    pledgeName: string,
+    actives: Array<Object>,
+    amount: number
+  ) {
     const body = { pledgeName, actives, amount };
     return axios.put('/api/notification/merit/pledgeCreated', body);
   },
-  sendCreatedChalkboardNotification: function(chalkboardTitle) {
+  sendCreatedChalkboardNotification: function(chalkboardTitle: string) {
     const body = { chalkboardTitle };
     return axios.put('/api/notification/chalkboard/created', body);
   },
-  sendUpdatedChalkboardNotification: function(chalkboard) {
-    const body = { chalkboard };
-    return axios.put('/api/notification/chalkboard/updated', body);
+  sendUpdatedChalkboardNotification: function(chalkboard: Object) {
+    return axios.put('/api/notification/chalkboard/updated', { chalkboard });
   },
-  sendJoinedChalkboardNotification: function(name, chalkboard) {
+  sendJoinedChalkboardNotification: function(name: string, chalkboard: Object) {
     const body = { name, chalkboard };
     return axios.put('/api/notification/chalkboard/joined', body);
   },
-  sendLeftChalkboardNotification: function(name, chalkboard) {
+  sendLeftChalkboardNotification: function(name: string, chalkboard: Object) {
     const body = { name, chalkboard };
     return axios.put('/api/notification/chalkboard/left', body);
   },
-  sendPendingComplaintNotification: function(complaint) {
-    const body = { complaint };
-    return axios.put('/api/notification/complaint/pending', body);
+  sendPendingComplaintNotification: function(complaint: Object) {
+    return axios.put('/api/notification/complaint/pending', { complaint });
   },
-  sendApprovedComplaintNotification: function(complaint) {
-    const body = { complaint };
-    return axios.put('/api/notification/complaint/approved', body);
+  sendApprovedComplaintNotification: function(complaint: Object) {
+    return axios.put('/api/notification/complaint/approved', { complaint });
   },
 
   // Delibs App
   // PUT requests
-  updateInteraction: function(displayName, rusheeName, interacted, totalInteractions) {
+  updateInteraction: function(
+    displayName: string, 
+    rusheeName: string, 
+    interacted: boolean, 
+    totalInteractions: number
+  ) {
     const body = { displayName, rusheeName, interacted, totalInteractions };
     return axios.put('/api/interaction/update', body);
   },
-  startVote: function(rusheeName) {
-    const body = { rusheeName };
-    return axios.put('/api/vote/start', body);
+  startVote: function(rusheeName: string) {
+    return axios.put('/api/vote/start', { rusheeName });
   },
   endVote: function() {
     return axios.put('/api/vote/end');
   },
-  voteForRushee: function(displayName, rushee, vote) {
-    const body = { displayName, rushee, vote };
-    return axios.put('/api/vote/create', body);
+  voteForRushee: function(displayName: string, rushee: Object, vote: string) {
+    return axios.put('/api/vote/create', { displayName, rushee, vote });
   }
 };

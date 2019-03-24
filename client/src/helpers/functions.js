@@ -1,11 +1,15 @@
+// @flow
+
 import API from 'api/API.js';
 
+import type { User } from 'api/models'
+
 // Used to get tab color for Pledge App
-export function getTabStyle(isActive) {
+export function getTabStyle(isActive: boolean): string {
   return { color: isActive ? 'var(--icon-color)' : 'var(--icon-dark)' };
 }
 
-export function isMobile() {
+export function isMobile(): boolean {
   return (navigator.userAgent.match(/Android/i) || 
           navigator.userAgent.match(/webOS/i) || 
           navigator.userAgent.match(/iPhone/i) || 
@@ -31,7 +35,7 @@ export function initializeFirebase() {
   });
 }
 
-export function loadFirebase(module) {
+export function loadFirebase(module: string): Promise<void> {
   return new Promise(resolve => {
     const script = document.createElement('script');
     script.src = `https://www.gstatic.com/firebasejs/4.6.2/firebase-${module}.js`;
@@ -42,7 +46,7 @@ export function loadFirebase(module) {
   });
 }
 
-export function registerNotificationToken(user, callback) {
+export function registerNotificationToken(user: User) {
   const displayName = user.firstName + user.lastName;
   const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
@@ -86,7 +90,7 @@ export function registerNotificationToken(user, callback) {
   });
 }
 
-export function loginCheck() {
+export function loginCheck(): boolean {
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
   return (!isSafari || iOSversion()[0] > 11 ||
           !document.documentMode ||
@@ -94,12 +98,12 @@ export function loginCheck() {
           process.env.NODE_ENV === 'production')
 }
 
-export function validateEmail(email) {
+export function validateEmail(email: string): boolean {
   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
 
-export function getDate() {
+export function getDate(): string {
   let today = new Date();
   let day = today.getDate();
   let month = today.getMonth() + 1;
@@ -117,7 +121,7 @@ export function getDate() {
   return today;
 }
 
-export function mapsSelector(location) {
+export function mapsSelector(location: string) {
   /* if we're on iOS, open in Apple Maps */
   if ((navigator.platform.indexOf("iPhone") !== -1) || 
       (navigator.platform.indexOf("iPad") !== -1) || 
@@ -130,7 +134,7 @@ export function mapsSelector(location) {
   }
 }
 
-export function invalidSafariVersion() {
+export function invalidSafariVersion(): boolean {
   const nAgt = navigator.userAgent;
   let versionOffset = nAgt.indexOf('Safari');
 
@@ -156,7 +160,7 @@ export function invalidSafariVersion() {
   }
 }
 
-export function iOSversion() {
+export function iOSversion(): boolean {
   if (/iP(hone|od|ad)/.test(navigator.platform)) {
     // supports iOS 2.0 and later: <http://bit.ly/TJjs1V>
     var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
@@ -168,7 +172,7 @@ export function iOSversion() {
 }
 
 // Handles android back button on dialog open
-export function androidBackOpen(callback) {
+export function androidBackOpen(callback: () => any) {
   if (/android/i.test(navigator.userAgent)) {
     let path = 'https://garnett-app.herokuapp.com';
     if (process.env.NODE_ENV === 'development') {

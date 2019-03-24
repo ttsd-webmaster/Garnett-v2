@@ -1,7 +1,9 @@
-import React from 'react';
+// @flow
+
+import React, { type Node } from 'react';
 import Divider from 'material-ui/Divider';
 
-export function PlaceholderMerit() {
+export function PlaceholderMerit(): Node {
   return (
     <div className="placeholder-skeleton">
       <Divider className="garnett-divider large" inset={true} />
@@ -15,7 +17,7 @@ export function PlaceholderMerit() {
   )
 }
 
-export function PlaceholderContacts() {
+export function PlaceholderContacts(): Node {
   return (
     <div className="placeholder-skeleton">
       <Divider className="garnett-divider large" inset={true} />
@@ -28,7 +30,7 @@ export function PlaceholderContacts() {
   )
 }
 
-export function PlaceholderPledgeComplaint() {
+export function PlaceholderPledgeComplaint(): Node {
   return (
     <div className="placeholder-skeleton">
       <Divider />
@@ -38,7 +40,7 @@ export function PlaceholderPledgeComplaint() {
   )
 }
 
-export function PlaceholderRusheeList() {
+export function PlaceholderRusheeList(): Node {
   return (
     <div className="placeholder-skeleton">
       <Divider className="garnett-divider large" inset={true} />

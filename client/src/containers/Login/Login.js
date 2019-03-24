@@ -1,6 +1,6 @@
 import './Login.css';
 import { isMobile } from 'helpers/functions.js';
-import { CompletingTaskDialog } from 'helpers/loaders.js';
+import { SpinnerDialog } from 'helpers/loaders.js';
 import {
   LoginOptions,
   SignIn,
@@ -121,10 +121,7 @@ export class Login extends PureComponent {
           />
         </div>
 
-        <CompletingTaskDialog
-          open={this.state.open}
-          message={this.state.message}
-        />
+        <SpinnerDialog open={this.state.open} message={this.state.message} />
       </div>
     );
   }

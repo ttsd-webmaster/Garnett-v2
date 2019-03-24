@@ -1,17 +1,28 @@
+// @flow
+
 import React, { Fragment } from 'react';
 import Subheader from 'material-ui/Subheader';
 import IconButton from 'material-ui/IconButton';
 
-export function FilterHeader({
-  status,
-  title,
-  filterName,
-  openPopover,
-  toggleIcon,
-  isReversed,
-  reverse,
-  ...rest
-}) {
+type Props = {
+  status: string,
+  title: string,
+  filterName: string,
+  openPopover: () => void,
+  isReversed: boolean,
+  reverse: () => void
+};
+
+export function FilterHeader(props: Props) {
+  const {
+    status,
+    title,
+    filterName,
+    openPopover,
+    isReversed,
+    reverse,
+    ...rest
+  } = props;
   return (
     <Subheader className="garnett-subheader" {...rest}>
       {status === 'pledge' ? (

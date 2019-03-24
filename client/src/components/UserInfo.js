@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Fragment } from 'react';
 import { List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
@@ -5,18 +7,30 @@ import Divider from 'material-ui/Divider';
 const phoneStyle = {
   display: 'block',
   textDecoration: 'none'
-}
+};
 
-export function UserInfo({
-  photoURL,
-  name,
-  className,
-  totalMerits,
-  remainingMerits,
-  phone,
-  email,
-  major
-}) {
+type Props = {
+  photoURL: string,
+  name: string,
+  className: string,
+  totalMerits: number,
+  remainingMerits: number,
+  phone: string,
+  email: string,
+  major: string
+};
+
+export function UserInfo(props: Props) {
+  const {
+    photoURL,
+    name,
+    className,
+    totalMerits,
+    remainingMerits,
+    phone,
+    email,
+    major
+  } = props;
   let firstRowName, firstRowDescription, firstRowIcon;
   // Settings
   if (name && className) {

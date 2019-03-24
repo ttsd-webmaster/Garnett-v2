@@ -1,6 +1,6 @@
 import '../MyMerits/MyMerits.css';
 import { getDate, invalidSafariVersion } from 'helpers/functions.js';
-import { CompletingTaskDialog } from 'helpers/loaders.js';
+import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 
 import React, { PureComponent } from 'react';
@@ -32,7 +32,7 @@ export default class PledgeMeritDialog extends PureComponent {
       isChalkboard: false,
       isPCGreet: false,
       amount: 0,
-      openCompletingTask: false,
+      openSpinner: false,
       activeValidation: true,
       descriptionValidation: true
     };
@@ -233,13 +233,13 @@ export default class PledgeMeritDialog extends PureComponent {
 
   openProgressDialog = () => {
     this.setState({
-      openCompletingTask: true,
-      completingTaskMessage: 'Meriting pledges...'
+      openSpinner: true,
+      spinnerMessage: 'Meriting pledges...'
     });
   }
 
   closeProgressDialog = () => {
-    this.setState({ openCompletingTask: false });
+    this.setState({ openSpinner: false });
   }
 
   render() {
@@ -391,9 +391,9 @@ export default class PledgeMeritDialog extends PureComponent {
           ))}
         </div>
 
-        <CompletingTaskDialog
-          open={this.state.openCompletingTask}
-          message={this.state.completingTaskMessage}
+        <SpinnerDialog
+          open={this.state.openSpinner}
+          message={this.state.spinnerMessage}
         />
       </Dialog>
     )

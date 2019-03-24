@@ -1,33 +1,37 @@
+// @flow
+
 import React from 'react';
 import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 
-export function Filter({
-  open,
-  anchorEl,
-  closePopover,
-  filters,
-  filterName,
-  setFilter
-}) {
+type Props = {
+  open: boolean,
+  anchorEl: HTMLElement,
+  closePopover: () => void,
+  filters: Array<string>,
+  filterName: string,
+  setFilter: () => void
+};
+
+export function Filter(props: Props) {
   return (
     <Popover
-      open={open}
-      anchorEl={anchorEl}
+      open={props.open}
+      anchorEl={props.anchorEl}
       anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
-      onRequestClose={closePopover}
+      onRequestClose={props.closePopover}
       animation={PopoverAnimationVertical}
     >
       <Menu>
-        {filters.map((filter) => (
+        {props.filters.map((filter) => (
           <MenuItem
             key={filter}
             primaryText={filter}
             insetChildren
-            checked={filter === filterName}
-            onClick={() => setFilter(filter)}
+            checked={filter === props.filterName}
+            onClick={() => props.setFilter(filter)}
           />
         ))}
       </Menu>

@@ -1,6 +1,6 @@
 import '../MyMerits/MyMerits.css';
 import { getDate } from 'helpers/functions.js';
-import { CompletingTaskDialog } from 'helpers/loaders.js';
+import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 
 import React, { PureComponent } from 'react';
@@ -31,7 +31,7 @@ export default class ActiveMeritDialog extends PureComponent {
       allPledges: false,
       amount: 0,
       chalkboards: null,
-      openCompletingTask: false,
+      openSpinner: false,
       pledgeValidation: true,
       descriptionValidation: true
     };
@@ -105,7 +105,16 @@ export default class ActiveMeritDialog extends PureComponent {
 
       this.openProgressDialog();
 
-      API.meritAsActive(displayName, selectedPledges, merit, isChalkboard, isPCGreet, status)
+      const meritInfo = {
+        displayName,
+        selectedPledges,
+        merit,
+        isChalkboard,
+        isPCGreet,
+        status
+      };
+
+      API.meritAsActive(meritInfo)
       .then(res => {
         console.log(res);
         this.handleClose();
@@ -242,13 +251,13 @@ export default class ActiveMeritDialog extends PureComponent {
 
   openProgressDialog = () => {
     this.setState({
-      openCompletingTask: true,
-      completingTaskMessage: 'Meriting pledges...'
+      openSpinner: true,
+      spinnerMessage: 'Meriting pledges...'
     });
   }
 
   closeProgressDialog = () => {
-    this.setState({ openCompletingTask: false });
+    this.setState({ openSpinner: false });
   }
 
   render() {
@@ -386,9 +395,9 @@ export default class ActiveMeritDialog extends PureComponent {
           ))}
         </div>
 
-        <CompletingTaskDialog
-          open={this.state.openCompletingTask}
-          message={this.state.completingTaskMessage}
+        <SpinnerDialog
+          open={this.state.openSpinner}
+          message={this.state.spinnerMessage}
         />
       </Dialog>
     )

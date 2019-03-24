@@ -1,6 +1,6 @@
 import '../../../MyMerits.css';
 import { getDate } from 'helpers/functions.js';
-import { CompletingTaskDialog } from 'helpers/loaders.js';
+import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 import { MeritUserRow } from './MeritUserRow';
 import { FilterHeader } from 'components';
@@ -16,7 +16,7 @@ export class MeritSelectActives extends Component {
     name: '',
     description: '',
     showAlumni: false,
-    openCompletingTask: false
+    openSpinner: false
   }
 
   componentDidMount() {
@@ -133,13 +133,13 @@ export class MeritSelectActives extends Component {
 
   openProgressDialog = () => {
     this.setState({
-      openCompletingTask: true,
-      completingTaskMessage: 'Meriting myself...'
+      openSpinner: true,
+      spinnerMessage: 'Meriting myself...'
     });
   }
 
   closeProgressDialog = () => {
-    this.setState({ openCompletingTask: false });
+    this.setState({ openSpinner: false });
   }
 
   render() {
@@ -213,9 +213,9 @@ export class MeritSelectActives extends Component {
         >
           {this.props.amount < 0 ? 'Demerit' : 'Merit'}
         </button>
-        <CompletingTaskDialog
-          open={this.state.openCompletingTask}
-          message={this.state.completingTaskMessage}
+        <SpinnerDialog
+          open={this.state.openSpinner}
+          message={this.state.spinnerMessage}
         />
       </div>
     )

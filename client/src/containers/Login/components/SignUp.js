@@ -64,11 +64,23 @@ export class SignUp extends PureComponent {
       email,
       password
     } = this.state;
-    const code = this.state.code.toLowerCase();
 
     this.props.openProgressDialog('Signing up...');
 
-    API.signUp(email, password, firstName, lastName, className, major, year, phone, code, pledgeCode)
+    const signUpInfo = {
+      email,
+      password,
+      firstName,
+      lastName,
+      className,
+      major,
+      year,
+      phone,
+      code: this.state.code.toLowerCase(),
+      pledgeCode
+    };
+
+    API.signUp(signUpInfo)
     .then(res => {
       if (res.status === 200) {
         const message = res.data;

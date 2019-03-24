@@ -1,8 +1,17 @@
+// @flow
+
 import API from 'api/API.js';
 
 import React, { PureComponent } from 'react';
 
-export class Header extends PureComponent {
+type Props = {
+  history: RouterHistory,
+  logoutCallBack: () => void,
+  noTabs: boolean,
+  title: string
+};
+
+export class Header extends PureComponent<Props> {
   goHome = () => {
     this.props.history.push('/home');
   }
@@ -24,14 +33,15 @@ export class Header extends PureComponent {
   }
 
   render() {
+    const { noTabs, title, logoutCallBack } = this.props;
+    const onClick = logoutCallBack ? this.logout : this.goHome;
+    const backText = logoutCallBack ? 'Log out' : 'Home';
     return (
-      <div className={`app-header${this.props.noTabs ? " no-tabs" : ""}`}>
-        <span>{this.props.title}</span>
-        {this.props.logoutCallBack ? (
-          <span className="back-button" onClick={this.logout}>Log Out</span>
-        ) : (
-          <span className="back-button" onClick={this.goHome}>Home</span>
-        )}
+      <div className={`app-header${noTabs ? " no-tabs" : ""}`}>
+        <span>{ title }</span>
+        <span className="back-button" onClick={onClick}>
+          { backText }
+        </span>
       </div>
     )
   }

@@ -1,3 +1,5 @@
+// @flow
+
 import './index.css';
 import registerServiceWorker from './registerServiceWorker.js';
 import { theme } from './helpers/theme.js';

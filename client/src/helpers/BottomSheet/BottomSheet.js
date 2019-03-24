@@ -1,3 +1,5 @@
+// @flow
+
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Paper } from 'material-ui'
@@ -6,8 +8,19 @@ import { Paper } from 'material-ui'
  * Material design bottom sheet
  * @see [Bottom Sheet](https://material.io/guidelines/components/bottom-sheets.html)
  */
-export default class BottomSheet extends Component {
-  getStyles () {
+
+type Props = {
+  open: ?boolean,
+  action: Object,
+  actionStyle: Object,
+  bodyStyle: Object,
+  contentStyle: Object,
+  style: Object,
+  onRequestClose: () => any,
+};
+
+export default class BottomSheet extends Component<Props> {
+  get getStyles(): Object {
     const { open } = this.props;
 
     return {
@@ -44,8 +57,7 @@ export default class BottomSheet extends Component {
   }
 
   render () {
-    const styles = this.getStyles()
-
+    const styles = this.getStyles
     return (
       <div
         style={{
