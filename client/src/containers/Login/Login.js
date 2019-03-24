@@ -1,3 +1,5 @@
+// @flow
+
 import './Login.css';
 import { isMobile } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
@@ -10,80 +12,89 @@ import {
 
 import React, { PureComponent } from 'react';
 
-export class Login extends PureComponent {
+type Props = {
+  loginCallback: () => void,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  open: boolean,
+  message: string
+};
+
+export class Login extends PureComponent<Props, State> {
   state = {
     open: false,
     message: ''
-  }
+  };
 
-  active = (event) => {
+  // TODO: Use state instead of document.getElementId
+  active = (event: SyntheticEvent<>) => {
     if (!event.target.classList.contains('underline')) {
-      if (event.target.id === 'sign-in') {
-        document.getElementById('sign-in')
-          .classList
-          .add('underline');
-        document.getElementById('sign-up')
-          .classList
-          .remove('underline');
-        document.getElementById('sign-in-form')
-          .classList
-          .add('active');
-        document.getElementById('sign-up-form')
-          .classList
-          .remove('active');
-        document.getElementById('forgot-password')
-          .classList
-          .remove('active');
-      }
-      else if (event.target.id === 'sign-up') {
-        document.getElementById('sign-in')
-          .classList
-          .remove('underline');
-        document.getElementById('sign-up')
-          .classList
-          .add('underline');
-        document.getElementById('sign-in-form')
-          .classList
-          .remove('active');
-        document.getElementById('sign-up-form')
-          .classList
-          .add('active');
-        document.getElementById('forgot-password')
-          .classList
-          .remove('active');
-      }
-      else if (event.target.id === 'forgot-link') {
-        document.getElementById('sign-in')
-          .classList
-          .remove('underline');
-        document.getElementById('sign-up')
-          .classList
-          .remove('underline');
-        document.getElementById('sign-in-form')
-          .classList
-          .remove('active');
-        document.getElementById('sign-up-form')
-          .classList
-          .remove('active');
-        document.getElementById('forgot-password')
-          .classList
-          .add('active');
+      switch (event.target.id) {
+        case 'sign-in':
+          document.getElementById('sign-in')
+            .classList
+            .add('underline');
+          document.getElementById('sign-up')
+            .classList
+            .remove('underline');
+          document.getElementById('sign-in-form')
+            .classList
+            .add('active');
+          document.getElementById('sign-up-form')
+            .classList
+            .remove('active');
+          document.getElementById('forgot-password')
+            .classList
+            .remove('active');
+          break
+        case 'sign-up':
+          document.getElementById('sign-in')
+            .classList
+            .remove('underline');
+          document.getElementById('sign-up')
+            .classList
+            .add('underline');
+          document.getElementById('sign-in-form')
+            .classList
+            .remove('active');
+          document.getElementById('sign-up-form')
+            .classList
+            .add('active');
+          document.getElementById('forgot-password')
+            .classList
+            .remove('active');
+          break
+        case 'forgot-link':
+          document.getElementById('sign-in')
+            .classList
+            .remove('underline');
+          document.getElementById('sign-up')
+            .classList
+            .remove('underline');
+          document.getElementById('sign-in-form')
+            .classList
+            .remove('active');
+          document.getElementById('sign-up-form')
+            .classList
+            .remove('active');
+          document.getElementById('forgot-password')
+            .classList
+            .add('active');
+          break
+        default:
+          throw new Error('invalid target');
       }
     }
   }
 
-  openProgressDialog = (message) => {
-    this.setState({
-      open: true,
-      message
-    });
+  openProgressDialog = (message: string) => {
+    this.setState({ open: true, message });
   }
 
   closeProgressDialog = () => {
-    this.setState({
-      open: false,
-      message: ''
-    });
+    this.setState({ open: false, message: '' });
   }
 
   render() {

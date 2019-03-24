@@ -1,15 +1,22 @@
+// @flow
+
 import './Home.css';
 import { Header } from 'components';
 import { GarnettApp } from './components/GarnettApp';
 
 import React, { PureComponent } from 'react';
 
-export class Home extends PureComponent {
+type Props = {
+  history: RouterHistory,
+  logoutCallBack: () => void
+};
+
+export class Home extends PureComponent<Props> {
   componentDidMount() {
     localStorage.setItem('route', 'home');
   }
 
-  goTo = (route) => {
+  goTo = (route: string) => {
     this.props.history.push('/' + route);
   }
 

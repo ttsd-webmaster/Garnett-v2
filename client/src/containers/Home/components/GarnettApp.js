@@ -1,16 +1,24 @@
+// @flow
+
 import React from 'react';
 
-export function GarnettApp({ title, value, goTo }) {
+type Props = {
+  title: string,
+  value: string,
+  goTo: () => void
+};
+
+export function GarnettApp(props: Props) {
   return (
-    <div className="app-icon" onClick={goTo}>
+    <div className="app-icon" onClick={props.goTo}>
       <div className="app-icon-image-container">
-        <img 
+        <img
           className="app-icon-image"
-          src={require(`../images/${value}.png`)}
-          alt={title}
+          src={require(`../images/${props.value}.png`)}
+          alt={props.title}
         />
       </div>
-      <p> {title} </p>
+      <p>{ props.title }</p>
     </div>
   )
 }

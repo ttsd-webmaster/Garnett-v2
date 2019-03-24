@@ -1,3 +1,5 @@
+// @flow
+
 import {
   activeCode,
   pledgeCode,
@@ -13,24 +15,41 @@ import TextField from 'material-ui/TextField';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
-export class SignUp extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      firstName: '',
-      lastName: '',
-      className: '',
-      major: '',
-      year: '',
-      phone: '',
-      email: '',
-      code: '',
-      password: '',
-      confirmation: ''
-    };
-  }
+type Props = {
+  openProgressDialog: () => void,
+  loginCallback: () => void,
+  closeProgressDialog: () => void,
+  handleRequestOpen: () => void
+};
 
-  get isFormInvalid() {
+type State = {
+  firstName: string,
+  lastName: string,
+  className: string,
+  major: string,
+  year: string,
+  phone: string,
+  email: string,
+  code: string,
+  password: string,
+  confirmation: string
+};
+
+export class SignUp extends PureComponent<Props, State> {
+  state = {
+    firstName: '',
+    lastName: '',
+    className: '',
+    major: '',
+    year: '',
+    phone: '',
+    email: '',
+    code: '',
+    password: '',
+    confirmation: ''
+  };
+
+  get isFormInvalid(): boolean {
     const {
       firstName,
       lastName,
@@ -111,7 +130,7 @@ export class SignUp extends PureComponent {
     });
   }
 
-  handleChange = (label, newValue) => {
+  handleChange = (label: string, newValue: string) => {
     this.setState({ [label]: newValue });
   }
 

@@ -1,15 +1,26 @@
+// @flow
+
 import API from 'api/API.js';
 import { validateEmail } from 'helpers/functions.js';
 
 import React, { PureComponent } from 'react';
 import TextField from 'material-ui/TextField';
 
-export class ForgotPassword extends PureComponent {
-  state = { email: '' }
+type Props = {
+  openProgressDialog: () => void,
+  closeProgressDialog: () => void,
+  handleRequestOpen: () => void
+};
 
-  get isFormInvalid() {
+type State = {
+  email: string
+};
+
+export class ForgotPassword extends PureComponent<Props, State> {
+  state = { email: '' };
+
+  get isFormInvalid(): boolean {
     const { email } = this.state;
-    console.log(email)
     if (email.length > 0 && validateEmail(email)) {
       return false;
     }
@@ -17,11 +28,9 @@ export class ForgotPassword extends PureComponent {
   }
 
   forgotPassword = () => {
-    const { email } = this.state;
-
     this.props.openProgressDialog('Sending password...');
 
-    API.forgotPassword(email)
+    API.forgotPassword(this.state.email)
     .then(res => {
       const message = res.data;
       document.getElementById('sign-in').click();
@@ -35,8 +44,8 @@ export class ForgotPassword extends PureComponent {
     });
   }
 
-  handleChange = (newValue) => {
-    this.setState({ email: newValue });
+  handleChange = (email: string) => {
+    this.setState({ email });
   }
 
   render() {
@@ -49,7 +58,7 @@ export class ForgotPassword extends PureComponent {
           floatingLabelText="Email"
           floatingLabelStyle={{ color: '#888' }}
           value={this.state.email}
-          onChange={(e, newValue) => this.handleChange(newValue)}
+          onChange={(e, email) => this.handleChange(email)}
           onSubmit={this.forgotPassword}
           onKeyPress={(ev) => {
             if (ev.key === 'Enter') {

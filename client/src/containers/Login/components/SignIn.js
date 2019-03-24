@@ -1,3 +1,5 @@
+// @flow
+
 import {
   initializeFirebase,
   loadFirebase,
@@ -7,13 +9,26 @@ import {
 import React, { PureComponent } from 'react';
 import TextField from 'material-ui/TextField';
 
-export class SignIn extends PureComponent {
+type Props = {
+  openProgressDialog: () => void,
+  loginCallback: () => void,
+  closeProgressDialog: () => void,
+  handleRequestOpen: () => void,
+  active: () => void
+};
+
+type State = {
+  email: string,
+  password: string
+};
+
+export class SignIn extends PureComponent<Props, State> {
   state = {
     email: '',
     password: ''
   }
 
-  get isFormInValid() {
+  get isFormInValid(): boolean {
     const { email, password } = this.state;
     if (email && validateEmail(email) && password) {
       return false;
@@ -61,7 +76,7 @@ export class SignIn extends PureComponent {
     });
   }
 
-  handleChange = (label, newValue) => {
+  handleChange = (label: string, newValue: string) => {
     this.setState({ [label]: newValue });
   }
 
