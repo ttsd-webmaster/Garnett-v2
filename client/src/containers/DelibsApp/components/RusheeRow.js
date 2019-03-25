@@ -1,3 +1,5 @@
+// @flow
+
 import { PlaceholderRusheeList } from 'components/Placeholders';
 import { InteractedCheckbox } from './InteractedCheckbox';
 
@@ -7,10 +9,16 @@ import Avatar from 'material-ui/Avatar';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export class RusheeRow extends PureComponent {
-  openRushee = (rushee) => {
+type Props = {
+  history: RouterHistory,
+  state: Object,
+  rushee: Object
+};
+
+export class RusheeRow extends PureComponent<Props> {
+  openRushee = (rushee: Object) => {
     const rusheeName = rushee.name.replace(/ /g,'');
-    this.props.history.push('/delibs-app/' + rusheeName, rusheeName);
+    this.props.history.push(`/delibs-app/${rusheeName}`, rusheeName);
   }
 
   render() {
@@ -33,13 +41,13 @@ export class RusheeRow extends PureComponent {
               <Avatar size={70} src={rushee.photo} className="garnett-image large" />
             )}
             primaryText={
-              <p className="garnett-name"> {rushee.name} </p>
+              <p className="garnett-name">{ rushee.name }</p>
             }
             secondaryText={
               <p>
-                {rushee.year}
+                { rushee.year }
                 <br />
-                {rushee.major}
+                { rushee.major }
               </p>
             }
             secondaryTextLines={2}

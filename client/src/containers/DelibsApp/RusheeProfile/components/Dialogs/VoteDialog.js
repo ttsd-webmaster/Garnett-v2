@@ -1,3 +1,5 @@
+// @flow
+
 import { loadFirebase } from 'helpers/functions.js';
 import API from 'api/API.js';
 
@@ -5,14 +7,21 @@ import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
-export default class VoteDialog extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      open: false,
-      rushee: null
-    };
-  }
+type Props = {
+  state: Object,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  open: boolean,
+  rushee: Object
+};
+
+export default class VoteDialog extends PureComponent<Props, State> {
+  state = {
+    open: false,
+    rushee: null
+  };
 
   componentDidMount() {
     if (navigator.onLine) {
@@ -24,14 +33,13 @@ export default class VoteDialog extends PureComponent {
         voteRef.on('value', (snapshot) => {
           const open = snapshot.val().open;
           const rushee = snapshot.val().rushee;
-
           this.setState({ open, rushee });
         });
       });
     }
   }
 
-  handleChange = (e, value) => {
+  handleChange = (e: SyntheticEvent<>, value: string) => {
     const { displayName } = this.props.state;
     const { rushee } = this.state;
 

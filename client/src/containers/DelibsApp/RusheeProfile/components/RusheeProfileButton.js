@@ -1,3 +1,5 @@
+// @flow
+
 import 'containers/PledgeApp/components/Settings/Settings.css';
 import API from 'api/API.js';
 import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
@@ -11,17 +13,28 @@ import { RusheeBottomSheet } from './RusheeBottomSheet';
 
 import React, { PureComponent } from 'react';
 
-export class RusheeProfileButton extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openEndVote: false,
-      resource: '',
-      sheetOpen: false,
-      openResource: false,
-      openInterview: false
-    };
-  }
+type Props = {
+  rushee: Object,
+  state: Object,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  openEndVote: boolean,
+  resource: string,
+  sheetOpen: boolean,
+  openResource: boolean,
+  openInterview: boolean
+};
+
+export class RusheeProfileButton extends PureComponent<Props, State> {
+  state = {
+    openEndVote: false,
+    resource: '',
+    sheetOpen: false,
+    openResource: false,
+    openInterview: false
+  };
 
   startVote = () => {
     const rusheeName = this.props.rushee.name;
@@ -40,7 +53,7 @@ export class RusheeProfileButton extends PureComponent {
     this.setState({ openEndVote: false });
   }
 
-  viewResource = (resource) => {
+  viewResource = (resource: string) => {
     androidBackOpen(this.closeResource);
     this.setState({
       sheetOpen: false,

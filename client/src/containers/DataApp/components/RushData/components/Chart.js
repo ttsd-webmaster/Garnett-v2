@@ -1,25 +1,31 @@
+// @flow
+
 import React , { PureComponent } from 'react';
 import { Bar } from 'react-chartjs-2';
 import Paper from 'material-ui/Paper';
 
-export default class Chart extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataSet: [],
-      title: '',
-      nameLabels: [],
-      data: []
-    }
-  }
+type Props = {
+  dataSet: Array<any>,
+  title: string
+};
 
-  componentWillReceiveProps(nextProps) {
+type State = {
+  nameLabels: Array<string>,
+  data: Array<any>
+};
+
+export default class Chart extends PureComponent<Props, State> {
+  state = {
+    nameLabels: [],
+    data: []
+  };
+
+  componentWillReceiveProps(nextProps: Props) {
     const nameLabels = nextProps.dataSet.map(element => element[0]);
     const data = nextProps.dataSet.map(element => element[1]);
 
     if (JSON.stringify(this.props.dataSet) !== JSON.stringify(nextProps.dataSet)) {
-      const { dataSet, title } = nextProps;
-      this.setState({ dataSet, title, nameLabels, data });
+      this.setState({ nameLabels, data });
     }
   }
 
@@ -60,7 +66,7 @@ export default class Chart extends PureComponent {
           options={{
             title: {
               display: true,
-              text: this.state.title
+              text: this.props.title
             },
             legend: {
               display: false

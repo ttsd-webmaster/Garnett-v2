@@ -1,16 +1,27 @@
+// @flow
+
 import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import { BottomSheet } from 'helpers/BottomSheet/index.js';
 
 import React from 'react';
 
-export function RusheeBottomSheet({
-  sheetOpen,
-  closeBottomSheet,
-  viewResource,
-  viewInterview,
-  preDelibs
-}) {
+type Props = {
+  sheetOpen: boolean,
+  closeBottomSheet: () => void,
+  viewResource: (string) => void,
+  viewInterview: () => void,
+  preDelibs: string
+};
+
+export function RusheeBottomSheet(props: Props) {
+  const {
+    sheetOpen,
+    closeBottomSheet,
+    viewResource,
+    viewInterview,
+    preDelibs
+  } = props;
   return (
     <BottomSheet
       open={sheetOpen}

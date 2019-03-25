@@ -1,3 +1,5 @@
+// @flow
+
 import API from 'api/API.js';
 
 import React, { PureComponent } from 'react';
@@ -8,8 +10,13 @@ const labelStyle = {
   width: 'auto'
 };
 
-export class InteractedCheckbox extends PureComponent {
-  updateInteraction = (rushee) => {
+type Props = {
+  state: Object,
+  rushee: Object
+};
+
+export class InteractedCheckbox extends PureComponent<Props> {
+  updateInteraction = (rushee: Object) => {
     const { displayName } = this.props.state;
     const rusheeName = rushee.name.replace(/ /g,'');
     const { interacted } = rushee;
@@ -24,7 +31,7 @@ export class InteractedCheckbox extends PureComponent {
     });
   }
 
-  handleClickCapture(event) {
+  handleClickCapture(event: SyntheticEvent<>) {
     event.stopPropagation();
   }
 

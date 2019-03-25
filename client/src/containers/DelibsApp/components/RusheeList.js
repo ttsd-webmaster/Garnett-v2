@@ -1,3 +1,5 @@
+// @flow
+
 import '../DelibsApp.css';
 import 'containers/PledgeApp/MobilePledgeApp.css';
 import { loadFirebase } from 'helpers/functions.js';
@@ -8,7 +10,17 @@ import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 
-export class RusheeList extends PureComponent {
+type Props = {
+  history: RouterHistory,
+  state: Object
+};
+
+type State = {
+  loaded: boolean,
+  rushees: Array<Object>
+};
+
+export class RusheeList extends PureComponent<Props, State> {
   state = {
     loaded: false,
     rushees: [],
@@ -26,7 +38,7 @@ export class RusheeList extends PureComponent {
 
         rusheesRef.on('value', (snapshot) => {
           if (snapshot.val()) {
-            let interactions = [];
+            const interactions = [];
             
             snapshot.forEach((rushee) => {
               rusheesRef.child(rushee.key + '/Actives/' + displayName).on('value', (active) => {
@@ -34,7 +46,7 @@ export class RusheeList extends PureComponent {
               })
             });
 
-            let rushees = Object.keys(snapshot.val()).map(function(key) {
+            const rushees = Object.keys(snapshot.val()).map(function(key) {
               return snapshot.val()[key];
             });
 

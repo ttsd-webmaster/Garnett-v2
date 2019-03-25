@@ -1,3 +1,5 @@
+// @flow
+
 import { loadFirebase } from 'helpers/functions.js';
 import API from 'api/API.js';
 
@@ -5,8 +7,19 @@ import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class EndVoteDialog extends PureComponent {
-  state = { totalVotes: null }
+type Props = {
+  open: boolean,
+  rushee: Object,
+  handleClose: () => void,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  totalVotes: number
+};
+
+export default class EndVoteDialog extends PureComponent<Props, State> {
+  state = { totalVotes: 0 };
 
   componentDidMount() {
     if (navigator.onLine) {
@@ -26,7 +39,7 @@ export default class EndVoteDialog extends PureComponent {
 
   endVote = () => {
     const { rushee } = this.props;
-    
+
     API.endVote()
     .then((res) => {
       console.log('Ended Vote');
@@ -55,8 +68,8 @@ export default class EndVoteDialog extends PureComponent {
         modal={true}
         open={this.props.open}
       >
-        <p> Voting for {this.props.rushee} </p>
-        <p> Total Votes: {this.state.totalVotes} </p>
+        <p>Voting for {this.props.rushee}</p>
+        <p>Total Votes: {this.state.totalVotes}</p>
       </Dialog>
     )
   }

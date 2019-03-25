@@ -1,4 +1,6 @@
-import React, { PureComponent } from 'react';
+// @flow
+
+import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 
@@ -11,28 +13,33 @@ const contentStyle = {
   width: '100vw'
 };
 
-export default class ResourceDialog extends PureComponent {
-  render() {
-    const actions = [
-      <FlatButton
-        label="Close"
-        primary={true}
-        onClick={this.props.handleClose}
-      />,
-    ];
+type Props = {
+  open: boolean,
+  resource: string,
+  resourceName: string,
+  handleClose: () => void
+};
 
-    return (
-      <Dialog
-        actions={actions}
-        bodyStyle={bodyStyle}
-        contentStyle={contentStyle}
-        modal={false}
-        open={this.props.open}
-        onRequestClose={this.props.handleClose}
-        autoScrollBodyContent={true}
-      >
-        <img src={this.props.resource} width="100%" alt={this.props.resourceName} />
-      </Dialog>
-    )
-  }
+export function ResourceDialog(props: Props) {
+  const actions = [
+    <FlatButton
+      label="Close"
+      primary={true}
+      onClick={props.handleClose}
+    />,
+  ];
+
+  return (
+    <Dialog
+      actions={actions}
+      bodyStyle={bodyStyle}
+      contentStyle={contentStyle}
+      modal={false}
+      open={props.open}
+      onRequestClose={props.handleClose}
+      autoScrollBodyContent={true}
+    >
+      <img src={props.resource} width="100%" alt={props.resourceName} />
+    </Dialog>
+  )
 }

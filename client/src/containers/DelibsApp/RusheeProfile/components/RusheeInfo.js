@@ -1,10 +1,12 @@
+// @flow
+
 import { rusheeInfo} from '../data.js';
 
 import React from 'react';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export function RusheeInfo({ rushee }) {
+export function RusheeInfo(props: { rushee: Object }) {
   return (
     <List className="garnett-list">
       {rusheeInfo.map((info, i) => (
@@ -13,7 +15,7 @@ export function RusheeInfo({ rushee }) {
           <ListItem
             className="garnett-list-item rushee long"
             primaryText={info.label}
-            secondaryText={rushee[info.value]}
+            secondaryText={props.rushee[info.value]}
           />
           <Divider />
         </div>

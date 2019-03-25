@@ -1,3 +1,5 @@
+// @flow
+
 import './DataApp.css';
 import 'containers/PledgeApp/MobilePledgeApp.css';
 import { PledgeData } from './components/PledgeData/PledgeData';
@@ -8,14 +10,23 @@ import { Header } from 'components';
 import React, { PureComponent } from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
-export class DataApp extends PureComponent {
-  state = { selectedIndex: 0 }
+type Props = {
+  history: RouterHistory,
+  state: Object // TODO: Use store instead of passing down state
+};
+
+type State = {
+  selectedIndex: number
+};
+
+export class DataApp extends PureComponent<Props, State> {
+  state = { selectedIndex: 0 };
 
   componentDidMount() {
     localStorage.setItem('route', 'data-app');
   }
 
-  select = (selectedIndex) => {
+  select = (selectedIndex: number) => {
     let previousIndex = this.state.selectedIndex;
     let pledgeData = document.getElementById('pledge-data');
     let rushData = document.getElementById('rush-data');
@@ -51,12 +62,13 @@ export class DataApp extends PureComponent {
   }
 
   render() {
+    const { history, state } = this.props;
     return (
       <div className="loading-container" id="data-app">
-        <Header title="Data App" noTabs history={this.props.history} />
+        <Header title="Data App" noTabs history={history} />
         <PledgeData />
         <RushData />
-        <MyData state={this.props.state} />
+        <MyData name={state.name} photoURL={state.photoURL} />
         <BottomNavigation
           className="bottom-tabs"
           selectedIndex={this.state.selectedIndex}

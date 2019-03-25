@@ -1,3 +1,5 @@
+// @flow
+
 import './RushData.css';
 import rushData from './data/rushData.json';
 import Filter from './components/Filter';
@@ -5,27 +7,30 @@ import Chart from './components/Chart';
 
 import React, { PureComponent } from 'react';
 
-export class RushData extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataSet: [],
-      title: '',
-      value: 0,
-      loaded: false, 
-    }
-  }
+type State = {
+  dataSet: Array<any>,
+  title: string,
+  value: number,
+  loaded: boolean
+};
+
+export class RushData extends PureComponent<{}, State> {
+  state = {
+    dataSet: [],
+    title: '',
+    value: 0,
+    loaded: false
+  };
 
   componentDidMount() {
-    let dataSet = rushData[0][1];
-    let title = rushData[0][0];
-
+    const dataSet = rushData[0][1];
+    const title = rushData[0][0];
     this.setState({ dataSet, title });
   }
 
-  filterData = (value) => {
-    let dataSet = rushData[value][1];
-    let title = rushData[value][0];
+  filterData = (value: string) => {
+    const dataSet = rushData[value][1];
+    const title = rushData[value][0];
     this.setState({ dataSet, title, value })
   }
 

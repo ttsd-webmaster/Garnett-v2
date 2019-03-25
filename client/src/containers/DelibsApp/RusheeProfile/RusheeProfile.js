@@ -1,3 +1,5 @@
+// @flow
+
 import '../DelibsApp.css';
 import 'containers/PledgeApp/MobilePledgeApp.css';
 import { loadFirebase } from 'helpers/functions.js';
@@ -8,7 +10,16 @@ import { RusheeProfileButton } from './components/RusheeProfileButton';
 
 import React, { PureComponent } from 'react';
 
-export class RusheeProfile extends PureComponent {
+type Props = {
+  history: RouterHistory,
+  state: Object
+};
+
+type State = {
+  rushee: Object
+};
+
+export class RusheeProfile extends PureComponent<Props, State> {
   state = { rushee: null }
 
   componentDidMount() {

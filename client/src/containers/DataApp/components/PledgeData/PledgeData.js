@@ -1,14 +1,21 @@
+// @flow
+
 import './PledgeData.css';
 import pledgeData from './data/pledgeData.json';
 import API from 'api/API.js';
 import { LoadingDataApp } from 'helpers/loaders.js';
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import Avatar from 'material-ui/Avatar';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-export class PledgeData extends PureComponent {
+type State = {
+  photoMap: Array<any>,
+  loaded: boolean
+};
+
+export class PledgeData extends PureComponent<{}, State> {
   state = {
     photoMap: [],
     loaded: false
@@ -24,7 +31,7 @@ export class PledgeData extends PureComponent {
     });
   }
 
-  dataValue(columnTitle, dataValue) {
+  dataValue(columnTitle: string, dataValue: string): Node {
     if (columnTitle.includes('Amount')) {
       if (dataValue > 0) {
         return <p className="data-value green">+{dataValue}</p>;
@@ -45,15 +52,21 @@ export class PledgeData extends PureComponent {
       <div id="pledge-data" className="active">
         {pledgeData.map((set, i) => (
           <div className="data-card" key={i}>
-            <div className="data-title"> {set[0]} </div>
+            <div className="data-title">{ set[0] }</div>
             {[...new Map(set[1])].map((entry, j) => (
               <div key={j}>
                 <Divider className="garnett-divider pledge-data" inset={true} />
                 <ListItem
                   className="garnett-list-item pledge-data"
-                  leftAvatar={<Avatar className="garnett-image" size={60} src={this.state.photoMap.get(entry[0])} />}
+                  leftAvatar={
+                    <Avatar
+                      className="garnett-image"
+                      size={60}
+                      src={this.state.photoMap.get(entry[0])}
+                    />
+                  }
                   primaryText={
-                    <p className="data-key"> {entry[0]} </p>
+                    <p className="data-key">{ entry[0] }</p>
                   }
                 >
                   {this.dataValue(set[0], entry[1])}

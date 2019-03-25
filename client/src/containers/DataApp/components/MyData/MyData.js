@@ -1,3 +1,5 @@
+// @flow
+
 import './MyData.css';
 import { LoadingDataApp } from 'helpers/loaders.js';
 import API from 'api/API.js';
@@ -8,13 +10,20 @@ import Divider from 'material-ui/Divider';
 
 const categories = ['Merit', 'Chalkboard'];
 
-export class MyData extends PureComponent {
-  state = { loaded: false }
+type Props = {
+  name: string,
+  photoURL: string
+};
+
+type State = {
+  loaded: boolean
+};
+
+export class MyData extends PureComponent<Props, State> {
+  state = { loaded: false };
 
   componentDidMount() {
-    const { name } = this.props.state;
-
-    API.getMyData(name)
+    API.getMyData(this.props.name)
     .then((res) => {
       this.setState({
         myData: res.data,
@@ -32,7 +41,7 @@ export class MyData extends PureComponent {
       <div id="my-data">
         <div style={{animation: 'fadeIn .25s ease-in forwards'}}>
           <div className="user-photo-container">
-            <img className="user-photo" src={this.props.state.photoURL} alt="User" />
+            <img className="user-photo" src={this.props.photoURL} alt="User" />
           </div>
 
           {categories.map((category, i) => (
