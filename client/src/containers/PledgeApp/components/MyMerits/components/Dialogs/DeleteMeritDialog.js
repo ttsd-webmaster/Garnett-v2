@@ -1,14 +1,24 @@
+// @flow
+
 import API from 'api/API.js';
+import type { User, Merit } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
-export default class DeleteMeritDialog extends PureComponent {
-  delete = (merit) => {
-    const { displayName } = this.props.state;
+type Props = {
+  state: User,
+  merit: Merit,
+  open: boolean,
+  handleDeleteClose: () => void,
+  handleRequestOpen: () => void
+};
 
+export default class DeleteMeritDialog extends PureComponent<Props> {
+  delete = (merit: Merit) => {
+    const { displayName } = this.props.state;
     API.deleteMerit(displayName, merit)
     .then((res) => {
       this.props.handleDeleteClose();

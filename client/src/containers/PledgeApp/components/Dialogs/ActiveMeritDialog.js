@@ -1,7 +1,10 @@
+// @flow
+
 import '../MyMerits/MyMerits.css';
 import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -19,36 +22,53 @@ const checkboxStyle = {
   transform: 'translateX(-130px)'
 };
 
-export default class ActiveMeritDialog extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      pledges: [],
-      selectedPledges: [],
-      description: '',
-      isChalkboard: false,
-      isPCGreet: false,
-      allPledges: false,
-      amount: 0,
-      chalkboards: null,
-      openSpinner: false,
-      pledgeValidation: true,
-      descriptionValidation: true
-    };
-  }
+type Props = {
+  state: User,
+  open: boolean,
+  handleMeritClose: () => void,
+  handleRequestOpen: () => void
+};
 
-  componentWillReceiveProps(nextProps) {
+type State = {
+  pledges: Array<User>,
+  selectedPledges: Array<Object>,
+  description: string,
+  isChalkboard: boolean,
+  isPCGreet: boolean,
+  allPledges: boolean,
+  amount: number,
+  chalkboards: ?Array<Object>,
+  openSpinner: boolean,
+  pledgeValidation: boolean,
+  descriptionValidation: boolean
+};
+
+export default class ActiveMeritDialog extends PureComponent<Props, State> {
+  state = {
+    pledges: [],
+    selectedPledges: [],
+    description: '',
+    isChalkboard: false,
+    isPCGreet: false,
+    allPledges: false,
+    amount: 0,
+    chalkboards: null,
+    openSpinner: false,
+    pledgeValidation: true,
+    descriptionValidation: true
+  };
+
+  componentWillReceiveProps(nextProps: Props) {
     if (navigator.onLine && this.props !== nextProps) {
       API.getPledgesForMerit(nextProps.state.displayName)
       .then((res) => {
         const pledges = res.data;
-
         this.setState({ pledges });
       });
     }
   }
 
-  merit = (type) => {
+  merit = (type: 'merit' | 'demerit') => {
     const { selectedPledges } = this.state;
     let { description, amount } = this.state;
     let pledgeValidation = true;
@@ -68,13 +88,8 @@ export default class ActiveMeritDialog extends PureComponent {
       if (!description || description.length > 50) {
         descriptionValidation = false;
       }
-
-      this.setState({
-        pledgeValidation,
-        descriptionValidation
-      });
-    }
-    else {
+      this.setState({ pledgeValidation, descriptionValidation });
+    } else {
       const {
         displayName,
         name: activeName,
@@ -124,13 +139,12 @@ export default class ActiveMeritDialog extends PureComponent {
         .then(res => {
           this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
         })
-        .catch(error => console.log(`Error: ${error}`));
+        .catch(error => console.error(`Error: ${error}`));
       })
       .catch((error) => {
-        console.log(error)
         const pledge = error.response.data;
-
-        console.log(`Not enough merits for ${pledge}`);
+        console.error(error);
+        console.error(`Not enough merits for ${pledge}`);
         this.handleClose();
         this.closeProgressDialog();
         this.props.handleRequestOpen(`Not enough merits for ${pledge}`);
@@ -138,7 +152,7 @@ export default class ActiveMeritDialog extends PureComponent {
     }
   }
 
-  handleChange = (label, newValue) => {
+  handleChange = (label: string, newValue: any) => {
     const validationLabel = [label] + 'Validation';
     let value = newValue;
     const { pledges, isChalkboard, allPledges } = this.state;
@@ -149,15 +163,11 @@ export default class ActiveMeritDialog extends PureComponent {
         value = parseInt(newValue, 10);
         break;
       case 'isChalkboard':
-        let maxAmount;
-
         if (newValue === true) {
           const { name } = this.props.state;
-
           // Only affects pipm since their max merit cap is 500
           if (this.props.state.status === 'pipm') {
-            maxAmount = 100;
-
+            const maxAmount = 100;
             if (amount > maxAmount) {
               amount = maxAmount;
               this.setState({ amount });
@@ -177,43 +187,23 @@ export default class ActiveMeritDialog extends PureComponent {
           })
         }
         else {
-          maxAmount = 50;
-
-          if (this.props.state.status === 'alumni') {
-            maxAmount = 100;
-          }
-
-          if (amount > maxAmount) {
-            amount = maxAmount;
-          }
-
-          this.setState({
-            amount,
-            description: ''
-          });
+          const maxAmount = this.props.state.status === 'alumni' ? 100 : 50;
+          amount = amount > maxAmount ? maxAmount : amount;
+          this.setState({ amount, description: '' });
         }
         break;
       case 'description':
         if (isChalkboard && newValue.amount) {
           value = newValue;
           amount = newValue.amount;
-
           this.setState({ amount });
         }
         break;
       case 'isPCGreet':
-        this.setState({
-          amount: 5,
-          isChalkboard: false
-        });
+        this.setState({ amount: 5, isChalkboard: false });
         break;
       case 'allPledges':
-        let selectedPledges = [];
-
-        if (allPledges === false) {
-          selectedPledges = pledges;
-        }
-
+        const selectedPledges = allPledges === false ? pledges : [];
         this.setState({ selectedPledges });
         break;
       default:
@@ -256,18 +246,12 @@ export default class ActiveMeritDialog extends PureComponent {
     });
   }
 
-  closeProgressDialog = () => {
-    this.setState({ openSpinner: false });
-  }
+  closeProgressDialog = () => this.setState({ openSpinner: false });
 
   render() {
     let maxAmount = 100;
-    if (this.state.isChalkboard) {
-      maxAmount = 100;
-    } else if (this.props.state.status === 'pipm') {
+    if (this.props.state.status === 'pipm') {
       maxAmount = 500;
-    } else if (this.props.state.status === 'alumni') {
-      maxAmount = 100;
     }
 
     const actions = [

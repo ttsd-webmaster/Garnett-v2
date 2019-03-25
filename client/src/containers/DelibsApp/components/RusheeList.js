@@ -5,6 +5,7 @@ import 'containers/PledgeApp/MobilePledgeApp.css';
 import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { RusheeRow } from './RusheeRow';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
@@ -12,7 +13,7 @@ import Subheader from 'material-ui/Subheader';
 
 type Props = {
   history: RouterHistory,
-  state: Object
+  state: User
 };
 
 type State = {

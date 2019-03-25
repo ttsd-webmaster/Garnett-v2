@@ -1,3 +1,5 @@
+// @flow
+
 import './MyMerits.css';
 import {
   isMobile,
@@ -8,27 +10,36 @@ import {
 } from 'helpers/functions.js';
 import { MyMeritsList, AllMeritsList, ToggleViewHeader } from './components';
 import { LoadableMobileMeritDialog } from './components/Dialogs';
+import type { User } from 'api/models';
 
 import React, { PureComponent, Fragment } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 
-export class MyMerits extends PureComponent {
+type Props = {
+  state: User,
+  hidden: boolean,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  view: 'myMerits' | 'allMerits',
+  openMerit: boolean
+};
+
+export class MyMerits extends PureComponent<Props, State> {
   state = {
     view: 'allMerits',
     openMerit: false
   }
 
-  setView = (value) => {
-    this.setState({ view: value });
-  }
+  setView = (value: string) => this.setState({ view: value });
 
   handleMeritOpen = () => {
     if (navigator.onLine) {
       iosFullscreenDialogOpen();
       androidBackOpen(this.handleMeritClose);
       this.setState({ openMerit: true });
-    }
-    else {
+    } else {
       this.props.handleRequestOpen('You are offline');
     }
   }

@@ -2,13 +2,14 @@
 
 import { loadFirebase } from 'helpers/functions.js';
 import API from 'api/API.js';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 
 type Props = {
-  state: Object,
+  state: User,
   handleRequestOpen: () => void
 };
 

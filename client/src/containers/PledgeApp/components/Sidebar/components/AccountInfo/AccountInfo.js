@@ -1,10 +1,22 @@
+// @flow
+
 import './AccountInfo.css';
 import { loadFirebase } from 'helpers/functions.js';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import CountUp from 'react-countup';
 
-export class AccountInfo extends PureComponent {
+type Props = {
+  user: User
+};
+
+type State = {
+  totalMerits: number,
+  previousTotalMerits: number
+};
+
+export class AccountInfo extends PureComponent<Props, State> {
   state = {
     totalMerits: 0,
     previousTotalMerits: 0,
@@ -37,7 +49,6 @@ export class AccountInfo extends PureComponent {
       status,
       photoURL
     } = this.props.user;
-
     return (
       <div id="account-info">
         <img id="sidebar-photo" src={photoURL} alt="User" />
@@ -49,7 +60,7 @@ export class AccountInfo extends PureComponent {
             end={this.state.totalMerits}
             useEasing
           />
-          merits {status !== 'pledge' && 'merited'}
+          merits { status !== 'pledge' && 'merited' }
         </h4>
       </div>
     )

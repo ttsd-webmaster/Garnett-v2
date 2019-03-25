@@ -1,29 +1,37 @@
+// @flow
+
 import React, { PureComponent } from 'react';
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '←'];
 
-export class MeritCreateAmount extends PureComponent {
-  state = { amount: '0' }
+type Props = {
+  changeView: (string) => void
+};
+
+type State = {
+  amount: string
+};
+
+export class MeritCreateAmount extends PureComponent<Props, State> {
+  state = { amount: '0' };
 
   get buttonsDisabled() {
     const parsedAmount = parseInt(this.state.amount, 10);
     return !parsedAmount || parsedAmount % 5 !== 0;
   }
 
-  onClick = (value) => {
+  onClick = (value: string) => {
     let { amount } = this.state;
 
     if (value === '←') {
       if (amount === '0') {
         return window.navigator.vibrate(150);
-      }
-      else if (amount.length === 1) {
+      } else if (amount.length === 1) {
         amount = '0';
       } else {
         amount = amount.slice(0, -1);
       }
-    }
-    else if (value) {
+    } else {
       if (amount === '0') {
         amount = value;
       } else {
@@ -33,18 +41,18 @@ export class MeritCreateAmount extends PureComponent {
 
     if (this.amountValid(amount) || !parseInt(amount, 10)) {
       this.setState({ amount });
-    }
-    else {
+    } else {
+      // vibrate if amount is invalid
       window.navigator.vibrate(150);
     }
   }
 
-  amountValid(amount) {
+  amountValid(amount: string): boolean {
     const parsedAmount = parseInt(amount, 10)
     return !!parsedAmount && parsedAmount < 1000;
   }
 
-  nextStep = (type) => {
+  nextStep = (type: 'merit' | 'demerit') => {
     const amount = type === 'demerit' ? -this.state.amount : this.state.amount;
     this.props.changeView(amount);
   }
@@ -60,7 +68,7 @@ export class MeritCreateAmount extends PureComponent {
               key={number}
               onClick={() => this.onClick(number)}
             >
-              {number}
+              { number }
             </button>
           ))}
         </div>

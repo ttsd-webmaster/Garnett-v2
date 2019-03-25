@@ -5,7 +5,7 @@ export default {
             'Mu', 'Nu', 'Xi', 'Omicron', 
             'Pi', 'Rho', 'Sigma'
           ],
-   activeClass: ['Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma'],
+   active: ['Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau'],
    major: [ 'Aerospace Engineering',
             'Bioengineering',
             'Chemical Engineering',
@@ -22,3 +22,23 @@ export default {
    year: ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Alumni'],
    mbti: ['INTJ', 'INTP', 'ENTJ', 'ENTP', 'INFJ', 'INFP', 'ENFJ', 'ENFP', 'ISTJ', 'ISTP', 'ESTJ', 'ESTP', 'ISFJ', 'ISFP', 'ESFJ', 'ESFP']
 };
+
+export type Filter =
+   'active' |
+   'alumni' |
+   'class' |
+   'major' |
+   'year' |
+   'firstName' |
+   'lastName' |
+   'mbti';
+
+export type FilterName =
+   'Active' |
+   'Alumni' |
+   'Class' |
+   'Major' |
+   'Year' |
+   'First Name' |
+   'Last Name' |
+   'Personality Type';

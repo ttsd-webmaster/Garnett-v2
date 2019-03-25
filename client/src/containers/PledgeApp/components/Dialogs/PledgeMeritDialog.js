@@ -1,7 +1,10 @@
+// @flow
+
 import '../MyMerits/MyMerits.css';
 import { getDate, invalidSafariVersion } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
@@ -20,25 +23,43 @@ const checkboxStyle = {
   transform: 'translateX(-130px)'
 };
 
-export default class PledgeMeritDialog extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      actives: [],
-      selectedActives: [],
-      description: '',
-      date: new Date(),
-      isAlumni: false,
-      isChalkboard: false,
-      isPCGreet: false,
-      amount: 0,
-      openSpinner: false,
-      activeValidation: true,
-      descriptionValidation: true
-    };
-  }
+type Props = {
+  state: User,
+  open: boolean,
+  handleMeritClose: () => void,
+  handleRequestOpen: () => void
+};
 
-  componentWillReceiveProps(nextProps) {
+type State = {
+  actives: Array<User>,
+  selectedActives: Array<Object>,
+  description: string,
+  date: Date,
+  isAlumni: boolean,
+  isChalkboard: boolean,
+  isPCGreet: boolean,
+  amount: number,
+  openSpinner: boolean,
+  activeValidation: boolean,
+  descriptionValidation: boolean
+};
+
+export default class PledgeMeritDialog extends PureComponent<Props, State> {
+  state = {
+    actives: [],
+    selectedActives: [],
+    description: '',
+    date: new Date(),
+    isAlumni: false,
+    isChalkboard: false,
+    isPCGreet: false,
+    amount: 0,
+    openSpinner: false,
+    activeValidation: true,
+    descriptionValidation: true
+  };
+
+  componentWillReceiveProps(nextProps: Props) {
     if (navigator.onLine && this.props !== nextProps) {
       API.getActivesForMerit(nextProps.state.displayName)
       .then((res) => {
@@ -49,7 +70,7 @@ export default class PledgeMeritDialog extends PureComponent {
     }
   }
 
-  merit = (type) => {
+  merit = (type: 'merit' | 'demerit') => {
     const { selectedActives } = this.state;
     let { description, amount } = this.state;
     let activeValidation = true;
@@ -66,13 +87,8 @@ export default class PledgeMeritDialog extends PureComponent {
       if (!description || description.length > 50) {
         descriptionValidation = false;
       }
-
-      this.setState({
-        activeValidation,
-        descriptionValidation
-      });
-    }
-    else {
+      this.setState({ activeValidation, descriptionValidation });
+    } else {
       const {
         displayName,
         name: pledgeName,
@@ -108,7 +124,6 @@ export default class PledgeMeritDialog extends PureComponent {
       API.meritAsPledge(displayName, selectedActives, merit, isChalkboard, isPCGreet)
       .then(res => {
         const totalAmount = amount * selectedActives.length;
-
         console.log(res);
         this.handleClose();
         this.closeProgressDialog();
@@ -117,13 +132,12 @@ export default class PledgeMeritDialog extends PureComponent {
         .then(res => {
           this.props.handleRequestOpen(`${action} yourself ${totalAmount} merits`);
         })
-        .catch(error => console.log(`Error: ${error}`));
+        .catch(error => console.error(`Error: ${error}`));
       })
       .catch((error) => {
         const active = error.response.data;
-
-        console.log(error)
-        console.log(`Not enough merits for ${active}`);
+        console.error(error)
+        console.error(`Not enough merits for ${active}`);
         this.handleClose();
         this.closeProgressDialog();
         this.props.handleRequestOpen(`${active} does not have enough merits`);
@@ -131,18 +145,18 @@ export default class PledgeMeritDialog extends PureComponent {
     }
   }
 
-  formatDate(date) {
+  formatDate(date: Date): string {
     return date.toLocaleDateString([], {month: '2-digit', day: '2-digit'});
   }
 
-  disableDates(date) {
+  disableDates(date: Date): boolean {
     const today = new Date();
     const startDate = new Date(today.getFullYear(), 3, 12);
 
     return date > today || date < startDate;
   }
 
-  handleChange = (label, newValue) => {
+  handleChange = (label: string, newValue: any) => {
     const validationLabel = [label] + 'Validation';
     let value = newValue;
     let { amount } = this.state;
@@ -165,11 +179,9 @@ export default class PledgeMeritDialog extends PureComponent {
       case 'isChalkboard':
         if (newValue === true) {
           const { name } = this.props.state.name;
-
           API.getChalkboardsForMerit(name)
           .then((res) => {
             const chalkboards = res.data;
-
             this.setState({
               chalkboards,
               description: '',
@@ -177,7 +189,7 @@ export default class PledgeMeritDialog extends PureComponent {
             });
           })
           .catch((error) => {
-            console.log(`Error: ${error}`);
+            console.error(`Error: ${error}`);
           })
         }
         else {
@@ -197,7 +209,6 @@ export default class PledgeMeritDialog extends PureComponent {
         if (this.state.isChalkboard && newValue.amount) {
           value = newValue;
           amount = newValue.amount;
-
           this.setState({ amount });
         }
         break;
@@ -218,7 +229,6 @@ export default class PledgeMeritDialog extends PureComponent {
 
   handleClose = () => {
     this.props.handleMeritClose();
-
     this.setState({
       selectedActives: [],
       description: '',
@@ -238,21 +248,11 @@ export default class PledgeMeritDialog extends PureComponent {
     });
   }
 
-  closeProgressDialog = () => {
-    this.setState({ openSpinner: false });
-  }
+  closeProgressDialog = () => this.setState({ openSpinner: false });
 
   render() {
-    let maxAmount = 100;
-    let selectLabel = 'Active Name';
-
-    if (this.state.isChalkboard) {
-      maxAmount = 100;
-    }
-    if (this.state.isAlumni) {
-      selectLabel = 'Alumni Name';
-    }
-
+    const maxAmount = 100;
+    const selectLabel = this.state.isAlumni ? 'Alumni Name' : 'Active Name';
     const actions = [
       <FlatButton
         label="Demerit"

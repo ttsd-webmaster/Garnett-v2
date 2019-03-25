@@ -1,13 +1,23 @@
+// @flow
+
 import './Settings.css';
 import API from 'api/API.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { UserInfo } from 'components';
 import { ThemeOptions } from './components';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
 
-export class Settings extends PureComponent {
+type Props = {
+  history: RouterHistory,
+  state: User,
+  hidden: boolean,
+  logoutCallBack: () => void
+};
+
+export class Settings extends PureComponent<Props> {
   goHome = () => {
     document.body.classList.remove('dark-mode');
     this.props.history.push('/home');

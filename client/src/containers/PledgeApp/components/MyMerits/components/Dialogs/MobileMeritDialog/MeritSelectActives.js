@@ -1,15 +1,35 @@
+// @flow
+
 import '../../../MyMerits.css';
 import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 import { MeritUserRow } from './MeritUserRow';
 import { FilterHeader } from 'components';
+import type { User } from 'api/models';
 
 import React, { Component } from 'react';
 import { List } from 'material-ui/List';
 import Chip from 'material-ui/Chip';
 
-export class MeritSelectActives extends Component {
+type Props = {
+  state: User,
+  amount: number,
+  hidden: boolean,
+  handleClose: () => void,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  actives: Array<User>,
+  selectedActives: Array<Object>,
+  name: string,
+  description: string,
+  showAlumni: boolean,
+  openSpinner: boolean
+};
+
+export class MeritSelectActives extends Component<Props, State> {
   state = {
     actives: [],
     selectedActives: [],
@@ -27,15 +47,16 @@ export class MeritSelectActives extends Component {
     });
   }
 
-  get buttonDisabled() {
+  get buttonDisabled(): boolean {
     return !this.state.selectedActives.length || !this.state.description;
   }
 
-  updateValue = (label, value) => {
+  updateValue = (label: string, value: string) => {
     this.setState({ [label]: value });
   }
 
-  onNameKeyDown = (event) => {
+  onNameKeyDown = (event: SyntheticEvent<>) => {
+    // Remove last selected active if no name input exists
     if ((event.keyCode === 8 || event.keyCode === 46) && !this.state.name) {
       let { selectedActives } = this.state;
       selectedActives.pop();
@@ -43,8 +64,9 @@ export class MeritSelectActives extends Component {
     }
   }
 
-  selectActive = (active) => {
+  selectActive = (active: User) => {
     const activeName = `${active.firstName} ${active.lastName}`;
+    // Only allow selection if active has enough merits
     if (this.props.amount <= active.remainingMerits) {
       let { selectedActives } = this.state;
       selectedActives.push({
@@ -53,13 +75,12 @@ export class MeritSelectActives extends Component {
         label: activeName
       });
       this.setState({ selectedActives, name: '' });
-    }
-    else {
+    } else {
       this.props.handleRequestOpen(`Not enough merits for ${activeName}.`)
     }
   }
 
-  deselectActive = (active) => {
+  deselectActive = (active: User) => {
     let { selectedActives } = this.state;
     selectedActives = selectedActives.filter((currentActive) => {
       return currentActive !== active;

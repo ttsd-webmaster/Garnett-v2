@@ -1,7 +1,10 @@
+// @flow
+
 import './MobileMeritDialog.css';
 import { MeritCreateAmount } from './MeritCreateAmount';
 import { MeritSelectPledges } from './MeritSelectPledges';
 import { MeritSelectActives } from './MeritSelectActives';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
@@ -24,7 +27,21 @@ const appBarStyle = {
   backgroundColor: '#fff'
 }
 
-export default class MobileMeritDialog extends PureComponent {
+type Props = {
+  state: User,
+  open: boolean,
+  handleMeritClose: () => void,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  view: 'amount' | 'selectUsers',
+  header: string,
+  isDemerit: boolean,
+  amount: number
+};
+
+export default class MobileMeritDialog extends PureComponent<Props, State> {
   state = {
     view: 'amount',
     header: 'Merits',
@@ -32,14 +49,14 @@ export default class MobileMeritDialog extends PureComponent {
     amount: 0
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     // Temporary fix for Android
     if (this.props.open !== nextProps.open) {
       this.resetView();
     }
   }
 
-  changeView = (value) => {
+  changeView = (value: string) => {
     const parsedAmount = parseInt(value, 10);
     let header;
 
@@ -49,7 +66,7 @@ export default class MobileMeritDialog extends PureComponent {
     else {
       header = `${value} merits`;
     }
-    
+
     this.setState({
       header,
       view: 'selectUsers',

@@ -1,3 +1,5 @@
+// @flow
+
 import './Contacts.css';
 import filters from './data.js';
 import API from 'api/API';
@@ -10,6 +12,8 @@ import {
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter, FilterHeader, UserRow } from 'components';
 import { LoadableContactsDialog } from './components/Dialogs';
+import type { FilterType, FilterName } from './data.js';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
@@ -26,60 +30,67 @@ const filterOptions = [
   'Personality Type'
 ];
 
-export class Contacts extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      actives: [],
-      active: null,
-      filter: 'activeClass',
-      filterName: 'Active',
-      reverse: false,
-      open: false,
-      openPopover: false
-    }
-  }
+type Props = {
+  hidden: boolean
+};
+
+type State = {
+  actives: Array<User>,
+  active: ?User,
+  filter: FilterType,
+  filterName: FilterName,
+  labels: ?Array<string>,
+  reverse: boolean,
+  open: boolean,
+  openPopover: boolean
+};
+
+export class Contacts extends PureComponent<Props, State> {
+  state = {
+    actives: [],
+    active: null,
+    filter: 'active',
+    filterName: 'Active',
+    labels: null,
+    reverse: false,
+    open: false,
+    openPopover: false
+  };
 
   componentDidMount() {
-    const labels = filters.activeClass;
-
+    const labels = filters.active;
     if (navigator.onLine) {
       API.getActives()
       .then(res => {
         const actives = res.data;
-
         localStorage.setItem('activeArray', JSON.stringify(res.data));
-
         this.setState({ actives, labels });
       });
-    }
-    else {
+    } else {
       const actives = localStorage.getItem('activeArray');
       this.setState({ actives, labels });
     }
   }
 
-  checkCondition(active, label) {
+  checkCondition(active: User, label: string): boolean {
     switch (this.state.filter) {
-      case 'firstName':
-      case 'lastName':
-        return active[this.state.filter].startsWith(label);
-      case 'activeClass':
+      case 'active':
         return active.status !== 'alumni' && active.class === label;
       case 'alumni':
         return active.status === 'alumni' && active.class === label;
+      case 'firstName':
+        return active.firstName.startsWith(label);
+      case 'lastName':
+        return active.lastName.startsWith(label);
       default:
         return active[this.state.filter] === label;
     }
   }
 
-  handleOpen = (active) => {
+  handleOpen = (active: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
-    this.setState({
-      active,
-      open: true
-    });
+    this.setState({ active, open: true });
   }
 
   handleClose = () => {
@@ -89,7 +100,7 @@ export class Contacts extends PureComponent {
     });
   }
 
-  openPopover = (event) => {
+  openPopover = (event: SyntheticEvent<>) => {
     // This prevents ghost click.
     event.preventDefault();
     this.setState({
@@ -98,28 +109,30 @@ export class Contacts extends PureComponent {
     });
   };
 
-  closePopover = () => {
-    this.setState({ openPopover: false });
-  };
+  closePopover = () => this.setState({ openPopover: false });
 
-  setFilter = (filterName) => {
+  setFilter = (filterName: FilterName) => {
     let filter = filterName.replace(/ /g,'');
+    // Make first letter of filter lower cased
     filter = filter[0].toLowerCase() + filter.substr(1);
     let labelFilter = filter;
 
-    if (filterName === 'Active') {
-      filter += 'Class';
-      labelFilter += 'Class';
-    }
-    else if (filterName === 'First Name' || filterName === 'Last Name') {
-      labelFilter = 'name';
-    }
-    else if (filterName === 'Alumni') {
-      labelFilter = 'class';
-    }
-    else if (filterName === 'Personality Type') {
-      filter = 'mbti';
-      labelFilter = 'mbti';
+    switch (filterName) {
+      case 'Active':
+        labelFilter = 'active';
+        break
+      case 'Alumni':
+        labelFilter = 'class';
+        break
+      case 'First Name':
+      case 'Last Name':
+        labelFilter = 'name';
+        break
+      case 'Personality Type':
+        filter = 'mbti';
+        labelFilter = 'mbti';
+        break
+      default:
     }
 
     const labels = filters[labelFilter];
@@ -165,7 +178,7 @@ export class Contacts extends PureComponent {
               />
             ) : (
               <Subheader className="garnett-subheader contacts">
-                {label}
+                { label }
               </Subheader>
             )}
             <List className="garnett-list">

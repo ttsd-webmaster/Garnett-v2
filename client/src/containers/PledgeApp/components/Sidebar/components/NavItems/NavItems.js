@@ -1,14 +1,26 @@
+// @flow
+
 import './NavItems.css';
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-export function NavItems({
-  status,
-  handleMeritOpen,
-  goHome,
-  handleLogoutOpen
-}) {
+type Props = {
+  status: string,
+  handleMeritOpen: () => void,
+  goHome: () => void,
+  handleLogoutOpen: () => void
+};
+
+export function NavItems(props: Props) {
+  const {
+    status,
+    handleMeritOpen,
+    goHome,
+    handleLogoutOpen
+  } = props;
+  const backClick = status === 'pledge' ? handleLogoutOpen : goHome;
+  const backText = status === 'pledge' ? 'Log out' : 'Home';
   return (
     <nav id="nav-items">
       <NavLink
@@ -38,17 +50,10 @@ export function NavItems({
         <i className="icon-address-book"></i>
         Brothers
       </NavLink>
-      {status === 'pledge' ? (
-        <a className="nav-item" onClick={handleLogoutOpen}>
-          <i className="icon-cog"></i>
-          Log Out
-        </a>
-      ) : (
-        <a className="nav-item" onClick={goHome}>
-          <i className="icon-logout"></i>
-          Home
-        </a>
-      )}
+      <a className="nav-item" onClick={backClick}>
+        <i className="icon-logout"></i>
+        { backText }
+      </a>
       <div id="merit-button" onClick={handleMeritOpen}>Merit</div>
     </nav>
   )

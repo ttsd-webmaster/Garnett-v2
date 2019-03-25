@@ -1,3 +1,5 @@
+// @flow
+
 import {
   loadFirebase,
   androidBackOpen,
@@ -6,14 +8,29 @@ import {
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 import { LoadableDeleteMeritDialog } from './Dialogs';
+import type { User, Merit } from 'api/models';
 
 import React, { Fragment, PureComponent } from 'react';
 import { List } from 'material-ui/List';
 
-export class MyMeritsList extends PureComponent {
+type Props = {
+  state: User,
+  hidden: boolean,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  loaded: boolean,
+  myMerits: ?Array<Merit>,
+  selectedMerit: ?Merit,
+  openDelete: boolean,
+  reverse: boolean
+};
+
+export class MyMeritsList extends PureComponent<Props, State> {
   state = {
     loaded: false,
-    myMerits: [],
+    myMerits: null,
     selectedMerit: null,
     openDelete: false,
     reverse: false
@@ -39,34 +56,26 @@ export class MyMeritsList extends PureComponent {
 
               localStorage.setItem('myMerits', JSON.stringify(myMerits));
 
-              this.setState({
-                myMerits,
-                loaded: true
-              });
+              this.setState({ myMerits, loaded: true });
             });
           } else {
-            this.setState({
-              myMerits: [],
-              loaded: true
-            })
+            this.setState({ myMerits: null, loaded: true });
           }
         });
       });
-    }
-    else {
+    } else {
       this.setState({ loaded: true });
     }
   }
 
-  handleDeleteOpen = (selectedMerit) => {
+  handleDeleteOpen = (selectedMerit: Merit) => {
     if (navigator.onLine) {
       androidBackOpen(this.handleDeleteClose);
       this.setState({
         selectedMerit,
         openDelete: true
       });
-    }
-    else {
+    } else {
       this.props.handleRequestOpen('You are offline');
     }
   }
@@ -79,9 +88,7 @@ export class MyMeritsList extends PureComponent {
     });
   }
 
-  reverse = () => {
-    this.setState({ reverse: !this.state.reverse });
-  }
+  reverse = () => this.setState({ reverse: !this.state.reverse });
 
   render() {
     let { myMerits, reverse, loaded, openDelete, selectedMerit } = this.state;
@@ -95,7 +102,7 @@ export class MyMeritsList extends PureComponent {
       return <LoadingComponent className={hidden ? "hidden" : ""} />;
     }
 
-    if (reverse) {
+    if (myMerits && reverse) {
       myMerits = myMerits.slice().reverse();
     }
 

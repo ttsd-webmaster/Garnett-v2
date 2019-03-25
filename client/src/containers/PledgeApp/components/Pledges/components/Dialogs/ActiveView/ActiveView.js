@@ -1,8 +1,11 @@
+// @flow
+
 import { getTabStyle, isMobile } from 'helpers/functions.js';
 import { UserInfo } from 'components';
 import { MeritsList } from './MeritsList';
+import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
@@ -24,36 +27,57 @@ const inkBarStyle = {
   zIndex: 2
 };
 
-export class ActiveView extends PureComponent {
-  state = { index: 0 }
+type Props = {
+  pledge: User,
+  open: boolean,
+  remainingMerits: number,
+  handleClose: () => void,
+  handleRequestOpen: () => void,
+  actions: Node
+};
 
-  componentWillReceiveProps(nextProps) {
+type State = {
+  index: number
+};
+
+export class ActiveView extends PureComponent<Props, State> {
+  state = { index: 0 };
+
+  componentWillReceiveProps(nextProps: Props) {
     this.setState({ index: 0 });
   }
 
-  handleChange = (index) => {
+  get userInfo(): Node {
+    const { pledge, remainingMerits } = this.props;
+    return (
+      <UserInfo
+        photoURL={pledge.photoURL}
+        remainingMerits={remainingMerits}
+        phone={pledge.phone}
+        email={pledge.email}
+        major={pledge.major}
+      />
+    )
+  }
+
+  get meritsList(): Node {
+    const { firstName, lastName } = this.props.pledge;
+    return (
+      <MeritsList
+        pledgeName={firstName + lastName}
+        handleRequestOpen={this.props.handleRequestOpen}
+      />
+    )
+  }
+
+  handleChange = (index: number) => {
     this.setState({ index });
   }
 
   render() {
-    const {
-      firstName,
-      lastName,
-      phone,
-      email,
-      major,
-      photoURL
-    } = this.props.pledge;
-
-    const {
-      open,
-      remainingMerits,
-      handleClose,
-      handleRequestOpen,
-      actions
-    } = this.props;
+    const { open, handleClose, actions } = this.props;
+    const { firstName, lastName } = this.props.pledge;
     const fullName = `${firstName} ${lastName}`;
-
     if (isMobile()) {
       return (
         <FullscreenDialog
@@ -77,24 +101,12 @@ export class ActiveView extends PureComponent {
             onChangeIndex={this.handleChange}
             disableLazyLoading
           >
-            <div>
-              <UserInfo
-                photoURL={photoURL}
-                remainingMerits={remainingMerits}
-                phone={phone}
-                email={email}
-                major={major}
-              />
-            </div>
-            <MeritsList
-              pledgeName={firstName + lastName}
-              handleRequestOpen={handleRequestOpen}
-            />
+            <div>{ this.userInfo }</div>
+            { this.meritsList }
           </SwipeableViews>
         </FullscreenDialog>
       )
     }
-
     return (
       <Dialog
         title={fullName}
@@ -114,19 +126,10 @@ export class ActiveView extends PureComponent {
           onChange={this.handleChange}
         >
           <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
-            <UserInfo
-              photoURL={photoURL}
-              remainingMerits={remainingMerits}
-              phone={phone}
-              email={email}
-              major={major}
-            />
+            { this.userInfo }
           </Tab>
           <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
-            <MeritsList
-              pledgeName={firstName + lastName}
-              handleRequestOpen={handleRequestOpen}
-            />
+            { this.meritsList }
           </Tab>
         </Tabs>
       </Dialog>

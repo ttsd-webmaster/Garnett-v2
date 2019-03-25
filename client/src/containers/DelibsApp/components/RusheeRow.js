@@ -2,6 +2,7 @@
 
 import { PlaceholderRusheeList } from 'components/Placeholders';
 import { InteractedCheckbox } from './InteractedCheckbox';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import LazyLoad from 'react-lazyload';
@@ -11,7 +12,7 @@ import Divider from 'material-ui/Divider';
 
 type Props = {
   history: RouterHistory,
-  state: Object,
+  state: User,
   rushee: Object
 };
 

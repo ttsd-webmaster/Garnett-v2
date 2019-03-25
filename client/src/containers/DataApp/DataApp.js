@@ -6,13 +6,14 @@ import { PledgeData } from './components/PledgeData/PledgeData';
 import { RushData } from './components/RushData/RushData';
 import { MyData } from './components/MyData/MyData';
 import { Header } from 'components';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
 type Props = {
   history: RouterHistory,
-  state: Object // TODO: Use store instead of passing down state
+  state: User // TODO: Use store instead of passing down state
 };
 
 type State = {

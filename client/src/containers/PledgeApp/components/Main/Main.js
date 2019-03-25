@@ -1,8 +1,11 @@
+// @flow
+
 import './Main.css';
+import { MyMerits, Pledges, Contacts } from 'containers/PledgeApp/components';
+import type { User } from 'api/models';
 
 import React from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
-import { MyMerits, Pledges, Contacts } from 'containers/PledgeApp/components';
 
 const routes = [
   {
@@ -37,7 +40,12 @@ const routes = [
   }
 ];
 
-export function Main(props) {
+type Props = {
+  state: User,
+  handleRequestOpen: () => void
+};
+
+export function Main(props: Props) {
   return (
     <div id="content">
       <Switch>

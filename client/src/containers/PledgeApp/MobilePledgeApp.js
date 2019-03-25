@@ -1,8 +1,7 @@
+// @flow
+
 import './MobilePledgeApp.css';
-import {
-  loadFirebase,
-  configureThemeMode
-} from 'helpers/functions';
+import { configureThemeMode } from 'helpers/functions';
 import {
   MyMerits,
   Pledges,
@@ -10,58 +9,38 @@ import {
   Settings
 } from './components';
 import { MobileHeader, MobileNavbar } from './components/Mobile';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 
-export class MobilePledgeApp extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      index: 0,
-      totalMerits: 0,
-      previousTotalMerits: 0
-    };
-  }
+type Props = {
+  history: RouterHistory,
+  state: User,
+  logoutCallBack: () => void,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  index: number
+};
+
+export class MobilePledgeApp extends PureComponent<Props, State> {
+  state = { index: 0 };
 
   componentDidMount() {
     console.log(`Pledge app mount: ${this.props.state.name}`)
     localStorage.setItem('route', 'pledge-app');
-
     configureThemeMode();
-
-    if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const { displayName } = this.props.state;
-        const userRef = firebase.database().ref('/users/' + displayName);
-
-        userRef.on('value', (user) => {
-          const { totalMerits } = user.val();
-
-          localStorage.setItem('totalMerits', totalMerits);
-          this.setState({
-            totalMerits: totalMerits,
-            previousTotalMerits: this.state.totalMerits
-          });
-        });
-      });
-    }
   }
 
-  handleChange = (index) => {
+  handleChange = (index: number) => {
     this.setState({ index })
   };
 
   render() {
     return (
       <div id="content-container">
-        <MobileHeader
-          status={this.props.state.status}
-          index={this.state.index}
-          totalMerits={this.state.totalMerits}
-          previousTotalMerits={this.state.previousTotalMerits}
-        />
+        <MobileHeader state={this.props.state} index={this.state.index} />
         <MyMerits
           state={this.props.state}
           handleRequestOpen={this.props.handleRequestOpen}

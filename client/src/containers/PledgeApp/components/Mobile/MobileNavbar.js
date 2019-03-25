@@ -1,14 +1,23 @@
+// @flow
+
 import { getTabStyle } from 'helpers/functions';
 
 import React from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 import FontIcon from 'material-ui/FontIcon';
 
-export function MobileNavbar({
-  index,
-  status,
-  handleChange
-}) {
+type Props = {
+  index: number,
+  status: string,
+  handleChange: () => void
+};
+
+export function MobileNavbar(props: Props) {
+  const {
+    index,
+    status,
+    handleChange
+  } = props;
   return (
     <BottomNavigation
       className="bottom-tabs"

@@ -1,14 +1,29 @@
+// @flow
+
 import API from 'api/API.js';
 import { PledgeView } from './PledgeView/PledgeView';
 import { ActiveView } from './ActiveView/ActiveView';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 
-export default class PledgeInfoDialog extends PureComponent {
-  state = { pledge: null }
+type Props = {
+  state: User,
+  open: boolean,
+  pledge: User,
+  handleClose: () => void,
+  handleRequestOpen: () => void
+};
 
-  componentWillReceiveProps(nextProps) {
+type State = {
+  pledge: ?User
+};
+
+export default class PledgeInfoDialog extends PureComponent<Props, State> {
+  state = { pledge: null };
+
+  componentWillReceiveProps(nextProps: Props) {
     const { pledge, state } = nextProps;
     if (pledge) {
       this.setState({ pledge });

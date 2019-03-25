@@ -1,17 +1,23 @@
+// @flow
+
 import './ThemeOptions.css';
 import { configureThemeMode } from 'helpers/functions';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
 
-export class ThemeOptions extends PureComponent {
+type State = {
+  mode: string
+};
+
+export class ThemeOptions extends PureComponent<{}, State> {
   constructor(props) {
     super(props);
     const mode = localStorage.getItem('themeMode') || 'automatic';
     this.state = { mode };
   }
 
-  setThemeMode(mode) {
+  setThemeMode(mode: string) {
     localStorage.setItem('themeMode', mode);
     configureThemeMode();
     this.setState({ mode });

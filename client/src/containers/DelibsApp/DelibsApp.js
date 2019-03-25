@@ -3,12 +3,13 @@
 import { Header } from 'components';
 import { RusheeList } from './components/RusheeList';
 import { LoadableVoteDialog } from './RusheeProfile/components/Dialogs';
+import type { User } from 'api/models';
 
 import React from 'react';
 
 type Props = {
   history: RouterHistory,
-  state: Object,
+  state: User,
   handleRequestOpen: () => void
 };
 

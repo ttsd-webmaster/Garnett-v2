@@ -1,3 +1,5 @@
+// @flow
+
 import './Pledges.css';
 
 import API from 'api/API.js';
@@ -11,6 +13,7 @@ import {
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter, FilterHeader, UserRow } from 'components';
 import { LoadablePledgeInfoDialog } from './components/Dialogs';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
@@ -23,7 +26,26 @@ const filterOptions = [
   'Total Merits'
 ];
 
-export class Pledges extends PureComponent {
+type Props = {
+  pledges: Array<User>,
+  state: User,
+  hidden: boolean,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  loaded: boolean,
+  pledges: Array<User>,
+  pledge: ?User,
+  filter: string,
+  filterName: string,
+  reverse: boolean,
+  open: boolean,
+  openMerit: boolean,
+  openPopover: boolean
+};
+
+export class Pledges extends PureComponent<Props, State> {
   state = {
     loaded: false,
     pledges: this.props.pledges,
@@ -49,8 +71,7 @@ export class Pledges extends PureComponent {
           });
         })
         .catch(error => console.log(`Error: ${error}`));
-      }
-      else {
+      } else {
         loadFirebase('database')
         .then(() => {
           let pledges = [];
@@ -83,15 +104,14 @@ export class Pledges extends PureComponent {
           });
         });
       }
-    }
-    else {
+    } else {
       this.setState({
         loaded: true
       })
     }
   }
 
-  handleOpen = (pledge) => {
+  handleOpen = (pledge: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
     this.setState({
@@ -107,23 +127,18 @@ export class Pledges extends PureComponent {
     });
   }
 
-  openPopover = (event) => {
+  openPopover = (event: SyntheticEvent<>) => {
     // This prevents ghost click.
     event.preventDefault();
-
     this.setState({
       openPopover: true,
       anchorEl: event.currentTarget,
     });
   };
 
-  closePopover = () => {
-    this.setState({
-      openPopover: false,
-    });
-  };
+  closePopover = () => this.setState({ openPopover: false });
 
-  setFilter = (filterName) => {
+  setFilter = (filterName: string) => {
     let filter = filterName.replace(/ /g,'');
     filter = filter[0].toLowerCase() + filter.substr(1);
     let pledges = this.state.pledges.sort(function(a, b) {

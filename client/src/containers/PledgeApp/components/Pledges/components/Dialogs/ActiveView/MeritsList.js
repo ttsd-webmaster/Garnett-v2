@@ -1,21 +1,32 @@
+// @flow
+
 import '../../../../MyMerits/MyMerits.css';
 import './ActiveView.css';
 import API from 'api/API.js';
 import { FilterHeader, MeritRow } from 'components';
+import type { Merit } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
 import CircularProgress from 'material-ui/CircularProgress';
 
-export class MeritsList extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      merits: [],
-      reverse: false,
-      loaded: false
-    };
-  }
+type Props = {
+  pledgeName: string,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  merits: ?Array<Merit>,
+  reverse: boolean,
+  loaded: boolean
+};
+
+export class MeritsList extends PureComponent<Props, State> {
+  state = {
+    merits: null,
+    reverse: false,
+    loaded: false
+  };
 
   componentDidMount() {
     if (navigator.onLine) {
@@ -27,20 +38,17 @@ export class MeritsList extends PureComponent {
         });
       })
       .catch(err => console.log('err', err));
-    }
-    else {
+    } else {
       this.props.handleRequestOpen('You are offline');
     }
   }
 
-  reverse = () => {
-    this.setState({ reverse: !this.state.reverse });
-  }
+  reverse = () => this.setState({ reverse: !this.state.reverse });
 
   render() {
     let { merits, reverse, loaded } = this.state;
 
-    if (reverse) {
+    if (merits && reverse) {
       merits = merits.slice().reverse();
     }
 
@@ -55,11 +63,11 @@ export class MeritsList extends PureComponent {
     return (
       <List className="garnett-list dialog pledge">
         <FilterHeader
-          title={reverse ? "Oldest" : "Recent"}
+          title={reverse ? 'Oldest' : 'Recent'}
           isReversed={reverse}
           reverse={this.reverse}
         />
-        {merits.map((merit, i) => (
+        {merits && merits.map((merit, i) => (
           <MeritRow
             key={i}
             merit={merit}

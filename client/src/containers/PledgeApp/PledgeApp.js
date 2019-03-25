@@ -1,11 +1,21 @@
+// @flow
+
 import './MobilePledgeApp.css';
 import './PledgeApp.css';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Main } from './components/Main/Main';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 
-export class PledgeApp extends PureComponent {
+type Props = {
+  history: RouterHistory,
+  state: User,
+  logoutCallBack: () => void,
+  handleRequestOpen: () => void
+};
+
+export class PledgeApp extends PureComponent<Props> {
   componentDidMount() {
     localStorage.setItem('route', 'pledge-app');
   }

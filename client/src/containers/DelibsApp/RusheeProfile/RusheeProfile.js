@@ -7,12 +7,13 @@ import { LoadingRusheeProfile } from 'helpers/loaders.js';
 import { Header } from 'components';
 import { RusheeInfo } from './components/RusheeInfo';
 import { RusheeProfileButton } from './components/RusheeProfileButton';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 
 type Props = {
   history: RouterHistory,
-  state: Object
+  state: User
 };
 
 type State = {

@@ -10,12 +10,13 @@ import {
   LoadableInterviewDialog
 } from './Dialogs';
 import { RusheeBottomSheet } from './RusheeBottomSheet';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 
 type Props = {
   rushee: Object,
-  state: Object,
+  state: User,
   handleRequestOpen: () => void
 };
 

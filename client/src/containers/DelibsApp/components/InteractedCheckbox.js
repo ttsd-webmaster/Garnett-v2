@@ -1,6 +1,7 @@
 // @flow
 
 import API from 'api/API.js';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import Checkbox from 'material-ui/Checkbox';
@@ -11,7 +12,7 @@ const labelStyle = {
 };
 
 type Props = {
-  state: Object,
+  state: User,
   rushee: Object
 };
 

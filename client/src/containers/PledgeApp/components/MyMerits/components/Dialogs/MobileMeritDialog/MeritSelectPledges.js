@@ -1,22 +1,41 @@
+// @flow
+
 import '../../../MyMerits.css';
 import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 import { MeritUserRow } from './MeritUserRow';
+import type { User } from 'api/models';
 
 import React, { Component } from 'react';
 import { List } from 'material-ui/List';
 import Chip from 'material-ui/Chip';
 import Subheader from 'material-ui/Subheader';
 
-export class MeritSelectPledges extends Component {
+type Props = {
+  state: User,
+  amount: number,
+  hidden: boolean,
+  handleClose: () => void,
+  handleRequestOpen: () => void
+};
+
+type State = {
+  pledges: Array<User>,
+  selectedPledges: Array<Object>,
+  name: string,
+  description: string,
+  openSpinner: boolean
+};
+
+export class MeritSelectPledges extends Component<Props, State> {
   state = {
     pledges: [],
     selectedPledges: [],
     name: '',
     description: '',
     openSpinner: false
-  }
+  };
 
   componentDidMount() {
     API.getPledgesForMeritMobile(this.props.state.displayName)
@@ -26,15 +45,16 @@ export class MeritSelectPledges extends Component {
     });
   }
 
-  get buttonDisabled() {
+  get buttonDisabled(): boolean {
     return !this.state.selectedPledges.length || !this.state.description;
   }
 
-  updateValue = (label, value) => {
+  updateValue = (label: string, value: string) => {
     this.setState({ [label]: value });
   }
 
-  onNameKeyDown = (event) => {
+  onNameKeyDown = (event: SyntheticEvent<>) => {
+    // Remove last selected pledge if no name input exists
     if ((event.keyCode === 8 || event.keyCode === 46) && !this.state.name) {
       let { selectedPledges } = this.state;
       selectedPledges.pop();
@@ -42,8 +62,9 @@ export class MeritSelectPledges extends Component {
     }
   }
 
-  selectPledge = (pledge) => {
+  selectPledge = (pledge: User) => {
     const pledgeName = `${pledge.firstName} ${pledge.lastName}`;
+    // Only allow selection if active has enough merits
     if (this.props.amount <= pledge.remainingMerits) {
       let { selectedPledges } = this.state;
       selectedPledges.push({
@@ -52,13 +73,12 @@ export class MeritSelectPledges extends Component {
         label: pledgeName
       });
       this.setState({ selectedPledges, name: '' });
-    }
-    else {
+    } else {
       this.props.handleRequestOpen(`Not enough merits for ${pledgeName}.`)
     }
   }
 
-  deselectPledge = (pledge) => {
+  deselectPledge = (pledge: User) => {
     let { selectedPledges } = this.state;
     selectedPledges = selectedPledges.filter((currentPledge) => {
       return currentPledge !== pledge;
