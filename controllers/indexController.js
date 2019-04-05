@@ -126,8 +126,7 @@ exports.signup = function(req, res) {
           if (year === 'Alumni') {
             userInfo.status = 'alumni';
             userRef.update(userInfo);
-          }
-          else {
+          } else {
             const storage = firebase.storage().ref(`${displayName}.jpg`);
             // Set the status of the user based on the authorization code
             if (code === pledgeCode) {
@@ -222,7 +221,6 @@ exports.signup = function(req, res) {
       // Handle errors here.
       const errorCode = error.code;
       const errorMessage = error.message;
-
       console.log(errorCode, errorMessage);
       res.status(400).send('Email has already been taken.');
     });
@@ -235,7 +233,6 @@ exports.forgot_password = function(req, res) {
     res.status(200).send('Email to reset password has been sent.');
   }).catch(function(error) {
     console.log(error);
-
     res.status(400).send('This email is not registered.');
   });
 };

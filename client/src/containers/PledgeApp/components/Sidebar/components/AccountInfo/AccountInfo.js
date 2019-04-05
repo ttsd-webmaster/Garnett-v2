@@ -28,7 +28,7 @@ export class AccountInfo extends PureComponent<Props, State> {
       .then(() => {
         const { firebase } = window;
         const { displayName } = this.props.user;
-        const userRef = firebase.database().ref('/users/' + displayName);
+        const userRef = firebase.database().ref(`/users/${displayName}`);
 
         userRef.on('value', (user) => {
           const { totalMerits } = user.val();

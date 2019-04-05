@@ -33,14 +33,18 @@ export class AllMeritsList extends PureComponent<Props, State> {
         const meritsRef = firebase.database().ref('/merits');
 
         meritsRef.limitToLast(100).on('value', (merits) => {
-          // Retrieves the 100 most recent merits
-          const allMerits = Object.keys(merits.val()).map(function(key) {
-            return merits.val()[key];
-          }).reverse();
+          if (merits.val()) {
+            // Retrieves the 100 most recent merits
+            const allMerits = Object.keys(merits.val()).map(function(key) {
+              return merits.val()[key];
+            }).reverse();
 
-          localStorage.setItem('allMerits', JSON.stringify(allMerits));
+            localStorage.setItem('allMerits', JSON.stringify(allMerits));
 
-          this.setState({ allMerits, loaded: true });
+            this.setState({ allMerits, loaded: true });
+          } else {
+            this.setState({ loaded: true });
+          }
         });
       });
     } else {

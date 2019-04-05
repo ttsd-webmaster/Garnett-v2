@@ -17,55 +17,51 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 })
 
-let usersRef = admin.database().ref('/users/');
-let approvedComplaints = admin.database().ref('/approvedComplaints');
-let pendingComplaints = admin.database().ref('/pendingComplaints');
-let chalkboards = admin.database().ref('/chalkboards');
+const usersRef = admin.database().ref('/users/');
+const meritsRef = admin.database().ref('/merits');
+const approvedComplaints = admin.database().ref('/approvedComplaints');
+const pendingComplaints = admin.database().ref('/pendingComplaints');
+const chalkboards = admin.database().ref('/chalkboards');
 
+meritsRef.remove();
 approvedComplaints.remove();
 pendingComplaints.remove();
 chalkboards.remove();
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
-    let userRef = admin.database().ref('/users/' + user.key);
+    const userRef = admin.database().ref('/users/' + user.key);
 
     console.log(`Reset data for ${user.key}`)
 
-    if (user.val().status === 'pledge') {
-      userRef.update({
-        Merits: null,
-        Complaints: null,
-        totalMerits: 0
-      });
-    }
-    else {
-      userRef.update({
-        Merits: null,
-        Complaints: null,
-        Pledges: null,
-        totalMerits: null
-      });
+    userRef.update({
+      Merits: null,
+      Complaints: null,
+      Pledges: null,
+      totalMerits: 0
+    });
 
+    // Update the active's pledge merit count for each pledge
+    if (user.val().status !== 'pledge') {
       usersRef.once('value', (snapshot) => {
         snapshot.forEach((child) => {
           if (child.val().status === 'pledge') {
-            let pledgeName = child.key;
-
-            if (user.val().status === 'alumni') {
-              userRef.child('/Pledges/' + pledgeName).update({
-                merits: 200
-              });
-            }
-            else if (user.val().status === 'pipm') {
-              userRef.child('/Pledges/' + pledgeName).update({
-                merits: 'Unlimited'
-              }); 
-            }
-            else {
-              userRef.child('/Pledges/' + pledgeName).update({
-                merits: 100
-              });
+            const pledgeName = child.key;
+            switch (user.val().status) {
+              case 'alumni':
+                userRef.child(`/Pledges/${pledgeName}`).update({
+                  merits: 200
+                });
+                break;
+              case 'pipm':
+                userRef.child(`/Pledges/${pledgeName}`).update({
+                  merits: 'Unlimited'
+                });
+                break;
+              default:
+                userRef.child(`/Pledges/${pledgeName}`).update({
+                  merits: 100
+                });
             }
           }
         });

@@ -59,7 +59,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
               this.setState({ myMerits, loaded: true });
             });
           } else {
-            this.setState({ myMerits: null, loaded: true });
+            this.setState({ loaded: true });
           }
         });
       });

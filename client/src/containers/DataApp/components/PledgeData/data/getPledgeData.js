@@ -9,7 +9,6 @@ export function getPledgeData() {
 
     meritsRef.once('value', (snapshot) => {
       usersRef.once('value', (users) => {
-        // let mostActivePledge = new Map();
         let totalActiveMeritInstances = new Map();
         let mostActiveMeritInstances = new Map();
         let mostActiveDemeritInstances = new Map();
@@ -36,7 +35,7 @@ export function getPledgeData() {
               let totalMeritAmountCounter;
               let meritAmountCounter;
               let demeritAmountCounter;
-              // let activePledgeCounter = mostActivePledge.get(merit.createdBy) || 0
+
               if (snapshot.val()[merit].activeName) {
                 totalActiveInstanceCounter = totalActiveMeritInstances.get(snapshot.val()[merit].activeName) || 0;
                 meritActiveInstanceCounter = mostActiveMeritInstances.get(snapshot.val()[merit].activeName) || 0;
@@ -45,6 +44,7 @@ export function getPledgeData() {
                 meritAmountCounter = mostMeritAmount.get(snapshot.val()[merit].activeName) || 0;
                 demeritAmountCounter = mostDemeritAmount.get(snapshot.val()[merit].activeName) || 0;
               }
+
               if (merit.pledgeName) {
                 totalPledgeInstanceCounter = totalPledgeMeritInstances.get(snapshot.val()[merit].pledgeName) || 0;
                 meritPledgeInstanceCounter = mostPledgeMeritInstances.get(snapshot.val()[merit].pledgeName) || 0;
@@ -55,8 +55,7 @@ export function getPledgeData() {
                 mostActiveMeritInstances.set(snapshot.val()[merit].activeName, meritActiveInstanceCounter += 1);
                 mostPledgeMeritInstances.set(snapshot.val()[merit].pledgeName, meritPledgeInstanceCounter += 1);
                 mostMeritAmount.set(snapshot.val()[merit].pledgeName, meritAmountCounter += snapshot.val()[merit].amount);
-              }
-              else {
+              } else {
                 mostActiveDemeritInstances.set(snapshot.val()[merit].activeName, demeritActiveInstanceCounter += 1);
                 mostPledgeDemeritInstances.set(snapshot.val()[merit].pledgeName, demeritPledgeInstanceCounter += 1);
                 mostDemeritAmount.set(snapshot.val()[merit].pledgeName, demeritAmountCounter += snapshot.val()[merit].amount);

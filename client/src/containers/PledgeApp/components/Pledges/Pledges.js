@@ -78,46 +78,42 @@ export class Pledges extends PureComponent<Props, State> {
           const firebase = window.firebase;
           const dbRef = firebase.database().ref('/users');
 
-          dbRef.orderByChild('status').equalTo('pledge').on('value', (snapshot) => {
+          dbRef.orderByChild('status').equalTo('pledge').on('value', (pledge) => {
             const { filter } = this.state;
 
-            pledges = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
-            });
-
-            if (this.state.filterName === 'Total Merits') {
-              pledges = pledges.sort(function(a, b) {
-                return a[filter] < b[filter] ? 1 : -1;
+            if (pledge.val()) {
+              pledges = Object.keys(pledge.val()).map(function(key) {
+                return pledge.val()[key];
               });
+
+              if (this.state.filterName === 'Total Merits') {
+                pledges = pledges.sort(function(a, b) {
+                  return a[filter] < b[filter] ? 1 : -1;
+                });
+              } else {
+                pledges = pledges.sort(function(a, b) {
+                  return a[filter] > b[filter] ? 1 : -1;
+                });
+              }
+
+              localStorage.setItem('pledgeArray', JSON.stringify(pledges));
+
+              this.setState({ pledges, loaded: true });
             } else {
-              pledges = pledges.sort(function(a, b) {
-                return a[filter] > b[filter] ? 1 : -1;
-              });
+              this.setState({ loaded: true });
             }
-
-            localStorage.setItem('pledgeArray', JSON.stringify(pledges));
-            
-            this.setState({
-              loaded: true,
-              pledges: pledges
-            });
           });
         });
       }
     } else {
-      this.setState({
-        loaded: true
-      })
+      this.setState({ loaded: true })
     }
   }
 
   handleOpen = (pledge: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
-    this.setState({
-      pledge,
-      open: true
-    });
+    this.setState({ pledge, open: true });
   }
 
   handleClose = () => {
@@ -190,7 +186,7 @@ export class Pledges extends PureComponent<Props, State> {
           reverse={this.reverse}
         />
         <List className="garnett-list">
-          {pledges.map((pledge, i) => (
+          {pledges && pledges.map((pledge, i) => (
             <UserRow
               key={i}
               user={pledge}
