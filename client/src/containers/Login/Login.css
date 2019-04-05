@@ -125,7 +125,7 @@
   }
 }
 .login-input > input {
-  color: var(--secondary-dark) !important;
+  color: var(--secondary-dark);
 }
 
 /* Login and Sign Up Buttons */

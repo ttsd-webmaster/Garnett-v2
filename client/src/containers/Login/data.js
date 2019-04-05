@@ -1,39 +1,31 @@
-export const activeCode = 'garnett';
-
-export const pledgeCode = 'taupledge';
-
 export const formData1 = [
   {
-    name: 'First Name',
-    value: 'firstName',
-    type: 'text',
-    errorText: 'Please enter a first name.',
+    placeholder: 'First Name',
+    name: 'firstName',
+    type: 'text'
   },
   {
-    name: 'Last Name',
-    value: 'lastName',
-    type: 'text',
-    errorText: 'Please enter a last name.',
+    placeholder: 'Last Name',
+    name: 'lastName',
+    type: 'text'
   },
 ];
 
 export const selectData = [
   {
-    name: 'Class',
-    value: 'className',
-    errorText: 'Please select a class.',
-    options: ['Charter', 'Alpha', 'Beta', 'Gamma',
-      'Delta', 'Epsilon', 'Zeta', 'Eta',
-      'Theta', 'Iota', 'Kappa', 'Lambda',
-      'Mu', 'Nu', 'Xi', 'Omicron',
-      'Pi', 'Rho', 'Sigma', 'Tau'
-    ],
+    placeholder: 'Class',
+    name: 'className',
+    options: [
+      'Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta',
+      'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi',
+      'Rho', 'Sigma', 'Tau', 'Upsilon'
+    ]
   },
   {
-    name: 'Major',
-    value: 'major',
-    errorText: 'Please select a major.',
-    options: ['Aerospace Engineering',
+    placeholder: 'Major',
+    name: 'major',
+    options: [
+      'Aerospace Engineering',
       'Bioengineering',
       'Chemical Engineering',
       'Computer Engineering',
@@ -46,10 +38,10 @@ export const selectData = [
     ]
   },
   {
-    name: 'Year',
-    value: 'year',
-    errorText: 'Please select an year.',
-    options: ['1st Year',
+    placeholder: 'Year',
+    name: 'year',
+    options: [
+      '1st Year',
       '2nd Year',
       '3rd Year',
       '4th Year',
@@ -61,33 +53,28 @@ export const selectData = [
 
 export const formData2 = [
   {
-    name: 'Phone',
-    value: 'phone',
-    type: 'number',
-    errorText: 'Please enter a valid phone number.',
+    placeholder: 'Phone (Only enter digits)',
+    name: 'phone',
+    type: 'number'
   },
   {
-    name: 'Email',
-    value: 'email',
-    type: 'email',
-    errorText: 'Please enter a valid email.',
+    placeholder: 'Email',
+    name: 'email',
+    type: 'email'
   },
   {
-    name: 'Authorization Code',
-    value: 'code',
-    type: 'password',
-    errorText: 'The authorization code is not correct.',
+    placeholder: 'Authorization Code',
+    name: 'code',
+    type: 'password'
   },
   {
-    name: 'Password',
-    value: 'password',
-    type: 'password',
-    errorText: 'Please enter a password that is longer than 8 characters.',
+    placeholder: 'Password (Must be longer than 8 characters)',
+    name: 'password',
+    type: 'password'
   },
   {
-    name: 'Password Confirmation',
-    value: 'confirmation',
-    type: 'password',
-    errorText: 'The confirmation password does not match.',
+    placeholder: 'Password Confirmation',
+    name: 'confirmation',
+    type: 'password'
   },
 ];

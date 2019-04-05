@@ -12,16 +12,15 @@ export type User = {
 };
 
 export type SignUpParams = {
-  email: string,
-  password: string,
   firstName: string,
   lastName: string,
+  email: string,
+  password: string,
   className: string,
-  majorName: string,
+  major: string,
   year: string,
   phone: string,
-  code: string,
-  pledgeCode: string
+  code: string
 };
 
 export type Merit = {

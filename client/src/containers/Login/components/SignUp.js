@@ -1,12 +1,6 @@
 // @flow
 
-import {
-  activeCode,
-  pledgeCode,
-  formData1,
-  selectData,
-  formData2
-} from '../data.js';
+import { formData1, selectData, formData2 } from '../data.js';
 import API from 'api/API.js';
 import { validateEmail } from 'helpers/functions.js';
 
@@ -49,7 +43,7 @@ export class SignUp extends PureComponent<Props, State> {
     confirmation: ''
   };
 
-  get isFormInvalid(): boolean {
+  get isFormValid(): boolean {
     const {
       firstName,
       lastName,
@@ -65,15 +59,14 @@ export class SignUp extends PureComponent<Props, State> {
 
     if (firstName && lastName && className && major && year && email &&
         validateEmail(email) && phone.length === 10 && code &&
-        (code === activeCode && code === pledgeCode) &&
         password.length > 7 && confirmation === password) {
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 
   signUp = () => {
-    const {
+    let {
       firstName,
       lastName,
       className,
@@ -81,22 +74,32 @@ export class SignUp extends PureComponent<Props, State> {
       year,
       phone,
       email,
-      password
+      password,
+      code
     } = this.state;
 
     this.props.openProgressDialog('Signing up...');
 
+    // Remove any spaces
+    firstName = firstName.replace(/ /g,'');
+    lastName = lastName.replace(/ /g,'');
+    phone = phone.replace(/ /g,'');
+    email = email.replace(/ /g,'');
+    // Capitalize first name and last name
+    firstName = firstName[0].toUpperCase() + firstName.substr(1);
+    lastName = lastName[0].toUpperCase() + lastName.substr(1);
+    code = code.toLowerCase();
+
     const signUpInfo = {
-      email,
-      password,
       firstName,
       lastName,
+      email,
+      password,
       className,
       major,
       year,
       phone,
-      code: this.state.code.toLowerCase(),
-      pledgeCode
+      code
     };
 
     API.signUp(signUpInfo)
@@ -124,7 +127,6 @@ export class SignUp extends PureComponent<Props, State> {
     })
     .catch((error) => {
       const message = error.response.data;
-      console.log(message);
       this.props.closeProgressDialog();
       this.props.handleRequestOpen(message);
     });
@@ -141,11 +143,10 @@ export class SignUp extends PureComponent<Props, State> {
           <TextField
             className="login-input"
             type={form.type}
-            inputStyle={{ color: '#fff' }}
-            floatingLabelText={form.name}
+            floatingLabelText={form.placeholder}
             floatingLabelStyle={{ color: '#888' }}
-            value={this.state[`${form.value}`]}
-            onChange={(e, newValue) => this.handleChange(form.value, newValue)}
+            value={this.state[form.name]}
+            onChange={(e, newValue) => this.handleChange(form.name, newValue)}
             key={i}
           />
         ))}
@@ -153,11 +154,10 @@ export class SignUp extends PureComponent<Props, State> {
         {selectData.map((select, i) => (
           <SelectField
             className="login-input"
-            value={this.state[`${select.value}`]}
-            floatingLabelText={select.name}
+            value={this.state[select.name]}
+            floatingLabelText={select.placeholder}
             floatingLabelStyle={{ color: '#888' }}
-            labelStyle={{ color: '#fff' }}
-            onChange={(e, key, newValue) => this.handleChange(select.value, newValue)}
+            onChange={(e, key, newValue) => this.handleChange(select.name, newValue)}
             key={i}
           >
             {select.options.map((item, i) => (
@@ -166,7 +166,7 @@ export class SignUp extends PureComponent<Props, State> {
                 value={item}
                 primaryText={item}
                 insetChildren
-                checked={item === this.state[`${select.value}`]}
+                checked={item === this.state[select.name]}
               />
             ))}
           </SelectField>
@@ -176,11 +176,10 @@ export class SignUp extends PureComponent<Props, State> {
           <TextField
             className="login-input"
             type={form.type}
-            inputStyle={{ color: '#fff' }}
-            floatingLabelText={form.name}
+            floatingLabelText={form.placeholder}
             floatingLabelStyle={{ color: '#888' }}
-            value={this.state[`${form.value}`]}
-            onChange={(e, newValue) => this.handleChange(form.value, newValue)}
+            value={this.state[form.name]}
+            onChange={(e, newValue) => this.handleChange(form.name, newValue)}
             key={i}
             onSubmit={this.signUp}
             onKeyPress={(ev) => {
@@ -195,7 +194,7 @@ export class SignUp extends PureComponent<Props, State> {
         <button
           type="button"
           className="login-button"
-          disabled={this.isFormInvalid}
+          disabled={!this.isFormValid}
           onClick={this.signUp}
         >
           Sign Up

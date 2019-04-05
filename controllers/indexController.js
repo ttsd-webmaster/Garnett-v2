@@ -78,150 +78,154 @@ exports.get_pledge_complaints = function(req, res) {
 
 // Signup Route
 exports.signup = function(req, res) {
-  let firstName = req.body.firstName.replace(/ /g,'');
-  let lastName = req.body.lastName.replace(/ /g,'');
-  firstName = firstName[0].toUpperCase() + firstName.substr(1);
-  lastName = lastName[0].toUpperCase() + lastName.substr(1);
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    className,
+    major,
+    year,
+    phone,
+    code
+  } = req.body;
+  const activeCode = process.env.ACTIVE_AUTHORIZATION_CODE;
+  const pledgeCode = process.env.PLEDGE_AUTHORIZATION_CODE;
+
+  if (code !== activeCode && code !== pledgeCode) {
+    res.status(401).send('The authorization code is incorrect.')
+  }
+
   const displayName = firstName + lastName;
   const usersRef = admin.database().ref('/users');
   const userRef = admin.database().ref('/users/' + displayName);
 
   userRef.once('value', (snapshot) => {
-    if (snapshot.val() && req.body.year !== 'Alumni') {
+    if (snapshot.val() && year !== 'Alumni') {
       res.status(400).send('This active is already signed up.');
+    } else if (!snapshot.val() && year === 'Alumni') {
+      res.status(400).send('This alumni does not exist.');
     }
-    else if (
-      (snapshot.val() && req.body.year === 'Alumni') || 
-      (!snapshot.val() && req.body.year !== 'Alumni')
-    ) {
-      // Create user with email and password
-      firebase.auth().createUserWithEmailAndPassword(req.body.email, req.body.password)
-      .then((user) => {
-        if (user && !user.emailVerified) {
-          user.updateProfile({ displayName })
-          .then(function() {
-            let userInfo = {
-              firstName: req.body.firstName.trim(),
-              lastName: req.body.lastName.trim(),
-              class: req.body.className,
-              major: req.body.majorName,
-              year: req.body.year,
-              phone: req.body.phone,
-              email: req.body.email.trim(),
-              totalMerits: 0
-            };
-            // Alumni
-            if (req.body.year === 'Alumni') {
-              userInfo.status = 'alumni';
-              userRef.update(userInfo);
+    // Create user with email and password
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((user) => {
+      if (user && !user.emailVerified) {
+        user.updateProfile({ displayName })
+        .then(function() {
+          const userInfo = {
+            firstName,
+            lastName,
+            class: className,
+            major,
+            year,
+            phone,
+            email,
+            totalMerits: 0
+          };
+          // Alumni
+          if (year === 'Alumni') {
+            userInfo.status = 'alumni';
+            userRef.update(userInfo);
+          }
+          else {
+            const storage = firebase.storage().ref(`${displayName}.jpg`);
+            // Set the status of the user based on the authorization code
+            if (code === pledgeCode) {
+              userInfo.status = 'pledge';
+            } else {
+              userInfo.status = 'active';
             }
-            else {
-              const storage = firebase.storage().ref(`${displayName}.jpg`);
-              // Pledge
-              if (req.body.code === req.body.pledgeCode) {
-                userInfo.status = 'pledge';
-              }
-              // Active
-              else {
-                userInfo.status = 'active';
-              }
-              // Sets user photo here
-              // Checks first if the .jpg file is in firebase storage
+            // Sets user photo here
+            // Checks first if the .jpg file is in firebase storage
+            storage.getDownloadURL()
+            .then((url) => {
+              userInfo.photoURL = url;
+              userRef.set(userInfo);
+            })
+            .catch((error) => {
+              // Checks if the .JPG file is in firebase storage
+              const storage = firebase.storage().ref(`${displayName}.JPG`);
               storage.getDownloadURL()
               .then((url) => {
                 userInfo.photoURL = url;
                 userRef.set(userInfo);
               })
               .catch((error) => {
-                // Checks if the .JPG file is in firebase storage
-                const storage = firebase.storage().ref(`${displayName}.JPG`);
-                storage.getDownloadURL()
-                .then((url) => {
-                  userInfo.photoURL = url;
-                  userRef.set(userInfo);
-                })
-                .catch((error) => {
-                  const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-                  userInfo.photoURL = defaultPhoto
-                  userRef.set(userInfo)
-                });
+                const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+                userInfo.photoURL = defaultPhoto
+                userRef.set(userInfo)
               });
-            }
-            // Set merits
-            usersRef.once('value', (users) => {
-              // Pledge
-              if (req.body.code === req.body.pledgeCode) {
-                users.forEach((child) => {
-                  if (child.val().status === 'alumni') {
-                    child.ref.child('/Pledges/' + displayName).set({
+            });
+          }
+          // Set merits
+          usersRef.once('value', (users) => {
+            // Set merit counts based on the user's status
+            if (code === pledgeCode) {
+              users.forEach((child) => {
+                switch (child.val().status) {
+                  case 'alumni':
+                    child.ref.child(`/Pledges/${displayName}`).set({
                       merits: 200
                     });
-                  }
-                  else if (child.val().status === 'pipm') {
-                    child.ref.child('/Pledges/' + displayName).set({
+                    break;
+                  case 'pipm':
+                    child.ref.child(`/Pledges/${displayName}`).set({
                       merits: 'Unlimited'
                     });
-                  }
-                  else if (child.val().status !== 'pledge') {
-                    child.ref.child('/Pledges/' + displayName).set({
+                    break
+                  case 'pledge':
+                    // don't give pledges a merit count for pledges
+                    break
+                  default:
+                    child.ref.child(`/Pledges/${displayName}`).set({
                       merits: 100
                     });
-                  }
-                });
-              }
-              // Alumni
-              else if (req.body.year === 'Alumni') {
-                users.forEach((child) => {
-                  if (child.val().status === 'pledge') {
-                    const pledgeName = child.key;
-
-                    userRef.child('/Pledges/' + pledgeName).set({
-                      merits: 200
-                    });
-                  }
-                });
-              }
-              // Active
-              else {
-                users.forEach((child) => {
-                  if (child.val().status === 'pledge') {
-                    const pledgeName = child.key;
-
-                    userRef.child('/Pledges/' + pledgeName).set({
-                      merits: 100
-                    });
-                  }
-                });
-              }
-            });
-
-            user.sendEmailVerification()
-            .then(function() {
-              res.status(200).send('Verification email has been sent.');
-            });
-          })
-          .catch(function(error) {
-            // Handle errors here.
-            const errorCode = error.code;
-            const errorMessage = error.message;
-
-            console.log(errorCode, errorMessage);
-            res.status(400).send('Something went wrong on the server.');
+                }
+              });
+            } else if (year === 'Alumni') {
+              users.forEach((child) => {
+                if (child.val().status === 'pledge') {
+                  const pledgeName = child.key;
+                  userRef.child(`/Pledges/${pledgeName}`).set({
+                    merits: 200
+                  });
+                }
+              });
+            } else {
+              users.forEach((child) => {
+                if (child.val().status === 'pledge') {
+                  const pledgeName = child.key;
+                  userRef.child(`/Pledges/${pledgeName}`).set({
+                    merits: 100
+                  });
+                }
+              });
+            }
           });
-        }
-      })
-      .catch(function(error) {
-        // Handle errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
 
-        console.log(errorCode, errorMessage);
-        res.status(400).send('Email has already been taken.');
-      });
-    }
-    else {
-      res.status(400).send('This active is already signed up.');
-    }
+          user.sendEmailVerification()
+          .then(function() {
+            res.status(200).send('Verification email has been sent.');
+          });
+        })
+        .catch(function(error) {
+          // Handle errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+
+          console.log(errorCode, errorMessage);
+          res.status(400).send('Something went wrong on the server.');
+        });
+      }
+    })
+    .catch(function(error) {
+      // Handle errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      console.log(errorCode, errorMessage);
+      res.status(400).send('Email has already been taken.');
+    });
   })
 }
 
