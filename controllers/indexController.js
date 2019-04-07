@@ -1,7 +1,6 @@
 const admin = require('firebase-admin');
 const firebase = require('@firebase/app').firebase;
 require('@firebase/auth');
-require('@firebase/storage');
 
 // Retrieving Authentication Status Route
 exports.get_auth_status = function(req, res) {
@@ -93,7 +92,7 @@ exports.signup = function(req, res) {
   const pledgeCode = process.env.PLEDGE_AUTHORIZATION_CODE;
 
   if (code !== activeCode && code !== pledgeCode) {
-    res.status(401).send('The authorization code is incorrect.')
+    return res.status(401).send('The authorization code is incorrect.');
   }
 
   const displayName = firstName + lastName;
@@ -102,9 +101,9 @@ exports.signup = function(req, res) {
 
   userRef.once('value', (snapshot) => {
     if (snapshot.val() && year !== 'Alumni') {
-      res.status(400).send('This active is already signed up.');
+      return res.status(400).send('This active is already signed up.');
     } else if (!snapshot.val() && year === 'Alumni') {
-      res.status(400).send('This alumni does not exist.');
+      return res.status(400).send('This alumni does not exist.');
     }
     // Create user with email and password
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -127,7 +126,8 @@ exports.signup = function(req, res) {
             userInfo.status = 'alumni';
             userRef.update(userInfo);
           } else {
-            const storage = firebase.storage().ref(`${displayName}.jpg`);
+            const bucket = admin.storage().bucket();
+            const file = bucket.file(`${displayName}.jpg`);
             // Set the status of the user based on the authorization code
             if (code === pledgeCode) {
               userInfo.status = 'pledge';
@@ -136,22 +136,22 @@ exports.signup = function(req, res) {
             }
             // Sets user photo here
             // Checks first if the .jpg file is in firebase storage
-            storage.getDownloadURL()
-            .then((url) => {
-              userInfo.photoURL = url;
+            file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
+            .then((signedUrls) => {
+              userInfo.photoURL = signedUrls[0];
               userRef.set(userInfo);
             })
             .catch((error) => {
               // Checks if the .JPG file is in firebase storage
-              const storage = firebase.storage().ref(`${displayName}.JPG`);
-              storage.getDownloadURL()
-              .then((url) => {
-                userInfo.photoURL = url;
+              const file = bucket.file(`${displayName}.jpg`);
+              file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
+              .then((signedUrls) => {
+                userInfo.photoURL = signedUrls[0];
                 userRef.set(userInfo);
               })
               .catch((error) => {
                 const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-                userInfo.photoURL = defaultPhoto
+                userInfo.photoURL = defaultPhoto;
                 userRef.set(userInfo)
               });
             });

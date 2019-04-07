@@ -28,12 +28,12 @@ export class SignIn extends PureComponent<Props, State> {
     password: ''
   }
 
-  get isFormInValid(): boolean {
+  get isFormValid(): boolean {
     const { email, password } = this.state;
     if (email && validateEmail(email) && password) {
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 
   login = () => {
@@ -60,8 +60,7 @@ export class SignIn extends PureComponent<Props, State> {
               this.props.loginCallback(user);
             });
           });
-        }
-        else {
+        } else {
           const message = 'Email is not verified.';
           this.props.closeProgressDialog();
           this.props.handleRequestOpen(message);
@@ -86,7 +85,6 @@ export class SignIn extends PureComponent<Props, State> {
         <TextField
           className="login-input"
           type="email"
-          inputStyle={{ color: '#fff' }}
           floatingLabelText="Email"
           floatingLabelStyle={{ color: '#888' }}
           value={this.state.email}
@@ -103,14 +101,13 @@ export class SignIn extends PureComponent<Props, State> {
         <TextField
           className="login-input"
           type="password"
-          inputStyle={{ color: '#fff' }}
           floatingLabelText="Password"
           floatingLabelStyle={{ color: '#888' }}
           value={this.state.password}
           onChange={(e, newValue) => this.handleChange('password', newValue)}
           onSubmit={this.login}
           onKeyPress={(ev) => {
-            if (ev.key === 'Enter') {
+            if (ev.key === 'Enter' && this.isFormValid) {
               this.login();
               ev.preventDefault();
             }
@@ -120,7 +117,7 @@ export class SignIn extends PureComponent<Props, State> {
         <button
           type="button"
           className="login-button"
-          disabled={this.isFormInValid}
+          disabled={!this.isFormValid}
           onClick={this.login}
         >
           Login

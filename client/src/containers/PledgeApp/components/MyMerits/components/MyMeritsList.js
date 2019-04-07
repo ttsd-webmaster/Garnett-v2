@@ -15,7 +15,6 @@ import { List } from 'material-ui/List';
 
 type Props = {
   state: User,
-  hidden: boolean,
   handleRequestOpen: () => void
 };
 
@@ -92,14 +91,9 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
   render() {
     let { myMerits, reverse, loaded, openDelete, selectedMerit } = this.state;
-    const { hidden, state, handleRequestOpen } = this.props;
-
-    if (hidden) {
-      return null;
-    }
-    
+    const { state, handleRequestOpen } = this.props;
     if (!loaded) {
-      return <LoadingComponent className={hidden ? "hidden" : ""} />;
+      return <LoadingComponent />;
     }
 
     if (myMerits && reverse) {

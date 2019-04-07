@@ -8,10 +8,6 @@ import type { Merit } from 'api/models';
 import React, { Fragment, PureComponent} from 'react';
 import { List } from 'material-ui/List';
 
-type Props = {
-  hidden: boolean
-};
-
 type State = {
   loaded: boolean,
   allMerits: ?Array<Merit>,
@@ -64,12 +60,8 @@ export class AllMeritsList extends PureComponent<Props, State> {
   render() {
     let { allMerits, reverse } = this.state;
 
-    if (this.props.hidden) {
-      return null
-    }
-
     if (!this.state.loaded) {
-      return <LoadingComponent className={this.props.hidden ? "hidden" : ""} />;
+      return <LoadingComponent />;
     }
 
     if (allMerits && reverse) {

@@ -30,6 +30,15 @@ export class MyMerits extends PureComponent<Props, State> {
   state = {
     view: 'allMerits',
     openMerit: false
+  };
+
+  get meritsList(): Node {
+    const { state, handleRequestOpen } = this.props;
+    const { view } = this.state;
+    if (view === 'allMerits' && state.status !== 'pledge') {
+      return <AllMeritsList state={state} />
+    }
+    return <MyMeritsList state={state} handleRequestOpen={handleRequestOpen} />
   }
 
   setView = (value: string) => this.setState({ view: value });
@@ -73,15 +82,9 @@ export class MyMerits extends PureComponent<Props, State> {
             setView={this.setView}
           />
         )}
-        <MyMeritsList
-          hidden={this.state.view === 'allMerits' && state.status !== 'pledge'}
-          state={state}
-          handleRequestOpen={handleRequestOpen}
-        />
-        <AllMeritsList
-          hidden={this.state.view === 'myMerits'}
-          state={state}
-        />
+
+        { this.meritsList }
+
         {isMobile() && (
           <Fragment>
             <LoadableMobileMeritDialog

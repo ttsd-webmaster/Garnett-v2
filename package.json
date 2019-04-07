@@ -20,7 +20,6 @@
     "@firebase/auth": "^0.2.2",
     "@firebase/database": "^0.1.11",
     "@firebase/messaging": "^0.1.9",
-    "@firebase/storage": "^0.1.9",
     "body-parser": "^1.18.3",
     "deep-equal": "^1.0.1",
     "dotenv": "^4.0.0",

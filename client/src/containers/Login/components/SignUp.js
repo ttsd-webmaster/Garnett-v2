@@ -183,7 +183,7 @@ export class SignUp extends PureComponent<Props, State> {
             key={i}
             onSubmit={this.signUp}
             onKeyPress={(ev) => {
-              if (ev.key === 'Enter') {
+              if (ev.key === 'Enter' && this.isFormValid) {
                 this.signUp();
                 ev.preventDefault();
               }
