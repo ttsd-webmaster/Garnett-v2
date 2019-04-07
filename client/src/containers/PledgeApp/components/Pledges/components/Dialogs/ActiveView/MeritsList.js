@@ -62,11 +62,7 @@ export class MeritsList extends PureComponent<Props, State> {
 
     return (
       <List className="garnett-list dialog pledge">
-        <FilterHeader
-          title={reverse ? 'Oldest' : 'Recent'}
-          isReversed={reverse}
-          reverse={this.reverse}
-        />
+        <FilterHeader isReversed={reverse} reverse={this.reverse} />
         {merits && merits.map((merit, i) => (
           <MeritRow
             key={i}

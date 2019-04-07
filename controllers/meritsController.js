@@ -43,9 +43,9 @@ exports.get_pledges_as_active_mobile = function(req, res) {
 
   userPledgesRef.once('value', (pledges) => {
     if (pledges.val()) {
-      let result = [];
-      let promises = [];
-      let remainingMerits = new Map();
+      const result = [];
+      const promises = [];
+      const remainingMerits = new Map();
       pledges.forEach((pledge) => {
         remainingMerits.set(pledge.key, pledge.val().merits);
         promises.push(usersRef.child(pledge.key).once('value'))
@@ -53,7 +53,7 @@ exports.get_pledges_as_active_mobile = function(req, res) {
 
       Promise.all(promises).then((results) => {
         results.forEach((user) => {
-          let currentPledge = {
+          const currentPledge = {
             firstName: user.val().firstName,
             lastName: user.val().lastName,
             year: user.val().year,
@@ -75,11 +75,11 @@ exports.get_actives_as_pledge = function(req, res) {
   const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (users) => {
-    let result = [];
+    const result = [];
 
     users.forEach((user) => {
       if (user.val().status !== 'pledge') {
-        let currentActive = {
+        const currentActive = {
           value: user.key,
           label: `${user.val().firstName} ${user.val().lastName}`,
           remainingMerits: user.val().Pledges[displayName].merits
@@ -106,11 +106,11 @@ exports.get_actives_as_pledge_mobile = function(req, res) {
   const usersRef = admin.database().ref('/users');
 
   usersRef.once('value', (users) => {
-    let result = [];
+    const result = [];
 
     users.forEach((user) => {
       if (user.val().status !== 'pledge') {
-        let currentActive = {
+        const currentActive = {
           firstName: user.val().firstName,
           lastName: user.val().lastName,
           year: user.val().year,
@@ -123,8 +123,7 @@ exports.get_actives_as_pledge_mobile = function(req, res) {
           if (user.val().status === 'alumni') {
             result.push(currentActive);
           }
-        }
-        else if (user.val().status !== 'alumni') {
+        } else if (user.val().status !== 'alumni') {
           result.push(currentActive);
         }
       }
@@ -140,7 +139,7 @@ exports.get_chalkboards_merit = function(req, res) {
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
   chalkboardsRef.once('value', (snapshot) => {
-    let myChalkboards = [];
+    const myChalkboards = [];
 
     if (snapshot.val()) {
       const chalkboards = Object.keys(snapshot.val()).map(function(key) {
@@ -148,15 +147,12 @@ exports.get_chalkboards_merit = function(req, res) {
       });
 
       chalkboards.forEach((chalkboard) => {
-        let currentChalkboard = {
-          title: chalkboard.title,
-          amount: chalkboard.amount
-        };
+        const { title, amount } = chalkboard;
+        const currentChalkboard = { title, amount };
 
         if (chalkboard.activeName === fullName) {
           myChalkboards.push(currentChalkboard);
-        }
-        else if (chalkboard.attendees) {
+        } else if (chalkboard.attendees) {
           const attendees = Object.keys(chalkboard.attendees).map(function(key) {
             return chalkboard.attendees[key];
           });
@@ -215,12 +211,9 @@ exports.merit_as_active = function(req, res) {
             remainingMerits < 0 &&
             !res.headersSent) {
           res.sendStatus(400).send(pledge.label);
-        }
-        else {
+        } else {
           const activePledgeRef = active.ref.child('/Pledges/' + pledge.value);
-          activePledgeRef.update({
-            merits: remainingMerits
-          });
+          activePledgeRef.update({ merits: remainingMerits });
         }
       }
 
@@ -278,9 +271,7 @@ exports.merit_as_pledge = function(req, res) {
         }
         else {
           const activePledgeRef = active.ref.child('/Pledges/' + displayName);
-          activePledgeRef.update({
-            merits: remainingMerits
-          });
+          activePledgeRef.update({ merits: remainingMerits });
         }
       }
 

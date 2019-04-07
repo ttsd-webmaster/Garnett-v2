@@ -22,30 +22,35 @@ export class AllMeritsList extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const meritsRef = firebase.database().ref('/merits');
-
-        meritsRef.limitToLast(100).on('value', (merits) => {
-          if (merits.val()) {
-            // Retrieves the 100 most recent merits
-            const allMerits = Object.keys(merits.val()).map(function(key) {
-              return merits.val()[key];
-            }).reverse();
-
-            localStorage.setItem('allMerits', JSON.stringify(allMerits));
-
-            this.setState({ allMerits, loaded: true });
-          } else {
-            this.setState({ loaded: true });
-          }
-        });
-      });
-    } else {
+    if (!navigator.onLine) {
       this.setState({ loaded: true });
+      return
     }
+    loadFirebase('database')
+    .then(() => {
+      const { firebase } = window;
+      const meritsRef = firebase.database().ref('/merits');
+
+      meritsRef.limitToLast(100).on('value', (merits) => {
+        if (!merits.val()) {
+          this.setState({ loaded: true });
+          return
+        }
+        // Retrieves the 100 most recent merits
+        const allMerits = Object.keys(merits.val()).map(function(key) {
+          return merits.val()[key];
+        }).reverse();
+
+        localStorage.setItem('allMerits', JSON.stringify(allMerits));
+        this.setState({ allMerits, loaded: true });
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    const { firebase } = window;
+    const meritsRef = firebase.database().ref('/merits');
+    meritsRef.off('value');
   }
 
   shortenedName(name: string): string {
@@ -55,27 +60,23 @@ export class AllMeritsList extends PureComponent<Props, State> {
     return `${firstName} ${lastName}.`;
   }
 
-  reverse = () => this.setState({ reverse: !this.state.reverse });
+  reverse = () => {
+    const { allMerits, reverse } = this.state;
+    const reversedMerits = allMerits && allMerits.reverse();
+    this.setState({ allMerits: reversedMerits, reverse: !reverse });
+  }
 
   render() {
-    let { allMerits, reverse } = this.state;
+    const { allMerits, reverse } = this.state;
 
     if (!this.state.loaded) {
       return <LoadingComponent />;
     }
 
-    if (allMerits && reverse) {
-      allMerits = allMerits.slice().reverse();
-    }
-
     return (
       <Fragment>
         <List className="animate-in garnett-list">
-          <FilterHeader
-            title={reverse ? "Oldest" : "Recent"}
-            isReversed={reverse}
-            reverse={this.reverse}
-          />
+          <FilterHeader isReversed={reverse} reverse={this.reverse} />
           {allMerits && allMerits.map((merit, i) => (
             <MeritRow
               key={i}

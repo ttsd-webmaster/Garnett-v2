@@ -131,7 +131,6 @@ export default class ActiveMeritDialog extends PureComponent<Props, State> {
 
       API.meritAsActive(meritInfo)
       .then(res => {
-        console.log(res);
         this.handleClose();
         this.closeProgressDialog();
 

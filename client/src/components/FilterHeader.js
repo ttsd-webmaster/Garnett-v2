@@ -29,7 +29,7 @@ export function FilterHeader(props: Props) {
         "Pledge Brothers"
       ) : (
         <Fragment>
-          {title}
+          { isReversed ? 'Oldest' : 'Recent' }
           <span className="garnett-filter">
             {filterName && openPopover && (
               <span className="garnett-filter" onClick={openPopover}> 
