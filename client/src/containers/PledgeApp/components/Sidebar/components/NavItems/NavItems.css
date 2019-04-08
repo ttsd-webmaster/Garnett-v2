@@ -20,7 +20,7 @@
   opacity: 0.6;
   text-decoration: none;
 }
-@media(max-height: 660px) {
+@media (max-height: 660px) {
   .nav-item {
     margin-bottom: 5px;
   }

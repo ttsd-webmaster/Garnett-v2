@@ -6,7 +6,7 @@ import { MeritSelectPledges } from './MeritSelectPledges';
 import { MeritSelectActives } from './MeritSelectActives';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
 const fullscreenDialogStyle = {
@@ -56,6 +56,36 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
     }
   }
 
+  get body(): ?Node {
+    const { state } = this.props;
+    const { view, amount } = this.state;
+    switch (view) {
+      case 'amount':
+        return <MeritCreateAmount changeView={this.changeView} />;
+      case 'selectUsers':
+        if (state.status === 'pledge') {
+          return (
+            <MeritSelectActives
+              state={state}
+              amount={amount}
+              handleRequestOpen={this.props.handleRequestOpen}
+              handleClose={this.onClose}
+            />
+          )
+        }
+        return (
+          <MeritSelectPledges
+            state={state}
+            amount={amount}
+            handleRequestOpen={this.props.handleRequestOpen}
+            handleClose={this.onClose}
+          />
+        )
+      default:
+        return null
+    }
+  }
+
   changeView = (value: string) => {
     const parsedAmount = parseInt(value, 10);
     let header;
@@ -99,26 +129,7 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
         onRequestClose={this.onClose}
         appBarZDepth={0}
       >
-        {this.state.view === 'amount' && (
-          <MeritCreateAmount changeView={this.changeView} />
-        )}
-        {this.props.state.status === 'pledge' ? (
-          <MeritSelectActives
-            hidden={this.state.view !== 'selectUsers'}
-            state={this.props.state}
-            amount={this.state.amount}
-            handleRequestOpen={this.props.handleRequestOpen}
-            handleClose={this.onClose}
-          />
-        ) : (
-          <MeritSelectPledges
-            hidden={this.state.view !== 'selectUsers'}
-            state={this.props.state}
-            amount={this.state.amount}
-            handleRequestOpen={this.props.handleRequestOpen}
-            handleClose={this.onClose}
-          />
-        )}
+        { this.body }
       </FullscreenDialog>
     )
   }

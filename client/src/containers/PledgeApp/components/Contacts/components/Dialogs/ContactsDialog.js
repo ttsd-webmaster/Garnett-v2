@@ -4,7 +4,7 @@ import { isMobile } from 'helpers/functions.js';
 import { UserInfo } from 'components';
 import type { User } from 'api/models';
 
-import React, { PureComponent, type Node } from 'react';
+import React from 'react';
 import FlatButton from 'material-ui/FlatButton';
 import Dialog from 'material-ui/Dialog';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
@@ -20,63 +20,48 @@ type Props = {
   handleClose: () => void
 };
 
-export default class ContactsDialog extends PureComponent<Props> {
-  get userInfo(): Node {
-    const { active } = this.props;
-    return (
-      <UserInfo
-        photoURL={active.photoURL}
-        className={active.class}
-        phone={active.phone}
-        email={active.email}
-        major={active.major}
-      />
-    )
+export default function ContactsDialog(props: Props) {
+  const { firstName, lastName } = props.active;
+  const fullName = `${firstName} ${lastName}`;
+  const actions = [
+    <FlatButton
+      label="Close"
+      primary={true}
+      onClick={props.handleClose}
+    />,
+  ];
+
+  if (!props.active) {
+    return null
   }
 
-  render() {
-    const { firstName, lastName } = this.props.active;
-    const fullName = `${firstName} ${lastName}`;
-    const actions = [
-      <FlatButton
-        label="Close"
-        primary={true}
-        onClick={this.props.handleClose}
-      />,
-    ];
-
-    if (!this.props.active) {
-      return null
-    }
-
-    if (isMobile()) {
-      return (
-        <FullscreenDialog
-          title={fullName}
-          titleStyle={{ fontSize:'22px' }}
-          style={fullscreenDialogStyle}
-          open={this.props.open}
-          onRequestClose={this.props.handleClose}
-        >
-          { this.userInfo }
-        </FullscreenDialog>
-      )
-    }
-
+  if (isMobile()) {
     return (
-      <Dialog
-        title={fullName}
-        titleClassName="garnett-dialog-title"
-        actions={actions}
-        modal={false}
-        bodyClassName="contacts-dialog-body"
-        contentClassName="garnett-dialog-content"
-        open={this.props.open}
-        onRequestClose={this.props.handleClose}
-        autoScrollBodyContent={true}
+      <FullscreenDialog
+        title="Brother"
+        titleStyle={{ fontSize:'22px' }}
+        style={fullscreenDialogStyle}
+        open={props.open}
+        onRequestClose={props.handleClose}
       >
-        { this.userInfo }
-      </Dialog>
+        <UserInfo user={props.active} name={fullName} />
+      </FullscreenDialog>
     )
   }
+
+  return (
+    <Dialog
+      title="Brother"
+      titleClassName="garnett-dialog-title"
+      actions={actions}
+      modal={false}
+      bodyClassName="garnett-dialog-body list"
+      contentClassName="garnett-dialog-content"
+      open={props.open}
+      onRequestClose={props.handleClose}
+      autoScrollBodyContent={true}
+    >
+      <UserInfo user={props.active} name={fullName} />
+    </Dialog>
+  )
 }

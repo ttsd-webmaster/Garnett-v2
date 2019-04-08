@@ -47,19 +47,6 @@ export class ActiveView extends PureComponent<Props, State> {
     this.setState({ index: 0 });
   }
 
-  get userInfo(): Node {
-    const { pledge, remainingMerits } = this.props;
-    return (
-      <UserInfo
-        photoURL={pledge.photoURL}
-        remainingMerits={remainingMerits}
-        phone={pledge.phone}
-        email={pledge.email}
-        major={pledge.major}
-      />
-    )
-  }
-
   get meritsList(): Node {
     const { firstName, lastName } = this.props.pledge;
     return (
@@ -75,13 +62,13 @@ export class ActiveView extends PureComponent<Props, State> {
   }
 
   render() {
-    const { open, handleClose, actions } = this.props;
-    const { firstName, lastName } = this.props.pledge;
+    const { pledge, remainingMerits, open, handleClose, actions } = this.props;
+    const { firstName, lastName } = pledge;
     const fullName = `${firstName} ${lastName}`;
     if (isMobile()) {
       return (
         <FullscreenDialog
-          title={fullName}
+          title="Pledge"
           titleStyle={{ fontSize: '22px' }}
           style={fullscreenDialogStyle}
           open={open}
@@ -101,7 +88,13 @@ export class ActiveView extends PureComponent<Props, State> {
             onChangeIndex={this.handleChange}
             disableLazyLoading
           >
-            <div>{ this.userInfo }</div>
+            <div>
+              <UserInfo
+                user={pledge}
+                name={fullName}
+                remainingMerits={remainingMerits}
+              />
+            </div>
             { this.meritsList }
           </SwipeableViews>
         </FullscreenDialog>
@@ -109,11 +102,11 @@ export class ActiveView extends PureComponent<Props, State> {
     }
     return (
       <Dialog
-        title={fullName}
+        title="Pledge"
         titleClassName="garnett-dialog-title"
         actions={actions}
         modal={false}
-        bodyClassName="garnett-dialog-body tabs grey"
+        bodyClassName="garnett-dialog-body list"
         contentClassName="garnett-dialog-content"
         open={open}
         onRequestClose={handleClose}
@@ -126,7 +119,11 @@ export class ActiveView extends PureComponent<Props, State> {
           onChange={this.handleChange}
         >
           <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
-            { this.userInfo }
+            <UserInfo
+              user={pledge}
+              name={fullName}
+              remainingMerits={remainingMerits}
+            />
           </Tab>
           <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
             { this.meritsList }

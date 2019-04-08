@@ -63,7 +63,11 @@ export class AllMeritsList extends PureComponent<Props, State> {
   get merits(): Node {
     const { allMerits } = this.state;
     if (!allMerits) {
-      return <h1 className="no-items-found">No merits found</h1>
+      return (
+        <div className="no-items-container">
+          <h1 className="no-items-found">No merits found</h1>
+        </div>
+      )
     }
     return (
       <List className="animate-in garnett-list">

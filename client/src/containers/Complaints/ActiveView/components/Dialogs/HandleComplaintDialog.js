@@ -81,7 +81,7 @@ export default class HandleComplaintDialog extends Component {
         onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
       >
-        {message}
+        { message }
       </Dialog>
     )
   }

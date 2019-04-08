@@ -131,7 +131,11 @@ export class Pledges extends PureComponent<Props, State> {
   get pledges(): Node {
     const { pledges } = this.state;
     if (!pledges) {
-      return <h1 className="no-items-found">No pledges found</h1>;
+      return (
+        <div className="no-items-container">
+          <h1 className="no-items-found">No pledges found</h1>
+        </div>
+      )
     }
     return (
       <List className="garnett-list">
@@ -207,7 +211,7 @@ export class Pledges extends PureComponent<Props, State> {
       return <LoadingComponent />
     }
     return (
-      <div id="pledges-container" className="garnett-container animate-in">
+      <div id="pledges-container" className="animate-in">
         <FilterHeader
           title={state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges'}
           status={state.status}

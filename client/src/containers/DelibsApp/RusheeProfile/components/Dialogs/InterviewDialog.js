@@ -61,7 +61,7 @@ export function InterviewDialog(props: Props) {
       titleClassName="garnett-dialog-title"
       actions={actions}
       modal={false}
-      bodyClassName="garnett-dialog-body tabs grey"
+      bodyClassName="garnett-dialog-body list"
       contentClassName="garnett-dialog-content"
       open={props.open}
       onRequestClose={props.handleClose}

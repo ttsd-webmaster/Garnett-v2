@@ -15,7 +15,6 @@ import Chip from 'material-ui/Chip';
 type Props = {
   state: User,
   amount: number,
-  hidden: boolean,
   handleClose: () => void,
   handleRequestOpen: () => void
 };
@@ -173,10 +172,7 @@ export class MeritSelectActives extends Component<Props, State> {
 
   render() {
     return (
-      <div
-        className={this.props.hidden ? 'hidden' : ''}
-        id="merit-select-users-container"
-      >
+      <div id="merit-select-users-container">
         <div id="merit-inputs-container">
           <div className="merit-input">
             <div id="chips-container">

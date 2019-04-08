@@ -40,34 +40,19 @@ export class Settings extends PureComponent<Props> {
   }
 
   render() {
-    const {
-      name,
-      phone,
-      email,
-      class: className,
-      major,
-      status,
-      photoURL
-    } = this.props.state;
+    const { state } = this.props;
 
-    if (!photoURL) {
+    if (!state.photoURL) {
       return <LoadingComponent />
     }
 
     return (
       <div className="animate-in">
-        <UserInfo
-          photoURL={photoURL}
-          name={name}
-          phone={phone}
-          email={email}
-          className={className}
-          major={major}
-        />
+        <UserInfo user={state} name={state.name} />
         {isMobile() && (
           <Fragment>
             <ThemeOptions />
-            {status === 'pledge' ? (
+            {state.status === 'pledge' ? (
               <div className="logout-button" onClick={this.logout}> Log Out </div>
             ) : (
               <span className="logout-button" onClick={this.goHome}> Back Home </span>

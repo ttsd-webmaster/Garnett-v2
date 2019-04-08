@@ -20,7 +20,7 @@
   padding-top: 75px;
   margin-bottom: 50px;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .login-logo {
     width: 280px;
     margin-bottom: 20px;
@@ -31,7 +31,7 @@
   height: 75px;
   margin: auto 0;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .login-logo img {
     height: 50px;
   }
@@ -42,7 +42,7 @@
   margin-bottom: 20px;
   text-transform: uppercase;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .login-logo h1 {
     font-size: 45px;
   }
@@ -61,7 +61,7 @@
   box-shadow: rgba(0, 0, 0, 0.06) 0px 4px 4px,
               rgba(0, 0, 0, 0.08) 0px 8px 18px;
 }
-@media(max-width: 420px) {
+@media (max-width: 420px) {
   .login-container {
     background-color: var(--background-color);
     box-shadow: none;
@@ -76,7 +76,7 @@
   font-size: 18px;
   margin: auto;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .sign-options {
     width: 300px;
   }
@@ -119,7 +119,7 @@
   width: 100% !important;
   margin: auto;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .login-input {
     width: 80% !important;
   }
@@ -146,7 +146,7 @@
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .login-button {
     width: 80%;
   }

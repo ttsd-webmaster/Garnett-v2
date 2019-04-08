@@ -22,14 +22,31 @@ type Props = {
 
 type State = {
   view: 'myMerits' | 'allMerits',
-  openMerit: boolean
+  openMerit: boolean,
+  scrollDirection: 'up' | 'down' | null,
+  lastScrollTop: number
 };
 
 export class MyMerits extends PureComponent<Props, State> {
+  containerRef: ?HtmlDivElement
   state = {
     view: 'allMerits',
-    openMerit: false
+    openMerit: false,
+    scrollDirection: null,
+    lastScrollTop: 0
   };
+
+  componentDidMount() {
+    if (this.containerRef) {
+      this.containerRef.addEventListener('scroll', this.handleScroll);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.containerRef) {
+      this.containerRef.removeEventListener('scroll', this.handleScroll);
+    }
+  }
 
   get meritsList(): Node {
     const { state, handleRequestOpen } = this.props;
@@ -38,6 +55,16 @@ export class MyMerits extends PureComponent<Props, State> {
       return <AllMeritsList state={state} />
     }
     return <MyMeritsList state={state} handleRequestOpen={handleRequestOpen} />
+  }
+
+  handleScroll = (event) => {
+    if (!this.containerRef) {
+      return
+    }
+    const { scrollTop } = this.containerRef;
+    const scrollDirection = scrollTop > this.state.lastScrollTop ? 'down' : 'up';
+    const lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
+    this.setState({ scrollDirection, lastScrollTop })
   }
 
   setView = (value: string) => this.setState({ view: value });
@@ -61,15 +88,17 @@ export class MyMerits extends PureComponent<Props, State> {
 
   render() {
     const { state, handleRequestOpen } = this.props;
+    const { view, openMerit, scrollDirection } = this.state;
     
     return (
       <div
-        id={state.status !== 'pledge' ? "active-merits" : ""}
-        className="garnett-container animate-in"
+        id="my-merits"
+        className="animate-in"
+        ref={(ref) => this.containerRef = ref}
       >
         {state.status !== 'pledge' && (
           <ToggleViewHeader
-            view={this.state.view}
+            view={view}
             setView={this.setView}
           />
         )}
@@ -79,12 +108,15 @@ export class MyMerits extends PureComponent<Props, State> {
         {isMobile() && (
           <Fragment>
             <LoadableMobileMeritDialog
-              open={this.state.openMerit}
+              open={openMerit}
               state={state}
               handleMeritClose={this.handleMeritClose}
               handleRequestOpen={handleRequestOpen}
             />
-            <FloatingActionButton className="fixed-button" onClick={this.handleMeritOpen}>
+            <FloatingActionButton
+              className={`fixed-button ${scrollDirection === 'down' && 'hidden'}`}
+              onClick={this.handleMeritOpen}
+            >
               <i className="icon-pencil"></i>
             </FloatingActionButton>
           </Fragment>

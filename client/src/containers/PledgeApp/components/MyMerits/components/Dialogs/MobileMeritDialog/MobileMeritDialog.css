@@ -1,5 +1,5 @@
 /* Used to unstyle close button for mobile merit fullscreen dialog */
-#active-merits svg {
+#my-merits svg {
   fill: unset !important;
 }
 
@@ -120,7 +120,7 @@
   background-color: var(--primary-color);
   color: #fff;
 }
-#active-merits .garnett-chip.merit-select > svg{
+#my-merits .garnett-chip.merit-select > svg{
   fill: #fff !important;
 }
 

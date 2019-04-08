@@ -53,7 +53,7 @@ body.dark-mode {
   --placeholder-color: #363636;
 }
 
-@media(max-width: 420px) {
+@media (max-width: 420px) {
   h1 {
     font-size: 32px;
   }
@@ -69,7 +69,7 @@ input:-webkit-autofill:active {
     -webkit-box-shadow: inset 0 0 0px 1000px #fff;
     -webkit-text-fill-color: var(--secondary-dark);
 }
-@media(max-width: 420px) {
+@media (max-width: 420px) {
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -108,7 +108,7 @@ div, a {
   animation: spin 5s linear infinite, fadeIn 0.5s ease-in;
   z-index: 10;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .loading-image {
     height: 150px;
     width: 150px;
@@ -151,10 +151,6 @@ div, a {
   margin-left: auto;
   margin-right: 15px;
   cursor: pointer;
-}
-
-.hidden {
-  display: none !important;
 }
 
 /* Placeholder skeleton for list items */
@@ -233,7 +229,7 @@ div, a {
   height: 60px;
   width: 60px;
 }
-@media(max-width: 767px) {
+@media (max-width: 767px) {
   .logo {
     height: 50px;
     width: 50px;
