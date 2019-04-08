@@ -11,7 +11,7 @@ import {
 import { MobileHeader, MobileNavbar } from './components/Mobile';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 
 type Props = {
   history: RouterHistory,
@@ -33,6 +33,28 @@ export class MobilePledgeApp extends PureComponent<Props, State> {
     configureThemeMode();
   }
 
+  get body(): ?Node {
+    const { state, history, handleRequestOpen, logoutCallBack } = this.props;
+    switch (this.state.index) {
+      case 0:
+        return <MyMerits state={state} handleRequestOpen={handleRequestOpen} />;
+      case 1:
+        return <Pledges state={state} />;
+      case 2:
+        return <Contacts state={this.state} actives={this.state.activeArray} />;
+      case 3:
+        return (
+          <Settings
+            state={state}
+            logoutCallBack={logoutCallBack}
+            history={history}
+          />
+        )
+      default:
+        return null
+    }
+  }
+
   handleChange = (index: number) => {
     this.setState({ index })
   };
@@ -41,26 +63,9 @@ export class MobilePledgeApp extends PureComponent<Props, State> {
     return (
       <div id="content-container">
         <MobileHeader state={this.props.state} index={this.state.index} />
-        <MyMerits
-          state={this.props.state}
-          handleRequestOpen={this.props.handleRequestOpen}
-          hidden={this.state.index !== 0}
-        />
-        <Pledges
-          state={this.props.state}
-          hidden={this.state.index !== 1}
-        />
-        <Contacts
-          state={this.props.state}
-          actives={this.state.activeArray}
-          hidden={this.state.index !== 2}
-        />
-        <Settings
-          state={this.props.state} 
-          logoutCallBack={this.props.logoutCallBack} 
-          history={this.props.history}
-          hidden={this.state.index !== 3}
-        />
+
+        { this.body }
+
         <MobileNavbar
           status={this.props.state.status}
           index={this.state.index}

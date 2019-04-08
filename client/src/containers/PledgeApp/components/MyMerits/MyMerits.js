@@ -17,7 +17,6 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 type Props = {
   state: User,
-  hidden: boolean,
   handleRequestOpen: () => void
 };
 
@@ -61,15 +60,7 @@ export class MyMerits extends PureComponent<Props, State> {
   }
 
   render() {
-    const {
-      state,
-      hidden,
-      handleRequestOpen
-    } = this.props;
-
-    if (hidden) {
-      return null;
-    }
+    const { state, handleRequestOpen } = this.props;
     
     return (
       <div

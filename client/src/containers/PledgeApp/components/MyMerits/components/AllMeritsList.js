@@ -33,7 +33,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
       meritsRef.limitToLast(100).on('value', (merits) => {
         if (!merits.val()) {
-          this.setState({ loaded: true });
+          this.setState({ allMerits: null, loaded: true });
           return
         }
         // Retrieves the 100 most recent merits

@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-import type { SignUpParams, Merit, MeritInfo } from 'api/models'
+import type { SignUpParams, Merit, ActiveMeritInfo, PledgeMeritInfo } from 'api/models'
 
 //Search functions to connect with back-end
 export default {
@@ -75,10 +75,10 @@ export default {
     const params = { displayName };
     return axios.get('/api/merit/pledge/pbros', { params });
   },
-  meritAsActive: function(params: MeritInfo) {
+  meritAsActive: function(params: ActiveMeritInfo) {
     return axios.put('/api/merit/active/create', params);
   },
-  meritAsPledge: function(params: MeritInfo) {
+  meritAsPledge: function(params: PledgeMeritInfo) {
     return axios.put('/api/merit/pledge/create', params);
   },
   deleteMerit: function(displayName: string, merit: Merit) {

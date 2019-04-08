@@ -118,8 +118,6 @@ export default class ActiveMeritDialog extends PureComponent<Props, State> {
         isPCGreet
       };
 
-      this.openProgressDialog();
-
       const meritInfo = {
         displayName,
         selectedPledges,
@@ -128,6 +126,8 @@ export default class ActiveMeritDialog extends PureComponent<Props, State> {
         isPCGreet,
         status
       };
+
+      this.openProgressDialog();
 
       API.meritAsActive(meritInfo)
       .then(res => {

@@ -13,7 +13,6 @@ import { List } from 'material-ui/List';
 type Props = {
   history: RouterHistory,
   state: User,
-  hidden: boolean,
   logoutCallBack: () => void
 };
 
@@ -50,10 +49,6 @@ export class Settings extends PureComponent<Props> {
       status,
       photoURL
     } = this.props.state;
-
-    if (this.props.hidden) {
-      return null;
-    }
 
     if (!photoURL) {
       return <LoadingComponent />

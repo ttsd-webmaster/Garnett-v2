@@ -30,10 +30,6 @@ const filterOptions = [
   'Personality Type'
 ];
 
-type Props = {
-  hidden: boolean
-};
-
 type State = {
   actives: Array<User>,
   active: ?User,
@@ -45,7 +41,7 @@ type State = {
   openPopover: boolean
 };
 
-export class Contacts extends PureComponent<Props, State> {
+export class Contacts extends PureComponent<{}, State> {
   state = {
     actives: [],
     active: null,
@@ -155,10 +151,6 @@ export class Contacts extends PureComponent<Props, State> {
   }
 
   render() {
-    if (this.props.hidden) {
-      return null;
-    }
-
     if (!this.state.labels) {
       return <LoadingComponent />
     }

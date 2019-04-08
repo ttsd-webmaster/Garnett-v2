@@ -33,11 +33,19 @@ export type Merit = {
   isPCGreet: boolean
 };
 
-export type MeritInfo = {
+export type ActiveMeritInfo = {
   displayName: string,
   selectedPledges: Array<Object>, // TODO: Change Object to Pledge type
   merit: Merit, //TODO: Change Object to Merit type
   isChalkboard: boolean,
   isPCGreet: boolean,
-  status?: string 
+  status: string
+};
+
+export type PledgeMeritInfo = {
+  displayName: string,
+  selectedActives: Array<Object>, // TODO: Change Object to Pledge type
+  merit: Merit, //TODO: Change Object to Merit type
+  isChalkboard: boolean,
+  isPCGreet: boolean
 };

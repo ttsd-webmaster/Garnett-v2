@@ -53,14 +53,15 @@ export class MyMeritsList extends PureComponent<Props, State> {
           return
         }
         meritsRef.on('value', (merits) => {
-          let myMerits = [];
+          if (!userMerits.val() || !merits.val()) {
+            this.setState({ myMerits: null, loaded: true });
+            return
+          }
           // Retrieves the user's merits by searching for the key in
           // the Merits table
-          if (userMerits.val() && merits.val()) {
-            myMerits = Object.keys(userMerits.val()).map(function(key) {
-              return merits.val()[userMerits.val()[key]];
-            }).reverse();
-          }
+          const myMerits = Object.keys(userMerits.val()).map(function(key) {
+            return merits.val()[userMerits.val()[key]];
+          }).reverse();
 
           localStorage.setItem('myMerits', JSON.stringify(myMerits));
           this.setState({ myMerits, loaded: true });
