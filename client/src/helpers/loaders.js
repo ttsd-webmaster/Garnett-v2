@@ -75,7 +75,7 @@ export function SpinnerDialog(props: { open: boolean, message: string }): Node {
   const contentStyle = isMobile() ? null : {maxWidth: '500px'};
   const bodyStyle = isMobile() ? spinnerDialogMobile : spinnerDialog;
   const size = isMobile() ? 25 : 90;
-  const thickness = isMobile() ? 3.5 : 5;
+  const thickness = isMobile() ? 2.5 : 5;
   const messageStyle = isMobile() ? { margin: 'auto' } : { marginTop: '50px' };
   return (
     <Dialog

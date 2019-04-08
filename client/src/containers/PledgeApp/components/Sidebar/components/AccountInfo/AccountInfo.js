@@ -43,7 +43,9 @@ export class AccountInfo extends PureComponent<Props, State> {
             // Retrieves the user's total merits by searching for the key in
             // the Merits table
             Object.keys(userMerits.val()).forEach(function(key) {
-              totalMerits += merits.val()[userMerits.val()[key]].amount;
+              if (merits.val()[userMerits.val()[key]]) {
+                totalMerits += merits.val()[userMerits.val()[key]].amount;
+              }
             });
 
             localStorage.setItem('totalMerits', totalMerits);

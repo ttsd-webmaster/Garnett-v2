@@ -50,6 +50,15 @@ export function NavItems(props: Props) {
         <i className="icon-address-book"></i>
         Brothers
       </NavLink>
+      <NavLink
+        className="nav-item"
+        activeClassName="active"
+        to="/pledge-app/settings"
+        exact
+      >
+        <i className="icon-cog"></i>
+        Settings
+      </NavLink>
       <a className="nav-item" onClick={backClick}>
         <i className="icon-logout"></i>
         { backText }

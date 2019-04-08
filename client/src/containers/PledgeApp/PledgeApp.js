@@ -30,6 +30,7 @@ export class PledgeApp extends PureComponent<Props> {
           handleRequestOpen={this.props.handleRequestOpen}
         />
         <Main
+          history={this.props.history}
           state={this.props.state}
           handleRequestOpen={this.props.handleRequestOpen}
         />

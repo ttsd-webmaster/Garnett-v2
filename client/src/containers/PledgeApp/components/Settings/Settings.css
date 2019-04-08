@@ -1,3 +1,9 @@
+.user-name {
+  color: var(--text-color);
+  margin: 0 auto 30px;
+  text-align: center;
+}
+
 .logout-button {
   display: flex;
   justify-content: center;

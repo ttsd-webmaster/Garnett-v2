@@ -2,13 +2,13 @@
 
 import './Settings.css';
 import API from 'api/API.js';
+import { isMobile } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { UserInfo } from 'components';
 import { ThemeOptions } from './components';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
-import { List } from 'material-ui/List';
+import React, { Fragment, PureComponent } from 'react';
 
 type Props = {
   history: RouterHistory,
@@ -56,21 +56,23 @@ export class Settings extends PureComponent<Props> {
 
     return (
       <div className="animate-in">
-        <List className="garnett-list">
-          <UserInfo
-            photoURL={photoURL}
-            name={name}
-            phone={phone}
-            email={email}
-            className={className}
-            major={major}
-          />
-        </List>
-        <ThemeOptions />
-        {status === 'pledge' ? (
-          <div className="logout-button" onClick={this.logout}> Log Out </div>
-        ) : (
-          <span className="logout-button" onClick={this.goHome}> Back Home </span>
+        <UserInfo
+          photoURL={photoURL}
+          name={name}
+          phone={phone}
+          email={email}
+          className={className}
+          major={major}
+        />
+        {isMobile() && (
+          <Fragment>
+            <ThemeOptions />
+            {status === 'pledge' ? (
+              <div className="logout-button" onClick={this.logout}> Log Out </div>
+            ) : (
+              <span className="logout-button" onClick={this.goHome}> Back Home </span>
+            )}
+          </Fragment>
         )}
       </div>
     )

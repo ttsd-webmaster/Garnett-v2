@@ -1,7 +1,7 @@
 // @flow
 
 import './Main.css';
-import { MyMerits, Pledges, Contacts } from 'containers/PledgeApp/components';
+import { MyMerits, Pledges, Contacts, Settings } from 'containers/PledgeApp/components';
 import type { User } from 'api/models';
 
 import React from 'react';
@@ -33,6 +33,17 @@ const routes = [
     exact: true,
     content: props => (
       <Contacts
+        state={props.state}
+        handleRequestOpen={props.handleRequestOpen}
+      />
+    )
+  },
+  {
+    path: '/pledge-app/settings',
+    exact: true,
+    content: props => (
+      <Settings
+        history={props.history}
         state={props.state}
         handleRequestOpen={props.handleRequestOpen}
       />

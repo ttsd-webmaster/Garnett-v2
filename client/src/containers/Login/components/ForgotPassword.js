@@ -54,7 +54,6 @@ export class ForgotPassword extends PureComponent<Props, State> {
         <TextField
           className="login-input"
           type="email"
-          inputStyle={{ color: '#fff' }}
           floatingLabelText="Email"
           floatingLabelStyle={{ color: '#888' }}
           value={this.state.email}

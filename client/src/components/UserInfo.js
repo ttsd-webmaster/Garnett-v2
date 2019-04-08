@@ -30,18 +30,11 @@ export function UserInfo(props: Props) {
     major
   } = props;
   let firstRowName, firstRowDescription, firstRowIcon;
-  if (className) {
-    if (name) {
-      // Settings
-      firstRowName = 'Name';
-      firstRowDescription = name;
-      firstRowIcon = 'user';
-    } else {
-      // Contacts
-      firstRowName = 'Class';
-      firstRowDescription = className;
-      firstRowIcon = 'users';
-    }
+  if (!name && className) {
+    // Contacts
+    firstRowName = 'Class';
+    firstRowDescription = className;
+    firstRowIcon = 'users';
   } else if (remainingMerits) {
     // Pledge Info Dialog (Active)
     firstRowName = 'Merits Remaining';
@@ -54,7 +47,8 @@ export function UserInfo(props: Props) {
       <div className="user-photo-container">
         <img className="user-photo" src={photoURL} alt="User" />
       </div>
-      <List>
+      { name && <h1 className="user-name">{ name }</h1> }
+      <List className="garnett-list">
         <Divider className="garnett-divider" />
         {firstRowName && firstRowDescription && firstRowIcon && (
           <ListItem

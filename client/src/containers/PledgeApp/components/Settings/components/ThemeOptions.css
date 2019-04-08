@@ -1,5 +1,5 @@
 .theme-options-container {
-  background-color: var(--list-color);
+  background-color: var(--background-color);
   padding: 20px 0 16px;
 }
 
@@ -7,7 +7,7 @@
   width: 90%;
   color: var(--text-color);
   font-weight: 700;
-  margin: 0 auto 10px;
+  margin: 0 auto 16px;
 }
 
 .theme-options {

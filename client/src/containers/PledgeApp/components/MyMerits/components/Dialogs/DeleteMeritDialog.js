@@ -5,6 +5,7 @@ import type { User, Merit } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import Dialog from 'material-ui/Dialog';
+import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
@@ -16,9 +17,18 @@ type Props = {
   handleRequestOpen: () => void
 };
 
-export default class DeleteMeritDialog extends PureComponent<Props> {
+type State = {
+  deleting: boolean
+};
+
+export default class DeleteMeritDialog extends PureComponent<Props, State> {
+  state = { deleting: false };
+
   delete = (merit: Merit) => {
     const { displayName } = this.props.state;
+
+    this.setState({ deleting: true });
+
     API.deleteMerit(displayName, merit)
     .then((res) => {
       this.props.handleDeleteClose();
@@ -32,15 +42,20 @@ export default class DeleteMeritDialog extends PureComponent<Props> {
   }
 
   render() {
+    const spinner = (
+      <CircularProgress size={25} thickness={2.5} style={{ top: '5px' }} />
+    );
     const actions = [
       <FlatButton
         label="Close"
         primary={true}
+        disabled={this.state.deleting}
         onClick={this.props.handleDeleteClose}
       />,
       <RaisedButton
-        label="Delete"
+        label={this.state.deleting ? spinner : 'Delete'}
         primary={true}
+        disabled={this.state.deleting}
         onClick={() => this.delete(this.props.merit)}
       />,
     ];

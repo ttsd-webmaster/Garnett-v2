@@ -72,7 +72,7 @@
 }
 .garnett-subheader.merit-view {
   justify-content: center;
-  height: 48px;
+  min-height: 52px;
   padding: 0 !important;
   z-index: 10;
 }
@@ -109,6 +109,11 @@
   margin: 0 auto;
   border: 1px solid var(--border-color);
 }
+@media (max-width: 767px) {
+  .garnett-list {
+    border: 0;
+  }
+}
 .garnett-list.no-header {
   margin-top: 48px !important;
 }
@@ -126,6 +131,11 @@
 
 .garnett-list-item > div > div {
   background-color: var(--list-color);
+}
+@media (max-width: 767px) {
+  .garnett-list-item > div > div {
+    background-color: var(--background-color);
+  }
 }
 .garnett-list-item.large > div > div {
   min-height: 48px;
@@ -195,15 +205,13 @@
   position: relative;
   background-color: var(--border-color) !important;
 }
-@media(min-width: 366px) {
-  .garnett-divider.large {
-    margin-left: 102px !important;
+@media(max-width: 767px) {
+  .garnett-divider {
+    display: none;
   }
 }
-@media(max-width: 365px) {
-  .garnett-divider.large {
-    margin-left: 80px !important;
-  }
+.garnett-divider.large {
+  margin-left: 102px !important;
 }
 
 /******************** Garnett Dialog *********************/
@@ -276,7 +284,7 @@
 
 /********** Photo for mobile dialog and settings **********/
 .user-photo-container {
-  padding: 15px 0;
+  padding: 20px 0;
 }
 
 .user-photo {

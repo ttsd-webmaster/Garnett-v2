@@ -16,13 +16,13 @@
 .nav-item {
   color: #fff;
   padding: 10px 0;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   opacity: 0.6;
   text-decoration: none;
 }
 @media(max-height: 660px) {
   .nav-item {
-    margin-bottom: 10px;
+    margin-bottom: 5px;
   }
 }
 .nav-item > i {
@@ -45,7 +45,7 @@
   height: 50px;
   background-color: #f60027;
   border-radius: 8px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease-in-out;
 }
 #merit-button:hover {
   background-color: #ff424a;
