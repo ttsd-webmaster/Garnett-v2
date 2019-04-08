@@ -112,9 +112,18 @@ export class MeritSelectPledges extends Component<Props, State> {
       isPCGreet: false
     };
 
+    const meritInfo = {
+      displayName,
+      selectedPledges,
+      merit,
+      isChalkboard: false,
+      isPCGreet: false,
+      status
+    };
+
     this.openProgressDialog();
 
-    API.meritAsActive(displayName, selectedPledges, merit, false, false, status)
+    API.meritAsActive(meritInfo)
     .then(res => {
       this.props.handleClose();
       this.closeProgressDialog();

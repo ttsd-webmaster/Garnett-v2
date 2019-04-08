@@ -127,9 +127,17 @@ export class MeritSelectActives extends Component<Props, State> {
       isPCGreet: false
     };
 
+    const meritInfo = {
+      displayName,
+      selectedActives,
+      merit,
+      isChalkboard: false,
+      isPCGreet: false
+    };
+
     this.openProgressDialog();
 
-    API.meritAsPledge(displayName, selectedActives, merit, false, false)
+    API.meritAsPledge(meritInfo)
     .then(res => {
       const totalAmount = amount * selectedActives.length;
       console.log(res);
