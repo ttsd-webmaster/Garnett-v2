@@ -15,7 +15,7 @@ import { Filter, FilterHeader, UserRow } from 'components';
 import { LoadablePledgeInfoDialog } from './components/Dialogs';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import { List } from 'material-ui/List';
 
 const filterOptions = [
@@ -27,7 +27,6 @@ const filterOptions = [
 ];
 
 type Props = {
-  pledges: Array<User>,
   state: User,
   handleRequestOpen: () => void
 };
@@ -47,7 +46,7 @@ type State = {
 export class Pledges extends PureComponent<Props, State> {
   state = {
     loaded: false,
-    pledges: this.props.pledges,
+    pledges: null,
     pledge: null,
     filter: 'lastName',
     filterName: 'Last Name',
@@ -112,6 +111,24 @@ export class Pledges extends PureComponent<Props, State> {
     usersRef.off('value');
   }
 
+  get pledges(): Node {
+    const { pledges } = this.state;
+    if (!pledges) {
+      return <h1 className="no-items-found">No pledges found</h1>;
+    }
+    return (
+      <List className="garnett-list">
+        {pledges.map((pledge, i) => (
+          <UserRow
+            key={i}
+            user={pledge}
+            handleOpen={() => this.handleOpen(pledge)}
+          />
+        ))}
+      </List>
+    )
+  }
+
   handleOpen = (pledge: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
@@ -166,14 +183,13 @@ export class Pledges extends PureComponent<Props, State> {
 
   render() {
     const { state } = this.props;
-    let { pledges, reverse, loaded } = this.state;
+    const { loaded, reverse } = this.state;
 
     if (!loaded) {
       return <LoadingComponent />
     }
-
     return (
-      <div id="pledges-container" className="animate-in">
+      <div id="pledges-container" className="garnett-container animate-in">
         <FilterHeader
           title={state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges'}
           status={state.status}
@@ -182,15 +198,9 @@ export class Pledges extends PureComponent<Props, State> {
           isReversed={reverse}
           reverse={this.reverse}
         />
-        <List className="garnett-list">
-          {pledges && pledges.map((pledge, i) => (
-            <UserRow
-              key={i}
-              user={pledge}
-              handleOpen={() => this.handleOpen(pledge)}
-            />
-          ))}
-        </List>
+
+        { this.pledges }
+
         <LoadablePledgeInfoDialog
           open={this.state.open}
           state={state}

@@ -65,7 +65,7 @@ export class MyMerits extends PureComponent<Props, State> {
     return (
       <div
         id={state.status !== 'pledge' ? "active-merits" : ""}
-        className="animate-in"
+        className="garnett-container animate-in"
       >
         {state.status !== 'pledge' && (
           <ToggleViewHeader

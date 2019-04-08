@@ -15,7 +15,7 @@ import { LoadableContactsDialog } from './components/Dialogs';
 import type { FilterType, FilterName } from './data.js';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 
@@ -43,7 +43,7 @@ type State = {
 
 export class Contacts extends PureComponent<{}, State> {
   state = {
-    actives: [],
+    actives: null,
     active: null,
     filter: 'active',
     filterName: 'Active',
@@ -66,6 +66,55 @@ export class Contacts extends PureComponent<{}, State> {
       const actives = localStorage.getItem('activeArray');
       this.setState({ actives, labels });
     }
+  }
+
+  get body(): Node {
+    const { actives, labels } = this.state;
+    const groups = [];
+    if (!actives || !labels) {
+      return null;
+    }
+    labels.forEach((label, index) => {
+      const group = (
+        <div key={index}>
+          { this.header(label, index) }
+
+          <List className="garnett-list">
+            {actives.map((active, i) => (
+              this.checkCondition(active, label) && (
+                <UserRow
+                  key={i}
+                  user={active}
+                  handleOpen={() => this.handleOpen(active)}
+                />
+              )
+            ))}
+          </List>
+        </div>
+      );
+      groups.push(group)
+    })
+    return groups;
+  }
+
+  header = (label: string, index: number): Node => {
+    if (index === 0) {
+      return (
+        <FilterHeader
+          className="garnett-subheader contacts"
+          title={label}
+          filterName={this.state.filterName}
+          openPopover={this.openPopover}
+          isReversed={this.state.reverse}
+          reverse={this.reverse}
+        />
+      )
+    }
+    return (
+      <Subheader className="garnett-subheader contacts">
+        { label }
+      </Subheader>
+    )
   }
 
   checkCondition(active: User, label: string): boolean {
@@ -151,41 +200,12 @@ export class Contacts extends PureComponent<{}, State> {
   }
 
   render() {
-    if (!this.state.labels) {
+    if (!this.state.labels || !this.state.actives) {
       return <LoadingComponent />
     }
 
     return (
       <div className="animate-in">
-        {this.state.labels.map((label, index) => (
-          <div key={index}>
-            {index === 0 ? (
-              <FilterHeader
-                className="garnett-subheader contacts"
-                title={label}
-                filterName={this.state.filterName}
-                openPopover={this.openPopover}
-                isReversed={this.state.reverse}
-                reverse={this.reverse}
-              />
-            ) : (
-              <Subheader className="garnett-subheader contacts">
-                { label }
-              </Subheader>
-            )}
-            <List className="garnett-list">
-              {this.state.actives.map((active, i) => (
-                this.checkCondition(active, label) && (
-                  <UserRow
-                    key={i}
-                    user={active}
-                    handleOpen={() => this.handleOpen(active)}
-                  />
-                )
-              ))}
-            </List>
-          </div>
-        ))}
         <Filter
           open={this.state.openPopover}
           anchorEl={this.state.anchorEl}
@@ -194,6 +214,9 @@ export class Contacts extends PureComponent<{}, State> {
           closePopover={this.closePopover}
           setFilter={this.setFilter}
         />
+
+        { this.body }
+
         {this.state.active && (
           <LoadableContactsDialog
             open={this.state.open}

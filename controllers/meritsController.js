@@ -19,7 +19,7 @@ exports.get_pledges_as_active = function(req, res) {
   const pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
 
   pledgesRef.once('value', (snapshot) => {
-    let pledges = [];
+    let pledges;
 
     if (snapshot.val()) {
       pledges = Object.keys(snapshot.val()).map(function(key) {
@@ -66,6 +66,24 @@ exports.get_pledges_as_active_mobile = function(req, res) {
         res.json(result)
       })
     }
+  });
+};
+
+// Get Pbros data for pledges
+exports.get_pbros_as_pledge = function(req, res) {
+  const { displayName } = req.query;
+  const usersRef = admin.database().ref('/users');
+  let pbros = [];
+
+  usersRef.once('value', (users) => {
+    users.forEach((user) => {
+      if (user.val().status === 'pledge' && user.key !== displayName) {
+        pbros.push(user.val());
+      }
+    });
+
+    pbros = pbros.length === 0 ? null : pbros;
+    res.json(pbros);
   });
 };
 
@@ -167,23 +185,6 @@ exports.get_chalkboards_merit = function(req, res) {
     }
 
     res.json(myChalkboards);
-  });
-};
-
-// Get Pbros data for pledges
-exports.get_pbros_as_pledge = function(req, res) {
-  let pbros = [];
-  const { displayName } = req.query;
-  const usersRef = admin.database().ref('/users');
-
-  usersRef.once('value', (users) => {
-    users.forEach((user) => {
-      if (user.val().status === 'pledge' && user.key !== displayName) {
-        pbros.push(user.val());
-      }
-    });
-
-    res.json(pbros);
   });
 };
 

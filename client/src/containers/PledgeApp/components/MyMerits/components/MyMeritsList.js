@@ -10,7 +10,7 @@ import { FilterHeader, MeritRow } from 'components';
 import { LoadableDeleteMeritDialog } from './Dialogs';
 import type { User, Merit } from 'api/models';
 
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, PureComponent, type Node } from 'react';
 import { List } from 'material-ui/List';
 
 type Props = {
@@ -79,24 +79,45 @@ export class MyMeritsList extends PureComponent<Props, State> {
     meritsRef.off('value');
   }
 
+  get merits(): Node {
+    const { state } = this.props;
+    const { myMerits } = this.state;
+    if (!myMerits) {
+      return <h1 className="no-items-found">No merits entered</h1>;
+    }
+    return (
+      <List className="animate-in garnett-list">
+        {myMerits.map((merit, i) => {
+          if (!merit) {
+            return null
+          }
+          const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
+          return (
+            <MeritRow
+              key={i}
+              merit={merit}
+              photo={state.status === 'pledge' ? activePhoto : pledgePhoto}
+              name={state.status === 'pledge' ? activeName : pledgeName}
+              handleDeleteOpen={this.handleDeleteOpen}
+            />
+          )
+        })}
+      </List>
+    )
+  }
+
   handleDeleteOpen = (selectedMerit: Merit) => {
     if (!navigator.onLine) {
       this.props.handleRequestOpen('You are offline');
       return
     }
     androidBackOpen(this.handleDeleteClose);
-    this.setState({
-      selectedMerit,
-      openDelete: true
-    });
+    this.setState({ selectedMerit, openDelete: true });
   }
 
   handleDeleteClose = () => {
     androidBackClose();
-    this.setState({
-      openDelete: false,
-      selectedMerit: null
-    });
+    this.setState({ selectedMerit: null, openDelete: false });
   }
 
   reverse = () => {
@@ -106,32 +127,17 @@ export class MyMeritsList extends PureComponent<Props, State> {
   }
 
   render() {
-    const { myMerits, reverse, loaded, openDelete, selectedMerit } = this.state;
     const { state, handleRequestOpen } = this.props;
+    const { reverse, loaded, openDelete, selectedMerit } = this.state;
     if (!loaded) {
       return <LoadingComponent />;
     }
-
     return (
       <Fragment>
-        <List className="animate-in garnett-list">
-          <FilterHeader isReversed={reverse} reverse={this.reverse} />
-          {myMerits && myMerits.map((merit, i) => {
-            if (!merit) {
-              return null
-            }
-            const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
-            return (
-              <MeritRow
-                key={i}
-                merit={merit}
-                photo={state.status === 'pledge' ? activePhoto : pledgePhoto}
-                name={state.status === 'pledge' ? activeName : pledgeName}
-                handleDeleteOpen={this.handleDeleteOpen}
-              />
-            )
-          })}
-        </List>
+        <FilterHeader isReversed={reverse} reverse={this.reverse} />
+
+        { this.merits }
+
         <LoadableDeleteMeritDialog
           open={openDelete}
           state={state}

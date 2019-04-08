@@ -39,9 +39,9 @@ export class MobilePledgeApp extends PureComponent<Props, State> {
       case 0:
         return <MyMerits state={state} handleRequestOpen={handleRequestOpen} />;
       case 1:
-        return <Pledges state={state} />;
+        return <Pledges state={state} handleRequestOpen={handleRequestOpen} />;
       case 2:
-        return <Contacts state={this.state} actives={this.state.activeArray} />;
+        return <Contacts />;
       case 3:
         return (
           <Settings

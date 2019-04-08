@@ -50,28 +50,31 @@
 }
 
 /*************** Garnett List, List Items, and Dividers ****************/
+.garnett-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.no-items-found {
+  color: var(--text-color);
+  margin: auto;
+  text-align: center;
+}
+
 .garnett-subheader {
   display: flex;
   align-items: center;
   max-width: 700px;
   width: 100%;
   background-color: var(--background-color);
-  margin: auto;
+  margin: 0 auto;
 }
 .garnett-subheader.merit-view {
   justify-content: center;
-  position: sticky;
-  top: 0;
-  background-color: var(--list-color);
   height: 48px;
-  border-bottom: 1px solid var(--border-color);
+  padding: 0 !important;
   z-index: 10;
-}
-@media(min-width: 420px) {
-  .garnett-subheader.merit-view {
-    border: 1px solid var(--border-color);
-    border-top: none;
-  }
 }
 
 /* Chip for merits toggle header in MyMerits */
@@ -99,11 +102,12 @@
 
 /***************** Garnett List *******************/
 .garnett-list {
-  width: 100%;
   max-width: 700px;
+  width: 100%;
   background-color: var(--background-color);
   padding: 0 !important;
-  margin: auto;
+  margin: 0 auto;
+  border: 1px solid var(--border-color);
 }
 .garnett-list.no-header {
   margin-top: 48px !important;
@@ -280,7 +284,7 @@
   display: block;
   height: 125px;
   width: 125px;
-  margin: auto;
+  margin: 0 auto;
   border-radius: 50%;
 }
 @media(max-width: 365px) {
