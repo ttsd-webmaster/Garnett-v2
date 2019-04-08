@@ -11,10 +11,9 @@ const phoneStyle = {
 
 type Props = {
   photoURL: string,
-  name: string,
-  className: string,
-  totalMerits: number,
-  remainingMerits: number,
+  name?: string,
+  className?: string,
+  remainingMerits?: number,
   phone: string,
   email: string,
   major: string
@@ -25,39 +24,29 @@ export function UserInfo(props: Props) {
     photoURL,
     name,
     className,
-    totalMerits,
     remainingMerits,
     phone,
     email,
     major
   } = props;
   let firstRowName, firstRowDescription, firstRowIcon;
-  // Settings
-  if (name && className) {
-    firstRowName = 'Name';
-    firstRowDescription = name;
-    firstRowIcon = 'user';
-  } 
-  // Contacts
-  else if (className) {
-    firstRowName = 'Class';
-    firstRowDescription = className;
-    firstRowIcon = 'users';
-  }
-  // Pledge Info Dialog (Pledge)
-  else if (totalMerits) {
-    firstRowName = 'Total Merits';
-    firstRowDescription = totalMerits;
-    firstRowIcon = 'star';
-  }
-  // Pledge Info Dialog (Active)
-  else if (remainingMerits) {
+  if (className) {
+    if (name) {
+      // Settings
+      firstRowName = 'Name';
+      firstRowDescription = name;
+      firstRowIcon = 'user';
+    } else {
+      // Contacts
+      firstRowName = 'Class';
+      firstRowDescription = className;
+      firstRowIcon = 'users';
+    }
+  } else if (remainingMerits) {
+    // Pledge Info Dialog (Active)
     firstRowName = 'Merits Remaining';
     firstRowDescription = remainingMerits;
     firstRowIcon = 'star';
-  }
-  else {
-    return null;
   }
 
   return (
@@ -67,12 +56,16 @@ export function UserInfo(props: Props) {
       </div>
       <List>
         <Divider className="garnett-divider" />
-        <ListItem
-          className="garnett-list-item"
-          primaryText={<p className="garnett-name">{firstRowName}</p>}
-          secondaryText={<p className="garnett-description">{firstRowDescription}</p>}
-          leftIcon={<i className={`icon-${firstRowIcon} garnett-icon`}></i>}
-        />
+        {firstRowName && firstRowDescription && firstRowIcon && (
+          <ListItem
+            className="garnett-list-item"
+            primaryText={<p className="garnett-name">{ firstRowName }</p>}
+            secondaryText={
+              <p className="garnett-description">{ firstRowDescription }</p>
+            }
+            leftIcon={<i className={`icon-${firstRowIcon} garnett-icon`}></i>}
+          />
+        )}
         <Divider className="garnett-divider" inset={true} />
         <a style={phoneStyle} href={`tel:${phone}`}>
           <ListItem

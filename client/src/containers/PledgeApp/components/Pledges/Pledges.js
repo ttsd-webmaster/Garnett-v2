@@ -75,6 +75,7 @@ export class Pledges extends PureComponent<Props, State> {
       .then(() => {
         const firebase = window.firebase;
         const usersRef = firebase.database().ref('/users');
+        const meritsRef = firebase.database().ref('/merits');
 
         usersRef.orderByChild('status').equalTo('pledge').on('value', (pledge) => {
           const { filter } = this.state;
@@ -87,19 +88,35 @@ export class Pledges extends PureComponent<Props, State> {
             return pledge.val()[key];
           });
 
-          if (this.state.filterName === 'Total Merits') {
-            pledges = pledges.sort(function(a, b) {
-              return a[filter] < b[filter] ? 1 : -1;
+          meritsRef.once('value', (merits) => {
+            if (!merits.val()) {
+              return
+            }
+            // Set all the pledge's total merits
+            pledges.forEach((pledge) => {
+              let totalMerits = 0;
+              // Retrieves the pledge's total merits by searching for the key in
+              // the Merits table
+              Object.keys(pledge.Merits).forEach(function(key) {
+                totalMerits += merits.val()[pledge.Merits[key]].amount;
+              });
+              pledge.totalMerits = totalMerits;
             });
-          } else {
-            pledges = pledges.sort(function(a, b) {
-              return a[filter] > b[filter] ? 1 : -1;
-            });
-          }
 
-          localStorage.setItem('pledgeArray', JSON.stringify(pledges));
+            // Sort the pledges based on the selected filter
+            if (this.state.filterName === 'Total Merits') {
+              pledges = pledges.sort(function(a, b) {
+                return a[filter] < b[filter] ? 1 : -1;
+              });
+            } else {
+              pledges = pledges.sort(function(a, b) {
+                return a[filter] > b[filter] ? 1 : -1;
+              });
+            }
 
-          this.setState({ pledges, loaded: true });
+            localStorage.setItem('pledgeArray', JSON.stringify(pledges));
+            this.setState({ pledges, loaded: true });
+          });
         });
       });
     }
@@ -122,6 +139,7 @@ export class Pledges extends PureComponent<Props, State> {
           <UserRow
             key={i}
             user={pledge}
+            isPledge={this.props.state.status === 'pledge'}
             handleOpen={() => this.handleOpen(pledge)}
           />
         ))}

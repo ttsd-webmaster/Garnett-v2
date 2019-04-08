@@ -221,10 +221,6 @@ exports.merit_as_active = function(req, res) {
       pledgeRef.once('value', (pledge) => {
         counter++;
 
-        pledgeRef.update({
-          totalMerits: pledge.val().totalMerits + merit.amount
-        });
-
         merit.pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
         merit.pledgePhoto = pledge.val().photoURL;
         merit.platform = platform;
@@ -235,10 +231,6 @@ exports.merit_as_active = function(req, res) {
         activeRef.child('Merits').push(key);
 
         if (!res.headersSent && counter === selectedPledges.length) {
-          activeRef.update({
-            totalMerits: active.val().totalMerits + (merit.amount * selectedPledges.length)
-          });
-
           res.sendStatus(200);
         }
       });
@@ -276,10 +268,6 @@ exports.merit_as_pledge = function(req, res) {
         }
       }
 
-      activeRef.update({
-        totalMerits: active.val().totalMerits + merit.amount
-      });
-
       pledgeRef.once('value', (pledge) => {
         counter++;
 
@@ -293,10 +281,6 @@ exports.merit_as_pledge = function(req, res) {
         active.ref.child('Merits').push(key);
 
         if (!res.headersSent && counter === selectedActives.length) {
-          pledgeRef.update({
-            totalMerits: pledge.val().totalMerits + (merit.amount * selectedActives.length)
-          });
-          
           res.sendStatus(200);
         }
       });
@@ -319,11 +303,6 @@ exports.delete_merit_as_pledge = function(req, res) {
         // Remove the merit from all merits list
         merit.ref.remove(() => {
           pledgeRef.once('value', (pledge) => {
-            // Update the pledge's total merits
-            pledgeRef.update({
-              totalMerits: pledge.val().totalMerits - req.body.merit.amount
-            });
-
             const pledgeMerits = Object.keys(pledge.val().Merits).map(function(key) {
               return [pledge.val().Merits[key], key];
             });
@@ -334,13 +313,6 @@ exports.delete_merit_as_pledge = function(req, res) {
                 // Remove the merit from the pledge's merits
                 pledgeRef.child('Merits').child(pledgeMerit[1]).remove(() => {
                   activeRef.once('value', (active) => {
-                    // Update the active's total merits if the merit is not from a chalkboard
-                    if (req.body.merit.description.lastIndexOf('Chalkboard:', 0) !== 0) {
-                      activeRef.update({
-                        totalMerits: active.val().totalMerits - req.body.merit.amount
-                      });
-                    }
-
                     const activeMerits = Object.keys(active.val().Merits).map(function(key) {
                       return [active.val().Merits[key], key];
                     });

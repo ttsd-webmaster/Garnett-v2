@@ -21,7 +21,6 @@ export class PledgeView extends PureComponent<Props> {
     return (
       <UserInfo
         photoURL={pledge.photoURL}
-        totalMerits={pledge.totalMerits}
         phone={pledge.phone}
         email={pledge.email}
         major={pledge.major}

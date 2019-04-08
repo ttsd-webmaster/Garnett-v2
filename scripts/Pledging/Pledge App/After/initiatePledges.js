@@ -25,9 +25,7 @@ usersRef.once('value', (snapshot) => {
       console.log(user.key);
 
       // Update pledge's status to active
-      user.ref.update({
-        status: 'active'
-      });
+      user.ref.update({ status: 'active' });
 
       // Remove Merits for pledge
       user.ref.child('Merits').remove(() => {
@@ -36,10 +34,6 @@ usersRef.once('value', (snapshot) => {
       // Remove Complaints for pledge
       user.ref.child('Complaints').remove(() => {
         console.log(`Removed complaints for ${user.key}.`);
-      });
-      // Remove total merits for pledge
-      user.ref.child('totalMerits').remove(() => {
-        console.log(`Removed total merits for ${user.key}.`);
       });
     }
   });

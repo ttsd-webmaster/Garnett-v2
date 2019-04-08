@@ -118,8 +118,7 @@ exports.signup = function(req, res) {
             major,
             year,
             phone,
-            email,
-            totalMerits: 0
+            email
           };
           // Alumni
           if (year === 'Alumni') {

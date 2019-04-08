@@ -28,16 +28,29 @@ export class AccountInfo extends PureComponent<Props, State> {
       .then(() => {
         const { firebase } = window;
         const { displayName } = this.props.user;
-        const userRef = firebase.database().ref(`/users/${displayName}`);
+        const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
+        const meritsRef = firebase.database().ref('/merits');
 
-        userRef.on('value', (user) => {
-          const { totalMerits } = user.val();
+        userMeritsRef.on('value', (userMerits) => {
+          if (!userMerits.val()) {
+            return
+          }
+          meritsRef.on('value', (merits) => {
+            if (!userMerits.val() || !merits.val()) {
+              return
+            }
+            let totalMerits = 0;
+            // Retrieves the user's total merits by searching for the key in
+            // the Merits table
+            Object.keys(userMerits.val()).forEach(function(key) {
+              totalMerits += merits.val()[userMerits.val()[key]].amount;
+            });
 
-          localStorage.setItem('totalMerits', totalMerits);
-
-          this.setState({
-            totalMerits,
-            previousTotalMerits: this.state.totalMerits
+            localStorage.setItem('totalMerits', totalMerits);
+            this.setState({
+              totalMerits,
+              previousTotalMerits: this.state.totalMerits
+            });
           });
         });
       });

@@ -37,8 +37,7 @@ usersRef.once('value', (snapshot) => {
     userRef.update({
       Merits: null,
       Complaints: null,
-      Pledges: null,
-      totalMerits: 0
+      Pledges: null
     });
 
     // Update the active's pledge merit count for each pledge
