@@ -59,7 +59,7 @@ export class SignUp extends PureComponent<Props, State> {
 
     if (firstName && lastName && className && major && year && email &&
         validateEmail(email) && phone.length === 10 && code &&
-        password.length > 7 && confirmation === password) {
+        password.length > 6 && confirmation === password) {
       return true;
     }
     return false;

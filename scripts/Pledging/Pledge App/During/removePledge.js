@@ -17,10 +17,11 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 })
 
-let usersRef = admin.database().ref('/users');
-let chalkboardsRef = admin.database().ref('/chalkboards');
-let approvedComplaintsRef = admin.database().ref('/approvedComplaints');
-let pendingComplaintsRef = admin.database().ref('/pendingComplaints');
+const usersRef = admin.database().ref('/users');
+const meritsRef = admin.database().ref('/merits');
+const chalkboardsRef = admin.database().ref('/chalkboards');
+const approvedComplaintsRef = admin.database().ref('/approvedComplaints');
+const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
@@ -47,6 +48,16 @@ usersRef.once('value', (snapshot) => {
               console.log(`Removed ${pledge}`);
             });
           }
+        });
+
+        meritsRef.once('value', (snapshot) => {
+          snapshot.forEach((merit) => {
+            if (merit.val().pledgeName.replace(/ /g,'') === removedPledge) {
+              merit.ref.remove(() => {
+                console.log(`Removed ${attendeeName}'s merit' from Merits.`);
+              })
+            }
+          });
         });
 
         chalkboardsRef.once('value', (snapshot) => {

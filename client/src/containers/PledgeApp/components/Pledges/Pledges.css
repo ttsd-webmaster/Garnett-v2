@@ -1,3 +1,7 @@
+#pledges-container {
+  height: 100%;
+}
+
 .pledge-merits {
   float: right;
   font-family: 'LeagueSpartan-Bold';

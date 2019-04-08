@@ -68,7 +68,7 @@ export const formData2 = [
     type: 'password'
   },
   {
-    placeholder: 'Password (Must be longer than 8 characters)',
+    placeholder: 'Password (Must be longer than 6 characters)',
     name: 'password',
     type: 'password'
   },
