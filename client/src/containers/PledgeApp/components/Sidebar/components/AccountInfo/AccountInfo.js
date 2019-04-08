@@ -34,13 +34,21 @@ export class AccountInfo extends PureComponent<Props, State> {
           const { totalMerits } = user.val();
 
           localStorage.setItem('totalMerits', totalMerits);
+
           this.setState({
-            totalMerits: totalMerits,
+            totalMerits,
             previousTotalMerits: this.state.totalMerits
           });
         });
       });
     }
+  }
+
+  componentWillUnmount() {
+    const { firebase } = window;
+    const { displayName } = this.props.user;
+    const userRef = firebase.database().ref(`/users/${displayName}`);
+    userRef.off('value');
   }
 
   render() {
@@ -52,7 +60,7 @@ export class AccountInfo extends PureComponent<Props, State> {
     return (
       <div id="account-info">
         <img id="sidebar-photo" src={photoURL} alt="User" />
-        <h3 id="account-name">{name}</h3>
+        <h3 id="account-name">{ name }</h3>
         <h4 id="merit-count">
           <CountUp
             className="total-merits"
