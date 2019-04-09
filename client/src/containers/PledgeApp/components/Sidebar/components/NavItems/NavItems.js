@@ -63,7 +63,9 @@ export function NavItems(props: Props) {
         <i className="icon-logout"></i>
         { backText }
       </a>
-      <div id="merit-button" onClick={handleMeritOpen}>Merit</div>
+      <div className="white-background">
+        <div id="merit-button" onClick={handleMeritOpen}>Merit</div>
+      </div>
     </nav>
   )
 }

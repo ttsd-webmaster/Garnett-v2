@@ -43,14 +43,16 @@ export class MeritsList extends PureComponent<Props, State> {
     }
   }
 
-  reverse = () => this.setState({ reverse: !this.state.reverse });
+  reverse = () => {
+    const { merits, reverse } = this.state;
+    this.setState({
+      merits: merits.reverse(),
+      reverse: !reverse
+    });
+  }
 
   render() {
-    let { merits, reverse, loaded } = this.state;
-
-    if (merits && reverse) {
-      merits = merits.slice().reverse();
-    }
+    const { merits, reverse, loaded } = this.state;
 
     if (!loaded) {
       return (
@@ -60,10 +62,18 @@ export class MeritsList extends PureComponent<Props, State> {
       )
     }
 
+    if (!merits) {
+      return (
+        <div className="no-items-container">
+          <h1 className="no-items-found dialog">No merits found</h1>
+        </div>
+      )
+    }
+
     return (
       <List className="garnett-list dialog pledge">
         <FilterHeader isReversed={reverse} reverse={this.reverse} />
-        {merits && merits.map((merit, i) => (
+        {merits.map((merit, i) => (
           <MeritRow
             key={i}
             merit={merit}

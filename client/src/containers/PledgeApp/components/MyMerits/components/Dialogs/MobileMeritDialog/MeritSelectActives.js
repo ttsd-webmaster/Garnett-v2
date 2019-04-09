@@ -8,7 +8,7 @@ import { MeritUserRow } from './MeritUserRow';
 import { FilterHeader } from 'components';
 import type { User } from 'api/models';
 
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import { List } from 'material-ui/List';
 import Chip from 'material-ui/Chip';
 
@@ -44,6 +44,73 @@ export class MeritSelectActives extends Component<Props, State> {
       const actives = res.data;
       this.setState({ actives });
     });
+  }
+
+  get inputs(): Node {
+    const { selectedActives, name, description } = this.state;
+    return (
+      <div id="merit-inputs-container">
+        <div className="merit-input">
+          {selectedActives.length > 0 && (
+            <div id="chips-container">
+              {selectedActives.map((active, i) => (
+                <Chip
+                  key={i}
+                  className="garnett-chip merit-select"
+                  onClick={() => this.deselectActive(active)}
+                  onRequestDelete={() => this.deselectActive(active)}
+                >
+                  { active.firstName }
+                </Chip>
+              ))}
+            </div>
+          )}
+          <input
+            className="merit-input name"
+            type="text"
+            placeholder="Name"
+            onChange={(event) => this.updateValue('name', event.target.value)}
+            onKeyDown={this.onNameKeyDown}
+            value={name}
+          />
+        </div>
+        <input
+          className="merit-input"
+          type="text"
+          placeholder="Description"
+          onChange={(event) => this.updateValue('description', event.target.value)}
+          value={description}
+        />
+      </div>
+    )
+  }
+
+  get activesList(): Node {
+    const { actives, selectedActives, name } = this.state;
+    return (
+      <List className="garnett-list merit-select">
+        {actives.map((active, i) => {
+          const activeName = active.firstName.toLowerCase();
+          const searchedName = name.toLowerCase();
+          const includesActive = selectedActives.find((selectedActive) => {
+            return selectedActive.firstName === active.firstName;
+          });
+
+          if (includesActive || !activeName.startsWith(searchedName)) {
+            return null;
+          }
+          else {
+            return (
+              <MeritUserRow
+                key={i}
+                user={active}
+                selectUser={() => this.selectActive(active)}
+              />
+            )
+          }
+        })}
+      </List>
+    )
   }
 
   get buttonDisabled(): boolean {
@@ -173,71 +240,23 @@ export class MeritSelectActives extends Component<Props, State> {
   render() {
     return (
       <div id="merit-select-users-container">
-        <div id="merit-inputs-container">
-          <div className="merit-input">
-            <div id="chips-container">
-              {this.state.selectedActives.map((active, i) => (
-                <Chip
-                  key={i}
-                  className="garnett-chip merit-select"
-                  onClick={() => this.deselectActive(active)}
-                  onRequestDelete={() => this.deselectActive(active)}
-                >
-                  {active.firstName}
-                </Chip>
-              ))}
-            </div>
-            <input
-              id="merit-users"
-              type="text"
-              placeholder="Name"
-              onChange={(event) => this.updateValue('name', event.target.value)}
-              onKeyDown={this.onNameKeyDown}
-              value={this.state.name}
-            />
-          </div>
-          <input
-            className="merit-input"
-            type="text"
-            placeholder="Description"
-            onChange={(event) => this.updateValue('description', event.target.value)}
-            value={this.state.description}
-          />
-        </div>
+        { this.inputs }
         <FilterHeader
+          className="garnett-subheader mobile-merit"
           title={this.state.showAlumni ? 'Alumni' : 'Actives'}
-          filterName={this.state.showAlumni ? 'Actives' : 'Alumni'}
+          filterName={`View ${this.state.showAlumni ? 'Actives' : 'Alumni'}`}
           openPopover={this.toggleAlumniView}
         />
-        <List className="garnett-list merit-select">
-          {this.state.actives.map((active, i) => {
-            const activeName = active.firstName.toLowerCase();
-            const searchedName = this.state.name.toLowerCase();
-            const includesActive = this.state.selectedActives.find((selectedActive) => {
-              return selectedActive.firstName === active.firstName;
-            });
-            
-            if (includesActive || !activeName.startsWith(searchedName)) {
-              return null;
-            }
-            else {
-              return (
-                <MeritUserRow
-                  key={i}
-                  user={active}
-                  selectUser={() => this.selectActive(active)}
-                />
-              )
-            }
-          })}
-        </List>
-        <button
-          className="mobile-merit-button confirm"
-          onClick={this.merit}
-          disabled={this.buttonDisabled}
-        >
-          {this.props.amount < 0 ? 'Demerit' : 'Merit'}
-        </button>
+        { this.activesList }
+        <div className="confirm-container">
+          <button
+            className="mobile-merit-button"
+            onClick={this.merit}
+            disabled={this.buttonDisabled}
+          >
+            {this.props.amount < 0 ? 'Demerit' : 'Merit'}
+          </button>
+        </div>
         <SpinnerDialog
           open={this.state.openSpinner}
           message={this.state.spinnerMessage}

@@ -33,20 +33,27 @@
   opacity: 1;
 }
 
+.white-background {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  width: 170px;
+  height: 50px;
+  background-color: #fff;
+  border-radius: 8px;
+  transform: translateX(-50%);
+}
+
 #merit-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
   width: 170px;
   height: 50px;
   background-color: #f60027;
   border-radius: 8px;
-  transition: background-color 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
 }
 #merit-button:hover {
-  background-color: #ff424a;
+  opacity: 0.8;
 }

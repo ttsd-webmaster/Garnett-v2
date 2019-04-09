@@ -59,11 +59,11 @@ export default {
     const params = { displayName };
     return axios.get('/api/merit/active/pledges/mobile', { params });
   },
-  getActivesForMerit: function(displayName: string, showAlumni: boolean) {
+  getActivesForMerit: function(displayName: string, showAlumni?: boolean) {
     const params = { displayName, showAlumni };
     return axios.get('/api/merit/pledge/actives', { params });
   },
-  getActivesForMeritMobile: function(displayName: string, showAlumni: boolean) {
+  getActivesForMeritMobile: function(displayName: string, showAlumni?: boolean) {
     const params = { displayName, showAlumni };
     return axios.get('/api/merit/pledge/actives/mobile', { params });
   },

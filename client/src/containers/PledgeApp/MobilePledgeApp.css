@@ -44,12 +44,20 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: calc(100% - 100px);
+  height: calc(100vh - 100px);
+}
+@media (max-width: 767px) {
+  .no-items-container {
+    height: calc(100vh - 160px);
+  }
 }
 
 .no-items-found {
   color: var(--text-color);
   margin: 0 0 150px;
+}
+.no-items-found.dialog {
+  margin: 150px 0;
 }
 
 .garnett-subheader {
@@ -57,12 +65,16 @@
   align-items: center;
   max-width: 700px;
   width: 100%;
+  min-height: 48px;
   background-color: var(--background-color);
   margin: 0 auto;
 }
 .garnett-subheader.merit-view {
   justify-content: center;
   padding: 0 !important;
+}
+.garnett-subheader.mobile-merit {
+  padding: 0 16px;
 }
 
 /* Chip for merits toggle header in MyMerits */

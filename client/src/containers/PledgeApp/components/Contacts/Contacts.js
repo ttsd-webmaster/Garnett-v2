@@ -194,7 +194,7 @@ export class Contacts extends PureComponent<{}, State> {
   reverse = () => {
     const { labels, reverse } = this.state;
     this.setState({
-      labels: labels.slice().reverse(),
+      labels: labels.reverse(),
       reverse: !reverse
     });
   }

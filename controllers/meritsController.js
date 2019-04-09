@@ -103,7 +103,7 @@ exports.get_actives_as_pledge = function(req, res) {
           remainingMerits: user.val().Pledges[displayName].merits
         };
 
-        if (showAlumni) {
+        if (showAlumni === 'true') {
           if (user.val().status === 'alumni') {
             result.push(currentActive);
           }
@@ -137,7 +137,7 @@ exports.get_actives_as_pledge_mobile = function(req, res) {
           remainingMerits: user.val().Pledges[displayName].merits
         };
 
-        if (showAlumni) {
+        if (showAlumni === 'true') {
           if (user.val().status === 'alumni') {
             result.push(currentActive);
           }

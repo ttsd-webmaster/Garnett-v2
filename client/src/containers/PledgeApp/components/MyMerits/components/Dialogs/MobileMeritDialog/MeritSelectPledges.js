@@ -7,7 +7,7 @@ import API from 'api/API.js';
 import { MeritUserRow } from './MeritUserRow';
 import type { User } from 'api/models';
 
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import { List } from 'material-ui/List';
 import Chip from 'material-ui/Chip';
 import Subheader from 'material-ui/Subheader';
@@ -44,6 +44,77 @@ export class MeritSelectPledges extends Component<Props, State> {
     });
   }
 
+  get inputs(): Node {
+    const { selectedPledges, name, description } = this.state;
+    return (
+      <div id="merit-inputs-container">
+        <div className="merit-input">
+          {selectedPledges.length > 0 && (
+            <div id="chips-container">
+              {selectedPledges.map((pledge, i) => (
+                <Chip
+                  key={i}
+                  className="garnett-chip merit-select"
+                  onClick={() => this.deselectPledge(pledge)}
+                  onRequestDelete={() => this.deselectPledge(pledge)}
+                >
+                  { pledge.firstName }
+                </Chip>
+              ))}
+            </div>
+          )}
+          <input
+            className="merit-input name"
+            type="text"
+            placeholder="Name"
+            onChange={(event) => this.updateValue('name', event.target.value)}
+            onKeyDown={this.onNameKeyDown}
+            value={name}
+          />
+          {selectedPledges.length === 0 && name.length === 0 && (
+            <span className="select-all-pledges" onClick={this.selectAllPledges}>
+              Select all pledges
+            </span>
+          )}
+        </div>
+        <input
+          className="merit-input"
+          type="text"
+          placeholder="Description"
+          onChange={(event) => this.updateValue('description', event.target.value)}
+          value={description}
+        />
+      </div>
+    )
+  }
+
+  get pledgesList(): Node {
+    const { pledges, selectedPledges, name } = this.state;
+    return (
+      <List className="garnett-list merit-select">
+        {pledges.map((pledge, i) => {
+          const pledgeName = pledge.firstName.toLowerCase();
+          const searchedName = name.toLowerCase();
+          const includesPledge = selectedPledges.find((selectedPledge) => {
+            return selectedPledge.firstName === pledge.firstName
+          })
+          if (includesPledge || !pledgeName.startsWith(searchedName)) {
+            return null;
+          }
+          else {
+            return (
+              <MeritUserRow
+                key={i}
+                user={pledge}
+                selectUser={() => this.selectPledge(pledge)}
+              />
+            )
+          }
+        })}
+      </List>
+    )
+  }
+
   get buttonDisabled(): boolean {
     return !this.state.selectedPledges.length || !this.state.description;
   }
@@ -75,6 +146,19 @@ export class MeritSelectPledges extends Component<Props, State> {
     } else {
       this.props.handleRequestOpen(`Not enough merits for ${pledgeName}.`)
     }
+  }
+
+  selectAllPledges = () => {
+    const selectedPledges = [];
+    this.state.pledges.forEach((pledge) => {
+      const pledgeName = `${pledge.firstName} ${pledge.lastName}`;
+      selectedPledges.push({
+        firstName: pledge.firstName,
+        value: pledge.firstName + pledge.lastName,
+        label: pledgeName
+      });
+    })
+    this.setState({ selectedPledges });
   }
 
   deselectPledge = (pledge: User) => {
@@ -158,66 +242,18 @@ export class MeritSelectPledges extends Component<Props, State> {
   render() {
     return (
       <div id="merit-select-users-container">
-        <div id="merit-inputs-container">
-          <div className="merit-input">
-            <div id="chips-container">
-              {this.state.selectedPledges.map((pledge, i) => (
-                <Chip
-                  key={i}
-                  className="garnett-chip merit-select"
-                  onClick={() => this.deselectPledge(pledge)}
-                  onRequestDelete={() => this.deselectPledge(pledge)}
-                >
-                  {pledge.firstName}
-                </Chip>
-              ))}
-            </div>
-            <input
-              id="merit-users"
-              type="text"
-              placeholder="Name"
-              onChange={(event) => this.updateValue('name', event.target.value)}
-              onKeyDown={this.onNameKeyDown}
-              value={this.state.name}
-            />
-          </div>
-          <input
-            className="merit-input"
-            type="text"
-            placeholder="Description"
-            onChange={(event) => this.updateValue('description', event.target.value)}
-            value={this.state.description}
-          />
+        { this.inputs }
+        <Subheader className="garnett-subheader merit-select">Pledges</Subheader>
+        { this.pledgesList }
+        <div className="confirm-container">
+          <button
+            className="mobile-merit-button"
+            onClick={this.merit}
+            disabled={this.buttonDisabled}
+          >
+            {this.props.amount < 0 ? 'Demerit' : 'Merit'}
+          </button>
         </div>
-        <List className="garnett-list merit-select">
-          <Subheader className="garnett-subheader merit-select">Pledges</Subheader>
-          {this.state.pledges.map((pledge, i) => {
-            const pledgeName = pledge.firstName.toLowerCase();
-            const searchedName = this.state.name.toLowerCase();
-            const includesPledge = this.state.selectedPledges.find((selectedPledge) => {
-              return selectedPledge.firstName === pledge.firstName
-            })
-            if (includesPledge || !pledgeName.startsWith(searchedName)) {
-              return null;
-            }
-            else {
-              return (
-                <MeritUserRow
-                  key={i}
-                  user={pledge}
-                  selectUser={() => this.selectPledge(pledge)}
-                />
-              )
-            }
-          })}
-        </List>
-        <button
-          className="mobile-merit-button confirm"
-          onClick={this.merit}
-          disabled={this.buttonDisabled}
-        >
-          {this.props.amount < 0 ? 'Demerit' : 'Merit'}
-        </button>
         <SpinnerDialog
           open={this.state.openSpinner}
           message={this.state.spinnerMessage}
