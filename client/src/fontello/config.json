@@ -143,6 +143,12 @@
       "css": "logout",
       "code": 59404,
       "src": "fontawesome"
+    },
+    {
+      "uid": "9fecfcfe680a469caedeeb40641a479f",
+      "css": "handshake-o",
+      "code": 62133,
+      "src": "fontawesome"
     }
   ]
 }
