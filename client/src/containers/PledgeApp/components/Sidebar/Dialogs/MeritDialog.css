@@ -12,6 +12,61 @@
 }
 
 #merit-create-amount-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
   padding: 20px;
+}
+
+#create-merit-amount {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  font-size: 150px;
+  color: var(--primary-color);
+  margin: 0 0 100px;
+}
+
+#create-merit-buttons {
+  display: flex;
+  max-width: 350px;
+  width: 100%;
+  height: 60px;
+}
+
+.create-merit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  max-height: 60px;
+  height: 100%;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: #fff;
+  font-family: 'Helvetica Neue';
+  font-size: 18px;
+  padding: 0;
+  border: 0;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+.create-merit-button:hover {
+  opacity: 0.8;
+}
+.create-merit-button:disabled {
+  opacity: 0.7;
+  cursor: auto;
+}
+
+.create-merit-button.demerit {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.create-merit-button.merit {
+  border-left: 1px solid rgb(192, 0, 31, 0.5);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
 }

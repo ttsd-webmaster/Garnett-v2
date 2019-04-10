@@ -1,14 +1,9 @@
 // @flow
 
-import React, { PureComponent } from 'react';
-import Chip from 'material-ui/Chip';
+import { MeritTypeOptions } from 'components/MeritTypeOptions';
 import type { MeritType } from 'api/models';
 
-const MERIT_OPTIONS = [
-  { type: 'pc', label: 'Price Center' },
-  { type: 'personal', label: 'Personal' },
-  { type: 'chalkboard', label: 'Chalkboard' }
-];
+import React, { PureComponent } from 'react';
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '←'];
 
@@ -87,18 +82,15 @@ export class CreateAmount extends PureComponent<Props, State> {
   render() {
     return (
       <div id="mobile-create-amount-container">
-        <div className="chips-container mobile-create-amount">
-          {MERIT_OPTIONS.map((option) => (
-            <Chip
-              key={option.type}
-              className={`garnett-chip merit-dialog ${option.type === this.state.type ? 'active' : ''}`}
-              onClick={() => this.setType(option.type)}
-            >
-              { option.label }
-            </Chip>
-          ))}
-        </div>
-        <div id="merit-create-amount" className={`${this.state.vibrate ? 'shake' : ''}`}>
+        <MeritTypeOptions
+          type={this.state.type}
+          isMobile
+          setType={this.setType}
+        />
+        <div
+          id="mobile-create-merit-amount"
+          className={`${this.state.vibrate ? 'shake' : ''}`}
+        >
           {this.state.amount}
         </div>
         <div id="numbers-grid">
@@ -112,7 +104,7 @@ export class CreateAmount extends PureComponent<Props, State> {
             </button>
           ))}
         </div>
-        <div id="merit-create-buttons">
+        <div id="mobile-create-merit-buttons">
           <button
             className="mobile-merit-button"
             onClick={() => this.advance('demerit')}

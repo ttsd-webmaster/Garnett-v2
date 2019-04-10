@@ -21,7 +21,7 @@
   }
 }
 
-#merit-create-amount {
+#mobile-create-merit-amount {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +30,7 @@
   color: var(--primary-color);
   font-size: 110px;
 }
-#merit-create-amount.shake {
+#mobile-create-merit-amount.shake {
   animation: shake 0.2s;
 }
 
@@ -52,7 +52,7 @@
   outline: none;
 }
 
-#merit-create-buttons {
+#mobile-create-merit-buttons {
   display: flex;
   position: sticky;
   bottom: 0;

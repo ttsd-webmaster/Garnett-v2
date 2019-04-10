@@ -47,7 +47,10 @@ export default class MeritDialog extends PureComponent<Props, State> {
           setUsers={this.setUsers}
           setDescription={this.setDescription}
         />
-        <CreateAmount />
+        <CreateAmount
+          handleMeritClose={handleMeritClose}
+          handleRequestOpen={handleRequestOpen}
+        />
       </div>
     )
   }
