@@ -1,14 +1,12 @@
 // @flow
 
-import '../../../MyMerits.css';
 import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
-import { MeritDialogList } from 'components/MeritDialogList';
+import { MeritDialogList, SelectedUsersChips } from 'components';
 import type { User } from 'api/models';
 
 import React, { Component, type Node } from 'react';
-import Chip from 'material-ui/Chip';
 
 type Props = {
   state: User,
@@ -18,22 +16,24 @@ type Props = {
 };
 
 type State = {
-  users: Array<User>,
+  users: ?Array<User>,
   selectedUsers: Array<Object>,
   name: string,
   description: string,
   showAlumni: boolean,
-  openSpinner: boolean
+  openSpinner: boolean,
+  spinnerMessage: string
 };
 
 export class SelectUsers extends Component<Props, State> {
   state = {
-    users: [],
+    users: null,
     selectedUsers: [],
     name: '',
     description: '',
     showAlumni: false,
-    openSpinner: false
+    openSpinner: false,
+    spinnerMessage: ''
   };
 
   componentDidMount() {
@@ -59,20 +59,10 @@ export class SelectUsers extends Component<Props, State> {
     return (
       <div id="merit-inputs-container">
         <div className="merit-input">
-          {selectedUsers.length > 0 && (
-            <div className="chips-container select-users">
-              {selectedUsers.map((user, i) => (
-                <Chip
-                  key={i}
-                  className="garnett-chip merit-dialog active"
-                  onClick={() => this.deselectUser(user)}
-                  onRequestDelete={() => this.deselectUser(user)}
-                >
-                  { user.firstName }
-                </Chip>
-              ))}
-            </div>
-          )}
+          <SelectedUsersChips
+            selectedUsers={selectedUsers}
+            deselectUser={this.deselectUser}
+          />
           <input
             className="merit-input name"
             type="text"
@@ -82,7 +72,7 @@ export class SelectUsers extends Component<Props, State> {
             value={name}
           />
           {status !== 'pledge' && selectedUsers.length === 0 && name.length === 0 && (
-            <span className="select-all-pledges" onClick={this.selectAllPledges}>
+            <span id="mobile-select-all-pledges" onClick={this.selectAllPledges}>
               Select all pledges
             </span>
           )}
@@ -132,11 +122,12 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   selectAllPledges = () => {
-    if (this.props.state.status === 'pledge') {
+    const { users } = this.state;
+    if (this.props.state.status === 'pledge' || !users) {
       return;
     }
     const selectedUsers = [];
-    this.state.users.forEach((user) => {
+    users.forEach((user) => {
       const userName = `${user.firstName} ${user.lastName}`;
       selectedUsers.push({
         firstName: user.firstName,
@@ -206,17 +197,17 @@ export class SelectUsers extends Component<Props, State> {
       this.props.handleClose();
       this.closeProgressDialog();
 
+      let message;
+      if (status === 'pledge') {
+        const totalAmount = amount * selectedUsers.length;
+        message = `${action} yourself ${totalAmount} merits`;
+      } else {
+        message = `${action} pledges: ${amount} merits`;
+      }
+      this.props.handleRequestOpen(message);
+
       API.sendPledgeMeritNotification(name, selectedUsers, amount)
-      .then(res => {
-        let message;
-        if (status === 'pledge') {
-          const totalAmount = amount * selectedUsers.length;
-          message = `${action} yourself ${totalAmount} merits`
-        } else {
-          message = `${action} pledges: ${amount} merits`
-        }
-        this.props.handleRequestOpen(message);
-      })
+      .then(res => console.log(res))
       .catch(error => console.log(`Error: ${error}`));
     })
     .catch((error) => {
@@ -235,15 +226,12 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   openProgressDialog = () => {
-    this.setState({
-      openSpinner: true,
-      spinnerMessage: 'Meriting myself...'
-    });
+    const isPledge = this.props.state.status === 'pledge';
+    const spinnerMessage = isPledge ? 'Meriting myself...' : 'Meriting pledges...';
+    this.setState({ openSpinner: true, spinnerMessage });
   }
 
-  closeProgressDialog = () => {
-    this.setState({ openSpinner: false });
-  }
+  closeProgressDialog = () => this.setState({ openSpinner: false });
 
   render() {
     const isPledge = this.props.state.status === 'pledge';
@@ -254,6 +242,7 @@ export class SelectUsers extends Component<Props, State> {
           users={this.state.users}
           selectedUsers={this.state.selectedUsers}
           name={this.state.name}
+          isPledge={isPledge}
           showAlumni={isPledge && this.state.showAlumni}
           selectUser={this.selectUser}
           toggleAlumniView={this.toggleAlumniView}

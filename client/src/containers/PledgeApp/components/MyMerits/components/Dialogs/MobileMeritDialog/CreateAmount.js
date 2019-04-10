@@ -24,6 +24,43 @@ export class CreateAmount extends PureComponent<Props, State> {
     vibrate: false
   };
 
+  get numbersGrid(): Node {
+    return (
+      <div id="numbers-grid">
+        {BUTTONS.map(number => (
+          <button
+            className="grid-button"
+            key={number}
+            onClick={() => this.onClick(number)}
+          >
+            { number }
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  get meritButtons(): Node {
+    return (
+      <div id="mobile-create-merit-buttons">
+        <button
+          className="mobile-merit-button"
+          onClick={() => this.advance('demerit')}
+          disabled={this.buttonsDisabled}
+        >
+          Demerit
+        </button>
+        <button
+          className="mobile-merit-button merit"
+          onClick={() => this.advance('merit')}
+          disabled={this.buttonsDisabled}
+        >
+          Merit
+        </button>
+      </div>
+    )
+  }
+
   get buttonsDisabled() {
     const parsedAmount = parseInt(this.state.amount, 10);
     return !parsedAmount || parsedAmount % 5 !== 0;
@@ -32,7 +69,7 @@ export class CreateAmount extends PureComponent<Props, State> {
   onClick = (value: string) => {
     // PC merits stay constant
     if (this.state.type === 'pc') {
-      return;
+      return this.vibrate();
     }
 
     let { amount } = this.state;
@@ -54,11 +91,7 @@ export class CreateAmount extends PureComponent<Props, State> {
       this.setState({ amount });
     } else {
       // vibrate if amount is invalid
-      window.navigator.vibrate(150);
-      this.setState({ vibrate: true });
-      setTimeout(() => {
-        this.setState({ vibrate: false });
-      }, 500);
+      this.vibrate();
     }
   }
 
@@ -79,6 +112,14 @@ export class CreateAmount extends PureComponent<Props, State> {
     this.props.enterUsersView(type, meritAmount);
   }
 
+  vibrate() {
+    window.navigator.vibrate(150);
+    this.setState({ vibrate: true });
+    setTimeout(() => {
+      this.setState({ vibrate: false });
+    }, 500);
+  }
+
   render() {
     return (
       <div id="mobile-create-amount-container">
@@ -93,33 +134,8 @@ export class CreateAmount extends PureComponent<Props, State> {
         >
           {this.state.amount}
         </div>
-        <div id="numbers-grid">
-          {BUTTONS.map(number => (
-            <button
-              className="grid-button"
-              key={number}
-              onClick={() => this.onClick(number)}
-            >
-              { number }
-            </button>
-          ))}
-        </div>
-        <div id="mobile-create-merit-buttons">
-          <button
-            className="mobile-merit-button"
-            onClick={() => this.advance('demerit')}
-            disabled={this.buttonsDisabled}
-          >
-            Demerit
-          </button>
-          <button
-            className="mobile-merit-button merit"
-            onClick={() => this.advance('merit')}
-            disabled={this.buttonsDisabled}
-          >
-            Merit
-          </button>
-        </div>
+        { this.numbersGrid }
+        { this.meritButtons }
       </div>
     )
   }

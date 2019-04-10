@@ -1,27 +1,74 @@
 #merit-dialog-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-column-gap: 20px;
+  display: flex;
   height: 100%;
   justify-items: center;
   color: var(--text-color);  
 }
 
+#merit-dialog-container .garnett-chip.merit-dialog > svg{
+  fill: #fff !important;
+}
+
 #merit-select-users-container {
+  width: 50%;
+  padding: 0 0 50px 40px;
+  overflow: auto;
+}
+
+#merit-dialog-list-container {
+  padding: 0 10px;
+}
+
+#select-users-header {
+  position: sticky;
+  top: 0;
+  background-color: var(--background-color);
+  z-index: 1;
+  padding: 0 ;
+}
+
+#darth-fader {
+  position: fixed;
+  top: 204px;
+  width: 50%;
+  height: 20px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0), #fefefe);
+  z-index: 1;
+}
+#darth-fader.selected-users {
+  top: 262px;
+}
+
+.select-users-input {
   width: 100%;
-  padding-left: 20px;
+  height: 50px;
+  font-size: 18px;
+  padding: 20px;
+  margin: 0 0 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#select-all-pledges {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: var(--accent-color);
+  cursor: pointer;
 }
 
 #merit-create-amount-container {
+  position: relative;
+  width: 50%;
+}
+
+#merit-create-amount-content {
+  position: fixed;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  padding-right: 20px;
-}
-
-#merit-create-amount-container .garnett-chip.merit-dialog > svg{
-  fill: #fff !important;
+  height: 100%;
+  padding: 0 50px 64px 0;
 }
 
 #create-merit-amount {

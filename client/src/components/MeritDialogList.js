@@ -1,43 +1,60 @@
 // @flow
 
-import { UserRow } from './UserRow';
+import { MeritDialogUserRow } from './MeritDialogUserRow';
 import { FilterHeader } from 'components';
+import { isMobile } from 'helpers/functions';
 import type { User } from 'api/models';
 
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
+import CircularProgress from 'material-ui/CircularProgress';
 
 type Props = {
-  users: User,
+  users: ?User,
   selectedUsers: Array<User>,
   name: string,
+  isPledge: boolean,
   showAlumni?: boolean,
   selectUser: () => void,
   toggleAlumniView?: () => void
 };
 
-export function MeritDialogList(props: Props) {
-  const {
-    users,
-    selectedUsers,
-    name,
-    showAlumni,
-    selectUser,
-    toggleAlumniView
-  } = props;
-  return (
-    <Fragment>
-      {showAlumni ? (
+export class MeritDialogList extends Component<Props> {
+  get header(): Node {
+    const { isPledge, showAlumni, toggleAlumniView } = this.props;
+    if (isPledge) {
+      return (
         <FilterHeader
           className="garnett-subheader mobile-merit"
           title={showAlumni ? 'Alumni' : 'Actives'}
           filterName={`View ${showAlumni ? 'Actives' : 'Alumni'}`}
           openPopover={toggleAlumniView}
         />
-      ) : (
-        <Subheader className="garnett-subheader merit-select">Pledges</Subheader>
-      )}
+      )
+    }
+    return (
+      <Subheader className="garnett-subheader merit-select">Pledges</Subheader>
+    )
+  }
+
+  get body(): Node {
+    const { users, selectedUsers, name, selectUser } = this.props;
+    if (!users) {
+      return (
+        <div className="no-items-container">
+          <CircularProgress
+            color="var(--accent-color)"
+            size={30}
+            style={!isMobile() && { marginBottom: '200px' }}
+          />
+        </div>
+      )
+    }
+    if (users.length === selectedUsers.length) {
+      return <div />
+    }
+    return (
       <List className="garnett-list merit-select">
         {users.map((user, i) => {
           const userName = user.firstName.toLowerCase();
@@ -48,18 +65,26 @@ export function MeritDialogList(props: Props) {
 
           if (includesUser || !userName.startsWith(searchedName)) {
             return null;
-          }
-          else {
+          } else {
             return (
-              <UserRow
+              <MeritDialogUserRow
                 key={i}
                 user={user}
-                handleOpen={() => selectUser(user)}
+                selectUser={() => selectUser(user)}
               />
             )
           }
         })}
       </List>
-    </Fragment>
-  )
+    )
+  }
+
+  render() {
+    return (
+      <Fragment>
+        { this.header }
+        { this.body }
+      </Fragment>
+    )
+  }
 }

@@ -1,21 +1,20 @@
 // @flow
 
-import '../../MyMerits/MyMerits.css';
 import API from 'api/API.js';
-import { MeritDialogList } from 'components/MeritDialogList';
+import { MeritDialogList, SelectedUsersChips } from 'components';
 import type { User } from 'api/models';
 
-import React, { Component, type Node } from 'react';
-import Chip from 'material-ui/Chip';
+import React, { Component } from 'react';
 
 type Props = {
   state: User,
   setUsers: (Array<User>) => void,
-  setDescription: (string) => void
+  setDescription: (string) => void,
+  handleRequestOpen: () => void
 };
 
 type State = {
-  users: Array<User>,
+  users: ?Array<User>,
   selectedUsers: Array<Object>,
   name: string,
   description: string,
@@ -24,7 +23,7 @@ type State = {
 
 export class SelectUsers extends Component<Props, State> {
   state = {
-    users: [],
+    users: null,
     selectedUsers: [],
     name: '',
     description: '',
@@ -49,6 +48,9 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   updateValue = (label: string, value: string) => {
+    if (label === 'description') {
+      this.props.setDescription(value);
+    }
     this.setState({ [label]: value });
   }
 
@@ -57,32 +59,30 @@ export class SelectUsers extends Component<Props, State> {
     if ((event.keyCode === 8 || event.keyCode === 46) && !this.state.name) {
       const { selectedUsers } = this.state;
       selectedUsers.pop();
+      this.props.setUsers(selectedUsers);
       this.setState({ selectedUsers });
     }
   }
 
   selectUser = (user: User) => {
     const userName = `${user.firstName} ${user.lastName}`;
-    // Only allow selection if active has enough merits
-    if (this.props.amount <= user.remainingMerits) {
-      const { selectedUsers } = this.state;
-      selectedUsers.push({
-        firstName: user.firstName,
-        value: user.firstName + user.lastName,
-        label: userName
-      });
-      this.setState({ selectedUsers, name: '' });
-    } else {
-      this.props.handleRequestOpen(`Not enough merits for ${userName}.`)
-    }
+    const { selectedUsers } = this.state;
+    selectedUsers.push({
+      firstName: user.firstName,
+      value: user.firstName + user.lastName,
+      label: userName
+    });
+    this.props.setUsers(selectedUsers);
+    this.setState({ selectedUsers, name: '' });
   }
 
   selectAllPledges = () => {
-    if (this.props.state.status === 'pledge') {
+    const { users } = this.state;
+    if (this.props.state.status === 'pledge' || !users) {
       return;
     }
     const selectedUsers = [];
-    this.state.users.forEach((user) => {
+    users.forEach((user) => {
       const userName = `${user.firstName} ${user.lastName}`;
       selectedUsers.push({
         firstName: user.firstName,
@@ -90,6 +90,7 @@ export class SelectUsers extends Component<Props, State> {
         label: userName
       });
     })
+    this.props.setUsers(selectedUsers);
     this.setState({ selectedUsers });
   }
 
@@ -98,15 +99,21 @@ export class SelectUsers extends Component<Props, State> {
     selectedUsers = selectedUsers.filter((currentUser) => {
       return currentUser !== user;
     })
+    this.props.setUsers(selectedUsers);
     this.setState({ selectedUsers });
   }
 
   toggleAlumniView = () => {
     const { displayName } = this.props.state;
     const { showAlumni } = this.state;
+
+    // Show spinner while loading users
+    this.setState({ users: null });
+
     API.getActivesForMeritMobile(displayName, !showAlumni)
     .then((res) => {
       const users = res.data;
+      this.props.setUsers([]);
       this.setState({
         users,
         selectedUsers: [],
@@ -116,17 +123,54 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   render() {
-    const isPledge = this.props.state.status === 'pledge';
+    const { status } = this.props.state;
+    const { users, selectedUsers, name, showAlumni } = this.state;
+    const isPledge = status === 'pledge';
     return (
       <div id="merit-select-users-container">
-        <MeritDialogList
-          users={this.state.users}
-          selectedUsers={this.state.selectedUsers}
-          name={this.state.name}
-          showAlumni={isPledge && this.state.showAlumni}
-          selectUser={this.selectUser}
-          toggleAlumniView={this.toggleAlumniView}
+        <div id="select-users-header">
+          <SelectedUsersChips
+            selectedUsers={selectedUsers}
+            deselectUser={this.deselectUser}
+          />
+          <input
+            className="select-users-input"
+            type="text"
+            placeholder="Name"
+            autoComplete="off"
+            value={this.state.name}
+            onChange={(event) => this.updateValue('name', event.target.value)}
+            onKeyDown={this.onNameKeyDown}
+          />
+          {!isPledge && selectedUsers.length === 0 && !name && (
+            <span id="select-all-pledges" onClick={this.selectAllPledges}>
+              Select all pledges
+            </span>
+          )}
+          <input
+            className="select-users-input"
+            type="text"
+            placeholder="Description"
+            autoComplete="off"
+            value={this.state.description}
+            onChange={(event) => this.updateValue('description', event.target.value)}
+          />
+        </div>
+        <div
+          id="darth-fader"
+          className={`${selectedUsers.length > 0 ? 'selected-users' : ''}`}
         />
+        <div id="merit-dialog-list-container">
+          <MeritDialogList
+            users={users}
+            selectedUsers={selectedUsers}
+            name={name}
+            isPledge={isPledge}
+            showAlumni={isPledge && showAlumni}
+            selectUser={this.selectUser}
+            toggleAlumniView={this.toggleAlumniView}
+          />
+        </div>
       </div>
     )
   }

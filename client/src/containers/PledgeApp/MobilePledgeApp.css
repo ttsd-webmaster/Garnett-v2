@@ -350,6 +350,10 @@
   margin: 5px !important;
 }
 
+.shake {
+  animation: shake 0.2s;
+}
+
 /***************** Animations ***********************/
 @keyframes shake {
   10%, 90% {

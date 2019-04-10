@@ -203,21 +203,18 @@ exports.create_merit = function(req, res) {
   selectedUsers.forEach((user) => {
     let active;
     let pledge;
-    let userStatus;
     if (status === 'pledge') {
       active = user.value;
       pledge = displayName;
-      userStatus = user.val().status;
     } else {
       active = displayName;
       pledge = user.value;
-      userStatus = status;
     }
     const activeRef = usersRef.child(active);
     const pledgeRef = usersRef.child(pledge);
 
     activeRef.once('value', (active) => {
-      if (userStatus !== 'pipm' && merit.type === 'personal') {
+      if (status !== 'pipm' && merit.type === 'personal') {
         const remainingMerits = active.val().Pledges[pledge].merits - merit.amount;
         if (merit.amount > 0 && remainingMerits < 0 && !res.headersSent) {
           res.sendStatus(400).send(user.label);
