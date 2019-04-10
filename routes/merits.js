@@ -15,8 +15,7 @@ router.get('/chalkboards', controller.get_chalkboards_merit);
 router.get('/pledge/pbros', controller.get_pbros_as_pledge);
 
 // PUT requests
-router.put('/active/create', controller.merit_as_active);
-router.put('/pledge/create', controller.merit_as_pledge);
-router.put('/pledge/delete', controller.delete_merit_as_pledge);
+router.put('/create', controller.create_merit);
+router.put('/delete', controller.delete_merit);
 
 module.exports = router;

@@ -105,7 +105,6 @@ export class ActiveView extends PureComponent<Props, State> {
         title="Pledge"
         titleClassName="garnett-dialog-title"
         actions={actions}
-        modal={false}
         bodyClassName="garnett-dialog-body list"
         contentClassName="garnett-dialog-content"
         open={open}

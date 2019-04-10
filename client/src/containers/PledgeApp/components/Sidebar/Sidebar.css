@@ -14,3 +14,8 @@
   padding-bottom: 46px;
   letter-spacing: 0.5px;
 }
+
+/* Used to unstyle close button for merit fullscreen dialog */
+#sidebar svg {
+  fill: unset !important;
+}

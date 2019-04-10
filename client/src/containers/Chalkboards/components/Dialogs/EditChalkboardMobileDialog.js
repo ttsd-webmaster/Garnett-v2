@@ -206,7 +206,6 @@ export default class MobileEditChalkboardDialog extends Component {
         title={`Edit ${this.props.field}`}
         titleClassName="garnett-dialog-title"
         actions={actions}
-        modal={false}
         open={this.props.open}
         onRequestClose={this.handleClose}
         autoScrollBodyContent={true}

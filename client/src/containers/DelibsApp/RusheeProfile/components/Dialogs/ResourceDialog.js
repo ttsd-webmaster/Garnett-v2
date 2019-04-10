@@ -34,7 +34,6 @@ export function ResourceDialog(props: Props) {
       actions={actions}
       bodyStyle={bodyStyle}
       contentStyle={contentStyle}
-      modal={false}
       open={props.open}
       onRequestClose={props.handleClose}
       autoScrollBodyContent={true}

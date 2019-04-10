@@ -114,7 +114,7 @@ export class MyMerits extends PureComponent<Props, State> {
               handleRequestOpen={handleRequestOpen}
             />
             <FloatingActionButton
-              className={`fixed-button ${scrollDirection === 'down' && 'hidden'}`}
+              className={`fixed-button ${scrollDirection === 'down' ? 'hidden' : ''}`}
               onClick={this.handleMeritOpen}
             >
               <i className="icon-pencil"></i>

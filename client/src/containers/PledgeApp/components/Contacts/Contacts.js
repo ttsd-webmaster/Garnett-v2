@@ -92,9 +92,20 @@ export class Contacts extends PureComponent<{}, State> {
           </List>
         </div>
       );
-      groups.push(group)
+      groups.push(group);
     })
     return groups;
+  }
+
+  get modalTitle(): string {
+    switch (this.state.filter) {
+      case 'active':
+        return 'Active';
+      case 'alumni':
+        return 'Alumni';
+      default:
+        return 'Brother';
+    }
   }
 
   header = (label: string, index: number): Node => {
@@ -221,6 +232,7 @@ export class Contacts extends PureComponent<{}, State> {
           <LoadableContactsDialog
             open={this.state.open}
             active={this.state.active}
+            title={this.modalTitle}
             handleClose={this.handleClose}
           />
         )}

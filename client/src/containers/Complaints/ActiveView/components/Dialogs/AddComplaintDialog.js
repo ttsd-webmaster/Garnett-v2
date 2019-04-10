@@ -128,7 +128,6 @@ export default class AddComplaintDialog extends Component {
         title="New Complaint"
         titleClassName="garnett-dialog-title"
         actions={actions}
-        modal={false}
         bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}

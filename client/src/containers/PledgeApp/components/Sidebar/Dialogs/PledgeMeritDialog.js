@@ -1,6 +1,6 @@
 // @flow
 
-import '../MyMerits/MyMerits.css';
+import '../../MyMerits/MyMerits.css';
 import { getDate, invalidSafariVersion } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
@@ -70,7 +70,7 @@ export default class PledgeMeritDialog extends PureComponent<Props, State> {
     }
   }
 
-  merit = (type: 'merit' | 'demerit') => {
+  merit = (action: 'merit' | 'demerit') => {
     const { selectedActives } = this.state;
     let { description, amount } = this.state;
     let activeValidation = true;
@@ -95,15 +95,15 @@ export default class PledgeMeritDialog extends PureComponent<Props, State> {
         photoURL: pledgePhoto
       } = this.props.state;
       const { isChalkboard, isPCGreet } = this.state;
-      let action = 'Merited';
+      let actionText = 'Merited';
       let date = this.formatDate(this.state.date);
 
       if (invalidSafariVersion()) {
         date = getDate();
       }
-      if (type === 'demerit') {
+      if (action === 'demerit') {
         amount = -amount;
-        action = 'Demerited';
+        actionText = 'Demerited';
       }
       if (isChalkboard) {
         description = `Chalkboard: ${description}`;
@@ -138,7 +138,7 @@ export default class PledgeMeritDialog extends PureComponent<Props, State> {
 
         API.sendPledgeMeritNotification(pledgeName, selectedActives, amount)
         .then(res => {
-          this.props.handleRequestOpen(`${action} yourself ${totalAmount} merits`);
+          this.props.handleRequestOpen(`${actionText} yourself ${totalAmount} merits`);
         })
         .catch(error => console.error(`Error: ${error}`));
       })
@@ -279,7 +279,6 @@ export default class PledgeMeritDialog extends PureComponent<Props, State> {
         title="Merit"
         titleClassName="garnett-dialog-title"
         actions={actions}
-        modal={false}
         bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}

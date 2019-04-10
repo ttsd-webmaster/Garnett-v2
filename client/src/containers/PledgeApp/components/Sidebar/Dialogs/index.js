@@ -22,3 +22,14 @@ export const LoadableActiveMeritDialog = Loadable({
     return <div></div>
   }
 });
+
+export const LoadableMeritDialog = Loadable({
+  loader: () => import('./MeritDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>
+  }
+});

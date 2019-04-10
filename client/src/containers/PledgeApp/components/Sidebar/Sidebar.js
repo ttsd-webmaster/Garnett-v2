@@ -2,10 +2,7 @@
 
 import './Sidebar.css';
 import { AccountInfo, NavItems } from './components';
-import {
-  LoadablePledgeMeritDialog,
-  LoadableActiveMeritDialog
-} from '../Dialogs';
+import { LoadableMeritDialog } from './Dialogs';
 import type { User } from 'api/models';
 
 import React, { Component, Fragment, type Node } from 'react';
@@ -32,7 +29,9 @@ export class Sidebar extends Component<Props, State> {
   };
 
   get dialogs(): Node {
-    if (this.props.user.status === 'pledge') {
+    const { user } = this.props;
+    let logoutDialog;
+    if (user.status === 'pledge') {
       const actions = [
         <FlatButton
           label="Just Kidding"
@@ -45,34 +44,28 @@ export class Sidebar extends Component<Props, State> {
           onClick={this.props.logOut}
         />
       ];
-      return (
-        <Fragment>
-          <LoadablePledgeMeritDialog
-            open={this.state.openMerit}
-            state={this.props.user}
-            handleMeritClose={this.handleMeritClose}
-            handleRequestOpen={this.props.handleRequestOpen}
-          />
-          <Dialog
-            actions={actions}
-            modal={false}
-            contentClassName="garnett-dialog-content"
-            open={this.state.openLogout}
-            onRequestClose={this.handleLogoutClose}
-            autoScrollBodyContent={true}
-          >
-            Are you sure you want to log out?
-          </Dialog>
-        </Fragment>
+      logoutDialog = (
+        <Dialog
+          actions={actions}
+          contentClassName="garnett-dialog-content"
+          open={this.state.openLogout}
+          onRequestClose={this.handleLogoutClose}
+          autoScrollBodyContent={true}
+        >
+          Are you sure you want to log out?
+        </Dialog>
       )
     }
     return (
-      <LoadableActiveMeritDialog
-        open={this.state.openMerit}
-        state={this.props.user}
-        handleMeritClose={this.handleMeritClose}
-        handleRequestOpen={this.props.handleRequestOpen}
-      />
+      <Fragment>
+        <LoadableMeritDialog
+          open={this.state.openMerit}
+          state={user}
+          handleMeritClose={this.handleMeritClose}
+          handleRequestOpen={this.props.handleRequestOpen}
+        />
+        { logoutDialog }
+      </Fragment>
     )
   }
 

@@ -1,10 +1,9 @@
 // @flow
 
 import './MobileMeritDialog.css';
-import { MeritCreateAmount } from './MeritCreateAmount';
-import { MeritSelectPledges } from './MeritSelectPledges';
-import { MeritSelectActives } from './MeritSelectActives';
-import type { User } from 'api/models';
+import { CreateAmount } from './CreateAmount';
+import { SelectUsers } from './SelectUsers';
+import type { User, MeritType } from 'api/models';
 
 import React, { PureComponent, type Node } from 'react';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
@@ -21,11 +20,11 @@ const titleStyle = {
   marginRight: '38px',
   letterSpacing: '0.5px',
   textAlign: 'center'
-}
+};
 
 const appBarStyle = {
   backgroundColor: '#fff'
-}
+};
 
 type Props = {
   state: User,
@@ -35,19 +34,17 @@ type Props = {
 };
 
 type State = {
-  view: 'amount' | 'selectUsers',
-  header: string,
-  isDemerit: boolean,
+  view: 'createAmount' | 'selectUsers',
+  type: ?MeritType,
   amount: number
 };
 
 export default class MobileMeritDialog extends PureComponent<Props, State> {
   state = {
-    view: 'amount',
-    header: 'Merits',
-    isDemerit: false,
+    view: 'createAmount',
+    type: null,
     amount: 0
-  }
+  };
 
   componentWillReceiveProps(nextProps: Props) {
     // Temporary fix for Android
@@ -56,26 +53,30 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
     }
   }
 
+  get header(): string {
+    const { view } = this.state;
+    switch (view) {
+      case 'createAmount':
+        return 'Merits'
+      case 'selectUsers':
+        const { amount } = this.state;
+        return amount > 0 ? `${amount} merits` : `${amount} demerits`;
+      default:
+        return ''
+    }
+  }
+
   get body(): ?Node {
     const { state } = this.props;
-    const { view, amount } = this.state;
+    const { view, type, amount } = this.state;
     switch (view) {
-      case 'amount':
-        return <MeritCreateAmount changeView={this.changeView} />;
+      case 'createAmount':
+        return <CreateAmount enterUsersView={this.enterUsersView} />;
       case 'selectUsers':
-        if (state.status === 'pledge') {
-          return (
-            <MeritSelectActives
-              state={state}
-              amount={amount}
-              handleRequestOpen={this.props.handleRequestOpen}
-              handleClose={this.onClose}
-            />
-          )
-        }
         return (
-          <MeritSelectPledges
+          <SelectUsers
             state={state}
+            type={type}
             amount={amount}
             handleRequestOpen={this.props.handleRequestOpen}
             handleClose={this.onClose}
@@ -86,21 +87,11 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
     }
   }
 
-  changeView = (value: string) => {
-    const parsedAmount = parseInt(value, 10);
-    let header;
-
-    if (parsedAmount < 0) {
-      header = `${value} demerits`;
-    }
-    else {
-      header = `${value} merits`;
-    }
-
+  enterUsersView = (type: MeritType, amount: number) => {
     this.setState({
-      header,
       view: 'selectUsers',
-      amount: parseInt(value, 10)
+      type,
+      amount
     });
   }
 
@@ -111,9 +102,8 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
 
   resetView = () => {
     this.setState({
-      view: 'amount',
-      header: 'Merits',
-      isDemerit: false,
+      view: 'createAmount',
+      type: null,
       amount: 0
     });
   }
@@ -121,7 +111,7 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
   render() {
     return (
       <FullscreenDialog
-        title={this.state.header}
+        title={this.header}
         titleStyle={titleStyle}
         appBarStyle={appBarStyle}
         style={fullscreenDialogStyle}

@@ -1,0 +1,17 @@
+#merit-dialog-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 100%;
+  justify-items: center;
+  color: var(--text-color);  
+}
+
+#merit-select-users-container {
+  width: 100%;
+  padding: 20px;
+}
+
+#merit-create-amount-container {
+  width: 100%;
+  padding: 20px;
+}

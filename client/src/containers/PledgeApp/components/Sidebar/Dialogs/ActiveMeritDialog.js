@@ -1,6 +1,6 @@
 // @flow
 
-import '../MyMerits/MyMerits.css';
+import '../../MyMerits/MyMerits.css';
 import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
@@ -68,7 +68,7 @@ export default class ActiveMeritDialog extends PureComponent<Props, State> {
     }
   }
 
-  merit = (type: 'merit' | 'demerit') => {
+  merit = (action: 'merit' | 'demerit') => {
     const { selectedPledges } = this.state;
     let { description, amount } = this.state;
     let pledgeValidation = true;
@@ -98,11 +98,11 @@ export default class ActiveMeritDialog extends PureComponent<Props, State> {
       } = this.props.state;
       const { isChalkboard, isPCGreet } = this.state;
       const date = getDate();
-      let action = 'Merited';
+      let actionText = 'Merited';
 
-      if (type === 'demerit') {
+      if (action === 'demerit') {
         amount = -amount;
-        action = 'Demerited';
+        actionText = 'Demerited';
       }
       if (isChalkboard) {
         description = `Chalkboard: ${description}`;
@@ -136,7 +136,7 @@ export default class ActiveMeritDialog extends PureComponent<Props, State> {
 
         API.sendActiveMeritNotification(activeName, selectedPledges, amount)
         .then(res => {
-          this.props.handleRequestOpen(`${action} pledges: ${amount} merits`);
+          this.props.handleRequestOpen(`${actionText} pledges: ${amount} merits`);
         })
         .catch(error => console.error(`Error: ${error}`));
       })
@@ -273,7 +273,6 @@ export default class ActiveMeritDialog extends PureComponent<Props, State> {
         title="Merit"
         titleClassName="garnett-dialog-title"
         actions={actions}
-        modal={false}
         bodyClassName="garnett-dialog-body"
         contentClassName="garnett-dialog-content"
         open={this.props.open}

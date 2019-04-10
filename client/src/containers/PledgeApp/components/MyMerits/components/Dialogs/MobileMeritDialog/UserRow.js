@@ -13,7 +13,7 @@ type Props = {
   selectUser: () => void
 };
 
-export class MeritUserRow extends PureComponent<Props> {
+export class UserRow extends PureComponent<Props> {
   get userInfo(): Node {
     const { user, selectUser } = this.props;
     return (

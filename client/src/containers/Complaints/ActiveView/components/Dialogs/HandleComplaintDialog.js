@@ -75,7 +75,6 @@ export default class HandleComplaintDialog extends Component {
     return (
       <Dialog
         actions={actions}
-        modal={false}
         contentClassName="garnett-dialog-content"
         open={this.props.open}
         onRequestClose={this.props.handleClose}

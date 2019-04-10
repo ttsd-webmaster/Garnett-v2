@@ -24,10 +24,3 @@
 .merit-date.small {
   font-size: 12px;
 }
-
-/* Merit Dialog */
-#remaining-merits {
-  font-size: 14px;
-  color: var(--text-light);
-  margin: 20px auto 0;
-}

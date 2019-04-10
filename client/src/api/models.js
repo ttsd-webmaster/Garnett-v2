@@ -23,29 +23,40 @@ export type SignUpParams = {
   code: string
 };
 
-export type Merit = {
+export const MeritType = 'personal' | 'pc' | 'chalkboard';
+
+type BaseMerit = {
+  type: MeritType,
   createdBy: string,
-  activeName: string,
   description: string,
   amount: number,
+  date: string
+};
+
+export type ActiveMerit = {
+  ...BaseMerit,
+  activeName: string,
+  activePhoto: string
+};
+
+export type PledgeMerit = {
+  ...BaseMerit,
+  pledgeName: string,
+  pledgePhoto: string
+};
+
+export type Merit = {
+  ...BaseMerit,
+  activeName: string,
   activePhoto: string,
-  date: string,
-  isPCGreet: boolean
+  pledgeName: string,
+  pledgePhoto: string,
+  platform: string
 };
 
-export type ActiveMeritInfo = {
+export type MeritInfo = {
   displayName: string,
-  selectedPledges: Array<Object>, // TODO: Change Object to Pledge type
-  merit: Merit, //TODO: Change Object to Merit type
-  isChalkboard: boolean,
-  isPCGreet: boolean,
+  selectedUsers: Array<Object>, // TODO: Change Object to Pledge type
+  merit: ActiveMerit | PledgeMerit,
   status: string
-};
-
-export type PledgeMeritInfo = {
-  displayName: string,
-  selectedActives: Array<Object>, // TODO: Change Object to Pledge type
-  merit: Merit, //TODO: Change Object to Merit type
-  isChalkboard: boolean,
-  isPCGreet: boolean
 };

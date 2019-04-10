@@ -188,32 +188,43 @@ exports.get_chalkboards_merit = function(req, res) {
   });
 };
 
-// Put merit data as active
-exports.merit_as_active = function(req, res) {
+// Create merit
+exports.create_merit = function(req, res) {
   const {
     displayName,
-    selectedPledges,
-    isChalkboard,
-    isPCGreet,
+    selectedUsers,
+    merit,
     status
   } = req.body;
   const platform = useragent.parse(req.headers['user-agent']).toString();
-  let { merit } = req.body;
   let counter = 0;
+  const usersRef = admin.database().ref('/users');
+  let activeRef;
+  let pledgeRef;
 
-  selectedPledges.forEach((pledge) => {
-    const activeRef = admin.database().ref('/users/' + displayName);
-    const pledgeRef = admin.database().ref('/users/' + pledge.value);
+  selectedUsers.forEach((user) => {
+    let active;
+    let pledge;
+    let userStatus;
+    if (status === 'pledge') {
+      active = user.value;
+      pledge = displayName;
+      userStatus = user.val().status;
+    } else {
+      active = displayName;
+      pledge = user.value;
+      userStatus = status;
+    }
+    activeRef = usersRef.child(active);
+    pledgeRef = usersRef.child(pledge);
 
     activeRef.once('value', (active) => {
-      if (status !== 'pipm' && !isChalkboard && !isPCGreet) {
-        const remainingMerits = active.val().Pledges[pledge.value].merits - merit.amount;
-        if (merit.amount > 0 &&
-            remainingMerits < 0 &&
-            !res.headersSent) {
-          res.sendStatus(400).send(pledge.label);
+      if (userStatus !== 'pipm' && merit.type === 'personal') {
+        const remainingMerits = active.val().Pledges[pledge].merits - merit.amount;
+        if (merit.amount > 0 && remainingMerits < 0 && !res.headersSent) {
+          res.sendStatus(400).send(user.label);
         } else {
-          const activePledgeRef = active.ref.child('/Pledges/' + pledge.value);
+          const activePledgeRef = active.ref.child(`/Pledges/${pledge}`);
           activePledgeRef.update({ merits: remainingMerits });
         }
       }
@@ -221,16 +232,22 @@ exports.merit_as_active = function(req, res) {
       pledgeRef.once('value', (pledge) => {
         counter++;
 
-        merit.pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
-        merit.pledgePhoto = pledge.val().photoURL;
-        merit.platform = platform;
+        if (status === 'pledge') {
+          merit.activeName = `${active.val().firstName} ${active.val().lastName}`;
+          merit.activePhoto = active.val().photoURL;
+          merit.platform = platform;
+        } else {
+          merit.pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
+          merit.pledgePhoto = pledge.val().photoURL;
+          merit.platform = platform;
+        }
 
         const meritsRef = admin.database().ref('/merits');
         const key = meritsRef.push(merit).getKey();
         pledge.ref.child('Merits').push(key);
         activeRef.child('Merits').push(key);
 
-        if (!res.headersSent && counter === selectedPledges.length) {
+        if (!res.headersSent && counter === selectedUsers.length) {
           res.sendStatus(200);
         }
       });
@@ -238,58 +255,8 @@ exports.merit_as_active = function(req, res) {
   })
 };
 
-// Put merit data as pledge
-exports.merit_as_pledge = function(req, res) {
-  const {
-    displayName,
-    selectedActives,
-    isChalkboard,
-    isPCGreet
-  } = req.body;
-  const platform = useragent.parse(req.headers['user-agent']).toString();
-  let { merit } = req.body;
-  let counter = 0;
-
-  selectedActives.forEach((child) => {
-    const activeRef = admin.database().ref('/users/' + child.value);
-    const pledgeRef = admin.database().ref('/users/' + displayName);
-
-    activeRef.once('value', (active) => {
-      if (active.val().status !== 'pipm' && !isChalkboard && !isPCGreet) {
-        const remainingMerits = active.val().Pledges[displayName].merits - merit.amount;
-        if (merit.amount > 0 && 
-            remainingMerits < 0 && 
-            !res.headersSent) {
-          res.sendStatus(400).send(child.label);
-        }
-        else {
-          const activePledgeRef = active.ref.child('/Pledges/' + displayName);
-          activePledgeRef.update({ merits: remainingMerits });
-        }
-      }
-
-      pledgeRef.once('value', (pledge) => {
-        counter++;
-
-        merit.activeName = `${active.val().firstName} ${active.val().lastName}`;
-        merit.activePhoto = active.val().photoURL;
-        merit.platform = platform;
-
-        const meritsRef = admin.database().ref('/merits');
-        const key = meritsRef.push(merit).getKey();
-        pledge.ref.child('Merits').push(key);
-        active.ref.child('Merits').push(key);
-
-        if (!res.headersSent && counter === selectedActives.length) {
-          res.sendStatus(200);
-        }
-      });
-    });
-  });
-};
-
-// Deletes merit as pledge
-exports.delete_merit_as_pledge = function(req, res) {
+// Deletes merit
+exports.delete_merit = function(req, res) {
   const pledgeName = req.body.merit.pledgeName.replace(/ /g,'');
   const activeName = req.body.merit.activeName.replace(/ /g,'');
   const meritsRef = admin.database().ref('/merits');

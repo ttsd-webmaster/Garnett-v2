@@ -6,7 +6,7 @@ import React, { Fragment } from 'react';
 import { List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-const phoneStyle = {
+const anchorStyle = {
   display: 'block',
   textDecoration: 'none'
 };
@@ -59,7 +59,7 @@ export function UserInfo(props: Props) {
           leftIcon={<i className="icon-graduation-cap garnett-icon"></i>}
         />
         <Divider className="garnett-divider" inset={true} />
-        <a style={phoneStyle} href={`tel:${phone}`}>
+        <a style={anchorStyle} href={`tel:${phone}`}>
           <ListItem
             className="garnett-list-item"
             primaryText={<p className="garnett-name">Phone Number</p>}
@@ -68,12 +68,14 @@ export function UserInfo(props: Props) {
           />
         </a>
         <Divider className="garnett-divider" inset={true} />
-        <ListItem
-          className="garnett-list-item"
-          primaryText={<p className="garnett-name">Email Address</p>}
-          secondaryText={<p className="garnett-description">{ email }</p>}
-          leftIcon={<i className="icon-mail-alt garnett-icon"></i>}
-        />
+        <a style={anchorStyle} href={`mailto:${email}`}>
+          <ListItem
+            className="garnett-list-item"
+            primaryText={<p className="garnett-name">Email Address</p>}
+            secondaryText={<p className="garnett-description">{ email }</p>}
+            leftIcon={<i className="icon-mail-alt garnett-icon"></i>}
+          />
+        </a>
         <Divider className="garnett-divider" />
       </List>
     </Fragment>

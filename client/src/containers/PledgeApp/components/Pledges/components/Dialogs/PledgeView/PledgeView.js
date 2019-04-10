@@ -36,7 +36,6 @@ export function PledgeView(props: Props) {
       title="Pledge Brother"
       titleClassName="garnett-dialog-title"
       actions={props.actions}
-      modal={false}
       bodyClassName="garnett-dialog-body list"
       contentClassName="garnett-dialog-content"
       open={props.open}

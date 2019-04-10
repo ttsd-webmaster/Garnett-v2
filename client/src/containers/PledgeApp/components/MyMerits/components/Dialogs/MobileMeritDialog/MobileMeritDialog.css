@@ -3,8 +3,8 @@
   fill: unset !important;
 }
 
-/*********** Create Amount View *************/
-#merit-create-amount-container {
+/*********** Select Amount View *************/
+#mobile-create-amount-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -12,11 +12,11 @@
   left: 0;
   bottom: 0;
   right: 0;
-  animation: fadein 0.4s;
+  animation: fadeup 0.4s;
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
-  #merit-create-amount-container {
+  #mobile-create-amount-container {
     bottom: 70px;
   }
 }
@@ -26,9 +26,12 @@
   justify-content: center;
   align-items: center;
   grid-column: 1/4;
-  height: 50%;
+  height: calc(50% - 111px);
   color: var(--primary-color);
   font-size: 110px;
+}
+#merit-create-amount.shake {
+  animation: shake 0.2s;
 }
 
 #numbers-grid {
@@ -78,7 +81,7 @@
 }
 
 .mobile-merit-button.merit {
-  border-left: 1px solid #ff424a;
+  border-left: 1px solid rgb(192, 0, 31, 0.5);
 }
 
 .confirm-container {
@@ -87,8 +90,13 @@
   bottom: 0;
 }
 
+.chips-container.mobile-create-amount {
+  justify-content: center;
+  padding: 64px 0 0;
+}
+
 /************* Select Users View **************/
-#merit-select-users-container {
+#mobile-merit-select-users-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -107,29 +115,13 @@
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
-  #merit-select-users-container {
+  #mobile-merit-select-users-container {
     bottom: 70px;
   }
 }
 
 .garnett-list.merit-select {
   flex-grow: 1;
-}
-
-.garnett-chip.merit-select {
-  height: 32px;
-  background-color: var(--primary-color);
-  color: #fff;
-  margin: 5px !important;
-}
-#my-merits .garnett-chip.merit-select > svg{
-  fill: #fff !important;
-}
-
-#chips-container {
-  display: flex;
-  height: 58px;
-  overflow: auto;
 }
 
 #merit-inputs-container {

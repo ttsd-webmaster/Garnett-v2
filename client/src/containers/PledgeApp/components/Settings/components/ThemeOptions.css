@@ -17,7 +17,7 @@
   height: 48px;
   width: 90%;
   font-size: 14px;
-  color: var(--accent-color);
+  color: var(--primary-color);
   margin: auto;
   border: 1px solid;
   border-radius: 50px;
@@ -30,12 +30,12 @@
   align-items: center;
   height: 100%;
   width: 33.33%;
-  border-right: 1px solid var(--accent-color);
+  border-right: 1px solid var(--primary-color);
 }
 .theme-option:last-child {
   border: none;
 }
 .theme-option.active {
-  background-color: var(--accent-color);
+  background-color: var(--primary-color);
   color: #fafafa;
 }

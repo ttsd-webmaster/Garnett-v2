@@ -15,8 +15,9 @@ const fullscreenDialogStyle = {
 };
 
 type Props = {
-  active: User,
   open: boolean,
+  active: User,
+  title: string,
   handleClose: () => void
 };
 
@@ -38,7 +39,7 @@ export default function ContactsDialog(props: Props) {
   if (isMobile()) {
     return (
       <FullscreenDialog
-        title="Brother"
+        title={props.title}
         titleStyle={{ fontSize:'22px' }}
         style={fullscreenDialogStyle}
         open={props.open}
@@ -51,15 +52,14 @@ export default function ContactsDialog(props: Props) {
 
   return (
     <Dialog
-      title="Brother"
+      title={props.title}
       titleClassName="garnett-dialog-title"
       actions={actions}
-      modal={false}
       bodyClassName="garnett-dialog-body list"
       contentClassName="garnett-dialog-content"
       open={props.open}
       onRequestClose={props.handleClose}
-      autoScrollBodyContent={true}
+      autoDetectWindowHeight={false}
     >
       <UserInfo user={props.active} name={fullName} />
     </Dialog>

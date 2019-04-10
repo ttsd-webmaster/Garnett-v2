@@ -82,8 +82,8 @@
   margin: 10px !important;
 }
 .garnett-chip.active {
-  background-color: var(--text-color);
-  color: var(--background-color);
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
 /* Filter and reverse toggle in the subheader */
@@ -172,7 +172,7 @@
   -webkit-line-clamp: 1;
   /* autoprefixer: off */
   -webkit-box-orient: vertical;
-  height: 16px;
+  height: 17px;
   font-weight: 700;
   margin: 0;
   overflow: hidden;
@@ -238,18 +238,25 @@
   display: flex;
   flex-direction: column;
   background-color: var(--list-color);
-  padding: 0 0 24px !important;
+  padding: 0px !important;
   border-bottom: 1px solid var(--border-color) !important;
 }
 .garnett-dialog-body.list {
-  height: 600px;
+  max-height: unset !important;
+  height: 515px;
   background-color: var(--background-color);
 }
+
+.garnett-dialog-body.list .user-name {
+  margin: 0 0 20px;
+}
+
 
 .garnett-dialog-title {
   background-color: var(--primary-color);
   color: #fff !important;
   font-size: 20px !important;
+  padding: 16px !important;
 }
 
 .garnett-input {
@@ -319,4 +326,45 @@
   color: var(--text-color);
   margin-right: 5.7px;
   margin-bottom: -3px;
+}
+
+/* Merit Dialog */
+#remaining-merits {
+  font-size: 14px;
+  color: var(--text-light);
+  margin: 20px auto 0;
+}
+
+.chips-container {
+  display: flex;
+}
+.chips-container.create-amount {
+  justify-content: center;
+}
+.chips-container.select-users {
+  height: 58px;
+  overflow: auto;
+}
+.garnett-chip.merit-dialog {
+  height: 32px;
+  margin: 5px !important;
+}
+.garnett-chip.merit-dialog > svg{
+  fill: #fff !important;
+}
+
+/***************** Animations ***********************/
+@keyframes shake {
+  10%, 90% {
+    transform: translateX(-1px);
+  }
+  20%, 80% {
+    transform: translateX(3px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-6px);
+  }
+  40%, 60% {
+    transform: translateX(6px);
+  }
 }
