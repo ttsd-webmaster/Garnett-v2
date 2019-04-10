@@ -36,7 +36,7 @@ export default class MeritDialog extends PureComponent<Props, State> {
   };
 
   get body(): Node {
-    const { state, handleMeritClose, handleRequestOpen } = this.props;
+    const { state, handleRequestOpen } = this.props;
     return (
       <div id="merit-dialog-container">
         <SelectUsers
@@ -49,7 +49,7 @@ export default class MeritDialog extends PureComponent<Props, State> {
           state={state}
           users={this.state.users}
           description={this.state.description}
-          handleClose={handleMeritClose}
+          handleClose={this.handleClose}
           handleRequestOpen={handleRequestOpen}
         />
       </div>
@@ -59,6 +59,14 @@ export default class MeritDialog extends PureComponent<Props, State> {
   setUsers = (users: Array<User>) => this.setState({ users });
 
   setDescription = (description: string) => this.setState({ description});
+
+  handleClose = () => {
+    this.props.handleMeritClose();
+    this.setState({
+      users: [],
+      description: ''
+    });
+  }
 
   render() {
     return (

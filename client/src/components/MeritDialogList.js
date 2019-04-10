@@ -46,7 +46,7 @@ export class MeritDialogList extends Component<Props> {
           <CircularProgress
             color="var(--accent-color)"
             size={30}
-            style={!isMobile() && { marginBottom: '200px' }}
+            style={!isMobile() ? { marginBottom: '200px' } : null}
           />
         </div>
       )
