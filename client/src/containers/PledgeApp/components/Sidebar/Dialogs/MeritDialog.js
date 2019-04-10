@@ -5,7 +5,7 @@ import { SelectUsers } from './SelectUsers';
 import { CreateAmount } from './CreateAmount';
 import type { User, MeritType } from 'api/models';
 
-import React, { PureComponent, type Node } from 'react';
+import React, { Component, type Node } from 'react';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
 const fullscreenDialogStyle = {
@@ -29,7 +29,7 @@ type State = {
   description: string
 };
 
-export default class MeritDialog extends PureComponent<Props, State> {
+export default class MeritDialog extends Component<Props, State> {
   state = {
     type: 'personal',
     users: [],
