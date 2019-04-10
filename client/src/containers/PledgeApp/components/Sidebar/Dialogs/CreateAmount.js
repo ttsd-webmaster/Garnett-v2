@@ -12,6 +12,7 @@ type Props = {
   state: User,
   users: Array<User>,
   description: string,
+  setType: (MeritType) => void,
   handleClose: () => void,
   handleRequestOpen: () => void
 };
@@ -79,6 +80,7 @@ export class CreateAmount extends Component<Props, State> {
 
   setType = (type: MeritType) => {
     const amount = type === 'pc' ? '5' : '0';
+    this.props.setType(type);
     this.setState({ type, amount });
   }
 

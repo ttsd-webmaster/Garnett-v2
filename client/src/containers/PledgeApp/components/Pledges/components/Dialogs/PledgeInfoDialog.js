@@ -23,14 +23,14 @@ type State = {
 export default class PledgeInfoDialog extends PureComponent<Props, State> {
   state = { pledge: null };
 
-  componentWillReceiveProps(nextProps: Props) {
-    const { pledge, state } = nextProps;
+  componentDidUpdate(prevProps: Props) {
+    const { pledge, state } = this.props;
     if (pledge) {
       this.setState({ pledge });
 
       if (state.status !== 'pledge') {
         if (navigator.onLine) {
-          const { displayName } = nextProps.state;
+          const { displayName } = this.props.state;
           const pledgeDisplayName = pledge.firstName + pledge.lastName;
 
           API.getRemainingMerits(displayName, pledgeDisplayName)

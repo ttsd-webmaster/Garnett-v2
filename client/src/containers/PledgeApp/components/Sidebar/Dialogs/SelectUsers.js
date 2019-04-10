@@ -2,12 +2,13 @@
 
 import API from 'api/API.js';
 import { MeritDialogList, SelectedUsersChips } from 'components';
-import type { User } from 'api/models';
+import type { User, MeritType } from 'api/models';
 
 import React, { Component } from 'react';
 
 type Props = {
   state: User,
+  type: MeritType,
   setUsers: (Array<User>) => void,
   setDescription: (string) => void,
   handleRequestOpen: () => void
@@ -44,6 +45,23 @@ export class SelectUsers extends Component<Props, State> {
         const users = res.data;
         this.setState({ users });
       });
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { type } = this.props;
+    if (type !== prevProps.type) {
+      let description = '';
+      switch (type) {
+        case 'pc':
+          description = 'PC Merits';
+          break;
+        case 'chalkboard':
+          description = 'Chalkboard: ';
+          break;
+        default:
+      }
+      this.setState({ description });
     }
   }
 
@@ -153,6 +171,7 @@ export class SelectUsers extends Component<Props, State> {
             placeholder="Description"
             autoComplete="off"
             value={this.state.description}
+            disabled={this.props.type === 'pc'}
             onChange={(event) => this.updateValue('description', event.target.value)}
           />
         </div>

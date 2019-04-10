@@ -46,9 +46,9 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
     amount: 0
   };
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     // Temporary fix for Android
-    if (this.props.open !== nextProps.open) {
+    if (this.props.open !== prevProps.open) {
       this.resetView();
     }
   }

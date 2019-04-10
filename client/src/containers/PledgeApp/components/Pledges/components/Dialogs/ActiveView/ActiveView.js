@@ -43,7 +43,7 @@ type State = {
 export class ActiveView extends PureComponent<Props, State> {
   state = { index: 0 };
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentDidUpdate(prevProps: Props) {
     this.setState({ index: 0 });
   }
 

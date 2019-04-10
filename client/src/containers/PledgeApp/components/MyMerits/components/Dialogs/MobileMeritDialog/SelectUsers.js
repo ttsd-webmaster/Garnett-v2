@@ -4,12 +4,13 @@ import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 import { MeritDialogList, SelectedUsersChips } from 'components';
-import type { User } from 'api/models';
+import type { User, MeritType } from 'api/models';
 
 import React, { Component, type Node } from 'react';
 
 type Props = {
   state: User,
+  type: MeritType,
   amount: number,
   handleClose: () => void,
   handleRequestOpen: () => void
@@ -26,15 +27,28 @@ type State = {
 };
 
 export class SelectUsers extends Component<Props, State> {
-  state = {
-    users: null,
-    selectedUsers: [],
-    name: '',
-    description: '',
-    showAlumni: false,
-    openSpinner: false,
-    spinnerMessage: ''
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: null,
+      selectedUsers: [],
+      name: '',
+      description: '',
+      showAlumni: false,
+      openSpinner: false,
+      spinnerMessage: ''
+    };
+
+    switch (props.type) {
+      case 'pc':
+        this.state.description = 'PC Merits';
+        break;
+      case 'chalkboard':
+        this.state.description = 'Chalkboard: ';
+        break;
+      default:
+    }
+  }
 
   componentDidMount() {
     const { status, displayName } = this.props.state;
@@ -83,6 +97,7 @@ export class SelectUsers extends Component<Props, State> {
           placeholder="Description"
           onChange={(event) => this.updateValue('description', event.target.value)}
           value={description}
+          disabled={this.props.type === 'pc'}
         />
       </div>
     )
