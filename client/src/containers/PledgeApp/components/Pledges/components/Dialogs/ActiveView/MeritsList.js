@@ -32,10 +32,8 @@ export class MeritsList extends PureComponent<Props, State> {
     if (navigator.onLine) {
       API.getPledgeMerits(this.props.pledgeName)
       .then(res => {
-        this.setState({
-          merits: res.data,
-          loaded: true
-        });
+        const { merits } = res.data;
+        this.setState({ merits, loaded: true });
       })
       .catch(err => console.log('err', err));
     } else {

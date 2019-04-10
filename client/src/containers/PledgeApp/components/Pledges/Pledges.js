@@ -89,9 +89,6 @@ export class Pledges extends PureComponent<Props, State> {
           });
 
           meritsRef.once('value', (merits) => {
-            if (!merits.val()) {
-              return
-            }
             // Set all the pledge's total merits
             pledges.forEach((pledge) => {
               let totalMerits = 0;

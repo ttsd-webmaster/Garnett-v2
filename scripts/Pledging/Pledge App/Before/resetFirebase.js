@@ -32,7 +32,7 @@ usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
     const userRef = admin.database().ref('/users/' + user.key);
 
-    console.log(`Reset data for ${user.key}`)
+    console.log(`Reset data for ${user.key}`);
 
     userRef.update({
       Merits: null,
@@ -43,6 +43,8 @@ usersRef.once('value', (snapshot) => {
     // Update the active's pledge merit count for each pledge
     if (user.val().status !== 'pledge') {
       usersRef.once('value', (snapshot) => {
+        console.log(`Set pledge merit counts for ${user.key}`);
+
         snapshot.forEach((child) => {
           if (child.val().status === 'pledge') {
             const pledgeName = child.key;
