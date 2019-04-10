@@ -1,19 +1,27 @@
 // @flow
 
 import React from 'react';
+import type { LoginView } from '../Login';
 
-export function LoginOptions(props: { active: boolean }) {
+type Props = {
+  view: LoginView,
+  changeView: (LoginView) => void
+};
+
+export function LoginOptions(props: Props) {
   return (
     <div className="sign-options">
-      <span className="sign-in underline"
+      <span
         id="sign-in"
-        onClick={props.active}
+        className={`${props.view === 'signin' ? 'underline' : ''}`}
+        onClick={() => props.changeView('signin')}
       >
         Sign In
       </span>
-      <span className="sign-up"
+      <span
         id="sign-up"
-        onClick={props.active}
+        className={`${props.view === 'signup' ? 'underline' : ''}`}
+        onClick={() => props.changeView('signup')}
       >
         Sign Up
       </span>

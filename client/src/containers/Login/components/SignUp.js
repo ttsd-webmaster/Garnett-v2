@@ -3,6 +3,7 @@
 import { formData1, selectData, formData2 } from '../data.js';
 import API from 'api/API.js';
 import { validateEmail } from 'helpers/functions.js';
+import type { LoginView } from '../Login';
 
 import React, { PureComponent } from 'react';
 import TextField from 'material-ui/TextField';
@@ -10,6 +11,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 
 type Props = {
+  view: LoginView,
   openProgressDialog: () => void,
   loginCallback: () => void,
   closeProgressDialog: () => void,
@@ -138,7 +140,10 @@ export class SignUp extends PureComponent<Props, State> {
 
   render() {
     return (
-      <form className="login-form" id="sign-up-form">
+      <form
+        id="sign-up-form"
+        className={`login-form ${this.props.view === 'signup' ? 'active' : ''}`}
+      >
         {formData1.map((form, i) => (
           <TextField
             className="login-input"

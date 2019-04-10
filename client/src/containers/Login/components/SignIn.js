@@ -5,16 +5,18 @@ import {
   loadFirebase,
   validateEmail
 } from 'helpers/functions.js';
+import type { LoginView } from '../Login';
 
 import React, { PureComponent } from 'react';
 import TextField from 'material-ui/TextField';
 
 type Props = {
+  view: LoginView,
+  changeView: (LoginView) => void,
   openProgressDialog: () => void,
   loginCallback: () => void,
   closeProgressDialog: () => void,
-  handleRequestOpen: () => void,
-  active: () => void
+  handleRequestOpen: () => void
 };
 
 type State = {
@@ -81,7 +83,10 @@ export class SignIn extends PureComponent<Props, State> {
 
   render() {
     return (
-      <form className="login-form active" id="sign-in-form">
+      <form
+        id="sign-in-form"
+        className={`login-form ${this.props.view === 'signin' ? 'active' : ''}`}
+      >
         <TextField
           className="login-input"
           type="email"
@@ -123,7 +128,12 @@ export class SignIn extends PureComponent<Props, State> {
           Login
         </button>
 
-        <div id="forgot-link" onClick={this.props.active}> Forgot Password? </div>
+        <div
+          id="forgot-link"
+          onClick={() => this.props.changeView('forgotPassword')}
+        >
+          Forgot Password?
+        </div>
       </form>
     )
   }

@@ -2,11 +2,13 @@
 
 import API from 'api/API.js';
 import { validateEmail } from 'helpers/functions.js';
+import type { LoginView } from '../Login';
 
 import React, { PureComponent } from 'react';
 import TextField from 'material-ui/TextField';
 
 type Props = {
+  view: LoginView,
   openProgressDialog: () => void,
   closeProgressDialog: () => void,
   handleRequestOpen: () => void
@@ -50,7 +52,10 @@ export class ForgotPassword extends PureComponent<Props, State> {
 
   render() {
     return (
-      <form className="login-form" id="forgot-password">
+      <form
+        id="forgot-password"
+        className={`login-form ${this.props.view === 'forgotPassword' ? 'active' : ''}`}
+      >
         <TextField
           className="login-input"
           type="email"

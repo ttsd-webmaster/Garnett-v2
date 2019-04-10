@@ -17,77 +17,22 @@ type Props = {
   handleRequestOpen: () => void
 };
 
+export type LoginView = 'signin' | 'signup' | 'forgotPassword';
+
 type State = {
   open: boolean,
-  message: string
+  message: string,
+  view: LoginView
 };
 
 export class Login extends PureComponent<Props, State> {
   state = {
     open: false,
-    message: ''
+    message: '',
+    view: 'signin'
   };
 
-  // TODO: Use state instead of document.getElementId
-  active = (event: SyntheticEvent<>) => {
-    if (!event.target.classList.contains('underline')) {
-      switch (event.target.id) {
-        case 'sign-in':
-          document.getElementById('sign-in')
-            .classList
-            .add('underline');
-          document.getElementById('sign-up')
-            .classList
-            .remove('underline');
-          document.getElementById('sign-in-form')
-            .classList
-            .add('active');
-          document.getElementById('sign-up-form')
-            .classList
-            .remove('active');
-          document.getElementById('forgot-password')
-            .classList
-            .remove('active');
-          break
-        case 'sign-up':
-          document.getElementById('sign-in')
-            .classList
-            .remove('underline');
-          document.getElementById('sign-up')
-            .classList
-            .add('underline');
-          document.getElementById('sign-in-form')
-            .classList
-            .remove('active');
-          document.getElementById('sign-up-form')
-            .classList
-            .add('active');
-          document.getElementById('forgot-password')
-            .classList
-            .remove('active');
-          break
-        case 'forgot-link':
-          document.getElementById('sign-in')
-            .classList
-            .remove('underline');
-          document.getElementById('sign-up')
-            .classList
-            .remove('underline');
-          document.getElementById('sign-in-form')
-            .classList
-            .remove('active');
-          document.getElementById('sign-up-form')
-            .classList
-            .remove('active');
-          document.getElementById('forgot-password')
-            .classList
-            .add('active');
-          break
-        default:
-          throw new Error('invalid target');
-      }
-    }
-  }
+  changeView = (view: LoginView) => this.setState({ view });
 
   openProgressDialog = (message: string) => {
     this.setState({ open: true, message });
@@ -112,20 +57,23 @@ export class Login extends PureComponent<Props, State> {
         </div>
 
         <div className="login-container">
-          <LoginOptions active={this.active} />
+          <LoginOptions view={this.state.view} changeView={this.changeView} />
           <SignIn
-            active={this.active}
+            view={this.state.view}
+            changeView={this.changeView}
             loginCallback={this.props.loginCallback}
             openProgressDialog={this.openProgressDialog}
             closeProgressDialog={this.closeProgressDialog}
             handleRequestOpen={this.props.handleRequestOpen}
           />
           <SignUp
+            view={this.state.view}
             openProgressDialog={this.openProgressDialog}
             closeProgressDialog={this.closeProgressDialog}
             handleRequestOpen={this.props.handleRequestOpen} 
           />
           <ForgotPassword
+            view={this.state.view}
             openProgressDialog={this.openProgressDialog}
             closeProgressDialog={this.closeProgressDialog}
             handleRequestOpen={this.props.handleRequestOpen}
