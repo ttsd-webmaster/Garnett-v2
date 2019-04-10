@@ -34,7 +34,7 @@ type State = {
 
 export default class MeritDialog extends PureComponent<Props, State> {
   state = {
-    users: null,
+    users: [],
     description: ''
   };
 
@@ -48,6 +48,8 @@ export default class MeritDialog extends PureComponent<Props, State> {
           setDescription={this.setDescription}
         />
         <CreateAmount
+          users={this.state.users}
+          description={this.state.description}
           handleMeritClose={handleMeritClose}
           handleRequestOpen={handleRequestOpen}
         />

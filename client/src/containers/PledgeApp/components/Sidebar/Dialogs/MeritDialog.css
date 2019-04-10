@@ -1,6 +1,7 @@
 #merit-dialog-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-column-gap: 20px;
   height: 100%;
   justify-items: center;
   color: var(--text-color);  
@@ -8,7 +9,7 @@
 
 #merit-select-users-container {
   width: 100%;
-  padding: 20px;
+  padding-left: 20px;
 }
 
 #merit-create-amount-container {
@@ -16,16 +17,23 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  padding: 20px;
+  padding-right: 20px;
+}
+
+#merit-create-amount-container .garnett-chip.merit-dialog > svg{
+  fill: #fff !important;
 }
 
 #create-merit-amount {
   display: flex;
   align-items: center;
   flex-grow: 1;
+  width: 100%;
   font-size: 150px;
+  background-color: var(--background-color);
   color: var(--primary-color);
-  margin: 0 0 100px;
+  border: 0;
+  text-align: center;
 }
 
 #create-merit-buttons {
@@ -33,6 +41,7 @@
   max-width: 350px;
   width: 100%;
   height: 60px;
+  margin: 0 0 64px;
 }
 
 .create-merit-button {

@@ -1,6 +1,6 @@
 // @flow
 
-import { MeritTypeOptions } from 'components/MeritTypeOptions';
+import { MeritTypeOptions } from 'components';
 import type { MeritType } from 'api/models';
 
 import React, { PureComponent } from 'react';
@@ -75,7 +75,7 @@ export class CreateAmount extends PureComponent<Props, State> {
   advance = (action: 'merit' | 'demerit') => {
     const { type, amount } = this.state;
     let meritAmount = parseInt(amount, 10);
-    meritAmount = action === 'merit' ? amount : -amount;
+    meritAmount = action === 'merit' ? meritAmount : -meritAmount;
     this.props.enterUsersView(type, meritAmount);
   }
 

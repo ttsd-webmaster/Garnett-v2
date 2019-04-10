@@ -3,6 +3,10 @@
   fill: unset !important;
 }
 
+#my-merits .garnett-chip.merit-dialog > svg{
+  fill: #fff !important;
+}
+
 /*********** Select Amount View *************/
 #mobile-create-amount-container {
   display: flex;

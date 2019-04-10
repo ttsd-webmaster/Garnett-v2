@@ -349,9 +349,6 @@
   height: 32px;
   margin: 5px !important;
 }
-.garnett-chip.merit-dialog > svg{
-  fill: #fff !important;
-}
 
 /***************** Animations ***********************/
 @keyframes shake {

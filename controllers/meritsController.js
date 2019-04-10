@@ -199,8 +199,6 @@ exports.create_merit = function(req, res) {
   const platform = useragent.parse(req.headers['user-agent']).toString();
   let counter = 0;
   const usersRef = admin.database().ref('/users');
-  let activeRef;
-  let pledgeRef;
 
   selectedUsers.forEach((user) => {
     let active;
@@ -215,8 +213,8 @@ exports.create_merit = function(req, res) {
       pledge = user.value;
       userStatus = status;
     }
-    activeRef = usersRef.child(active);
-    pledgeRef = usersRef.child(pledge);
+    const activeRef = usersRef.child(active);
+    const pledgeRef = usersRef.child(pledge);
 
     activeRef.once('value', (active) => {
       if (userStatus !== 'pipm' && merit.type === 'personal') {

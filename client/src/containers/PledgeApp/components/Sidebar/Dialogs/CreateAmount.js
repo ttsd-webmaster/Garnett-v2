@@ -3,18 +3,14 @@
 import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
-import { MeritTypeOptions } from 'components/MeritTypeOptions';
-import type { MeritType } from 'api/models';
+import { MeritTypeOptions } from 'components';
+import type { User, MeritType } from 'api/models';
 
 import React, { Component } from 'react';
 
-const MERIT_OPTIONS = [
-  { type: 'pc', label: 'Price Center' },
-  { type: 'personal', label: 'Personal' },
-  { type: 'chalkboard', label: 'Chalkboard' }
-];
-
 type Props = {
+  users: Array<User>,
+  description: string,
   handleMeritClose: () => void,
   handleRequestOpen: () => void
 };
@@ -30,6 +26,21 @@ export class CreateAmount extends Component<Props, State> {
     amount: '0'
   };
 
+  get buttonsDisabled(): boolean {
+    const { users, description } = this.props;
+    const parsedAmount = parseInt(this.state.amount, 10);
+    return (
+      users.length === 0 ||
+      !description ||
+      !parsedAmount ||
+      parsedAmount % 5 !== 0
+    )
+  }
+
+  changeAmount = (event: SyntheticEvent<>) => {
+    this.setState({ amount: event.target.value });
+  }
+
   setType = (type: MeritType) => {
     const amount = type === 'pc' ? '5' : '0';
     this.setState({ type, amount });
@@ -43,7 +54,12 @@ export class CreateAmount extends Component<Props, State> {
           isMobile={false}
           setType={this.setType}
         />
-        <div id="create-merit-amount">0</div>
+        <input
+          id="create-merit-amount"
+          type="text"
+          value={this.state.amount}
+          onChange={this.changeAmount}
+        />
         <div id="create-merit-buttons">
           <button
             className="create-merit-button demerit"
