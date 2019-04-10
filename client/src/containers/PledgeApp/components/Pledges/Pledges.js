@@ -33,14 +33,14 @@ type Props = {
 
 type State = {
   loaded: boolean,
-  pledges: Array<User>,
+  pledges: ?Array<User>,
   pledge: ?User,
   filter: string,
   filterName: string,
   reverse: boolean,
-  open: boolean,
-  openMerit: boolean,
-  openPopover: boolean
+  openPledge: boolean,
+  openPopover: boolean,
+  anchorEl: ?HTMLDivElement
 };
 
 export class Pledges extends PureComponent<Props, State> {
@@ -51,9 +51,9 @@ export class Pledges extends PureComponent<Props, State> {
     filter: 'lastName',
     filterName: 'Last Name',
     reverse: false,
-    open: false,
-    openMerit: false,
-    openPopover: false
+    openPledge: false,
+    openPopover: false,
+    anchorEl: null
   };
 
   componentDidMount() {
@@ -167,12 +167,12 @@ export class Pledges extends PureComponent<Props, State> {
   handleOpen = (pledge: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
-    this.setState({ pledge, open: true });
+    this.setState({ pledge, openPledge: true });
   }
 
   handleClose = () => {
     androidBackClose();
-    this.setState({ open: false }, () => {
+    this.setState({ pledge: null, openPledge: false }, () => {
       iosFullscreenDialogClose();
     });
   }
@@ -182,7 +182,7 @@ export class Pledges extends PureComponent<Props, State> {
     event.preventDefault();
     this.setState({
       openPopover: true,
-      anchorEl: event.currentTarget,
+      anchorEl: event.currentTarget
     });
   };
 
@@ -220,17 +220,26 @@ export class Pledges extends PureComponent<Props, State> {
 
   render() {
     const { state } = this.props;
-    const { loaded, reverse } = this.state;
+    const {
+      loaded,
+      pledge,
+      filterName,
+      reverse,
+      openPledge,
+      openPopover,
+      anchorEl
+    } = this.state;
 
     if (!loaded) {
       return <LoadingComponent />
     }
+
     return (
       <div id="pledges-container" className="animate-in">
         <FilterHeader
           title={state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges'}
           status={state.status}
-          filterName={this.state.filterName}
+          filterName={filterName}
           openPopover={this.openPopover}
           isReversed={reverse}
           reverse={this.reverse}
@@ -238,19 +247,21 @@ export class Pledges extends PureComponent<Props, State> {
 
         { this.pledges }
 
-        <LoadablePledgeInfoDialog
-          open={this.state.open}
-          state={state}
-          pledge={this.state.pledge}
-          handleClose={this.handleClose}
-          handleRequestOpen={this.props.handleRequestOpen}
-        />
+        {pledge && (
+          <LoadablePledgeInfoDialog
+            open={openPledge}
+            state={state}
+            pledge={pledge}
+            handleClose={this.handleClose}
+            handleRequestOpen={this.props.handleRequestOpen}
+          />
+        )}
         {state.status !== 'pledge' && (
           <Filter
-            open={this.state.openPopover}
-            anchorEl={this.state.anchorEl}
+            open={openPopover}
+            anchorEl={anchorEl}
             filters={filterOptions}
-            filterName={this.state.filterName}
+            filterName={filterName}
             closePopover={this.closePopover}
             setFilter={this.setFilter}
           />

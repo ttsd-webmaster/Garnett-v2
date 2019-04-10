@@ -5,10 +5,9 @@ const useragent = require('useragent');
 // Get remaining merits for pledge
 exports.get_remaining_merits = function(req, res) {
   const { displayName, pledgeName } = req.query;
-  const meritsRef = admin.database().ref('/users/' + displayName + '/Pledges/' + pledgeName + '/merits');
+  const meritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName }/merits`);
 
   meritsRef.once('value', (merits) => {
-    console.log()
     res.json(merits.val());
   });
 };
@@ -16,7 +15,7 @@ exports.get_remaining_merits = function(req, res) {
 // Gets all the pledges for meriting as active
 exports.get_pledges_as_active = function(req, res) {
   const { displayName } = req.query;
-  const pledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
+  const pledgesRef = admin.database().ref(`/users/${displayName}/Pledges`);
 
   pledgesRef.once('value', (snapshot) => {
     let pledges;
@@ -39,7 +38,7 @@ exports.get_pledges_as_active = function(req, res) {
 exports.get_pledges_as_active_mobile = function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
-  const userPledgesRef = admin.database().ref('/users/' + displayName + '/Pledges');
+  const userPledgesRef = admin.database().ref(`/users/${displayName}/Pledges`);
 
   userPledgesRef.once('value', (pledges) => {
     if (pledges.val()) {
@@ -274,8 +273,8 @@ exports.delete_merit = function(req, res) {
   const pledgeName = req.body.merit.pledgeName.replace(/ /g,'');
   const activeName = req.body.merit.activeName.replace(/ /g,'');
   const meritsRef = admin.database().ref('/merits');
-  const pledgeRef = admin.database().ref('/users/' + pledgeName);
-  const activeRef = admin.database().ref('/users/' + activeName);
+  const pledgeRef = admin.database().ref(`/users/${pledgeName}`);
+  const activeRef = admin.database().ref(`/users/${activeName}`);
 
   meritsRef.once('value', (merits) => {
     merits.forEach((merit) => {

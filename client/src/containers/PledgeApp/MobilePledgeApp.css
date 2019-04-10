@@ -51,6 +51,9 @@
     height: calc(100vh - 160px);
   }
 }
+.no-items-container.dialog {
+  height: unset;
+}
 
 .no-items-found {
   color: var(--text-color);

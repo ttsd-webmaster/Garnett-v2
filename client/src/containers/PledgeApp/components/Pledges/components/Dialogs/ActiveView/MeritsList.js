@@ -16,14 +16,14 @@ type Props = {
 };
 
 type State = {
-  merits: ?Array<Merit>,
+  merits: Array<Merit>,
   reverse: boolean,
   loaded: boolean
 };
 
 export class MeritsList extends PureComponent<Props, State> {
   state = {
-    merits: null,
+    merits: [],
     reverse: false,
     loaded: false
   };
@@ -60,9 +60,9 @@ export class MeritsList extends PureComponent<Props, State> {
       )
     }
 
-    if (!merits) {
+    if (merits.length === 0) {
       return (
-        <div className="no-items-container">
+        <div className="no-items-container dialog">
           <h1 className="no-items-found dialog">No merits found</h1>
         </div>
       )

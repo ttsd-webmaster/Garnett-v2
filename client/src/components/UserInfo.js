@@ -34,7 +34,7 @@ export function UserInfo(props: Props) {
       <h1 className="user-name">{ props.name }</h1>
       <List className="garnett-list">
         <Divider className="garnett-divider" />
-        {props.remainingMerits && (
+        {typeof props.remainingMerits === 'number' && (
           <ListItem
             className="garnett-list-item"
             primaryText={<p className="garnett-name">Merits Remaining</p>}

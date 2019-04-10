@@ -68,6 +68,7 @@ export default class MeritDialog extends PureComponent<Props, State> {
   handleClose = () => {
     this.props.handleMeritClose();
     this.setState({
+      type: 'personal',
       users: [],
       description: ''
     });

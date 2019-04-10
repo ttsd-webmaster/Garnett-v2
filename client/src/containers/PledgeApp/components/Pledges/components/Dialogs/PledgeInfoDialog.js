@@ -17,32 +17,24 @@ type Props = {
 };
 
 type State = {
-  pledge: ?User
+  remainingMerits: number
 };
 
 export default class PledgeInfoDialog extends PureComponent<Props, State> {
-  state = { pledge: null };
+  state = { remainingMerits: 0 };
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidMount() {
     const { pledge, state } = this.props;
-    if (pledge) {
-      this.setState({ pledge });
-
+    if (navigator.onLine) {
       if (state.status !== 'pledge') {
-        if (navigator.onLine) {
-          const { displayName } = this.props.state;
-          const pledgeDisplayName = pledge.firstName + pledge.lastName;
+        const { displayName } = this.props.state;
+        const pledgeDisplayName = pledge.firstName + pledge.lastName;
 
-          API.getRemainingMerits(displayName, pledgeDisplayName)
-          .then((res) => {
-            const remainingMerits = res.data;
-
-            this.setState({ remainingMerits });
-          });
-        }
-        else {
-          this.setState({ remainingMerits: 0 });
-        }
+        API.getRemainingMerits(displayName, pledgeDisplayName)
+        .then((res) => {
+          const remainingMerits = res.data;
+          this.setState({ remainingMerits });
+        });
       }
     }
   }
@@ -56,15 +48,11 @@ export default class PledgeInfoDialog extends PureComponent<Props, State> {
       />
     );
 
-    if (!this.state.pledge) {
-      return null
-    }
-
     if (this.props.state.status === 'pledge') {
       return (
         <PledgeView
           open={this.props.open}
-          pledge={this.state.pledge}
+          pledge={this.props.pledge}
           handleClose={this.props.handleClose}
           actions={actions}
         />
@@ -74,7 +62,7 @@ export default class PledgeInfoDialog extends PureComponent<Props, State> {
     return (
       <ActiveView
         open={this.props.open}
-        pledge={this.state.pledge}
+        pledge={this.props.pledge}
         remainingMerits={this.state.remainingMerits}
         handleClose={this.props.handleClose}
         handleRequestOpen={this.props.handleRequestOpen}

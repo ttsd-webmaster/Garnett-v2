@@ -6,7 +6,7 @@ require('@firebase/auth');
 exports.get_auth_status = function(req, res) {
   // Send back user's info to the client
   const { displayName } = req.query;
-  const userRef = admin.database().ref('/users/' + displayName);
+  const userRef = admin.database().ref(`/users/${displayName}`);
   console.log(displayName);
 
   userRef.once('value', (user) => {
@@ -38,28 +38,26 @@ exports.get_actives = function(req, res) {
 // Query for the specified pledge's merits
 exports.get_pledge_merits = function(req, res) {
   const { pledgeName } = req.query;
-  const pledgeMeritsRef = admin.database().ref('/users/' + pledgeName + '/Merits');
+  const pledgeMeritsRef = admin.database().ref(`/users/${pledgeName}/Merits`);
   const meritsRef = admin.database().ref('/merits');
-  let pledgeMerits = [];
 
   pledgeMeritsRef.once('value', (userMerits) => {
-    if (userMerits.val()) {
-      meritsRef.once('value', (merits) => {
+    meritsRef.once('value', (merits) => {
+      let pledgeMerits = [];
+      if (userMerits.val() && merits.val()) {
         pledgeMerits = Object.keys(userMerits.val()).map(function(key) {
           return merits.val()[userMerits.val()[key]];
         }).reverse();
-        res.json(pledgeMerits);
-      })
-    } else {
-      res.json(pledgeMerits);
-    }
+      }
+      res.json({ merits: pledgeMerits });
+    })
   });
 };
 
 // Query for the specified pledge's complaints
 exports.get_pledge_complaints = function(req, res) {
   const { pledgeName } = req.query;
-  const complaintsRef = admin.database().ref('/users/' + pledgeName + '/Complaints');
+  const complaintsRef = admin.database().ref(`/users/${pledgeName}/Complaints`);
   let complaints = [];
 
   complaintsRef.once('value', (snapshot) => {
@@ -97,7 +95,7 @@ exports.signup = function(req, res) {
 
   const displayName = firstName + lastName;
   const usersRef = admin.database().ref('/users');
-  const userRef = admin.database().ref('/users/' + displayName);
+  const userRef = admin.database().ref(`/users/${displayName}`);
 
   userRef.once('value', (snapshot) => {
     if (snapshot.val() && year !== 'Alumni') {
@@ -268,7 +266,7 @@ exports.get_photos = function(req, res) {
     [...new Map(parsedSet[1])].forEach((entry) => {
       if (photoMap.get(entry[0]) === undefined) {
         const name = entry[0].replace(/ /g,'');;
-        const userRef = admin.database().ref('/users/' + name);
+        const userRef = admin.database().ref(`/users/${name}`);
 
         userRef.once('value', (user) => {
           photoMap.set(entry[0], user.val().photoURL);

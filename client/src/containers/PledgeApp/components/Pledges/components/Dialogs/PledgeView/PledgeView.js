@@ -40,7 +40,7 @@ export function PledgeView(props: Props) {
       contentClassName="garnett-dialog-content"
       open={props.open}
       onRequestClose={props.handleClose}
-      autoScrollBodyContent={true}
+      autoDetectWindowHeight={false}
     >
       <UserInfo user={props.pledge} name={fullName} />
     </Dialog>

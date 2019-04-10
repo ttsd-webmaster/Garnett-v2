@@ -43,10 +43,6 @@ type State = {
 export class ActiveView extends PureComponent<Props, State> {
   state = { index: 0 };
 
-  componentDidUpdate(prevProps: Props) {
-    this.setState({ index: 0 });
-  }
-
   get meritsList(): Node {
     const { firstName, lastName } = this.props.pledge;
     return (
@@ -61,8 +57,13 @@ export class ActiveView extends PureComponent<Props, State> {
     this.setState({ index });
   }
 
+  handleClose = () => {
+    this.props.handleClose();
+    this.setState({ index: 0 });
+  }
+
   render() {
-    const { pledge, remainingMerits, open, handleClose, actions } = this.props;
+    const { pledge, remainingMerits, open, actions } = this.props;
     const { firstName, lastName } = pledge;
     const fullName = `${firstName} ${lastName}`;
     if (isMobile()) {
@@ -72,7 +73,7 @@ export class ActiveView extends PureComponent<Props, State> {
           titleStyle={{ fontSize: '22px' }}
           style={fullscreenDialogStyle}
           open={open}
-          onRequestClose={handleClose}
+          onRequestClose={this.handleClose}
         >
           <Tabs 
             className="garnett-tabs"
@@ -108,7 +109,7 @@ export class ActiveView extends PureComponent<Props, State> {
         bodyClassName="garnett-dialog-body list"
         contentClassName="garnett-dialog-content"
         open={open}
-        onRequestClose={handleClose}
+        onRequestClose={this.handleClose}
         autoScrollBodyContent={true}
       >
         <Tabs

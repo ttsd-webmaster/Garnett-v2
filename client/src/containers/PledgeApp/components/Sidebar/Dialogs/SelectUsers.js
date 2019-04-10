@@ -61,6 +61,7 @@ export class SelectUsers extends Component<Props, State> {
           break;
         default:
       }
+      this.props.setDescription(description);
       this.setState({ description });
     }
   }
