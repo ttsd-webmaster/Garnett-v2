@@ -32,22 +32,17 @@ export class AccountInfo extends PureComponent<Props, State> {
         const meritsRef = firebase.database().ref('/merits');
 
         userMeritsRef.on('value', (userMerits) => {
-          if (!userMerits.val()) {
-            return
-          }
           meritsRef.on('value', (merits) => {
-            if (!userMerits.val() || !merits.val()) {
-              return
-            }
             let totalMerits = 0;
             // Retrieves the user's total merits by searching for the key in
             // the Merits table
-            Object.keys(userMerits.val()).forEach(function(key) {
-              if (merits.val()[userMerits.val()[key]]) {
-                totalMerits += merits.val()[userMerits.val()[key]].amount;
-              }
-            });
-
+            if (userMerits.val() && merits.val()) {
+              Object.keys(userMerits.val()).forEach(function(key) {
+                if (merits.val()[userMerits.val()[key]]) {
+                  totalMerits += merits.val()[userMerits.val()[key]].amount;
+                }
+              });
+            }
             localStorage.setItem('totalMerits', totalMerits);
             this.setState({
               totalMerits,
