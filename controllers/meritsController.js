@@ -77,7 +77,7 @@ exports.get_pbros_as_pledge = function(req, res) {
 
   usersRef.orderByChild('status').equalTo('pledge').on('value', (pledges) => {
     if (!pledges.val()) {
-      return res.json([]);
+      return res.status(400).send('No pledges found.');
     }
     pledges = Object.keys(pledges.val()).map(function(key) {
       if (pledges.val()[key] !== displayName) {

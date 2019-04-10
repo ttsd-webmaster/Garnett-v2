@@ -80,7 +80,10 @@ export class Pledges extends PureComponent<Props, State> {
         localStorage.setItem('pbros', JSON.stringify(pledges));
         this.setState({ pledges, loaded: true });
       })
-      .catch(error => console.error(`Error: ${error}`));
+      .catch(error => {
+        console.error(`Error: ${error}`);
+        this.setState({ loaded: true });
+      });
     } else {
       loadFirebase('database')
       .then(() => {
