@@ -97,9 +97,11 @@ export class Pledges extends PureComponent<Props, State> {
               let totalMerits = 0;
               // Retrieves the pledge's total merits by searching for the key in
               // the Merits table
-              if (pledge.Merits) {
+              if (merits.val() && pledge.Merits) {
                 Object.keys(pledge.Merits).forEach(function(key) {
-                  totalMerits += merits.val()[pledge.Merits[key]].amount;
+                  if (merits.val()[pledge.Merits[key]]) {
+                    totalMerits += merits.val()[pledge.Merits[key]].amount;
+                  }
                 });
               }
               pledge.totalMerits = totalMerits;
