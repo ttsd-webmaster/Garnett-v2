@@ -331,11 +331,10 @@
   margin-bottom: -3px;
 }
 
-/* Merit Dialog */
-#remaining-merits {
-  font-size: 14px;
-  color: var(--text-light);
-  margin: 20px auto 0;
+/****************** Merit Dialog ********************/
+#no-users-to-select {
+  flex-grow: 1;
+  background-color: var(--background-color);
 }
 
 .chips-container {

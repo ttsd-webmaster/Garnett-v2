@@ -52,7 +52,7 @@ export class MeritDialogList extends Component<Props> {
       )
     }
     if (users.length === selectedUsers.length) {
-      return <div />
+      return <div id="no-users-to-select" />
     }
     return (
       <List className="garnett-list merit-select">
