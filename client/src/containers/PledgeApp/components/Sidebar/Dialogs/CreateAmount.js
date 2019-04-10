@@ -101,6 +101,7 @@ export class CreateAmount extends Component<Props, State> {
     } = state;
     const date = getDate();
     let actionText = 'Merited';
+    amount = parseInt(amount, 10);
 
     if (action === 'demerit') {
       amount = -Math.abs(amount);

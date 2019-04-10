@@ -33,11 +33,13 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
     .then((res) => {
       this.props.handleDeleteClose();
       this.props.handleRequestOpen(`Deleted merit from ${merit.activeName}`);
+      this.setState({ deleting: false });
     })
     .catch((error) => {
       console.log(`Error: ${error}`);
       this.props.handleDeleteClose();
       this.props.handleRequestOpen('Error deleting merit');
+      this.setState({ deleting: false });
     });
   }
 

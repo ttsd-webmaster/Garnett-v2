@@ -92,18 +92,19 @@ export class MyMeritsList extends PureComponent<Props, State> {
     return (
       <List className="animate-in garnett-list">
         {myMerits.map((merit, i) => {
-          if (merit) {
-            const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
-            return (
-              <MeritRow
-                key={i}
-                merit={merit}
-                photo={state.status === 'pledge' ? activePhoto : pledgePhoto}
-                name={state.status === 'pledge' ? activeName : pledgeName}
-                handleDeleteOpen={this.handleDeleteOpen}
-              />
-            )
+          if (!merit) {
+            return null;
           }
+          const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
+          return (
+            <MeritRow
+              key={i}
+              merit={merit}
+              photo={state.status === 'pledge' ? activePhoto : pledgePhoto}
+              name={state.status === 'pledge' ? activeName : pledgeName}
+              handleDeleteOpen={this.handleDeleteOpen}
+            />
+          )
         })}
       </List>
     )
