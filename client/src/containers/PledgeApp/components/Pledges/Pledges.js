@@ -64,12 +64,23 @@ export class Pledges extends PureComponent<Props, State> {
     if (this.props.state.status === 'pledge') {
       API.getPbros(this.props.state.displayName)
       .then(res => {
-        const pledges = res.data;
-        localStorage.setItem('pbros', JSON.stringify(pledges));
+        let pledges = res.data;
+        const { filter } = this.state;
+        // Sort the pledges based on the selected filter
+        if (this.state.filterName === 'Total Merits') {
+          pledges = pledges.sort(function(a, b) {
+            return a[filter] < b[filter] ? 1 : -1;
+          });
+        } else {
+          pledges = pledges.sort(function(a, b) {
+            return a[filter] >= b[filter] ? 1 : -1;
+          });
+        }
 
+        localStorage.setItem('pbros', JSON.stringify(pledges));
         this.setState({ pledges, loaded: true });
       })
-      .catch(error => console.log(`Error: ${error}`));
+      .catch(error => console.error(`Error: ${error}`));
     } else {
       loadFirebase('database')
       .then(() => {
@@ -77,15 +88,13 @@ export class Pledges extends PureComponent<Props, State> {
         const usersRef = firebase.database().ref('/users');
         const meritsRef = firebase.database().ref('/merits');
 
-        usersRef.orderByChild('status').equalTo('pledge').on('value', (pledge) => {
-          const { filter } = this.state;
-
-          if (!pledge.val()) {
+        usersRef.orderByChild('status').equalTo('pledge').on('value', (pledges) => {
+          if (!pledges.val()) {
             this.setState({ pledges: null, loaded: true });
             return
           }
-          let pledges = Object.keys(pledge.val()).map(function(key) {
-            return pledge.val()[key];
+          pledges = Object.keys(pledges.val()).map(function(key) {
+            return pledges.val()[key];
           });
 
           meritsRef.once('value', (merits) => {
@@ -104,6 +113,7 @@ export class Pledges extends PureComponent<Props, State> {
               pledge.totalMerits = totalMerits;
             });
 
+            const { filter } = this.state;
             // Sort the pledges based on the selected filter
             if (this.state.filterName === 'Total Merits') {
               pledges = pledges.sort(function(a, b) {
@@ -111,7 +121,7 @@ export class Pledges extends PureComponent<Props, State> {
               });
             } else {
               pledges = pledges.sort(function(a, b) {
-                return a[filter] > b[filter] ? 1 : -1;
+                return a[filter] >= b[filter] ? 1 : -1;
               });
             }
 
@@ -144,7 +154,6 @@ export class Pledges extends PureComponent<Props, State> {
           <UserRow
             key={i}
             user={pledge}
-            isPledge={this.props.state.status === 'pledge'}
             handleOpen={() => this.handleOpen(pledge)}
           />
         ))}
@@ -179,13 +188,15 @@ export class Pledges extends PureComponent<Props, State> {
   setFilter = (filterName: string) => {
     let filter = filterName.replace(/ /g,'');
     filter = filter[0].toLowerCase() + filter.substr(1);
-    let pledges = this.state.pledges.sort(function(a, b) {
-      return a[filter] > b[filter] ? 1 : -1;
-    });
+    let { pledges } = this.state;
 
     if (filterName === 'Total Merits') {
       pledges = this.state.pledges.sort(function(a, b) {
         return a[filter] < b[filter] ? 1 : -1;
+      });
+    } else {
+      pledges = this.state.pledges.sort(function(a, b) {
+        return a[filter] >= b[filter] ? 1 : -1;
       });
     }
 

@@ -74,7 +74,7 @@ export default class MeritDialog extends PureComponent<Props, State> {
         appBarStyle={appBarStyle}
         style={fullscreenDialogStyle}
         open={this.props.open}
-        onRequestClose={this.props.handleMeritClose}
+        onRequestClose={this.handleClose}
         appBarZDepth={0}
       >
         { this.body }

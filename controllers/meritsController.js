@@ -73,17 +73,36 @@ exports.get_pledges_as_active_mobile = function(req, res) {
 exports.get_pbros_as_pledge = function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
-  let pbros = [];
+  const meritsRef = admin.database().ref('/merits');
 
-  usersRef.once('value', (users) => {
-    users.forEach((user) => {
-      if (user.val().status === 'pledge' && user.key !== displayName) {
-        pbros.push(user.val());
+  usersRef.orderByChild('status').equalTo('pledge').on('value', (pledges) => {
+    if (!pledges.val()) {
+      return res.json([]);
+    }
+    pledges = Object.keys(pledges.val()).map(function(key) {
+      if (pledges.val()[key] !== displayName) {
+        return pledges.val()[key];
       }
     });
 
-    pbros = pbros.length === 0 ? null : pbros;
-    res.json(pbros);
+    meritsRef.once('value', (merits) => {
+      // Set all the pledge's total merits
+      pledges.forEach((pledge) => {
+        let totalMerits = 0;
+        // Retrieves the pledge's total merits by searching for the key in
+        // the Merits table
+        if (merits.val() && pledge.Merits) {
+          Object.keys(pledge.Merits).forEach(function(key) {
+            if (merits.val()[pledge.Merits[key]]) {
+              totalMerits += merits.val()[pledge.Merits[key]].amount;
+            }
+          });
+        }
+        pledge.totalMerits = totalMerits;
+      });
+
+      res.json(pledges);
+    });
   });
 };
 

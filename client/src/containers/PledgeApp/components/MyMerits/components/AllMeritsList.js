@@ -10,14 +10,14 @@ import { List } from 'material-ui/List';
 
 type State = {
   loaded: boolean,
-  allMerits: ?Array<Merit>,
+  allMerits: Array<Merit>,
   reverse: boolean
 };
 
 export class AllMeritsList extends PureComponent<Props, State> {
   state = {
     loaded: false,
-    allMerits: null,
+    allMerits: [],
     reverse: false
   }
 
@@ -32,15 +32,13 @@ export class AllMeritsList extends PureComponent<Props, State> {
       const meritsRef = firebase.database().ref('/merits');
 
       meritsRef.limitToLast(100).on('value', (merits) => {
-        if (!merits.val()) {
-          this.setState({ allMerits: null, loaded: true });
-          return
-        }
+        let allMerits = [];
         // Retrieves the 100 most recent merits
-        const allMerits = Object.keys(merits.val()).map(function(key) {
-          return merits.val()[key];
-        }).reverse();
-
+        if (merits.val()) {
+          allMerits = Object.keys(merits.val()).map(function(key) {
+            return merits.val()[key];
+          }).reverse();
+        }
         localStorage.setItem('allMerits', JSON.stringify(allMerits));
         this.setState({ allMerits, loaded: true });
       });
@@ -62,7 +60,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
   get merits(): Node {
     const { allMerits } = this.state;
-    if (!allMerits) {
+    if (allMerits.length === 0) {
       return (
         <div className="no-items-container">
           <h1 className="no-items-found">No merits found</h1>
@@ -103,7 +101,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
   reverse = () => {
     const { allMerits, reverse } = this.state;
-    const reversedMerits = allMerits && allMerits.reverse();
+    const reversedMerits = allMerits.reverse();
     this.setState({ allMerits: reversedMerits, reverse: !reverse });
   }
 

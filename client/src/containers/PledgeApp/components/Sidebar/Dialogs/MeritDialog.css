@@ -48,6 +48,9 @@
   border: 1px solid #ccc;
   border-radius: 6px;
 }
+.select-users-input::placeholder {
+  color: #ccc;
+}
 
 #select-all-pledges {
   position: absolute;

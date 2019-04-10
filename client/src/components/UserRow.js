@@ -11,13 +11,12 @@ import Divider from 'material-ui/Divider';
 
 type Props = {
   user: User,
-  isPledge?: boolean,
   handleOpen: () => void
 };
 
 export class UserRow extends PureComponent<Props> {
   get body(): Node {
-    const { user, isPledge, handleOpen } = this.props;
+    const { user, handleOpen } = this.props;
     return (
       <div>
         <Divider className="garnett-divider large" inset={true} />
@@ -39,7 +38,7 @@ export class UserRow extends PureComponent<Props> {
           secondaryTextLines={2}
           onClick={handleOpen}
         >
-          {!isPledge && user.status === 'pledge' && (
+          {user.status === 'pledge' && (
             <p className="pledge-merits">{ user.totalMerits }</p>
           )}
         </ListItem>

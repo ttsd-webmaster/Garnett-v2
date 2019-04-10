@@ -20,7 +20,7 @@ type Props = {
 
 type State = {
   loaded: boolean,
-  myMerits: ?Array<Merit>,
+  myMerits: Array<Merit>,
   selectedMerit: ?Merit,
   openDelete: boolean,
   reverse: boolean
@@ -29,7 +29,7 @@ type State = {
 export class MyMeritsList extends PureComponent<Props, State> {
   state = {
     loaded: false,
-    myMerits: null,
+    myMerits: [],
     selectedMerit: null,
     openDelete: false,
     reverse: false
@@ -53,16 +53,14 @@ export class MyMeritsList extends PureComponent<Props, State> {
           return
         }
         meritsRef.on('value', (merits) => {
-          if (!userMerits.val() || !merits.val()) {
-            this.setState({ myMerits: null, loaded: true });
-            return
-          }
+          let myMerits = [];
           // Retrieves the user's merits by searching for the key in
           // the Merits table
-          const myMerits = Object.keys(userMerits.val()).map(function(key) {
-            return merits.val()[userMerits.val()[key]];
-          }).reverse();
-
+          if (userMerits.val() && merits.val()) {
+            myMerits = Object.keys(userMerits.val()).map(function(key) {
+              return merits.val()[userMerits.val()[key]];
+            }).reverse();
+          }
           localStorage.setItem('myMerits', JSON.stringify(myMerits));
           this.setState({ myMerits, loaded: true });
         });
@@ -82,7 +80,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
   get merits(): Node {
     const { state } = this.props;
     const { myMerits } = this.state;
-    if (!myMerits) {
+    if (myMerits.length === 0) {
       return (
         <div className="no-items-container">
           <h1 className="no-items-found">No merits entered</h1>
@@ -126,7 +124,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
   reverse = () => {
     const { myMerits, reverse } = this.state;
-    const reversedMerits = myMerits && myMerits.reverse();
+    const reversedMerits = myMerits.reverse();
     this.setState({ myMerits: reversedMerits, reverse: !reverse });
   }
 
