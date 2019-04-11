@@ -56,7 +56,7 @@ export class CreateAmount extends PureComponent<Props, State> {
   }
 
   get meritButtons(): Node {
-    const { standardizedMeritAction } = this.state;
+    const { type, standardizedMeritAction } = this.state;
     return (
       <div id="mobile-create-merit-buttons">
         <button
@@ -64,7 +64,7 @@ export class CreateAmount extends PureComponent<Props, State> {
           onClick={() => this.advance('demerit')}
           disabled={
             this.buttonsDisabled ||
-            (standardizedMeritAction && standardizedMeritAction !== 'demerit')
+            (type === 'standardized' && standardizedMeritAction !== 'demerit')
           }
         >
           Demerit
@@ -74,7 +74,7 @@ export class CreateAmount extends PureComponent<Props, State> {
           onClick={() => this.advance('merit')}
           disabled={
             this.buttonsDisabled ||
-            (standardizedMeritAction && standardizedMeritAction !== 'merit')
+            (type === 'standardized' && standardizedMeritAction !== 'merit')
           }
         >
           Merit
@@ -125,23 +125,21 @@ export class CreateAmount extends PureComponent<Props, State> {
   setAmount = (amount: string) => this.setState({ amount });
 
   setType = (type: MeritType) => {
-    let { description } = this.state;
-    switch (type) {
-      case 'chalkboard':
-        description = 'Chalkboard: ';
-        break;
-      case 'personal':
-        description = '';
-        break;
-      default:
+    let description = '';
+    if (type === 'chalkboard') {
+      description = 'Chalkboard: ';
     }
-    this.setState({ type, description });
+    this.setState({
+      type,
+      description,
+      standardizedMeritAction: null
+    });
   }
 
   selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
-    this.setType('standardized');
     this.handleClose();
     this.setState({
+      type: 'standardized',
       amount: option.amount,
       description: option.reason,
       standardizedMeritAction: option.action

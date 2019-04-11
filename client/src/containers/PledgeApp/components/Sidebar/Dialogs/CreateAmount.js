@@ -48,7 +48,7 @@ export class CreateAmount extends Component<Props, State> {
   };
 
   get meritButtons(): Node {
-    const { standardizedMeritAction } = this.state;
+    const { type, standardizedMeritAction } = this.state;
     return (
       <div id="create-merit-buttons">
         <button
@@ -56,7 +56,7 @@ export class CreateAmount extends Component<Props, State> {
           onClick={() => this.merit('demerit')}
           disabled={
             this.buttonsDisabled ||
-            (standardizedMeritAction && standardizedMeritAction !== 'demerit')
+            (type === 'standardized' && standardizedMeritAction !== 'demerit')
           }
         >
           Demerit
@@ -66,7 +66,7 @@ export class CreateAmount extends Component<Props, State> {
           onClick={() => this.merit('merit')}
           disabled={
             this.buttonsDisabled ||
-            (standardizedMeritAction && standardizedMeritAction !== 'merit')
+            (type === 'standardized' && standardizedMeritAction !== 'merit')
           }
         >
           Merit
@@ -132,7 +132,7 @@ export class CreateAmount extends Component<Props, State> {
       default:
     }
     this.props.setType(type);
-    this.setState({ type });
+    this.setState({ type, standardizedMeritAction: null });
   }
 
   selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
