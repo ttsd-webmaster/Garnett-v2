@@ -33,6 +33,7 @@ body {
   --dialog-button: var(--primary-color);
   --label-color: rgba(0, 0, 0, 0.3);
   --placeholder-color: #e0e0e0;
+  --hover-color: #f1f1f1;
 }
 
 /* Dark Mode */

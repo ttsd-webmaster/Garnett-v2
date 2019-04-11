@@ -45,6 +45,7 @@
   justify-content: center;
   align-items: center;
   height: calc(100vh - 100px);
+  background-color: var(--background-color);
 }
 @media (max-width: 767px) {
   .no-items-container {
@@ -83,24 +84,55 @@
 /* Chip for merits toggle header in MyMerits */
 .garnett-chip {
   margin: 10px !important;
+  transition: background-color 0.2s ease-in-out;
 }
 .garnett-chip.active {
   background-color: var(--primary-color);
   color: #fff;
 }
+@media (min-width: 768px) {
+  .garnett-chip:not(.active):hover {
+    background-color: var(--hover-color);
+  }
+}
 
 /* Filter and reverse toggle in the subheader */
-.garnett-filter {
+.garnett-filter-container {
   position: relative;
   height: 48px;
   margin-left: auto;
   cursor: pointer;
+}
+@media (min-width: 768px) {
+  .garnett-filter {
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .garnett-filter:hover {
+    background-color: var(--hover-color);
+  }
 }
 .reverse-toggle {
   padding: 0 !important;
 }
 .reverse-toggle .icon-down-open-mini {
   top: 4px;
+}
+@media (min-width: 768px) {
+  .reverse-toggle {
+    top: 2px;
+    width: 35px !important;
+    height: 35px !important;
+    border-radius: 50%;
+    transition: background-color 0.2s ease-in-out !important;
+  }
+  .reverse-toggle:hover {
+    background-color: var(--hover-color) !important;
+  }
+  .reverse-toggle .icon-down-open-mini {
+    top: 2px;
+  }
 }
 
 /***************** Garnett List *******************/
@@ -128,6 +160,7 @@
 
 .garnett-list-item > div > div {
   background-color: var(--list-color);
+  transition: background-color 0.2s ease-in-out;
 }
 @media (max-width: 767px) {
   .garnett-list-item > div > div {
@@ -144,6 +177,11 @@
 .garnett-list-item.long > div > div > div:last-child {
   height: fit-content !important;
   white-space: pre-line !important;
+}
+@media (min-width: 768px) {
+  .garnett-list-item > div > div:hover {
+    background-color: var(--hover-color);
+  }
 }
 
 /* Image for user and merit row */

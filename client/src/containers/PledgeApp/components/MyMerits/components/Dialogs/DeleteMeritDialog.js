@@ -68,7 +68,6 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
         contentClassName="garnett-dialog-content"
         open={this.props.open}
         onRequestClose={this.props.handleDeleteClose}
-        autoScrollBodyContent={true}
       >
         Delete Merit?
       </Dialog>
