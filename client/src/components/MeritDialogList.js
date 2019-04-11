@@ -51,13 +51,14 @@ export class MeritDialogList extends Component<Props> {
         </div>
       )
     }
-    if (users.length === selectedUsers.length) {
+    if (this.noUsersToSelect) {
       return <div id="no-users-to-select" />
     }
     return (
       <List className="garnett-list merit-select">
         {users.map((user, i) => {
-          const userName = user.firstName.toLowerCase();
+          const { firstName, lastName } = user;
+          const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
           const searchedName = name.toLowerCase();
           const includesUser = selectedUsers.find((selectedUser) => {
             return selectedUser.firstName === user.firstName;
@@ -77,6 +78,22 @@ export class MeritDialogList extends Component<Props> {
         })}
       </List>
     )
+  }
+
+  get noUsersToSelect(): boolean {
+    const { users, selectedUsers, name } = this.props;
+    const userCheck = users.some((user) => {
+      const { firstName, lastName } = user;
+      const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
+      const searchedName = name.toLowerCase();
+      const includesUser = selectedUsers.some((selectedUser) => (
+        selectedUser.firstName === user.firstName
+      ));
+      return includesUser || userName.startsWith(searchedName);
+    });
+    // Check that no users match the input name or all users have
+    // already been selected
+    return !userCheck || (users.length === selectedUsers.length);
   }
 
   render() {
