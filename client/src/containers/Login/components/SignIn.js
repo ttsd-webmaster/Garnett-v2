@@ -59,7 +59,13 @@ export class SignIn extends PureComponent<Props, State> {
             userRef.once('value', (snapshot) => {
               const user = snapshot.val();
               localStorage.setItem('data', JSON.stringify(user));
-              this.props.loginCallback(user);
+
+              try {
+                this.props.loginCallback(user);
+              } catch (error) {
+                this.props.closeProgressDialog();
+                this.props.handleRequestOpen(error);
+              }
             });
           });
         } else {

@@ -136,7 +136,14 @@ export default class App extends Component<{}, State> {
 
   loginCallback = (user: User) => {
     if (browserSupportsNotifications()) {
-      registerNotificationToken(user, () => this.setData(user));
+      try {
+        registerNotificationToken(user, () => {
+          this.setData(user);
+          this.handleRequestOpen('Successfully saved notification token');
+        });
+      } catch (error) {
+        throw new Error(error);
+      }
     } else {
       this.setData(user);
     }

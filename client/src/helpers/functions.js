@@ -38,7 +38,7 @@ export function initializeFirebase() {
 export function loadFirebase(module: string): Promise<void> {
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = `https://www.gstatic.com/firebasejs/4.6.2/firebase-${module}.js`;
+    script.src = `https://www.gstatic.com/firebasejs/5.9.3/firebase-${module}.js`;
     script.async = true;
     script.onload = () => resolve();
     script.onerror = () => { throw new Error(); };
@@ -56,6 +56,10 @@ export function registerNotificationToken(user: User) {
     .then(() => {
       const { firebase } = window;
       const messaging = firebase.messaging();
+
+      // Initialize the VAPID key
+      messaging.usePublicVapidKey(process.env.REACT_APP_FIREBASE_MESSAGING_VAPID_KEY);
+      // Register the Service Worker
       messaging.useServiceWorker(registration);
 
       messaging.requestPermission()
@@ -72,19 +76,22 @@ export function registerNotificationToken(user: User) {
             .then(messageRes => {
               console.log(messageRes)
             })
-            .catch(error => console.log(`Error: ${error}`));
+            .catch(error => {
+              console.error(`Server error: ${error}`);
+              throw new Error('An error occurred while saving token.')
+            });
           } 
           else {
             // Show permission request.
-            console.log('No Instance ID token available. Request permission to generate one.');
+            throw new Error('No Instance ID token available. Request permission to generate');
           }
         })
         .catch((err) => {
-          console.log('An error occurred while retrieving token. ', err);
+          throw new Error('An error occurred while retrieving token.');
         });
       })
       .catch((err) => {
-        console.log('Unable to get permission to notify.', err);
+        throw new Error('Unable to get permission to notify.');
       });
     });
   });
