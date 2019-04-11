@@ -1,6 +1,6 @@
 import MyComplaints from './components/MyComplaints';
 import PastComplaints from './components/PastComplaints';
-import { loadFirebase, androidBackOpen, androidBackClose } from 'helpers/functions.js';
+import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { LoadableAddComplaintDialog } from './components/Dialogs';
 
@@ -30,61 +30,57 @@ export default class ActiveComplaints extends Component {
 
   componentDidMount() {
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const dbRef = firebase.database().ref('/');
+      const { firebase } = window;
+      const dbRef = firebase.database().ref('/');
 
-        dbRef.on('value', (snapshot) => {
-          let complaints = [];
-          let pendingComplaints = [];
-          let approvedComplaints = [];
-          
-          if (snapshot.val().pendingComplaints) {
-            pendingComplaints = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
-              return snapshot.val().pendingComplaints[key];
-            }).sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
-            });
-
-            if (this.props.state.status !== 'pipm') {
-              pendingComplaints = pendingComplaints.filter((complaint) => {
-                return this.props.state.name === complaint.activeName;
-              });
-            }
-          }
-          
-          if (snapshot.val().approvedComplaints) {
-            approvedComplaints = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
-              return snapshot.val().approvedComplaints[key];
-            }).sort((a, b) => {
-              return new Date(b.date) - new Date(a.date);
-            });
-
-            complaints = approvedComplaints;
-
-            if (this.props.state.status !== 'pipm') {
-              approvedComplaints = approvedComplaints.filter((complaint) => {
-                return this.props.state.name === complaint.activeName;
-              });
-            }
-          }
-
-          localStorage.setItem('activeComplaints', JSON.stringify(complaints));
-          localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
-          localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
-
-          this.setState({
-            loaded: true,
-            complaints,
-            pendingComplaints,
-            approvedComplaints
+      dbRef.on('value', (snapshot) => {
+        let complaints = [];
+        let pendingComplaints = [];
+        let approvedComplaints = [];
+        
+        if (snapshot.val().pendingComplaints) {
+          pendingComplaints = Object.keys(snapshot.val().pendingComplaints).map(function(key) {
+            return snapshot.val().pendingComplaints[key];
+          }).sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
           });
+
+          if (this.props.state.status !== 'pipm') {
+            pendingComplaints = pendingComplaints.filter((complaint) => {
+              return this.props.state.name === complaint.activeName;
+            });
+          }
+        }
+        
+        if (snapshot.val().approvedComplaints) {
+          approvedComplaints = Object.keys(snapshot.val().approvedComplaints).map(function(key) {
+            return snapshot.val().approvedComplaints[key];
+          }).sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
+          });
+
+          complaints = approvedComplaints;
+
+          if (this.props.state.status !== 'pipm') {
+            approvedComplaints = approvedComplaints.filter((complaint) => {
+              return this.props.state.name === complaint.activeName;
+            });
+          }
+        }
+
+        localStorage.setItem('activeComplaints', JSON.stringify(complaints));
+        localStorage.setItem('pendingComplaints', JSON.stringify(pendingComplaints));
+        localStorage.setItem('approvedComplaints', JSON.stringify(approvedComplaints));
+
+        this.setState({
+          loaded: true,
+          complaints,
+          pendingComplaints,
+          approvedComplaints
         });
       })
       .catch(error => console.log(`Error: ${error}`));
-    }
-    else {
+    } else {
       const activeComplaints = localStorage.getItem('activeComplaints');
       const pendingComplaints = localStorage.getItem('pendingComplaints');
       const approvedComplaints = localStorage.getItem('approvedComplaints');

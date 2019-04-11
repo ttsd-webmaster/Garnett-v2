@@ -2,7 +2,6 @@
 
 import '../DelibsApp.css';
 import 'containers/PledgeApp/MobilePledgeApp.css';
-import { loadFirebase } from 'helpers/functions.js';
 import { LoadingRusheeProfile } from 'helpers/loaders.js';
 import { Header } from 'components';
 import { RusheeInfo } from './components/RusheeInfo';
@@ -31,14 +30,11 @@ export class RusheeProfile extends PureComponent<Props, State> {
     }
 
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const rusheesRef = firebase.database().ref('/rushees/' + rusheeName);
+      const { firebase } = window;
+      const rusheesRef = firebase.database().ref('/rushees/' + rusheeName);
 
-        rusheesRef.on('value', (snapshot) => {
-          this.setState({ rushee: snapshot.val() });
-        });
+      rusheesRef.on('value', (snapshot) => {
+        this.setState({ rushee: snapshot.val() });
       });
     }
   }

@@ -57,11 +57,11 @@ export class SignIn extends PureComponent<Props, State> {
             const userRef = firebase.database().ref('/users/' + displayName);
 
             userRef.once('value', (snapshot) => {
-              const user = snapshot.val();
-              localStorage.setItem('data', JSON.stringify(user));
+              const userData = snapshot.val();
+              localStorage.setItem('data', JSON.stringify(userData));
 
               try {
-                this.props.loginCallback(user);
+                this.props.loginCallback(userData);
               } catch (error) {
                 this.props.closeProgressDialog();
                 this.props.handleRequestOpen(error);

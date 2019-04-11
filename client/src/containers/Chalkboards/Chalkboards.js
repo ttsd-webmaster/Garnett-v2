@@ -2,7 +2,6 @@ import './Chalkboards.css';
 import MyChalkboards from './components/MyChalkboards';
 import AllChalkboards from './components/AllChalkboards';
 import {
-  loadFirebase,
   isMobile,
   getDate,
   androidBackOpen,
@@ -49,90 +48,87 @@ export default class Chalkboards extends Component {
 
   componentDidMount() {
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const chalkboardsRef = firebase.database().ref('/chalkboards');
-        let chalkboards = [];
+      const { firebase } = window;
+      const chalkboardsRef = firebase.database().ref('/chalkboards');
+      let chalkboards = [];
 
-        chalkboardsRef.on('value', (snap) => {
-          let myHostingChalkboards = [];
-          let myAttendingChalkboards = [];
-          let myCompletedChalkboards = [];
-          let upcomingChalkboards = [];
-          let completedChalkboards = [];
-          
-          // Checks if there are any chalkboards
-          if (snap.val()) {
-            const today = getDate();
+      chalkboardsRef.on('value', (snap) => {
+        let myHostingChalkboards = [];
+        let myAttendingChalkboards = [];
+        let myCompletedChalkboards = [];
+        let upcomingChalkboards = [];
+        let completedChalkboards = [];
+        
+        // Checks if there are any chalkboards
+        if (snap.val()) {
+          const today = getDate();
 
-            // Converts object to array
-            chalkboards = Object.keys(snap.val()).map(function(key) {
-              return snap.val()[key];
-            });
+          // Converts object to array
+          chalkboards = Object.keys(snap.val()).map(function(key) {
+            return snap.val()[key];
+          });
 
-            // Checks which chalkboards I am attending and which ones I have completed
-            chalkboards.forEach((chalkboard) => {
-              // Checks if the user has created the chalkboard
-              if (this.props.state.status !== 'pledge' &&
-                  this.props.state.name === chalkboard.activeName) {
+          // Checks which chalkboards I am attending and which ones I have completed
+          chalkboards.forEach((chalkboard) => {
+            // Checks if the user has created the chalkboard
+            if (this.props.state.status !== 'pledge' &&
+                this.props.state.name === chalkboard.activeName) {
+              if (chalkboard.date >= today) {
+                myHostingChalkboards.push(chalkboard);
+              }
+              else {
+                myCompletedChalkboards.push(chalkboard);
+              }
+            }
+            else {
+              let isAttendee = false;
+              
+              if (chalkboard.attendees) {
+                let attendees = Object.keys(chalkboard.attendees).map(function(key) {
+                  return chalkboard.attendees[key];
+                });
+                attendees.forEach((attendee) => {
+                  if (this.props.state.name === attendee.name) {
+                    isAttendee = true;
+                  }
+                });
+              }
+
+              // Checks if the user is attending the chalkboard
+              if (isAttendee) {
                 if (chalkboard.date >= today) {
-                  myHostingChalkboards.push(chalkboard);
+                  myAttendingChalkboards.push(chalkboard);
                 }
                 else {
                   myCompletedChalkboards.push(chalkboard);
                 }
               }
+              // All chalkboards the user did not create or is not attending
               else {
-                let isAttendee = false;
-                
-                if (chalkboard.attendees) {
-                  let attendees = Object.keys(chalkboard.attendees).map(function(key) {
-                    return chalkboard.attendees[key];
-                  });
-                  attendees.forEach((attendee) => {
-                    if (this.props.state.name === attendee.name) {
-                      isAttendee = true;
-                    }
-                  });
+                if (chalkboard.date >= today) {
+                  upcomingChalkboards.push(chalkboard);
                 }
-
-                // Checks if the user is attending the chalkboard
-                if (isAttendee) {
-                  if (chalkboard.date >= today) {
-                    myAttendingChalkboards.push(chalkboard);
-                  }
-                  else {
-                    myCompletedChalkboards.push(chalkboard);
-                  }
-                }
-                // All chalkboards the user did not create or is not attending
                 else {
-                  if (chalkboard.date >= today) {
-                    upcomingChalkboards.push(chalkboard);
-                  }
-                  else {
-                    completedChalkboards.push(chalkboard);
-                  }
+                  completedChalkboards.push(chalkboard);
                 }
               }
-            });
-          }
-
-          localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
-          localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
-          localStorage.setItem('myHostingChalkboards', JSON.stringify(myHostingChalkboards));
-          localStorage.setItem('myAttendingChalkboards', JSON.stringify(myAttendingChalkboards));
-          localStorage.setItem('myCompletedChalkboards', JSON.stringify(myCompletedChalkboards));
-
-          this.setState({
-            loaded: true,
-            upcomingChalkboards,
-            completedChalkboards,
-            myHostingChalkboards,
-            myAttendingChalkboards,
-            myCompletedChalkboards
+            }
           });
+        }
+
+        localStorage.setItem('upcomingChalkboards', JSON.stringify(upcomingChalkboards));
+        localStorage.setItem('completedChalkboards', JSON.stringify(completedChalkboards));
+        localStorage.setItem('myHostingChalkboards', JSON.stringify(myHostingChalkboards));
+        localStorage.setItem('myAttendingChalkboards', JSON.stringify(myAttendingChalkboards));
+        localStorage.setItem('myCompletedChalkboards', JSON.stringify(myCompletedChalkboards));
+
+        this.setState({
+          loaded: true,
+          upcomingChalkboards,
+          completedChalkboards,
+          myHostingChalkboards,
+          myAttendingChalkboards,
+          myCompletedChalkboards
         });
       });
     }

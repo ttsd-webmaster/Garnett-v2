@@ -1,6 +1,5 @@
 // @flow
 
-import { loadFirebase } from 'helpers/functions.js';
 import API from 'api/API.js';
 import type { User } from 'api/models';
 
@@ -26,16 +25,13 @@ export default class VoteDialog extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const voteRef = firebase.database().ref('/delibsVoting');
+      const { firebase } = window;
+      const voteRef = firebase.database().ref('/delibsVoting');
 
-        voteRef.on('value', (snapshot) => {
-          const open = snapshot.val().open;
-          const rushee = snapshot.val().rushee;
-          this.setState({ open, rushee });
-        });
+      voteRef.on('value', (snapshot) => {
+        const open = snapshot.val().open;
+        const rushee = snapshot.val().rushee;
+        this.setState({ open, rushee });
       });
     }
   }

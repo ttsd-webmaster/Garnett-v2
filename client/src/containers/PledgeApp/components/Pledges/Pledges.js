@@ -4,7 +4,6 @@ import './Pledges.css';
 
 import API from 'api/API.js';
 import {
-  loadFirebase,
   androidBackOpen,
   androidBackClose,
   iosFullscreenDialogOpen,
@@ -85,52 +84,49 @@ export class Pledges extends PureComponent<Props, State> {
         this.setState({ loaded: true });
       });
     } else {
-      loadFirebase('database')
-      .then(() => {
-        const firebase = window.firebase;
-        const usersRef = firebase.database().ref('/users');
-        const meritsRef = firebase.database().ref('/merits');
+      const firebase = window.firebase;
+      const usersRef = firebase.database().ref('/users');
+      const meritsRef = firebase.database().ref('/merits');
 
-        usersRef.orderByChild('status').equalTo('pledge').on('value', (pledges) => {
-          if (!pledges.val()) {
-            this.setState({ pledges: null, loaded: true });
-            return
-          }
-          pledges = Object.keys(pledges.val()).map(function(key) {
-            return pledges.val()[key];
-          });
+      usersRef.orderByChild('status').equalTo('pledge').on('value', (pledges) => {
+        if (!pledges.val()) {
+          this.setState({ pledges: null, loaded: true });
+          return
+        }
+        pledges = Object.keys(pledges.val()).map(function(key) {
+          return pledges.val()[key];
+        });
 
-          meritsRef.once('value', (merits) => {
-            // Set all the pledge's total merits
-            pledges.forEach((pledge) => {
-              let totalMerits = 0;
-              // Retrieves the pledge's total merits by searching for the key in
-              // the Merits table
-              if (merits.val() && pledge.Merits) {
-                Object.keys(pledge.Merits).forEach(function(key) {
-                  if (merits.val()[pledge.Merits[key]]) {
-                    totalMerits += merits.val()[pledge.Merits[key]].amount;
-                  }
-                });
-              }
-              pledge.totalMerits = totalMerits;
-            });
-
-            const { filter } = this.state;
-            // Sort the pledges based on the selected filter
-            if (this.state.filterName === 'Total Merits') {
-              pledges = pledges.sort(function(a, b) {
-                return a[filter] < b[filter] ? 1 : -1;
-              });
-            } else {
-              pledges = pledges.sort(function(a, b) {
-                return a[filter] >= b[filter] ? 1 : -1;
+        meritsRef.once('value', (merits) => {
+          // Set all the pledge's total merits
+          pledges.forEach((pledge) => {
+            let totalMerits = 0;
+            // Retrieves the pledge's total merits by searching for the key in
+            // the Merits table
+            if (merits.val() && pledge.Merits) {
+              Object.keys(pledge.Merits).forEach(function(key) {
+                if (merits.val()[pledge.Merits[key]]) {
+                  totalMerits += merits.val()[pledge.Merits[key]].amount;
+                }
               });
             }
-
-            localStorage.setItem('pledgeArray', JSON.stringify(pledges));
-            this.setState({ pledges, loaded: true });
+            pledge.totalMerits = totalMerits;
           });
+
+          const { filter } = this.state;
+          // Sort the pledges based on the selected filter
+          if (this.state.filterName === 'Total Merits') {
+            pledges = pledges.sort(function(a, b) {
+              return a[filter] < b[filter] ? 1 : -1;
+            });
+          } else {
+            pledges = pledges.sort(function(a, b) {
+              return a[filter] >= b[filter] ? 1 : -1;
+            });
+          }
+
+          localStorage.setItem('pledgeArray', JSON.stringify(pledges));
+          this.setState({ pledges, loaded: true });
         });
       });
     }

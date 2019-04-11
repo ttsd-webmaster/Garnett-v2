@@ -1,4 +1,3 @@
-import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader } from 'components';
 import { PlaceholderPledgeComplaint } from 'components/Placeholders';
@@ -26,32 +25,28 @@ export default class PledgeComplaints extends Component {
 
   componentDidMount() {
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { displayName } = this.props.state;
-        const { firebase } = window;
-        const complaintsRef = firebase.database().ref('/users/' + displayName + '/Complaints/');
+      const { displayName } = this.props.state;
+      const { firebase } = window;
+      const complaintsRef = firebase.database().ref('/users/' + displayName + '/Complaints/');
 
-        complaintsRef.sortByChild('date').on('value', (snapshot) => {
-          let { complaints } = this.state;
+      complaintsRef.sortByChild('date').on('value', (snapshot) => {
+        let { complaints } = this.state;
 
-          if (snapshot.val()) {
-            complaints = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
-            });
-          }
-
-          console.log(`Complaints Array: ${complaints}`);
-          localStorage.setItem('pledgeComplaints', JSON.stringify(complaints));
-
-          this.setState({
-            loaded: true,
-            complaints
+        if (snapshot.val()) {
+          complaints = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
           });
+        }
+
+        console.log(`Complaints Array: ${complaints}`);
+        localStorage.setItem('pledgeComplaints', JSON.stringify(complaints));
+
+        this.setState({
+          loaded: true,
+          complaints
         });
       });
-    }
-    else {
+    } else {
       const complaints = localStorage.getItem('pledgeComplaints');
       this.setState({
         loaded: true,

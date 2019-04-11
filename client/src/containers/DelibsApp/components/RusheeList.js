@@ -2,7 +2,6 @@
 
 import '../DelibsApp.css';
 import 'containers/PledgeApp/MobilePledgeApp.css';
-import { loadFirebase } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { RusheeRow } from './RusheeRow';
 import type { User } from 'api/models';
@@ -31,44 +30,39 @@ export class RusheeList extends PureComponent<Props, State> {
     localStorage.setItem('route', 'delibs-app');
     
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const { displayName } = this.props.state;
-        const rusheesRef = firebase.database().ref('/rushees');
+      const { firebase } = window;
+      const { displayName } = this.props.state;
+      const rusheesRef = firebase.database().ref('/rushees');
 
-        rusheesRef.on('value', (snapshot) => {
-          if (snapshot.val()) {
-            const interactions = [];
-            
-            snapshot.forEach((rushee) => {
-              rusheesRef.child(rushee.key + '/Actives/' + displayName).on('value', (active) => {
-                interactions.push(active.val().interacted);
-              })
-            });
+      rusheesRef.on('value', (snapshot) => {
+        if (snapshot.val()) {
+          const interactions = [];
+          
+          snapshot.forEach((rushee) => {
+            rusheesRef.child(rushee.key + '/Actives/' + displayName).on('value', (active) => {
+              interactions.push(active.val().interacted);
+            })
+          });
 
-            const rushees = Object.keys(snapshot.val()).map(function(key) {
-              return snapshot.val()[key];
-            });
+          const rushees = Object.keys(snapshot.val()).map(function(key) {
+            return snapshot.val()[key];
+          });
 
-            rushees.forEach((rushee, i) => {
-              rushee['interacted'] = interactions[i];
-            });
+          rushees.forEach((rushee, i) => {
+            rushee['interacted'] = interactions[i];
+          });
 
-            localStorage.setItem('rusheesArray', JSON.stringify(rushees));
-            
-            this.setState({
-              rushees,
-              loaded: true
-            });
-          }
-          else {
-            this.setState({ loaded: true });
-          }
-        });
+          localStorage.setItem('rusheesArray', JSON.stringify(rushees));
+          
+          this.setState({
+            rushees,
+            loaded: true
+          });
+        } else {
+          this.setState({ loaded: true });
+        }
       });
-    }
-    else {
+    } else {
       this.setState({ loaded: true });
     }
   }

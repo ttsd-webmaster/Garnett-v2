@@ -1,7 +1,6 @@
 // @flow
 
 import './AccountInfo.css';
-import { loadFirebase } from 'helpers/functions.js';
 import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
@@ -24,30 +23,27 @@ export class AccountInfo extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const { firebase } = window;
-        const { displayName } = this.props.user;
-        const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
-        const meritsRef = firebase.database().ref('/merits');
+      const { firebase } = window;
+      const { displayName } = this.props.user;
+      const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
+      const meritsRef = firebase.database().ref('/merits');
 
-        userMeritsRef.on('value', (userMerits) => {
-          meritsRef.on('value', (merits) => {
-            let totalMerits = 0;
-            // Retrieves the user's total merits by searching for the key in
-            // the Merits table
-            if (userMerits.val() && merits.val()) {
-              Object.keys(userMerits.val()).forEach(function(key) {
-                if (merits.val()[userMerits.val()[key]]) {
-                  totalMerits += merits.val()[userMerits.val()[key]].amount;
-                }
-              });
-            }
-            localStorage.setItem('totalMerits', totalMerits);
-            this.setState({
-              totalMerits,
-              previousTotalMerits: this.state.totalMerits
+      userMeritsRef.on('value', (userMerits) => {
+        meritsRef.on('value', (merits) => {
+          let totalMerits = 0;
+          // Retrieves the user's total merits by searching for the key in
+          // the Merits table
+          if (userMerits.val() && merits.val()) {
+            Object.keys(userMerits.val()).forEach(function(key) {
+              if (merits.val()[userMerits.val()[key]]) {
+                totalMerits += merits.val()[userMerits.val()[key]].amount;
+              }
             });
+          }
+          localStorage.setItem('totalMerits', totalMerits);
+          this.setState({
+            totalMerits,
+            previousTotalMerits: this.state.totalMerits
           });
         });
       });

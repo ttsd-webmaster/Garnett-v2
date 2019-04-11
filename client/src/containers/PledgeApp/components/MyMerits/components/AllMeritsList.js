@@ -1,6 +1,6 @@
 // @flow
 
-import { isMobile, loadFirebase } from 'helpers/functions.js';
+import { isMobile } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 import type { Merit } from 'api/models';
@@ -26,22 +26,19 @@ export class AllMeritsList extends PureComponent<Props, State> {
       this.setState({ loaded: true });
       return
     }
-    loadFirebase('database')
-    .then(() => {
-      const { firebase } = window;
-      const meritsRef = firebase.database().ref('/merits');
+    const { firebase } = window;
+    const meritsRef = firebase.database().ref('/merits');
 
-      meritsRef.limitToLast(100).on('value', (merits) => {
-        let allMerits = [];
-        // Retrieves the 100 most recent merits
-        if (merits.val()) {
-          allMerits = Object.keys(merits.val()).map(function(key) {
-            return merits.val()[key];
-          }).reverse();
-        }
-        localStorage.setItem('allMerits', JSON.stringify(allMerits));
-        this.setState({ allMerits, loaded: true });
-      });
+    meritsRef.limitToLast(100).on('value', (merits) => {
+      let allMerits = [];
+      // Retrieves the 100 most recent merits
+      if (merits.val()) {
+        allMerits = Object.keys(merits.val()).map(function(key) {
+          return merits.val()[key];
+        }).reverse();
+      }
+      localStorage.setItem('allMerits', JSON.stringify(allMerits));
+      this.setState({ allMerits, loaded: true });
     });
   }
 

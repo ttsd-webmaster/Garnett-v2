@@ -102,54 +102,60 @@ export default class App extends Component<{}, State> {
       }, 2000);
     }
 
-    if (navigator.onLine) {
-      if (data) {
-        initializeFirebase();
+    if (!data) {
+      this.setState({ loading: false });
+      return;
+    }
 
-        loadFirebase('auth')
-        .then(() => {
-          const { firebase } = window;
+    if (!navigator.onLine) {
+      this.loadDatabase(data);
+      return;
+    }
 
-          firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-              API.getAuthStatus(user.displayName)
-              .then((res) => {
-                this.loginCallback(res.data);
-              });
-            } else {
-              this.setState({ loading: false });
-            }
+    initializeFirebase();
+
+    loadFirebase('auth')
+    .then(() => {
+      const { firebase } = window;
+
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          API.getAuthStatus(user.displayName)
+          .then((res) => {
+            this.loginCallback(res.data);
           });
-        });
-      } else {
-        this.setState({ loading: false });
-      }
-    }
-    else {
-      if (data) {
-        this.setData(data);
-      } else {
-        this.setState({ loading: false });
-      }
-    }
+        } else {
+          this.setState({ loading: false });
+        }
+      });
+    });
   }
 
-  loginCallback = (user: User) => {
+  loginCallback(user: User) {
     if (browserSupportsNotifications()) {
       try {
         registerNotificationToken(user, () => {
-          this.setData(user);
+          this.loadDatabase(user);
           this.handleRequestOpen('Successfully saved notification token');
         });
       } catch (error) {
         throw new Error(error);
       }
     } else {
-      this.setData(user);
+      this.loadDatabase(user);
     }
   }
 
-  setData = (user: User) => {
+  loadDatabase(user: User) {
+    if (window.firebase.database) {
+      this.setData(user);
+    } else {
+      loadFirebase('database')
+      .then(() => this.setData(user));
+    }
+  }
+
+  setData(user: User) {
     const name = `${user.firstName} ${user.lastName}`;
     let displayName = user.firstName + user.lastName;
     displayName = displayName.replace(/\s/g, '');

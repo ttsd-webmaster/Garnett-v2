@@ -1,6 +1,5 @@
 // @flow
 
-import { loadFirebase } from 'helpers/functions.js';
 import API from 'api/API.js';
 
 import React, { PureComponent } from 'react';
@@ -23,16 +22,13 @@ export default class EndVoteDialog extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
-      loadFirebase('database')
-      .then(() => {
-        const rusheeName = this.props.rushee.replace(/ /g,'');
-        const { firebase } = window;
-        const rusheeRef = firebase.database().ref('/rushees/' + rusheeName);
+      const rusheeName = this.props.rushee.replace(/ /g,'');
+      const { firebase } = window;
+      const rusheeRef = firebase.database().ref('/rushees/' + rusheeName);
 
-        rusheeRef.on('value', (snapshot) => {
-          const totalVotes = snapshot.val().totalVotes;
-          this.setState({ totalVotes });
-        });
+      rusheeRef.on('value', (snapshot) => {
+        const totalVotes = snapshot.val().totalVotes;
+        this.setState({ totalVotes });
       });
     }
   }

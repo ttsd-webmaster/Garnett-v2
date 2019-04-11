@@ -1,10 +1,6 @@
 // @flow
 
-import {
-  loadFirebase,
-  androidBackOpen,
-  androidBackClose
-} from 'helpers/functions.js';
+import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 import { LoadableDeleteMeritDialog } from './Dialogs';
@@ -40,30 +36,27 @@ export class MyMeritsList extends PureComponent<Props, State> {
       this.setState({ loaded: true });
       return
     }
-    loadFirebase('database')
-    .then(() => {
-      const { firebase } = window;
-      const { displayName } = this.props.state;
-      const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
-      const meritsRef = firebase.database().ref('/merits');
+    const { firebase } = window;
+    const { displayName } = this.props.state;
+    const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
+    const meritsRef = firebase.database().ref('/merits');
 
-      userMeritsRef.on('value', (userMerits) => {
-        if (!userMerits.val()) {
-          this.setState({ loaded: true });
-          return
+    userMeritsRef.on('value', (userMerits) => {
+      if (!userMerits.val()) {
+        this.setState({ loaded: true });
+        return
+      }
+      meritsRef.on('value', (merits) => {
+        let myMerits = [];
+        // Retrieves the user's merits by searching for the key in
+        // the Merits table
+        if (userMerits.val() && merits.val()) {
+          myMerits = Object.keys(userMerits.val()).map(function(key) {
+            return merits.val()[userMerits.val()[key]];
+          }).reverse();
         }
-        meritsRef.on('value', (merits) => {
-          let myMerits = [];
-          // Retrieves the user's merits by searching for the key in
-          // the Merits table
-          if (userMerits.val() && merits.val()) {
-            myMerits = Object.keys(userMerits.val()).map(function(key) {
-              return merits.val()[userMerits.val()[key]];
-            }).reverse();
-          }
-          localStorage.setItem('myMerits', JSON.stringify(myMerits));
-          this.setState({ myMerits, loaded: true });
-        });
+        localStorage.setItem('myMerits', JSON.stringify(myMerits));
+        this.setState({ myMerits, loaded: true });
       });
     });
   }
