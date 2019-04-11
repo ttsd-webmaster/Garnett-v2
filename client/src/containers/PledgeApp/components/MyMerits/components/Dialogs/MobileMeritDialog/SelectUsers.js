@@ -12,6 +12,7 @@ type Props = {
   state: User,
   type: MeritType,
   amount: number,
+  description: string,
   handleClose: () => void,
   handleRequestOpen: () => void
 };
@@ -33,21 +34,11 @@ export class SelectUsers extends Component<Props, State> {
       users: null,
       selectedUsers: [],
       name: '',
-      description: '',
+      description: this.props.description,
       showAlumni: false,
       openSpinner: false,
       spinnerMessage: ''
     };
-
-    switch (props.type) {
-      case 'pc':
-        this.state.description = 'PC Merits';
-        break;
-      case 'chalkboard':
-        this.state.description = 'Chalkboard: ';
-        break;
-      default:
-    }
   }
 
   componentDidMount() {
@@ -97,7 +88,7 @@ export class SelectUsers extends Component<Props, State> {
           placeholder="Description"
           onChange={(event) => this.updateValue('description', event.target.value)}
           value={description}
-          disabled={this.props.type === 'pc'}
+          disabled={this.props.type === 'standardized'}
         />
       </div>
     )

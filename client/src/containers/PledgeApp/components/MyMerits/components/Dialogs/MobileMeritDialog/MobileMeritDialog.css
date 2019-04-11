@@ -17,6 +17,8 @@
   bottom: 0;
   right: 0;
   animation: fadeup 0.4s;
+  --list-color: #fff;
+  --text-color: rgba(0, 0, 0, 0.87);
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
@@ -30,7 +32,7 @@
   justify-content: center;
   align-items: center;
   grid-column: 1/4;
-  height: calc(50% - 111px);
+  flex-grow: 1;
   color: var(--primary-color);
   font-size: 110px;
 }

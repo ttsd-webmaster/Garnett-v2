@@ -43,6 +43,7 @@ export default class MeritDialog extends Component<Props, State> {
         <SelectUsers
           state={state}
           type={this.state.type}
+          description={this.state.description}
           setUsers={this.setUsers}
           setDescription={this.setDescription}
           handleRequestOpen={handleRequestOpen}
@@ -52,6 +53,7 @@ export default class MeritDialog extends Component<Props, State> {
           users={this.state.users}
           description={this.state.description}
           setType={this.setType}
+          setDescription={this.setDescription}
           handleClose={this.handleClose}
           handleRequestOpen={handleRequestOpen}
         />

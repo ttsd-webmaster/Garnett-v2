@@ -23,7 +23,7 @@ export type SignUpParams = {
   code: string
 };
 
-export const MeritType = 'personal' | 'pc' | 'chalkboard';
+export const MeritType = 'personal' | 'standardized' | 'chalkboard';
 
 type BaseMerit = {
   type: MeritType,

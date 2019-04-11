@@ -1,27 +1,42 @@
 // @flow
 
 import { MeritTypeOptions } from 'components';
+import { StandardizedMeritOptionsDialog } from 'components';
 import type { MeritType } from 'api/models';
 
 import React, { PureComponent } from 'react';
 
 const BUTTONS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '', '0', '←'];
 
+type MeritAction = 'merit' | 'demerit';
+
+type StandardizedMeritOption = {
+  reason: string,
+  amount: number,
+  action: MeritAction
+};
+
 type Props = {
-  enterUsersView: (string) => void
+  enterUsersView: (type: MeritType, amount: number, description: string) => void
 };
 
 type State = {
   type: MeritType,
   amount: string,
-  vibrate: boolean
+  description: '',
+  vibrate: boolean,
+  open: boolean,
+  standardizedMeritAction: ?MeritAction
 };
 
 export class CreateAmount extends PureComponent<Props, State> {
   state = {
     type: 'personal',
     amount: '0',
-    vibrate: false
+    description: '',
+    vibrate: false,
+    open: false,
+    standardizedMeritAction: null
   };
 
   get numbersGrid(): Node {
@@ -41,19 +56,26 @@ export class CreateAmount extends PureComponent<Props, State> {
   }
 
   get meritButtons(): Node {
+    const { standardizedMeritAction } = this.state;
     return (
       <div id="mobile-create-merit-buttons">
         <button
           className="mobile-merit-button"
           onClick={() => this.advance('demerit')}
-          disabled={this.buttonsDisabled}
+          disabled={
+            this.buttonsDisabled ||
+            (standardizedMeritAction && standardizedMeritAction !== 'demerit')
+          }
         >
           Demerit
         </button>
         <button
           className="mobile-merit-button merit"
           onClick={() => this.advance('merit')}
-          disabled={this.buttonsDisabled}
+          disabled={
+            this.buttonsDisabled ||
+            (standardizedMeritAction && standardizedMeritAction !== 'merit')
+          }
         >
           Merit
         </button>
@@ -67,8 +89,8 @@ export class CreateAmount extends PureComponent<Props, State> {
   }
 
   onClick = (value: string) => {
-    // PC merits stay constant
-    if (this.state.type === 'pc') {
+    // Standardized merits stay constant
+    if (this.state.type === 'standardized') {
       return this.vibrate();
     }
 
@@ -100,16 +122,37 @@ export class CreateAmount extends PureComponent<Props, State> {
     return amount !== '00' && parsedAmount >= 0 && parsedAmount < 1000;
   }
 
+  setAmount = (amount: string) => this.setState({ amount });
+
   setType = (type: MeritType) => {
-    const amount = type === 'pc' ? '5' : '0';
-    this.setState({ type, amount });
+    let { description } = this.state;
+    switch (type) {
+      case 'chalkboard':
+        description = 'Chalkboard: ';
+        break;
+      case 'personal':
+        description = '';
+        break;
+      default:
+    }
+    this.setState({ type, description });
+  }
+
+  selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
+    this.setType('standardized');
+    this.handleClose();
+    this.setState({
+      amount: option.amount,
+      description: option.reason,
+      standardizedMeritAction: option.action
+    })
   }
 
   advance = (action: 'merit' | 'demerit') => {
-    const { type, amount } = this.state;
+    const { type, amount, description } = this.state;
     let meritAmount = parseInt(amount, 10);
     meritAmount = action === 'merit' ? meritAmount : -meritAmount;
-    this.props.enterUsersView(type, meritAmount);
+    this.props.enterUsersView(type, meritAmount, description);
   }
 
   vibrate() {
@@ -120,6 +163,10 @@ export class CreateAmount extends PureComponent<Props, State> {
     }, 500);
   }
 
+  handleOpen = () => this.setState({ open: true });
+
+  handleClose = () => this.setState({ open: false });
+
   render() {
     return (
       <div id="mobile-create-amount-container">
@@ -127,6 +174,8 @@ export class CreateAmount extends PureComponent<Props, State> {
           type={this.state.type}
           isMobile
           setType={this.setType}
+          setAmount={this.setAmount}
+          handleOpen={this.handleOpen}
         />
         <div
           id="mobile-create-merit-amount"
@@ -136,6 +185,12 @@ export class CreateAmount extends PureComponent<Props, State> {
         </div>
         { this.numbersGrid }
         { this.meritButtons }
+        <StandardizedMeritOptionsDialog
+          isMobile
+          open={this.state.open}
+          selectStandardizedMeritOption={this.selectStandardizedMeritOption}
+          handleClose={this.handleClose}
+        />
       </div>
     )
   }

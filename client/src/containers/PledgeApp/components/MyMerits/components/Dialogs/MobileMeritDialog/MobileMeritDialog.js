@@ -36,14 +36,16 @@ type Props = {
 type State = {
   view: 'createAmount' | 'selectUsers',
   type: ?MeritType,
-  amount: number
+  amount: number,
+  description: string
 };
 
 export default class MobileMeritDialog extends PureComponent<Props, State> {
   state = {
     view: 'createAmount',
     type: null,
-    amount: 0
+    amount: 0,
+    description: ''
   };
 
   componentDidUpdate(prevProps: Props) {
@@ -68,7 +70,7 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
 
   get body(): ?Node {
     const { state } = this.props;
-    const { view, type, amount } = this.state;
+    const { view, type, amount, description } = this.state;
     switch (view) {
       case 'createAmount':
         return <CreateAmount enterUsersView={this.enterUsersView} />;
@@ -78,8 +80,9 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
             state={state}
             type={type}
             amount={amount}
-            handleRequestOpen={this.props.handleRequestOpen}
+            description={description}
             handleClose={this.onClose}
+            handleRequestOpen={this.props.handleRequestOpen}
           />
         )
       default:
@@ -87,11 +90,12 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
     }
   }
 
-  enterUsersView = (type: MeritType, amount: number) => {
+  enterUsersView = (type: MeritType, amount: number, description: string) => {
     this.setState({
       view: 'selectUsers',
       type,
-      amount
+      amount,
+      description
     });
   }
 
@@ -104,7 +108,8 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
     this.setState({
       view: 'createAmount',
       type: null,
-      amount: 0
+      amount: 0,
+      description: ''
     });
   }
 

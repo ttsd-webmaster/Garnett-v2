@@ -3,16 +3,25 @@
 import { getDate } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
-import { MeritTypeOptions } from 'components';
+import { MeritTypeOptions, StandardizedMeritOptionsDialog } from 'components';
 import type { User, MeritType } from 'api/models';
 
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
+
+type MeritAction = 'merit' | 'demerit';
+
+type StandardizedMeritOption = {
+  reason: string,
+  amount: number,
+  action: MeritAction
+};
 
 type Props = {
   state: User,
   users: Array<User>,
   description: string,
   setType: (MeritType) => void,
+  setDescription: (string) => void,
   handleClose: () => void,
   handleRequestOpen: () => void
 };
@@ -21,6 +30,8 @@ type State = {
   type: MeritType,
   amount: string,
   vibrate: boolean,
+  openStandardizedOptions: boolean,
+  standardizedMeritAction: ?MeritAction,
   openSpinner: boolean,
   spinnerMessage: string
 };
@@ -30,9 +41,39 @@ export class CreateAmount extends Component<Props, State> {
     type: 'personal',
     amount: '0',
     vibrate: false,
+    openStandardizedOptions: false,
+    standardizedMeritAction: null,
     openSpinner: false,
     spinnerMessage: ''
   };
+
+  get meritButtons(): Node {
+    const { standardizedMeritAction } = this.state;
+    return (
+      <div id="create-merit-buttons">
+        <button
+          className="create-merit-button demerit"
+          onClick={() => this.merit('demerit')}
+          disabled={
+            this.buttonsDisabled ||
+            (standardizedMeritAction && standardizedMeritAction !== 'demerit')
+          }
+        >
+          Demerit
+        </button>
+        <button
+          className="create-merit-button merit"
+          onClick={() => this.merit('merit')}
+          disabled={
+            this.buttonsDisabled ||
+            (standardizedMeritAction && standardizedMeritAction !== 'merit')
+          }
+        >
+          Merit
+        </button>
+      </div>
+    )
+  }
 
   get buttonsDisabled(): boolean {
     const { users, description } = this.props;
@@ -46,8 +87,8 @@ export class CreateAmount extends Component<Props, State> {
   }
 
   changeAmount = (event: SyntheticEvent<>) => {
-    // PC merits stay constant
-    if (this.state.type === 'pc') {
+    // Standardized merits stay constant
+    if (this.state.type === 'standardized') {
       return this.vibrate();
     }
 
@@ -78,10 +119,30 @@ export class CreateAmount extends Component<Props, State> {
     return amount !== '00' && parsedAmount >= 0 && parsedAmount < 1000;
   }
 
+  setAmount = (amount: string) => this.setState({ amount });
+
   setType = (type: MeritType) => {
-    const amount = type === 'pc' ? '5' : '0';
+    switch (type) {
+      case 'chalkboard':
+        this.props.setDescription('Chalkboard: ');
+        break;
+      case 'personal':
+        this.props.setDescription('');
+        break;
+      default:
+    }
     this.props.setType(type);
-    this.setState({ type, amount });
+    this.setState({ type });
+  }
+
+  selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
+    this.props.setDescription(option.reason);
+    this.setType('standardized');
+    this.handleClose();
+    this.setState({
+      amount: option.amount,
+      standardizedMeritAction: option.action
+    })
   }
 
   vibrate() {
@@ -169,6 +230,10 @@ export class CreateAmount extends Component<Props, State> {
     });
   }
 
+  handleOpen = () => this.setState({ openStandardizedOptions: true });
+
+  handleClose = () => this.setState({ openStandardizedOptions: false });
+
   openProgressDialog = () => {
     const isPledge = this.props.state.status === 'pledge';
     const spinnerMessage = isPledge ? 'Meriting myself...' : 'Meriting pledges...';
@@ -185,6 +250,8 @@ export class CreateAmount extends Component<Props, State> {
             type={this.state.type}
             isMobile={false}
             setType={this.setType}
+            setAmount={this.setAmount}
+            handleOpen={this.handleOpen}
           />
           <input
             id="create-merit-amount"
@@ -195,27 +262,18 @@ export class CreateAmount extends Component<Props, State> {
             value={this.state.amount}
             onChange={this.changeAmount}
           />
-          <div id="create-merit-buttons">
-            <button
-              className="create-merit-button demerit"
-              onClick={() => this.merit('demerit')}
-              disabled={this.buttonsDisabled}
-            >
-              Demerit
-            </button>
-            <button
-              className="create-merit-button merit"
-              onClick={() => this.merit('merit')}
-              disabled={this.buttonsDisabled}
-            >
-              Merit
-            </button>
-          </div>
-          <SpinnerDialog
-            open={this.state.openSpinner}
-            message={this.state.spinnerMessage}
-          />
+          { this.meritButtons }
         </div>
+        <StandardizedMeritOptionsDialog
+          isMobile={false}
+          open={this.state.openStandardizedOptions}
+          selectStandardizedMeritOption={this.selectStandardizedMeritOption}
+          handleClose={this.handleClose}
+        />
+        <SpinnerDialog
+          open={this.state.openSpinner}
+          message={this.state.spinnerMessage}
+        />
       </div>
     )
   }

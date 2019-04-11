@@ -5,7 +5,7 @@ import Chip from 'material-ui/Chip';
 import type { MeritType } from 'api/models';
 
 const MERIT_OPTIONS = [
-  { type: 'pc', label: 'Price Center' },
+  { type: 'standardized', label: 'Standardized' },
   { type: 'personal', label: 'Personal' },
   { type: 'chalkboard', label: 'Chalkboard' }
 ];
@@ -13,7 +13,9 @@ const MERIT_OPTIONS = [
 type Props = {
   isMobile: boolean,
   type: MeritType,
-  setType: (MeritType) => void 
+  setType: (MeritType) => void,
+  setAmount: (string) => void,
+  handleOpen: () => void
 };
 
 export function MeritTypeOptions(props: Props) {
@@ -24,7 +26,14 @@ export function MeritTypeOptions(props: Props) {
         <Chip
           key={option.type}
           className={`garnett-chip merit-dialog ${option.type === props.type ? 'active' : ''}`}
-          onClick={() => props.setType(option.type)}
+          onClick={() => {
+            if (option.type === 'standardized') {
+              props.handleOpen();
+            } else {
+              props.setAmount('0');
+              props.setType(option.type);
+            }
+          }}
         >
           { option.label }
         </Chip>

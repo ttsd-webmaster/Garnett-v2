@@ -9,6 +9,7 @@ import React, { Component } from 'react';
 type Props = {
   state: User,
   type: MeritType,
+  description: string,
   setUsers: (Array<User>) => void,
   setDescription: (string) => void,
   handleRequestOpen: () => void
@@ -49,18 +50,8 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { type } = this.props;
-    if (type !== prevProps.type) {
-      let description = '';
-      switch (type) {
-        case 'pc':
-          description = 'PC Merits';
-          break;
-        case 'chalkboard':
-          description = 'Chalkboard: ';
-          break;
-        default:
-      }
+    const { description } = this.props;
+    if (description !== prevProps.description) {
       this.props.setDescription(description);
       this.setState({ description });
     }
@@ -172,7 +163,7 @@ export class SelectUsers extends Component<Props, State> {
             placeholder="Description"
             autoComplete="off"
             value={this.state.description}
-            disabled={this.props.type === 'pc'}
+            disabled={this.props.type === 'standardized'}
             onChange={(event) => this.updateValue('description', event.target.value)}
           />
         </div>
