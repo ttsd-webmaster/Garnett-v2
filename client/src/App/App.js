@@ -8,7 +8,7 @@ import {
   initializeFirebase,
   loadFirebase,
   registerNotificationToken,
-  loginCheck
+  browserSupportsNotifications
 } from 'helpers/functions';
 import { 
   Login,
@@ -135,11 +135,10 @@ export default class App extends Component<{}, State> {
   }
 
   loginCallback = (user: User) => {
-    /* Checks if browser is Safari, iOS version < 11, IE, Edge, or in development */
-    if (loginCheck()) {
-      this.setData(user);
-    } else {
+    if (browserSupportsNotifications()) {
       registerNotificationToken(user, () => this.setData(user));
+    } else {
+      this.setData(user);
     }
   }
 
@@ -166,21 +165,14 @@ export default class App extends Component<{}, State> {
 
   logoutCallBack = () => {
     localStorage.clear();
-    this.setState({
-      authenticated: false
-    });
+    this.setState({ authenticated: false });
   }
 
   handleRequestOpen = (message: string) => {
-    this.setState({
-      message,
-      open: true
-    });
+    this.setState({ message, open: true });
   }
 
-  handleRequestClose = () => {
-    this.setState({ open: false });
-  }
+  handleRequestClose = () => this.setState({ open: false });
 
   get rootPath() {
     const route = localStorage.getItem('route');

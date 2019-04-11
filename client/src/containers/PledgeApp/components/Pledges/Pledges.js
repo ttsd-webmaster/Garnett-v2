@@ -172,7 +172,7 @@ export class Pledges extends PureComponent<Props, State> {
 
   handleClose = () => {
     androidBackClose();
-    this.setState({ pledge: null, openPledge: false }, () => {
+    this.setState({ openPledge: false }, () => {
       iosFullscreenDialogClose();
     });
   }
@@ -256,16 +256,14 @@ export class Pledges extends PureComponent<Props, State> {
             handleRequestOpen={this.props.handleRequestOpen}
           />
         )}
-        {state.status !== 'pledge' && (
-          <Filter
-            open={openPopover}
-            anchorEl={anchorEl}
-            filters={filterOptions}
-            filterName={filterName}
-            closePopover={this.closePopover}
-            setFilter={this.setFilter}
-          />
-        )}
+        <Filter
+          open={openPopover}
+          anchorEl={anchorEl}
+          filters={filterOptions}
+          filterName={filterName}
+          closePopover={this.closePopover}
+          setFilter={this.setFilter}
+        />
       </div>
     )
   }

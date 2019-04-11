@@ -57,7 +57,6 @@ export class MeritDialogList extends Component<Props> {
     return (
       <List className="garnett-list merit-select">
         {users.map((user, i) => {
-          const { firstName, lastName } = user;
           const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
           const searchedName = name.toLowerCase();
           const includesUser = selectedUsers.find((selectedUser) => {
@@ -83,7 +82,6 @@ export class MeritDialogList extends Component<Props> {
   get noUsersToSelect(): boolean {
     const { users, selectedUsers, name } = this.props;
     const userCheck = users.some((user) => {
-      const { firstName, lastName } = user;
       const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
       const searchedName = name.toLowerCase();
       const includesUser = selectedUsers.some((selectedUser) => (

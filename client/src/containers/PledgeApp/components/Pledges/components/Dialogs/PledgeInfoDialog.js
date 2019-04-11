@@ -24,6 +24,16 @@ export default class PledgeInfoDialog extends PureComponent<Props, State> {
   state = { remainingMerits: 0 };
 
   componentDidMount() {
+    this.retrieveRemainingMerits();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (this.props.open !== prevProps.open) {
+      this.retrieveRemainingMerits();
+    }
+  }
+
+  retrieveRemainingMerits() {
     const { pledge, state } = this.props;
     if (navigator.onLine) {
       if (state.status !== 'pledge') {

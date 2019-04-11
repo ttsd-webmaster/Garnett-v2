@@ -90,12 +90,15 @@ export function registerNotificationToken(user: User) {
   });
 }
 
-export function loginCheck(): boolean {
+// Returns false if browser is Safari, iOS version < 11, IE, Edge, or in development
+export function browserSupportsNotifications(): boolean {
   const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-  return (!isSafari || iOSversion()[0] > 11 ||
-          !document.documentMode ||
-          !/Edge/.test(navigator.userAgent) ||
-          process.env.NODE_ENV === 'production')
+  return (
+    !isSafari &&
+    !document.documentMode &&
+    !/Edge/.test(navigator.userAgent) &&
+    process.env.NODE_ENV === 'production'
+  )
 }
 
 export function validateEmail(email: string): boolean {
