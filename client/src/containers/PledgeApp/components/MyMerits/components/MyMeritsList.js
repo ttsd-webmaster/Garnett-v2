@@ -80,6 +80,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
   get merits(): Node {
     const { state } = this.props;
     const { myMerits } = this.state;
+    const isPledge = state.status === 'pledge';
     if (myMerits.length === 0) {
       return (
         <div className="no-items-container">
@@ -98,9 +99,9 @@ export class MyMeritsList extends PureComponent<Props, State> {
             <MeritRow
               key={i}
               merit={merit}
-              photo={state.status === 'pledge' ? activePhoto : pledgePhoto}
-              name={state.status === 'pledge' ? activeName : pledgeName}
-              handleDeleteOpen={this.handleDeleteOpen}
+              photo={isPledge ? activePhoto : pledgePhoto}
+              name={isPledge ? activeName : pledgeName}
+              handleDeleteOpen={isPledge ? null : this.handleDeleteOpen}
             />
           )
         })}
@@ -111,7 +112,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
   handleDeleteOpen = (selectedMerit: Merit) => {
     if (!navigator.onLine) {
       this.props.handleRequestOpen('You are offline');
-      return
+      return;
     }
     androidBackOpen(this.handleDeleteClose);
     this.setState({ selectedMerit, openDelete: true });
@@ -140,13 +141,15 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
         { this.merits }
 
-        <LoadableDeleteMeritDialog
-          open={openDelete}
-          state={state}
-          merit={selectedMerit}
-          handleDeleteClose={this.handleDeleteClose}
-          handleRequestOpen={handleRequestOpen}
-        />
+        {this.props.state.status !== 'pledge' && (
+          <LoadableDeleteMeritDialog
+            open={openDelete}
+            state={state}
+            merit={selectedMerit}
+            handleDeleteClose={this.handleDeleteClose}
+            handleRequestOpen={handleRequestOpen}
+          />
+        )}
       </Fragment>
     )
   }
