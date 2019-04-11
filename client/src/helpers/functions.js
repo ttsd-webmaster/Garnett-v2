@@ -47,51 +47,52 @@ export function loadFirebase(module: string): Promise<void> {
 }
 
 export function registerNotificationToken(user: User) {
-  const displayName = user.firstName + user.lastName;
-  const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
+  return new Promise((resolve, reject) => {
+    const displayName = user.firstName + user.lastName;
+    const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`;
 
-  navigator.serviceWorker.getRegistration(swUrl)
-  .then((registration) => {
-    loadFirebase('messaging')
-    .then(() => {
-      const { firebase } = window;
-      const messaging = firebase.messaging();
-
-      // Initialize the VAPID key
-      messaging.usePublicVapidKey(process.env.REACT_APP_FIREBASE_MESSAGING_VAPID_KEY);
-      // Register the Service Worker
-      messaging.useServiceWorker(registration);
-
-      messaging.requestPermission()
+    navigator.serviceWorker.getRegistration(swUrl)
+    .then((registration) => {
+      loadFirebase('messaging')
       .then(() => {
-        console.log('Notification permission granted.');
-        // Get Instance ID token. Initially this makes a network call, once retrieved
-        // subsequent calls to getToken will return from cache.
-        messaging.getToken()
-        .then((currentToken) => {
-          if (currentToken) {
-            localStorage.setItem('registrationToken', currentToken);
+        const { firebase } = window;
+        const messaging = firebase.messaging();
 
-            API.saveMessagingToken(displayName, currentToken)
-            .then(messageRes => {
-              console.log(messageRes)
-            })
-            .catch(error => {
-              console.error(`Server error: ${error}`);
-              throw new Error('An error occurred while saving token.')
-            });
-          } 
-          else {
-            // Show permission request.
-            throw new Error('No Instance ID token available. Request permission to generate');
-          }
+        // Initialize the VAPID key
+        messaging.usePublicVapidKey(process.env.REACT_APP_FIREBASE_MESSAGING_VAPID_KEY);
+        // Register the Service Worker
+        messaging.useServiceWorker(registration);
+
+        messaging.requestPermission()
+        .then(() => {
+          console.log('Notification permission granted.');
+          // Get Instance ID token. Initially this makes a network call, once retrieved
+          // subsequent calls to getToken will return from cache.
+          messaging.getToken()
+          .then((currentToken) => {
+            if (currentToken) {
+              localStorage.setItem('registrationToken', currentToken);
+
+              API.saveMessagingToken(displayName, currentToken)
+              .then(messageRes => {
+                resolve('Notifications have been turned on.');
+              })
+              .catch(error => {
+                console.error(`Server error: ${error}`);
+                reject(new Error('An error occurred while saving token.'));
+              });
+            } else {
+              // Show permission request.
+              reject(new Error('No Instance ID token available. Request permission to generate'));
+            }
+          })
+          .catch((err) => {
+            reject(new Error('An error occurred while retrieving token.'));
+          });
         })
         .catch((err) => {
-          throw new Error('An error occurred while retrieving token.');
+          reject(new Error('Notifications have been turned off.'));
         });
-      })
-      .catch((err) => {
-        throw new Error('Unable to get permission to notify.');
       });
     });
   });

@@ -49,7 +49,8 @@ export class SignIn extends PureComponent<Props, State> {
       const firebase= window.firebase;
 
       firebase.auth().signInWithEmailAndPassword(email, password)
-      .then((user) => {
+      .then((userObject) => {
+        const { user } = userObject;
         if (user && user.emailVerified) {
           loadFirebase('database')
           .then(() => {
@@ -60,12 +61,7 @@ export class SignIn extends PureComponent<Props, State> {
               const userData = snapshot.val();
               localStorage.setItem('data', JSON.stringify(userData));
 
-              try {
-                this.props.loginCallback(userData);
-              } catch (error) {
-                this.props.closeProgressDialog();
-                this.props.handleRequestOpen(error);
-              }
+              this.props.loginCallback(userData);
             });
           });
         } else {

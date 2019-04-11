@@ -13,7 +13,6 @@ import MenuItem from 'material-ui/MenuItem';
 type Props = {
   view: LoginView,
   openProgressDialog: () => void,
-  loginCallback: () => void,
   closeProgressDialog: () => void,
   handleRequestOpen: () => void
 };

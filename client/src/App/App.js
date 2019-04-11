@@ -122,7 +122,8 @@ export default class App extends Component<{}, State> {
         if (user) {
           API.getAuthStatus(user.displayName)
           .then((res) => {
-            this.loginCallback(res.data);
+            const userData = res.data;
+            this.loginCallback(userData);
           });
         } else {
           this.setState({ loading: false });
@@ -131,16 +132,16 @@ export default class App extends Component<{}, State> {
     });
   }
 
-  loginCallback(user: User) {
+  loginCallback = (user: User) => {
     if (browserSupportsNotifications()) {
-      try {
-        registerNotificationToken(user, () => {
-          this.loadDatabase(user);
-          this.handleRequestOpen('Successfully saved notification token');
-        });
-      } catch (error) {
-        throw new Error(error);
-      }
+      registerNotificationToken(user)
+      .then((res) => {
+        this.loadDatabase(user);
+      })
+      .catch((error) => {
+        this.loadDatabase(user);
+        this.handleRequestOpen(error.message);
+      })
     } else {
       this.loadDatabase(user);
     }
