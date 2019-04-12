@@ -1,6 +1,7 @@
 // @flow
 
 import './MobilePledgeApp.css';
+import './PledgeApp.css';
 import { configureThemeMode } from 'helpers/functions';
 import {
   MyMerits,

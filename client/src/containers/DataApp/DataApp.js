@@ -1,7 +1,7 @@
 // @flow
 
 import './DataApp.css';
-import 'containers/PledgeApp/MobilePledgeApp.css';
+import 'containers/PledgeApp/PledgeApp.css';
 import { PledgeData } from './components/PledgeData/PledgeData';
 import { RushData } from './components/RushData/RushData';
 import { MyData } from './components/MyData/MyData';

@@ -1,6 +1,5 @@
 // @flow
 
-import './MobilePledgeApp.css';
 import './PledgeApp.css';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Main } from './components/Main/Main';

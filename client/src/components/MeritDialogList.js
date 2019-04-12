@@ -41,7 +41,7 @@ export class MeritDialogList extends Component<Props> {
     const { users, selectedUsers, selectUser } = this.props;
     if (!users) {
       return (
-        <div className="no-items-container">
+        <div id="fetching-users">
           <CircularProgress
             color="var(--accent-color)"
             size={30}

@@ -1,7 +1,7 @@
 // @flow
 
 import '../DelibsApp.css';
-import 'containers/PledgeApp/MobilePledgeApp.css';
+import 'containers/PledgeApp/PledgeApp.css';
 import { LoadingRusheeProfile } from 'helpers/loaders.js';
 import { Header } from 'components';
 import { RusheeInfo } from './components/RusheeInfo';

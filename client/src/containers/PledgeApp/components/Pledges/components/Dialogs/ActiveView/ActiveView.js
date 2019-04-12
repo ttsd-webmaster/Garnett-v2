@@ -89,7 +89,7 @@ export class ActiveView extends PureComponent<Props, State> {
             onChangeIndex={this.handleChange}
             disableLazyLoading
           >
-            <div>
+            <div style={{ paddingBottom: '20px' }}>
               <UserInfo
                 user={pledge}
                 name={fullName}

@@ -1,6 +1,6 @@
 // @flow
 
-import 'containers/PledgeApp/MobilePledgeApp.css';
+import 'containers/PledgeApp/PledgeApp.css';
 import { isMobile } from './functions.js';
 
 import React, { Fragment, type Node } from 'react';

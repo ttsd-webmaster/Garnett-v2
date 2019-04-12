@@ -1,7 +1,7 @@
 // @flow
 
 import '../DelibsApp.css';
-import 'containers/PledgeApp/MobilePledgeApp.css';
+import 'containers/PledgeApp/PledgeApp.css';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { RusheeRow } from './RusheeRow';
 import type { User } from 'api/models';
