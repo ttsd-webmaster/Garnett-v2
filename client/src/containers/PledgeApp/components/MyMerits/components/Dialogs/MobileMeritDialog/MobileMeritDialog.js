@@ -13,7 +13,7 @@ const fullscreenDialogStyle = {
 };
 
 const titleStyle = {
-  fontFamily: 'Helvetica Neue',
+  fontFamily: "'Helvetica Neue', Roboto, sans-serif",
   fontSize: '18px',
   fontWeight: '500',
   color: 'rgba(0, 0, 0, 0.87)',
