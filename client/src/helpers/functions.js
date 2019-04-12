@@ -53,6 +53,10 @@ export function registerNotificationToken(user: User) {
 
     navigator.serviceWorker.getRegistration(swUrl)
     .then((registration) => {
+      if (!registration) {
+        return reject(new Error('No service worker registration found.'));
+      }
+
       loadFirebase('messaging')
       .then(() => {
         const { firebase } = window;
