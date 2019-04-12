@@ -232,7 +232,12 @@ exports.create_merit = function(req, res) {
     const pledgeRef = usersRef.child(pledge);
 
     activeRef.once('value', (active) => {
-      if (status !== 'pipm' && merit.type === 'personal') {
+      const nonPCStandardizedMerit = merit.type === 'standardized' && merit.description !== 'PC Merits';
+      const shouldCountTowardsMeritCap = (
+        status !== 'pipm' && (merit.type === 'personal' || nonPCStandardizedMerit)
+      );
+
+      if (shouldCountTowardsMeritCap) {
         const remainingMerits = active.val().Pledges[pledge].merits - merit.amount;
         if (merit.amount > 0 && remainingMerits < 0 && !res.headersSent) {
           res.sendStatus(400).send(user.label);

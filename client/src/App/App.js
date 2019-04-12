@@ -108,7 +108,7 @@ export default class App extends Component<{}, State> {
     }
 
     if (!navigator.onLine) {
-      this.loadDatabase(data);
+      this.setData(data);
       return;
     }
 
