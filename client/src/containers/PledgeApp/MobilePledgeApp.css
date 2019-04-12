@@ -382,6 +382,7 @@
   justify-content: center;
 }
 .chips-container.select-users {
+  width: 100%;
   height: 58px;
   overflow: auto;
 }

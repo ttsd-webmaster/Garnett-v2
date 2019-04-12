@@ -60,7 +60,7 @@ export class SelectUsers extends Component<Props, State> {
     }
   }
 
-  get inputs(): Node {
+  get header(): Node {
     const { status } = this.props.state;
     const { selectedUsers, name, description } = this.state;
     return (
@@ -70,19 +70,21 @@ export class SelectUsers extends Component<Props, State> {
             selectedUsers={selectedUsers}
             deselectUser={this.deselectUser}
           />
-          <input
-            className="merit-input name"
-            type="text"
-            placeholder="Name"
-            onChange={this.setName}
-            onKeyDown={this.onNameKeyDown}
-            value={name}
-          />
-          {status !== 'pledge' && selectedUsers.length === 0 && name.length === 0 && (
-            <span id="mobile-select-all-pledges" onClick={this.selectAllPledges}>
-              Select all pledges
-            </span>
-          )}
+          <div id="select-name-container">
+            <input
+              className="merit-input name"
+              type="text"
+              placeholder="Name"
+              onChange={this.setName}
+              onKeyDown={this.onNameKeyDown}
+              value={name}
+            />
+            {status !== 'pledge' && selectedUsers.length === 0 && name.length === 0 && (
+              <span id="mobile-select-all-pledges" onClick={this.selectAllPledges}>
+                Select all pledges
+              </span>
+            )}
+          </div>
         </div>
         <input
           className="merit-input"
@@ -260,7 +262,7 @@ export class SelectUsers extends Component<Props, State> {
     const isPledge = this.props.state.status === 'pledge';
     return (
       <div id="mobile-merit-select-users-container">
-        { this.inputs }
+        { this.header }
         <MeritDialogList
           users={this.state.filteredUsers}
           selectedUsers={this.state.selectedUsers}

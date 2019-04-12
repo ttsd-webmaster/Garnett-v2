@@ -74,7 +74,7 @@ exports.get_pbros_as_pledge = function(req, res) {
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
 
-  usersRef.orderByChild('status').equalTo('pledge').on('value', (pledges) => {
+  usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
     if (!pledges.val()) {
       return res.status(400).send('No pledges found.');
     }
