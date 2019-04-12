@@ -1,18 +1,14 @@
 // @flow
 
 import API from 'api/API.js';
+import { PLEDGING_START_DATE, PLEDGING_END_DATE } from 'helpers/constants';
 import { getToday, formatDate } from 'helpers/functions';
 import { MeritDialogList, SelectedUsersChips } from 'components';
 import type { User, MeritType } from 'api/models';
 
-import React, { Component } from 'react';
+import React, { Component, type Node } from 'react';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-
-const PLEDGING_START_DATE = new Date();
-const PLEDGING_END_DATE = new Date();
-PLEDGING_START_DATE.setMonth(3);
-PLEDGING_END_DATE.setMonth(4);
 
 type Props = {
   state: User,
@@ -43,7 +39,7 @@ export class SelectUsers extends Component<Props, State> {
     description: '',
     date: new Date(),
     showAlumni: false
-  }
+  };
 
   componentDidMount() {
     const { status, displayName } = this.props.state;
@@ -68,6 +64,61 @@ export class SelectUsers extends Component<Props, State> {
       this.props.setDescription(description);
       this.setState({ description });
     }
+  }
+
+  get header(): Node {
+    const { status } = this.props.state;
+    const { selectedUsers, name } = this.state;
+    const isPledge = status === 'pledge';
+    return (
+      <div id="select-users-header">
+        <SelectedUsersChips
+          selectedUsers={selectedUsers}
+          deselectUser={this.deselectUser}
+        />
+        <div id="select-name-container">
+          <input
+            className="select-users-input"
+            type="text"
+            placeholder="Name"
+            autoComplete="off"
+            value={this.state.name}
+            onChange={this.setName}
+            onKeyDown={this.onNameKeyDown}
+          />
+          {!isPledge && !name && (selectedUsers.length === 0) && (
+            <span id="select-all-pledges" onClick={this.selectAllPledges}>
+              Select all pledges
+            </span>
+          )}
+        </div>
+        <input
+          className="select-users-input"
+          type="text"
+          placeholder="Description"
+          autoComplete="off"
+          value={this.state.description}
+          disabled={this.props.type === 'standardized'}
+          onChange={this.setDescription}
+        />
+        <DayPickerInput
+          value={this.state.date}
+          formatDate={formatDate}
+          placeholder={getToday()}
+          onDayChange={this.setDate}
+          inputProps={{ readOnly: true }}
+          dayPickerProps={{
+            selectedDays: this.state.date,
+            fromMonth: PLEDGING_START_DATE,
+            toMonth: PLEDGING_END_DATE
+          }}
+        />
+        <div
+          id="darth-fader"
+          className={`${selectedUsers.length > 0 ? 'selected-users' : ''}`}
+        />
+      </div>
+    )
   }
 
   setName = (event: SyntheticEvent<>) => {
@@ -97,9 +148,11 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   onNameKeyDown = (event: SyntheticEvent<>) => {
-    // Remove last selected active if no name input exists
-    if ((event.keyCode === 8 || event.keyCode === 46) && !this.state.name) {
-      const { filteredUsers, selectedUsers } = this.state;
+    const { filteredUsers, selectedUsers, name } = this.state;
+    const { keyCode } = event;
+    // Remove last selected active if no name input exists and
+    // there are selected users
+    if ((keyCode === 8 || keyCode === 46) && !name && selectedUsers.length > 0) {
       const removedUser = selectedUsers.pop();
       filteredUsers.push(removedUser);
       this.props.setUsers(selectedUsers);
@@ -107,7 +160,7 @@ export class SelectUsers extends Component<Props, State> {
     }
   }
 
-  handleDateChange = (date: Date) => {
+  setDate = (date: Date) => {
     this.props.setDate(formatDate(date));
     this.setState({ date });
   }
@@ -164,56 +217,11 @@ export class SelectUsers extends Component<Props, State> {
 
   render() {
     const { status } = this.props.state;
-    const { filteredUsers, selectedUsers, name, showAlumni } = this.state;
+    const { filteredUsers, selectedUsers, showAlumni } = this.state;
     const isPledge = status === 'pledge';
     return (
       <div id="merit-select-users-container">
-        <div id="select-users-header">
-          <SelectedUsersChips
-            selectedUsers={selectedUsers}
-            deselectUser={this.deselectUser}
-          />
-          <div id="select-name-container">
-            <input
-              className="select-users-input"
-              type="text"
-              placeholder="Name"
-              autoComplete="off"
-              value={this.state.name}
-              onChange={this.setName}
-              onKeyDown={this.onNameKeyDown}
-            />
-            {!isPledge && selectedUsers.length === 0 && !name && (
-              <span id="select-all-pledges" onClick={this.selectAllPledges}>
-                Select all pledges
-              </span>
-            )}
-          </div>
-          <input
-            className="select-users-input"
-            type="text"
-            placeholder="Description"
-            autoComplete="off"
-            value={this.state.description}
-            disabled={this.props.type === 'standardized'}
-            onChange={this.setDescription}
-          />
-          <DayPickerInput
-            value={this.state.date}
-            formatDate={formatDate}
-            placeholder={getToday()}
-            onDayChange={this.handleDateChange}
-            dayPickerProps={{
-              selectedDays: this.state.date,
-              fromMonth: PLEDGING_START_DATE,
-              toMonth: PLEDGING_END_DATE
-            }}
-          />
-        </div>
-        <div
-          id="darth-fader"
-          className={`${selectedUsers.length > 0 ? 'selected-users' : ''}`}
-        />
+        { this.header }
         <div id="merit-dialog-list-container">
           <MeritDialogList
             users={filteredUsers}

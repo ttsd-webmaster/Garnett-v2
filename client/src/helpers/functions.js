@@ -136,6 +136,10 @@ export function getToday(): string {
 }
 
 export function formatDate(date: Date): string {
+  if (!date) {
+    return;
+  }
+
   let day = date.getDate();
   let month = date.getMonth() + 1;
   let year = date.getYear() - 100;

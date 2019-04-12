@@ -1,0 +1,6 @@
+const PLEDGING_START_DATE = new Date();
+const PLEDGING_END_DATE = new Date();
+PLEDGING_START_DATE.setMonth(3);
+PLEDGING_END_DATE.setMonth(4);
+
+export { PLEDGING_START_DATE, PLEDGING_END_DATE };

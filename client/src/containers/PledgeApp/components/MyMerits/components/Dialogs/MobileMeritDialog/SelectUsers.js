@@ -1,12 +1,15 @@
 // @flow
 
-import { getToday } from 'helpers/functions.js';
-import { SpinnerDialog } from 'helpers/loaders.js';
+import { PLEDGING_START_DATE, PLEDGING_END_DATE } from 'helpers/constants';
+import { getToday, formatDate } from 'helpers/functions';
+import { SpinnerDialog } from 'helpers/loaders';
 import API from 'api/API.js';
 import { MeritDialogList, SelectedUsersChips } from 'components';
 import type { User, MeritType } from 'api/models';
 
 import React, { Component, type Node } from 'react';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 
 type Props = {
   state: User,
@@ -23,25 +26,26 @@ type State = {
   selectedUsers: Array<Object>,
   name: string,
   description: string,
+  date: string,
+  showOverlay: boolean,
   showAlumni: boolean,
   openSpinner: boolean,
   spinnerMessage: string
 };
 
 export class SelectUsers extends Component<Props, State> {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: null,
-      filteredUsers: null,
-      selectedUsers: [],
-      name: '',
-      description: this.props.description,
-      showAlumni: false,
-      openSpinner: false,
-      spinnerMessage: ''
-    };
-  }
+  state = {
+    users: null,
+    filteredUsers: null,
+    selectedUsers: [],
+    name: '',
+    description: this.props.description,
+    date: new Date(),
+    showOverlay: false,
+    showAlumni: false,
+    openSpinner: false,
+    spinnerMessage: ''
+  };
 
   componentDidMount() {
     const { status, displayName } = this.props.state;
@@ -62,7 +66,8 @@ export class SelectUsers extends Component<Props, State> {
 
   get header(): Node {
     const { status } = this.props.state;
-    const { selectedUsers, name, description } = this.state;
+    const { selectedUsers, name, description, showOverlay } = this.state;
+    const isPledge = status === 'pledge';
     return (
       <div id="merit-inputs-container">
         <div className="merit-input">
@@ -79,7 +84,7 @@ export class SelectUsers extends Component<Props, State> {
               onKeyDown={this.onNameKeyDown}
               value={name}
             />
-            {status !== 'pledge' && selectedUsers.length === 0 && name.length === 0 && (
+            {!isPledge && !name && selectedUsers.length === 0 && (
               <span id="mobile-select-all-pledges" onClick={this.selectAllPledges}>
                 Select all pledges
               </span>
@@ -93,6 +98,24 @@ export class SelectUsers extends Component<Props, State> {
           onChange={this.setDescription}
           value={description}
           disabled={this.props.type === 'standardized'}
+        />
+        <DayPickerInput
+          value={this.state.date}
+          formatDate={formatDate}
+          placeholder={getToday()}
+          onDayChange={this.setDate}
+          onDayPickerShow={this.showOverlay}
+          onDayPickerHide={this.hideOverlay}
+          inputProps={{ readOnly: true }}
+          dayPickerProps={{
+            selectedDays: this.state.date,
+            fromMonth: PLEDGING_START_DATE,
+            toMonth: PLEDGING_END_DATE
+          }}
+        />
+        <div
+          id="date-picker-overlay"
+          className={`${showOverlay ? '' : 'hidden'}`}
         />
       </div>
     )
@@ -128,14 +151,21 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   onNameKeyDown = (event: SyntheticEvent<>) => {
-    // Remove last selected active if no name input exists
-    if ((event.keyCode === 8 || event.keyCode === 46) && !this.state.name) {
-      const { filteredUsers, selectedUsers } = this.state;
+    const { filteredUsers, selectedUsers, name } = this.state;
+    const { keyCode } = event;
+    // Remove last selected active if no name input exists and
+    // there are selected users
+    if ((keyCode === 8 || keyCode === 46) && !name && selectedUsers.length > 0) {
       const removedUser = selectedUsers.pop();
       filteredUsers.push(removedUser);
       this.setState({ filteredUsers, selectedUsers });
     }
   }
+
+  setDate = (date: Date) => this.setState({ date });
+
+  showOverlay = () => this.setState({ showOverlay: true });
+  hideOverlay = () => this.setState({ showOverlay: false });
 
   selectUser = (user: User) => {
     // Only allow selection if active has enough merits
@@ -192,9 +222,8 @@ export class SelectUsers extends Component<Props, State> {
       photoURL,
       status
     } = this.props.state;
-    const { selectedUsers, description } = this.state;
+    const { selectedUsers, description, date } = this.state;
     const { type, amount } = this.props;
-    const date = getToday();
     const action = amount > 0 ? 'Merited' : 'Demerited';
 
     const merit = {
@@ -202,7 +231,7 @@ export class SelectUsers extends Component<Props, State> {
       createdBy: displayName,
       description,
       amount,
-      date
+      date: formatDate(date)
     };
 
     if (status === 'pledge') {

@@ -127,6 +127,7 @@
   flex-grow: 1;
 }
 
+/***** Inputs *****/
 #merit-inputs-container {
   position: sticky;
   top: 0;
@@ -134,7 +135,8 @@
   z-index: 1;
 }
 
-.merit-input {
+.merit-input,
+.DayPickerInput > input {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -144,6 +146,32 @@
   padding: 0 10px;
   border: 0;
   border-top: 1px solid #e0e0e0;
+}
+
+.DayPickerInput {
+  width: 100%;
+}
+.DayPickerInput > input {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.DayPicker-Months {
+  width: 100vw;
+}
+
+#date-picker-overlay {
+  position: fixed;
+  top: 305px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: #000;
+  opacity: 0.5;
+  transition: all 0.2s;
+}
+#date-picker-overlay.hidden {
+  visibility: hidden;
+  opacity: 0;
 }
 
 .merit-input.name {
