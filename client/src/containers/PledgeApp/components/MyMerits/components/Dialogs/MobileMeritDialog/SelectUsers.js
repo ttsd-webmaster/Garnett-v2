@@ -19,6 +19,7 @@ type Props = {
 
 type State = {
   users: ?Array<User>,
+  filteredUsers: ?Array<Object>,
   selectedUsers: Array<Object>,
   name: string,
   description: string,
@@ -32,6 +33,7 @@ export class SelectUsers extends Component<Props, State> {
     super(props);
     this.state = {
       users: null,
+      filteredUsers: null,
       selectedUsers: [],
       name: '',
       description: this.props.description,
@@ -47,13 +49,13 @@ export class SelectUsers extends Component<Props, State> {
       API.getActivesForMeritMobile(displayName)
       .then((res) => {
         const users = res.data;
-        this.setState({ users });
+        this.setState({ users, filteredUsers: users });
       });
     } else {
       API.getPledgesForMeritMobile(displayName)
       .then((res) => {
         const users = res.data;
-        this.setState({ users });
+        this.setState({ users, filteredUsers: users });
       });
     }
   }
@@ -72,7 +74,7 @@ export class SelectUsers extends Component<Props, State> {
             className="merit-input name"
             type="text"
             placeholder="Name"
-            onChange={(event) => this.updateValue('name', event.target.value)}
+            onChange={this.setName}
             onKeyDown={this.onNameKeyDown}
             value={name}
           />
@@ -86,7 +88,7 @@ export class SelectUsers extends Component<Props, State> {
           className="merit-input"
           type="text"
           placeholder="Description"
-          onChange={(event) => this.updateValue('description', event.target.value)}
+          onChange={this.setDescription}
           value={description}
           disabled={this.props.type === 'standardized'}
         />
@@ -98,57 +100,71 @@ export class SelectUsers extends Component<Props, State> {
     return !this.state.selectedUsers.length || !this.state.description;
   }
 
-  updateValue = (label: string, value: string) => {
-    this.setState({ [label]: value });
+  setName = (event: SyntheticEvent<>) => {
+    const name = event.target.value;
+    const { filteredUsers } = this.state;
+    let result = [];
+
+    if (name === '') {
+      result = this.state.users;
+    } else {
+      filteredUsers.forEach((user) => {
+        const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
+        const searchedName = name.toLowerCase();
+        if (userName.startsWith(searchedName)) {
+          result.push(user);
+        }
+      });
+    }
+
+    this.setState({ filteredUsers: result, name });
+  }
+
+  setDescription = (event: SyntheticEvent<>) => {
+    const description = event.target.value;
+    this.setState({ description });
   }
 
   onNameKeyDown = (event: SyntheticEvent<>) => {
     // Remove last selected active if no name input exists
     if ((event.keyCode === 8 || event.keyCode === 46) && !this.state.name) {
-      const { selectedUsers } = this.state;
-      selectedUsers.pop();
-      this.setState({ selectedUsers });
+      const { filteredUsers, selectedUsers } = this.state;
+      const removedUser = selectedUsers.pop();
+      filteredUsers.push(removedUser);
+      this.setState({ filteredUsers, selectedUsers });
     }
   }
 
   selectUser = (user: User) => {
-    const userName = `${user.firstName} ${user.lastName}`;
     // Only allow selection if active has enough merits
     if (this.props.amount <= user.remainingMerits) {
-      const { selectedUsers } = this.state;
-      selectedUsers.push({
-        firstName: user.firstName,
-        value: user.firstName + user.lastName,
-        label: userName
+      let { filteredUsers, selectedUsers } = this.state;
+      selectedUsers.push(user);
+      filteredUsers = filteredUsers.filter((currentUser) => {
+        const userDisplayName = user.firstName + user.lastName;
+        const currentUserName = currentUser.firstName + currentUser.lastName;
+        return userDisplayName !== currentUserName;
       });
-      this.setState({ selectedUsers, name: '' });
+      this.setState({ selectedUsers, filteredUsers });
     } else {
-      this.props.handleRequestOpen(`Not enough merits for ${userName}.`)
+      const userName = `${user.firstName} ${user.lastName}`;
+      this.props.handleRequestOpen(`Not enough merits for ${userName}.`);
     }
   }
 
   selectAllPledges = () => {
     const { users } = this.state;
-    if (this.props.state.status === 'pledge' || !users) {
-      return;
+    if (this.props.state.status !== 'pledge' && users) {
+      this.setState({ selectedUsers: users, filteredUsers: [] });
     }
-    const selectedUsers = [];
-    users.forEach((user) => {
-      const userName = `${user.firstName} ${user.lastName}`;
-      selectedUsers.push({
-        firstName: user.firstName,
-        value: user.firstName + user.lastName,
-        label: userName
-      });
-    })
-    this.setState({ selectedUsers });
   }
 
   deselectUser = (user: User) => {
-    let { selectedUsers } = this.state;
+    let { filteredUsers, selectedUsers } = this.state;
     selectedUsers = selectedUsers.filter((currentUser) => {
       return currentUser !== user;
-    })
+    });
+    filteredUsers.push(user);
     this.setState({ selectedUsers });
   }
 
@@ -160,6 +176,7 @@ export class SelectUsers extends Component<Props, State> {
       const users = res.data;
       this.setState({
         users,
+        filteredUsers: users,
         selectedUsers: [],
         showAlumni: !showAlumni
       });
@@ -245,9 +262,8 @@ export class SelectUsers extends Component<Props, State> {
       <div id="mobile-merit-select-users-container">
         { this.inputs }
         <MeritDialogList
-          users={this.state.users}
+          users={this.state.filteredUsers}
           selectedUsers={this.state.selectedUsers}
-          name={this.state.name}
           isPledge={isPledge}
           showAlumni={isPledge && this.state.showAlumni}
           selectUser={this.selectUser}

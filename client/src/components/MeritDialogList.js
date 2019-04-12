@@ -13,7 +13,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 type Props = {
   users: ?User,
   selectedUsers: Array<User>,
-  name: string,
   isPledge: boolean,
   showAlumni?: boolean,
   selectUser: () => void,
@@ -39,7 +38,7 @@ export class MeritDialogList extends Component<Props> {
   }
 
   get body(): Node {
-    const { users, selectedUsers, name, selectUser } = this.props;
+    const { users, selectedUsers, selectUser } = this.props;
     if (!users) {
       return (
         <div className="no-items-container">
@@ -51,19 +50,19 @@ export class MeritDialogList extends Component<Props> {
         </div>
       )
     }
-    if (this.noUsersToSelect) {
+    if (users.length === 0) {
       return <div id="no-users-to-select" />
     }
     return (
       <List className="garnett-list merit-select">
         {users.map((user, i) => {
-          const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
-          const searchedName = name.toLowerCase();
+          const userName = user.firstName + user.lastName;
           const includesUser = selectedUsers.find((selectedUser) => {
-            return selectedUser.firstName === user.firstName;
+            const selectedUserName = selectedUser.firstName + selectedUser.lastName;
+            return userName === selectedUserName;
           });
 
-          if (includesUser || !userName.startsWith(searchedName)) {
+          if (includesUser) {
             return null;
           } else {
             return (
@@ -77,21 +76,6 @@ export class MeritDialogList extends Component<Props> {
         })}
       </List>
     )
-  }
-
-  get noUsersToSelect(): boolean {
-    const { users, selectedUsers, name } = this.props;
-    const userCheck = users.some((user) => {
-      const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
-      const searchedName = name.toLowerCase();
-      const includesUser = selectedUsers.some((selectedUser) => (
-        selectedUser.firstName === user.firstName
-      ));
-      return includesUser || userName.startsWith(searchedName);
-    });
-    // Check that no users match the input name or all users have
-    // already been selected
-    return !userCheck || (users.length === selectedUsers.length);
   }
 
   render() {

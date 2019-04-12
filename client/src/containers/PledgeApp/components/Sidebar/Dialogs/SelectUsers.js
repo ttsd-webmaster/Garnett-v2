@@ -17,6 +17,7 @@ type Props = {
 
 type State = {
   users: ?Array<User>,
+  filteredUsers: ?Array<Object>,
   selectedUsers: Array<Object>,
   name: string,
   description: string,
@@ -26,6 +27,7 @@ type State = {
 export class SelectUsers extends Component<Props, State> {
   state = {
     users: null,
+    filteredUsers: null,
     selectedUsers: [],
     name: '',
     description: '',
@@ -38,13 +40,13 @@ export class SelectUsers extends Component<Props, State> {
       API.getActivesForMeritMobile(displayName)
       .then((res) => {
         const users = res.data;
-        this.setState({ users });
+        this.setState({ users, filteredUsers: users });
       });
     } else {
       API.getPledgesForMeritMobile(displayName)
       .then((res) => {
         const users = res.data;
-        this.setState({ users });
+        this.setState({ users, filteredUsers: users });
       });
     }
   }
@@ -57,60 +59,71 @@ export class SelectUsers extends Component<Props, State> {
     }
   }
 
-  updateValue = (label: string, value: string) => {
-    if (label === 'description') {
-      this.props.setDescription(value);
+  setName = (event: SyntheticEvent<>) => {
+    const name = event.target.value;
+    const { filteredUsers } = this.state;
+    let result = [];
+
+    if (name === '') {
+      result = this.state.users;
+    } else {
+      filteredUsers.forEach((user) => {
+        const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
+        const searchedName = name.toLowerCase();
+        if (userName.startsWith(searchedName)) {
+          result.push(user);
+        }
+      });
     }
-    this.setState({ [label]: value });
+
+    this.setState({ filteredUsers: result, name });
+  }
+
+  setDescription = (event: SyntheticEvent<>) => {
+    const description = event.target.value;
+    this.props.setDescription(description);
+    this.setState({ description });
   }
 
   onNameKeyDown = (event: SyntheticEvent<>) => {
     // Remove last selected active if no name input exists
     if ((event.keyCode === 8 || event.keyCode === 46) && !this.state.name) {
-      const { selectedUsers } = this.state;
-      selectedUsers.pop();
+      const { filteredUsers, selectedUsers } = this.state;
+      const removedUser = selectedUsers.pop();
+      filteredUsers.push(removedUser);
       this.props.setUsers(selectedUsers);
-      this.setState({ selectedUsers });
+      this.setState({ filteredUsers, selectedUsers });
     }
   }
 
   selectUser = (user: User) => {
-    const userName = `${user.firstName} ${user.lastName}`;
-    const { selectedUsers } = this.state;
-    selectedUsers.push({
-      firstName: user.firstName,
-      value: user.firstName + user.lastName,
-      label: userName
+    let { filteredUsers, selectedUsers } = this.state;
+    selectedUsers.push(user);
+    filteredUsers = filteredUsers.filter((currentUser) => {
+      const userDisplayName = user.firstName + user.lastName;
+      const currentUserName = currentUser.firstName + currentUser.lastName;
+      return userDisplayName !== currentUserName;
     });
     this.props.setUsers(selectedUsers);
-    this.setState({ selectedUsers, name: '' });
+    this.setState({ selectedUsers, filteredUsers });
   }
 
   selectAllPledges = () => {
     const { users } = this.state;
-    if (this.props.state.status === 'pledge' || !users) {
-      return;
+    if (this.props.state.status !== 'pledge' && users) {
+      this.props.setUsers(users);
+      this.setState({ selectedUsers: users, filteredUsers: [] });
     }
-    const selectedUsers = [];
-    users.forEach((user) => {
-      const userName = `${user.firstName} ${user.lastName}`;
-      selectedUsers.push({
-        firstName: user.firstName,
-        value: user.firstName + user.lastName,
-        label: userName
-      });
-    })
-    this.props.setUsers(selectedUsers);
-    this.setState({ selectedUsers });
   }
 
   deselectUser = (user: User) => {
-    let { selectedUsers } = this.state;
+    let { filteredUsers, selectedUsers } = this.state;
     selectedUsers = selectedUsers.filter((currentUser) => {
       return currentUser !== user;
     })
+    filteredUsers.push(user);
     this.props.setUsers(selectedUsers);
-    this.setState({ selectedUsers });
+    this.setState({ filteredUsers, selectedUsers });
   }
 
   toggleAlumniView = () => {
@@ -126,6 +139,7 @@ export class SelectUsers extends Component<Props, State> {
       this.props.setUsers([]);
       this.setState({
         users,
+        filteredUsers: users,
         selectedUsers: [],
         showAlumni: !showAlumni
       });
@@ -134,7 +148,7 @@ export class SelectUsers extends Component<Props, State> {
 
   render() {
     const { status } = this.props.state;
-    const { users, selectedUsers, name, showAlumni } = this.state;
+    const { filteredUsers, selectedUsers, name, showAlumni } = this.state;
     const isPledge = status === 'pledge';
     return (
       <div id="merit-select-users-container">
@@ -149,7 +163,7 @@ export class SelectUsers extends Component<Props, State> {
             placeholder="Name"
             autoComplete="off"
             value={this.state.name}
-            onChange={(event) => this.updateValue('name', event.target.value)}
+            onChange={this.setName}
             onKeyDown={this.onNameKeyDown}
           />
           {!isPledge && selectedUsers.length === 0 && !name && (
@@ -164,7 +178,7 @@ export class SelectUsers extends Component<Props, State> {
             autoComplete="off"
             value={this.state.description}
             disabled={this.props.type === 'standardized'}
-            onChange={(event) => this.updateValue('description', event.target.value)}
+            onChange={this.setDescription}
           />
         </div>
         <div
@@ -173,9 +187,8 @@ export class SelectUsers extends Component<Props, State> {
         />
         <div id="merit-dialog-list-container">
           <MeritDialogList
-            users={users}
+            users={filteredUsers}
             selectedUsers={selectedUsers}
-            name={name}
             isPledge={isPledge}
             showAlumni={isPledge && showAlumni}
             selectUser={this.selectUser}

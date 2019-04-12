@@ -223,8 +223,7 @@ export class CreateAmount extends Component<Props, State> {
       } else {
         errorMessage = `Not enough merits for ${user}`
       }
-      console.error(error)
-      this.props.handleClose();
+      console.error(error);
       this.closeProgressDialog();
       this.props.handleRequestOpen(errorMessage);
     });

@@ -219,14 +219,16 @@ exports.create_merit = function(req, res) {
   const usersRef = admin.database().ref('/users');
 
   selectedUsers.forEach((user) => {
+    const userName = `${user.firstName} ${user.lastName}`;
+    const userDisplayName = user.firstName + user.lastName;
     let active;
     let pledge;
     if (status === 'pledge') {
-      active = user.value;
+      active = userDisplayName;
       pledge = displayName;
     } else {
       active = displayName;
-      pledge = user.value;
+      pledge = userDisplayName;
     }
     const activeRef = usersRef.child(active);
     const pledgeRef = usersRef.child(pledge);
@@ -240,7 +242,7 @@ exports.create_merit = function(req, res) {
       if (shouldCountTowardsMeritCap) {
         const remainingMerits = active.val().Pledges[pledge].merits - merit.amount;
         if (merit.amount > 0 && remainingMerits < 0 && !res.headersSent) {
-          res.sendStatus(400).send(user.label);
+          return res.status(400).send(userName);
         } else {
           const activePledgeRef = active.ref.child(`/Pledges/${pledge}`);
           activePledgeRef.update({ merits: remainingMerits });
