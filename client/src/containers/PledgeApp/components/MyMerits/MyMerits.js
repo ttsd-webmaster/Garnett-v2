@@ -107,18 +107,18 @@ export class MyMerits extends PureComponent<Props, State> {
 
         {isMobile() && (
           <Fragment>
-            <LoadableMobileMeritDialog
-              open={openMerit}
-              state={state}
-              handleMeritClose={this.handleMeritClose}
-              handleRequestOpen={handleRequestOpen}
-            />
             <FloatingActionButton
               className={`fixed-button ${scrollDirection === 'down' ? 'hidden' : ''}`}
               onClick={this.handleMeritOpen}
             >
               <i className="icon-pencil"></i>
             </FloatingActionButton>
+            <LoadableMobileMeritDialog
+              open={openMerit}
+              state={state}
+              handleMeritClose={this.handleMeritClose}
+              handleRequestOpen={handleRequestOpen}
+            />
           </Fragment>
         )}
       </div>
