@@ -30,8 +30,10 @@ export const selectData = [
       'Chemical Engineering',
       'Computer Engineering',
       'Computer Science',
+      'Data Science',
       'Electrical Engineering',
       'Environmental Engineering',
+      'Math-Computer Science',
       'Mechanical Engineering',
       'Nanoengineering',
       'Structural Engineering'
