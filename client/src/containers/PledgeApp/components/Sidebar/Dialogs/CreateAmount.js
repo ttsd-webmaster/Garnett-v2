@@ -1,6 +1,7 @@
 // @flow
 
 import API from 'api/API.js';
+import { formatDate } from 'helpers/functions';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import { MeritTypeOptions, StandardizedMeritOptionsDialog } from 'components';
 import type { User, MeritType } from 'api/models';
@@ -19,7 +20,7 @@ type Props = {
   state: User,
   users: Array<User>,
   description: string,
-  date: string,
+  date: Date,
   setType: (MeritType) => void,
   setDescription: (string) => void,
   handleClose: () => void,
@@ -142,7 +143,7 @@ export class CreateAmount extends Component<Props, State> {
     this.setState({
       amount: option.amount,
       standardizedMeritAction: option.action
-    })
+    });
   }
 
   vibrate() {
@@ -175,7 +176,7 @@ export class CreateAmount extends Component<Props, State> {
       createdBy: displayName,
       description,
       amount,
-      date
+      date: formatDate(date)
     };
 
     if (status === 'pledge') {
@@ -198,9 +199,6 @@ export class CreateAmount extends Component<Props, State> {
 
     API.createMerit(meritInfo)
     .then(res => {
-      this.props.handleClose();
-      this.closeProgressDialog();
-
       let message;
       if (status === 'pledge') {
         const totalAmount = amount * users.length;
@@ -208,6 +206,9 @@ export class CreateAmount extends Component<Props, State> {
       } else {
         message = `${actionText} pledges: ${amount} merits`
       }
+
+      this.props.handleClose();
+      this.closeProgressDialog();
       this.props.handleRequestOpen(message);
 
       API.sendPledgeMeritNotification(name, users, amount)

@@ -27,7 +27,7 @@ type State = {
   type: MeritType,
   users: Array<User>,
   description: string,
-  date: string
+  date: Date
 };
 
 export default class MeritDialog extends Component<Props, State> {
@@ -35,7 +35,7 @@ export default class MeritDialog extends Component<Props, State> {
     type: 'personal',
     users: [],
     description: '',
-    date: ''
+    date: new Date()
   };
 
   get body(): Node {
@@ -68,7 +68,7 @@ export default class MeritDialog extends Component<Props, State> {
   // Sets state from SelectUsers
   setUsers = (users: Array<User>) => this.setState({ users });
   setDescription = (description: string) => this.setState({ description});
-  setDate = (date: string) => this.setState({ date });
+  setDate = (date: Date) => this.setState({ date });
   // Sets state from CreateAmount
   setType = (type: MeritType) => this.setState({ type });
 

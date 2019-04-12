@@ -110,7 +110,11 @@ export class SelectUsers extends Component<Props, State> {
           dayPickerProps={{
             selectedDays: this.state.date,
             fromMonth: PLEDGING_START_DATE,
-            toMonth: PLEDGING_END_DATE
+            toMonth: PLEDGING_END_DATE,
+            disabledDays: [{
+              after: new Date(),
+              before: PLEDGING_START_DATE
+            }]
           }}
         />
         <div
@@ -161,7 +165,7 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   setDate = (date: Date) => {
-    this.props.setDate(formatDate(date));
+    this.props.setDate(date);
     this.setState({ date });
   }
 
@@ -200,7 +204,7 @@ export class SelectUsers extends Component<Props, State> {
     const { showAlumni } = this.state;
 
     // Show spinner while loading users
-    this.setState({ users: null });
+    this.setState({ filteredUsers: null });
 
     API.getActivesForMeritMobile(displayName, !showAlumni)
     .then((res) => {

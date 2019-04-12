@@ -26,7 +26,7 @@ type State = {
   selectedUsers: Array<Object>,
   name: string,
   description: string,
-  date: string,
+  date: Date,
   showOverlay: boolean,
   showAlumni: boolean,
   openSpinner: boolean,
@@ -110,7 +110,11 @@ export class SelectUsers extends Component<Props, State> {
           dayPickerProps={{
             selectedDays: this.state.date,
             fromMonth: PLEDGING_START_DATE,
-            toMonth: PLEDGING_END_DATE
+            toMonth: PLEDGING_END_DATE,
+            disabledDays: [{
+              after: new Date(),
+              before: PLEDGING_START_DATE
+            }]
           }}
         />
         <div
@@ -197,12 +201,16 @@ export class SelectUsers extends Component<Props, State> {
       return currentUser !== user;
     });
     filteredUsers.push(user);
-    this.setState({ selectedUsers });
+    this.setState({ filteredUsers, selectedUsers });
   }
 
   toggleAlumniView = () => {
     const { displayName } = this.props.state;
     const { showAlumni } = this.state;
+
+    // Show spinner while loading users
+    this.setState({ filteredUsers: null });
+
     API.getActivesForMeritMobile(displayName, !showAlumni)
     .then((res) => {
       const users = res.data;
@@ -248,9 +256,6 @@ export class SelectUsers extends Component<Props, State> {
 
     API.createMerit(meritInfo)
     .then(res => {
-      this.props.handleClose();
-      this.closeProgressDialog();
-
       let message;
       if (status === 'pledge') {
         const totalAmount = amount * selectedUsers.length;
@@ -258,6 +263,9 @@ export class SelectUsers extends Component<Props, State> {
       } else {
         message = `${action} pledges: ${amount} merits`;
       }
+
+      this.props.handleClose();
+      this.closeProgressDialog();
       this.props.handleRequestOpen(message);
 
       API.sendPledgeMeritNotification(name, selectedUsers, amount)
