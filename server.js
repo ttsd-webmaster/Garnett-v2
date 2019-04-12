@@ -71,7 +71,7 @@ app.use('/api/complaint', complaintsRouter);
 app.use('/api/notification', notificationsRouter);
 app.use('/api/delibs', delibsRouter);
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname, './client/build/index.html'));
 });
 
