@@ -1,10 +1,18 @@
 // @flow
 
 import API from 'api/API.js';
+import { getToday, formatDate } from 'helpers/functions';
 import { MeritDialogList, SelectedUsersChips } from 'components';
 import type { User, MeritType } from 'api/models';
 
 import React, { Component } from 'react';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
+
+const PLEDGING_START_DATE = new Date();
+const PLEDGING_END_DATE = new Date();
+PLEDGING_START_DATE.setMonth(3);
+PLEDGING_END_DATE.setMonth(4);
 
 type Props = {
   state: User,
@@ -12,6 +20,7 @@ type Props = {
   description: string,
   setUsers: (Array<User>) => void,
   setDescription: (string) => void,
+  setDate: (string) => void,
   handleRequestOpen: () => void
 };
 
@@ -21,6 +30,7 @@ type State = {
   selectedUsers: Array<Object>,
   name: string,
   description: string,
+  date: Date,
   showAlumni: boolean
 };
 
@@ -31,6 +41,7 @@ export class SelectUsers extends Component<Props, State> {
     selectedUsers: [],
     name: '',
     description: '',
+    date: new Date(),
     showAlumni: false
   }
 
@@ -96,6 +107,11 @@ export class SelectUsers extends Component<Props, State> {
     }
   }
 
+  handleDateChange = (date: Date) => {
+    this.props.setDate(formatDate(date));
+    this.setState({ date });
+  }
+
   selectUser = (user: User) => {
     let { filteredUsers, selectedUsers } = this.state;
     selectedUsers.push(user);
@@ -157,20 +173,22 @@ export class SelectUsers extends Component<Props, State> {
             selectedUsers={selectedUsers}
             deselectUser={this.deselectUser}
           />
-          <input
-            className="select-users-input"
-            type="text"
-            placeholder="Name"
-            autoComplete="off"
-            value={this.state.name}
-            onChange={this.setName}
-            onKeyDown={this.onNameKeyDown}
-          />
-          {!isPledge && selectedUsers.length === 0 && !name && (
-            <span id="select-all-pledges" onClick={this.selectAllPledges}>
-              Select all pledges
-            </span>
-          )}
+          <div id="select-name-container">
+            <input
+              className="select-users-input"
+              type="text"
+              placeholder="Name"
+              autoComplete="off"
+              value={this.state.name}
+              onChange={this.setName}
+              onKeyDown={this.onNameKeyDown}
+            />
+            {!isPledge && selectedUsers.length === 0 && !name && (
+              <span id="select-all-pledges" onClick={this.selectAllPledges}>
+                Select all pledges
+              </span>
+            )}
+          </div>
           <input
             className="select-users-input"
             type="text"
@@ -179,6 +197,17 @@ export class SelectUsers extends Component<Props, State> {
             value={this.state.description}
             disabled={this.props.type === 'standardized'}
             onChange={this.setDescription}
+          />
+          <DayPickerInput
+            value={this.state.date}
+            formatDate={formatDate}
+            placeholder={getToday()}
+            onDayChange={this.handleDateChange}
+            dayPickerProps={{
+              selectedDays: this.state.date,
+              fromMonth: PLEDGING_START_DATE,
+              toMonth: PLEDGING_END_DATE
+            }}
           />
         </div>
         <div

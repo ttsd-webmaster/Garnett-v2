@@ -1,4 +1,4 @@
-import { getDate } from 'helpers/functions.js';
+import { getToday } from 'helpers/functions.js';
 import API from 'api/API.js';
 
 import React, { Component } from 'react';
@@ -50,7 +50,7 @@ export default class AddComplaintDialog extends Component {
     }
     else {
       let { status, displayName, name } = this.props.state;
-      const date = getDate();
+      const date = getToday();
       const complaint = {
         activeDisplayName: displayName,
         activeName: name,

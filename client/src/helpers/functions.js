@@ -118,10 +118,11 @@ export function validateEmail(email: string): boolean {
   return re.test(email);
 }
 
-export function getDate(): string {
+export function getToday(): string {
   let today = new Date();
   let day = today.getDate();
   let month = today.getMonth() + 1;
+  let year = today.getYear() - 100;
 
   if (day < 10) {
     day = '0' + day;
@@ -131,9 +132,23 @@ export function getDate(): string {
     month = '0' + month;
   }
 
-  today = month + '/' + day;
+  return `${month}/${day}/${year}`;
+}
 
-  return today;
+export function formatDate(date: Date): string {
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getYear() - 100;
+
+  if (day < 10) {
+    day = '0' + day;
+  }
+
+  if (month < 10) {
+    month = '0' + month;
+  }
+
+  return `${month}/${day}/${year}`;
 }
 
 export function mapsSelector(location: string) {

@@ -1,8 +1,7 @@
 // @flow
 
-import { getDate } from 'helpers/functions.js';
-import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
+import { SpinnerDialog } from 'helpers/loaders.js';
 import { MeritTypeOptions, StandardizedMeritOptionsDialog } from 'components';
 import type { User, MeritType } from 'api/models';
 
@@ -20,6 +19,7 @@ type Props = {
   state: User,
   users: Array<User>,
   description: string,
+  date: string,
   setType: (MeritType) => void,
   setDescription: (string) => void,
   handleClose: () => void,
@@ -153,7 +153,7 @@ export class CreateAmount extends Component<Props, State> {
   }
 
   merit = (action: 'merit' | 'demerit') => {
-    const { state, users, description } = this.props;
+    const { state, users, description, date } = this.props;
     const { type } = this.state;
     let { amount } = this.state;
     const {
@@ -162,7 +162,6 @@ export class CreateAmount extends Component<Props, State> {
       photoURL,
       status
     } = state;
-    const date = getDate();
     let actionText = 'Merited';
     amount = parseInt(amount, 10);
 

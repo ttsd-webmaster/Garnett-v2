@@ -1,6 +1,6 @@
 // @flow
 
-import { getDate } from 'helpers/functions.js';
+import { getToday } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import API from 'api/API.js';
 import { MeritDialogList, SelectedUsersChips } from 'components';
@@ -194,7 +194,7 @@ export class SelectUsers extends Component<Props, State> {
     } = this.props.state;
     const { selectedUsers, description } = this.state;
     const { type, amount } = this.props;
-    const date = getDate();
+    const date = getToday();
     const action = amount > 0 ? 'Merited' : 'Demerited';
 
     const merit = {

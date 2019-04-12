@@ -3,7 +3,7 @@ import MyChalkboards from './components/MyChalkboards';
 import AllChalkboards from './components/AllChalkboards';
 import {
   isMobile,
-  getDate,
+  getToday,
   androidBackOpen,
   androidBackClose
 } from 'helpers/functions.js';
@@ -61,7 +61,7 @@ export default class Chalkboards extends Component {
         
         // Checks if there are any chalkboards
         if (snap.val()) {
-          const today = getDate();
+          const today = getToday();
 
           // Converts object to array
           chalkboards = Object.keys(snap.val()).map(function(key) {
