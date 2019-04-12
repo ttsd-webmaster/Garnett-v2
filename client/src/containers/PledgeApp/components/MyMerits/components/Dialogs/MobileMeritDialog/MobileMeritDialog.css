@@ -186,8 +186,9 @@
 
 #mobile-select-all-pledges {
   position: absolute;
-  top: 22px;
+  top: 23px;
   right: 10px;
+  font-size: 14px;
   color: var(--accent-color);
 }
 
