@@ -5,38 +5,30 @@ const equal = require('deep-equal');
 // Save message token from server
 exports.save_messaging_token = function(req, res) {
   const { displayName, token } = req.body;
-  const userRef = admin.database().ref('/users/' + displayName);
+  const userRef = admin.database().ref(`/users/${displayName}`);
 
-  userRef.update({
-    registrationToken: token
-  });
-
+  userRef.update({ registrationToken: token });
   res.sendStatus(200);
 };
 
 // Send active merit notification to pledges
 exports.merited_as_active = function(req, res) {
   const { activeName, pledges, amount } = req.body;
+  const action = amount >= 0 ? 'merits' : 'demerits';
   let counter = 0;
-  let merits = 'merits';
-
-  if (amount <= 0) {
-    merits = 'demerits';
-  }
 
   pledges.forEach((pledge) => {
-    const pledgeRef = admin.database().ref('/users/' + pledge.value);
+    const pledgeName = pledge.firstName + pledge.lastName;
+    const pledgeRef = admin.database().ref(`/users/${pledgeName}`);
+    counter++;
 
     pledgeRef.once('value', (snapshot) => {
-      const registrationToken = snapshot.val().registrationToken;
-      const meritAmount = Math.abs(amount);
-      counter++;
-
+      const { registrationToken } = snapshot.val();
       const message = {
         webpush: {
           notification: {
             title: 'Garnett',
-            body: `You have received ${meritAmount} ${merits} from ${activeName}.`,
+            body: `You have received ${amount} ${action} from ${activeName}.`,
             click_action: 'https://garnett-app.herokuapp.com/pledge-app',
             icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
             vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
@@ -59,8 +51,7 @@ exports.merited_as_active = function(req, res) {
             res.sendStatus(400);
           }
         });
-      }
-      else {
+      } else {
         if (!res.headersSent && counter === pledges.length) {
           res.sendStatus(200);
         }
@@ -72,26 +63,21 @@ exports.merited_as_active = function(req, res) {
 // Send pledge merit notification to actives
 exports.merited_as_pledge = function(req, res) {
   const { pledgeName, actives, amount } = req.body;
+  const action = amount >= 0 ? 'merits' : 'demerits';
   let counter = 0;
-  let merits = 'merits';
-
-  if (amount <= 0) {
-    merits = 'demerits';
-  }
 
   actives.forEach((active) => {
-    const activeRef = admin.database().ref('/users/' + active.value);
+    const activeName = active.firstName + active.lastName;
+    const activeRef = admin.database().ref(`/users/${activeName}`);
+    counter++;
 
     activeRef.once('value', (snapshot) => {
-      const registrationToken = snapshot.val().registrationToken;
-      const meritAmount = Math.abs(amount);
-      counter++;
-
+      const { registrationToken } = snapshot.val();
       const message = {
         webpush: {
           notification: {
             title: 'Garnett',
-            body: `You have given ${meritAmount} ${merits} to ${pledgeName}.`,
+            body: `You have given ${amount} ${action} to ${pledgeName}.`,
             click_action: 'https://garnett-app.herokuapp.com/pledge-app',
             icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
             vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
@@ -114,8 +100,7 @@ exports.merited_as_pledge = function(req, res) {
             res.sendStatus(400);
           }
         });
-      }
-      else {
+      } else {
         if (!res.headersSent && counter === actives.length) {
           res.sendStatus(200);
         }
@@ -131,10 +116,9 @@ exports.created_chalkboard = function(req, res) {
 
   usersRef.once('value', (users) => {
     users.forEach((user) => {
+      counter++;
       if (user.val().status !== 'alumni') {
-        const registrationToken = user.val().registrationToken;
-        counter++;
-
+        const { registrationToken } = user.val();
         const message = {
           webpush: {
             notification: {
@@ -162,8 +146,7 @@ exports.created_chalkboard = function(req, res) {
               res.sendStatus(400);
             }
           });
-        }
-        else {
+        } else {
           if (!res.headersSent) {
             res.sendStatus(200);
           }
@@ -184,10 +167,10 @@ exports.updated_chalkboard = function(req, res) {
         child.ref.child('attendees').once('value', (attendees) => {
           attendees.forEach((attendee) => {
             const attendeeName = attendee.val().name.replace(/ /g,'');
-            const attendeeRef = admin.database().ref('/users/' + attendeeName);
+            const attendeeRef = admin.database().ref(`/users/${attendeeName}`);
 
             attendeeRef.once('value', (snapshot) => {
-              const registrationToken = snapshot.val().registrationToken;
+              const { registrationToken } = snapshot.val();
               const message = {
                 webpush: {
                   notification: {
@@ -215,8 +198,7 @@ exports.updated_chalkboard = function(req, res) {
                     res.sendStatus(400);
                   }
                 });
-              }
-              else {
+              } else {
                 if (!res.headersSent) {
                   res.sendStatus(200);
                 }
@@ -238,10 +220,10 @@ function sendAttendeesNotification(chalkboard, message, res) {
         child.ref.child('attendees').once('value', (attendees) => {
           attendees.forEach((attendee) => {
             const attendeeName = attendee.val().name.replace(/ /g,'');
-            const attendeeRef = admin.database().ref('/users/' + attendeeName);
+            const attendeeRef = admin.database().ref(`/users/${attendeeName}`);
 
             attendeeRef.once('value', (snapshot) => {
-              const registrationToken = snapshot.val().registrationToken;
+              const { registrationToken } = snapshot.val();
 
               if (registrationToken) {
                 admin.messaging().send(message)
@@ -257,8 +239,7 @@ function sendAttendeesNotification(chalkboard, message, res) {
                     res.sendStatus(400);
                   }
                 });
-              }
-              else {
+              } else {
                 if (!res.headersSent) {
                   res.sendStatus(200);
                 }
@@ -275,10 +256,10 @@ function sendAttendeesNotification(chalkboard, message, res) {
 exports.joined_chalkboard = function(req, res) {
   const { chalkboard, name } = req.body;
   const activeName = chalkboard.displayName;
-  const activeRef = admin.database().ref('/users/' + activeName);
+  const activeRef = admin.database().ref(`/users/${activeName}`);
 
   activeRef.once('value', (active) => {
-    const registrationToken = active.val().registrationToken;
+    const { registrationToken } = active.val();
     const message = {
       webpush: {
         notification: {
@@ -307,8 +288,7 @@ exports.joined_chalkboard = function(req, res) {
           res.sendStatus(400);
         }
       });
-    }
-    else {
+    } else {
       if (!res.headersSent) {
         res.sendStatus(200);
         sendAttendeesNotification(chalkboard, message, res);
@@ -321,10 +301,10 @@ exports.joined_chalkboard = function(req, res) {
 exports.left_chalkboard = function(req, res) {
   const { chalkboard, name } = req.body;
   const activeName = chalkboard.displayName;
-  const activeRef = admin.database().ref('/users/' + activeName);
+  const activeRef = admin.database().ref(`/users/${activeName}`);
 
   activeRef.once('value', (active) => {
-    const registrationToken = active.val().registrationToken;
+    const { registrationToken } = active.val();
     const message = {
       webpush: {
         notification: {
@@ -353,8 +333,7 @@ exports.left_chalkboard = function(req, res) {
           res.sendStatus(400);
         }
       });
-    }
-    else {
+    } else {
       if (!res.headersSent) {
         res.sendStatus(200);
         sendAttendeesNotification(chalkboard, message, res);
@@ -371,7 +350,7 @@ exports.pending_complaint = function(req, res) {
   usersRef.once('value', (users) => {
     users.forEach((user) => {
       if (user.val().status === 'pipm') {
-        const registrationToken = user.val().registrationToken;
+        const { registrationToken } = user.val();
         const message = {
           webpush: {
             notification: {
@@ -399,8 +378,7 @@ exports.pending_complaint = function(req, res) {
               res.sendStatus(400);
             }
           });
-        }
-        else {
+        } else {
           if (!res.headersSent) {
             res.sendStatus(200);
           }
@@ -413,10 +391,10 @@ exports.pending_complaint = function(req, res) {
 // Send complaint notification to pledge
 exports.approved_complaint = function(req, res) {
   const { complaint } = req.body;
-  const pledgeRef = admin.database().ref('/users/' + complaint.pledgeDisplayName);
+  const pledgeRef = admin.database().ref(`/users/${complaint.pledgeDisplayName}`);
 
   pledgeRef.once('value', (pledge) => {
-    const registrationToken = pledge.val().registrationToken;
+    const { registrationToken } = pledge.val();
     const message = {
       webpush: {
         notification: {
@@ -440,8 +418,7 @@ exports.approved_complaint = function(req, res) {
         console.log("Error sending message:", error);
         res.sendStatus(400);
       });
-    }
-    else {
+    } else {
       res.sendStatus(200);
     }
   });
