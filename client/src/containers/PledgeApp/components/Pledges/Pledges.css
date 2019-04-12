@@ -2,7 +2,7 @@
   float: right;
   font-family: 'LeagueSpartan-Bold';
   font-size: 16px;
-  color: var(--text-color);
+  line-height: normal;
 }
 
 .loading-merits {
