@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Fragment, PureComponent, type Node } from 'react';
+import React, { Fragment, Component, type Node } from 'react';
 import CountUp from 'react-countup';
 
 import type { User } from 'api/models';
@@ -15,7 +15,7 @@ type State = {
   previousTotalMerits: number
 };
 
-export class MobileHeader extends PureComponent<Props, State> {
+export class MobileHeader extends Component<Props, State> {
   state = {
     totalMerits: 0,
     previousTotalMerits: 0
@@ -29,22 +29,17 @@ export class MobileHeader extends PureComponent<Props, State> {
       const meritsRef = firebase.database().ref('/merits');
 
       userMeritsRef.on('value', (userMerits) => {
-        if (!userMerits.val()) {
-          return
-        }
         meritsRef.on('value', (merits) => {
-          if (!userMerits.val() || !merits.val()) {
-            return
-          }
           let totalMerits = 0;
           // Retrieves the user's merits by searching for the key in
           // the Merits table
-          Object.keys(userMerits.val()).forEach((key) => {
-            if (merits.val()[userMerits.val()[key]]) {
-              totalMerits += merits.val()[userMerits.val()[key]].amount;
-            }
-          });
-
+          if (userMerits.val() && merits.val()) {
+            Object.keys(userMerits.val()).forEach((key) => {
+              if (merits.val()[userMerits.val()[key]]) {
+                totalMerits += merits.val()[userMerits.val()[key]].amount;
+              }
+            });
+          }
           localStorage.setItem('totalMerits', totalMerits);
           this.setState({
             totalMerits,

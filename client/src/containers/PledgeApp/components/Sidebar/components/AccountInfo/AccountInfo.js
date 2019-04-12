@@ -3,7 +3,7 @@
 import './AccountInfo.css';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import CountUp from 'react-countup';
 
 type Props = {
@@ -15,7 +15,7 @@ type State = {
   previousTotalMerits: number
 };
 
-export class AccountInfo extends PureComponent<Props, State> {
+export class AccountInfo extends Component<Props, State> {
   state = {
     totalMerits: 0,
     previousTotalMerits: 0,
