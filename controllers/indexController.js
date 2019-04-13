@@ -95,7 +95,7 @@ exports.signup = function(req, res) {
 
   const displayName = firstName + lastName;
   const usersRef = admin.database().ref('/users');
-  const userRef = admin.database().ref(`/users/${displayName}`);
+  const userRef = usersRef.child(displayName);
 
   userRef.once('value', (snapshot) => {
     if (snapshot.val() && year !== 'Alumni') {

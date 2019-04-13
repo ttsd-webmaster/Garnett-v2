@@ -16,38 +16,40 @@ admin.initializeApp({
     client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL
   }),
   databaseURL: process.env.FIREBASE_DATABASE_URL
-})
+});
 
-let usersRef = admin.database().ref('/users');
+const usersRef = admin.database().ref('/users');
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
     const userName = `${user.val().firstName} ${user.val().lastName}`;
     const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-    const userRef = admin.database().ref(`/users/${user.key}`);
+    const userRef = usersRef.child(user.key);
     const bucket = admin.storage().bucket('garnett-230209.appspot.com');
     const file = bucket.file(`${user.key}.jpg`);
 
     file.getSignedUrl({ action: 'read', expires: '03-17-2025' })
-    .then((signedUrls) => {
-      urlExists(signedUrls[0], function(err, exists) {
+    .then((jpgUrls) => {
+      const jpgPhoto = jpgUrls[0];
+      urlExists(jpgPhoto, function(err, exists) {
         if (exists) {
-          if (user.val().photoURL === signedUrls[0]) {
+          if (user.val().photoURL === jpgPhoto) {
             return;
           }
           console.log(`Updated ${userName}'s photo`);
-          userRef.update({ photoURL: signedUrls[0] });
+          userRef.update({ photoURL: jpgPhoto });
         } else {
           const file = bucket.file(`${user.key}.JPG`);
           file.getSignedUrl({ action: 'read', expires: '03-17-2025' })
-          .then((signedUrls) => {
-            urlExists(signedUrls[0], function(err, exists) {
+          .then((JPGUrls) => {
+            const JPGPhoto = JPGUrls[0];
+            urlExists(JPGPhoto, function(err, exists) {
               if (exists) {
-                if (user.val().photoURL === signedUrls[0]) {
+                if (user.val().photoURL === JPGPhoto) {
                   return;
                 }
                 console.log(`Updated ${userName}'s photo`);
-                userRef.update({ photoURL: signedUrls[0] });
+                userRef.update({ photoURL: JPGPhoto });
               } else {
                 console.log(`Couldn't find ${userName}'s photo`);
                 userRef.update({ photoURL: defaultPhoto });

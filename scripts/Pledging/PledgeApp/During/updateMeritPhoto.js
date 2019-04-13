@@ -28,8 +28,9 @@ meritsRef.once('value', (merits) => {
       const activePhoto = active.val().photoURL;
       usersRef.child(pledgeName).once('value', (pledge) => {
         const pledgePhoto = pledge.val().photoURL;
+        console.log(`Updated ${activeName} and ${pledgeName} merit photo`);
         merit.ref.update({ activePhoto, pledgePhoto });
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});
