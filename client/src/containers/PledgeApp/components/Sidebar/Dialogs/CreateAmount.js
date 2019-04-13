@@ -162,16 +162,22 @@ export class CreateAmount extends Component<Props, State> {
     let { description, date } = this.props;
     let { amount } = this.state;
     let actionText = 'Merited';
-    amount = parseInt(amount, 10);
-    date = date.getTime();
 
-    // Append chalkboard text if merit type is chalkboard
-    description = type === 'chalkboard' && `Chalkboard: ${description}`;
+    // Convert amount from string to number
+    amount = parseInt(amount, 10);
+
+    // Convert date to timestamp so we can order merits
+    date = date.getTime();
 
     // Amount should be negative if demerit
     if (action === 'demerit') {
       amount = -Math.abs(amount);
       actionText = 'Demerited';
+    }
+
+    // Append chalkboard text if merit type is chalkboard
+    if (type === 'chalkboard') {
+      description = `Chalkboard: ${description}`;
     }
 
     const merit = {

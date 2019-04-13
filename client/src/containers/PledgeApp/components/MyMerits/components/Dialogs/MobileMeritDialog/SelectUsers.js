@@ -234,20 +234,25 @@ export class SelectUsers extends Component<Props, State> {
       photoURL,
       status
     } = this.props.state;
-    const { selectedUsers, date } = this.state;
+    const { selectedUsers } = this.state;
     const { type, amount } = this.props;
     const action = amount > 0 ? 'Merited' : 'Demerited';
-    let { description } = this.state;
+    let { description, date } = this.state;
+
+    // Convert date to timestamp so we can order merits
+    date = date.getTime();
 
     // Append chalkboard text if merit type is chalkboard
-    description = type === 'chalkboard' && `Chalkboard: ${description}`;
+    if (type === 'chalkboard') {
+      description = `Chalkboard: ${description}`;
+    }
 
     const merit = {
       type,
       createdBy: displayName,
       description,
       amount,
-      date: date.getTime()
+      date
     };
 
     if (status === 'pledge') {
