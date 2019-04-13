@@ -22,7 +22,7 @@ export default class EndVoteDialog extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
-      const rusheeName = this.props.rushee.replace(/ /g,'');
+      const rusheeName = this.props.rushee.replace(/ /g, '');
       const { firebase } = window;
       const rusheeRef = firebase.database().ref('/rushees/' + rusheeName);
 

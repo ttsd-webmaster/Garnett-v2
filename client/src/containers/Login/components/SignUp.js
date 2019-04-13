@@ -82,10 +82,10 @@ export class SignUp extends PureComponent<Props, State> {
     this.props.openProgressDialog('Signing up...');
 
     // Remove any spaces
-    firstName = firstName.replace(/ /g,'');
-    lastName = lastName.replace(/ /g,'');
-    phone = phone.replace(/ /g,'');
-    email = email.replace(/ /g,'');
+    firstName = firstName.replace(/ /g, '');
+    lastName = lastName.replace(/ /g, '');
+    phone = phone.replace(/ /g, '');
+    email = email.replace(/ /g, '');
     // Capitalize first name and last name
     firstName = firstName[0].toUpperCase() + firstName.substr(1);
     lastName = lastName[0].toUpperCase() + lastName.substr(1);

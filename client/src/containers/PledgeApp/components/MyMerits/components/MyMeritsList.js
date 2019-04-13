@@ -46,7 +46,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
         merits.forEach((merit) => {
           const { activeName, pledgeName } = merit.val();
           const meritName = status === 'pledge' ? pledgeName : activeName;
-          if (displayName === meritName.replace(/ /g,'')) {
+          if (displayName === meritName.replace(/ /g, '')) {
             myMerits.push(merit.val());
           }
         });
@@ -59,10 +59,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
   componentWillUnmount() {
     const { firebase } = window;
-    const { displayName } = this.props.state;
-    const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
     const meritsRef = firebase.database().ref('/merits');
-    userMeritsRef.off('value');
     meritsRef.off('value');
   }
 

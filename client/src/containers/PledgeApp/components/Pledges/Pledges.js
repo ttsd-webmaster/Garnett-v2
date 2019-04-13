@@ -88,7 +88,7 @@ export class Pledges extends PureComponent<Props, State> {
       const usersRef = firebase.database().ref('/users');
       const meritsRef = firebase.database().ref('/merits');
 
-      usersRef.orderByChild('status').equalTo('pledge').on('value', (pledges) => {
+      usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
         if (!pledges.val()) {
           this.setState({ pledges: null, loaded: true });
           return
@@ -97,7 +97,7 @@ export class Pledges extends PureComponent<Props, State> {
           return pledges.val()[key];
         });
 
-        meritsRef.once('value', (merits) => {
+        meritsRef.on('value', (merits) => {
           // Set all the pledge's total merits
           pledges.forEach((pledge) => {
             const searchedName = pledge.firstName + pledge.lastName;
@@ -107,7 +107,7 @@ export class Pledges extends PureComponent<Props, State> {
             if (merits.val()) {
               merits.forEach((merit) => {
                 const { pledgeName } = merit.val();
-                if (searchedName === pledgeName.replace(/ /g,'')) {
+                if (searchedName === pledgeName.replace(/ /g, '')) {
                   totalMerits += merit.val().amount;
                 }
               });
@@ -136,8 +136,8 @@ export class Pledges extends PureComponent<Props, State> {
 
   componentWillUnmount() {
     const firebase = window.firebase;
-    const usersRef = firebase.database().ref('/users');
-    usersRef.off('value');
+    const meritsRef = firebase.database().ref('/merits');
+    meritsRef.off('value');
   }
 
   get pledges(): Node {
@@ -187,7 +187,7 @@ export class Pledges extends PureComponent<Props, State> {
   closePopover = () => this.setState({ openPopover: false });
 
   setFilter = (filterName: string) => {
-    let filter = filterName.replace(/ /g,'');
+    let filter = filterName.replace(/ /g, '');
     filter = filter[0].toLowerCase() + filter.substr(1);
     let { pledges } = this.state;
 

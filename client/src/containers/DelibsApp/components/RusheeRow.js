@@ -18,7 +18,7 @@ type Props = {
 
 export class RusheeRow extends PureComponent<Props> {
   openRushee = (rushee: Object) => {
-    const rusheeName = rushee.name.replace(/ /g,'');
+    const rusheeName = rushee.name.replace(/ /g, '');
     this.props.history.push(`/delibs-app/${rusheeName}`, rusheeName);
   }
 

@@ -33,7 +33,7 @@ export class AccountInfo extends Component<Props, State> {
           merits.forEach((merit) => {
             const { activeName, pledgeName } = merit.val();
             const meritName = status === 'pledge' ? pledgeName : activeName;
-            if (displayName === meritName.replace(/ /g,'')) {
+            if (displayName === meritName.replace(/ /g, '')) {
               totalMerits += merit.val().amount;
             }
           });
@@ -49,9 +49,8 @@ export class AccountInfo extends Component<Props, State> {
 
   componentWillUnmount() {
     const { firebase } = window;
-    const { displayName } = this.props.user;
-    const userRef = firebase.database().ref(`/users/${displayName}`);
-    userRef.off('value');
+    const meritsRef = firebase.database().ref('/merits');
+    meritsRef.off('value');
   }
 
   render() {

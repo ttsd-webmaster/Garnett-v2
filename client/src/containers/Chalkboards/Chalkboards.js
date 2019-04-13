@@ -266,7 +266,7 @@ export default class Chalkboards extends Component {
   };
 
   setFilter = (filterName) => {
-    let filter = filterName.replace(/ /g,'');
+    let filter = filterName.replace(/ /g, '');
     filter = filter[0].toLowerCase() + filter.substr(1);
 
     this.setState({

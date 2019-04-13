@@ -19,7 +19,7 @@ type Props = {
 export class InteractedCheckbox extends PureComponent<Props> {
   updateInteraction = (rushee: Object) => {
     const { displayName } = this.props.state;
-    const rusheeName = rushee.name.replace(/ /g,'');
+    const rusheeName = rushee.name.replace(/ /g, '');
     const { interacted } = rushee;
     const { totalInteractions } = rushee;
 

@@ -168,7 +168,7 @@ export class Contacts extends PureComponent<{}, State> {
   closePopover = () => this.setState({ openPopover: false });
 
   setFilter = (filterName: FilterName) => {
-    let filter = filterName.replace(/ /g,'');
+    let filter = filterName.replace(/ /g, '');
     // Make first letter of filter lower cased
     filter = filter[0].toLowerCase() + filter.substr(1);
     let labelFilter = filter;
