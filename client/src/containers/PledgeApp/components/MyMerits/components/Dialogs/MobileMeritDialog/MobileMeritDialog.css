@@ -11,7 +11,7 @@
 #mobile-create-amount-container {
   display: flex;
   flex-direction: column;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
@@ -144,9 +144,34 @@
   min-height: 60px;
   font-size: 16px;
   background-color: #fff;
+  color: var(--text-color);
   padding: 0 10px;
   border: 0;
   border-top: 1px solid #e0e0e0;
+}
+
+.merit-input::placeholder,
+#description::placeholder,
+.DayPickerInput > input::placeholder {
+  font-weight: 300;
+  color: #ccc;
+}
+
+.merit-input.name {
+  padding: 0;
+  border-top: 0;
+}
+
+.merit-input.description {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 10px;
+}
+
+#description {
+  padding: 0;
+  border: 0;
 }
 
 .DayPickerInput {
@@ -173,16 +198,6 @@
 #date-picker-overlay.hidden {
   visibility: hidden;
   opacity: 0;
-}
-
-.merit-input.name {
-  padding: 0;
-  border-top: 0;
-}
-
-.merit-input::placeholder {
-  font-weight: 300;
-  color: #ccc;
 }
 
 #mobile-select-all-pledges {

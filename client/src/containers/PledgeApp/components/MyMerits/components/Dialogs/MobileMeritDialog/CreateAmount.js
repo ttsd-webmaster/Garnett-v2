@@ -125,13 +125,9 @@ export class CreateAmount extends PureComponent<Props, State> {
   setAmount = (amount: string) => this.setState({ amount });
 
   setType = (type: MeritType) => {
-    let description = '';
-    if (type === 'chalkboard') {
-      description = 'Chalkboard: ';
-    }
     this.setState({
       type,
-      description,
+      description: '',
       standardizedMeritAction: null
     });
   }

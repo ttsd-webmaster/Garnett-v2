@@ -124,8 +124,6 @@ export class CreateAmount extends Component<Props, State> {
   setType = (type: MeritType) => {
     switch (type) {
       case 'chalkboard':
-        this.props.setDescription('Chalkboard: ');
-        break;
       case 'personal':
         this.props.setDescription('');
         break;
@@ -153,18 +151,24 @@ export class CreateAmount extends Component<Props, State> {
   }
 
   merit = (action: 'merit' | 'demerit') => {
-    const { state, users, description, date } = this.props;
+    const { state, users } = this.props;
     const { type } = this.state;
-    let { amount } = this.state;
     const {
       displayName,
       name,
       photoURL,
       status
     } = state;
+    let { description, date } = this.props;
+    let { amount } = this.state;
     let actionText = 'Merited';
     amount = parseInt(amount, 10);
+    date = date.getTime();
 
+    // Append chalkboard text if merit type is chalkboard
+    description = type === 'chalkboard' && `Chalkboard: ${description}`;
+
+    // Amount should be negative if demerit
     if (action === 'demerit') {
       amount = -Math.abs(amount);
       actionText = 'Demerited';
@@ -175,7 +179,7 @@ export class CreateAmount extends Component<Props, State> {
       createdBy: displayName,
       description,
       amount,
-      date: date.getTime()
+      date
     };
 
     if (status === 'pledge') {

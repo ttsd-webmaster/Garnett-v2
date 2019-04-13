@@ -91,14 +91,18 @@ export class SelectUsers extends Component<Props, State> {
             )}
           </div>
         </div>
-        <input
-          className="merit-input"
-          type="text"
-          placeholder="Description"
-          onChange={this.setDescription}
-          value={description}
-          disabled={this.props.type === 'standardized'}
-        />
+        <label htmlFor="description" className="merit-input description">
+          { this.props.type === 'chalkboard' && 'Chalkboard:\xa0' }
+          <input
+            id="description"
+            className="merit-input"
+            type="text"
+            placeholder="Description"
+            value={description}
+            disabled={this.props.type === 'standardized'}
+            onChange={this.setDescription}
+          />
+        </label>
         <DayPickerInput
           value={this.state.date}
           formatDate={formatDate}
@@ -230,9 +234,13 @@ export class SelectUsers extends Component<Props, State> {
       photoURL,
       status
     } = this.props.state;
-    const { selectedUsers, description, date } = this.state;
+    const { selectedUsers, date } = this.state;
     const { type, amount } = this.props;
     const action = amount > 0 ? 'Merited' : 'Demerited';
+    let { description } = this.state;
+
+    // Append chalkboard text if merit type is chalkboard
+    description = type === 'chalkboard' && `Chalkboard: ${description}`;
 
     const merit = {
       type,

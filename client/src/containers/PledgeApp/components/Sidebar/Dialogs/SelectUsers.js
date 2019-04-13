@@ -68,7 +68,7 @@ export class SelectUsers extends Component<Props, State> {
 
   get header(): Node {
     const { status } = this.props.state;
-    const { selectedUsers, name } = this.state;
+    const { selectedUsers, name, description } = this.state;
     const isPledge = status === 'pledge';
     return (
       <div id="select-users-header">
@@ -92,15 +92,17 @@ export class SelectUsers extends Component<Props, State> {
             </span>
           )}
         </div>
-        <input
-          className="select-users-input"
-          type="text"
-          placeholder="Description"
-          autoComplete="off"
-          value={this.state.description}
-          disabled={this.props.type === 'standardized'}
-          onChange={this.setDescription}
-        />
+        <label htmlFor="description" className="select-users-input description">
+          { this.props.type === 'chalkboard' && 'Chalkboard:\xa0' }
+          <input
+            id="description"
+            type="text"
+            placeholder="Description"
+            value={description}
+            disabled={this.props.type === 'standardized'}
+            onChange={this.setDescription}
+          />
+        </label>
         <DayPickerInput
           value={this.state.date}
           formatDate={formatDate}
