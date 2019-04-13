@@ -1,5 +1,5 @@
-var urlExists = require('url-exists');
-const admin = require("firebase-admin");
+const urlExists = require('url-exists');
+const admin = require('firebase-admin');
 require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
 
 admin.initializeApp({
@@ -22,57 +22,42 @@ let usersRef = admin.database().ref('/users');
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
-    let defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-    let userRef = admin.database().ref('/users/' + user.key);
-    let bucket = admin.storage().bucket("garnett-230209.appspot.com");
+    const userName = `${user.val().firstName} ${user.val().lastName}`;
+    const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+    const userRef = admin.database().ref(`/users/${user.key}`);
+    const bucket = admin.storage().bucket('garnett-230209.appspot.com');
+    const file = bucket.file(`${user.key}.jpg`);
 
-    bucket.file(`${user.key}.jpg`).getSignedUrl({
-      action: 'read',
-      expires: '03-17-2025'
-    })
-    .then((url) => {
-      urlExists(url[0], function(err, exists) {
+    file.getSignedUrl({ action: 'read', expires: '03-17-2025' })
+    .then((signedUrls) => {
+      urlExists(signedUrls[0], function(err, exists) {
         if (exists) {
-          userRef.update({
-            photoURL: url[0]
-          });
-        }
-        else {
-          bucket.file(`${user.key}.JPG`).getSignedUrl({
-            action: 'read',
-            expires: '03-17-2025'
-          })
-          .then((url) => {
-            urlExists(url[0], function(err, exists) {
+          if (user.val().photoURL === signedUrls[0]) {
+            return;
+          }
+          console.log(`Updated ${userName}'s photo`);
+          userRef.update({ photoURL: signedUrls[0] });
+        } else {
+          const file = bucket.file(`${user.key}.JPG`);
+          file.getSignedUrl({ action: 'read', expires: '03-17-2025' })
+          .then((signedUrls) => {
+            urlExists(signedUrls[0], function(err, exists) {
               if (exists) {
-                userRef.update({
-                  photoURL: url[0]
-                });
-              }
-              else {
-                urlExists(url[0], function(err, exists) {
-                  if (exists) {
-                    userRef.update({
-                      photoURL: url[0]
-                    });
-                  }
-                  else {
-                    userRef.update({
-                      photoURL: defaultPhoto
-                    });
-                  }
-                });
+                if (user.val().photoURL === signedUrls[0]) {
+                  return;
+                }
+                console.log(`Updated ${userName}'s photo`);
+                userRef.update({ photoURL: signedUrls[0] });
+              } else {
+                console.log(`Couldn't find ${userName}'s photo`);
+                userRef.update({ photoURL: defaultPhoto });
               }
             });
           })
-          .catch((err) => {
-            console.log(err);
-          })
+          .catch((err) => console.error(err));
         }
       });
     })
-    .catch((err) => {
-      console.log(err);
-    })
+    .catch((err) => console.error(err));
   });
 });

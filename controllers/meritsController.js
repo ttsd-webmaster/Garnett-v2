@@ -272,6 +272,8 @@ exports.create_merit = function(req, res) {
             activeRef.update({ merits: remainingMerits });
           });
           res.sendStatus(200);
+        } else {
+          res.status(400).send('Error');
         }
       });
     });

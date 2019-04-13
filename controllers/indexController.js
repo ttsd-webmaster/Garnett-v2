@@ -1,5 +1,6 @@
 const admin = require('firebase-admin');
 const firebase = require('@firebase/app').firebase;
+const urlExists = require('url-exists');
 require('@firebase/auth');
 
 // Retrieving Authentication Status Route
@@ -133,25 +134,36 @@ exports.signup = function(req, res) {
             // Sets user photo here
             // Checks first if the .jpg file is in firebase storage
             file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
-            .then((signedUrls) => {
-              userInfo.photoURL = signedUrls[0];
-              userRef.set(userInfo);
-            })
-            .catch((error) => {
-              // Checks if the .JPG file is in firebase storage
-              const file = bucket.file(`${displayName}.jpg`);
-              file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
-              .then((signedUrls) => {
-                userInfo.photoURL = signedUrls[0];
-                userRef.set(userInfo);
-              })
-              .catch((error) => {
-                const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-                userInfo.photoURL = defaultPhoto;
-                userRef.set(userInfo)
+            .then((jpgUrls) => {
+              const jpgPhoto = jpgUrls[0];
+              urlExists(jpgPhoto, function(err, exists) {
+                if (exists) {
+                  userInfo.photoURL = jpgPhoto;
+                  userRef.set(userInfo);
+                } else {
+                  // Checks if the .JPG file is in firebase storage
+                  const file = bucket.file(`${displayName}.JPG`);
+                  file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
+                  .then((signedUrls) => {
+                    const JPGPhoto = JPGUrls[0];
+                    urlExists(JPGPhoto, function(err, exists) {
+                      if (exists) {
+                        userInfo.photoURL = JPGPhoto;
+                        userRef.set(userInfo);
+                      } else {
+                        const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
+                        userInfo.photoURL = defaultPhoto;
+                        userRef.set(userInfo);
+                      }
+                    });
+                  })
+                  .catch((err) => console.error(err));
+                }
               });
-            });
+            })
+            .catch((err) => console.error(err));
           }
+
           // Set merits
           usersRef.once('value', (users) => {
             // Set merit counts based on the user's status
