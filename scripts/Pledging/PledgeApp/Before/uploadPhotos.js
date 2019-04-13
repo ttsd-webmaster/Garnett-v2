@@ -24,23 +24,30 @@ const bucket = admin.storage().bucket('garnett-230209.appspot.com');
 const usersRef = admin.database().ref('/users');
 
 function uploadFile(file) {
-  bucket.upload(`images/${file}`, {
-    destination: file,
-    gzip: true,
-    metadata: {
-      cacheControl: 'public, max-age=31536000'
+  const userName = file.slice(0, -4);
+  const userRef = usersRef.child(userName);
+  userRef.once('value', (user) => {
+    if (user.exists()) {
+      bucket.upload(`images/${file}`, {
+        destination: file,
+        gzip: true,
+        metadata: {
+          cacheControl: 'public, max-age=31536000'
+        }
+      }).then(() => {
+        const uploadedFile = bucket.file(file);
+        uploadedFile.getSignedUrl({ action: 'read', expires: '03-17-2025' })
+        .then((signedUrls) => {
+          console.log(`Updated ${userName}'s photo`);
+          userRef.update({ photoURL: signedUrls[0] });
+        })
+        .catch((err) => console.error(err));
+      }).catch(err => {
+        console.error('ERROR:', err);
+      });
+    } else {
+      console.log(`${userName} does not exist in the database.`);
     }
-  }).then(() => {
-    const uploadedFile = bucket.file(file);
-    uploadedFile.getSignedUrl({ action: 'read', expires: '03-17-2025' })
-    .then((signedUrls) => {
-      const userName = file.slice(0, -4);
-      console.log(`Updated ${userName}'s photo`);
-      usersRef.child(userName).update({ photoURL: signedUrls[0] });
-    })
-    .catch((err) => console.error(err));
-  }).catch(err => {
-    console.error('ERROR:', err);
   });
 }
 

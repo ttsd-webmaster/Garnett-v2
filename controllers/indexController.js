@@ -167,15 +167,15 @@ exports.signup = function(req, res) {
           usersRef.once('value', (users) => {
             // Set merit counts based on the user's status
             if (code === pledgeCode) {
-              users.forEach((child) => {
-                switch (child.val().status) {
+              users.forEach((user) => {
+                switch (user.val().status) {
                   case 'alumni':
-                    child.ref.child(`/Pledges/${displayName}`).set({
+                    user.ref.child(`/Pledges/${displayName}`).set({
                       merits: 200
                     });
                     break;
                   case 'pipm':
-                    child.ref.child(`/Pledges/${displayName}`).set({
+                    user.ref.child(`/Pledges/${displayName}`).set({
                       merits: 'Unlimited'
                     });
                     break
@@ -183,24 +183,24 @@ exports.signup = function(req, res) {
                     // don't give pledges a merit count for pledges
                     break
                   default:
-                    child.ref.child(`/Pledges/${displayName}`).set({
+                    user.ref.child(`/Pledges/${displayName}`).set({
                       merits: 100
                     });
                 }
               });
             } else if (year === 'Alumni') {
-              users.forEach((child) => {
-                if (child.val().status === 'pledge') {
-                  const pledgeName = child.key;
+              users.forEach((user) => {
+                if (user.val().status === 'pledge') {
+                  const pledgeName = user.key;
                   userRef.child(`/Pledges/${pledgeName}`).set({
                     merits: 200
                   });
                 }
               });
             } else {
-              users.forEach((child) => {
-                if (child.val().status === 'pledge') {
-                  const pledgeName = child.key;
+              users.forEach((user) => {
+                if (user.val().status === 'pledge') {
+                  const pledgeName = user.key;
                   userRef.child(`/Pledges/${pledgeName}`).set({
                     merits: 100
                   });

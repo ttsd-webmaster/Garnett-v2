@@ -127,8 +127,7 @@ exports.get_actives_as_pledge = function(req, res) {
           if (user.val().status === 'alumni') {
             result.push(currentActive);
           }
-        }
-        else if (user.val().status !== 'alumni') {
+        } else if (user.val().status !== 'alumni') {
           result.push(currentActive);
         }
       }
@@ -176,26 +175,22 @@ exports.get_chalkboards_merit = function(req, res) {
   const { fullName } = req.query;
   const chalkboardsRef = admin.database().ref('/chalkboards');
 
-  chalkboardsRef.once('value', (snapshot) => {
+  chalkboardsRef.once('value', (chalkboards) => {
     const myChalkboards = [];
 
-    if (snapshot.val()) {
-      const chalkboards = Object.keys(snapshot.val()).map(function(key) {
-        return snapshot.val()[key];
-      });
-
+    if (chalkboards.val()) {
       chalkboards.forEach((chalkboard) => {
-        const { title, amount } = chalkboard;
+        const { title, amount, activeName, attendees } = chalkboard.val();
         const currentChalkboard = { title, amount };
 
-        if (chalkboard.activeName === fullName) {
+        if (activeName === fullName) {
           myChalkboards.push(currentChalkboard);
-        } else if (chalkboard.attendees) {
-          const attendees = Object.keys(chalkboard.attendees).map(function(key) {
-            return chalkboard.attendees[key];
+        } else if (attendees) {
+          const attendeesArray = Object.keys(attendees).map(function(key) {
+            return attendees[key];
           });
 
-          attendees.forEach((attendee) => {
+          attendeesArray.forEach((attendee) => {
             if (attendee.name === fullName) {
               myChalkboards.push(currentChalkboard);
             }
