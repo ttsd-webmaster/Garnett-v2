@@ -1,5 +1,6 @@
 // @flow
 
+import { formatDate } from 'helpers/functions';
 import { PlaceholderMerit } from 'components/Placeholders';
 import type { Merit } from 'api/models';
 
@@ -48,7 +49,7 @@ export class MeritRow extends PureComponent<Props> {
           onClick={() => handleDeleteOpen && handleDeleteOpen(merit)}
         >
           <div className="merit-amount-container">
-            <p className="merit-date">{ merit.date }</p>
+            <p className="merit-date">{ formatDate(new Date(merit.date)) }</p>
             {merit.amount > 0 ? (
               <p className="merit-amount green">+{ merit.amount }</p>
             ) : (

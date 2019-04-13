@@ -37,27 +37,23 @@ export class MyMeritsList extends PureComponent<Props, State> {
       return
     }
     const { firebase } = window;
-    const { displayName } = this.props.state;
-    const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
+    const { displayName, status } = this.props.state;
     const meritsRef = firebase.database().ref('/merits');
 
-    userMeritsRef.on('value', (userMerits) => {
-      if (!userMerits.val()) {
-        this.setState({ loaded: true });
-        return
+    meritsRef.orderByChild('date').on('value', (merits) => {
+      let myMerits = [];
+      if (merits.val()) {
+        merits.forEach((merit) => {
+          const { activeName, pledgeName } = merit.val();
+          const meritName = status === 'pledge' ? pledgeName : activeName;
+          if (displayName === meritName.replace(/ /g,'')) {
+            myMerits.push(merit.val());
+          }
+        });
       }
-      meritsRef.on('value', (merits) => {
-        let myMerits = [];
-        // Retrieves the user's merits by searching for the key in
-        // the Merits table
-        if (userMerits.val() && merits.val()) {
-          myMerits = Object.keys(userMerits.val()).map(function(key) {
-            return merits.val()[userMerits.val()[key]];
-          }).reverse();
-        }
-        localStorage.setItem('myMerits', JSON.stringify(myMerits));
-        this.setState({ myMerits, loaded: true });
-      });
+      myMerits = myMerits.reverse();
+      localStorage.setItem('myMerits', JSON.stringify(myMerits));
+      this.setState({ myMerits, loaded: true });
     });
   }
 

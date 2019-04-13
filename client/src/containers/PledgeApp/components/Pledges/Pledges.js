@@ -100,13 +100,15 @@ export class Pledges extends PureComponent<Props, State> {
         meritsRef.once('value', (merits) => {
           // Set all the pledge's total merits
           pledges.forEach((pledge) => {
+            const searchedName = pledge.firstName + pledge.lastName;
             let totalMerits = 0;
             // Retrieves the pledge's total merits by searching for the key in
             // the Merits table
-            if (merits.val() && pledge.Merits) {
-              Object.keys(pledge.Merits).forEach(function(key) {
-                if (merits.val()[pledge.Merits[key]]) {
-                  totalMerits += merits.val()[pledge.Merits[key]].amount;
+            if (merits.val()) {
+              merits.forEach((merit) => {
+                const { pledgeName } = merit.val();
+                if (searchedName === pledgeName.replace(/ /g,'')) {
+                  totalMerits += merit.val().amount;
                 }
               });
             }

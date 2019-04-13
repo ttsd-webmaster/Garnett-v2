@@ -38,19 +38,18 @@ exports.get_actives = function(req, res) {
 // Query for the specified pledge's merits
 exports.get_pledge_merits = function(req, res) {
   const { pledgeName } = req.query;
-  const pledgeMeritsRef = admin.database().ref(`/users/${pledgeName}/Merits`);
   const meritsRef = admin.database().ref('/merits');
 
-  pledgeMeritsRef.once('value', (userMerits) => {
-    meritsRef.once('value', (merits) => {
-      let pledgeMerits = [];
-      if (userMerits.val() && merits.val()) {
-        pledgeMerits = Object.keys(userMerits.val()).map(function(key) {
-          return merits.val()[userMerits.val()[key]];
-        }).reverse();
-      }
-      res.json({ merits: pledgeMerits });
-    })
+  meritsRef.orderByChild('date').once('value', (merits) => {
+    const pledgeMerits = [];
+    if (merits.val()) {
+      merits.forEach((merit) => {
+        if (pledgeName === merit.val().pledgeName.replace(/ /g,'')) {
+          pledgeMerits.push(merit.val());
+        }
+      });
+    }
+    res.json({ merits: pledgeMerits.reverse() });
   });
 };
 
@@ -265,7 +264,7 @@ exports.get_photos = function(req, res) {
     const parsedSet = JSON.parse(set);
     [...new Map(parsedSet[1])].forEach((entry) => {
       if (photoMap.get(entry[0]) === undefined) {
-        const name = entry[0].replace(/ /g,'');;
+        const name = entry[0].replace(/ /g,'');
         const userRef = admin.database().ref(`/users/${name}`);
 
         userRef.once('value', (user) => {

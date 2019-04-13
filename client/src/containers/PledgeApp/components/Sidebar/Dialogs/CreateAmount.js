@@ -1,7 +1,6 @@
 // @flow
 
 import API from 'api/API.js';
-import { formatDate } from 'helpers/functions';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import { MeritTypeOptions, StandardizedMeritOptionsDialog } from 'components';
 import type { User, MeritType } from 'api/models';
@@ -176,7 +175,7 @@ export class CreateAmount extends Component<Props, State> {
       createdBy: displayName,
       description,
       amount,
-      date: formatDate(date)
+      date: date.getTime()
     };
 
     if (status === 'pledge') {

@@ -24,27 +24,24 @@ export class AccountInfo extends Component<Props, State> {
   componentDidMount() {
     if (navigator.onLine) {
       const { firebase } = window;
-      const { displayName } = this.props.user;
-      const userMeritsRef = firebase.database().ref(`/users/${displayName}/Merits`);
+      const { displayName, status } = this.props.user;
       const meritsRef = firebase.database().ref('/merits');
 
-      userMeritsRef.on('value', (userMerits) => {
-        meritsRef.on('value', (merits) => {
-          let totalMerits = 0;
-          // Retrieves the user's total merits by searching for the key in
-          // the Merits table
-          if (userMerits.val() && merits.val()) {
-            Object.keys(userMerits.val()).forEach(function(key) {
-              if (merits.val()[userMerits.val()[key]]) {
-                totalMerits += merits.val()[userMerits.val()[key]].amount;
-              }
-            });
-          }
-          localStorage.setItem('totalMerits', totalMerits);
-          this.setState({
-            totalMerits,
-            previousTotalMerits: this.state.totalMerits
+      meritsRef.on('value', (merits) => {
+        let totalMerits = 0;
+        if (merits.val()) {
+          merits.forEach((merit) => {
+            const { activeName, pledgeName } = merit.val();
+            const meritName = status === 'pledge' ? pledgeName : activeName;
+            if (displayName === meritName.replace(/ /g,'')) {
+              totalMerits += merit.val().amount;
+            }
           });
+        }
+        localStorage.setItem('totalMerits', totalMerits);
+        this.setState({
+          totalMerits,
+          previousTotalMerits: this.state.totalMerits
         });
       });
     }

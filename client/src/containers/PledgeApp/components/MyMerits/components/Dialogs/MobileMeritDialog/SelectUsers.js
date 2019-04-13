@@ -239,7 +239,7 @@ export class SelectUsers extends Component<Props, State> {
       createdBy: displayName,
       description,
       amount,
-      date: formatDate(date)
+      date: date.getTime()
     };
 
     if (status === 'pledge') {

@@ -24,19 +24,19 @@ export class AllMeritsList extends PureComponent<Props, State> {
   componentDidMount() {
     if (!navigator.onLine) {
       this.setState({ loaded: true });
-      return
+      return;
     }
     const { firebase } = window;
     const meritsRef = firebase.database().ref('/merits');
 
-    meritsRef.limitToLast(100).on('value', (merits) => {
+    meritsRef.orderByChild('date').limitToLast(100).on('value', (merits) => {
       let allMerits = [];
-      // Retrieves the 100 most recent merits
       if (merits.val()) {
-        allMerits = Object.keys(merits.val()).map(function(key) {
-          return merits.val()[key];
-        }).reverse();
+        merits.forEach((merit) => {
+          allMerits.push(merit.val());
+        });
       }
+      allMerits = allMerits.reverse();
       localStorage.setItem('allMerits', JSON.stringify(allMerits));
       this.setState({ allMerits, loaded: true });
     });

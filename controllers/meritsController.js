@@ -52,15 +52,17 @@ exports.get_pledges_as_active_mobile = function(req, res) {
 
       Promise.all(promises).then((results) => {
         results.forEach((user) => {
-          const currentPledge = {
-            firstName: user.val().firstName,
-            lastName: user.val().lastName,
-            year: user.val().year,
-            major: user.val().major,
-            photoURL: user.val().photoURL,
-            remainingMerits: remainingMerits.get(user.key)
-          };
-          result.push(currentPledge);
+          if (user.val()) {
+            const currentPledge = {
+              firstName: user.val().firstName,
+              lastName: user.val().lastName,
+              year: user.val().year,
+              major: user.val().major,
+              photoURL: user.val().photoURL,
+              remainingMerits: remainingMerits.get(user.key)
+            };
+            result.push(currentPledge);
+          }
         })
         res.json(result)
       })
@@ -214,12 +216,11 @@ exports.create_merit = function(req, res) {
     merit,
     status
   } = req.body;
-  const platform = useragent.parse(req.headers['user-agent']).toString();
-  let counter = 0;
   const usersRef = admin.database().ref('/users');
+  const platform = useragent.parse(req.headers['user-agent']).toString();
+  const activesToUpdate = [];
 
   selectedUsers.forEach((user) => {
-    const userName = `${user.firstName} ${user.lastName}`;
     const userDisplayName = user.firstName + user.lastName;
     let active;
     let pledge;
@@ -240,18 +241,17 @@ exports.create_merit = function(req, res) {
       );
 
       if (shouldCountTowardsMeritCap) {
-        const remainingMerits = active.val().Pledges[pledge].merits - merit.amount;
-        if (merit.amount > 0 && remainingMerits < 0 && !res.headersSent) {
+        if (merit.amount > user.remainingMerits && !res.headersSent) {
+          const userName = `${user.firstName} ${user.lastName}`;
           return res.status(400).send(userName);
         } else {
-          const activePledgeRef = active.ref.child(`/Pledges/${pledge}`);
-          activePledgeRef.update({ merits: remainingMerits });
+          const pledgeName = pledge.firstName + pledge.lastName;
+          const activePledgeRef = active.ref.child(`/Pledges/${pledgeName}`);
+          activesToUpdate.push([activePledgeRef, user.remainingMerits]);
         }
       }
 
       pledgeRef.once('value', (pledge) => {
-        counter++;
-
         if (status === 'pledge') {
           merit.activeName = `${active.val().firstName} ${active.val().lastName}`;
           merit.activePhoto = active.val().photoURL;
@@ -263,11 +263,14 @@ exports.create_merit = function(req, res) {
         }
 
         const meritsRef = admin.database().ref('/merits');
-        const key = meritsRef.push(merit).getKey();
-        pledge.ref.child('Merits').push(key);
-        activeRef.child('Merits').push(key);
+        meritsRef.push(merit);
 
-        if (!res.headersSent && counter === selectedUsers.length) {
+        if (!res.headersSent && activesToUpdate.length === selectedUsers.length) {
+          activesToUpdate.forEach((activeToUpdate) => {
+            const activeRef = activeToUpdate[0];
+            const remainingMerits = activeToUpdate[1];
+            activeRef.update({ merits: remainingMerits });
+          });
           res.sendStatus(200);
         }
       });
