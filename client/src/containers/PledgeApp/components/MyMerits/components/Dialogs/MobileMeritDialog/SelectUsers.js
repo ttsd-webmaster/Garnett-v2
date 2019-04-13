@@ -315,7 +315,6 @@ export class SelectUsers extends Component<Props, State> {
         { this.header }
         <MeritDialogList
           users={this.state.filteredUsers}
-          selectedUsers={this.state.selectedUsers}
           isPledge={isPledge}
           showAlumni={isPledge && this.state.showAlumni}
           selectUser={this.selectUser}

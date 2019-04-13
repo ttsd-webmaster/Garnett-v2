@@ -15,7 +15,7 @@ import { LoadableContactsDialog } from './components/Dialogs';
 import type { FilterType, FilterName } from './data.js';
 import type { User } from 'api/models';
 
-import React, { PureComponent, type Node } from 'react';
+import React, { Fragment, PureComponent, type Node } from 'react';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 
@@ -31,11 +31,13 @@ const filterOptions = [
 ];
 
 type State = {
-  actives: Array<User>,
-  active: ?User,
-  filter: FilterType,
+  brothers: ?Array<User>,
+  filteredBrothers: ?Array<User>,
+  selectedBrother: ?User,
+  searchedName: string,
+  filterKey: FilterType,
   filterName: FilterName,
-  labels: ?Array<string>,
+  filterSubgroups: ?Array<string>,
   reverse: boolean,
   open: boolean,
   openPopover: boolean
@@ -43,62 +45,74 @@ type State = {
 
 export class Contacts extends PureComponent<{}, State> {
   state = {
-    actives: null,
-    active: null,
-    filter: 'active',
+    brothers: null,
+    filteredBrothers: null,
+    selectedBrother: null,
+    searchedName: '',
+    filterKey: 'active',
     filterName: 'Active',
-    labels: null,
+    filterSubgroups: filters.active,
     reverse: false,
     open: false,
     openPopover: false
   };
 
   componentDidMount() {
-    const labels = filters.active;
     if (navigator.onLine) {
-      API.getActives()
+      API.getBrothers()
       .then(res => {
-        const actives = res.data;
-        localStorage.setItem('activeArray', JSON.stringify(res.data));
-        this.setState({ actives, labels });
+        const brothers = res.data;
+        localStorage.setItem('brothersArray', JSON.stringify(res.data));
+        this.setState({ brothers, filteredBrothers: brothers });
       });
     } else {
-      const actives = localStorage.getItem('activeArray');
-      this.setState({ actives, labels });
+      const brothers = localStorage.getItem('brothersArray');
+      this.setState({ brothers, filteredBrothers: brothers });
     }
   }
 
   get body(): Node {
-    const { actives, labels } = this.state;
+    const { filteredBrothers, filterSubgroups } = this.state;
     const groups = [];
-    if (!actives || !labels) {
+    let index = 0;
+
+    if (!filteredBrothers) {
       return null;
     }
-    labels.forEach((label, index) => {
-      const group = (
-        <div key={index}>
-          { this.header(label, index) }
 
+    filterSubgroups.forEach((subgroup) => {
+      const includesBrother = filteredBrothers.some((brother) => (
+        this.checkCondition(brother, subgroup)
+      ));
+
+      if (!includesBrother) {
+        return null
+      }
+
+      const group = (
+        <Fragment key={index}>
+          { this.header(subgroup, index++) }
           <List className="garnett-list">
-            {actives.map((active, i) => (
-              this.checkCondition(active, label) && (
+            {filteredBrothers.map((brother, i) => (
+              this.checkCondition(brother, subgroup) && (
                 <UserRow
                   key={i}
-                  user={active}
-                  handleOpen={() => this.handleOpen(active)}
+                  user={brother}
+                  handleOpen={() => this.handleOpen(brother)}
                 />
               )
             ))}
           </List>
-        </div>
+        </Fragment>
       );
+
       groups.push(group);
     })
     return groups;
   }
 
   get modalTitle(): string {
-    switch (this.state.filter) {
+    switch (this.state.filterKey) {
       case 'active':
         return 'Active';
       case 'alumni':
@@ -108,12 +122,12 @@ export class Contacts extends PureComponent<{}, State> {
     }
   }
 
-  header = (label: string, index: number): Node => {
+  header = (subgroup: string, index: number): Node => {
     if (index === 0) {
       return (
         <FilterHeader
           className="garnett-subheader contacts"
-          title={label}
+          title={subgroup}
           filterName={this.state.filterName}
           openPopover={this.openPopover}
           isReversed={this.state.reverse}
@@ -123,30 +137,53 @@ export class Contacts extends PureComponent<{}, State> {
     }
     return (
       <Subheader className="garnett-subheader contacts">
-        { label }
+        { subgroup }
       </Subheader>
     )
   }
 
-  checkCondition(active: User, label: string): boolean {
-    switch (this.state.filter) {
+  setSearchedName = (event: SyntheticEvent<>) => {
+    const searchedName = event.target.value;
+    const { brothers, filteredBrothers } = this.state;
+    let result = [];
+
+    if (searchedName === '') {
+      result = brothers;
+    } else {
+      filteredBrothers.forEach((user) => {
+        const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
+        if (userName.startsWith(searchedName.toLowerCase())) {
+          result.push(user);
+        }
+      });
+    }
+
+    this.setState({ filteredBrothers: result, searchedName });
+  }
+
+  checkCondition(brother: User, subgroup: string): boolean {
+    if (!brother) {
+      return false;
+    }
+
+    switch (this.state.filterKey) {
       case 'active':
-        return active.status !== 'alumni' && active.class === label;
+        return brother.status !== 'alumni' && brother.class === subgroup;
       case 'alumni':
-        return active.status === 'alumni' && active.class === label;
+        return brother.status === 'alumni' && brother.class === subgroup;
       case 'firstName':
-        return active.firstName.startsWith(label);
+        return brother.firstName.startsWith(subgroup);
       case 'lastName':
-        return active.lastName.startsWith(label);
+        return brother.lastName.startsWith(subgroup);
       default:
-        return active[this.state.filter] === label;
+        return brother[this.state.filterKey] === subgroup;
     }
   }
 
-  handleOpen = (active: User) => {
+  handleOpen = (selectedBrother: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
-    this.setState({ active, open: true });
+    this.setState({ selectedBrother, open: true });
   }
 
   handleClose = () => {
@@ -168,55 +205,62 @@ export class Contacts extends PureComponent<{}, State> {
   closePopover = () => this.setState({ openPopover: false });
 
   setFilter = (filterName: FilterName) => {
-    let filter = filterName.replace(/ /g, '');
+    let filterKey = filterName.replace(/ /g, '');
     // Make first letter of filter lower cased
-    filter = filter[0].toLowerCase() + filter.substr(1);
-    let labelFilter = filter;
+    filterKey = filterKey[0].toLowerCase() + filterKey.substr(1);
+    let group = filterKey;
 
     switch (filterName) {
       case 'Active':
-        labelFilter = 'active';
+        group = 'active';
         break
       case 'Alumni':
-        labelFilter = 'class';
+        group = 'class';
         break
       case 'First Name':
       case 'Last Name':
-        labelFilter = 'name';
+        group = 'name';
         break
       case 'Personality Type':
-        filter = 'mbti';
-        labelFilter = 'mbti';
+        filterKey = 'mbti';
+        group = 'mbti';
         break
       default:
     }
 
-    const labels = filters[labelFilter];
+    const filterSubgroups = filters[group];
 
     this.setState({
-      filter,
+      filterKey,
       filterName,
-      labels,
+      filterSubgroups,
       openPopover: false,
       reverse: false
     });
   }
 
   reverse = () => {
-    const { labels, reverse } = this.state;
+    const { filterSubgroups, reverse } = this.state;
     this.setState({
-      labels: labels.reverse(),
+      filterSubgroups: filterSubgroups.reverse(),
       reverse: !reverse
     });
   }
 
   render() {
-    if (!this.state.labels || !this.state.actives) {
+    if (!this.state.brothers) {
       return <LoadingComponent />
     }
 
     return (
-      <div className="animate-in">
+      <div id="contacts-container" className="animate-in">
+        <input
+          id="search-brothers-input"
+          type="text"
+          placeholder="Name"
+          value={this.state.searchedName}
+          onChange={this.setSearchedName}
+        />
         <Filter
           open={this.state.openPopover}
           anchorEl={this.state.anchorEl}
@@ -228,10 +272,10 @@ export class Contacts extends PureComponent<{}, State> {
 
         { this.body }
 
-        {this.state.active && (
+        {this.state.selectedBrother && (
           <LoadableContactsDialog
             open={this.state.open}
-            active={this.state.active}
+            active={this.state.selectedBrother}
             title={this.modalTitle}
             handleClose={this.handleClose}
           />

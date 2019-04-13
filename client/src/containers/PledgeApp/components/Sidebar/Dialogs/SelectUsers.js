@@ -81,7 +81,6 @@ export class SelectUsers extends Component<Props, State> {
             className="select-users-input"
             type="text"
             placeholder="Name"
-            autoComplete="off"
             value={this.state.name}
             onChange={this.setName}
             onKeyDown={this.onNameKeyDown}
@@ -129,16 +128,15 @@ export class SelectUsers extends Component<Props, State> {
 
   setName = (event: SyntheticEvent<>) => {
     const name = event.target.value;
-    const { filteredUsers } = this.state;
+    const { users, filteredUsers } = this.state;
     let result = [];
 
     if (name === '') {
-      result = this.state.users;
+      result = users;
     } else {
       filteredUsers.forEach((user) => {
         const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
-        const searchedName = name.toLowerCase();
-        if (userName.startsWith(searchedName)) {
+        if (userName.startsWith(name.toLowerCase())) {
           result.push(user);
         }
       });
@@ -223,7 +221,7 @@ export class SelectUsers extends Component<Props, State> {
 
   render() {
     const { status } = this.props.state;
-    const { filteredUsers, selectedUsers, showAlumni } = this.state;
+    const { filteredUsers, showAlumni } = this.state;
     const isPledge = status === 'pledge';
     return (
       <div id="merit-select-users-container">
@@ -231,7 +229,6 @@ export class SelectUsers extends Component<Props, State> {
         <div id="merit-dialog-list-container">
           <MeritDialogList
             users={filteredUsers}
-            selectedUsers={selectedUsers}
             isPledge={isPledge}
             showAlumni={isPledge && showAlumni}
             selectUser={this.selectUser}

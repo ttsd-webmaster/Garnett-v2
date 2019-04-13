@@ -15,24 +15,23 @@ exports.get_auth_status = function(req, res) {
   });
 };
 
-// Query for active data
-exports.get_actives = function(req, res) {
+// Query for brothers data
+exports.get_brothers = function(req, res) {
   const usersRef = admin.database().ref('/users');
-  let activeArray = [];
+  const brothersArray = [];
 
   usersRef.once('value', (users) => {
-    users.forEach((child) => {
-      if (child.val().status !== 'pledge') {
-        activeArray.push(child.val());
+    users.forEach((user) => {
+      if (user.val().status !== 'pledge') {
+        brothersArray.push(user.val());
       }
     });
 
-    activeArray.sort((a, b) => {
+    brothersArray.sort((a, b) => {
       return a.lastName > b.lastName ? 1 : -1;
     });
 
-    console.log("Active array: ", activeArray);
-    res.json(activeArray);
+    res.json(brothersArray);
   });
 };
 

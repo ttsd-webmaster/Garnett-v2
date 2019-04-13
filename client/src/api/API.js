@@ -12,8 +12,8 @@ export default {
     const params = { displayName };
     return axios.get('/api/auth', { params });
   },
-  getActives: function() {
-    return axios.get('/api/actives');
+  getBrothers: function() {
+    return axios.get('/api/brothers');
   },
   getPledgeMerits: function(pledgeName: string) {
     const params = { pledgeName };

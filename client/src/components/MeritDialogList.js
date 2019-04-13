@@ -12,7 +12,6 @@ import CircularProgress from 'material-ui/CircularProgress';
 
 type Props = {
   users: ?User,
-  selectedUsers: Array<User>,
   isPledge: boolean,
   showAlumni?: boolean,
   selectUser: () => void,
@@ -38,7 +37,7 @@ export class MeritDialogList extends Component<Props> {
   }
 
   get body(): Node {
-    const { users, selectedUsers, selectUser } = this.props;
+    const { users, selectUser } = this.props;
     if (!users) {
       return (
         <div id="fetching-users">
@@ -55,25 +54,13 @@ export class MeritDialogList extends Component<Props> {
     }
     return (
       <List className="garnett-list merit-select">
-        {users.map((user, i) => {
-          const userName = user.firstName + user.lastName;
-          const includesUser = selectedUsers.find((selectedUser) => {
-            const selectedUserName = selectedUser.firstName + selectedUser.lastName;
-            return userName === selectedUserName;
-          });
-
-          if (includesUser) {
-            return null;
-          } else {
-            return (
-              <MeritDialogUserRow
-                key={i}
-                user={user}
-                selectUser={() => selectUser(user)}
-              />
-            )
-          }
-        })}
+        {users.map((user, i) => (
+          <MeritDialogUserRow
+            key={i}
+            user={user}
+            selectUser={() => selectUser(user)}
+          />
+        ))}
       </List>
     )
   }
