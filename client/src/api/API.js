@@ -78,8 +78,8 @@ export default {
   createMerit: function(params: MeritInfo) {
     return axios.put('/api/merit/create', params);
   },
-  deleteMerit: function(displayName: string, merit: Merit) {
-    return axios.put('/api/merit/delete', { displayName, merit });
+  deleteMerit: function(displayName: string, meritToDelete: Merit) {
+    return axios.put('/api/merit/delete', { displayName, meritToDelete });
   },
 
   // Chalkboards

@@ -241,7 +241,7 @@ exports.create_merit = function(req, res) {
       );
 
       if (shouldCountTowardsMeritCap) {
-        if (merit.amount > user.remainingMerits && !res.headersSent) {
+        if ((merit.amount > user.remainingMerits) && !res.headersSent) {
           const userName = `${user.firstName} ${user.lastName}`;
           return res.status(400).send(userName);
         } else {
@@ -282,51 +282,27 @@ exports.create_merit = function(req, res) {
 
 // Deletes merit
 exports.delete_merit = function(req, res) {
-  const pledgeName = req.body.merit.pledgeName.replace(/ /g,'');
-  const activeName = req.body.merit.activeName.replace(/ /g,'');
+  const { displayName, meritToDelete } = req.body;
+  const activeName = meritToDelete.activeName.replace(/ /g, '');
+  const pledgeName = meritToDelete.pledgeName.replace(/ /g, '');
   const meritsRef = admin.database().ref('/merits');
-  const pledgeRef = admin.database().ref(`/users/${pledgeName}`);
-  const activeRef = admin.database().ref(`/users/${activeName}`);
+  const activePledgeMeritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName}`);
+
+  if (displayName !== activeName) {
+    return res.sendStatus(400);
+  }
 
   meritsRef.once('value', (merits) => {
     merits.forEach((merit) => {
       // Find the merit in the merits list
-      if (equal(merit.val(), req.body.merit)) {
+      if (equal(merit.val(), meritToDelete)) {
         // Remove the merit from all merits list
         merit.ref.remove(() => {
-          pledgeRef.once('value', (pledge) => {
-            const pledgeMerits = Object.keys(pledge.val().Merits).map(function(key) {
-              return [pledge.val().Merits[key], key];
-            });
-
-            // Search for the merit reference in the pledge's merits
-            pledgeMerits.forEach((pledgeMerit) => {
-              if (pledgeMerit[0] === merit.key) {
-                // Remove the merit from the pledge's merits
-                pledgeRef.child('Merits').child(pledgeMerit[1]).remove(() => {
-                  activeRef.once('value', (active) => {
-                    const activeMerits = Object.keys(active.val().Merits).map(function(key) {
-                      return [active.val().Merits[key], key];
-                    });
-
-                    // Search for the merit reference in the active's merits
-                    activeMerits.forEach((activeMerit) => {
-                      if (activeMerit[0] === merit.key) {
-                        // Remove the merit from the active's merits
-                        activeRef.child('Merits').child(activeMerit[1]).remove(() => {
-                          // Update the active's remaining merits for the pledge
-                          activeRef.child('Pledges').child(pledgeName).update({
-                            merits: active.val().Pledges[pledgeName].merits + req.body.merit.amount
-                          });
-
-                          res.sendStatus(200);
-                        })
-                      }
-                    })
-                  });
-                })
-              }
-            })
+          activePledgeMeritsRef.child('merits').once('value', (meritCount) => {
+            const updatedMeritCount = meritCount.val() + meritToDelete.amount;
+            // Update the active's remaining merits for the pledge
+            activePledgeMeritsRef.update({ merits: updatedMeritCount });
+            res.sendStatus(200);
           });
         })
       }
