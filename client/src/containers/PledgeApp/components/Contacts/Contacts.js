@@ -144,13 +144,17 @@ export class Contacts extends PureComponent<{}, State> {
 
   setSearchedName = (event: SyntheticEvent<>) => {
     const searchedName = event.target.value;
-    const { brothers, filteredBrothers } = this.state;
+    const { brothers } = this.state;
     let result = [];
+
+    if (!brothers) {
+      return;
+    }
 
     if (searchedName === '') {
       result = brothers;
     } else {
-      filteredBrothers.forEach((user) => {
+      brothers.forEach((user) => {
         const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
         if (userName.startsWith(searchedName.toLowerCase())) {
           result.push(user);

@@ -137,16 +137,28 @@ export class SelectUsers extends Component<Props, State> {
 
   setName = (event: SyntheticEvent<>) => {
     const name = event.target.value;
-    const { filteredUsers } = this.state;
+    const { users, selectedUsers } = this.state;
+    let remainingUsers = [];
     let result = [];
 
+    if (!users) {
+      return;
+    }
+
+    // Add the remaining users to an array
+    users.forEach((user) => {
+      if (!selectedUsers.includes(user)) {
+        remainingUsers.push(user);
+      }
+    });
+
+    // If searched name is empty, return the remaining users
     if (name === '') {
-      result = this.state.users;
+      result = remainingUsers;
     } else {
-      filteredUsers.forEach((user) => {
+      remainingUsers.forEach((user) => {
         const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
-        const searchedName = name.toLowerCase();
-        if (userName.startsWith(searchedName)) {
+        if (userName.startsWith(name.toLowerCase())) {
           result.push(user);
         }
       });
@@ -180,14 +192,14 @@ export class SelectUsers extends Component<Props, State> {
   selectUser = (user: User) => {
     // Only allow selection if active has enough merits
     if (this.props.amount <= user.remainingMerits) {
-      let { filteredUsers, selectedUsers } = this.state;
-      selectedUsers.push(user);
-      filteredUsers = filteredUsers.filter((currentUser) => {
+      let { users, selectedUsers } = this.state;
+      const filteredUsers = users.filter((currentUser) => {
         const userDisplayName = user.firstName + user.lastName;
         const currentUserName = currentUser.firstName + currentUser.lastName;
         return userDisplayName !== currentUserName;
       });
-      this.setState({ selectedUsers, filteredUsers });
+      selectedUsers.push(user);
+      this.setState({ filteredUsers, selectedUsers, name: '' });
     } else {
       const userName = `${user.firstName} ${user.lastName}`;
       this.props.handleRequestOpen(`Not enough merits for ${userName}.`);
@@ -202,11 +214,20 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   deselectUser = (user: User) => {
-    let { filteredUsers, selectedUsers } = this.state;
+    const { filteredUsers, name } = this.state;
+    const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    let { selectedUsers } = this.state;
+
     selectedUsers = selectedUsers.filter((currentUser) => {
       return currentUser !== user;
     });
-    filteredUsers.push(user);
+
+    // Add the deselected user to the list if their name matches searched name
+    if (userName.startsWith(name.toLowerCase())) {
+      filteredUsers.push(user);
+      filteredUsers.sort((a, b) => a.firstName.localeCompare(b.firstName));
+    }
+
     this.setState({ filteredUsers, selectedUsers });
   }
 
