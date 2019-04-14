@@ -80,6 +80,7 @@ export class SelectUsers extends Component<Props, State> {
               className="merit-input name"
               type="text"
               placeholder="Name"
+              autoComplete="off"
               onChange={this.setName}
               onKeyDown={this.onNameKeyDown}
               value={name}
@@ -98,6 +99,7 @@ export class SelectUsers extends Component<Props, State> {
             className="merit-input"
             type="text"
             placeholder="Description"
+            autoComplete="off"
             value={description}
             disabled={this.props.type === 'standardized'}
             onChange={this.setDescription}

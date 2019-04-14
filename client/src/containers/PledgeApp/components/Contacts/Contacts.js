@@ -258,6 +258,7 @@ export class Contacts extends PureComponent<{}, State> {
           id="search-brothers-input"
           type="text"
           placeholder="Name"
+          autoComplete="off"
           value={this.state.searchedName}
           onChange={this.setSearchedName}
         />
