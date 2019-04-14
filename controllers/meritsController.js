@@ -205,71 +205,61 @@ exports.get_chalkboards_merit = function(req, res) {
 
 // Create merit
 exports.create_merit = function(req, res) {
-  const {
-    displayName,
-    selectedUsers,
-    merit,
-    status
-  } = req.body;
-  const usersRef = admin.database().ref('/users');
+  const { user, selectedUsers, merit } = req.body;
   const platform = useragent.parse(req.headers['user-agent']).toString();
+  const meritsRef = admin.database().ref('/merits');
   let counter = 0;
 
-  selectedUsers.forEach((user) => {
-    const userDisplayName = user.firstName + user.lastName;
+  selectedUsers.forEach((selectedUser) => {
+    const selectedDisplayName = selectedUser.firstName + selectedUser.lastName;
     let active;
     let pledge;
-    if (status === 'pledge') {
-      active = userDisplayName;
-      pledge = displayName;
+    if (user.status === 'pledge') {
+      active = selectedUser;
+      pledge = user;
+      active.displayName = selectedDisplayName;
     } else {
-      active = displayName;
-      pledge = userDisplayName;
+      active = user;
+      pledge = selectedUser;
+      pledge.displayName = selectedDisplayName;
     }
-    const activeRef = usersRef.child(active);
-    const pledgeRef = usersRef.child(pledge);
 
-    activeRef.once('value', (active) => {
-      const nonPCStandardizedMerit = merit.type === 'standardized' && merit.description !== 'PC Merits';
-      const shouldCountTowardsMeritCap = (
-        status !== 'pipm' && (merit.type === 'personal' || nonPCStandardizedMerit)
-      );
+    const nonPCStandardizedMerit = merit.type === 'standardized' && merit.description !== 'PC Merits';
+    const shouldCountTowardsMeritCap = (
+      user.status !== 'pipm' && (merit.type === 'personal' || nonPCStandardizedMerit)
+    );
 
-      if (shouldCountTowardsMeritCap) {
-        if ((merit.amount > user.remainingMerits) && !res.headersSent) {
-          const userName = `${user.firstName} ${user.lastName}`;
-          return res.status(400).send(userName);
-        } else if (!res.headersSent) {
-          const pledgeName = pledge.firstName + pledge.lastName;
-          const activePledgeRef = active.ref.child(`/Pledges/${pledgeName}`);
-          const merits = users.remainingMerits - merit.amount;
-          activePledgeRef.update({ merits });
-        }
+    // Update active's merit count if not pi or pm
+    if (shouldCountTowardsMeritCap) {
+      if ((merit.amount > selectedUser.remainingMerits) && !res.headersSent) {
+        const userName = `${selectedUser.firstName} ${selectedUser.lastName}`;
+        return res.status(400).send(userName);
+      } else if (!res.headersSent) {
+        const activePledgeRef = admin.database().ref(`/users/${active.displayName}/Pledges/${pledge.displayName}`);
+        const merits = selectedUser.remainingMerits - merit.amount;
+        activePledgeRef.update({ merits });
       }
+    }
 
-      pledgeRef.once('value', (pledge) => {
-        if (status === 'pledge') {
-          merit.activeName = `${active.val().firstName} ${active.val().lastName}`;
-          merit.activePhoto = active.val().photoURL;
-          merit.platform = platform;
-        } else {
-          merit.pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
-          merit.pledgePhoto = pledge.val().photoURL;
-          merit.platform = platform;
-        }
+    if (user.status === 'pledge') {
+      merit.activeName = `${active.firstName} ${active.lastName}`;
+      merit.activePhoto = active.photoURL;
+      merit.platform = platform;
+    } else {
+      merit.pledgeName = `${pledge.firstName} ${pledge.lastName}`;
+      merit.pledgePhoto = pledge.photoURL;
+      merit.platform = platform;
+    }
 
-        const meritsRef = admin.database().ref('/merits');
-        meritsRef.push(merit);
-        counter++;
+    meritsRef.push(merit);
+    counter++;
 
-        if ((counter === selectedUsers.length) && !res.headersSent) {
-          res.sendStatus(200);
-        } else {
-          res.status(400).send('Error');
-        }
-      });
-    });
-  })
+    if ((counter === selectedUsers.length) && !res.headersSent) {
+      res.sendStatus(200);
+    } else {
+      res.status(400).send('Error');
+    }
+  });
 };
 
 // Deletes merit

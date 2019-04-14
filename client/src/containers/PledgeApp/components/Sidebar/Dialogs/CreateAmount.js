@@ -196,13 +196,7 @@ export class CreateAmount extends Component<Props, State> {
       merit.activePhoto = photoURL;
     }
 
-    const meritInfo = {
-      type,
-      displayName,
-      merit,
-      selectedUsers: users,
-      status
-    }
+    const meritInfo = { user: state, selectedUsers: users, merit };
 
     this.openProgressDialog();
 

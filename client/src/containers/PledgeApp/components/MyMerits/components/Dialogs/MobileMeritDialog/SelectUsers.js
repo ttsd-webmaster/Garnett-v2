@@ -230,14 +230,14 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   merit = () => {
+    const { state, type, amount } = this.props;
+    const { selectedUsers } = this.state;
     const {
       displayName,
       name,
       photoURL,
       status
-    } = this.props.state;
-    const { selectedUsers } = this.state;
-    const { type, amount } = this.props;
+    } = state;
     const action = amount > 0 ? 'Merited' : 'Demerited';
     let { description, date } = this.state;
 
@@ -265,7 +265,7 @@ export class SelectUsers extends Component<Props, State> {
       merit.activePhoto = photoURL;
     }
 
-    const meritInfo = { displayName, selectedUsers, merit, status };
+    const meritInfo = { user: state, selectedUsers, merit };
 
     this.openProgressDialog();
 

@@ -55,8 +55,7 @@ export type Merit = {
 };
 
 export type MeritInfo = {
-  displayName: string,
+  user: User,
   selectedUsers: Array<Object>, // TODO: Change Object to Pledge type
-  merit: ActiveMerit | PledgeMerit,
-  status: string
+  merit: ActiveMerit | PledgeMerit
 };
