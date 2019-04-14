@@ -213,7 +213,7 @@ exports.create_merit = function(req, res) {
   } = req.body;
   const usersRef = admin.database().ref('/users');
   const platform = useragent.parse(req.headers['user-agent']).toString();
-  const activesToUpdate = [];
+  let counter = 0;
 
   selectedUsers.forEach((user) => {
     const userDisplayName = user.firstName + user.lastName;
@@ -239,10 +239,11 @@ exports.create_merit = function(req, res) {
         if ((merit.amount > user.remainingMerits) && !res.headersSent) {
           const userName = `${user.firstName} ${user.lastName}`;
           return res.status(400).send(userName);
-        } else {
+        } else if (!res.headersSent) {
           const pledgeName = pledge.firstName + pledge.lastName;
           const activePledgeRef = active.ref.child(`/Pledges/${pledgeName}`);
-          activesToUpdate.push([activePledgeRef, user.remainingMerits]);
+          const merits = users.remainingMerits - merit.amount;
+          activePledgeRef.update({ merits });
         }
       }
 
@@ -259,13 +260,9 @@ exports.create_merit = function(req, res) {
 
         const meritsRef = admin.database().ref('/merits');
         meritsRef.push(merit);
+        counter++;
 
-        if (!res.headersSent && activesToUpdate.length === selectedUsers.length) {
-          activesToUpdate.forEach((activeToUpdate) => {
-            const activeRef = activeToUpdate[0];
-            const remainingMerits = activeToUpdate[1];
-            activeRef.update({ merits: remainingMerits });
-          });
+        if ((counter === selectedUsers.length) && !res.headersSent) {
           res.sendStatus(200);
         } else {
           res.status(400).send('Error');
