@@ -87,23 +87,21 @@ export class CreateAmount extends Component<Props, State> {
   }
 
   changeAmount = (event: SyntheticEvent<>) => {
+    const numbersRegex = /^[0-9]+$/;
+    const { value } = event.target;
+    let { type, amount } = this.state;
+
     // Standardized merits stay constant
-    if (this.state.type === 'standardized') {
+    if (type === 'standardized' || (!numbersRegex.test(value) && value)) {
       return this.vibrate();
     }
 
-    const numbersRegex = /^[0-9]+$/;
-    const { value } = event.target;
-    let { amount } = this.state;
-
-    if (numbersRegex.test(value) || !value) {
-      if ((amount.length === 1 && amount !== '0') && !value) {
-        amount = '0';
-      } else {
-        amount = value;
-        // Remove leading zeroes
-        amount = amount.replace(/^[0.]+/, '');
-      }
+    if ((amount.length === 1 && amount !== '0') && !value) {
+      amount = '0';
+    } else {
+      amount = value;
+      // Remove leading zeroes
+      amount = amount.replace(/^[0.]+/, '');
     }
 
     if (this.amountValid(amount)) {
