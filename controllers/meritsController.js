@@ -205,19 +205,22 @@ exports.get_chalkboards_merit = function(req, res) {
 
 // Create merit
 exports.create_merit = function(req, res) {
-  const { user, selectedUsers, merit } = req.body;
+  const { user, selectedUsers } = req.body;
   const platform = useragent.parse(req.headers['user-agent']).toString();
   const meritsRef = admin.database().ref('/merits');
   const activesThatMerited = [];
   const meritsToAdd = [];
 
-  // Set the merit's platform for tracking
-  merit.platform = platform;
-
   selectedUsers.forEach((selectedUser) => {
+    const merit = Object.assign({}, req.body.merit);
     const selectedDisplayName = selectedUser.firstName + selectedUser.lastName;
     let active;
     let pledge;
+
+    // Set the merit's platform for tracking
+    merit.platform = platform;
+
+    // Set the pledge and the active based on who is creating the merits
     if (user.status === 'pledge') {
       active = selectedUser;
       pledge = user;
