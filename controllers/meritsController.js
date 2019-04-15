@@ -236,7 +236,7 @@ exports.create_merit = function(req, res) {
       merit.description !== 'PC Merits'
     );
     const shouldCountTowardsMeritCap = (
-      user.status !== 'pipm' &&
+      active.status !== 'pipm' &&
       (merit.type === 'personal' || nonPCStandardizedMerit)
     );
 
