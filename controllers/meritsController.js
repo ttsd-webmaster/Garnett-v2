@@ -210,6 +210,7 @@ exports.create_merit = function(req, res) {
   const meritsRef = admin.database().ref('/merits');
   const activesThatMerited = [];
   const meritsToAdd = [];
+  let notEnoughMeritsUser;
 
   selectedUsers.forEach((selectedUser) => {
     const merit = Object.assign({}, req.body.merit);
@@ -244,7 +245,7 @@ exports.create_merit = function(req, res) {
     if (shouldCountTowardsMeritCap) {
       if (merit.amount > selectedUser.remainingMerits) {
         const userName = `${selectedUser.firstName} ${selectedUser.lastName}`;
-        return res.status(400).send(userName);
+        notEnoughMeritsUser = userName;
       } else {
         const activePledgeRef = admin.database().ref(`/users/${active.displayName}/Pledges/${pledge.displayName}`);
         const updatedMerits = selectedUser.remainingMerits - merit.amount;
@@ -266,20 +267,20 @@ exports.create_merit = function(req, res) {
   });
 
   // If all users have enough merits to give, add the merits to the DB
-  if (!res.headersSent) {
+  if (notEnoughMeritsUser) {
+    res.status(400).send(notEnoughMeritsUser);
+  } else {
+    // Add the merits to the DB
     meritsToAdd.forEach((merit) => {
       meritsRef.push(merit);
     });
-
+    // Update the actives' remaining merits
     activesThatMerited.forEach((activeThatMerited) => {
       const activePledgeRef = activeThatMerited[0];
       const merits = activeThatMerited[1];
       activePledgeRef.update({ merits });
     });
-
     res.sendStatus(200);
-  } else {
-    res.status(400).send('Error');
   }
 };
 
