@@ -208,7 +208,11 @@ exports.create_merit = function(req, res) {
   const { user, selectedUsers, merit } = req.body;
   const platform = useragent.parse(req.headers['user-agent']).toString();
   const meritsRef = admin.database().ref('/merits');
-  let counter = 0;
+  const activesThatMerited = [];
+  const meritsToAdd = [];
+
+  // Set the merit's platform for tracking
+  merit.platform = platform;
 
   selectedUsers.forEach((selectedUser) => {
     const selectedDisplayName = selectedUser.firstName + selectedUser.lastName;
@@ -224,42 +228,56 @@ exports.create_merit = function(req, res) {
       pledge.displayName = selectedDisplayName;
     }
 
-    const nonPCStandardizedMerit = merit.type === 'standardized' && merit.description !== 'PC Merits';
+    const nonPCStandardizedMerit = (
+      merit.type === 'standardized' &&
+      merit.description !== 'PC Merits'
+    );
     const shouldCountTowardsMeritCap = (
-      user.status !== 'pipm' && (merit.type === 'personal' || nonPCStandardizedMerit)
+      user.status !== 'pipm' &&
+      (merit.type === 'personal' || nonPCStandardizedMerit)
     );
 
-    // Update active's merit count if not pi or pm
+    // Push active to array if not pi or pm
     if (shouldCountTowardsMeritCap) {
-      if ((merit.amount > selectedUser.remainingMerits) && !res.headersSent) {
+      if (merit.amount > selectedUser.remainingMerits) {
         const userName = `${selectedUser.firstName} ${selectedUser.lastName}`;
         return res.status(400).send(userName);
-      } else if (!res.headersSent) {
+      } else {
         const activePledgeRef = admin.database().ref(`/users/${active.displayName}/Pledges/${pledge.displayName}`);
-        const merits = selectedUser.remainingMerits - merit.amount;
-        activePledgeRef.update({ merits });
+        const updatedMerits = selectedUser.remainingMerits - merit.amount;
+        activesThatMerited.push([activePledgeRef, updatedMerits]);
       }
     }
 
+    // Finally, set the merit's remaining info based on the user's status
     if (user.status === 'pledge') {
       merit.activeName = `${active.firstName} ${active.lastName}`;
       merit.activePhoto = active.photoURL;
-      merit.platform = platform;
     } else {
       merit.pledgeName = `${pledge.firstName} ${pledge.lastName}`;
       merit.pledgePhoto = pledge.photoURL;
-      merit.platform = platform;
     }
 
-    meritsRef.push(merit);
-    counter++;
-
-    if ((counter === selectedUsers.length) && !res.headersSent) {
-      res.sendStatus(200);
-    } else {
-      res.status(400).send('Error');
-    }
+    // Add merit to array of merits to add to DB
+    meritsToAdd.push(merit);
   });
+
+  // If all users have enough merits to give, add the merits to the DB
+  if (!res.headersSent) {
+    meritsToAdd.forEach((merit) => {
+      meritsRef.push(merit);
+    });
+
+    activesThatMerited.forEach((activeThatMerited) => {
+      const activePledgeRef = activeThatMerited[0];
+      const merits = activeThatMerited[1];
+      activePledgeRef.update({ merits });
+    });
+
+    res.sendStatus(200);
+  } else {
+    res.status(400).send('Error');
+  }
 };
 
 // Deletes merit
