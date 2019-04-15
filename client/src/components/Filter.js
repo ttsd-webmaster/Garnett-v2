@@ -15,23 +15,31 @@ type Props = {
 };
 
 export function Filter(props: Props) {
+  const {
+    open,
+    anchorEl,
+    closePopover,
+    filters,
+    filterName,
+    setFilter
+  } = props;
   return (
     <Popover
-      open={props.open}
-      anchorEl={props.anchorEl}
+      open={open}
+      anchorEl={anchorEl}
       anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
-      onRequestClose={props.closePopover}
+      onRequestClose={closePopover}
       animation={PopoverAnimationVertical}
     >
       <Menu>
-        {props.filters.map((filter) => (
+        {filters.map((filter) => (
           <MenuItem
             key={filter}
             primaryText={filter}
             insetChildren
-            checked={filter === props.filterName}
-            onClick={() => props.setFilter(filter)}
+            checked={filter === filterName}
+            onClick={() => setFilter(filter)}
           />
         ))}
       </Menu>

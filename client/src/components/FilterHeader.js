@@ -28,7 +28,7 @@ export function FilterHeader(props: Props) {
         <span className="garnett-filter-container">
           {filterName && openPopover && (
             <span className="garnett-filter" onClick={openPopover}>
-              {filterName}
+              { filterName }
             </span>
           )}
           {reverse && (

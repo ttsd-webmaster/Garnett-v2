@@ -35,6 +35,45 @@ exports.get_brothers = function(req, res) {
   });
 };
 
+// Query for pledges data
+exports.get_pledges = function(req, res) {
+  const { displayName } = req.query;
+  const usersRef = admin.database().ref('/users');
+  const meritsRef = admin.database().ref('/merits');
+
+  usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
+    if (!pledges.val()) {
+      return res.status(400).send('No pledges found.');
+    }
+    const pledgesArray = Object.keys(pledges.val()).map(function(key) {
+      if (pledges.val()[key] !== displayName) {
+        return pledges.val()[key];
+      }
+    });
+
+    meritsRef.once('value', (merits) => {
+      // Set all the pledge's total merits
+      pledgesArray.forEach((pledge) => {
+        const searchedName = pledge.firstName + pledge.lastName;
+        let totalMerits = 0;
+        // Retrieves the pledge's total merits by searching for the key in
+        // the Merits table
+        if (merits.val()) {
+          merits.forEach((merit) => {
+            const { pledgeName } = merit.val();
+            if (searchedName === pledgeName.replace(/ /g, '')) {
+              totalMerits += merit.val().amount;
+            }
+          });
+        }
+        pledge.totalMerits = totalMerits;
+      });
+
+      res.json(pledgesArray);
+    });
+  });
+};
+
 // Query for the specified pledge's merits
 exports.get_pledge_merits = function(req, res) {
   const { pledgeName } = req.query;

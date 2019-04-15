@@ -70,43 +70,6 @@ exports.get_pledges_as_active_mobile = function(req, res) {
   });
 };
 
-// Get Pbros data for pledges
-exports.get_pbros_as_pledge = function(req, res) {
-  const { displayName } = req.query;
-  const usersRef = admin.database().ref('/users');
-  const meritsRef = admin.database().ref('/merits');
-
-  usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
-    if (!pledges.val()) {
-      return res.status(400).send('No pledges found.');
-    }
-    pledges = Object.keys(pledges.val()).map(function(key) {
-      if (pledges.val()[key] !== displayName) {
-        return pledges.val()[key];
-      }
-    });
-
-    meritsRef.once('value', (merits) => {
-      // Set all the pledge's total merits
-      pledges.forEach((pledge) => {
-        let totalMerits = 0;
-        // Retrieves the pledge's total merits by searching for the key in
-        // the Merits table
-        if (merits.val() && pledge.Merits) {
-          Object.keys(pledge.Merits).forEach(function(key) {
-            if (merits.val()[pledge.Merits[key]]) {
-              totalMerits += merits.val()[pledge.Merits[key]].amount;
-            }
-          });
-        }
-        pledge.totalMerits = totalMerits;
-      });
-
-      res.json(pledges);
-    });
-  });
-};
-
 // Gets all the actives for meriting as pledge
 exports.get_actives_as_pledge = function(req, res) {
   const { displayName, showAlumni } = req.query;

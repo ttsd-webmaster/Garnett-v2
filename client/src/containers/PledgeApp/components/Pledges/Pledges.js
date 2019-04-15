@@ -35,7 +35,6 @@ type State = {
   pledges: ?Array<User>,
   pledge: ?User,
   filter: string,
-  filterName: string,
   reverse: boolean,
   openPledge: boolean,
   openPopover: boolean,
@@ -48,7 +47,6 @@ export class Pledges extends PureComponent<Props, State> {
     pledges: null,
     pledge: null,
     filter: 'lastName',
-    filterName: 'Last Name',
     reverse: false,
     openPledge: false,
     openPopover: false,
@@ -60,78 +58,28 @@ export class Pledges extends PureComponent<Props, State> {
       this.setState({ loaded: true });
       return
     }
-    if (this.props.state.status === 'pledge') {
-      API.getPbros(this.props.state.displayName)
-      .then(res => {
-        let pledges = res.data;
-        const { filter } = this.state;
-        // Sort the pledges based on the selected filter
-        if (this.state.filterName === 'Total Merits') {
-          pledges = pledges.sort(function(a, b) {
-            return a[filter] < b[filter] ? 1 : -1;
-          });
-        } else {
-          pledges = pledges.sort(function(a, b) {
-            return a[filter] >= b[filter] ? 1 : -1;
-          });
-        }
-
-        localStorage.setItem('pbros', JSON.stringify(pledges));
-        this.setState({ pledges, loaded: true });
-      })
-      .catch(error => {
-        console.error(`Error: ${error}`);
-        this.setState({ loaded: true });
-      });
-    } else {
-      const firebase = window.firebase;
-      const usersRef = firebase.database().ref('/users');
-      const meritsRef = firebase.database().ref('/merits');
-
-      usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
-        if (!pledges.val()) {
-          this.setState({ pledges: null, loaded: true });
-          return
-        }
-        pledges = Object.keys(pledges.val()).map(function(key) {
-          return pledges.val()[key];
+    API.getPledges(this.props.state.displayName)
+    .then(res => {
+      let pledges = res.data;
+      const { filter } = this.state;
+      // Sort the pledges based on the selected filter
+      if (filter === 'totalMerits') {
+        pledges = pledges.sort(function(a, b) {
+          return a[filter] < b[filter] ? 1 : -1;
         });
-
-        meritsRef.on('value', (merits) => {
-          // Set all the pledge's total merits
-          pledges.forEach((pledge) => {
-            const searchedName = pledge.firstName + pledge.lastName;
-            let totalMerits = 0;
-            // Retrieves the pledge's total merits by searching for the key in
-            // the Merits table
-            if (merits.val()) {
-              merits.forEach((merit) => {
-                const { pledgeName } = merit.val();
-                if (searchedName === pledgeName.replace(/ /g, '')) {
-                  totalMerits += merit.val().amount;
-                }
-              });
-            }
-            pledge.totalMerits = totalMerits;
-          });
-
-          const { filter } = this.state;
-          // Sort the pledges based on the selected filter
-          if (this.state.filterName === 'Total Merits') {
-            pledges = pledges.sort(function(a, b) {
-              return a[filter] < b[filter] ? 1 : -1;
-            });
-          } else {
-            pledges = pledges.sort(function(a, b) {
-              return a[filter] >= b[filter] ? 1 : -1;
-            });
-          }
-
-          localStorage.setItem('pledgeArray', JSON.stringify(pledges));
-          this.setState({ pledges, loaded: true });
+      } else {
+        pledges = pledges.sort(function(a, b) {
+          return a[filter] >= b[filter] ? 1 : -1;
         });
-      });
-    }
+      }
+
+      localStorage.setItem('pbros', JSON.stringify(pledges));
+      this.setState({ pledges, loaded: true });
+    })
+    .catch(error => {
+      console.error(`Error: ${error}`);
+      this.setState({ loaded: true });
+    });
   }
 
   componentWillUnmount() {
@@ -162,6 +110,23 @@ export class Pledges extends PureComponent<Props, State> {
     )
   }
 
+  get filterLabel(): string {
+    switch (this.state.filter) {
+      case 'lastName':
+        return 'Last Name';
+      case 'firstName':
+        return 'First Name';
+      case 'year':
+        return 'Year';
+      case 'major':
+        return 'Major';
+      case 'totalMerits':
+        return 'Total Merits';
+      default:
+        return ''
+    }
+  }
+
   handleOpen = (pledge: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
@@ -187,11 +152,11 @@ export class Pledges extends PureComponent<Props, State> {
   closePopover = () => this.setState({ openPopover: false });
 
   setFilter = (filterName: string) => {
+    let { pledges } = this.state;
     let filter = filterName.replace(/ /g, '');
     filter = filter[0].toLowerCase() + filter.substr(1);
-    let { pledges } = this.state;
 
-    if (filterName === 'Total Merits') {
+    if (filter === 'totalMerits') {
       pledges = this.state.pledges.sort(function(a, b) {
         return a[filter] < b[filter] ? 1 : -1;
       });
@@ -204,7 +169,6 @@ export class Pledges extends PureComponent<Props, State> {
     this.setState({
       pledges,
       filter,
-      filterName,
       reverse: false,
       openPopover: false
     });
@@ -221,7 +185,6 @@ export class Pledges extends PureComponent<Props, State> {
     const {
       loaded,
       pledge,
-      filterName,
       reverse,
       openPledge,
       openPopover,
@@ -237,7 +200,7 @@ export class Pledges extends PureComponent<Props, State> {
         <FilterHeader
           title={state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges'}
           status={state.status}
-          filterName={filterName}
+          filterName={this.filterLabel}
           openPopover={this.openPopover}
           isReversed={reverse}
           reverse={this.reverse}
@@ -258,7 +221,7 @@ export class Pledges extends PureComponent<Props, State> {
           open={openPopover}
           anchorEl={anchorEl}
           filters={filterOptions}
-          filterName={filterName}
+          filterName={this.filterLabel}
           closePopover={this.closePopover}
           setFilter={this.setFilter}
         />

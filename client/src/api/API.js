@@ -15,6 +15,10 @@ export default {
   getBrothers: function() {
     return axios.get('/api/brothers');
   },
+  getPledges: function(displayName: string) {
+    const params = { displayName };
+    return axios.get('/api/pledges', { params });
+  },
   getPledgeMerits: function(pledgeName: string) {
     const params = { pledgeName };
     return axios.get('/api/pledge/merits', { params });
@@ -70,10 +74,6 @@ export default {
   getChalkboardsForMerit: function(fullName: string) {
     const params = { fullName };
     return axios.get('/api/merit/chalkboards', { params });
-  },
-  getPbros: function(displayName: string) {
-    const params = { displayName };
-    return axios.get('/api/merit/pledge/pbros', { params });
   },
   createMerit: function(params: MeritInfo) {
     return axios.put('/api/merit/create', params);

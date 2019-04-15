@@ -8,6 +8,7 @@ var controller = require('../controllers/indexController');
 // GET requests
 router.get('/auth', controller.get_auth_status);
 router.get('/brothers', controller.get_brothers);
+router.get('/pledges', controller.get_pledges);
 router.get('/pledge/merits', controller.get_pledge_merits);
 router.get('/pledge/complaints', controller.get_pledge_complaints);
 router.get('/photos', controller.get_photos);
