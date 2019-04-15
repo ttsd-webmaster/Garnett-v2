@@ -37,21 +37,22 @@ export class MyMeritsList extends PureComponent<Props, State> {
       return
     }
     const { firebase } = window;
-    const { displayName, status } = this.props.state;
+    const { firstName, lastName, status } = this.props.state;
+    const fullName = `${firstName} ${lastName}`;
     const meritsRef = firebase.database().ref('/merits');
+    let queriedName = 'activeName';
 
-    meritsRef.orderByChild('date').on('value', (merits) => {
+    if (status === 'pledge') {
+      queriedName = 'pledgeName';
+    }
+
+    meritsRef.orderByChild(queriedName).equalTo(fullName).on('value', (merits) => {
       let myMerits = [];
       if (merits.val()) {
-        merits.forEach((merit) => {
-          const { activeName, pledgeName } = merit.val();
-          const meritName = status === 'pledge' ? pledgeName : activeName;
-          if (displayName === meritName.replace(/ /g, '')) {
-            myMerits.push(merit.val());
-          }
-        });
+        myMerits = Object.keys(merits.val()).map(function(key) {
+          return merits.val()[key];
+        }).sort((a, b) => a.date - b.date).reverse();
       }
-      myMerits = myMerits.reverse();
       localStorage.setItem('myMerits', JSON.stringify(myMerits));
       this.setState({ myMerits, loaded: true });
     });

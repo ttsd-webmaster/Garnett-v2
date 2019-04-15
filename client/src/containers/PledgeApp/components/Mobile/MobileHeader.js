@@ -24,21 +24,29 @@ export class MobileHeader extends Component<Props, State> {
   componentDidMount() {
     if (navigator.onLine) {
       const { firebase } = window;
-      const { displayName, status } = this.props.state;
+      const { firstName, lastName, status } = this.props.state;
+      const fullName = `${firstName} ${lastName}`;
       const meritsRef = firebase.database().ref('/merits');
+      let queriedName = 'activeName';
 
-      meritsRef.on('value', (merits) => {
-        let totalMerits = 0;
-        if (merits.val()) {
-          merits.forEach((merit) => {
-            const { activeName, pledgeName } = merit.val();
-            const meritName = status === 'pledge' ? pledgeName : activeName;
-            if (displayName === meritName.replace(/ /g, '')) {
-              totalMerits += merit.val().amount;
-            }
-          });
-        }
-        localStorage.setItem('totalMerits', totalMerits);
+      if (status === 'pledge') {
+        queriedName = 'pledgeName';
+      }
+
+      const myMeritsRef = meritsRef.orderByChild(queriedName).equalTo(fullName);
+
+      myMeritsRef.on('child_added', (merit) => {
+        let { totalMerits } = this.state;
+        totalMerits += merit.val().amount;
+        this.setState({
+          totalMerits,
+          previousTotalMerits: this.state.totalMerits
+        });
+      });
+
+      myMeritsRef.on('child_removed', (merit) => {
+        let { totalMerits } = this.state;
+        totalMerits -= merit.val().amount;
         this.setState({
           totalMerits,
           previousTotalMerits: this.state.totalMerits
