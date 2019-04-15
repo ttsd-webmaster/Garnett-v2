@@ -78,7 +78,7 @@ export class SelectUsers extends Component<Props, State> {
         />
         <div id="select-name-container">
           <input
-            className="select-users-input"
+            className="select-users-input name"
             type="text"
             placeholder="Name"
             autoComplete="off"
@@ -128,11 +128,9 @@ export class SelectUsers extends Component<Props, State> {
     )
   }
 
-  setName = (event: SyntheticEvent<>) => {
-    const name = event.target.value;
+  get remainingUsers(): Array<Object> {
     const { users, selectedUsers } = this.state;
-    let remainingUsers = [];
-    let result = [];
+    const remainingUsers = [];
 
     if (!users) {
       return;
@@ -145,11 +143,18 @@ export class SelectUsers extends Component<Props, State> {
       }
     });
 
+    return remainingUsers;
+  }
+
+  setName = (event: SyntheticEvent<>) => {
+    const name = event.target.value;
+    let result = [];
+
     // If searched name is empty, return the remaining users
     if (name === '') {
-      result = remainingUsers;
+      result = this.remainingUsers;
     } else {
-      remainingUsers.forEach((user) => {
+      this.remainingUsers.forEach((user) => {
         const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
         if (userName.startsWith(name.toLowerCase())) {
           result.push(user);

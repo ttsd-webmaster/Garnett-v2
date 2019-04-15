@@ -4,6 +4,7 @@ import './Contacts.css';
 import filters from './data.js';
 import API from 'api/API';
 import {
+  isMobile,
   androidBackOpen,
   androidBackClose,
   iosFullscreenDialogOpen,
@@ -40,7 +41,8 @@ type State = {
   filterSubgroups: ?Array<string>,
   reverse: boolean,
   open: boolean,
-  openPopover: boolean
+  openPopover: boolean,
+  anchorEl: ?HTMLElement
 };
 
 export class Contacts extends PureComponent<{}, State> {
@@ -54,7 +56,8 @@ export class Contacts extends PureComponent<{}, State> {
     filterSubgroups: filters.active,
     reverse: false,
     open: false,
-    openPopover: false
+    openPopover: false,
+    anchorEl: null
   };
 
   componentDidMount() {
@@ -142,6 +145,25 @@ export class Contacts extends PureComponent<{}, State> {
     )
   }
 
+  checkCondition(brother: User, subgroup: string): boolean {
+    if (!brother) {
+      return false;
+    }
+
+    switch (this.state.filterKey) {
+      case 'active':
+        return brother.status !== 'alumni' && brother.class === subgroup;
+      case 'alumni':
+        return brother.status === 'alumni' && brother.class === subgroup;
+      case 'firstName':
+        return brother.firstName.startsWith(subgroup);
+      case 'lastName':
+        return brother.lastName.startsWith(subgroup);
+      default:
+        return brother[this.state.filterKey] === subgroup;
+    }
+  }
+
   setSearchedName = (event: SyntheticEvent<>) => {
     const searchedName = event.target.value;
     const { brothers } = this.state;
@@ -165,23 +187,8 @@ export class Contacts extends PureComponent<{}, State> {
     this.setState({ filteredBrothers: result, searchedName });
   }
 
-  checkCondition(brother: User, subgroup: string): boolean {
-    if (!brother) {
-      return false;
-    }
-
-    switch (this.state.filterKey) {
-      case 'active':
-        return brother.status !== 'alumni' && brother.class === subgroup;
-      case 'alumni':
-        return brother.status === 'alumni' && brother.class === subgroup;
-      case 'firstName':
-        return brother.firstName.startsWith(subgroup);
-      case 'lastName':
-        return brother.lastName.startsWith(subgroup);
-      default:
-        return brother[this.state.filterKey] === subgroup;
-    }
+  clearInput = () => {
+    this.setState({ filteredBrothers: this.state.brothers, searchedName: '' });
   }
 
   handleOpen = (selectedBrother: User) => {
@@ -252,35 +259,54 @@ export class Contacts extends PureComponent<{}, State> {
   }
 
   render() {
-    if (!this.state.brothers) {
+    const {
+      brothers,
+      selectedBrother,
+      searchedName,
+      filterName,
+      open,
+      openPopover,
+      anchorEl
+    } = this.state;
+
+    if (!brothers) {
       return <LoadingComponent />
     }
 
     return (
       <div id="contacts-container" className="animate-in">
-        <input
-          id="search-brothers-input"
-          type="text"
-          placeholder="Name"
-          autoComplete="off"
-          value={this.state.searchedName}
-          onChange={this.setSearchedName}
-        />
+        <div id="search-input-container">
+          <input
+            id="search-brothers-input"
+            type="text"
+            placeholder="Name"
+            autoComplete="off"
+            value={searchedName}
+            onChange={this.setSearchedName}
+          />
+          <span
+            id="clear-input"
+            className={`${(!isMobile() || !searchedName) && 'hidden'}`}
+            onClick={this.clearInput}
+          >
+            &times;
+          </span>
+        </div>
         <Filter
-          open={this.state.openPopover}
-          anchorEl={this.state.anchorEl}
+          open={openPopover}
+          anchorEl={anchorEl}
           filters={filterOptions}
-          filterName={this.state.filterName}
+          filterName={filterName}
           closePopover={this.closePopover}
           setFilter={this.setFilter}
         />
 
         { this.body }
 
-        {this.state.selectedBrother && (
+        {selectedBrother && (
           <LoadableContactsDialog
-            open={this.state.open}
-            active={this.state.selectedBrother}
+            open={open}
+            active={selectedBrother}
             title={this.modalTitle}
             handleClose={this.handleClose}
           />

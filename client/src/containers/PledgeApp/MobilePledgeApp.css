@@ -35,6 +35,7 @@
 }
 .fixed-button.hidden {
   opacity: 0;
+  visibility: hidden;
   transform: scale(0.5);
 }
 
@@ -61,4 +62,25 @@
   color: var(--text-color);
   margin-right: 5.7px;
   margin-bottom: -3px;
+}
+
+/****************** Clear Input *******************/
+#clear-input {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 30px;
+  height: 30px;
+  line-height: 25px;
+  font-size: 30px;
+  font-weight: 300;
+  color: var(--text-color);
+  text-align: center;
+  transform: translateY(-50%) scale(1);
+  transition: all 0.2s ease-in-out;
+}
+#clear-input.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-50%) scale(0.5);
 }

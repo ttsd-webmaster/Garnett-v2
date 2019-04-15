@@ -164,6 +164,12 @@
   padding: 0 10px;
 }
 
+#select-name-container {
+  position: relative;
+  max-width: 700px;
+  width: 100%;
+}
+
 #description {
   padding: 0;
   border: 0;
@@ -197,10 +203,11 @@
 
 #mobile-select-all-pledges {
   position: absolute;
-  top: 23px;
+  top: 50%;
   right: 10px;
   font-size: 14px;
   color: var(--accent-color);
+  transform: translateY(-50%);
 }
 
 #confirm-container {

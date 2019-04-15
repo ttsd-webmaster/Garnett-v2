@@ -85,9 +85,17 @@ export class SelectUsers extends Component<Props, State> {
               onKeyDown={this.onNameKeyDown}
               value={name}
             />
-            {!isPledge && !name && selectedUsers.length === 0 && (
+            {!isPledge && !name && selectedUsers.length === 0 ? (
               <span id="mobile-select-all-pledges" onClick={this.selectAllPledges}>
                 Select all pledges
+              </span>
+            ) : (
+              <span
+                id="clear-input"
+                className={`${!name && 'hidden'}`}
+                onClick={this.clearName}
+              >
+                &times;
               </span>
             )}
           </div>
@@ -131,15 +139,9 @@ export class SelectUsers extends Component<Props, State> {
     )
   }
 
-  get buttonDisabled(): boolean {
-    return !this.state.selectedUsers.length || !this.state.description;
-  }
-
-  setName = (event: SyntheticEvent<>) => {
-    const name = event.target.value;
+  get remainingUsers(): Array<Object> {
     const { users, selectedUsers } = this.state;
-    let remainingUsers = [];
-    let result = [];
+    const remainingUsers = [];
 
     if (!users) {
       return;
@@ -152,11 +154,22 @@ export class SelectUsers extends Component<Props, State> {
       }
     });
 
+    return remainingUsers;
+  }
+
+  get buttonDisabled(): boolean {
+    return !this.state.selectedUsers.length || !this.state.description;
+  }
+
+  setName = (event: SyntheticEvent<>) => {
+    const name = event.target.value;
+    let result = [];
+
     // If searched name is empty, return the remaining users
     if (name === '') {
-      result = remainingUsers;
+      result = this.remainingUsers;
     } else {
-      remainingUsers.forEach((user) => {
+      this.remainingUsers.forEach((user) => {
         const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
         if (userName.startsWith(name.toLowerCase())) {
           result.push(user);
@@ -165,6 +178,10 @@ export class SelectUsers extends Component<Props, State> {
     }
 
     this.setState({ filteredUsers: result, name });
+  }
+
+  clearName = () => {
+    this.setState({ filteredUsers: this.remainingUsers, name: '' });
   }
 
   setDescription = (event: SyntheticEvent<>) => {
