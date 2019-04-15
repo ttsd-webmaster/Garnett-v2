@@ -22,8 +22,8 @@ type Props = {
 
 type State = {
   users: ?Array<User>,
-  filteredUsers: ?Array<Object>,
-  selectedUsers: Array<Object>,
+  filteredUsers: ?Array<User>,
+  selectedUsers: Array<User>,
   name: string,
   description: string,
   date: Date,
@@ -128,7 +128,7 @@ export class SelectUsers extends Component<Props, State> {
     )
   }
 
-  get remainingUsers(): Array<Object> {
+  get remainingUsers(): Array<User> {
     const { users, selectedUsers } = this.state;
     const remainingUsers = [];
 
@@ -172,13 +172,13 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   onNameKeyDown = (event: SyntheticEvent<>) => {
-    const { filteredUsers, selectedUsers, name } = this.state;
+    const { selectedUsers, name } = this.state;
     const { keyCode } = event;
     // Remove last selected active if no name input exists and
     // there are selected users
     if ((keyCode === 8 || keyCode === 46) && !name && selectedUsers.length > 0) {
       const removedUser = selectedUsers.pop();
-      filteredUsers.push(removedUser);
+      const filteredUsers = this.addAndSortDeselectedUser(removedUser);
       this.props.setUsers(selectedUsers);
       this.setState({ filteredUsers, selectedUsers });
     }
@@ -190,8 +190,8 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   selectUser = (user: User) => {
-    let { users, selectedUsers } = this.state;
-    const filteredUsers = users.filter((currentUser) => {
+    const { selectedUsers } = this.state;
+    const filteredUsers = this.remainingUsers.filter((currentUser) => {
       const userDisplayName = user.firstName + user.lastName;
       const currentUserName = currentUser.firstName + currentUser.lastName;
       return userDisplayName !== currentUserName;
@@ -210,22 +210,26 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   deselectUser = (user: User) => {
-    const { filteredUsers, name } = this.state;
-    const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
+    const filteredUsers = this.addAndSortDeselectedUser(user);
     let { selectedUsers } = this.state;
 
     selectedUsers = selectedUsers.filter((currentUser) => {
       return currentUser !== user;
     });
 
-    // Add the deselected user to the list if their name matches searched name
+    this.props.setUsers(selectedUsers);
+    this.setState({ filteredUsers, selectedUsers });
+  }
+
+  // Add the deselected user to the list if their name matches searched name
+  addAndSortDeselectedUser(user: User): Array<Users> {
+    const { filteredUsers, name } = this.state;
+    const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
     if (userName.startsWith(name.toLowerCase())) {
       filteredUsers.push(user);
       filteredUsers.sort((a, b) => a.firstName.localeCompare(b.firstName));
     }
-
-    this.props.setUsers(selectedUsers);
-    this.setState({ filteredUsers, selectedUsers });
+    return filteredUsers;
   }
 
   toggleAlumniView = () => {

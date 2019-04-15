@@ -8,7 +8,8 @@ export type User = {
   class: string,
   major: string,
   status: string,
-  photoURL: string
+  photoURL: string,
+  remainingMerits?: number
 };
 
 export type SignUpParams = {
