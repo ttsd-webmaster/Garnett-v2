@@ -130,20 +130,20 @@ export class SelectUsers extends Component<Props, State> {
 
   get remainingUsers(): Array<User> {
     const { users, selectedUsers } = this.state;
-    const remainingUsers = [];
-
     if (!users) {
       return;
+    } else if (selectedUsers.length === 0) {
+      return users;
+    } else {
+      const remainingUsers = [];
+      // Add the remaining users to an array
+      users.forEach((user) => {
+        if (!selectedUsers.includes(user)) {
+          remainingUsers.push(user);
+        }
+      });
+      return remainingUsers;
     }
-
-    // Add the remaining users to an array
-    users.forEach((user) => {
-      if (!selectedUsers.includes(user)) {
-        remainingUsers.push(user);
-      }
-    });
-
-    return remainingUsers;
   }
 
   setName = (event: SyntheticEvent<>) => {
