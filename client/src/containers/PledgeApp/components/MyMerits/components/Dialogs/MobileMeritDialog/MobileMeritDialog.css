@@ -28,6 +28,11 @@
   }
 }
 
+.chips-container.mobile-create-amount {
+  justify-content: center;
+  padding: 64px 0 0;
+}
+
 #mobile-create-merit-amount {
   display: flex;
   justify-content: center;
@@ -47,7 +52,7 @@
 }
 
 .grid-button {
-  background-color: #fff;
+  background-color: var(--list-color);
   font-size: 25px;
   border: none;
   cursor: pointer;
@@ -88,17 +93,6 @@
   border-left: 1px solid rgb(192, 0, 31, 0.5);
 }
 
-.confirm-container {
-  background-color: #fff;
-  position: sticky;
-  bottom: 0;
-}
-
-.chips-container.mobile-create-amount {
-  justify-content: center;
-  padding: 64px 0 0;
-}
-
 /************* Select Users View **************/
 #mobile-merit-select-users-container {
   display: flex;
@@ -116,6 +110,7 @@
   --border-color: #e0e0e0;
   --text-color: rgba(0, 0, 0, 0.87);
   --text-light: rgba(0, 0, 0, 0.54);
+  --label-color: rgba(0, 0, 0, 0.3);
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
@@ -132,7 +127,7 @@
 #merit-inputs-container {
   position: sticky;
   top: 0;
-  background-color: #fff;
+  background-color: var(--list-color);
   z-index: 1;
 }
 
@@ -143,18 +138,18 @@
   width: 100%;
   min-height: 60px;
   font-size: 16px;
-  background-color: #fff;
+  background-color: var(--list-color);
   color: var(--text-color);
   padding: 0 10px;
   border: 0;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--border-color);
 }
 
 .merit-input::placeholder,
 #description::placeholder,
 .DayPickerInput > input::placeholder {
   font-weight: 300;
-  color: #ccc;
+  color: var(--label-color);
 }
 
 .merit-input.name {
@@ -178,7 +173,7 @@
   width: 100%;
 }
 .DayPickerInput > input {
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .DayPicker-Months {
@@ -206,6 +201,12 @@
   right: 10px;
   font-size: 14px;
   color: var(--accent-color);
+}
+
+#confirm-container {
+  background-color: #fff;
+  position: sticky;
+  bottom: 0;
 }
 
 /**************** Animations *****************/

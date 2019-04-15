@@ -343,7 +343,7 @@ export class SelectUsers extends Component<Props, State> {
           selectUser={this.selectUser}
           toggleAlumniView={this.toggleAlumniView}
         />
-        <div className="confirm-container">
+        <div id="confirm-container">
           <button
             className="mobile-merit-button"
             onClick={this.merit}
