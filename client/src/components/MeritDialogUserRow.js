@@ -16,6 +16,13 @@ type Props = {
 export class MeritDialogUserRow extends PureComponent<Props> {
   get userInfo(): Node {
     const { user, selectUser } = this.props;
+    const {
+      firstName,
+      lastName,
+      year,
+      major,
+      remainingMerits
+    } = user;
     return (
       <div>
         <Divider className="garnett-divider large" inset={true} />
@@ -23,19 +30,19 @@ export class MeritDialogUserRow extends PureComponent<Props> {
           className="garnett-list-item large"
           leftAvatar={<Avatar className="garnett-image large" size={70} src={user.photoURL} />}
           primaryText={
-            <p className="garnett-name"> {user.firstName} {user.lastName}</p>
+            <p className="garnett-name">{ firstName } { lastName }</p>
           }
           secondaryText={
             <p className="garnett-description">
-              {user.year}
+              { year }
               <br />
-              {user.major}
+              { major }
             </p>
           }
           secondaryTextLines={2}
           onClick={selectUser}
         >
-          <p className="pledge-merits"> {user.remainingMerits} </p>
+          <p className="pledge-merits">{ remainingMerits }</p>
         </ListItem>
         <Divider className="garnett-divider large" inset={true} />
       </div>

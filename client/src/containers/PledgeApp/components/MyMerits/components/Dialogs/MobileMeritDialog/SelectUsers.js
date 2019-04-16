@@ -50,13 +50,13 @@ export class SelectUsers extends Component<Props, State> {
   componentDidMount() {
     const { status, displayName } = this.props.state;
     if (status === 'pledge') {
-      API.getActivesForMeritMobile(displayName)
+      API.getActivesForMerit(displayName)
       .then((res) => {
         const users = res.data;
         this.setState({ users, filteredUsers: users });
       });
     } else {
-      API.getPledgesForMeritMobile(displayName)
+      API.getPledgesForMerit(displayName)
       .then((res) => {
         const users = res.data;
         this.setState({ users, filteredUsers: users });
@@ -211,9 +211,7 @@ export class SelectUsers extends Component<Props, State> {
     if (this.props.amount <= user.remainingMerits) {
       const { selectedUsers } = this.state;
       const filteredUsers = this.remainingUsers.filter((currentUser) => {
-        const userDisplayName = user.firstName + user.lastName;
-        const currentUserName = currentUser.firstName + currentUser.lastName;
-        return userDisplayName !== currentUserName;
+        return user.displayName !== currentUser.displayName;
       });
       selectedUsers.push(user);
       this.setState({ filteredUsers, selectedUsers, name: '' });
@@ -259,7 +257,7 @@ export class SelectUsers extends Component<Props, State> {
     // Show spinner while loading users
     this.setState({ filteredUsers: null });
 
-    API.getActivesForMeritMobile(displayName, !showAlumni)
+    API.getActivesForMerit(displayName, !showAlumni)
     .then((res) => {
       const users = res.data;
       this.setState({
@@ -325,9 +323,9 @@ export class SelectUsers extends Component<Props, State> {
       this.closeProgressDialog();
       this.props.handleRequestOpen(message);
 
-      API.sendPledgeMeritNotification(name, selectedUsers, amount)
+      API.sendCreatedMeritNotification(meritInfo)
       .then(res => console.log(res))
-      .catch(error => console.log(`Error: ${error}`));
+      .catch(error => console.error(`Error: ${error}`));
     })
     .catch((error) => {
       const user = error.response.data;

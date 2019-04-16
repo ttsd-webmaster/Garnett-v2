@@ -13,7 +13,7 @@ type Props = {
   state: User,
   merit: Merit,
   open: boolean,
-  handleDeleteClose: () => void,
+  handleClose: () => void,
   handleRequestOpen: () => void
 };
 
@@ -31,13 +31,17 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
 
     API.deleteMerit(displayName, merit)
     .then((res) => {
-      this.props.handleDeleteClose();
+      this.props.handleClose();
       this.props.handleRequestOpen(`Deleted merit for ${merit.pledgeName}`);
       this.setState({ deleting: false });
+
+      API.sendDeletedMeritNotification(merit)
+      .then(res => console.log(res))
+      .catch(error => console.error(`Error: ${error}`));
     })
     .catch((error) => {
       console.log(`Error: ${error}`);
-      this.props.handleDeleteClose();
+      this.props.handleClose();
       this.props.handleRequestOpen('Error deleting merit');
       this.setState({ deleting: false });
     });
@@ -52,7 +56,7 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
         label="Close"
         primary={true}
         disabled={this.state.deleting}
-        onClick={this.props.handleDeleteClose}
+        onClick={this.props.handleClose}
       />,
       <RaisedButton
         label={this.state.deleting ? spinner : 'Delete'}
@@ -67,7 +71,7 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
         actions={actions}
         contentClassName="garnett-dialog-content"
         open={this.props.open}
-        onRequestClose={this.props.handleDeleteClose}
+        onRequestClose={this.props.handleClose}
       >
         Delete Merit?
       </Dialog>

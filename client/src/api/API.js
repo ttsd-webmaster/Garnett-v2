@@ -1,8 +1,7 @@
 // @flow
 
 import axios from 'axios';
-
-import type { SignUpParams, Merit, MeritInfo } from 'api/models'
+import type { SignUpParams, Merit, MeritInfo } from 'api/models';
 
 //Search functions to connect with back-end
 export default {
@@ -59,17 +58,9 @@ export default {
     const params = { displayName };
     return axios.get('/api/merit/active/pledges', { params });
   },
-  getPledgesForMeritMobile: function(displayName: string) {
-    const params = { displayName };
-    return axios.get('/api/merit/active/pledges/mobile', { params });
-  },
   getActivesForMerit: function(displayName: string, showAlumni?: boolean) {
     const params = { displayName, showAlumni };
     return axios.get('/api/merit/pledge/actives', { params });
-  },
-  getActivesForMeritMobile: function(displayName: string, showAlumni?: boolean) {
-    const params = { displayName, showAlumni };
-    return axios.get('/api/merit/pledge/actives/mobile', { params });
   },
   getChalkboardsForMerit: function(fullName: string) {
     const params = { fullName };
@@ -136,21 +127,12 @@ export default {
     const body = { displayName, token };
     return axios.put('/api/notification/saveMessageToken', body);
   },
-  sendPledgeMeritNotification: function(
-    activeName: string,
-    pledges: Array<Object>,
-    amount: number
-  ) {
-    const body = { activeName, pledges, amount };
-    return axios.put('/api/notification/merit/activeCreated', body);
+  sendCreatedMeritNotification: function(params: MeritInfo) {
+    return axios.put('/api/notification/merit/created', params);
   },
-  sendActiveMeritNotification: function(
-    pledgeName: string,
-    actives: Array<Object>,
-    amount: number
-  ) {
-    const body = { pledgeName, actives, amount };
-    return axios.put('/api/notification/merit/pledgeCreated', body);
+  sendDeletedMeritNotification: function(merit: Merit) {
+    const body = { merit };
+    return axios.put('/api/notification/merit/deleted', body);
   },
   sendCreatedChalkboardNotification: function(chalkboardTitle: string) {
     const body = { chalkboardTitle };

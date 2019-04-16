@@ -212,9 +212,9 @@ export class CreateAmount extends Component<Props, State> {
       this.closeProgressDialog();
       this.props.handleRequestOpen(message);
 
-      API.sendPledgeMeritNotification(name, users, amount)
+      API.sendCreatedMeritNotification(meritInfo)
       .then(res => console.log(res))
-      .catch(error => console.log(`Error: ${error}`));
+      .catch(error => console.error(`Error: ${error}`));
     })
     .catch((error) => {
       const user = error.response.data;

@@ -136,7 +136,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
             open={openDelete}
             state={state}
             merit={selectedMerit}
-            handleDeleteClose={this.handleDeleteClose}
+            handleClose={this.handleDeleteClose}
             handleRequestOpen={handleRequestOpen}
           />
         )}

@@ -2,6 +2,8 @@ const admin = require("firebase-admin");
 require('@firebase/messaging');
 const equal = require('deep-equal');
 
+const DARTH_VADER_RINGTONE = [500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500];
+
 // Save message token from server
 exports.save_messaging_token = function(req, res) {
   const { displayName, token } = req.body;
@@ -11,27 +13,35 @@ exports.save_messaging_token = function(req, res) {
   res.sendStatus(200);
 };
 
-// Send active merit notification to pledges
-exports.merited_as_active = function(req, res) {
-  const { activeName, pledges, amount } = req.body;
-  const action = amount >= 0 ? 'merits' : 'demerits';
+// Send created merit notification to users
+exports.created_merit = function(req, res) {
+  const { user, selectedUsers, merit } = req.body;
+  const userName = `${user.firstName} ${user.lastName}`;
+  const action = merit.amount >= 0 ? 'merits' : 'demerits';
   let counter = 0;
+  let body;
 
-  pledges.forEach((pledge) => {
-    const pledgeName = pledge.firstName + pledge.lastName;
-    const pledgeRef = admin.database().ref(`/users/${pledgeName}`);
+  // Check who is creating the merit
+  if (user.status === 'pledge') {
+    body = `You have given ${merit.amount} ${action} to ${merit.pledgeName}.`;
+  } else {
+    body = `You have received ${merit.amount} ${action} from ${merit.activeName}.`;
+  }
+
+  selectedUsers.forEach((selectedUser) => {
+    const selectedUserRef = admin.database().ref(`/users/${selectedUser.displayName}`);
     counter++;
 
-    pledgeRef.once('value', (snapshot) => {
+    selectedUserRef.once('value', (snapshot) => {
       const { registrationToken } = snapshot.val();
       const message = {
         webpush: {
           notification: {
-            title: 'Garnett',
-            body: `You have received ${amount} ${action} from ${activeName}.`,
+            title: userName,
+            body,
             click_action: 'https://garnett-app.herokuapp.com/pledge-app',
-            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-            vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+            icon: user.photoURL,
+            vibrate: DARTH_VADER_RINGTONE
           }
         },
         token: registrationToken
@@ -40,19 +50,19 @@ exports.merited_as_active = function(req, res) {
       if (registrationToken) {
         admin.messaging().send(message)
         .then(function(response) {
-          if (!res.headersSent && counter === pledges.length) {
+          if (!res.headersSent && counter === selectedUsers.length) {
             console.log("Successfully sent message:", response);
             res.sendStatus(200);
           }
         })
         .catch(function(error) {
-          if (!res.headersSent && counter === pledges.length) {
-            console.log("Error sending message:", error);
+          if (!res.headersSent && counter === selectedUsers.length) {
+            console.error("Error sending message:", error);
             res.sendStatus(400);
           }
         });
       } else {
-        if (!res.headersSent && counter === pledges.length) {
+        if (!res.headersSent && counter === selectedUsers.length) {
           res.sendStatus(200);
         }
       }
@@ -60,53 +70,42 @@ exports.merited_as_active = function(req, res) {
   });
 };
 
-// Send pledge merit notification to actives
-exports.merited_as_pledge = function(req, res) {
-  const { pledgeName, actives, amount } = req.body;
+// Send deleted merit notification to users
+exports.deleted_merit = function(req, res) {
+  const { amount, activeName, pledgeName, activePhoto } = req.body.merit;
   const action = amount >= 0 ? 'merits' : 'demerits';
-  let counter = 0;
+  const trimmedPledgeName = pledgeName.replace(/\s/g, '');
+  const pledgeRef = admin.database().ref(`/users/${trimmedPledgeName}`);
 
-  actives.forEach((active) => {
-    const activeName = active.firstName + active.lastName;
-    const activeRef = admin.database().ref(`/users/${activeName}`);
-    counter++;
-
-    activeRef.once('value', (snapshot) => {
-      const { registrationToken } = snapshot.val();
-      const message = {
-        webpush: {
-          notification: {
-            title: 'Garnett',
-            body: `You have given ${amount} ${action} to ${pledgeName}.`,
-            click_action: 'https://garnett-app.herokuapp.com/pledge-app',
-            icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-            vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
-          }
-        },
-        token: registrationToken
-      };
-
-      if (registrationToken) {
-        admin.messaging().send(message)
-        .then(function(response) {
-          if (!res.headersSent && counter === actives.length) {
-            console.log("Successfully sent message:", response);
-            res.sendStatus(200);
-          }
-        })
-        .catch(function(error) {
-          if (!res.headersSent && counter === actives.length) {
-            console.log("Error sending message:", error);
-            res.sendStatus(400);
-          }
-        });
-      } else {
-        if (!res.headersSent && counter === actives.length) {
-          res.sendStatus(200);
+  pledgeRef.once('value', (pledge) => {
+    const { registrationToken } = pledge.val();
+    const message = {
+      webpush: {
+        notification: {
+          title: activeName,
+          body: `${activeName} has deleted ${amount} ${action}`,
+          click_action: 'https://garnett-app.herokuapp.com/pledge-app',
+          icon: activePhoto,
+          vibrate: DARTH_VADER_RINGTONE
         }
-      }
-    })
-  });
+      },
+      token: registrationToken
+    };
+
+    if (registrationToken) {
+      admin.messaging().send(message)
+      .then(function(response) {
+        console.log("Successfully sent message:", response);
+        res.sendStatus(200);
+      })
+      .catch(function(error) {
+        console.error("Error sending message:", error);
+        res.sendStatus(400);
+      });
+    } else {
+      res.sendStatus(200);
+    }
+  })
 };
 
 // Send created chalkboard notification to pledges
@@ -126,7 +125,7 @@ exports.created_chalkboard = function(req, res) {
               body: `New Chalkboard: ${req.body.chalkboardTitle}.`,
               click_action: 'https://garnett-app.herokuapp.com/pledge-app',
               icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-              vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+              vibrate: DARTH_VADER_RINGTONE
             }
           },
           token: registrationToken
@@ -142,7 +141,7 @@ exports.created_chalkboard = function(req, res) {
           })
           .catch(function(error) {
             if (!res.headersSent) {
-              console.log("Error sending message:", error);
+              console.error("Error sending message:", error);
               res.sendStatus(400);
             }
           });
@@ -178,7 +177,7 @@ exports.updated_chalkboard = function(req, res) {
                     body: `${chalkboard.activeName} has edited the chalkboard, ${chalkboard.title}.`,
                     click_action: 'https://garnett-app.herokuapp.com/pledge-app',
                     icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-                    vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+                    vibrate: DARTH_VADER_RINGTONE
                   }
                 },
                 token: registrationToken
@@ -194,7 +193,7 @@ exports.updated_chalkboard = function(req, res) {
                 })
                 .catch(function(error) {
                   if (!res.headersSent) {
-                    console.log("Error sending message:", error);
+                    console.error("Error sending message:", error);
                     res.sendStatus(400);
                   }
                 });
@@ -235,7 +234,7 @@ function sendAttendeesNotification(chalkboard, message, res) {
                 })
                 .catch(function(error) {
                   if (!res.headersSent) {
-                    console.log("Error sending message:", error);
+                    console.error("Error sending message:", error);
                     res.sendStatus(400);
                   }
                 });
@@ -267,7 +266,7 @@ exports.joined_chalkboard = function(req, res) {
           body: `${name} has joined the chalkboard, ${chalkboard.title}.`,
           click_action: 'https://garnett-app.herokuapp.com/pledge-app',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+          vibrate: DARTH_VADER_RINGTONE
         }
       },
       token: registrationToken
@@ -284,7 +283,7 @@ exports.joined_chalkboard = function(req, res) {
       })
       .catch(function(error) {
         if (!res.headersSent) {
-          console.log("Error sending message:", error);
+          console.error("Error sending message:", error);
           res.sendStatus(400);
         }
       });
@@ -312,7 +311,7 @@ exports.left_chalkboard = function(req, res) {
           body: `${name} has left the chalkboard, ${chalkboard.title}.`,
           click_action: 'https://garnett-app.herokuapp.com/pledge-app',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+          vibrate: DARTH_VADER_RINGTONE
         }
       },
       token: registrationToken
@@ -329,7 +328,7 @@ exports.left_chalkboard = function(req, res) {
       })
       .catch(function(error) {
         if (!res.headersSent) {
-          console.log("Error sending message:", error);
+          console.error("Error sending message:", error);
           res.sendStatus(400);
         }
       });
@@ -358,7 +357,7 @@ exports.pending_complaint = function(req, res) {
               body: `A complaint has been submitted for ${complaint.pledgeName}.`,
               click_action: 'https://garnett-app.herokuapp.com/pledge-app',
               icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-              vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+              vibrate: DARTH_VADER_RINGTONE
             }
           },
           token: registrationToken
@@ -374,7 +373,7 @@ exports.pending_complaint = function(req, res) {
           })
           .catch(function(error) {
             if (!res.headersSent) {
-              console.log("Error sending message:", error);
+              console.error("Error sending message:", error);
               res.sendStatus(400);
             }
           });
@@ -402,7 +401,7 @@ exports.approved_complaint = function(req, res) {
           body: 'You have received a complaint.',
           click_action: 'https://garnett-app.herokuapp.com/pledge-app',
           icon: 'https://farm5.staticflickr.com/4555/24846365458_2fa6bb5179.jpg',
-          vibrate: [500,110,500,110,450,110,200,110,170,40,450,110,200,110,170,40,500]
+          vibrate: DARTH_VADER_RINGTONE
         }
       },
       token: registrationToken
@@ -415,7 +414,7 @@ exports.approved_complaint = function(req, res) {
         res.sendStatus(200);
       })
       .catch(function(error) {
-        console.log("Error sending message:", error);
+        console.error("Error sending message:", error);
         res.sendStatus(400);
       });
     } else {
