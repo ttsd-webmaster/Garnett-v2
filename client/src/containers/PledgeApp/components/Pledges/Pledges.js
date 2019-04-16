@@ -55,8 +55,9 @@ export class Pledges extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (!navigator.onLine) {
-      this.setState({ loaded: true });
-      return
+      const pledges = JSON.parse(localStorage.getItem('pledges'));
+      this.setState({ pledges, loaded: true });
+      return;
     }
     API.getPledges(this.props.state.displayName)
     .then(res => {
@@ -72,8 +73,7 @@ export class Pledges extends PureComponent<Props, State> {
           return a[filter] >= b[filter] ? 1 : -1;
         });
       }
-
-      localStorage.setItem('pbros', JSON.stringify(pledges));
+      localStorage.setItem('pledges', JSON.stringify(pledges));
       this.setState({ pledges, loaded: true });
     })
     .catch(error => {
@@ -84,8 +84,10 @@ export class Pledges extends PureComponent<Props, State> {
 
   componentWillUnmount() {
     const firebase = window.firebase;
-    const meritsRef = firebase.database().ref('/merits');
-    meritsRef.off('value');
+    if (navigator.onLine && firebase) {
+      const meritsRef = firebase.database().ref('/merits');
+      meritsRef.off('value');
+    }
   }
 
   get pledges(): Node {

@@ -57,8 +57,10 @@ export class AccountInfo extends Component<Props, State> {
 
   componentWillUnmount() {
     const { firebase } = window;
-    const meritsRef = firebase.database().ref('/merits');
-    meritsRef.off('value');
+    if (navigator.onLine && firebase) {
+      const meritsRef = firebase.database().ref('/merits');
+      meritsRef.off('value');
+    }
   }
 
   render() {

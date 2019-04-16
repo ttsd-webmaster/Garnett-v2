@@ -10,7 +10,7 @@ workbox.skipWaiting();
 workbox.clientsClaim();
 
 // Google analytics for workbox v3
-workbox.googleAnalytics.initialize()
+workbox.googleAnalytics.initialize();
 
 // Placeholder array which is populated automatically by workboxBuild.injectManifest()
 workbox.precaching.precacheAndRoute(self.__precacheManifest || []);
@@ -20,7 +20,7 @@ workbox.routing.registerNavigationRoute('/index.html');
 // Use a cache first strategy for files from firebasestorage.googleapis.com
 workbox.routing.registerRoute(
   /^https:\/\/storage\.googleapis\.com\//,
-  workbox.strategies.cacheFirst({
+  workbox.strategies.staleWhileRevalidate({
     cacheName: 'firebasestorage',
     plugins: [
       new workbox.cacheableResponse.Plugin({

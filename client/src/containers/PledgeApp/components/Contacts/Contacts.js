@@ -69,7 +69,7 @@ export class Contacts extends PureComponent<{}, State> {
         this.setState({ brothers, filteredBrothers: brothers });
       });
     } else {
-      const brothers = localStorage.getItem('brothersArray');
+      const brothers = JSON.parse(localStorage.getItem('brothersArray'));
       this.setState({ brothers, filteredBrothers: brothers });
     }
   }

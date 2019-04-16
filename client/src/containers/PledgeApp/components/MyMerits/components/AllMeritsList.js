@@ -23,7 +23,8 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (!navigator.onLine) {
-      this.setState({ loaded: true });
+      const allMerits = JSON.parse(localStorage.getItem('allMerits'));
+      this.setState({ allMerits, loaded: true });
       return;
     }
     const { firebase } = window;
@@ -44,8 +45,10 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
   componentWillUnmount() {
     const { firebase } = window;
-    const meritsRef = firebase.database().ref('/merits');
-    meritsRef.off('value');
+    if (navigator.onLine && firebase) {
+      const meritsRef = firebase.database().ref('/merits');
+      meritsRef.off('value');
+    }
   }
 
   shortenedName(name: string): string {

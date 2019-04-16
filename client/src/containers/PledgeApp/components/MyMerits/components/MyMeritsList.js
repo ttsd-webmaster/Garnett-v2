@@ -33,8 +33,9 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (!navigator.onLine) {
-      this.setState({ loaded: true });
-      return
+      const myMerits = JSON.parse(localStorage.getItem('myMerits'));
+      this.setState({ myMerits, loaded: true });
+      return;
     }
     const { firebase } = window;
     const { firstName, lastName, status } = this.props.state;
@@ -60,8 +61,10 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
   componentWillUnmount() {
     const { firebase } = window;
-    const meritsRef = firebase.database().ref('/merits');
-    meritsRef.off('value');
+    if (navigator.onLine && firebase) {
+      const meritsRef = firebase.database().ref('/merits');
+      meritsRef.off('value');
+    }
   }
 
   get merits(): Node {
