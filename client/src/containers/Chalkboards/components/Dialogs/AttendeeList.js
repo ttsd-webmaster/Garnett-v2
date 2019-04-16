@@ -33,7 +33,7 @@ export default class AttendeeList extends Component {
 
   render() {
     return (
-      <List className="garnett-list dialog">
+      <List className="garnett-list">
         {this.state.attendees.map((attendee, i) => (
           <div key={i}>
             <Divider className="garnett-divider large" inset={true} />

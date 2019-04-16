@@ -16,16 +16,14 @@ type Props = {
 };
 
 type State = {
-  merits: Array<Merit>,
-  reverse: boolean,
-  loaded: boolean
+  merits: ?Array<Merit>,
+  reverse: boolean
 };
 
 export class MeritsList extends PureComponent<Props, State> {
   state = {
-    merits: [],
-    reverse: false,
-    loaded: false
+    merits: null,
+    reverse: false
   };
 
   componentDidMount() {
@@ -33,7 +31,7 @@ export class MeritsList extends PureComponent<Props, State> {
       API.getPledgeMerits(this.props.pledgeName)
       .then(res => {
         const { merits } = res.data;
-        this.setState({ merits, loaded: true });
+        this.setState({ merits });
       })
       .catch(err => console.log('err', err));
     } else {
@@ -50,9 +48,9 @@ export class MeritsList extends PureComponent<Props, State> {
   }
 
   render() {
-    const { merits, reverse, loaded } = this.state;
+    const { merits, reverse } = this.state;
 
-    if (!loaded) {
+    if (!merits) {
       return (
         <div className="loading-merits">
           <CircularProgress color="var(--accent-color)" size={30} />
@@ -69,7 +67,7 @@ export class MeritsList extends PureComponent<Props, State> {
     }
 
     return (
-      <List className="garnett-list dialog pledge">
+      <List className="garnett-list">
         <FilterHeader isReversed={reverse} reverse={this.reverse} />
         {merits.map((merit, i) => {
           if (!merit) {

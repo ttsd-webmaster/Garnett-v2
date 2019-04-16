@@ -117,7 +117,6 @@ exports.create_merit = function(req, res) {
 
   selectedUsers.forEach((selectedUser) => {
     const merit = Object.assign({}, req.body.merit);
-    const selectedDisplayName = selectedUser.firstName + selectedUser.lastName;
     let active;
     let pledge;
 
@@ -128,11 +127,9 @@ exports.create_merit = function(req, res) {
     if (user.status === 'pledge') {
       active = selectedUser;
       pledge = user;
-      active.displayName = selectedDisplayName;
     } else {
       active = user;
       pledge = selectedUser;
-      pledge.displayName = selectedDisplayName;
     }
 
     const nonPCStandardizedMerit = (

@@ -118,11 +118,6 @@
 .garnett-list.no-header {
   margin-top: 48px !important;
 }
-.garnett-list.dialog {
-  width: auto;
-  max-width: none;
-  margin: 24px auto;
-}
 
 .garnett-list-item > div > div {
   background-color: var(--list-color);

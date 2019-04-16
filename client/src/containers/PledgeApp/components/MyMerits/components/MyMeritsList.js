@@ -15,48 +15,46 @@ type Props = {
 };
 
 type State = {
-  loaded: boolean,
-  myMerits: Array<Merit>,
+  myMerits: ?Array<Merit>,
   selectedMerit: ?Merit,
-  openDelete: boolean,
-  reverse: boolean
+  reverse: boolean,
+  openDelete: boolean
 };
 
 export class MyMeritsList extends PureComponent<Props, State> {
   state = {
-    loaded: false,
-    myMerits: [],
+    myMerits: null,
     selectedMerit: null,
-    openDelete: false,
-    reverse: false
+    reverse: false,
+    openDelete: false
   }
 
   componentDidMount() {
-    if (!navigator.onLine) {
-      const myMerits = JSON.parse(localStorage.getItem('myMerits'));
-      this.setState({ myMerits, loaded: true });
-      return;
-    }
-    const { firebase } = window;
-    const { firstName, lastName, status } = this.props.state;
-    const fullName = `${firstName} ${lastName}`;
-    const meritsRef = firebase.database().ref('/merits');
-    let queriedName = 'activeName';
+    if (navigator.onLine) {
+      const { firebase } = window;
+      const { firstName, lastName, status } = this.props.state;
+      const fullName = `${firstName} ${lastName}`;
+      const meritsRef = firebase.database().ref('/merits');
+      let queriedName = 'activeName';
 
-    if (status === 'pledge') {
-      queriedName = 'pledgeName';
-    }
-
-    meritsRef.orderByChild(queriedName).equalTo(fullName).on('value', (merits) => {
-      let myMerits = [];
-      if (merits.val()) {
-        myMerits = Object.keys(merits.val()).map(function(key) {
-          return merits.val()[key];
-        }).sort((a, b) => a.date - b.date).reverse();
+      if (status === 'pledge') {
+        queriedName = 'pledgeName';
       }
-      localStorage.setItem('myMerits', JSON.stringify(myMerits));
-      this.setState({ myMerits, loaded: true });
-    });
+
+      meritsRef.orderByChild(queriedName).equalTo(fullName).on('value', (merits) => {
+        let myMerits = [];
+        if (merits.val()) {
+          myMerits = Object.keys(merits.val()).map(function(key) {
+            return merits.val()[key];
+          }).sort((a, b) => a.date - b.date).reverse();
+        }
+        localStorage.setItem('myMerits', JSON.stringify(myMerits));
+        this.setState({ myMerits });
+      });
+    } else {
+      const myMerits = JSON.parse(localStorage.getItem('myMerits'));
+      this.setState({ myMerits });
+    }
   }
 
   componentWillUnmount() {
@@ -100,12 +98,12 @@ export class MyMeritsList extends PureComponent<Props, State> {
   }
 
   handleDeleteOpen = (selectedMerit: Merit) => {
-    if (!navigator.onLine) {
+    if (navigator.onLine) {
+      androidBackOpen(this.handleDeleteClose);
+      this.setState({ selectedMerit, openDelete: true });
+    } else {
       this.props.handleRequestOpen('You are offline');
-      return;
     }
-    androidBackOpen(this.handleDeleteClose);
-    this.setState({ selectedMerit, openDelete: true });
   }
 
   handleDeleteClose = () => {
@@ -121,8 +119,8 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
   render() {
     const { state, handleRequestOpen } = this.props;
-    const { reverse, loaded, openDelete, selectedMerit } = this.state;
-    if (!loaded) {
+    const { myMerits, selectedMerit, reverse, openDelete } = this.state;
+    if (!myMerits) {
       return <LoadingComponent />;
     }
     return (

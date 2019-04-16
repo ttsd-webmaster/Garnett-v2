@@ -9,38 +9,35 @@ import React, { Fragment, PureComponent, type Node } from 'react';
 import { List } from 'material-ui/List';
 
 type State = {
-  loaded: boolean,
-  allMerits: Array<Merit>,
+  allMerits: ?Array<Merit>,
   reverse: boolean
 };
 
 export class AllMeritsList extends PureComponent<Props, State> {
   state = {
-    loaded: false,
-    allMerits: [],
+    allMerits: null,
     reverse: false
   }
 
   componentDidMount() {
-    if (!navigator.onLine) {
+    if (navigator.onLine) {
+      const { firebase } = window;
+      const meritsRef = firebase.database().ref('/merits');
+      meritsRef.orderByChild('date').limitToLast(100).on('value', (merits) => {
+        let allMerits = [];
+        if (merits.val()) {
+          merits.forEach((merit) => {
+            allMerits.push(merit.val());
+          });
+        }
+        allMerits = allMerits.reverse();
+        localStorage.setItem('allMerits', JSON.stringify(allMerits));
+        this.setState({ allMerits });
+      });
+    } else {
       const allMerits = JSON.parse(localStorage.getItem('allMerits'));
-      this.setState({ allMerits, loaded: true });
-      return;
+      this.setState({ allMerits });
     }
-    const { firebase } = window;
-    const meritsRef = firebase.database().ref('/merits');
-
-    meritsRef.orderByChild('date').limitToLast(100).on('value', (merits) => {
-      let allMerits = [];
-      if (merits.val()) {
-        merits.forEach((merit) => {
-          allMerits.push(merit.val());
-        });
-      }
-      allMerits = allMerits.reverse();
-      localStorage.setItem('allMerits', JSON.stringify(allMerits));
-      this.setState({ allMerits, loaded: true });
-    });
   }
 
   componentWillUnmount() {
@@ -106,9 +103,9 @@ export class AllMeritsList extends PureComponent<Props, State> {
   }
 
   render() {
-    const { loaded, reverse } = this.state;
+    const { allMerits, reverse } = this.state;
 
-    if (!loaded) {
+    if (!allMerits) {
       return <LoadingComponent />;
     }
     return (

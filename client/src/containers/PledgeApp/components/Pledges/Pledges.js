@@ -31,7 +31,6 @@ type Props = {
 };
 
 type State = {
-  loaded: boolean,
   pledges: ?Array<User>,
   pledge: ?User,
   filter: string,
@@ -43,7 +42,6 @@ type State = {
 
 export class Pledges extends PureComponent<Props, State> {
   state = {
-    loaded: false,
     pledges: null,
     pledge: null,
     filter: 'lastName',
@@ -54,32 +52,32 @@ export class Pledges extends PureComponent<Props, State> {
   };
 
   componentDidMount() {
-    if (!navigator.onLine) {
+    if (navigator.onLine) {
+      API.getPledges(this.props.state.displayName)
+      .then(res => {
+        let pledges = res.data;
+        const { filter } = this.state;
+        // Sort the pledges based on the selected filter
+        if (filter === 'totalMerits') {
+          pledges = pledges.sort(function(a, b) {
+            return a[filter] < b[filter] ? 1 : -1;
+          });
+        } else {
+          pledges = pledges.sort(function(a, b) {
+            return a[filter] >= b[filter] ? 1 : -1;
+          });
+        }
+        localStorage.setItem('pledges', JSON.stringify(pledges));
+        this.setState({ pledges });
+      })
+      .catch(error => {
+        console.error(`Error: ${error}`);
+        this.setState({ pledges: [] });
+      });
+    } else {
       const pledges = JSON.parse(localStorage.getItem('pledges'));
-      this.setState({ pledges, loaded: true });
-      return;
+      this.setState({ pledges });
     }
-    API.getPledges(this.props.state.displayName)
-    .then(res => {
-      let pledges = res.data;
-      const { filter } = this.state;
-      // Sort the pledges based on the selected filter
-      if (filter === 'totalMerits') {
-        pledges = pledges.sort(function(a, b) {
-          return a[filter] < b[filter] ? 1 : -1;
-        });
-      } else {
-        pledges = pledges.sort(function(a, b) {
-          return a[filter] >= b[filter] ? 1 : -1;
-        });
-      }
-      localStorage.setItem('pledges', JSON.stringify(pledges));
-      this.setState({ pledges, loaded: true });
-    })
-    .catch(error => {
-      console.error(`Error: ${error}`);
-      this.setState({ loaded: true });
-    });
   }
 
   componentWillUnmount() {
@@ -185,7 +183,7 @@ export class Pledges extends PureComponent<Props, State> {
   render() {
     const { state } = this.props;
     const {
-      loaded,
+      pledges,
       pledge,
       reverse,
       openPledge,
@@ -193,7 +191,7 @@ export class Pledges extends PureComponent<Props, State> {
       anchorEl
     } = this.state;
 
-    if (!loaded) {
+    if (!pledges) {
       return <LoadingComponent />
     }
 

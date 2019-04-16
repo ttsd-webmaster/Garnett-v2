@@ -1,12 +1,3 @@
-.garnett-list.dialog.pledge {
-  margin-top: 0;
-}
-@media (max-width: 420px) {
-  .garnett-list.dialog.pledge {
-    padding-bottom: 48px !important;
-  }
-}
-
 .react-swipeable-view-container > div {
   overflow: auto !important;
 }
