@@ -32,7 +32,6 @@ type Props = {
   open: boolean,
   remainingMerits: number,
   handleClose: () => void,
-  handleRequestOpen: () => void,
   actions: Node
 };
 
@@ -42,16 +41,6 @@ type State = {
 
 export class ActiveView extends PureComponent<Props, State> {
   state = { index: 0 };
-
-  get meritsList(): Node {
-    const { firstName, lastName } = this.props.pledge;
-    return (
-      <MeritsList
-        pledgeName={firstName + lastName}
-        handleRequestOpen={this.props.handleRequestOpen}
-      />
-    )
-  }
 
   handleChange = (index: number) => {
     this.setState({ index });
@@ -64,7 +53,7 @@ export class ActiveView extends PureComponent<Props, State> {
 
   render() {
     const { pledge, remainingMerits, open, actions } = this.props;
-    const { firstName, lastName } = pledge;
+    const { firstName, lastName, displayName } = pledge;
     const fullName = `${firstName} ${lastName}`;
     if (isMobile()) {
       return (
@@ -96,7 +85,7 @@ export class ActiveView extends PureComponent<Props, State> {
                 remainingMerits={remainingMerits}
               />
             </div>
-            { this.meritsList }
+            <MeritsList pledgeName={displayName} />
           </SwipeableViews>
         </FullscreenDialog>
       )
@@ -126,7 +115,7 @@ export class ActiveView extends PureComponent<Props, State> {
             />
           </Tab>
           <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
-            { this.meritsList }
+            <MeritsList pledgeName={displayName} />
           </Tab>
         </Tabs>
       </Dialog>

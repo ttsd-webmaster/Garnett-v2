@@ -11,8 +11,7 @@ import { List } from 'material-ui/List';
 import CircularProgress from 'material-ui/CircularProgress';
 
 type Props = {
-  pledgeName: string,
-  handleRequestOpen: () => void
+  pledgeName: string
 };
 
 type State = {
@@ -27,15 +26,18 @@ export class MeritsList extends PureComponent<Props, State> {
   };
 
   componentDidMount() {
+    const { pledgeName } = this.props;
     if (navigator.onLine) {
       API.getPledgeMerits(this.props.pledgeName)
       .then(res => {
         const { merits } = res.data;
+        localStorage.setItem(`${pledgeName}Merits`, JSON.stringify(merits));
         this.setState({ merits });
       })
       .catch(err => console.log('err', err));
     } else {
-      this.props.handleRequestOpen('You are offline');
+      const merits = JSON.parse(localStorage.getItem(`${pledgeName}Merits`));
+      this.setState({ merits });
     }
   }
 

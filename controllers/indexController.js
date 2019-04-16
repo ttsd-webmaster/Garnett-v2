@@ -66,6 +66,7 @@ exports.get_pledges = function(req, res) {
             }
           });
         }
+        pledge.displayName = searchedName;
         pledge.totalMerits = totalMerits;
       });
 
