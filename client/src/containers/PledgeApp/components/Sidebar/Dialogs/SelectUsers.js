@@ -122,7 +122,7 @@ export class SelectUsers extends Component<Props, State> {
         />
         <div
           id="darth-fader"
-          className={`${selectedUsers.length > 0 ? 'selected-users' : ''}`}
+          className={`merit-dialog ${selectedUsers.length > 0 ? 'selected-users' : ''}`}
         />
       </div>
     )

@@ -230,8 +230,9 @@ export function androidBackClose() {
 export function iosFullscreenDialogOpen() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   const pledgesContainer = document.getElementById('pledges-container');
+  const contactsContainer = document.getElementById('contacts-container');
   if (isIPhone) {
-    if (pledgesContainer) {
+    if (pledgesContainer || contactsContainer) {
       pledgesContainer.style.setProperty('overflow', 'hidden', 'important');
       pledgesContainer.style.setProperty('position', 'fixed', 'important');
     }
@@ -243,8 +244,9 @@ export function iosFullscreenDialogOpen() {
 export function iosFullscreenDialogClose() {
   const isIPhone = navigator.userAgent.match(/iPhone/i);
   const pledgesContainer = document.getElementById('pledges-container');
+  const contactsContainer = document.getElementById('contacts-container');
   if (isIPhone) {
-    if (pledgesContainer) {
+    if (pledgesContainer || contactsContainer) {
       pledgesContainer.style.setProperty('overflow', 'auto', 'important');
       pledgesContainer.style.setProperty('position', 'absolute', 'important');
     }

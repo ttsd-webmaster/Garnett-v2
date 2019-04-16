@@ -32,10 +32,7 @@ const routes = [
     path: '/pledge-app/brothers',
     exact: true,
     content: props => (
-      <Contacts
-        state={props.state}
-        handleRequestOpen={props.handleRequestOpen}
-      />
+      <Contacts />
     )
   },
   {
@@ -46,6 +43,7 @@ const routes = [
         history={props.history}
         state={props.state}
         handleRequestOpen={props.handleRequestOpen}
+        logoutCallBack={props.logoutCallBack}
       />
     )
   }
@@ -53,7 +51,8 @@ const routes = [
 
 type Props = {
   state: User,
-  handleRequestOpen: () => void
+  handleRequestOpen: () => void,
+  logoutCallBack?: () => void
 };
 
 export function Main(props: Props) {

@@ -97,10 +97,13 @@ export class MyMerits extends PureComponent<Props, State> {
         ref={(ref) => this.containerRef = ref}
       >
         {state.status !== 'pledge' && (
-          <ToggleViewHeader
-            view={view}
-            setView={this.setView}
-          />
+          <Fragment>
+            <ToggleViewHeader
+              view={view}
+              setView={this.setView}
+            />
+            <div id="darth-fader" />
+          </Fragment>
         )}
 
         { this.meritsList }

@@ -33,15 +33,12 @@
   padding: 0 ;
 }
 
-#darth-fader {
-  position: fixed;
+#darth-fader.merit-dialog {
   top: 274px;
   width: 50%;
   height: 20px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0), #fefefe);
-  z-index: 1;
 }
-#darth-fader.selected-users {
+#darth-fader.merit-dialog.selected-users {
   top: 332px;
 }
 

@@ -53,6 +53,7 @@ export class ActiveView extends PureComponent<Props, State> {
 
   render() {
     const { pledge, remainingMerits, open, actions } = this.props;
+    const { index } = this.state;
     const { firstName, lastName, displayName } = pledge;
     const fullName = `${firstName} ${lastName}`;
     if (isMobile()) {
@@ -66,15 +67,15 @@ export class ActiveView extends PureComponent<Props, State> {
         >
           <Tabs 
             className="garnett-tabs"
-            value={this.state.index}
+            value={index}
             onChange={this.handleChange}
           >
-            <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0} />
-            <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1} />
+            <Tab style={getTabStyle(index === 0)} label="Info" value={0} />
+            <Tab style={getTabStyle(index === 1)} label="Merits" value={1} />
           </Tabs>
           <SwipeableViews
             containerStyle={slideContainer}
-            index={this.state.index}
+            index={index}
             onChangeIndex={this.handleChange}
             disableLazyLoading
           >
@@ -104,17 +105,17 @@ export class ActiveView extends PureComponent<Props, State> {
         <Tabs
           className="garnett-tabs"
           inkBarStyle={inkBarStyle}
-          value={this.state.index}
+          value={index}
           onChange={this.handleChange}
         >
-          <Tab style={getTabStyle(this.state.index === 0)} label="Info" value={0}>
+          <Tab style={getTabStyle(index === 0)} label="Info" value={0}>
             <UserInfo
               user={pledge}
               name={fullName}
               remainingMerits={remainingMerits}
             />
           </Tab>
-          <Tab style={getTabStyle(this.state.index === 1)} label="Merits" value={1}>
+          <Tab style={getTabStyle(index === 1)} label="Merits" value={1}>
             <MeritsList pledgeName={displayName} />
           </Tab>
         </Tabs>

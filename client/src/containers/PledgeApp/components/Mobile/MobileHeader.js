@@ -6,8 +6,8 @@ import CountUp from 'react-countup';
 import type { User } from 'api/models';
 
 type Props = {
-  state: User,
-  index: number
+  history: RouterHistory,
+  state: User
 };
 
 type State = {
@@ -75,8 +75,10 @@ export class MobileHeader extends Component<Props, State> {
   }
 
   get header(): Node | string {
-    switch (this.props.index) {
-      case 0:
+    const { history, state } = this.props;
+    switch (history.location.pathname) {
+      case '/pledge-app':
+      case '/pledge-app/my-merits':
         return (
           <Fragment>
             <CountUp
@@ -86,19 +88,19 @@ export class MobileHeader extends Component<Props, State> {
               useEasing
             />
             <span>
-              merits { this.props.state.status !== 'pledge' && 'merited' }
+              merits { state.status !== 'pledge' && 'merited' }
             </span>
           </Fragment>
         )
-      case 1:
-        if (this.props.state.status === 'pledge') {
+      case '/pledge-app/pledges':
+        if (state.status === 'pledge') {
           return "Pledge Brothers"
         } else {
           return "Pledges"
         }
-      case 2:
+      case '/pledge-app/brothers':
         return "Brothers"
-      case 3:
+      case '/pledge-app/settings':
         return "Settings"
       default:
         throw new Error('wrong index');

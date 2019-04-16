@@ -39,12 +39,35 @@
   background-color: var(--background-color);
   margin: 0 auto;
 }
-.garnett-subheader.merit-view {
-  justify-content: center;
-  padding: 0 !important;
-}
 .garnett-subheader.mobile-merit {
   padding: 0 16px;
+}
+.garnett-subheader.merit-view {
+  position: sticky;
+  top: -20px;
+  justify-content: center;
+  max-width: unset;
+  padding: 0 !important;
+  z-index: 2;
+}
+@media (max-width: 767px) {
+  .garnett-subheader.merit-view {
+    top: 0;
+  }
+}
+
+#darth-fader {
+  position: fixed;
+  top: 52px;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0), var(--background-color));
+  z-index: 1;
+}
+@media (max-width: 767px) {
+  #darth-fader {
+    top: 107px;
+  }
 }
 
 /* Chip for merits toggle header in MyMerits */

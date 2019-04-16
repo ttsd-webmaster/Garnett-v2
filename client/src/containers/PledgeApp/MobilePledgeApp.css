@@ -8,23 +8,6 @@
   overflow: hidden;
 }
 
-/* Mobile slide view */
-#content-container > .animate-in {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 55px 0;
-  overflow: auto;
-}
-@supports (-webkit-overflow-scrolling: touch) {
-  /* CSS specific to iOS devices */
-  #content-container > .animate-in {
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
 .fixed-button {
   position: fixed;
   bottom: 70px;
@@ -62,6 +45,17 @@
   color: var(--text-color);
   margin-right: 5.7px;
   margin-bottom: -3px;
+}
+
+/**************** Mobile Navbar *******************/
+.mobile-nav-item {
+  text-align: center;
+}
+.mobile-nav-item * {
+  color: var(--icon-dark);
+}
+.mobile-nav-item.active * {
+  color: var(--icon-color);
 }
 
 /****************** Clear Input *******************/
