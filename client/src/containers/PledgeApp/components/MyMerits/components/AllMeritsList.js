@@ -23,7 +23,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
     if (navigator.onLine) {
       const { firebase } = window;
       const meritsRef = firebase.database().ref('/merits');
-      meritsRef.orderByChild('date').limitToLast(100).on('value', (merits) => {
+      meritsRef.orderByChild('date').on('value', (merits) => {
         let allMerits = [];
         if (merits.val()) {
           merits.forEach((merit) => {
