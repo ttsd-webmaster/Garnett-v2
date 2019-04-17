@@ -196,7 +196,7 @@ export class Pledges extends PureComponent<Props, State> {
     }
 
     return (
-      <div id="pledges-container" className="animate-in">
+      <div className="animate-in">
         <FilterHeader
           title={state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges'}
           status={state.status}
