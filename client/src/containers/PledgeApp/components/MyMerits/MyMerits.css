@@ -1,3 +1,17 @@
+.garnett-subheader.merit-view {
+  position: sticky;
+  top: -20px;
+  justify-content: center;
+  max-width: unset;
+  padding: 0 !important;
+  z-index: 2;
+}
+@media (max-width: 767px) {
+  .garnett-subheader.merit-view {
+    top: 0;
+  }
+}
+
 .merit-amount-container {
   float: right;
   text-align: center;

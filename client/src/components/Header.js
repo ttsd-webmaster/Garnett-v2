@@ -7,7 +7,6 @@ import React, { PureComponent } from 'react';
 type Props = {
   history: RouterHistory,
   logoutCallBack: () => void,
-  noTabs: boolean,
   title: string
 };
 
@@ -33,11 +32,11 @@ export class Header extends PureComponent<Props> {
   }
 
   render() {
-    const { noTabs, title, logoutCallBack } = this.props;
+    const { title, logoutCallBack } = this.props;
     const onClick = logoutCallBack ? this.logout : this.goHome;
     const backText = logoutCallBack ? 'Log out' : 'Home';
     return (
-      <div className={`app-header${noTabs ? " no-tabs" : ""}`}>
+      <div className="app-header">
         <span>{ title }</span>
         <span className="back-button" onClick={onClick}>
           { backText }

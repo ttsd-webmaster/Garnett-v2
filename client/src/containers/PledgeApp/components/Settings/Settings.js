@@ -1,6 +1,5 @@
 // @flow
 
-import './Settings.css';
 import API from 'api/API.js';
 import { isMobile } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders.js';
@@ -55,7 +54,7 @@ export class Settings extends PureComponent<Props> {
             {state.status === 'pledge' ? (
               <div className="logout-button" onClick={this.logout}> Log Out </div>
             ) : (
-              <span className="logout-button" onClick={this.goHome}> Back Home </span>
+              <div className="logout-button" onClick={this.goHome}> Back Home </div>
             )}
           </Fragment>
         )}

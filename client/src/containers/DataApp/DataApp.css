@@ -1,15 +1,110 @@
-#pledge-data,
-#rush-data,
-#my-data {
-  display: none;
-  padding-top: 75px;
-  padding-bottom: 57px;
+#data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0 57px;
   animation: fadeIn .25s ease-in forwards;
 }
-#pledge-data.active,
-#rush-data.active,
-#my-data.active {
+@media (max-width: 767px) {
+  #data-container {
+    padding-top: 55px;
+  }
+}
+
+#pledging-data-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+}
+
+#rush-data-container {
+  width: 100%;
+  height: 100%;
+}
+
+@media(min-width: 768px) {
+  .garnett-subheader.data-app {
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+.garnett-subheader.pledging-data {
+  position: sticky;
+  top: 0;
+  justify-content: center;
+  max-width: unset;
+  padding: 0 !important;
+  margin: 0 0 50px;
+  z-index: 2;
+}
+
+#darth-fader {
+  top: 52px;
+}
+
+
+/******* Pledging Data ********/
+#data-app-header {
+  font-family: 'LeagueSpartan-Bold';
+  color: var(--text-color);
+  margin: 20px 0 50px;
+  z-index: 2;
+}
+
+.data-card {
+  max-width: 100vw;
+  width: 400px;
+  height: fit-content;
+  margin: 0 0 20px;
+}
+@media (min-width: 768px) {
+  .data-card {
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  }
+}
+
+.data-key {
+  font-weight: 700;
+  margin: 0;
+  margin-top: 8px;
+}
+
+.data-value {
+  position: absolute;
+  right: 26px;
+  font-family: 'LeagueSpartan-Bold';
+  font-size: 16px;
+}
+
+/* Garnett List */
+.garnett-list-item.pledge-data > div > div {
+  min-height: 78px;
+  padding-left: 90px !important;
+}
+.garnett-divider.pledge-data {
+  margin-left: 90px !important;
+}
+
+/******* Rush Data ********/
+.filter-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px;
+}
+@media (min-width: 768px) {
+  .filter-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+}
+
+.graph {
+  flex: 5;
+  margin: 0 10px;
+}
+
+/****** My Data ******/
+.data-value.my-data {
+  margin-top: 8px;
 }

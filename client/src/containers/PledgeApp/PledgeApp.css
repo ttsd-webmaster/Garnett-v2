@@ -5,6 +5,33 @@
   height: 100vh;
 }
 
+/******************* Logout Button *********************/
+.logout-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: #fff;
+  height: 48px;
+  width: 40%;
+  max-width: 576px;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 30px auto;
+  border-radius: 500px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+@media (max-width: 767px) {
+  .logout-button {
+    width: 80%;
+  }
+}
+.logout-button:hover {
+  background-color: var(--primary-dark);
+}
+
 /*************** Garnett List, List Items, and Dividers ****************/
 .no-items-container {
   display: flex;
@@ -41,19 +68,6 @@
 }
 .garnett-subheader.mobile-merit {
   padding: 0 16px;
-}
-.garnett-subheader.merit-view {
-  position: sticky;
-  top: -20px;
-  justify-content: center;
-  max-width: unset;
-  padding: 0 !important;
-  z-index: 2;
-}
-@media (max-width: 767px) {
-  .garnett-subheader.merit-view {
-    top: 0;
-  }
 }
 
 #darth-fader {

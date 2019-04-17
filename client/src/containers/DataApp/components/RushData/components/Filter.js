@@ -19,7 +19,7 @@ export default function Filter(props: Props) {
         style={{margin:'10px'}}
         floatingLabelText="Filters"
         value={props.value}
-        onChange={(event, index, value) => props.filterData(props.value)}
+        onChange={(event, index, value) => props.filterData(value)}
       >
         {filters.map((filter, i) => (
           <MenuItem

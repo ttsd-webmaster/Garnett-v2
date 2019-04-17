@@ -39,13 +39,12 @@ export default {
 
   // Data App
   // GET requests
-  getPhotos: function(data: Object) {
-    const params = { data };
-    return axios.get('/api/photos', { params });
+  getPledgingData: function() {
+    return axios.get('/api/data/pledging');
   },
   getMyData: function(fullName: string) {
     const params = { fullName };
-    return axios.get('/api/mydata', { params });
+    return axios.get('/api/data/mydata', { params });
   },
 
   // Merit Book
@@ -67,10 +66,11 @@ export default {
     return axios.get('/api/merit/chalkboards', { params });
   },
   createMerit: function(params: MeritInfo) {
-    return axios.put('/api/merit/create', params);
+    return axios.put('/api/merit', params);
   },
   deleteMerit: function(displayName: string, meritToDelete: Merit) {
-    return axios.put('/api/merit/delete', { displayName, meritToDelete });
+    const body = { displayName, meritToDelete };
+    return axios.delete('/api/merit', { data: body });
   },
 
   // Chalkboards
@@ -98,11 +98,11 @@ export default {
     const body = { name, photoURL, title };
     return axios.put('/api/chalkboard/join', body);
   },
-  deleteChalkboard: function(title: string) {
-    return axios.put('/api/chalkboard/delete', { title });
-  },
   leaveChalkboard: function(name: string, title: string) {
     return axios.put('/api/chalkboard/leave', { name, title });
+  },
+  deleteChalkboard: function(title: string) {
+    return axios.delete('/api/chalkboard', { data: { title } });
   },
 
   // Complaints
@@ -112,13 +112,13 @@ export default {
   },
   // PUT requests
   createComplaint: function(complaint: Object, status: string) {
-    return axios.put('/api/complaint/create', { complaint, status });
-  },
-  deleteComplaint: function(complaint: Object) {
-    return axios.put('/api/complaint/delete', { complaint });
+    return axios.put('/api/complaint', { complaint, status });
   },
   approveComplaint: function(complaint: Object) {
     return axios.put('/api/complaint/approve', { complaint });
+  },
+  deleteComplaint: function(complaint: Object) {
+    return axios.delete('/api/complaint', { data: { complaint } });
   },
 
   // Notification Messaging

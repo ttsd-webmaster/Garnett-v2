@@ -2,13 +2,13 @@
 
 import './DataApp.css';
 import 'containers/PledgeApp/PledgeApp.css';
-import { PledgeData } from './components/PledgeData/PledgeData';
+import { getTabStyle } from 'helpers/functions';
+import { PledgingData } from './components/PledgingData';
 import { RushData } from './components/RushData/RushData';
-import { MyData } from './components/MyData/MyData';
-import { Header } from 'components';
+import { MyData } from './components/MyData';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { PureComponent, type Node } from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
 type Props = {
@@ -17,75 +17,80 @@ type Props = {
 };
 
 type State = {
-  selectedIndex: number
+  index: number
 };
 
 export class DataApp extends PureComponent<Props, State> {
-  state = { selectedIndex: 0 };
+  state = { index: 0 };
 
   componentDidMount() {
     localStorage.setItem('route', 'data-app');
   }
 
-  select = (selectedIndex: number) => {
-    let previousIndex = this.state.selectedIndex;
-    let pledgeData = document.getElementById('pledge-data');
-    let rushData = document.getElementById('rush-data');
-    let myData = document.getElementById('my-data');
-
-    if (previousIndex !== selectedIndex) {
-      if (pledgeData)
-        pledgeData.classList.remove('active');
-      if (rushData)
-        rushData.classList.remove('active');
-      if (myData)
-        myData.classList.remove('active');
-
-      switch (selectedIndex) {
-        case 0:
-          pledgeData.classList.add('active');
-          break;
-        case 1:
-          rushData.classList.add('active');
-          break;
-        case 2:
-          myData.classList.add('active');
-          break;
-        default:
-      }
-
-      this.setState({ selectedIndex });
+  get header(): string {
+    switch (this.state.index) {
+      case 0:
+        return 'Leaderboard';
+      case 1:
+        return 'Rush Data';
+      case 2:
+        return 'My Data';
+      default:
+        return '';
     }
   }
+
+  get body(): ?Node {
+    const { history, state } = this.props;
+    switch (this.state.index) {
+      case 0:
+        return <PledgingData />;
+      case 1:
+        return <RushData />;
+      case 2:
+        return (
+          <MyData
+            history={history}
+            name={state.name}
+            photoURL={state.photoURL}
+          />
+        )
+      default:
+    }
+  }
+
+  select = (index: number) => this.setState({ index });
 
   goHome = () => {
     this.props.history.push('/home');
   }
 
   render() {
-    const { history, state } = this.props;
+    const { index } = this.state;
     return (
       <div className="loading-container" id="data-app">
-        <Header title="Data App" noTabs history={history} />
-        <PledgeData />
-        <RushData />
-        <MyData name={state.name} photoURL={state.photoURL} />
+
+        <div id="data-container">
+          <h1 id="data-app-header">{ this.header }</h1>
+          { this.body }
+        </div>
+
         <BottomNavigation
           className="bottom-tabs"
-          selectedIndex={this.state.selectedIndex}
+          selectedIndex={index}
         >
           <BottomNavigationItem
-            label="Pledge Data"
+            label={<span style={getTabStyle(index === 0)}>Pledge Data</span>}
             icon={<div></div>}
             onClick={() => this.select(0)}
           />
           <BottomNavigationItem
-            label="Rush Data"
+            label={<span style={getTabStyle(index === 1)}>Rush Data</span>}
             icon={<div></div>}
             onClick={() => this.select(1)}
           />
           <BottomNavigationItem
-            label="My Data"
+            label={<span style={getTabStyle(index === 2)}>My Data</span>}
             icon={<div></div>}
             onClick={() => this.select(2)}
           />

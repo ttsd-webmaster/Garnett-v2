@@ -1,6 +1,5 @@
 // @flow
 
-import 'containers/PledgeApp/components/Settings/Settings.css';
 import API from 'api/API.js';
 import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
 import {

@@ -1,6 +1,5 @@
 // @flow
 
-import './RushData.css';
 import rushData from './data/rushData.json';
 import Filter from './components/Filter';
 import Chart from './components/Chart';
@@ -36,7 +35,7 @@ export class RushData extends PureComponent<{}, State> {
 
   render() {
     return (
-      <div id="rush-data">
+      <div id="rush-data-container">
         <Filter value={this.state.value} filterData={this.filterData} />
         <Chart dataSet={this.state.dataSet} title={this.state.title} />
       </div>

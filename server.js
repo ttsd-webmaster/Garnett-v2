@@ -11,6 +11,7 @@ const meritsRouter = require('./routes/merits');
 const chalkboardsRouter = require('./routes/chalkboards');
 const complaintsRouter = require('./routes/complaints');
 const notificationsRouter = require('./routes/notifications');
+const dataRouter = require('./routes/data');
 const delibsRouter = require('./routes/delibs');
 const port = process.env.PORT || 4000;
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
@@ -69,6 +70,7 @@ app.use('/api/merit', meritsRouter);
 app.use('/api/chalkboard', chalkboardsRouter);
 app.use('/api/complaint', complaintsRouter);
 app.use('/api/notification', notificationsRouter);
+app.use('/api/data', dataRouter);
 app.use('/api/delibs', delibsRouter);
 
 app.get('/*', (req, res) => {

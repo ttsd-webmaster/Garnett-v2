@@ -8,12 +8,18 @@ import {
   iosFullscreenDialogOpen,
   iosFullscreenDialogClose
 } from 'helpers/functions.js';
-import { MyMeritsList, AllMeritsList, ToggleViewHeader } from './components';
+import { MyMeritsList, AllMeritsList } from './components';
 import { LoadableMobileMeritDialog } from './components/Dialogs';
+import { ToggleViewHeader } from 'components';
 import type { User } from 'api/models';
 
 import React, { PureComponent, Fragment } from 'react';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
+
+const VIEW_OPTIONS = [
+  { view: 'myMerits', label: 'My Merits' },
+  { view: 'allMerits', label: 'All Merits' }
+];
 
 type Props = {
   state: User,
@@ -99,6 +105,7 @@ export class MyMerits extends PureComponent<Props, State> {
         {state.status !== 'pledge' && (
           <Fragment>
             <ToggleViewHeader
+              viewOptions={VIEW_OPTIONS}
               view={view}
               setView={this.setView}
             />

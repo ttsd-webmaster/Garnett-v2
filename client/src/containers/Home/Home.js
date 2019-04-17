@@ -25,7 +25,6 @@ export class Home extends PureComponent<Props> {
       <div className="loading-container">
         <Header
           title="Home"
-          noTabs
           history={this.props.history}
           logoutCallBack={this.props.logoutCallBack}
         />

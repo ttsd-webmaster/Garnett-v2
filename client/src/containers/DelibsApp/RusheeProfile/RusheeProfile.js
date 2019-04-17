@@ -46,11 +46,7 @@ export class RusheeProfile extends PureComponent<Props, State> {
     
     return (
       <div className="loading-container">
-        <Header
-          title="Rushee Profile"
-          noTabs
-          history={this.props.history}
-        />
+        <Header title="Rushee Profile" history={this.props.history} />
         <div className="animate-in delibs-app rushee">
           <img
             className={`user-photo${this.state.rushee.rotate ? " rotate" : ""}`}

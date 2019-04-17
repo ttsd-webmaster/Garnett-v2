@@ -9,8 +9,10 @@ var controller = require('../controllers/complaintsController');
 router.get('/pledges', controller.get_pledges_as_active);
 
 // PUT requests
-router.put('/create', controller.create_complaint);
-router.put('/delete', controller.delete_complaint);
+router.put('/', controller.create_complaint);
 router.put('/approve', controller.approve_complaint);
+
+// DELETE requests
+router.delete('/', controller.delete_complaint);
 
 module.exports = router;

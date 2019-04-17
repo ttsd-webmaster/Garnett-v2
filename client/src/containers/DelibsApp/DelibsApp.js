@@ -16,7 +16,7 @@ type Props = {
 export function DelibsApp(props: Props) {
   return (
     <div className="loading-container">
-      <Header title="Delibs App" noTabs history={props.history} />
+      <Header title="Delibs App" history={props.history} />
       <RusheeList state={props.state} />
       {props.state.status !== 'regent' && (
         <LoadableVoteDialog
