@@ -129,7 +129,7 @@ export class Contacts extends PureComponent<{}, State> {
     if (index === 0) {
       return (
         <FilterHeader
-          className="garnett-subheader contacts"
+          className="garnett-subheader"
           title={subgroup}
           filterName={this.state.filterName}
           openPopover={this.openPopover}
@@ -139,7 +139,7 @@ export class Contacts extends PureComponent<{}, State> {
       )
     }
     return (
-      <Subheader className="garnett-subheader contacts">
+      <Subheader className="garnett-subheader">
         { subgroup }
       </Subheader>
     )
@@ -300,9 +300,8 @@ export class Contacts extends PureComponent<{}, State> {
           closePopover={this.closePopover}
           setFilter={this.setFilter}
         />
-
+        { isMobile() && <div id="darth-fader" /> }
         { this.body }
-
         {selectedBrother && (
           <LoadableContactsDialog
             open={open}

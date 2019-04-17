@@ -3,10 +3,9 @@
 import 'containers/PledgeApp/PledgeApp.css';
 import { isMobile } from './functions.js';
 
-import React, { Fragment, type Node } from 'react';
+import React, { type Node } from 'react';
 import Dialog from 'material-ui/Dialog';
 import CircularProgress from 'material-ui/CircularProgress';
-import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
 
 const spinnerDialogMobile = {
   display: 'flex',
@@ -27,31 +26,6 @@ function LoadingPage(props: { name: string }): Node {
         <LoadingComponent />
       </div>
     </div>
-  )
-};
-
-export function LoadingDataApp(): Node {
-  return (
-    <Fragment>
-      <LoadingPage name="Data App" />
-      <BottomNavigation
-        className="bottom-tabs"
-        selectedIndex={0}
-      >
-        <BottomNavigationItem
-          label="Pledge Data"
-          icon={<div></div>}
-        />
-        <BottomNavigationItem
-          label="Rush Data"
-          icon={<div></div>}
-        />
-        <BottomNavigationItem
-          label="My Data"
-          icon={<div></div>}
-        />
-      </BottomNavigation>
-    </Fragment>
   )
 };
 

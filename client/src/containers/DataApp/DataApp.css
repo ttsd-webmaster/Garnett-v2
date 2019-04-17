@@ -22,28 +22,46 @@
   height: 100%;
 }
 
-@media(min-width: 768px) {
+/********* Garnett Subheader *********/
+@media (min-width: 768px) {
   .garnett-subheader.data-app {
     border-bottom: 1px solid var(--border-color);
   }
 }
+/* Only target subheaders within PledgingData */
+@media (max-width: 767px) {
+  #pledging-data-container .garnett-subheader {
+    position: sticky;
+    top: 62px;
+    z-index: 2;
+  }
+}
+@media (max-width: 767px) {
+  #pledging-data-container #darth-fader {
+    top: 110px;
+  }
+}
 
-.garnett-subheader.pledging-data {
+#pledging-data-container .garnett-subheader.toggle-view {
   position: sticky;
   top: 0;
   justify-content: center;
   max-width: unset;
-  padding: 0 !important;
+  padding: 10px 0 0 !important;
   margin: 0 0 50px;
-  z-index: 2;
+  z-index: 3;
 }
 
-#darth-fader {
-  top: 52px;
+/********** Garnett List ***********/
+#pledging-data-container .garnett-list-item > div > div {
+  min-height: 78px;
+  padding-left: 90px !important;
+}
+#pledging-data-container .garnett-divider {
+  margin-left: 90px !important;
 }
 
-
-/******* Pledging Data ********/
+/********** Pledging Data **********/
 #data-app-header {
   font-family: 'LeagueSpartan-Bold';
   color: var(--text-color);
@@ -76,16 +94,7 @@
   font-size: 16px;
 }
 
-/* Garnett List */
-.garnett-list-item.pledge-data > div > div {
-  min-height: 78px;
-  padding-left: 90px !important;
-}
-.garnett-divider.pledge-data {
-  margin-left: 90px !important;
-}
-
-/******* Rush Data ********/
+/*********** Rush Data ***********/
 .filter-container {
   display: flex;
   justify-content: center;
@@ -104,7 +113,7 @@
   margin: 0 10px;
 }
 
-/****** My Data ******/
+/************ My Data ************/
 .data-value.my-data {
   margin-top: 8px;
 }

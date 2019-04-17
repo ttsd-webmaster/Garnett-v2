@@ -4,11 +4,26 @@
   align-items: center;
 }
 
+@media (max-width: 700px) {
+  #contacts-container .garnett-subheader {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
+@media (max-width: 767px) {
+  #contacts-container #darth-fader {
+    top: 103px;
+  }
+}
+
+/********* Search Bar **********/
 #search-input-container {
   position: relative;
   max-width: 700px;
   width: stretch;
   margin: 20px;
+  z-index: 2;
 }
 
 #search-brothers-input {
@@ -27,12 +42,4 @@
 #search-brothers-input::placeholder {
   font-weight: 300;
   color: var(--label-color);
-}
-
-@media (max-width: 700px) {
-  .garnett-subheader.contacts {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-  }
 }

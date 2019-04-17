@@ -35,14 +35,14 @@ export class Home extends PureComponent<Props> {
             goTo={() => this.goTo('pledge-app')}
           />
           <GarnettApp
-            title="Delibs App"
-            value="delibs-app"
-            goTo={() => this.goTo('delibs-app')}
-          />
-          <GarnettApp
             title="Data App"
             value="data-app"
             goTo={() => this.goTo('data-app')}
+          />
+          <GarnettApp
+            title="Delibs App"
+            value="delibs-app"
+            goTo={() => this.goTo('delibs-app')}
           />
         </div>
       </div>

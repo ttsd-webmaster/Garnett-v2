@@ -81,7 +81,7 @@ export class PledgingData extends PureComponent<{}, State> {
     return (
       <div id="pledging-data-container">
         <ToggleViewHeader
-          className="garnett-subheader pledging-data"
+          className="garnett-subheader toggle-view"
           viewOptions={VIEW_OPTIONS}
           view={view}
           setView={this.setView}
@@ -90,14 +90,14 @@ export class PledgingData extends PureComponent<{}, State> {
 
         {displayedData.map((set, i) => (
           <div className="data-card" key={i}>
-            <Subheader className="garnett-subheader data-app">
+            <Subheader className="garnett-subheader">
               { set[0] }
             </Subheader>
             {set[1].map((entry, j) => (
               <div key={j}>
-                <Divider className="garnett-divider pledge-data" inset={true} />
+                <Divider className="garnett-divider" inset={true} />
                 <ListItem
-                  className="garnett-list-item pledge-data"
+                  className="garnett-list-item"
                   leftAvatar={
                     <Avatar
                       className="garnett-image"

@@ -48,7 +48,7 @@ export class MyData extends PureComponent<Props, State> {
 
         {CATEGORIES.map((category, i) => (
           <div className="data-card" key={i}>
-            <Subheader className="garnett-subheader data-app">
+            <Subheader className="garnett-subheader">
               { category }s
             </Subheader>
             {[...new Map(this.state.myData)].map((data, j) => (
