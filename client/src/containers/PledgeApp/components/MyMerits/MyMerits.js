@@ -23,36 +23,20 @@ const VIEW_OPTIONS = [
 
 type Props = {
   state: User,
+  scrollDirection: 'up' | 'down' | null,
   handleRequestOpen: () => void
 };
 
 type State = {
   view: 'myMerits' | 'allMerits',
-  openMerit: boolean,
-  scrollDirection: 'up' | 'down' | null,
-  lastScrollTop: number
+  openMerit: boolean
 };
 
 export class MyMerits extends PureComponent<Props, State> {
-  containerRef: ?HtmlDivElement
   state = {
     view: 'allMerits',
-    openMerit: false,
-    scrollDirection: null,
-    lastScrollTop: 0
+    openMerit: false
   };
-
-  componentDidMount() {
-    if (this.containerRef) {
-      this.containerRef.addEventListener('scroll', this.handleScroll);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.containerRef) {
-      this.containerRef.removeEventListener('scroll', this.handleScroll);
-    }
-  }
 
   get meritsList(): Node {
     const { state, handleRequestOpen } = this.props;
@@ -61,16 +45,6 @@ export class MyMerits extends PureComponent<Props, State> {
       return <AllMeritsList state={state} />
     }
     return <MyMeritsList state={state} handleRequestOpen={handleRequestOpen} />
-  }
-
-  handleScroll = (event) => {
-    if (!this.containerRef) {
-      return
-    }
-    const { scrollTop } = this.containerRef;
-    const scrollDirection = scrollTop > this.state.lastScrollTop ? 'down' : 'up';
-    const lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // For Mobile or negative scrolling
-    this.setState({ scrollDirection, lastScrollTop })
   }
 
   setView = (value: string) => this.setState({ view: value });
@@ -93,15 +67,11 @@ export class MyMerits extends PureComponent<Props, State> {
   }
 
   render() {
-    const { state, handleRequestOpen } = this.props;
-    const { view, openMerit, scrollDirection } = this.state;
+    const { state, scrollDirection, handleRequestOpen } = this.props;
+    const { view, openMerit } = this.state;
     
     return (
-      <div
-        id="my-merits"
-        className="animate-in"
-        ref={(ref) => this.containerRef = ref}
-      >
+      <div id="my-merits" className="animate-in">
         {state.status !== 'pledge' && (
           <Fragment>
             <ToggleViewHeader
