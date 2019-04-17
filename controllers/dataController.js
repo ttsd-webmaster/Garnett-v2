@@ -64,6 +64,9 @@ exports.get_pledging_data = function(req, res) {
           totalPledgeInstanceCounter = totalPledgeMeritInstances.get(pledgeName) || 0;
           meritPledgeInstanceCounter = mostPledgeMeritInstances.get(pledgeName) || 0;
           demeritPledgeInstanceCounter = mostPledgeDemeritInstances.get(pledgeName) || 0;
+          totalPledgeMeritAmountCounter = totalPledgeMeritAmount.get(pledgeName) || 0;
+          meritPledgeAmountCounter = mostPledgeMeritAmount.get(pledgeName) || 0;
+          demeritPledgeAmountCounter = mostPledgeDemeritAmount.get(pledgeName) || 0;
 
           if (amount > 0) {
             mostActiveMeritInstances.set(activeName, meritActiveInstanceCounter += 1);
