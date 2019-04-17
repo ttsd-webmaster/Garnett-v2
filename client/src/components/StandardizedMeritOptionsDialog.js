@@ -15,8 +15,8 @@ const MERIT_OPTIONS = [
 ];
 
 const DEMERIT_OPTIONS = [
-  { reason: 'Late Greet', amount: '5', action: 'demerit' },
-  { reason: 'Missed Greet', amount: '10', action: 'demerit' },
+  { reason: 'Late Greet', amount: '10', action: 'demerit' },
+  { reason: 'Missed Greet', amount: '15', action: 'demerit' },
   { reason: 'Missed Text Reminder', amount: '20', action: 'demerit' },
   { reason: 'Rude to Active', amount: '15', action: 'demerit' },
   { reason: 'Asking for/ Complaining about Merits', amount: '15', action: 'demerit' }
