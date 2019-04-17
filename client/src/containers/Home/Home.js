@@ -1,6 +1,9 @@
 // @flow
 
 import './Home.css';
+import dataApp from './images/dataApp.png';
+import delibsApp from './images/delibsApp.png';
+import pledgeApp from './images/pledgeApp.png';
 import { Header } from 'components';
 import { GarnettApp } from './components/GarnettApp';
 
@@ -31,17 +34,17 @@ export class Home extends PureComponent<Props> {
         <div className="icon-container animate-in">
           <GarnettApp
             title="Pledge App"
-            value="pledge-app"
+            src={pledgeApp}
             goTo={() => this.goTo('pledge-app')}
           />
           <GarnettApp
             title="Data App"
-            value="data-app"
+            src={dataApp}
             goTo={() => this.goTo('data-app')}
           />
           <GarnettApp
             title="Delibs App"
-            value="delibs-app"
+            src={delibsApp}
             goTo={() => this.goTo('delibs-app')}
           />
         </div>

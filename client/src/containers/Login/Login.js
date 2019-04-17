@@ -1,6 +1,8 @@
 // @flow
 
 import './Login.css';
+import ttLogo from './images/logo.png';
+import garnettLogo from './images/garnett.svg';
 import { isMobile } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import {
@@ -47,12 +49,12 @@ export class Login extends PureComponent<Props, State> {
       <div className="login animate-in">
         {!isMobile() && (
           <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
-            <img className="logo" src={require('./images/logo.png')} alt="logo"/>
+            <img className="logo" src={ttLogo} alt="TT Logo"/>
           </a>
         )}
 
         <div className="login-logo">
-          <img src={require('./images/garnett.svg')} alt="garnett"/>
+          <img src={garnettLogo} alt="Garnett Logo"/>
           <h1> Garne<span className="tt">tt</span> </h1>
         </div>
 

@@ -80,7 +80,7 @@ export class DataApp extends PureComponent<Props, State> {
           selectedIndex={index}
         >
           <BottomNavigationItem
-            label={<span style={getTabStyle(index === 0)}>Pledge Data</span>}
+            label={<span style={getTabStyle(index === 0)}>Pledging Data</span>}
             icon={<div></div>}
             onClick={() => this.select(0)}
           />

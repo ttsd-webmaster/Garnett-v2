@@ -99,19 +99,19 @@ exports.get_pledging_data = function(req, res) {
     mostPledgeDemeritAmount = [...mostPledgeDemeritAmount.entries()].sort((a,b) => a[1] - b[1]).slice(0, 10);
 
     const activeData = [
-      ['Total Merit Instances', totalActiveMeritInstances],
+      ['Most Combined Merit Instances', totalActiveMeritInstances],
       ['Most Merit Instances', mostActiveMeritInstances],
       ['Most Demerit Instances', mostActiveDemeritInstances],
-      ['Total Merit Amount', totalActiveMeritAmount],
+      ['Most Combined Merit Amount', totalActiveMeritAmount],
       ['Most Merit Amount', mostActiveMeritAmount],
       ['Most Demerit Amount', mostActiveDemeritAmount]
     ];
 
     const pledgeData = [
-      ['Total Merit Instances', totalPledgeMeritInstances],
+      ['Most Combined Merit Instances', totalPledgeMeritInstances],
       ['Most Merit Instances', mostPledgeMeritInstances],
       ['Most Demerit Instances', mostPledgeDemeritInstances],
-      ['Total Merit Amount', totalPledgeMeritAmount],
+      ['Most Combined Merit Amount', totalPledgeMeritAmount],
       ['Most Merit Amount', mostPledgeMeritAmount],
       ['Most Demerit Amount', mostPledgeDemeritAmount]
     ];
@@ -176,11 +176,11 @@ exports.get_my_data = function(req, res) {
       }
 
       res.json([
-        ['Total Merit Instances', totalMeritInstances],
+        ['Combined Merit Instances', totalMeritInstances],
         ['Merit Instances', meritInstances],
         ['Demerit Instances', demeritInstances],
         ['Merits created on Garnett', meritsCreated],
-        ['Total Merit Amount', totalMeritAmount],
+        ['Combined Merit Amount', totalMeritAmount],
         ['Merit Amount', meritAmount],
         ['Demerit Amount', demeritAmount],
         ['Chalkboards Created', chalkboardsCreated],

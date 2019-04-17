@@ -1,6 +1,9 @@
 // @flow
 
 import API from 'api/API.js';
+import goldMedal from './images/gold.png';
+import silverMedal from './images/silver.png';
+import bronzeMedal from './images/bronze.png';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { ToggleViewHeader } from 'components';
 
@@ -57,6 +60,18 @@ export class PledgingData extends PureComponent<{}, State> {
     }
   }
 
+  medal(index: number): ?Node {
+    switch (index) {
+      case 0:
+        return <img className="medal" src={goldMedal} alt="Gold medal" />;
+      case 1:
+        return <img className="medal" src={silverMedal} alt="Silver medal" />;
+      case 2:
+        return <img className="medal" src={bronzeMedal} alt="Bronze medal" />;
+      default:
+    }
+  }
+
   setView = (value: string) => {
     let displayedData;
     switch (value) {
@@ -105,11 +120,10 @@ export class PledgingData extends PureComponent<{}, State> {
                       src={photoMap.get(entry[0])}
                     />
                   }
-                  primaryText={
-                    <p className="data-key">{ entry[0] }</p>
-                  }
+                  primaryText={<p className="data-key">{ entry[0] }</p>}
                 >
-                  {this.dataValue(set[0], entry[1])}
+                  { this.medal(j) }
+                  { this.dataValue(set[0], entry[1]) }
                 </ListItem>
                 <Divider className="garnett-divider pledge-data" inset={true} />
               </div>

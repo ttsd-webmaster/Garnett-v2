@@ -4,7 +4,7 @@ import React from 'react';
 
 type Props = {
   title: string,
-  value: string,
+  src: string,
   goTo: () => void
 };
 
@@ -14,7 +14,7 @@ export function GarnettApp(props: Props) {
       <div className="app-icon-image-container">
         <img
           className="app-icon-image"
-          src={require(`../images/${props.value}.png`)}
+          src={props.src}
           alt={props.title}
         />
       </div>
