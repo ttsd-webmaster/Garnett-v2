@@ -5,31 +5,19 @@ exports.get_pledging_data = function(req, res) {
   // Map to map user photo
   const photoMap = new Map();
   // Maps to map user to value
-  let totalActiveMeritInstances = new Map();
-  let mostActiveMeritInstances = new Map();
-  let mostActiveDemeritInstances = new Map();
-  let totalPledgeMeritInstances = new Map();
-  let mostPledgeMeritInstances = new Map();
-  let mostPledgeDemeritInstances = new Map();
-  let totalActiveMeritAmount = new Map();
-  let mostActiveMeritAmount = new Map();
-  let mostActiveDemeritAmount = new Map();
-  let totalPledgeMeritAmount = new Map();
-  let mostPledgeMeritAmount = new Map();
-  let mostPledgeDemeritAmount = new Map();
+  let activeMostOverallMeritsGiven = new Map();
+  let activeMostMeritsGiven = new Map();
+  let activeMostDemeritsGiven = new Map();
+  let pledgeMostOverallMeritsGiven = new Map();
+  let pledgeMostMeritsGiven = new Map();
+  let pledgeMostDemeritsGiven = new Map();
   // Counter to keep track of all the amounts
-  let totalActiveInstanceCounter;
-  let meritActiveInstanceCounter;
-  let demeritActiveInstanceCounter;
-  let totalPledgeInstanceCounter;
-  let meritPledgeInstanceCounter;
-  let demeritPledgeInstanceCounter;
-  let totalActiveMeritAmountCounter;
-  let meritActiveAmountCounter;
-  let demeritActiveAmountCounter;
-  let totalPledgeMeritAmountCounter;
-  let meritPledgeAmountCounter;
-  let demeritPledgeAmountCounter;
+  let activeMostOverallMeritsGivenCounter;
+  let activeMostMeritsGivenCounter;
+  let activeMostDemeritsGivenCounter;
+  let pledgeMostOverallMeritsGivenCounter;
+  let pledgeMostMeritsGivenCounter;
+  let pledgeMostDemeritsGivenCounter;
 
   meritsRef.once('value', (merits) => {
     merits.forEach((merit) => {
@@ -55,68 +43,58 @@ exports.get_pledging_data = function(req, res) {
         }
 
         if (!isPIPM) {
-          totalActiveInstanceCounter = totalActiveMeritInstances.get(activeName) || 0;
-          meritActiveInstanceCounter = mostActiveMeritInstances.get(activeName) || 0;
-          demeritActiveInstanceCounter = mostActiveDemeritInstances.get(activeName) || 0;
-          totalActiveMeritAmountCounter = totalActiveMeritAmount.get(activeName) || 0;
-          meritActiveAmountCounter = mostActiveMeritAmount.get(activeName) || 0;
-          demeritActiveAmountCounter = mostActiveDemeritAmount.get(activeName) || 0;
-          totalPledgeInstanceCounter = totalPledgeMeritInstances.get(pledgeName) || 0;
-          meritPledgeInstanceCounter = mostPledgeMeritInstances.get(pledgeName) || 0;
-          demeritPledgeInstanceCounter = mostPledgeDemeritInstances.get(pledgeName) || 0;
-          totalPledgeMeritAmountCounter = totalPledgeMeritAmount.get(pledgeName) || 0;
-          meritPledgeAmountCounter = mostPledgeMeritAmount.get(pledgeName) || 0;
-          demeritPledgeAmountCounter = mostPledgeDemeritAmount.get(pledgeName) || 0;
+          activeMostOverallMeritsGivenCounter = activeMostOverallMeritsGiven.get(activeName) || [0, 0];
+          activeMostMeritsGivenCounter = activeMostMeritsGiven.get(activeName) || [0, 0];
+          activeMostDemeritsGivenCounter = activeMostDemeritsGiven.get(activeName) || [0, 0];
+          pledgeMostOverallMeritsGivenCounter = pledgeMostOverallMeritsGiven.get(pledgeName) || [0, 0];
+          pledgeMostMeritsGivenCounter = pledgeMostMeritsGiven.get(pledgeName) || [0, 0];
+          pledgeMostDemeritsGivenCounter = pledgeMostDemeritsGiven.get(pledgeName) || [0, 0];
+
+          console.log(activeMostMeritsGivenCounter);
 
           if (amount > 0) {
-            mostActiveMeritInstances.set(activeName, meritActiveInstanceCounter += 1);
-            mostPledgeMeritInstances.set(pledgeName, meritPledgeInstanceCounter += 1);
-            mostActiveMeritAmount.set(activeName, meritActiveAmountCounter += amount);
-            mostPledgeMeritAmount.set(pledgeName, meritPledgeAmountCounter += amount);
+            const updatedActiveMeritInstances = activeMostMeritsGivenCounter[0] + 1;
+            const updatedActiveMeritAmounts = activeMostMeritsGivenCounter[1] + amount;
+            const updatedPledgeMeritInstances = pledgeMostMeritsGivenCounter[0] + 1;
+            const updatedPledgeMeritAmounts = pledgeMostMeritsGivenCounter[1] + amount;
+            activeMostMeritsGiven.set(activeName, [updatedActiveMeritInstances, updatedActiveMeritAmounts]);
+            pledgeMostMeritsGiven.set(pledgeName, [updatedPledgeMeritInstances, updatedPledgeMeritAmounts]);
           } else {
-            mostActiveDemeritInstances.set(activeName, demeritActiveInstanceCounter += 1);
-            mostPledgeDemeritInstances.set(pledgeName, demeritPledgeInstanceCounter += 1);
-            mostActiveDemeritAmount.set(activeName, demeritActiveAmountCounter += amount);
-            mostPledgeDemeritAmount.set(pledgeName, demeritPledgeAmountCounter += amount);
+            const updatedActiveDemeritInstances = activeMostDemeritsGivenCounter[0] + 1;
+            const updatedActiveDemeritAmounts = activeMostDemeritsGivenCounter[1] + amount;
+            const updatedPledgeDemeritInstances = pledgeMostDemeritsGivenCounter[0] + 1;
+            const updatedPledgeDemeritAmounts = pledgeMostDemeritsGivenCounter[1] + amount;
+            activeMostDemeritsGiven.set(activeName, [updatedActiveDemeritInstances, updatedActiveDemeritAmounts]);
+            pledgeMostDemeritsGiven.set(pledgeName, [updatedPledgeDemeritInstances, updatedPledgeDemeritAmounts]);
           }
 
-          totalActiveMeritInstances.set(activeName, totalActiveInstanceCounter += 1);
-          totalPledgeMeritInstances.set(pledgeName, totalPledgeInstanceCounter += 1);
-          totalActiveMeritAmount.set(activeName, totalActiveMeritAmountCounter += amount);
-          totalPledgeMeritAmount.set(pledgeName, totalPledgeMeritAmountCounter += amount);
+          const updatedActiveOverallMeritInstances = activeMostOverallMeritsGivenCounter[0] + 1;
+          const updatedActiveOverallMeritAmounts = activeMostOverallMeritsGivenCounter[1] + amount;
+          const updatedPledgeOverallMeritInstances = pledgeMostOverallMeritsGivenCounter[0] + 1;
+          const updatedPledgeOverallMeritAmounts = pledgeMostOverallMeritsGivenCounter[1] + amount;
+          activeMostOverallMeritsGiven.set(activeName, [updatedActiveOverallMeritInstances, updatedActiveOverallMeritAmounts]);
+          pledgeMostOverallMeritsGiven.set(pledgeName, [updatedPledgeOverallMeritInstances, updatedPledgeOverallMeritAmounts]);
         }
       }
     });
 
-    totalActiveMeritInstances = [...totalActiveMeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostActiveMeritInstances = [...mostActiveMeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostActiveDemeritInstances = [...mostActiveDemeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    totalPledgeMeritInstances = [...totalPledgeMeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostPledgeMeritInstances = [...mostPledgeMeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostPledgeDemeritInstances = [...mostPledgeDemeritInstances.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    totalActiveMeritAmount = [...totalActiveMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostActiveMeritAmount = [...mostActiveMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostActiveDemeritAmount = [...mostActiveDemeritAmount.entries()].sort((a,b) => a[1] - b[1]).slice(0, 10);
-    totalPledgeMeritAmount = [...totalPledgeMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostPledgeMeritAmount = [...mostPledgeMeritAmount.entries()].sort((a,b) => b[1] - a[1]).slice(0, 10);
-    mostPledgeDemeritAmount = [...mostPledgeDemeritAmount.entries()].sort((a,b) => a[1] - b[1]).slice(0, 10);
+    activeMostOverallMeritsGiven = [...activeMostOverallMeritsGiven.entries()].sort((a,b) => b[1][1] - a[1][1]).slice(0, 10);
+    activeMostMeritsGiven = [...activeMostMeritsGiven.entries()].sort((a,b) => b[1][1] - a[1][1]).slice(0, 10);
+    activeMostDemeritsGiven = [...activeMostDemeritsGiven.entries()].sort((a,b) => a[1][1] - b[1][1]).slice(0, 10);
+    pledgeMostOverallMeritsGiven = [...pledgeMostOverallMeritsGiven.entries()].sort((a,b) => b[1][1] - a[1][1]).slice(0, 10);
+    pledgeMostMeritsGiven = [...pledgeMostMeritsGiven.entries()].sort((a,b) => b[1][1] - a[1][1]).slice(0, 10);
+    pledgeMostDemeritsGiven = [...pledgeMostDemeritsGiven.entries()].sort((a,b) => a[1][1] - b[1][1]).slice(0, 10);
 
     const activeData = [
-      ['Most Combined Merit Instances', totalActiveMeritInstances],
-      ['Most Merit Instances', mostActiveMeritInstances],
-      ['Most Demerit Instances', mostActiveDemeritInstances],
-      ['Most Combined Merit Amount', totalActiveMeritAmount],
-      ['Most Merit Amount', mostActiveMeritAmount],
-      ['Most Demerit Amount', mostActiveDemeritAmount]
+      ['Most Merits and Demerits Given', activeMostOverallMeritsGiven],
+      ['Most Merits Given', activeMostMeritsGiven],
+      ['Most Demerits Given', activeMostDemeritsGiven]
     ];
 
     const pledgeData = [
-      ['Most Combined Merit Instances', totalPledgeMeritInstances],
-      ['Most Merit Instances', mostPledgeMeritInstances],
-      ['Most Demerit Instances', mostPledgeDemeritInstances],
-      ['Most Combined Merit Amount', totalPledgeMeritAmount],
-      ['Most Merit Amount', mostPledgeMeritAmount],
-      ['Most Demerit Amount', mostPledgeDemeritAmount]
+      ['Most Merits and Demerits Received', pledgeMostOverallMeritsGiven],
+      ['Most Merits Received', pledgeMostMeritsGiven],
+      ['Most Demerits Received', pledgeMostDemeritsGiven]
     ];
 
     res.json({ activeData, pledgeData, photoMap: [...photoMap] });
@@ -129,66 +107,67 @@ exports.get_my_data = function(req, res) {
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
   const chalkboardsRef = admin.database().ref('/chalkboards');
-  let totalMeritInstances = 0;
+  let overallMeritInstances = 0;
   let meritInstances = 0;
   let demeritInstances = 0;
-  let meritsCreated = 0;
-  let totalMeritAmount = 0;
+  let meritsCreatedInstances = 0;
+  let meritsCreatedAmount = 0;
+  let overallMeritAmount = 0;
   let meritAmount = 0;
   let demeritAmount = 0;
 
   meritsRef.orderByChild('activeName').equalTo(fullName).once('value', (merits) => {
     merits.forEach((merit) => {
-      if (merit.val().createdBy === fullName.replace(/ /g, '')) {
-        meritsCreated++;
+      const { amount, createdBy } = merit.val();
+
+      if (createdBy === fullName.replace(/ /g, '')) {
+        meritsCreatedInstances++;
+        meritsCreatedAmount += amount;
       }
-      if (merit.val().amount > 0) {
+      if (amount > 0) {
         meritInstances += 1;
-        meritAmount += merit.val().amount;
+        meritAmount += amount;
       }
       else {
         demeritInstances += 1;
-        demeritAmount += merit.val().amount;
+        demeritAmount += amount;
       }
 
-      totalMeritInstances++;
-      totalMeritAmount += merit.val().amount;
+      overallMeritInstances++;
+      overallMeritAmount += amount;
     });
 
-    chalkboardsRef.once('value', (chalkboards) => {
-      let chalkboardsCreated = 0;
-      let chalkboardsAttended = 0;
+    // chalkboardsRef.once('value', (chalkboards) => {
+    //   let chalkboardsCreated = 0;
+    //   let chalkboardsAttended = 0;
 
-      if (chalkboards.val()) {
-        chalkboards.forEach((chalkboard) => {
-          if (chalkboard.val().activeName === fullName) {
-            chalkboardsCreated += 1;
-          }
-          else {
-            let attendees = Object.keys(chalkboard.val().attendees).map(function(key) {
-              return chalkboard.val().attendees[key];
-            });
+    //   if (chalkboards.val()) {
+    //     chalkboards.forEach((chalkboard) => {
+    //       if (chalkboard.val().activeName === fullName) {
+    //         chalkboardsCreated += 1;
+    //       }
+    //       else {
+    //         let attendees = Object.keys(chalkboard.val().attendees).map(function(key) {
+    //           return chalkboard.val().attendees[key];
+    //         });
 
-            attendees.forEach((attendee) => {
-              if (attendee.name === fullName) {
-                chalkboardsAttended += 1;
-              }
-            });
-          }
-        });
-      }
+    //         attendees.forEach((attendee) => {
+    //           if (attendee.name === fullName) {
+    //             chalkboardsAttended += 1;
+    //           }
+    //         });
+    //       }
+    //     });
+    //   }
 
       res.json([
-        ['Combined Merit Instances', totalMeritInstances],
-        ['Merit Instances', meritInstances],
-        ['Demerit Instances', demeritInstances],
-        ['Merits created on Garnett', meritsCreated],
-        ['Combined Merit Amount', totalMeritAmount],
-        ['Merit Amount', meritAmount],
-        ['Demerit Amount', demeritAmount],
-        ['Chalkboards Created', chalkboardsCreated],
-        ['Chalkboards Attended', chalkboardsAttended],
+        ['Merits and Demerits Given', [overallMeritInstances, overallMeritAmount]],
+        ['Merits Given', [meritInstances, meritAmount]],
+        ['Demerits Given', [demeritInstances, demeritAmount]],
+        ['Merits created on Garnett', [meritsCreatedInstances, meritsCreatedAmount]],
+        // ['Chalkboards Created', chalkboardsCreated],
+        // ['Chalkboards Attended', chalkboardsAttended]
       ]);
-    });
+    // });
   });
 };

@@ -23,7 +23,7 @@ type State = {
   activeData: ?Array<any>,
   pledgeData: ?Array<any>,
   photoMap: ?Array<any>,
-  view: 'actives' | 'pledges'
+  view: 'actives' | 'pledges' | null
 };
 
 export class PledgingData extends PureComponent<{}, State> {
@@ -32,32 +32,44 @@ export class PledgingData extends PureComponent<{}, State> {
     activeData: null,
     pledgeData: null,
     photoMap: null,
-    view: 'actives'
+    view: null
   }
 
   componentDidMount() {
     API.getPledgingData()
     .then((res) => {
       const { activeData, pledgeData, photoMap } = res.data;
+      const view = localStorage.getItem('pledgingDataView') || 'actives';
+      const displayedData = view === 'actives' ? activeData : pledgeData;
       this.setState({
-        displayedData: activeData,
+        displayedData,
         activeData,
         pledgeData,
-        photoMap: new Map(photoMap)
+        photoMap: new Map(photoMap),
+        view
       });
     });
   }
 
-  dataValue(columnTitle: string, dataValue: string): Node {
-    if (columnTitle.includes('Amount')) {
-      if (dataValue > 0) {
-        return <p className="data-value green">+{ dataValue }</p>;
-      } else {
-        return <p className="data-value red">{ dataValue }</p>;
-      }
-    } else {
-      return <p className="data-value">{ dataValue }</p>;
+  dataValue(dataValue: string): Node {
+    const instances = dataValue[0];
+    const amount = dataValue[1];
+    let color = '';
+
+    if (amount > 0) {
+      color = 'green';
+    } else if (amount < 0) {
+      color = 'red';
     }
+
+    return (
+      <div className="data-value-container">
+        <p className="data-instance">{ instances } instances</p>
+          <p className={`data-amount ${color}`}>
+            { amount > 0 && '+' }{ amount }
+          </p>
+      </div>
+    )
   }
 
   medal(index: number): ?Node {
@@ -83,6 +95,7 @@ export class PledgingData extends PureComponent<{}, State> {
         break;
       default:
     }
+    localStorage.setItem('pledgingDataView', value);
     this.setState({ displayedData, view: value });
   };
 
@@ -123,7 +136,7 @@ export class PledgingData extends PureComponent<{}, State> {
                   primaryText={<p className="data-key">{ entry[0] }</p>}
                 >
                   { this.medal(j) }
-                  { this.dataValue(set[0], entry[1]) }
+                  { this.dataValue(entry[1]) }
                 </ListItem>
                 <Divider className="garnett-divider pledge-data" inset={true} />
               </div>

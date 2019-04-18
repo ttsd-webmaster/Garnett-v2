@@ -88,15 +88,25 @@
 
 .data-key {
   font-weight: 700;
-  margin: 0;
-  margin-top: 8px;
+  margin: 8px 0 0;
 }
 
-.data-value {
+.data-value-container {
   position: absolute;
   right: 26px;
+  text-align: center;
+}
+
+.data-instance {
+  color: var(--text-light);
+  font-size: 14px;
+  margin: 0;
+}
+
+.data-amount {
   font-family: 'LeagueSpartan-Bold';
   font-size: 16px;
+  margin: 10px 0 0;
 }
 
 /*********** Rush Data ***********/
@@ -128,6 +138,6 @@
 }
 
 /************ My Data ************/
-.data-value.my-data {
-  margin-top: 8px;
+.garnett-list-item.my-data {
+  height: 78px;
 }

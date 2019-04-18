@@ -8,7 +8,7 @@ import { ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
-const CATEGORIES = ['Merit', 'Chalkboard'];
+const CATEGORIES = ['Merit'];
 
 type Props = {
   history: RouterHistory,
@@ -28,6 +28,27 @@ export class MyData extends PureComponent<Props, State> {
     .then((res) => {
       this.setState({ myData: res.data, });
     });
+  }
+
+  dataValue(dataValue: string): Node {
+    const instances = dataValue[0];
+    const amount = dataValue[1];
+    let color = '';
+
+    if (amount > 0) {
+      color = 'green';
+    } else if (amount < 0) {
+      color = 'red';
+    }
+
+    return (
+      <div className="data-value-container">
+        <p className="data-instance">{ instances } instances</p>
+          <p className={`data-amount ${color}`}>
+            { amount > 0 && '+' }{ amount }
+          </p>
+      </div>
+    )
   }
 
   goHome = () => {
@@ -56,12 +77,12 @@ export class MyData extends PureComponent<Props, State> {
                 <div key={j}>
                   <Divider className="garnett-divider" />
                   <ListItem
-                    className="garnett-list-item"
+                    className="garnett-list-item my-data"
                     primaryText={
                       <p className="data-key">{ data[0] }</p>
                     }
                   >
-                    <p className="data-value my-data">{ data[1] }</p>
+                    { this.dataValue(data[1]) }
                   </ListItem>
                   <Divider className="garnett-divider" />
                 </div>
