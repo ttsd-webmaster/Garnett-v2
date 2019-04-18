@@ -29,15 +29,21 @@ usersRef.once('value', (users) => {
         if (pledge.val().status === 'pledge') {
           user.ref.child(`/Pledges/${pledge.key}`).update({ merits: 200 });
         }
-      })
+      });
     } else if (user.val().status === 'active') {
       users.forEach((pledge) => {
         if (pledge.val().status === 'pledge') {
           user.ref.child(`/Pledges/${pledge.key}`).update({ merits: 100 });
         }
-      })
+      });
+    } else if (user.val().status === 'pipm') {
+      users.forEach((pledge) => {
+        if (pledge.val().status === 'pledge') {
+          user.ref.child(`/Pledges/${pledge.key}`).update({ merits: 'Unlimited' });
+        }
+      });
     }
-  })
+  });
 
   // Recalculate merit amounts for each active and alumni
   meritsRef.once('value', (merits) => {
@@ -46,10 +52,12 @@ usersRef.once('value', (users) => {
       const pledgeName = merit.val().pledgeName.replace(/ /g, '');
       const activeMeritsRef = usersRef.child(`/${activeName}/Pledges/${pledgeName}`);
       activeMeritsRef.child('merits').once('value', (meritCount) => {
-        const merits = meritCount.val() - merit.val().amount;
-        activeMeritsRef.update({ merits });
-        console.log(`Recalculated merits for ${merit.val().activeName}`);
+        if (meritCount.val() !== 'Unlimited') {
+          const merits = meritCount.val() - merit.val().amount;
+          activeMeritsRef.update({ merits });
+          console.log(`Recalculated merits for ${merit.val().activeName}`);
+        }
       });
     });
-  })
+  });
 });

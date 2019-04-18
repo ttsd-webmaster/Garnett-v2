@@ -140,16 +140,16 @@ export function formatDate(date: Date): string {
     return;
   }
 
-  let day = date.getDate();
+  const year = date.getYear() - 100;
   let month = date.getMonth() + 1;
-  let year = date.getYear() - 100;
-
-  if (day < 10) {
-    day = '0' + day;
-  }
+  let day = date.getDate();
 
   if (month < 10) {
     month = '0' + month;
+  }
+
+  if (day < 10) {
+    day = '0' + day;
   }
 
   return `${month}/${day}/${year}`;

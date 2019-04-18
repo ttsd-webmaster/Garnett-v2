@@ -1,11 +1,11 @@
 var fs = require('fs');
 const admin = require("firebase-admin");
-var NuData = require('./data/RushFall15.json');
-var XiData = require('./data/RushSpring16.json');
-var OmicronData = require('./data/RushFall16.json');
-var PiData = require('./data/RushSpring17.json');
-var RhoData = require('./data/RushFall17.json');
-var SigmaData = require('./data/RushSpring18.json');
+var NuData = require('./rushData/RushFall15.json');
+var XiData = require('./rushData/RushSpring16.json');
+var OmicronData = require('./rushData/RushFall16.json');
+var PiData = require('./rushData/RushSpring17.json');
+var RhoData = require('./rushData/RushFall17.json');
+var SigmaData = require('./rushData/RushSpring18.json');
 require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
 
 admin.initializeApp({
