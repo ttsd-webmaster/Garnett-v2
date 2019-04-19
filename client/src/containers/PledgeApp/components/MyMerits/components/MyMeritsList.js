@@ -89,7 +89,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
               merit={merit}
               photo={isPledge ? activePhoto : pledgePhoto}
               name={isPledge ? activeName : pledgeName}
-              handleDeleteOpen={isPledge ? null : this.handleDeleteOpen}
+              handleDeleteOpen={this.handleDeleteOpen}
             />
           )
         })}
@@ -126,18 +126,14 @@ export class MyMeritsList extends PureComponent<Props, State> {
     return (
       <Fragment>
         <FilterHeader isReversed={reverse} reverse={this.reverse} />
-
         { this.merits }
-
-        {this.props.state.status !== 'pledge' && (
-          <LoadableDeleteMeritDialog
-            open={openDelete}
-            state={state}
-            merit={selectedMerit}
-            handleClose={this.handleDeleteClose}
-            handleRequestOpen={handleRequestOpen}
-          />
-        )}
+        <LoadableDeleteMeritDialog
+          open={openDelete}
+          state={state}
+          merit={selectedMerit}
+          handleClose={this.handleDeleteClose}
+          handleRequestOpen={handleRequestOpen}
+        />
       </Fragment>
     )
   }

@@ -25,14 +25,18 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
   state = { deleting: false };
 
   delete = (merit: Merit) => {
-    const { displayName } = this.props.state;
+    const { displayName, status } = this.props.state;
 
     this.setState({ deleting: true });
 
     API.deleteMerit(displayName, merit)
     .then((res) => {
+      let message = `Deleted merit for ${merit.pledgeName}.`;
+      if (status === 'pledge') {
+        message = `Deleted merit from ${merit.activeName}.`;
+      }
       this.props.handleClose();
-      this.props.handleRequestOpen(`Deleted merit for ${merit.pledgeName}`);
+      this.props.handleRequestOpen(message);
       this.setState({ deleting: false });
 
       API.sendDeletedMeritNotification(merit)
@@ -42,7 +46,7 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
     .catch((error) => {
       console.log(`Error: ${error}`);
       this.props.handleClose();
-      this.props.handleRequestOpen('Error deleting merit');
+      this.props.handleRequestOpen('You can only delete merits you created.');
       this.setState({ deleting: false });
     });
   }
