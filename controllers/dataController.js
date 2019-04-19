@@ -5,6 +5,7 @@ exports.get_pledging_data = function(req, res) {
   // Map to map user photo
   const photoMap = new Map();
   // Maps to map user to value
+  let activeMostMeritsCreated = new Map();
   let activeMostOverallMeritsGiven = new Map();
   let activeMostMeritsGiven = new Map();
   let activeMostDemeritsGiven = new Map();
@@ -12,6 +13,7 @@ exports.get_pledging_data = function(req, res) {
   let pledgeMostMeritsGiven = new Map();
   let pledgeMostDemeritsGiven = new Map();
   // Counter to keep track of all the amounts
+  let activeMostMeritsCreatedCounter;
   let activeMostOverallMeritsGivenCounter;
   let activeMostMeritsGivenCounter;
   let activeMostDemeritsGivenCounter;
@@ -24,6 +26,7 @@ exports.get_pledging_data = function(req, res) {
       if (merit.val()) {
         const {
           amount,
+          createdBy,
           activeName,
           pledgeName,
           activePhoto,
@@ -46,11 +49,16 @@ exports.get_pledging_data = function(req, res) {
           activeMostOverallMeritsGivenCounter = activeMostOverallMeritsGiven.get(activeName) || [0, 0];
           activeMostMeritsGivenCounter = activeMostMeritsGiven.get(activeName) || [0, 0];
           activeMostDemeritsGivenCounter = activeMostDemeritsGiven.get(activeName) || [0, 0];
+          activeMostMeritsCreatedCounter = activeMostMeritsCreated.get(activeName) || [0, 0];
           pledgeMostOverallMeritsGivenCounter = pledgeMostOverallMeritsGiven.get(pledgeName) || [0, 0];
           pledgeMostMeritsGivenCounter = pledgeMostMeritsGiven.get(pledgeName) || [0, 0];
           pledgeMostDemeritsGivenCounter = pledgeMostDemeritsGiven.get(pledgeName) || [0, 0];
 
-          console.log(activeMostMeritsGivenCounter);
+          if (createdBy === activeName.replace(/ /g, '')) {
+            const updatedActiveMeritCreatedInstances = activeMostMeritsCreatedCounter[0] + 1;
+            const updatedActiveMeritCreatedAmounts = activeMostMeritsCreatedCounter[1] + amount;
+            activeMostMeritsCreated.set(activeName, [updatedActiveMeritCreatedInstances, updatedActiveMeritCreatedAmounts])
+          }
 
           if (amount > 0) {
             const updatedActiveMeritInstances = activeMostMeritsGivenCounter[0] + 1;
@@ -78,6 +86,7 @@ exports.get_pledging_data = function(req, res) {
       }
     });
 
+    activeMostMeritsCreated = [...activeMostMeritsCreated.entries()].sort((a,b) => b[1][0] - a[1][0]).slice(0, 10);
     activeMostOverallMeritsGiven = [...activeMostOverallMeritsGiven.entries()].sort((a,b) => b[1][1] - a[1][1]).slice(0, 10);
     activeMostMeritsGiven = [...activeMostMeritsGiven.entries()].sort((a,b) => b[1][1] - a[1][1]).slice(0, 10);
     activeMostDemeritsGiven = [...activeMostDemeritsGiven.entries()].sort((a,b) => a[1][1] - b[1][1]).slice(0, 10);
@@ -88,7 +97,8 @@ exports.get_pledging_data = function(req, res) {
     const activeData = [
       ['Most Merits and Demerits Given', activeMostOverallMeritsGiven],
       ['Most Merits Given', activeMostMeritsGiven],
-      ['Most Demerits Given', activeMostDemeritsGiven]
+      ['Most Demerits Given', activeMostDemeritsGiven],
+      ['Most Merit Instances Created on Garnett', activeMostMeritsCreated]
     ];
 
     const pledgeData = [
