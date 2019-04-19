@@ -19,29 +19,33 @@ admin.initializeApp({
 
 const usersRef = admin.database().ref('/users/');
 const meritsRef = admin.database().ref('/merits');
+let usersMerits = {};
 
  // Set merits
 usersRef.once('value', (users) => {
   users.forEach((user) => {
-    // Reset merit amounts
-    if (user.val().status === 'alumni') {
-      users.forEach((pledge) => {
-        if (pledge.val().status === 'pledge') {
-          user.ref.child(`/Pledges/${pledge.key}`).update({ merits: 200 });
-        }
-      });
-    } else if (user.val().status === 'active') {
-      users.forEach((pledge) => {
-        if (pledge.val().status === 'pledge') {
-          user.ref.child(`/Pledges/${pledge.key}`).update({ merits: 100 });
-        }
-      });
-    } else if (user.val().status === 'pipm') {
-      users.forEach((pledge) => {
-        if (pledge.val().status === 'pledge') {
-          user.ref.child(`/Pledges/${pledge.key}`).update({ merits: 'Unlimited' });
-        }
-      });
+    if (user.val().status !== 'pledge') {
+      usersMerits[user.key] = {};
+      // Reset merit amounts
+      if (user.val().status === 'alumni') {
+        users.forEach((pledge) => {
+          if (pledge.val().status === 'pledge') {
+            usersMerits[user.key][pledge.key] = 200;
+          }
+        });
+      } else if (user.val().status === 'active') {
+        users.forEach((pledge) => {
+          if (pledge.val().status === 'pledge') {
+            usersMerits[user.key][pledge.key] = 100;
+          }
+        });
+      } else if (user.val().status === 'pipm') {
+        users.forEach((pledge) => {
+          if (pledge.val().status === 'pledge') {
+            usersMerits[user.key][pledge.key] = 'Unlimited';
+          }
+        });
+      }
     }
   });
 
@@ -50,14 +54,26 @@ usersRef.once('value', (users) => {
     merits.forEach((merit) => {
       const activeName = merit.val().activeName.replace(/ /g, '');
       const pledgeName = merit.val().pledgeName.replace(/ /g, '');
-      const activeMeritsRef = usersRef.child(`/${activeName}/Pledges/${pledgeName}`);
-      activeMeritsRef.child('merits').once('value', (meritCount) => {
-        if (meritCount.val() !== 'Unlimited') {
-          const merits = meritCount.val() - merit.val().amount;
-          activeMeritsRef.update({ merits });
-          console.log(`Recalculated merits for ${merit.val().activeName}`);
-        }
+      if (usersMerits[activeName][pledgeName] !== 'Unlimited') {
+        usersMerits[activeName][pledgeName] = usersMerits[activeName][pledgeName] - merit.val().amount;
+      }
+    });
+
+    usersMerits = Object.keys(usersMerits).map(function(key) {
+      return [key, usersMerits[key]];
+    });
+
+    usersMerits.forEach((userMerits) => {
+      const userKey = userMerits[0];
+      pledgeMerits = Object.keys(userMerits[1]).map(function(key) {
+        return [key, userMerits[1][key]];
       });
+      pledgeMerits.forEach((pledgeInfo) => {
+        const pledgeKey = pledgeInfo[0];
+        const merits = pledgeInfo[1];
+        usersRef.child(userKey).child(`/Pledges/${pledgeKey}`).update({ merits });
+        console.log(`${userKey} has ${merits} merits left for ${pledgeKey}`);
+      })
     });
   });
 });

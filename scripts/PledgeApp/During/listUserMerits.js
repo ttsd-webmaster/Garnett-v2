@@ -18,12 +18,13 @@ admin.initializeApp({
 })
 
 const meritsRef = admin.database().ref('/merits');
-const userName = process.argv[2];
+const userName = process.argv[2].toLowerCase();
 let totalMerits = 0;
 
 meritsRef.once('value', (merits) => {
   merits.forEach((merit) => {
-    if (merit.val().activeName === userName) {
+    const activeName = merit.val().activeName.toLowerCase();
+    if (activeName === userName) {
       totalMerits += merit.val().amount;
     }
   });
