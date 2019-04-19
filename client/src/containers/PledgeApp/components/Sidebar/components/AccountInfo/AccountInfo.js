@@ -35,13 +35,24 @@ export class AccountInfo extends Component<Props, State> {
 
       const myMeritsRef = meritsRef.orderByChild(queriedName).equalTo(fullName);
 
-      myMeritsRef.on('value', (merits) => {
+      myMeritsRef.once('value', (merits) => {
         let totalMerits = 0;
         if (merits.val()) {
           merits.forEach((merit) => {
             totalMerits += merit.val().amount;
           });
         }
+
+        localStorage.setItem('totalMerits', totalMerits);
+        this.setState({
+          totalMerits,
+          previousTotalMerits: this.state.totalMerits
+        });
+      });
+
+      myMeritsRef.on('child_added', (merit) => {
+        let { totalMerits } = this.state;
+        totalMerits += merit.val().amount;
 
         localStorage.setItem('totalMerits', totalMerits);
         this.setState({
@@ -70,7 +81,8 @@ export class AccountInfo extends Component<Props, State> {
     const { firebase } = window;
     if (navigator.onLine && firebase) {
       const meritsRef = firebase.database().ref('/merits');
-      meritsRef.off('value');
+      meritsRef.off('child_added');
+      meritsRef.off('child_removed');
     }
   }
 
