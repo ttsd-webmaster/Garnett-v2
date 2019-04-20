@@ -71,7 +71,10 @@ export class SelectUsers extends Component<Props, State> {
     const { selectedUsers, name, description } = this.state;
     const isPledge = status === 'pledge';
     return (
-      <div id="select-users-header">
+      <div
+        id="select-users-header"
+        className={`${selectedUsers.length > 0 ? 'selected-users' : ''}`}
+      >
         <SelectedUsersChips
           selectedUsers={selectedUsers}
           deselectUser={this.deselectUser}
@@ -119,10 +122,6 @@ export class SelectUsers extends Component<Props, State> {
               before: PLEDGING_START_DATE
             }]
           }}
-        />
-        <div
-          id="darth-fader"
-          className={`merit-dialog ${selectedUsers.length > 0 ? 'selected-users' : ''}`}
         />
       </div>
     )

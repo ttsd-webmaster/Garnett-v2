@@ -114,7 +114,6 @@ export class PledgingData extends PureComponent<{}, State> {
           view={view}
           setView={this.setView}
         />
-        <div id="darth-fader" />
 
         {displayedData.map((set, i) => (
           <div className="data-card" key={i}>

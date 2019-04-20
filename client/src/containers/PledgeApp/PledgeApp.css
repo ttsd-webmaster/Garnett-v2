@@ -70,20 +70,6 @@
   padding: 0 16px;
 }
 
-#darth-fader {
-  position: fixed;
-  top: 52px;
-  width: 100%;
-  height: 20px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0), var(--background-color));
-  z-index: 1;
-}
-@media (max-width: 767px) {
-  #darth-fader {
-    top: 107px;
-  }
-}
-
 /* Chip for merits toggle header in MyMerits */
 .garnett-chip {
   margin: 10px !important;

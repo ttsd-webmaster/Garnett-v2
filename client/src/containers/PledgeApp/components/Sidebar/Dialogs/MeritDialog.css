@@ -32,14 +32,16 @@
   z-index: 1;
   padding: 0 ;
 }
-
-#darth-fader.merit-dialog {
-  top: 274px;
-  width: 50%;
+#select-users-header::after {
+  content: '';
+  position: absolute;
+  top: 212px;
+  width: 100%;
   height: 20px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0), var(--background-color));
 }
-#darth-fader.merit-dialog.selected-users {
-  top: 332px;
+#select-users-header.selected-users::after {
+  top: 270px;
 }
 
 .DayPickerInput {

@@ -292,6 +292,7 @@ export class Contacts extends PureComponent<{}, State> {
             &times;
           </span>
         </div>
+
         <Filter
           open={openPopover}
           anchorEl={anchorEl}
@@ -300,8 +301,9 @@ export class Contacts extends PureComponent<{}, State> {
           closePopover={this.closePopover}
           setFilter={this.setFilter}
         />
-        { isMobile() && <div id="darth-fader" /> }
+
         { this.body }
+
         {selectedBrother && (
           <LoadableContactsDialog
             open={open}

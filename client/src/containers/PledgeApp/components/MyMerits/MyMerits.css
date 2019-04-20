@@ -4,12 +4,20 @@
   justify-content: center;
   max-width: unset;
   padding: 0 !important;
-  z-index: 2;
+  z-index: 1;
 }
 @media (max-width: 767px) {
   .garnett-subheader.merit-view {
     top: 0;
   }
+}
+.garnett-subheader.merit-view::after {
+  content: '';
+  position: absolute;
+  top: 52px;
+  width: 100%;
+  height: 20px;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0), var(--background-color));
 }
 
 .merit-amount-container {

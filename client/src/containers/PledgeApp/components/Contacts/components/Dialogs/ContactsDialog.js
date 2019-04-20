@@ -22,6 +22,10 @@ type Props = {
 };
 
 export default function ContactsDialog(props: Props) {
+  if (!props.active) {
+    return null;
+  }
+
   const { firstName, lastName } = props.active;
   const fullName = `${firstName} ${lastName}`;
   const actions = [
@@ -31,10 +35,6 @@ export default function ContactsDialog(props: Props) {
       onClick={props.handleClose}
     />,
   ];
-
-  if (!props.active) {
-    return null
-  }
 
   if (isMobile()) {
     return (

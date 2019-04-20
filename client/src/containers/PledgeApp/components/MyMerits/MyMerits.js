@@ -73,14 +73,11 @@ export class MyMerits extends PureComponent<Props, State> {
     return (
       <div id="my-merits" className="animate-in">
         {state.status !== 'pledge' && (
-          <Fragment>
-            <ToggleViewHeader
-              viewOptions={VIEW_OPTIONS}
-              view={view}
-              setView={this.setView}
-            />
-            <div id="darth-fader" />
-          </Fragment>
+          <ToggleViewHeader
+            viewOptions={VIEW_OPTIONS}
+            view={view}
+            setView={this.setView}
+          />
         )}
 
         { this.meritsList }
