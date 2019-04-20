@@ -4,6 +4,12 @@
   align-items: center;
 }
 
+@media (min-width: 768px) {
+  #contacts-container .garnett-list {
+    z-index: 1;
+  }
+}
+
 @media (max-width: 767px) {
   #contacts-container .garnett-subheader {
     position: sticky;
