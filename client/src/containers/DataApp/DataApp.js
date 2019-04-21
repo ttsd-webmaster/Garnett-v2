@@ -10,6 +10,7 @@ import type { User } from 'api/models';
 
 import React, { PureComponent, type Node } from 'react';
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation';
+import FontIcon from 'material-ui/FontIcon';
 
 type Props = {
   history: RouterHistory,
@@ -80,18 +81,33 @@ export class DataApp extends PureComponent<Props, State> {
           selectedIndex={index}
         >
           <BottomNavigationItem
-            label={<span style={getTabStyle(index === 0)}>Pledging Data</span>}
-            icon={<div></div>}
+            label={<span style={getTabStyle(index === 0)}>Pledging</span>}
+            icon={
+              <FontIcon
+                style={getTabStyle(index === 0)}
+                className="icon-handshake-o"
+              />
+            }
             onClick={() => this.select(0)}
           />
           <BottomNavigationItem
-            label={<span style={getTabStyle(index === 1)}>Rush Data</span>}
-            icon={<div></div>}
+            label={<span style={getTabStyle(index === 1)}>Rush</span>}
+            icon={
+              <FontIcon
+                style={getTabStyle(index === 1)}
+                className="icon-users"
+              />
+            }
             onClick={() => this.select(1)}
           />
           <BottomNavigationItem
-            label={<span style={getTabStyle(index === 2)}>My Data</span>}
-            icon={<div></div>}
+            label={<span style={getTabStyle(index === 2)}>Me</span>}
+            icon={
+              <FontIcon
+                style={getTabStyle(index === 2)}
+                className="icon-user"
+              />
+            }
             onClick={() => this.select(2)}
           />
         </BottomNavigation>
