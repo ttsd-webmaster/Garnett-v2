@@ -33,7 +33,7 @@
   position: relative;
   max-width: 700px;
   width: stretch;
-  margin: 20px;
+  margin: 20px 16px;
   z-index: 2;
 }
 

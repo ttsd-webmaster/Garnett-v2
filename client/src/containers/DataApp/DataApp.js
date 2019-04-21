@@ -42,20 +42,14 @@ export class DataApp extends PureComponent<Props, State> {
   }
 
   get body(): ?Node {
-    const { history, state } = this.props;
+    const { state } = this.props;
     switch (this.state.index) {
       case 0:
         return <PledgingData />;
       case 1:
         return <RushData />;
       case 2:
-        return (
-          <MyData
-            history={history}
-            name={state.name}
-            photoURL={state.photoURL}
-          />
-        )
+        return <MyData name={state.name} photoURL={state.photoURL} />;
       default:
     }
   }
@@ -63,7 +57,9 @@ export class DataApp extends PureComponent<Props, State> {
   select = (index: number) => this.setState({ index });
 
   goHome = () => {
-    this.props.history.push('/home');
+    const { history } = this.props;
+    const prevPath = history.location.state || 'home';
+    history.push(prevPath);
   }
 
   render() {
@@ -72,6 +68,7 @@ export class DataApp extends PureComponent<Props, State> {
       <div className="loading-container">
 
         <div id="data-container">
+          <span id="back-button" onClick={this.goHome}>←</span>
           <h1 id="data-app-header">{ this.header }</h1>
           { this.body }
         </div>

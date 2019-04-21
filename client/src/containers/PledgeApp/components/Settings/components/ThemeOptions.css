@@ -1,10 +1,4 @@
-.theme-options-container {
-  background-color: var(--background-color);
-  padding: 20px 0 16px;
-}
-
 .theme-label {
-  width: 90%;
   color: var(--text-color);
   font-weight: 700;
   margin: 0 auto 16px;
@@ -15,10 +9,8 @@
   justify-content: space-between;
   align-items: center;
   height: 48px;
-  width: 90%;
   font-size: 14px;
   color: var(--primary-color);
-  margin: auto;
   border: 1px solid;
   border-radius: 50px;
   overflow: hidden;

@@ -13,7 +13,6 @@ import Divider from 'material-ui/Divider';
 const CATEGORIES = ['Merit'];
 
 type Props = {
-  history: RouterHistory,
   name: string,
   photoURL: string
 };
@@ -32,9 +31,9 @@ export class MyData extends PureComponent<Props, State> {
     });
   }
 
-  dataValue(dataValue: string): Node {
-    const instances = dataValue[0];
-    const amount = dataValue[1];
+  dataValue(value: string): Node {
+    const instances = value[0];
+    const amount = value[1];
     let color = '';
 
     if (amount > 0) {
@@ -51,10 +50,6 @@ export class MyData extends PureComponent<Props, State> {
           </p>
       </div>
     )
-  }
-
-  goHome = () => {
-    this.props.history.push('/home');
   }
 
   render() {
@@ -92,8 +87,6 @@ export class MyData extends PureComponent<Props, State> {
             ))}
           </div>
         ))}
-
-        <div className="logout-button" onClick={this.goHome}>Back Home</div>
       </Fragment>
     )
   }

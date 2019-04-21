@@ -20,7 +20,7 @@ export class Home extends PureComponent<Props> {
   }
 
   goTo = (route: string) => {
-    this.props.history.push('/' + route);
+    this.props.history.push(route);
   }
 
   render() {

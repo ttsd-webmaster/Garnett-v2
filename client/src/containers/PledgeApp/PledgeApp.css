@@ -5,33 +5,6 @@
   height: 100vh;
 }
 
-/******************* Logout Button *********************/
-.logout-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--primary-color);
-  color: #fff;
-  height: 48px;
-  width: 40%;
-  max-width: 576px;
-  font-size: 16px;
-  font-weight: 700;
-  margin: 30px auto;
-  border-radius: 500px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-@media (max-width: 767px) {
-  .logout-button {
-    width: 80%;
-  }
-}
-.logout-button:hover {
-  background-color: var(--primary-dark);
-}
-
 /*************** Garnett List, List Items, and Dividers ****************/
 .no-items-container {
   display: flex;
@@ -144,11 +117,16 @@
 
 .garnett-list-item > div > div {
   background-color: var(--list-color);
-  transition: background-color 0.2s ease-in-out;
 }
 @media (max-width: 767px) {
   .garnett-list-item > div > div {
     background-color: var(--background-color);
+  }
+}
+@media (min-width: 768px) {
+  .garnett-list-item > div > div:hover {
+    background-color: var(--hover-color);
+    transition: background-color 0.2s ease-in-out;
   }
 }
 .garnett-list-item.large > div > div {
@@ -161,11 +139,6 @@
 .garnett-list-item.long > div > div > div:last-child {
   height: fit-content !important;
   white-space: pre-line !important;
-}
-@media (min-width: 768px) {
-  .garnett-list-item > div > div:hover {
-    background-color: var(--hover-color);
-  }
 }
 
 /* Image for user and merit row */
@@ -187,8 +160,8 @@
 
 /* Icon for bottom tabs and list items */
 .garnett-icon {
-  font-size: 1.4em;
-  color: var(--icon-color);
+  font-size: 1.4em !important;
+  color: var(--icon-color) !important;
 }
 
 /* Primary text for list item */

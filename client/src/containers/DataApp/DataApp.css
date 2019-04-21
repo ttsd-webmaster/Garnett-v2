@@ -22,6 +22,29 @@
   height: 100%;
 }
 
+#back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 20px;
+}
+@media (min-width: 768px) {
+  #back-button {
+    left: 30px;
+    font-size: 30px;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.2s ease-in-out;
+  }
+  #back-button:hover {
+    background-color: var(--hover-color);
+  }
+}
+
 /********* Garnett Subheader *********/
 @media (min-width: 768px) {
   .garnett-subheader.data-app {

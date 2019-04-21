@@ -1,5 +1,6 @@
 // @flow
 
+import './Settings.css';
 import API from 'api/API.js';
 import { isMobile } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders.js';
@@ -8,6 +9,8 @@ import { ThemeOptions } from './components';
 import type { User } from 'api/models';
 
 import React, { Fragment, PureComponent } from 'react';
+import Subheader from 'material-ui/Subheader';
+import FontIcon from 'material-ui/FontIcon';
 
 type Props = {
   history: RouterHistory,
@@ -38,6 +41,10 @@ export class Settings extends PureComponent<Props> {
     }
   }
 
+  viewDataApp = () => {
+    this.props.history.push('/data-app', '/pledge-app/settings');
+  }
+
   render() {
     const { state } = this.props;
 
@@ -50,12 +57,21 @@ export class Settings extends PureComponent<Props> {
         <UserInfo user={state} name={state.name} />
         {isMobile() && (
           <Fragment>
-            <ThemeOptions />
-            {state.status === 'pledge' ? (
-              <div className="logout-button" onClick={this.logout}> Log Out </div>
-            ) : (
-              <div className="logout-button" onClick={this.goHome}> Back Home </div>
-            )}
+            <Subheader>Miscellaneous</Subheader>
+            <div id="options-container">
+              {state.status !== 'pledge' && (
+                <div className="option-row" onClick={this.viewDataApp}>
+                  <FontIcon className="garnett-icon icon-chart-bar" />
+                  View Pledging Data
+                </div>
+              )}
+              <ThemeOptions />
+              {state.status === 'pledge' ? (
+                <div className="logout-button" onClick={this.logout}> Log Out </div>
+              ) : (
+                <div className="logout-button" onClick={this.goHome}> Back Home </div>
+              )}
+            </div>
           </Fragment>
         )}
       </div>

@@ -1,0 +1,42 @@
+#options-container {
+  background-color: var(--background-color);
+  padding: 0 16px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+  height: 73px;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+.option-row .garnett-icon {
+  margin-right: 24px;
+}
+
+.logout-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: #fff;
+  height: 48px;
+  width: 40%;
+  max-width: 576px;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 30px auto;
+  border-radius: 500px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+@media (max-width: 767px) {
+  .logout-button {
+    width: 80%;
+  }
+}
+.logout-button:hover {
+  background-color: var(--primary-dark);
+}
