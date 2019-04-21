@@ -4,7 +4,6 @@ import './App.css';
 import 'fontello/css/fontello.css';
 import API from 'api/API';
 import {
-  isMobile,
   initializeFirebase,
   loadFirebase,
   registerNotificationToken,
@@ -16,8 +15,7 @@ import {
   DelibsApp,
   RusheeProfile,
   DataApp,
-  PledgeApp,
-  MobilePledgeApp
+  PledgeApp
 } from 'containers';
 import { PublicRoute, PrivateRoute } from 'components/Routes';
 import type { User } from 'api/models';
@@ -35,7 +33,12 @@ const routes = [
   {
     path: '/pledge-app',
     exact: false,
-    component: isMobile() ? MobilePledgeApp : PledgeApp
+    component: PledgeApp
+  },
+  {
+    path: '/data-app',
+    exact: true,
+    component: DataApp
   },
   {
     path: '/delibs-app',
@@ -46,11 +49,6 @@ const routes = [
     path: '/delibs-app/:id',
     exact: true,
     component: RusheeProfile
-  },
-  {
-    path: '/data-app',
-    exact: true,
-    component: DataApp
   }
 ];
 

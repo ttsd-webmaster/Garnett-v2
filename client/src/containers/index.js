@@ -4,4 +4,3 @@ export { DelibsApp } from './DelibsApp/DelibsApp';
 export { RusheeProfile } from './DelibsApp/RusheeProfile/RusheeProfile';
 export { DataApp } from './DataApp/DataApp';
 export { PledgeApp } from './PledgeApp/PledgeApp';
-export { MobilePledgeApp } from './PledgeApp/MobilePledgeApp';

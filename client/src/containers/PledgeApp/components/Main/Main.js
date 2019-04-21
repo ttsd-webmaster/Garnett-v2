@@ -54,7 +54,7 @@ const routes = [
 type Props = {
   state: User,
   handleRequestOpen: () => void,
-  logoutCallBack?: () => void
+  logoutCallBack: () => void
 };
 
 type State = {

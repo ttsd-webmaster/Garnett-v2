@@ -1,11 +1,14 @@
 // @flow
 
+import './MobilePledgeApp.css';
 import './PledgeApp.css';
+import { isMobile, configureThemeMode } from 'helpers/functions';
+import { MobileHeader, MobileNavbar } from './components/Mobile';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Main } from './components/Main/Main';
 import type { User } from 'api/models';
 
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 
 type Props = {
   history: RouterHistory,
@@ -17,21 +20,34 @@ type Props = {
 export class PledgeApp extends PureComponent<Props> {
   componentDidMount() {
     localStorage.setItem('route', 'pledge-app');
+    if (isMobile()) {
+      configureThemeMode();
+    }
   }
 
   render() {
+    const { history, state, handleRequestOpen, logoutCallBack } = this.props;
+    const containerIdName = isMobile() ? 'content-container' : 'pledge-app-container';
     return (
-      <div id="pledge-app-container">
-        <Sidebar
-          history={this.props.history}
-          user={this.props.state}
-          logOut={this.props.logoutCallBack}
-          handleRequestOpen={this.props.handleRequestOpen}
-        />
+      <div id={containerIdName}>
+        {isMobile() ? (
+          <Fragment>
+            <MobileHeader history={history} state={state} />
+            <MobileNavbar status={state.status} />
+          </Fragment>
+        ) : (
+          <Sidebar
+            history={history}
+            user={state}
+            logOut={logoutCallBack}
+            handleRequestOpen={handleRequestOpen}
+          />
+        )}
         <Main
-          history={this.props.history}
-          state={this.props.state}
-          handleRequestOpen={this.props.handleRequestOpen}
+          history={history}
+          state={state}
+          handleRequestOpen={handleRequestOpen}
+          logoutCallBack={logoutCallBack}
         />
       </div>
     )
