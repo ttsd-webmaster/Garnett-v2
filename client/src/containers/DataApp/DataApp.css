@@ -22,14 +22,21 @@
   height: 100%;
 }
 
+#data-app-header {
+  font-family: 'LeagueSpartan-Bold';
+  color: var(--text-color);
+  margin: 20px 0 50px;
+  z-index: 2;
+}
+
 #back-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 20px;
+  position: fixed;
+  color: var(--text-color);
+  z-index: 4;
 }
 @media (min-width: 768px) {
   #back-button {
+    top: 15px;
     left: 30px;
     font-size: 30px;
     width: 40px;
@@ -42,6 +49,13 @@
   }
   #back-button:hover {
     background-color: var(--hover-color);
+  }
+}
+@media (max-width: 768px) {
+  #back-button {
+    top: 22px;
+    left: 20px;
+    font-size: 24px;
   }
 }
 

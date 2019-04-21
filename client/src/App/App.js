@@ -177,6 +177,7 @@ export default class App extends Component<{}, State> {
 
   logoutCallBack = () => {
     localStorage.clear();
+    document.body.classList.remove('dark-mode');
     this.setState({ authenticated: false });
   }
 

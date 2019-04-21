@@ -1,10 +1,14 @@
-.theme-label {
+#theme-options-container {
+  padding: 0 0 20px;
+}
+
+#theme-label {
   color: var(--text-color);
   font-weight: 700;
   margin: 0 auto 16px;
 }
 
-.theme-options {
+#theme-options {
   display: flex;
   justify-content: space-between;
   align-items: center;

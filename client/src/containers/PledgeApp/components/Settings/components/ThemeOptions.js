@@ -24,12 +24,12 @@ export class ThemeOptions extends PureComponent<{}, State> {
 
   render() {
     return (
-      <div>
-        <div className="theme-label">Theme Options</div>
-        <div className="theme-options">
+      <div id="theme-options-container">
+        <div id="theme-label">Theme Options</div>
+        <div id="theme-options">
           <div
             className={
-              `theme-option${this.state.mode === 'automatic' ? " active" : ""}`
+              `theme-option${this.state.mode === 'automatic' ? ' active' : ''}`
             }
             onClick={() => this.setThemeMode('automatic')}
           >
@@ -37,7 +37,7 @@ export class ThemeOptions extends PureComponent<{}, State> {
           </div>
           <div
             className={
-              `theme-option${this.state.mode === 'day' ? " active" : ""}`
+              `theme-option${this.state.mode === 'day' ? ' active' : ''}`
             }
             onClick={() => this.setThemeMode('day')}
             >
@@ -45,7 +45,7 @@ export class ThemeOptions extends PureComponent<{}, State> {
           </div>
           <div
             className={
-              `theme-option${this.state.mode === 'night' ? " active" : ""}`
+              `theme-option${this.state.mode === 'night' ? ' active' : ''}`
             }
             onClick={() => this.setThemeMode('night')}
           >

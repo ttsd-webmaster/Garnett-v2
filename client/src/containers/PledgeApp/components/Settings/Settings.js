@@ -20,22 +20,18 @@ type Props = {
 
 export class Settings extends PureComponent<Props> {
   goHome = () => {
-    document.body.classList.remove('dark-mode');
     this.props.history.push('/home');
   }
   
   logout = () => {
-    document.body.classList.remove('dark-mode');
     if (navigator.onLine) {
       API.logout()
       .then(res => {
-        console.log(res);
         this.props.logoutCallBack();
         this.props.history.push('/');
       })
-      .catch(err => console.log('err', err));
-    }
-    else {
+      .catch(err => console.error('err', err));
+    } else {
       this.props.logoutCallBack();
       this.props.history.push('/');
     }
@@ -57,7 +53,7 @@ export class Settings extends PureComponent<Props> {
         <UserInfo user={state} name={state.name} />
         {isMobile() && (
           <Fragment>
-            <Subheader>Miscellaneous</Subheader>
+            <Subheader>Features</Subheader>
             <div id="options-container">
               {state.status !== 'pledge' && (
                 <div className="option-row" onClick={this.viewDataApp}>
@@ -67,9 +63,9 @@ export class Settings extends PureComponent<Props> {
               )}
               <ThemeOptions />
               {state.status === 'pledge' ? (
-                <div className="logout-button" onClick={this.logout}> Log Out </div>
+                <div className="logout-button" onClick={this.logout}>Log Out</div>
               ) : (
-                <div className="logout-button" onClick={this.goHome}> Back Home </div>
+                <div className="logout-button" onClick={this.goHome}>Back Home</div>
               )}
             </div>
           </Fragment>
