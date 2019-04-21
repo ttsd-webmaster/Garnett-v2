@@ -1,5 +1,6 @@
 // @flow
 
+import './RushData.css';
 import rushData from './data/rushData.json';
 import Filter from './components/Filter';
 import Chart from './components/Chart';

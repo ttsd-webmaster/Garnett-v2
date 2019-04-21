@@ -3,9 +3,9 @@
 import './DataApp.css';
 import 'containers/PledgeApp/PledgeApp.css';
 import { getTabStyle } from 'helpers/functions';
-import { PledgingData } from './components/PledgingData';
+import { PledgingData } from './components/PledgingData/PledgingData';
 import { RushData } from './components/RushData/RushData';
-import { MyData } from './components/MyData';
+import { MyData } from './components/MyData/MyData';
 import type { User } from 'api/models';
 
 import React, { PureComponent, type Node } from 'react';
@@ -69,7 +69,7 @@ export class DataApp extends PureComponent<Props, State> {
   render() {
     const { index } = this.state;
     return (
-      <div className="loading-container" id="data-app">
+      <div className="loading-container">
 
         <div id="data-container">
           <h1 id="data-app-header">{ this.header }</h1>

@@ -1,5 +1,6 @@
 // @flow
 
+import './PledgingData.css';
 import API from 'api/API.js';
 import goldMedal from './images/gold.png';
 import silverMedal from './images/silver.png';

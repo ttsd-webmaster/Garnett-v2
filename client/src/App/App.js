@@ -189,17 +189,17 @@ export default class App extends Component<{}, State> {
   get rootPath() {
     const route = localStorage.getItem('route');
     if (this.state.status === 'pledge') {
-      return <Redirect to="/pledge-app" />
+      return <Redirect to="/pledge-app" />;
     } else {
       switch (route) {
         case 'pledge-app':
-          return <Redirect to="/pledge-app" />
-        case 'delibs-app':
-          return <Redirect to="/delibs-app" />
+          return <Redirect to="/pledge-app" />;
         case 'data-app':
-          return <Redirect to="/data-app" />
+          return <Redirect to="/data-app" />;
+        case 'delibs-app':
+          return <Redirect to="/delibs-app" />;
         default:
-          return <Redirect to="/home" />
+          return <Redirect to="/home" />;
       }
     }
   }

@@ -1,5 +1,7 @@
 // @flow
 
+import './MyData.css';
+import '../PledgingData/PledgingData.css';
 import { LoadingComponent } from 'helpers/loaders.js';
 import API from 'api/API.js';
 
