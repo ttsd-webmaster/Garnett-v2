@@ -89,11 +89,6 @@ export class CreateAmount extends PureComponent<Props, State> {
   }
 
   onClick = (value: string) => {
-    // Standardized merits stay constant
-    if (this.state.type === 'standardized') {
-      return this.vibrate();
-    }
-
     let { amount } = this.state;
 
     if (value === '←') {

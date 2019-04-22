@@ -89,10 +89,9 @@ export class CreateAmount extends Component<Props, State> {
   changeAmount = (event: SyntheticEvent<>) => {
     const numbersRegex = /^[0-9]+$/;
     const { value } = event.target;
-    let { type, amount } = this.state;
+    let { amount } = this.state;
 
-    // Standardized merits stay constant
-    if (type === 'standardized' || (!numbersRegex.test(value) && value)) {
+    if (value && !numbersRegex.test(value)) {
       return this.vibrate();
     }
 

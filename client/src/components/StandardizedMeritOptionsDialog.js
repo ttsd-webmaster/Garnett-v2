@@ -8,15 +8,15 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 const MERIT_OPTIONS = [
-  { reason: 'PC Merits', amount: '5', action: 'merit' },
+  { reason: 'PC Merits', amount: '10', action: 'merit' },
   { reason: 'Good Interview', amount: '30', action: 'merit' },
   { reason: 'Standard Interview', amount: '25', action: 'merit' },
   { reason: 'Family Night Merits', amount: '20', action: 'merit' }
 ];
 
 const DEMERIT_OPTIONS = [
-  { reason: 'Late Greet', amount: '10', action: 'demerit' },
-  { reason: 'Missed Greet', amount: '15', action: 'demerit' },
+  { reason: 'Late Greet', amount: '15', action: 'demerit' },
+  { reason: 'Missed Greet', amount: '30', action: 'demerit' },
   { reason: 'Missed Text Reminder', amount: '20', action: 'demerit' },
   { reason: 'Rude to Active', amount: '15', action: 'demerit' },
   { reason: 'Asking for/ Complaining about Merits', amount: '15', action: 'demerit' }
