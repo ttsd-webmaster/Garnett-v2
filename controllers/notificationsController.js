@@ -23,7 +23,7 @@ exports.created_merit = function(req, res) {
 
   // Check who is creating the merit
   if (user.status === 'pledge') {
-    body = `You have given ${merit.amount} ${action} to ${merit.pledgeName}.`;
+    body = `${merit.pledgeName} has logged ${merit.amount} ${action} from you.`;
   } else {
     body = `You have received ${merit.amount} ${action} from ${merit.activeName}.`;
   }
@@ -37,7 +37,7 @@ exports.created_merit = function(req, res) {
       const message = {
         webpush: {
           notification: {
-            title: userName,
+            title: 'Garnett',
             body,
             click_action: 'https://garnett-app.herokuapp.com/pledge-app',
             icon: user.photoURL,
@@ -82,7 +82,7 @@ exports.deleted_merit = function(req, res) {
     const message = {
       webpush: {
         notification: {
-          title: activeName,
+          title: 'Garnett',
           body: `${activeName} has deleted ${amount} ${action}`,
           click_action: 'https://garnett-app.herokuapp.com/pledge-app',
           icon: activePhoto,
