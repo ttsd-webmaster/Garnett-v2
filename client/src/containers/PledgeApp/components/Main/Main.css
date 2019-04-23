@@ -7,7 +7,9 @@
   #content {
     order: 1;
     position: relative;
+    max-width: 700px;
     padding: 20px 0 50px;
+    margin: 0 auto;
     z-index: 0;
   }
 }
