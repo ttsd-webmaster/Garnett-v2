@@ -54,7 +54,19 @@ usersRef.once('value', (users) => {
     merits.forEach((merit) => {
       const activeName = merit.val().activeName.replace(/ /g, '');
       const pledgeName = merit.val().pledgeName.replace(/ /g, '');
-      if (usersMerits[activeName][pledgeName] !== 'Unlimited') {
+      const nonPCStandardizedMerit = (
+        merit.val().type === 'standardized' &&
+        merit.val().description !== 'PC Merits'
+      );
+      const shouldCountTowardsMeritCap = (
+        usersMerits[activeName][pledgeName] !== 'Unlimited' &&
+        (
+          merit.val().type === 'personal' ||
+          merit.val().type === 'interview' ||
+          nonPCStandardizedMerit
+        )
+      );
+      if (shouldCountTowardsMeritCap) {
         usersMerits[activeName][pledgeName] = usersMerits[activeName][pledgeName] - merit.val().amount;
       }
     });

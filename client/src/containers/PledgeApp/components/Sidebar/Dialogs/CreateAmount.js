@@ -121,6 +121,7 @@ export class CreateAmount extends Component<Props, State> {
   setType = (type: MeritType) => {
     switch (type) {
       case 'chalkboard':
+      case 'interview':
       case 'personal':
         this.props.setDescription('');
         break;
@@ -131,8 +132,13 @@ export class CreateAmount extends Component<Props, State> {
   }
 
   selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
-    this.props.setDescription(option.reason);
-    this.setType('standardized');
+    let type = 'standardized';
+    if (option.reason === 'Interview Merits') {
+      type = 'interview';
+    } else {
+      this.props.setDescription(option.reason);
+    }
+    this.setType(type);
     this.handleClose();
     this.setState({
       amount: option.amount,
@@ -172,9 +178,15 @@ export class CreateAmount extends Component<Props, State> {
       actionText = 'Demerited';
     }
 
-    // Append chalkboard text if merit type is chalkboard
-    if (type === 'chalkboard') {
-      description = `Chalkboard: ${description}`;
+    // Append text if merit type is chalkboard or interview
+    switch (type) {
+      case 'chalkboard':
+        description = `Chalkboard: ${description}`;
+        break;
+      case 'interview':
+        description = `Interview: ${description}`;
+        break;
+      default:
     }
 
     const merit = {

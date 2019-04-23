@@ -138,7 +138,11 @@ exports.create_merit = function(req, res) {
     );
     const shouldCountTowardsMeritCap = (
       active.status !== 'pipm' &&
-      (merit.type === 'personal' || nonPCStandardizedMerit)
+      (
+        merit.type === 'personal' ||
+        merit.type === 'interview' ||
+        nonPCStandardizedMerit
+      )
     );
 
     // Push active to array if not pi or pm

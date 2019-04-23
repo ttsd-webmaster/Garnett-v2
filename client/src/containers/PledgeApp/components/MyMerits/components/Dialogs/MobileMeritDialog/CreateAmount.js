@@ -128,11 +128,17 @@ export class CreateAmount extends PureComponent<Props, State> {
   }
 
   selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
+    let type = 'standardized';
+    let description = option.reason;
+    if (option.reason === 'Interview Merits') {
+      type = 'interview';
+      description = '';
+    }
     this.handleClose();
     this.setState({
-      type: 'standardized',
+      type,
       amount: option.amount,
-      description: option.reason,
+      description,
       standardizedMeritAction: option.action
     })
   }

@@ -101,7 +101,7 @@ export class SelectUsers extends Component<Props, State> {
           </div>
         </div>
         <label htmlFor="description" className="merit-input description">
-          { this.props.type === 'chalkboard' && 'Chalkboard:\xa0' }
+          { this.descriptionLabel }
           <input
             id="description"
             className="merit-input"
@@ -137,6 +137,17 @@ export class SelectUsers extends Component<Props, State> {
         />
       </div>
     )
+  }
+
+  get descriptionLabel(): string {
+    switch (this.props.type) {
+      case 'interview':
+        return 'Interview:\xa0';
+      case 'chalkboard':
+        return 'Chalkboard:\xa0';
+      default:
+        return '';
+    }
   }
 
   get remainingUsers(): Array<User> {
@@ -284,9 +295,15 @@ export class SelectUsers extends Component<Props, State> {
     // Convert date to timestamp so we can order merits
     date = date.getTime();
 
-    // Append chalkboard text if merit type is chalkboard
-    if (type === 'chalkboard') {
-      description = `Chalkboard: ${description}`;
+    // Append text if merit type is chalkboard or interview
+    switch (type) {
+      case 'chalkboard':
+        description = `Chalkboard: ${description}`;
+        break;
+      case 'interview':
+        description = `Interview: ${description}`;
+        break;
+      default:
     }
 
     const merit = {

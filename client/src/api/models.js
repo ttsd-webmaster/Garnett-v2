@@ -24,7 +24,11 @@ export type SignUpParams = {
   code: string
 };
 
-export const MeritType = 'personal' | 'standardized' | 'chalkboard';
+export const MeritType =
+  'personal' |
+  'standardized' |
+  'interview' |
+  'chalkboard';
 
 type BaseMerit = {
   type: MeritType,

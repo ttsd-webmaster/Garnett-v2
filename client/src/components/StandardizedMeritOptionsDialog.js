@@ -9,8 +9,7 @@ import Divider from 'material-ui/Divider';
 
 const MERIT_OPTIONS = [
   { reason: 'PC Merits', amount: '10', action: 'merit' },
-  { reason: 'Good Interview', amount: '30', action: 'merit' },
-  { reason: 'Standard Interview', amount: '25', action: 'merit' },
+  { reason: 'Interview Merits', amount: '25', action: 'merit' },
   { reason: 'Family Night Merits', amount: '20', action: 'merit' }
 ];
 

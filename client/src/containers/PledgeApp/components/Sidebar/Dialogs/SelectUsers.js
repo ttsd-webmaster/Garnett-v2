@@ -96,7 +96,7 @@ export class SelectUsers extends Component<Props, State> {
           )}
         </div>
         <label htmlFor="description" className="select-users-input description">
-          { this.props.type === 'chalkboard' && 'Chalkboard:\xa0' }
+          { this.descriptionLabel }
           <input
             id="description"
             type="text"
@@ -125,6 +125,17 @@ export class SelectUsers extends Component<Props, State> {
         />
       </div>
     )
+  }
+
+  get descriptionLabel(): string {
+    switch (this.props.type) {
+      case 'interview':
+        return 'Interview:\xa0';
+      case 'chalkboard':
+        return 'Chalkboard:\xa0';
+      default:
+        return '';
+    }
   }
 
   get remainingUsers(): Array<User> {
