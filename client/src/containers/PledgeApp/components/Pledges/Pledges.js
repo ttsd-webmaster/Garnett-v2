@@ -29,6 +29,21 @@ const FILTER_OPTIONS = [
 const cachedPledges = JSON.parse(localStorage.getItem('pledges'));
 const cachedFilter = localStorage.getItem('pledgesFilter') || 'lastName';
 
+function sortPledges(pledges: Array<User>, filter: string): Array<User> {
+  if (!pledges) {
+    return null;
+  } else if (filter === 'totalMerits' || filter === 'completedInterviews') {
+    pledges = pledges.sort(function(a, b) {
+      return a[filter] < b[filter] ? 1 : -1;
+    });
+  } else {
+    pledges = pledges.sort(function(a, b) {
+      return a[filter] >= b[filter] ? 1 : -1;
+    });
+  }
+  return pledges;
+}
+
 type Props = {
   state: User,
   handleRequestOpen: () => void
@@ -46,7 +61,7 @@ type State = {
 
 export class Pledges extends PureComponent<Props, State> {
   state = {
-    pledges: cachedPledges,
+    pledges: sortPledges(cachedPledges, cachedFilter),
     pledge: null,
     filter: cachedFilter,
     reverse: false,
@@ -59,18 +74,8 @@ export class Pledges extends PureComponent<Props, State> {
     if (navigator.onLine) {
       API.getPledges(this.props.state.displayName)
       .then(res => {
-        let pledges = res.data;
         const { filter } = this.state;
-        // Sort the pledges based on the selected filter
-        if (filter === 'totalMerits' || filter === 'completedInterviews') {
-          pledges = pledges.sort(function(a, b) {
-            return a[filter] < b[filter] ? 1 : -1;
-          });
-        } else {
-          pledges = pledges.sort(function(a, b) {
-            return a[filter] >= b[filter] ? 1 : -1;
-          });
-        }
+        const pledges = sortPledges(res.data, filter);
         localStorage.setItem('pledges', JSON.stringify(pledges));
         this.setState({ pledges });
       })
@@ -168,15 +173,7 @@ export class Pledges extends PureComponent<Props, State> {
     let filter = filterName.replace(/ /g, '');
     filter = filter[0].toLowerCase() + filter.substr(1);
 
-    if (filter === 'totalMerits' || filter === 'completedInterviews') {
-      pledges = this.state.pledges.sort(function(a, b) {
-        return a[filter] < b[filter] ? 1 : -1;
-      });
-    } else {
-      pledges = this.state.pledges.sort(function(a, b) {
-        return a[filter] >= b[filter] ? 1 : -1;
-      });
-    }
+    pledges = sortPledges(pledges, filter);
 
     localStorage.setItem('pledgesFilter', filter);
     this.setState({
