@@ -13,44 +13,42 @@ type Props = {
 };
 
 type State = {
-  merits: ?Array<Merit>,
-  reverse: boolean
+  interviews: ?Array<Merit>
 };
 
-export class MeritsList extends PureComponent<Props, State> {
+export class InterviewsList extends PureComponent<Props, State> {
   state = {
-    merits: null,
-    reverse: false
+    interviews: null
   };
 
   componentDidMount() {
     const { pledgeName } = this.props;
     if (navigator.onLine) {
-      API.getPledgeMerits(this.props.pledgeName)
+      API.getPledgeCompletedInterviews(this.props.pledgeName)
       .then(res => {
-        const { merits } = res.data;
-        localStorage.setItem(`${pledgeName}Merits`, JSON.stringify(merits));
-        this.setState({ merits });
+        const interviews = res.data;
+        localStorage.setItem(`${pledgeName}Interviews`, JSON.stringify(interviews));
+        this.setState({ interviews });
       })
       .catch(err => console.log('err', err));
     } else {
-      const merits = JSON.parse(localStorage.getItem(`${pledgeName}Merits`));
-      this.setState({ merits });
+      const interviews = JSON.parse(localStorage.getItem(`${pledgeName}Interviews`));
+      this.setState({ interviews });
     }
   }
 
   reverse = () => {
-    const { merits, reverse } = this.state;
+    const { interviews, reverse } = this.state;
     this.setState({
-      merits: merits.reverse(),
+      interviews: interviews.reverse(),
       reverse: !reverse
     });
   }
 
   render() {
-    const { merits, reverse } = this.state;
+    const { interviews, reverse } = this.state;
 
-    if (!merits) {
+    if (!interviews) {
       return (
         <div className="loading-merits">
           <CircularProgress color="var(--accent-color)" size={30} />
@@ -58,10 +56,10 @@ export class MeritsList extends PureComponent<Props, State> {
       )
     }
 
-    if (merits.length === 0) {
+    if (interviews.length === 0) {
       return (
         <div className="no-items-container dialog">
-          <h1 className="no-items-found dialog">No merits found</h1>
+          <h1 className="no-items-found dialog">No interviews found</h1>
         </div>
       )
     }
@@ -69,16 +67,16 @@ export class MeritsList extends PureComponent<Props, State> {
     return (
       <List className="garnett-list">
         <FilterHeader isReversed={reverse} reverse={this.reverse} />
-        {merits.map((merit, i) => {
-          if (!merit) {
+        {interviews.map((interview, i) => {
+          if (!interview) {
             return null
           }
           return (
             <MeritRow
               key={i}
-              merit={merit}
-              photo={merit.activePhoto}
-              name={merit.activeName}
+              merit={interview}
+              photo={interview.activePhoto}
+              name={interview.activeName}
             />
           )
         })}

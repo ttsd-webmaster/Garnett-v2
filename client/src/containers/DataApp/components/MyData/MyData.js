@@ -32,8 +32,7 @@ export class MyData extends PureComponent<Props, State> {
   }
 
   dataValue(value: string): Node {
-    const instances = value[0];
-    const amount = value[1];
+    const { instances, amount } = value;
     let color = '';
 
     if (amount > 0) {

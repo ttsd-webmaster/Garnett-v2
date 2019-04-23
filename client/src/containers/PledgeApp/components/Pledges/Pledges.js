@@ -22,10 +22,12 @@ const FILTER_OPTIONS = [
   'First Name',
   'Year',
   'Major',
-  'Total Merits'
+  'Total Merits',
+  'Completed Interviews'
 ];
 
 const cachedPledges = JSON.parse(localStorage.getItem('pledges'));
+const cachedFilter = localStorage.getItem('pledgesFilter') || 'lastName';
 
 type Props = {
   state: User,
@@ -46,7 +48,7 @@ export class Pledges extends PureComponent<Props, State> {
   state = {
     pledges: cachedPledges,
     pledge: null,
-    filter: 'lastName',
+    filter: cachedFilter,
     reverse: false,
     openPledge: false,
     openPopover: false,
@@ -60,7 +62,7 @@ export class Pledges extends PureComponent<Props, State> {
         let pledges = res.data;
         const { filter } = this.state;
         // Sort the pledges based on the selected filter
-        if (filter === 'totalMerits') {
+        if (filter === 'totalMerits' || filter === 'completedInterviews') {
           pledges = pledges.sort(function(a, b) {
             return a[filter] < b[filter] ? 1 : -1;
           });
@@ -88,7 +90,7 @@ export class Pledges extends PureComponent<Props, State> {
   }
 
   get pledges(): Node {
-    const { pledges } = this.state;
+    const { pledges, filter } = this.state;
     if (!pledges) {
       return (
         <div className="no-items-container">
@@ -98,13 +100,22 @@ export class Pledges extends PureComponent<Props, State> {
     }
     return (
       <List className="garnett-list">
-        {pledges.map((pledge, i) => (
-          <UserRow
-            key={i}
-            user={pledge}
-            handleOpen={() => this.handleOpen(pledge)}
-          />
-        ))}
+        {pledges.map((pledge, i) => {
+          let pledgeValue;
+          if (filter === 'completedInterviews') {
+            pledgeValue = pledge.completedInterviews;
+          } else {
+            pledgeValue = pledge.totalMerits;
+          }
+          return (
+            <UserRow
+              key={i}
+              user={pledge}
+              value={pledgeValue}
+              handleOpen={() => this.handleOpen(pledge)}
+            />
+          )
+        })}
       </List>
     )
   }
@@ -121,6 +132,8 @@ export class Pledges extends PureComponent<Props, State> {
         return 'Major';
       case 'totalMerits':
         return 'Total Merits';
+      case 'completedInterviews':
+        return 'Completed Interviews';
       default:
         return ''
     }
@@ -155,7 +168,7 @@ export class Pledges extends PureComponent<Props, State> {
     let filter = filterName.replace(/ /g, '');
     filter = filter[0].toLowerCase() + filter.substr(1);
 
-    if (filter === 'totalMerits') {
+    if (filter === 'totalMerits' || filter === 'completedInterviews') {
       pledges = this.state.pledges.sort(function(a, b) {
         return a[filter] < b[filter] ? 1 : -1;
       });
@@ -165,6 +178,7 @@ export class Pledges extends PureComponent<Props, State> {
       });
     }
 
+    localStorage.setItem('pledgesFilter', filter);
     this.setState({
       pledges,
       filter,

@@ -26,6 +26,10 @@ export default {
     const params = { displayName, status };
     return axios.get('/api/interviews', { params });
   },
+  getPledgeCompletedInterviews: function(pledgeName: string) {
+    const params = { pledgeName };
+    return axios.get('/api/pledge/interviews', { params });
+  },
   getPledgeComplaints: function(pledgeName: string) {
     const params = { pledgeName };
     return axios.get('/api/pledge/complaints', { params });

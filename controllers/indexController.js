@@ -40,7 +40,7 @@ exports.get_pledges = function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
-  const pledgeMeritsMap = new Map();
+  const pledgesMap = new Map();
 
   usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
     if (!pledges.val()) {
@@ -57,17 +57,21 @@ exports.get_pledges = function(req, res) {
       if (merits.val()) {
         merits.forEach((merit) => {
           const pledgeName = merit.val().pledgeName.replace(/ /g, '');
-          let totalMerits = pledgeMeritsMap.get(pledgeName) || 0;
-          totalMerits += merit.val().amount;
-          pledgeMeritsMap.set(pledgeName, totalMerits);
+          const pledge = pledgesMap.get(pledgeName) || { merits: 0, interviews: 0 };
+          pledge.merits += merit.val().amount;
+          if (merit.val().type === 'interview') {
+            pledge.interviews += 1;
+          }
+          pledgesMap.set(pledgeName, pledge);
         });
       }
       // Set all the pledge's total merits
       pledgesArray.forEach((pledge) => {
         const pledgeName = pledge.firstName + pledge.lastName;
-        const totalMerits = pledgeMeritsMap.get(pledgeName);
+        const mappedPledge = pledgesMap.get(pledgeName);
         pledge.displayName = pledgeName;
-        pledge.totalMerits = totalMerits;
+        pledge.totalMerits = mappedPledge.merits;
+        pledge.completedInterviews = mappedPledge.interviews;
       });
 
       res.json(pledgesArray);
@@ -145,6 +149,26 @@ exports.get_interviews_progress = function(req, res) {
 
       res.json({ completed, incomplete });
     });
+  });
+};
+
+// Query for the pledge's completed interviews
+exports.get_pledge_completed_interviews = function(req, res) {
+  const { pledgeName } = req.query;
+  const meritsRef = admin.database().ref('/merits');
+  let interviews = [];
+
+  meritsRef.orderByChild('type').equalTo('interview').once('value', (merits) => {
+    merits.forEach((merit) => {
+      const pledgeCheck = merit.val().pledgeName.replace(/ /g, '');
+      if (pledgeName === pledgeCheck) {
+        interviews.push(merit.val());
+      }
+    });
+
+    interviews = interviews.sort((a, b) => b.date - a.date);
+
+    res.json(interviews);
   });
 };
 

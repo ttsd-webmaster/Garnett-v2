@@ -1,8 +1,11 @@
 // @flow
 
+import '../../../../MyMerits/MyMerits.css';
+import './ActiveView.css';
 import { getTabStyle, isMobile } from 'helpers/functions.js';
 import { UserInfo } from 'components';
 import { MeritsList } from './MeritsList';
+import { InterviewsList } from './InterviewsList';
 import type { User } from 'api/models';
 
 import React, { PureComponent, type Node } from 'react';
@@ -72,6 +75,7 @@ export class ActiveView extends PureComponent<Props, State> {
           >
             <Tab style={getTabStyle(index === 0)} label="Info" value={0} />
             <Tab style={getTabStyle(index === 1)} label="Merits" value={1} />
+            <Tab style={getTabStyle(index === 2)} label="Interviews" value={2} />
           </Tabs>
           <SwipeableViews
             containerStyle={slideContainer}
@@ -87,6 +91,7 @@ export class ActiveView extends PureComponent<Props, State> {
               />
             </div>
             <MeritsList pledgeName={displayName} />
+            <InterviewsList pledgeName={displayName} />
           </SwipeableViews>
         </FullscreenDialog>
       )
@@ -117,6 +122,9 @@ export class ActiveView extends PureComponent<Props, State> {
           </Tab>
           <Tab style={getTabStyle(index === 1)} label="Merits" value={1}>
             <MeritsList pledgeName={displayName} />
+          </Tab>
+          <Tab style={getTabStyle(index === 2)} label="Interviews" value={2}>
+            <InterviewsList pledgeName={displayName} />
           </Tab>
         </Tabs>
       </Dialog>

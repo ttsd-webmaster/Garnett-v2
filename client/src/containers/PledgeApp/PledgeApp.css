@@ -124,13 +124,15 @@
   }
 }
 @media (min-width: 768px) {
+  .garnett-list-item > div > div {
+    transition: background-color 0.2s ease-in-out;
+  }
   .garnett-list-item > div > div:hover {
     background-color: var(--hover-color);
-    transition: background-color 0.2s ease-in-out;
   }
 }
 .garnett-list-item.large > div > div {
-  min-height: 48px;
+  min-height: 89px;
   padding-left: 102px !important;
 }
 .garnett-list-item.small > div > div {

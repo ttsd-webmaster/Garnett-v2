@@ -53,8 +53,7 @@ export class PledgingData extends PureComponent<{}, State> {
   }
 
   dataValue(dataValue: string): Node {
-    const instances = dataValue[0];
-    const amount = dataValue[1];
+    const { instances, amount } = dataValue;
     let color = '';
 
     if (amount > 0) {

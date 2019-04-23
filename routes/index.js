@@ -11,6 +11,7 @@ router.get('/brothers', controller.get_brothers);
 router.get('/pledges', controller.get_pledges);
 router.get('/pledge/merits', controller.get_pledge_merits);
 router.get('/interviews', controller.get_interviews_progress);
+router.get('/pledge/interviews', controller.get_pledge_completed_interviews);
 router.get('/pledge/complaints', controller.get_pledge_complaints);
 
 // PUT requests
