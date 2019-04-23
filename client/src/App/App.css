@@ -394,3 +394,31 @@ div, a {
           animation-fill-mode: both;
   display: inline-block; 
 }
+
+/* React Day Picker */
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  position: relative;
+  background-color: var(--primary-color) !important;
+  color: #F0F8FF !important;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside):hover {
+  background-color: var(--primary-color) !important;
+  color: #F0F8FF !important;
+}
+
+.DayPicker:not(.DayPicker--interactionDisabled)
+  .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+  background-color: rgb(192, 0, 31, 0.2) !important;
+}
+
+/* React Sweet Progress */
+.react-sweet-progress {
+  padding: 20px;
+}
+
+.react-sweet-progress-symbol {
+  width: unset !important;
+  font-weight: unset !important;
+  color: var(--text-color) !important;
+}
