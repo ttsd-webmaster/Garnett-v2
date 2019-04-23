@@ -40,6 +40,7 @@ exports.get_pledges = function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
+  const pledgeMeritsMap = new Map();
 
   usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
     if (!pledges.val()) {
@@ -52,21 +53,20 @@ exports.get_pledges = function(req, res) {
     });
 
     meritsRef.once('value', (merits) => {
+      // Map the pledge's total merits
+      if (merits.val()) {
+        merits.forEach((merit) => {
+          const pledgeName = merit.val().pledgeName.replace(/ /g, '');
+          let totalMerits = pledgeMeritsMap.get(pledgeName) || 0;
+          totalMerits += merit.val().amount;
+          pledgeMeritsMap.set(pledgeName, totalMerits);
+        });
+      }
       // Set all the pledge's total merits
       pledgesArray.forEach((pledge) => {
-        const searchedName = pledge.firstName + pledge.lastName;
-        let totalMerits = 0;
-        // Retrieves the pledge's total merits by searching for the key in
-        // the Merits table
-        if (merits.val()) {
-          merits.forEach((merit) => {
-            const { pledgeName } = merit.val();
-            if (searchedName === pledgeName.replace(/ /g, '')) {
-              totalMerits += merit.val().amount;
-            }
-          });
-        }
-        pledge.displayName = searchedName;
+        const pledgeName = pledge.firstName + pledge.lastName;
+        const totalMerits = pledgeMeritsMap.get(pledgeName);
+        pledge.displayName = pledgeName;
         pledge.totalMerits = totalMerits;
       });
 

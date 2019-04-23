@@ -20,7 +20,7 @@ import React, { Fragment, PureComponent, type Node } from 'react';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 
-const filterOptions = [
+const FILTER_OPTIONS = [
   'Active', 
   'Alumni', 
   'Class', 
@@ -30,6 +30,8 @@ const filterOptions = [
   'Last Name', 
   'Personality Type'
 ];
+
+const cachedBrothers = JSON.parse(localStorage.getItem('brothersArray'));
 
 type State = {
   brothers: ?Array<User>,
@@ -47,8 +49,8 @@ type State = {
 
 export class Contacts extends PureComponent<{}, State> {
   state = {
-    brothers: null,
-    filteredBrothers: null,
+    brothers: cachedBrothers,
+    filteredBrothers: cachedBrothers,
     selectedBrother: null,
     searchedName: '',
     filterKey: 'active',
@@ -68,9 +70,6 @@ export class Contacts extends PureComponent<{}, State> {
         localStorage.setItem('brothersArray', JSON.stringify(res.data));
         this.setState({ brothers, filteredBrothers: brothers });
       });
-    } else {
-      const brothers = JSON.parse(localStorage.getItem('brothersArray'));
-      this.setState({ brothers, filteredBrothers: brothers });
     }
   }
 
@@ -296,7 +295,7 @@ export class Contacts extends PureComponent<{}, State> {
         <Filter
           open={openPopover}
           anchorEl={anchorEl}
-          filters={filterOptions}
+          filters={FILTER_OPTIONS}
           filterName={filterName}
           closePopover={this.closePopover}
           setFilter={this.setFilter}

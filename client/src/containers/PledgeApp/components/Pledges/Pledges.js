@@ -17,13 +17,15 @@ import type { User } from 'api/models';
 import React, { PureComponent, type Node } from 'react';
 import { List } from 'material-ui/List';
 
-const filterOptions = [
+const FILTER_OPTIONS = [
   'Last Name',
   'First Name',
   'Year',
   'Major',
   'Total Merits'
 ];
+
+const cachedPledges = JSON.parse(localStorage.getItem('pledges'));
 
 type Props = {
   state: User,
@@ -42,7 +44,7 @@ type State = {
 
 export class Pledges extends PureComponent<Props, State> {
   state = {
-    pledges: null,
+    pledges: cachedPledges,
     pledge: null,
     filter: 'lastName',
     reverse: false,
@@ -74,9 +76,6 @@ export class Pledges extends PureComponent<Props, State> {
         console.error(`Error: ${error}`);
         this.setState({ pledges: [] });
       });
-    } else {
-      const pledges = JSON.parse(localStorage.getItem('pledges'));
-      this.setState({ pledges });
     }
   }
 
@@ -220,7 +219,7 @@ export class Pledges extends PureComponent<Props, State> {
         <Filter
           open={openPopover}
           anchorEl={anchorEl}
-          filters={filterOptions}
+          filters={FILTER_OPTIONS}
           filterName={this.filterLabel}
           closePopover={this.closePopover}
           setFilter={this.setFilter}
