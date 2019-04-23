@@ -27,9 +27,8 @@ export class PledgeApp extends PureComponent<Props> {
 
   render() {
     const { history, state, handleRequestOpen, logoutCallBack } = this.props;
-    const containerIdName = isMobile() ? 'content-container' : 'pledge-app-container';
     return (
-      <div id={containerIdName}>
+      <div id="pledge-app-container">
         {isMobile() ? (
           <Fragment>
             <MobileHeader history={history} state={state} />

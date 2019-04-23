@@ -107,7 +107,7 @@ export class Main extends Component<Props, State> {
   render() {
     const { scrollDirection } = this.state;
     return (
-      <div id="content" ref={(ref) => this.containerRef = ref}>
+      <div id="content-container" ref={(ref) => this.containerRef = ref}>
         <Switch>
           {routes.map((route, index) => (
             <Route

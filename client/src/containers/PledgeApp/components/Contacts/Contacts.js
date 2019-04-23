@@ -273,7 +273,7 @@ export class Contacts extends PureComponent<{}, State> {
     }
 
     return (
-      <div id="contacts-container" className="animate-in">
+      <div id="contacts-container" className="content animate-in">
         <div id="search-input-container">
           <input
             id="search-brothers-input"

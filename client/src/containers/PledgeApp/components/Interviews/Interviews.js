@@ -49,7 +49,7 @@ export class Interviews extends PureComponent<Props> {
     const percent = (interviewsDone / interviewsLeft) * 100;
 
     return (
-      <div className="animate-in">
+      <div className="content animate-in">
         <Subheader className="garnett-subheader">Progress</Subheader>
         <Progress
           percent={percent}

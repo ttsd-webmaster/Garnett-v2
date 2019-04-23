@@ -49,7 +49,7 @@ export class Settings extends PureComponent<Props> {
     }
 
     return (
-      <div className="animate-in">
+      <div className="content animate-in">
         <UserInfo user={state} name={state.name} />
         {isMobile() && (
           <Fragment>

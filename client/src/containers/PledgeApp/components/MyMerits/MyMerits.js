@@ -71,7 +71,7 @@ export class MyMerits extends PureComponent<Props, State> {
     const { view, openMerit } = this.state;
     
     return (
-      <div id="my-merits" className="animate-in">
+      <div id="my-merits" className="content animate-in">
         {state.status !== 'pledge' && (
           <ToggleViewHeader
             viewOptions={VIEW_OPTIONS}
