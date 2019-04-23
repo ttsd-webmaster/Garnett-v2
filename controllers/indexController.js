@@ -93,6 +93,61 @@ exports.get_pledge_merits = function(req, res) {
   });
 };
 
+// Query for the user's interviews progress
+exports.get_interviews_progress = function(req, res) {
+  const { displayName, status } = req.query;
+  const usersRef = admin.database().ref('/users');
+  const meritsRef = admin.database().ref('/merits');
+  const completedNames = [];
+  const completed = [];
+  const incomplete = [];
+
+  meritsRef.orderByChild('type').equalTo('interview').once('value', (merits) => {
+    merits.forEach((merit) => {
+      const activeName = merit.val().activeName.replace(/ /g, '');
+      const pledgeName = merit.val().pledgeName.replace(/ /g, '');
+      let userCheck;
+      let interviewCheck;
+
+      if (status === 'pledge') {
+        userCheck = pledgeName;
+        interviewCheck = activeName;
+      } else {
+        userCheck = activeName;
+        interviewCheck = pledgeName;
+      }
+
+      if (displayName === userCheck && !completedNames.includes(interviewCheck)) {
+        completedNames.push(interviewCheck);
+      }
+    });
+
+    usersRef.once('value', (users) => {
+      users.forEach((user) => {
+        if (status === 'pledge') {
+          if (user.val().status !== 'alumni' || user.val().status !== 'pledge') {
+            if (completedNames.includes(user.key)) {
+              completed.push(user.val());
+            } else {
+              incomplete.push(user.val());
+            }
+          }
+        } else {
+          if (user.val().status === 'pledge') {
+            if (completedNames.includes(user.key)) {
+              completed.push(user.val());
+            } else {
+              incomplete.push(user.val());
+            }
+          }
+        }
+      });
+
+      res.json({ completed, incomplete });
+    });
+  });
+};
+
 // Query for the specified pledge's complaints
 exports.get_pledge_complaints = function(req, res) {
   const { pledgeName } = req.query;

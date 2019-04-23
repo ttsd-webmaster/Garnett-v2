@@ -105,17 +105,15 @@ export class MobileHeader extends Component<Props, State> {
           </Fragment>
         )
       case '/pledge-app/pledges':
-        if (state.status === 'pledge') {
-          return "Pledge Brothers"
-        } else {
-          return "Pledges"
-        }
+        return state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges';
       case '/pledge-app/brothers':
-        return "Brothers"
+        return 'Brothers';
+      case '/pledge-app/interviews':
+        return 'Interviews';
       case '/pledge-app/settings':
-        return "Settings"
+        return 'Settings';
       default:
-        throw new Error('wrong index');
+        throw new Error('unknown route');
     }
   }
 

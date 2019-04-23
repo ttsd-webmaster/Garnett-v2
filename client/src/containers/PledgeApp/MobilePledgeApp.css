@@ -57,6 +57,18 @@
 .mobile-nav-item.active * {
   color: var(--icon-color);
 }
+.mobile-nav-item > button {
+  min-width: unset !important;
+  width: 20vw;
+}
+.mobile-nav-item span {
+  font-size: 22px !important;
+}
+@media (max-width: 375px) {
+  .mobile-nav-item div {
+    font-size: 11px !important;
+  }
+}
 
 /****************** Clear Input *******************/
 #clear-input {

@@ -27,6 +27,17 @@ export function MobileNavbar(props: Props) {
       <NavLink
         className="mobile-nav-item"
         activeClassName="active"
+        to="/pledge-app/interviews"
+        exact
+      >
+        <BottomNavigationItem
+          label="Interviews"
+          icon={<FontIcon className="icon-chat" />}
+        />
+      </NavLink>
+      <NavLink
+        className="mobile-nav-item"
+        activeClassName="active"
         to="/pledge-app/pledges"
         exact
       >

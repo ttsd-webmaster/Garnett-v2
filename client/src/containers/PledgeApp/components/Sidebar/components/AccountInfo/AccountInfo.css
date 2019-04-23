@@ -1,10 +1,21 @@
-#sidebar-photo {
-  object-fit: cover;
-  height: 70px;
+#sidebar-photo-container {
+  background-color: #000;
   width: 70px;
+  height: 70px;
+  margin: 0 0 20px;
   border: 2px solid #fff;
   border-radius: 50%;
-  margin-bottom: 20px;
+}
+
+#sidebar-photo {
+  object-fit: cover;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  transition: opacity 0.2s ease-in-out;
+}
+#sidebar-photo:hover {
+  opacity: 0.9;
 }
 
 #account-info {

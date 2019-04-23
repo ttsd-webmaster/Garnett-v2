@@ -2,7 +2,13 @@
 
 import './Main.css';
 import { isMobile } from 'helpers/functions';
-import { MyMerits, Pledges, Contacts, Settings } from 'containers/PledgeApp/components';
+import {
+  MyMerits,
+  Pledges,
+  Contacts,
+  Interviews,
+  Settings
+} from 'containers/PledgeApp/components';
 import type { User } from 'api/models';
 
 import React, { Component } from 'react';
@@ -18,6 +24,13 @@ const routes = [
         scrollDirection={scrollDirection}
         handleRequestOpen={props.handleRequestOpen}
       />
+    )
+  },
+  {
+    path: '/pledge-app/interviews',
+    exact: true,
+    content: props => (
+      <Interviews state={props.state} />
     )
   },
   {
