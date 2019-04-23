@@ -57,6 +57,10 @@ export default {
 
   // Merit Book
   // GET requests
+  getAllMerits: function(lastKey: { value?: string, key?: string }) {
+    const params = { lastKey };
+    return axios.get('/api/merit/all', { params });
+  },
   getRemainingMerits: function(displayName: string, pledgeName: string) {
     const params = { displayName, pledgeName };
     return axios.get('/api/merit/active/remainingMerits', { params });

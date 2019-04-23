@@ -64,6 +64,16 @@ export function SpinnerDialog(props: { open: boolean, message: string }): Node {
   )
 };
 
+export const FetchingListSpinner = (
+  <div className="fetching-users" key={0}>
+    <CircularProgress
+      color="var(--accent-color)"
+      size={30}
+      style={{ margin: '0 auto' }}
+    />
+  </div>
+);
+
 export const LoadingHome =  () => <LoadingPage name="Home" />;
 export const LoadingDelibsApp =  () => <LoadingPage name="Delibs App" />;
 export const LoadingRusheeProfile =  () => <LoadingPage name="Rushee Profile" />;

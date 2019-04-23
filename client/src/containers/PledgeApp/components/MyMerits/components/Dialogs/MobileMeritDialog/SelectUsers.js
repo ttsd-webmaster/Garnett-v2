@@ -1,9 +1,9 @@
 // @flow
 
+import API from 'api/API.js';
 import { PLEDGING_START_DATE, PLEDGING_END_DATE } from 'helpers/constants';
 import { getToday, formatDate } from 'helpers/functions';
 import { SpinnerDialog } from 'helpers/loaders';
-import API from 'api/API.js';
 import { MeritDialogList, SelectedUsersChips } from 'components';
 import type { User, MeritType } from 'api/models';
 

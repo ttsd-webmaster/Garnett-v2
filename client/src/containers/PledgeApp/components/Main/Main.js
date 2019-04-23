@@ -18,9 +18,10 @@ const routes = [
   {
     path: '/pledge-app/my-merits',
     exact: true,
-    content: (props, scrollDirection) => (
+    content: (props, containerRef, scrollDirection) => (
       <MyMerits
         state={props.state}
+        containerRef={containerRef}
         scrollDirection={scrollDirection}
         handleRequestOpen={props.handleRequestOpen}
       />
@@ -71,6 +72,7 @@ type Props = {
 };
 
 type State = {
+  containerRef: ?HtmlDivElement,
   scrollDirection: 'up' | 'down' | null,
   lastScrollTop: number
 };
@@ -78,13 +80,18 @@ type State = {
 export class Main extends Component<Props, State> {
   containerRef: ?HtmlDivElement
   state = {
+    containerRef: null,
     scrollDirection: null,
     lastScrollTop: 0
   };
 
   componentDidMount() {
-    if (isMobile() && this.containerRef) {
-      this.containerRef.addEventListener('scroll', this.handleScroll);
+    if (this.containerRef) {
+      if (isMobile()) {
+        this.containerRef.addEventListener('scroll', this.handleScroll);
+      }
+      // Gotta use state to pass down ref as a prop
+      this.setState({ containerRef: this.containerRef });
     }
   }
 
@@ -105,7 +112,7 @@ export class Main extends Component<Props, State> {
   }
 
   render() {
-    const { scrollDirection } = this.state;
+    const { containerRef, scrollDirection } = this.state;
     return (
       <div id="content-container" ref={(ref) => this.containerRef = ref}>
         <Switch>
@@ -114,7 +121,7 @@ export class Main extends Component<Props, State> {
               key={index}
               exact={route.exact}
               path={route.path}
-              render={() => route.content(this.props, scrollDirection)}
+              render={() => route.content(this.props, containerRef, scrollDirection)}
             />
           ))}
           <Redirect from="/pledge-app" to="/pledge-app/my-merits" />

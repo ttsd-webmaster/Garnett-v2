@@ -319,11 +319,9 @@
 }
 
 /****************** Merit Dialog ********************/
-#fetching-users {
+.fetching-users.dialog {
   flex-grow: 1;
-  background-color: var(--background-color);
   padding: 50px 0 0;
-  text-align: center;
 }
 
 #no-users-to-select {

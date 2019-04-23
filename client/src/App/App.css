@@ -395,6 +395,18 @@ div, a {
   display: inline-block; 
 }
 
+/* Fetching spinner */
+.fetching-users {
+  background-color: var(--background-color);
+  padding: 20px 0 0;
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .fetching-users {
+    padding: 20px 0;
+  }
+}
+
 /* React Day Picker */
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   position: relative;

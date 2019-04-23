@@ -1,50 +1,44 @@
 // @flow
 
+import API from 'api/API.js';
 import { isMobile } from 'helpers/functions.js';
-import { LoadingComponent } from 'helpers/loaders.js';
+import { LoadingComponent, FetchingListSpinner } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 import type { Merit } from 'api/models';
 
 import React, { Fragment, PureComponent, type Node } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import { List } from 'material-ui/List';
+
+type Props = {
+  containerRef: ?HtmlDivElement
+};
 
 type State = {
   allMerits: ?Array<Merit>,
+  lastKey: ?Object,
   reverse: boolean
 };
 
 export class AllMeritsList extends PureComponent<Props, State> {
   state = {
     allMerits: null,
+    lastKey: null,
     reverse: false
   }
 
   componentDidMount() {
     if (navigator.onLine) {
-      const { firebase } = window;
-      const meritsRef = firebase.database().ref('/merits');
-      meritsRef.orderByChild('date').on('value', (merits) => {
-        let allMerits = [];
-        if (merits.val()) {
-          merits.forEach((merit) => {
-            allMerits.push(merit.val());
-          });
-        }
-        allMerits = allMerits.reverse();
-        localStorage.setItem('allMerits', JSON.stringify(allMerits));
-        this.setState({ allMerits });
-      });
+      API.getAllMerits()
+      .then((res) => {
+        const { fetchedMerits, lastKey } = res.data;
+        localStorage.setItem('allMerits', JSON.stringify(fetchedMerits));
+        this.setState({ allMerits: fetchedMerits, lastKey });
+      })
+      .catch((err) => console.error(err));
     } else {
       const allMerits = JSON.parse(localStorage.getItem('allMerits'));
       this.setState({ allMerits });
-    }
-  }
-
-  componentWillUnmount() {
-    const { firebase } = window;
-    if (navigator.onLine && firebase) {
-      const meritsRef = firebase.database().ref('/merits');
-      meritsRef.off('value');
     }
   }
 
@@ -65,35 +59,55 @@ export class AllMeritsList extends PureComponent<Props, State> {
       )
     }
     return (
-      <List className="animate-in garnett-list">
-        {allMerits.map((merit, i) => {
-          if (!merit) {
-            return null;
-          }
-          return (
-            <MeritRow
-              key={i}
-              merit={merit}
-              photo={merit.activePhoto}
-              primaryText={
-                <p className="garnett-name all-merits">
-                  {isMobile()
-                    ? this.shortenedName(merit.activeName)
-                    : merit.activeName}
-                  <span style={{ fontWeight: 400 }}>
-                    {merit.amount > 0
-                      ? " merited "
-                      : " demerited "
-                    }
-                  </span>
-                  {this.shortenedName(merit.pledgeName)}
-                </p>
-              }
-            />
-          )
-        })}
-      </List>
+      <InfiniteScroll
+        loadMore={this.fetchMerits}
+        hasMore={true}
+        loader={FetchingListSpinner}
+        useWindow={false}
+        getScrollParent={() => this.props.containerRef}
+      >
+        <List className="animate-in garnett-list">
+          {allMerits.map((merit, i) => {
+            if (!merit) {
+              return null;
+            }
+            return (
+              <MeritRow
+                key={i}
+                merit={merit}
+                photo={merit.activePhoto}
+                primaryText={
+                  <p className="garnett-name all-merits">
+                    {isMobile()
+                      ? this.shortenedName(merit.activeName)
+                      : merit.activeName}
+                    <span style={{ fontWeight: 400 }}>
+                      {merit.amount > 0
+                        ? " merited "
+                        : " demerited "
+                      }
+                    </span>
+                    {this.shortenedName(merit.pledgeName)}
+                  </p>
+                }
+              />
+            )
+          })}
+        </List>
+      </InfiniteScroll>
     )
+  }
+
+  fetchMerits = () => {
+    if (this.state.lastKey) {
+      API.getAllMerits(this.state.lastKey)
+      .then((res) => {
+        const { fetchedMerits, lastKey } = res.data;
+        const allMerits = this.state.allMerits.concat(fetchedMerits);
+        this.setState({ allMerits, lastKey });
+      })
+      .catch((err) => console.error(err));
+    }
   }
 
   reverse = () => {
@@ -104,7 +118,6 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
   render() {
     const { allMerits, reverse } = this.state;
-
     if (!allMerits) {
       return <LoadingComponent />;
     }

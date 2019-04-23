@@ -23,6 +23,7 @@ const VIEW_OPTIONS = [
 
 type Props = {
   state: User,
+  containerRef: ?HtmlDivElement,
   scrollDirection: 'up' | 'down' | null,
   handleRequestOpen: () => void
 };
@@ -39,12 +40,18 @@ export class MyMerits extends PureComponent<Props, State> {
   };
 
   get meritsList(): Node {
-    const { state, handleRequestOpen } = this.props;
+    const { state, containerRef, handleRequestOpen } = this.props;
     const { view } = this.state;
     if (view === 'allMerits' && state.status !== 'pledge') {
-      return <AllMeritsList state={state} />
+      return <AllMeritsList containerRef={containerRef} />;
     }
-    return <MyMeritsList state={state} handleRequestOpen={handleRequestOpen} />
+    return (
+      <MyMeritsList
+        state={state}
+        containerRef={containerRef}
+        handleRequestOpen={handleRequestOpen}
+      />
+    )
   }
 
   setView = (value: string) => this.setState({ view: value });
