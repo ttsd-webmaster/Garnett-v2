@@ -45,13 +45,14 @@ type State = {
 export class ActiveView extends PureComponent<Props, State> {
   state = { index: 0 };
 
-  handleChange = (index: number) => {
-    this.setState({ index });
+  componentDidUpdate(prevProps) {
+    if (prevProps.open === false && this.props.open === true) {
+      this.setState({ index: 0 });
+    }
   }
 
-  handleClose = () => {
-    this.props.handleClose();
-    this.setState({ index: 0 });
+  handleChange = (index: number) => {
+    this.setState({ index });
   }
 
   render() {
@@ -66,7 +67,7 @@ export class ActiveView extends PureComponent<Props, State> {
           titleStyle={{ fontSize: '22px' }}
           style={fullscreenDialogStyle}
           open={open}
-          onRequestClose={this.handleClose}
+          onRequestClose={this.props.handleClose}
         >
           <Tabs 
             className="garnett-tabs"
@@ -104,7 +105,7 @@ export class ActiveView extends PureComponent<Props, State> {
         bodyClassName="garnett-dialog-body list"
         contentClassName="garnett-dialog-content"
         open={open}
-        onRequestClose={this.handleClose}
+        onRequestClose={this.props.handleClose}
         autoScrollBodyContent={true}
       >
         <Tabs
