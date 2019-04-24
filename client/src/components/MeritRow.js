@@ -15,6 +15,7 @@ type Props = {
   photo: string,
   name?: string,
   primaryText?: string,
+  canDelete?: boolean,
   handleDeleteOpen?: () => void
 };
 
@@ -25,13 +26,14 @@ export class MeritRow extends PureComponent<Props> {
       photo,
       name,
       primaryText,
+      canDelete,
       handleDeleteOpen
     } = this.props;
     return (
       <div>
         <Divider className="garnett-divider large" inset={true} />
         <ListItem
-          className="garnett-list-item large"
+          className={`garnett-list-item large ${!canDelete ? 'disabled' : ''}`}
           leftAvatar={
             <Avatar
               size={70}

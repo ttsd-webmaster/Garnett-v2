@@ -77,18 +77,18 @@ export class MyMeritsList extends PureComponent<Props, State> {
       )
     }
     return (
-      <List className="animate-in garnett-list">
+      <List id="my-merits-list" className="animate-in garnett-list">
         {myMerits.map((merit, i) => {
           if (!merit) {
             return null;
           }
-          const { activeName, activePhoto, pledgeName, pledgePhoto } = merit;
           return (
             <MeritRow
               key={i}
               merit={merit}
-              photo={isPledge ? activePhoto : pledgePhoto}
-              name={isPledge ? activeName : pledgeName}
+              photo={isPledge ? merit.activePhoto : merit.pledgePhoto}
+              name={isPledge ? merit.activeName : merit.pledgeName}
+              canDelete={state.displayName === merit.createdBy}
               handleDeleteOpen={this.handleDeleteOpen}
             />
           )
@@ -98,9 +98,14 @@ export class MyMeritsList extends PureComponent<Props, State> {
   }
 
   handleDeleteOpen = (selectedMerit: Merit) => {
+    const { displayName } = this.props.state;
     if (navigator.onLine) {
-      androidBackOpen(this.handleDeleteClose);
-      this.setState({ selectedMerit, openDelete: true });
+      if (displayName === selectedMerit.createdBy) {
+        androidBackOpen(this.handleDeleteClose);
+        this.setState({ selectedMerit, openDelete: true });
+      } else {
+        this.props.handleRequestOpen('You can only delete merits you created.');
+      }
     } else {
       this.props.handleRequestOpen('You are offline');
     }

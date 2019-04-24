@@ -78,7 +78,7 @@ export class MyMerits extends PureComponent<Props, State> {
     const { view, openMerit } = this.state;
     
     return (
-      <div id="my-merits" className="content animate-in">
+      <Fragment>
         {state.status !== 'pledge' && (
           <ToggleViewHeader
             viewOptions={VIEW_OPTIONS}
@@ -86,26 +86,26 @@ export class MyMerits extends PureComponent<Props, State> {
             setView={this.setView}
           />
         )}
-
-        { this.meritsList }
-
-        {isMobile() && (
-          <Fragment>
-            <FloatingActionButton
-              className={`fixed-button ${scrollDirection === 'down' ? 'hidden' : ''}`}
-              onClick={this.handleMeritOpen}
-            >
-              <i className="icon-pencil"></i>
-            </FloatingActionButton>
-            <LoadableMobileMeritDialog
-              open={openMerit}
-              state={state}
-              handleMeritClose={this.handleMeritClose}
-              handleRequestOpen={handleRequestOpen}
-            />
-          </Fragment>
-        )}
-      </div>
+        <div id="my-merits" className="content animate-in">
+          { this.meritsList }
+          {isMobile() && (
+            <Fragment>
+              <FloatingActionButton
+                className={`fixed-button ${scrollDirection === 'down' ? 'hidden' : ''}`}
+                onClick={this.handleMeritOpen}
+              >
+                <i className="icon-pencil"></i>
+              </FloatingActionButton>
+              <LoadableMobileMeritDialog
+                open={openMerit}
+                state={state}
+                handleMeritClose={this.handleMeritClose}
+                handleRequestOpen={handleRequestOpen}
+              />
+            </Fragment>
+          )}
+        </div>
+      </Fragment>
     )
   }
 }
