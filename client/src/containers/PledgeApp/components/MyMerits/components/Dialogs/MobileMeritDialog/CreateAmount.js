@@ -132,7 +132,7 @@ export class CreateAmount extends PureComponent<Props, State> {
     let description = option.reason;
     if (option.reason === 'Interview Merits') {
       type = 'interview';
-      description = '';
+      description = '🤗';
     }
     this.handleClose();
     this.setState({
@@ -163,10 +163,12 @@ export class CreateAmount extends PureComponent<Props, State> {
   handleClose = () => this.setState({ open: false });
 
   render() {
+    const { type, amount, vibrate, open } = this.state;
+    const meritType = type === 'interview' ? 'standardized' : type;
     return (
       <div id="mobile-create-amount-container">
         <MeritTypeOptions
-          type={this.state.type}
+          type={meritType}
           isMobile
           setType={this.setType}
           setAmount={this.setAmount}
@@ -174,15 +176,15 @@ export class CreateAmount extends PureComponent<Props, State> {
         />
         <div
           id="mobile-create-merit-amount"
-          className={`${this.state.vibrate ? 'shake' : ''}`}
+          className={`${vibrate ? 'shake' : ''}`}
         >
-          {this.state.amount}
+          { amount }
         </div>
         { this.numbersGrid }
         { this.meritButtons }
         <StandardizedMeritOptionsDialog
           isMobile
-          open={this.state.open}
+          open={open}
           selectStandardizedMeritOption={this.selectStandardizedMeritOption}
           handleClose={this.handleClose}
         />

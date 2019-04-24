@@ -121,9 +121,11 @@ export class CreateAmount extends Component<Props, State> {
   setType = (type: MeritType) => {
     switch (type) {
       case 'chalkboard':
-      case 'interview':
       case 'personal':
         this.props.setDescription('');
+        break;
+      case 'interview':
+        this.props.setDescription('🤗');
         break;
       default:
     }
@@ -254,11 +256,20 @@ export class CreateAmount extends Component<Props, State> {
   closeProgressDialog = () => this.setState({ openSpinner: false });
 
   render() {
+    const {
+      type,
+      amount,
+      vibrate,
+      openStandardizedOptions,
+      openSpinner,
+      spinnerMessage
+    } = this.state;
+    const meritType = type === 'interview' ? 'standardized' : type;
     return (
       <div id="merit-create-amount-container">
         <div id="merit-create-amount-content">
           <MeritTypeOptions
-            type={this.state.type}
+            type={meritType}
             isMobile={false}
             setType={this.setType}
             setAmount={this.setAmount}
@@ -266,24 +277,24 @@ export class CreateAmount extends Component<Props, State> {
           />
           <input
             id="create-merit-amount"
-            className={`${this.state.vibrate ? 'shake' : ''}`}
+            className={`${vibrate ? 'shake' : ''}`}
             type="text"
             autoComplete="off"
             autoFocus
-            value={this.state.amount}
+            value={amount}
             onChange={this.changeAmount}
           />
           { this.meritButtons }
         </div>
         <StandardizedMeritOptionsDialog
           isMobile={false}
-          open={this.state.openStandardizedOptions}
+          open={openStandardizedOptions}
           selectStandardizedMeritOption={this.selectStandardizedMeritOption}
           handleClose={this.handleClose}
         />
         <SpinnerDialog
-          open={this.state.openSpinner}
-          message={this.state.spinnerMessage}
+          open={openSpinner}
+          message={spinnerMessage}
         />
       </div>
     )
