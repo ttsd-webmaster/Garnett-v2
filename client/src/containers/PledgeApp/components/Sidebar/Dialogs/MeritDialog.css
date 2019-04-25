@@ -38,7 +38,7 @@
   top: 212px;
   width: 100%;
   height: 10px;
-  background: linear-gradient(0deg, rgba(255, 255, 255, 0), var(--background-color));
+  background: linear-gradient(0deg, var(--fader-color), var(--background-color));
 }
 #select-users-header.selected-users::after {
   top: 270px;

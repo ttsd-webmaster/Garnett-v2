@@ -34,6 +34,7 @@ body {
   --dialog-button: var(--primary-color);
   --label-color: rgba(0, 0, 0, 0.3);
   --placeholder-color: #e0e0e0;
+  --fader-color: rgb(254, 254, 254, 0);
   --hover-color: #f1f1f1;
 }
 
@@ -53,6 +54,7 @@ body.dark-mode {
   --dialog-button: var(--text-color);
   --label-color: #777;
   --placeholder-color: #363636;
+  --fader-color: rgb(26, 26, 26, 0);
 }
 
 @media (max-width: 420px) {
