@@ -14,7 +14,7 @@
 @media (max-width: 767px) {
   #content-container {
     position: absolute;
-    padding: 55px 0;
+    padding: 56px 0;
     -webkit-overflow-scrolling: touch;
   }
 }
