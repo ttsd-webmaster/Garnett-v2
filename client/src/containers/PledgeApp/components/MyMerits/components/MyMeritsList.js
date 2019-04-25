@@ -90,7 +90,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
               merit={merit}
               photo={isPledge ? merit.activePhoto : merit.pledgePhoto}
               name={isPledge ? merit.activeName : merit.pledgeName}
-              canDelete={state.displayName === merit.createdBy}
+              userCreated={state.displayName === merit.createdBy}
               handleDeleteOpen={this.handleDeleteOpen}
             />
           )
@@ -100,13 +100,13 @@ export class MyMeritsList extends PureComponent<Props, State> {
   }
 
   handleDeleteOpen = (selectedMerit: Merit) => {
-    const { displayName } = this.props.state;
     if (navigator.onLine) {
-      if (displayName === selectedMerit.createdBy) {
+      const { displayName, status } = this.props.state;
+      if (status === 'pledge' && (displayName !== selectedMerit.createdBy)) {
+        this.props.handleRequestOpen('You can only delete merits you created.');
+      } else {
         androidBackOpen(this.handleDeleteClose);
         this.setState({ selectedMerit, openDelete: true });
-      } else {
-        this.props.handleRequestOpen('You can only delete merits you created.');
       }
     } else {
       this.props.handleRequestOpen('You are offline');

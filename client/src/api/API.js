@@ -80,8 +80,8 @@ export default {
   createMerit: function(params: MeritInfo) {
     return axios.put('/api/merit', params);
   },
-  deleteMerit: function(displayName: string, meritToDelete: Merit) {
-    const body = { displayName, meritToDelete };
+  deleteMerit: function(displayName: string, status: string, meritToDelete: Merit) {
+    const body = { displayName, status, meritToDelete };
     return axios.delete('/api/merit', { data: body });
   },
 

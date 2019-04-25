@@ -29,7 +29,7 @@ export default class DeleteMeritDialog extends PureComponent<Props, State> {
 
     this.setState({ deleting: true });
 
-    API.deleteMerit(displayName, merit)
+    API.deleteMerit(displayName, status, merit)
     .then((res) => {
       let message = `Deleted merit for ${merit.pledgeName}.`;
       if (status === 'pledge') {

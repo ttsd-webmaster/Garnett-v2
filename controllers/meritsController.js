@@ -242,13 +242,11 @@ exports.create_merit = function(req, res) {
 
 // Deletes merit
 exports.delete_merit = function(req, res) {
-  const { displayName, meritToDelete } = req.body;
-  const pledgeName = meritToDelete.pledgeName.replace(/ /g, '');
+  const { displayName, status, meritToDelete } = req.body;
   const meritsRef = admin.database().ref('/merits');
-  const activePledgeMeritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName}`);
 
-  // Users can only delete merits they created
-  if (displayName !== meritToDelete.createdBy) {
+  // Pledges can only delete merits they created
+  if (status === 'pledge' && (displayName !== meritToDelete.createdBy)) {
     return res.sendStatus(400);
   }
 
@@ -258,6 +256,8 @@ exports.delete_merit = function(req, res) {
       if (equal(merit.val(), meritToDelete)) {
         // Remove the merit from all merits list
         merit.ref.remove(() => {
+          const pledgeName = meritToDelete.pledgeName.replace(/ /g, '');
+          const activePledgeMeritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName}`);
           // Update the active's remaining merits for the pledge
           activePledgeMeritsRef.child('merits').once('value', (meritCount) => {
             const updatedMeritCount = meritCount.val() + meritToDelete.amount;

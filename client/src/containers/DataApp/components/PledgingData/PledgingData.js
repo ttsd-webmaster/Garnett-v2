@@ -24,6 +24,7 @@ const cachedDisplayedData = JSON.parse(localStorage.getItem('displayedData'));
 const cachedActiveData = JSON.parse(localStorage.getItem('activeData'));
 const cachedPledgeData = JSON.parse(localStorage.getItem('pledgeData'));
 const cachedPhotoMap = JSON.parse(localStorage.getItem('photoMap'));
+const cachedView = localStorage.getItem('pledgingDataView') || 'actives';
 
 type State = {
   displayedData: ?Array<any>,
@@ -39,7 +40,7 @@ export class PledgingData extends PureComponent<{}, State> {
     activeData: cachedActiveData,
     pledgeData: cachedPledgeData,
     photoMap: cachedPhotoMap ? new Map(cachedPhotoMap) : null,
-    view: localStorage.getItem('pledgingDataView') || 'actives'
+    view: cachedView
   };
 
   componentDidMount() {
@@ -102,9 +103,9 @@ export class PledgingData extends PureComponent<{}, State> {
     });
   }
 
-  setView = (value: string) => {
+  setView = (view: string) => {
     let displayedData;
-    switch (value) {
+    switch (view) {
       case 'actives':
         displayedData = this.state.activeData;
         break;
@@ -113,8 +114,8 @@ export class PledgingData extends PureComponent<{}, State> {
         break;
       default:
     }
-    localStorage.setItem('pledgingDataView', value);
-    this.setState({ displayedData, view: value });
+    localStorage.setItem('pledgingDataView', view);
+    this.setState({ displayedData, view });
   };
 
   render() {

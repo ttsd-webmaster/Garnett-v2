@@ -43,8 +43,7 @@
   font-size: 12px;
 }
 
-/********* My Merits List **********/
-#my-merits-list .garnett-list-item.disabled > div > div {
-  background-color: var(--placeholder-color) !important;
-  opacity: 0.5;
+.user-verified {
+  height: 13px;
+  margin-left: 5px;
 }

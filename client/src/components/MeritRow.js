@@ -1,5 +1,6 @@
 // @flow
 
+import userVerified from 'images/user-verified.png';
 import { formatDate } from 'helpers/functions';
 import { PlaceholderMerit } from 'components/Placeholders';
 import type { Merit } from 'api/models';
@@ -15,7 +16,7 @@ type Props = {
   photo: string,
   name?: string,
   primaryText?: string,
-  canDelete?: boolean,
+  userCreated?: boolean,
   handleDeleteOpen?: () => void
 };
 
@@ -26,14 +27,14 @@ export class MeritRow extends PureComponent<Props> {
       photo,
       name,
       primaryText,
-      canDelete,
+      userCreated,
       handleDeleteOpen
     } = this.props;
     return (
       <div>
         <Divider className="garnett-divider large" inset={true} />
         <ListItem
-          className={`garnett-list-item large ${!canDelete ? 'disabled' : ''}`}
+          className="garnett-list-item large"
           leftAvatar={
             <Avatar
               size={70}
@@ -42,7 +43,17 @@ export class MeritRow extends PureComponent<Props> {
             />
           }
           primaryText={
-            primaryText || <p className="garnett-name">{ name }</p>
+            primaryText ||
+            <p className="garnett-name">
+              { name }
+              {userCreated && (
+                <img
+                  className="user-verified"
+                  src={userVerified}
+                  alt="User Verified"
+                />
+              )}
+            </p>
           }
           secondaryText={
             <p className="garnett-description">{ merit.description }</p>
