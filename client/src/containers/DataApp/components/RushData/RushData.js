@@ -2,6 +2,7 @@
 
 import './RushData.css';
 import rushData from './data/rushData.json';
+import { setRefresh } from 'helpers/functions';
 import Filter from './components/Filter';
 import Chart from './components/Chart';
 
@@ -25,6 +26,7 @@ export class RushData extends PureComponent<{}, State> {
   componentDidMount() {
     const dataSet = rushData[0][1];
     const title = rushData[0][0];
+    setRefresh(null);
     this.setState({ dataSet, title });
   }
 

@@ -29,15 +29,8 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
-      setRefresh(this.fetchMerits);
-
-      API.getAllMerits()
-      .then((res) => {
-        const { fetchedMerits, lastKey } = res.data;
-        localStorage.setItem('allMerits', JSON.stringify(fetchedMerits));
-        this.setState({ allMerits: fetchedMerits, lastKey });
-      })
-      .catch((err) => console.error(err));
+      setRefresh(this.fetchInitialMerits);
+      this.fetchInitialMerits();
     } else {
       const allMerits = JSON.parse(localStorage.getItem('allMerits'));
       this.setState({ allMerits });
@@ -62,7 +55,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
     }
     return (
       <InfiniteScroll
-        loadMore={this.fetchMerits}
+        loadMore={this.fetchMoreMerits}
         hasMore={true}
         loader={FetchingListSpinner}
         useWindow={false}
@@ -100,22 +93,55 @@ export class AllMeritsList extends PureComponent<Props, State> {
     )
   }
 
-  fetchMerits = () => {
+  fetchInitialMerits = () => {
+    API.getAllMerits()
+    .then((res) => {
+      const { fetchedMerits, lastKey } = res.data;
+      localStorage.setItem('allMerits', JSON.stringify(fetchedMerits));
+      this.setState({ allMerits: fetchedMerits, lastKey });
+    })
+    .catch((err) => console.error(err));
+  }
+
+  fetchMoreMerits = () => {
     if (this.state.lastKey) {
-      API.getAllMerits(this.state.lastKey)
-      .then((res) => {
-        const { fetchedMerits, lastKey } = res.data;
-        const allMerits = this.state.allMerits.concat(fetchedMerits);
-        this.setState({ allMerits, lastKey });
-      })
-      .catch((err) => console.error(err));
+      if (this.state.reverse) {
+        API.getAllMeritsReverse(this.state.lastKey)
+        .then((res) => {
+          const { fetchedMerits, lastKey } = res.data;
+          const allMerits = this.state.allMerits.concat(fetchedMerits);
+          this.setState({ allMerits, lastKey });
+        })
+        .catch((err) => console.error(err));
+      } else {
+        API.getAllMerits(this.state.lastKey)
+        .then((res) => {
+          const { fetchedMerits, lastKey } = res.data;
+          const allMerits = this.state.allMerits.concat(fetchedMerits);
+          this.setState({ allMerits, lastKey });
+        })
+        .catch((err) => console.error(err));
+      }
     }
   }
 
   reverse = () => {
-    const { allMerits, reverse } = this.state;
-    const reversedMerits = allMerits.reverse();
-    this.setState({ allMerits: reversedMerits, reverse: !reverse });
+    const reverse = !this.state.reverse;
+
+    this.setState({ allMerits: null });
+
+    if (reverse) {
+      API.getAllMeritsReverse()
+      .then((res) => {
+        const { fetchedMerits, lastKey } = res.data;
+        localStorage.setItem('allMerits', JSON.stringify(fetchedMerits));
+        this.setState({ allMerits: fetchedMerits, lastKey, reverse });
+      })
+      .catch((err) => console.error(err));
+    } else {
+      this.fetchInitialMerits();
+      this.setState({ reverse });
+    }
   }
 
   render() {

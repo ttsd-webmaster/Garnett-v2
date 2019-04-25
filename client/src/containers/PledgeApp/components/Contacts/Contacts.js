@@ -8,7 +8,8 @@ import {
   androidBackOpen,
   androidBackClose,
   iosFullscreenDialogOpen,
-  iosFullscreenDialogClose
+  iosFullscreenDialogClose,
+  setRefresh
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter, FilterHeader, UserRow } from 'components';
@@ -64,6 +65,8 @@ export class Contacts extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
+      setRefresh(null);
+
       API.getBrothers()
       .then(res => {
         const brothers = res.data;

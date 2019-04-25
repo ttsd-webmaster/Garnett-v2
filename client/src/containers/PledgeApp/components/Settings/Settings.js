@@ -2,7 +2,7 @@
 
 import './Settings.css';
 import API from 'api/API.js';
-import { isMobile } from 'helpers/functions';
+import { isMobile, setRefresh } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { UserInfo } from 'components';
 import { ThemeOptions } from './components';
@@ -19,6 +19,10 @@ type Props = {
 };
 
 export class Settings extends PureComponent<Props> {
+  componentDidMount() {
+    setRefresh(null);
+  }
+
   goHome = () => {
     this.props.history.push('/home');
   }

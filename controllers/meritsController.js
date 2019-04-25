@@ -54,6 +54,53 @@ exports.get_all_merits = function(req, res) {
   }
 };
 
+// Get next 50 merits for all merits list reversed
+exports.get_all_merits_reverse = function(req, res) {
+  let { lastKey } = req.query;
+  const meritsRef = admin.database().ref('/merits');
+  let fetchedMerits = [];
+  let updatedLastKey;
+
+  // Subsequent fetches
+  if (lastKey) {
+    lastKey = JSON.parse(lastKey);
+    meritsRef
+    .orderByChild('date')
+    .startAt(lastKey.value, lastKey.key)
+    .limitToFirst(50)
+    .once('value', (merits) => {
+      if (merits.val()) {
+        merits.forEach((merit, i) => {
+          updatedLastKey = {
+            value: merit.val().date,
+            key: merit.key
+          };
+          fetchedMerits.push(merit.val());
+        });
+      }
+      fetchedMerits = fetchedMerits.slice(1);
+      res.json({ fetchedMerits, lastKey: updatedLastKey });
+    });
+  } else {
+    // Initial fetch
+    meritsRef
+    .orderByChild('date')
+    .limitToFirst(50)
+    .once('value', (merits) => {
+      if (merits.val()) {
+        merits.forEach((merit, i) => {
+          updatedLastKey = {
+            value: merit.val().date,
+            key: merit.key
+          };
+          fetchedMerits.push(merit.val());
+        });
+      }
+      res.json({ fetchedMerits, lastKey: updatedLastKey });
+    });
+  }
+}
+
 // Get remaining merits for pledge
 exports.get_remaining_merits = function(req, res) {
   const { displayName, pledgeName } = req.query;
