@@ -16,7 +16,7 @@ body {
   background-color: var(--background-color);
   margin: 0;
   padding: 0;
-  overscroll-behavior: contain;
+  overscroll-behavior: none;
   --background-color: #fefefe;
   --list-color: #fff;
   --primary-color: #c0001f;

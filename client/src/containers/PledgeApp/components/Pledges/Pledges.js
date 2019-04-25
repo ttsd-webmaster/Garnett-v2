@@ -7,7 +7,8 @@ import {
   androidBackOpen,
   androidBackClose,
   iosFullscreenDialogOpen,
-  iosFullscreenDialogClose
+  iosFullscreenDialogClose,
+  setRefresh
 } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { Filter, FilterHeader, UserRow } from 'components';
@@ -72,17 +73,8 @@ export class Pledges extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
-      API.getPledges(this.props.state.displayName)
-      .then(res => {
-        const { filter } = this.state;
-        const pledges = sortPledges(res.data, filter);
-        localStorage.setItem('pledges', JSON.stringify(pledges));
-        this.setState({ pledges });
-      })
-      .catch(error => {
-        console.error(`Error: ${error}`);
-        this.setState({ pledges: [] });
-      });
+      setRefresh(this.fetchPledges);
+      this.fetchPledges();
     }
   }
 
@@ -142,6 +134,20 @@ export class Pledges extends PureComponent<Props, State> {
       default:
         return ''
     }
+  }
+
+  fetchPledges = () => {
+    API.getPledges(this.props.state.displayName)
+    .then(res => {
+      const { filter } = this.state;
+      const pledges = sortPledges(res.data, filter);
+      localStorage.setItem('pledges', JSON.stringify(pledges));
+      this.setState({ pledges });
+    })
+    .catch(error => {
+      console.error(`Error: ${error}`);
+      this.setState({ pledges: [] });
+    });
   }
 
   handleOpen = (pledge: User) => {

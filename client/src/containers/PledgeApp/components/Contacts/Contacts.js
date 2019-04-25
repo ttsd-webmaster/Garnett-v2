@@ -47,7 +47,7 @@ type State = {
   anchorEl: ?HTMLElement
 };
 
-export class Contacts extends PureComponent<{}, State> {
+export class Contacts extends PureComponent<Props, State> {
   state = {
     brothers: cachedBrothers,
     filteredBrothers: cachedBrothers,

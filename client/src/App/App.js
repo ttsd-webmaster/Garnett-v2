@@ -93,6 +93,7 @@ export default class App extends Component<{}, State> {
     const data = storedData ? JSON.parse(storedData) : null;
     const sw_msg = localStorage.getItem('sw_msg');
 
+    // Show snackbar message if there is one
     if (sw_msg) {
       localStorage.removeItem('sw_msg');
       setTimeout(() => {
@@ -100,11 +101,13 @@ export default class App extends Component<{}, State> {
       }, 2000);
     }
 
+    // Check if there is user data cached
     if (!data) {
       this.setState({ loading: false });
       return;
     }
 
+    // Check if we are online
     if (!navigator.onLine) {
       this.setData(data);
       return;

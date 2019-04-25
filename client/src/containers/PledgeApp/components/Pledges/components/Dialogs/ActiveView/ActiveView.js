@@ -45,7 +45,7 @@ type State = {
 export class ActiveView extends PureComponent<Props, State> {
   state = { index: 0 };
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.open === false && this.props.open === true) {
       this.setState({ index: 0 });
     }

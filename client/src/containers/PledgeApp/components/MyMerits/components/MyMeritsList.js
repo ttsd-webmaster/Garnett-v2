@@ -1,6 +1,6 @@
 // @flow
 
-import { androidBackOpen, androidBackClose } from 'helpers/functions.js';
+import { androidBackOpen, androidBackClose, setRefresh } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 import { LoadableDeleteMeritDialog } from './Dialogs';
@@ -40,6 +40,8 @@ export class MyMeritsList extends PureComponent<Props, State> {
       if (status === 'pledge') {
         queriedName = 'pledgeName';
       }
+
+      setRefresh(null);
 
       meritsRef.orderByChild(queriedName).equalTo(fullName).on('value', (merits) => {
         let myMerits = [];

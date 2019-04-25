@@ -2,8 +2,9 @@
 
 import './MyData.css';
 import '../PledgingData/PledgingData.css';
-import { LoadingComponent } from 'helpers/loaders.js';
 import API from 'api/API.js';
+import { setRefresh } from 'helpers/functions';
+import { LoadingComponent } from 'helpers/loaders';
 
 import React, { Fragment, PureComponent } from 'react';
 import { ListItem } from 'material-ui/List';
@@ -11,6 +12,8 @@ import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
 
 const CATEGORIES = ['Merit'];
+
+const cachedMyData = JSON.parse(localStorage.getItem('myData'));
 
 type Props = {
   name: string,
@@ -22,16 +25,16 @@ type State = {
 };
 
 export class MyData extends PureComponent<Props, State> {
-  state = { loaded: false };
+  state = { myData: cachedMyData };
 
   componentDidMount() {
-    API.getMyData(this.props.name)
-    .then((res) => {
-      this.setState({ myData: res.data, });
-    });
+    if (navigator.onLine) {
+      setRefresh(this.getMyData);
+      this.getMyData();
+    }
   }
 
-  dataValue(value: string): Node {
+  dataValue(value: { instances: number, amount: number }): Node {
     const { instances, amount } = value;
     let color = '';
 
@@ -49,6 +52,15 @@ export class MyData extends PureComponent<Props, State> {
           </p>
       </div>
     )
+  }
+
+  getMyData = () => {
+    API.getMyData(this.props.name)
+    .then((res) => {
+      const myData = res.data;
+      localStorage.setItem('myData', JSON.stringify(myData));
+      this.setState({ myData });
+    });
   }
 
   render() {

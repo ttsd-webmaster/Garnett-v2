@@ -1,6 +1,8 @@
 // @flow
 
 import API from 'api/API.js';
+import { pullToRefresh } from 'helpers/pullToRefresh';
+import ptrAnimatesMaterial from 'mobile-pull-to-refresh/dist/styles/material/animates';
 
 import type { User } from 'api/models'
 
@@ -270,5 +272,27 @@ export function configureThemeMode() {
       } else {
         document.body.classList.remove('dark-mode');
       }
+  }
+}
+
+export function setRefresh(refreshFunction: () => void) {
+  if (isMobile()) {
+    const containerId = localStorage.getItem('refreshContainerId');
+    const container = document.getElementById(containerId);
+    if (container) {
+      pullToRefresh({
+        container,
+        animates: ptrAnimatesMaterial,
+        refresh() {
+          return new Promise(resolve => {
+            if (refreshFunction) {
+              setTimeout(() => resolve(refreshFunction()), 1000);
+            } else {
+              setTimeout(resolve, 1000);
+            }
+          });
+        }
+      });
+    }
   }
 }

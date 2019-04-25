@@ -1,7 +1,7 @@
 // @flow
 
 import API from 'api/API.js';
-import { isMobile } from 'helpers/functions.js';
+import { isMobile, setRefresh } from 'helpers/functions.js';
 import { LoadingComponent, FetchingListSpinner } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
 import type { Merit } from 'api/models';
@@ -29,6 +29,8 @@ export class AllMeritsList extends PureComponent<Props, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
+      setRefresh(this.fetchMerits);
+
       API.getAllMerits()
       .then((res) => {
         const { fetchedMerits, lastKey } = res.data;

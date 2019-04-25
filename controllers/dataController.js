@@ -131,34 +131,30 @@ exports.get_my_data = function(req, res) {
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
   const chalkboardsRef = admin.database().ref('/chalkboards');
-  let overallMeritInstances = 0;
-  let meritInstances = 0;
-  let demeritInstances = 0;
-  let meritsCreatedInstances = 0;
-  let meritsCreatedAmount = 0;
-  let overallMeritAmount = 0;
-  let meritAmount = 0;
-  let demeritAmount = 0;
+  const overallMeritGiven = { instances: 0, amount: 0 };
+  const meritsGiven = { instances: 0, amount: 0 };
+  const demeritsGiven = { instances: 0, amount: 0 };
+  const meritsCreated = { instances: 0, amount: 0 };
 
   meritsRef.orderByChild('activeName').equalTo(fullName).once('value', (merits) => {
     merits.forEach((merit) => {
       const { amount, createdBy } = merit.val();
 
       if (createdBy === fullName.replace(/ /g, '')) {
-        meritsCreatedInstances++;
-        meritsCreatedAmount += amount;
+        meritsCreated.instances++;
+        meritsCreated.amount += amount;
       }
       if (amount > 0) {
-        meritInstances += 1;
-        meritAmount += amount;
+        meritsGiven.instances += 1;
+        meritsGiven.amount += amount;
       }
       else {
-        demeritInstances += 1;
-        demeritAmount += amount;
+        demeritsGiven.instances += 1;
+        demeritsGiven.amount += amount;
       }
 
-      overallMeritInstances++;
-      overallMeritAmount += amount;
+      overallMeritGiven.instances++;
+      overallMeritGiven.amount += amount;
     });
 
     // chalkboardsRef.once('value', (chalkboards) => {
@@ -185,10 +181,10 @@ exports.get_my_data = function(req, res) {
     //   }
 
       res.json([
-        ['Merits and Demerits Given', [overallMeritInstances, overallMeritAmount]],
-        ['Merits Given', [meritInstances, meritAmount]],
-        ['Demerits Given', [demeritInstances, demeritAmount]],
-        ['Merits created on Garnett', [meritsCreatedInstances, meritsCreatedAmount]],
+        ['Merits and Demerits Given', overallMeritGiven],
+        ['Merits Given', meritsGiven],
+        ['Demerits Given', demeritsGiven],
+        ['Merits created on Garnett', meritsCreated],
         // ['Chalkboards Created', chalkboardsCreated],
         // ['Chalkboards Attended', chalkboardsAttended]
       ]);

@@ -5,7 +5,8 @@ import API from 'api/API.js';
 import goldMedal from './images/gold.png';
 import silverMedal from './images/silver.png';
 import bronzeMedal from './images/bronze.png';
-import { LoadingComponent } from 'helpers/loaders.js';
+import { setRefresh } from 'helpers/functions';
+import { LoadingComponent } from 'helpers/loaders';
 import { ToggleViewHeader } from 'components';
 
 import React, { PureComponent, type Node } from 'react';
@@ -19,6 +20,11 @@ const VIEW_OPTIONS = [
   { view: 'pledges', label: 'Pledges' }
 ];
 
+const cachedDisplayedData = JSON.parse(localStorage.getItem('displayedData'));
+const cachedActiveData = JSON.parse(localStorage.getItem('activeData'));
+const cachedPledgeData = JSON.parse(localStorage.getItem('pledgeData'));
+const cachedPhotoMap = JSON.parse(localStorage.getItem('photoMap'));
+
 type State = {
   displayedData: ?Array<any>,
   activeData: ?Array<any>,
@@ -29,30 +35,22 @@ type State = {
 
 export class PledgingData extends PureComponent<{}, State> {
   state = {
-    displayedData: null,
-    activeData: null,
-    pledgeData: null,
-    photoMap: null,
-    view: null
-  }
+    displayedData: cachedDisplayedData,
+    activeData: cachedActiveData,
+    pledgeData: cachedPledgeData,
+    photoMap: cachedPhotoMap ? new Map(cachedPhotoMap) : null,
+    view: localStorage.getItem('pledgingDataView') || 'actives'
+  };
 
   componentDidMount() {
-    API.getPledgingData()
-    .then((res) => {
-      const { activeData, pledgeData, photoMap } = res.data;
-      const view = localStorage.getItem('pledgingDataView') || 'actives';
-      const displayedData = view === 'actives' ? activeData : pledgeData;
-      this.setState({
-        displayedData,
-        activeData,
-        pledgeData,
-        photoMap: new Map(photoMap),
-        view
-      });
-    });
+    if (navigator.onLine) {
+      localStorage.setItem('refreshContainerId', 'data-container');
+      setRefresh(this.getPledgingData);
+      this.getPledgingData();
+    }
   }
 
-  dataValue(dataValue: string): Node {
+  dataValue(dataValue: { instances: number, amount: number }): Node {
     const { instances, amount } = dataValue;
     let color = '';
 
@@ -82,6 +80,26 @@ export class PledgingData extends PureComponent<{}, State> {
         return <img className="medal" src={bronzeMedal} alt="Bronze medal" />;
       default:
     }
+  }
+
+  getPledgingData = () => {
+    API.getPledgingData()
+    .then((res) => {
+      const { activeData, pledgeData, photoMap } = res.data;
+      const displayedData = this.state.view === 'actives' ? activeData : pledgeData;
+
+      localStorage.setItem('displayedData', JSON.stringify(displayedData));
+      localStorage.setItem('activeData', JSON.stringify(activeData));
+      localStorage.setItem('pledgeData', JSON.stringify(pledgeData));
+      localStorage.setItem('photoMap', JSON.stringify(photoMap));
+
+      this.setState({
+        displayedData,
+        activeData,
+        pledgeData,
+        photoMap: new Map(photoMap)
+      });
+    });
   }
 
   setView = (value: string) => {

@@ -1,6 +1,7 @@
 // @flow
 
 import API from 'api/API.js';
+import { setRefresh } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders';
 import { UserRow } from 'components';
 import type { User } from 'api/models';
@@ -25,6 +26,13 @@ export class Interviews extends PureComponent<Props> {
   };
 
   componentDidMount() {
+    if (navigator.onLine) {
+      setRefresh(this.fetchInterviewProgress);
+      this.fetchInterviewProgress();
+    }
+  }
+
+  fetchInterviewProgress = () => {
     const { displayName, status } = this.props.state;
     API.getInterviewsProgress(displayName, status)
     .then(res => {

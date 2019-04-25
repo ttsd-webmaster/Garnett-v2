@@ -2,7 +2,8 @@
 
 import './DataApp.css';
 import 'containers/PledgeApp/PledgeApp.css';
-import { getTabStyle } from 'helpers/functions';
+import { isMobile, getTabStyle } from 'helpers/functions';
+import { PullToRefreshSpinner } from 'helpers/loaders';
 import { PledgingData } from './components/PledgingData/PledgingData';
 import { RushData } from './components/RushData/RushData';
 import { MyData } from './components/MyData/MyData';
@@ -71,6 +72,7 @@ export class DataApp extends PureComponent<Props, State> {
           <span id="back-button" onClick={this.goHome}>←</span>
           <h1 id="data-app-header">{ this.header }</h1>
           { this.body }
+          { isMobile() && <PullToRefreshSpinner /> }
         </div>
 
         <BottomNavigation

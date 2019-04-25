@@ -2,6 +2,7 @@
 
 import './Main.css';
 import { isMobile } from 'helpers/functions';
+import { PullToRefreshSpinner } from 'helpers/loaders';
 import {
   MyMerits,
   Pledges,
@@ -58,7 +59,6 @@ const routes = [
       <Settings
         history={props.history}
         state={props.state}
-        handleRequestOpen={props.handleRequestOpen}
         logoutCallBack={props.logoutCallBack}
       />
     )
@@ -67,8 +67,8 @@ const routes = [
 
 type Props = {
   state: User,
-  handleRequestOpen: () => void,
-  logoutCallBack: () => void
+  logoutCallBack: () => void,
+  handleRequestOpen: () => void
 };
 
 type State = {
@@ -88,6 +88,7 @@ export class Main extends Component<Props, State> {
   componentDidMount() {
     if (this.containerRef) {
       if (isMobile()) {
+        localStorage.setItem('refreshContainerId', 'content-container');
         this.containerRef.addEventListener('scroll', this.handleScroll);
       }
       // Gotta use state to pass down ref as a prop
@@ -126,6 +127,7 @@ export class Main extends Component<Props, State> {
           ))}
           <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
         </Switch>
+        { isMobile() && <PullToRefreshSpinner /> }
       </div>
     )
   }
