@@ -172,6 +172,21 @@ export class SelectUsers extends Component<Props, State> {
     return !this.state.selectedUsers.length || !this.state.description;
   }
 
+  get shouldCountTowardsMeritCap(): boolean {
+    const { state, type } = this.props;
+    const nonPCStandardizedMerit = (
+      type === 'standardized' && this.state.description !== 'PC Merits'
+    );
+    return (
+      state.status !== 'pipm' &&
+      (
+        type === 'personal' ||
+        type === 'interview' ||
+        nonPCStandardizedMerit
+      )
+    );
+  }
+
   setName = (event: SyntheticEvent<>) => {
     const name = event.target.value;
     let result = [];
@@ -218,23 +233,46 @@ export class SelectUsers extends Component<Props, State> {
   hideOverlay = () => this.setState({ showOverlay: false });
 
   selectUser = (user: User) => {
-    // Only allow selection if active has enough merits
-    if (this.props.amount <= user.remainingMerits) {
+    const { amount } = this.props;
+    // Only allow selection if merit should count towards cap and
+    // active has enough merits
+    if (this.shouldCountTowardsMeritCap && (amount > user.remainingMerits)) {
+      const userName = `${user.firstName} ${user.lastName}`;
+      this.props.handleRequestOpen(`Not enough merits for ${userName}.`);
+    } else {
       const { selectedUsers } = this.state;
       const filteredUsers = this.remainingUsers.filter((currentUser) => {
         return user.displayName !== currentUser.displayName;
       });
       selectedUsers.push(user);
       this.setState({ filteredUsers, selectedUsers, name: '' });
-    } else {
-      const userName = `${user.firstName} ${user.lastName}`;
-      this.props.handleRequestOpen(`Not enough merits for ${userName}.`);
     }
   }
 
+  // Only available for actives view
   selectAllPledges = () => {
+    const { state, amount } = this.props;
     const { users } = this.state;
-    if (this.props.state.status !== 'pledge' && users) {
+    let notEnoughMeritsUser;
+
+    if (!users) {
+      return;
+    }
+
+    users.forEach((user) => {
+      if (this.shouldCountTowardsMeritCap && (amount > user.remainingMerits)) {
+        notEnoughMeritsUser = `${user.firstName} ${user.lastName}`;
+      }
+    });
+
+    if (state.status === 'pledge') {
+      // Should never reach here
+      this.props.handleRequestOpen('How da fuh?');
+    } else if (notEnoughMeritsUser) {
+      // One of the pledges does not have enough merits
+      this.props.handleRequestOpen(`Not enough merits for ${notEnoughMeritsUser}.`);
+    } else {
+      // Success!
       this.setState({ selectedUsers: users, filteredUsers: [] });
     }
   }
