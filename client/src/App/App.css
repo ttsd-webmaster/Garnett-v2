@@ -16,6 +16,7 @@ body {
   background-color: var(--background-color);
   margin: 0;
   padding: 0;
+  overscroll-behavior: contain;
   --background-color: #fefefe;
   --list-color: #fff;
   --primary-color: #c0001f;
@@ -433,4 +434,10 @@ div, a {
   width: unset !important;
   font-weight: unset !important;
   color: var(--text-color) !important;
+}
+
+/* Pull To Refresh */
+.pull-to-refresh-material__control {
+  top: 5px !important;
+  z-index: 9;
 }

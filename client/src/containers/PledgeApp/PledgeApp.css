@@ -6,7 +6,7 @@
 }
 @media (max-width: 767px) {
   #pledge-app-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
