@@ -303,14 +303,31 @@ exports.delete_merit = function(req, res) {
       if (equal(merit.val(), meritToDelete)) {
         // Remove the merit from all merits list
         merit.ref.remove(() => {
-          const pledgeName = meritToDelete.pledgeName.replace(/ /g, '');
-          const activePledgeMeritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName}`);
+          const nonPCStandardizedMerit = (
+            meritToDelete.type === 'standardized' &&
+            meritToDelete.description !== 'PC Merits'
+          );
+          const shouldCountTowardsMeritCap = (
+            status !== 'pipm' &&
+            (
+              meritToDelete.type === 'personal' ||
+              meritToDelete.type === 'interview' ||
+              nonPCStandardizedMerit
+            )
+          );
+
           // Update the active's remaining merits for the pledge
-          activePledgeMeritsRef.child('merits').once('value', (meritCount) => {
-            const updatedMeritCount = meritCount.val() + meritToDelete.amount;
-            activePledgeMeritsRef.update({ merits: updatedMeritCount });
+          if (shouldCountTowardsMeritCap) {
+            const pledgeName = meritToDelete.pledgeName.replace(/ /g, '');
+            const activePledgeMeritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName}`);
+            activePledgeMeritsRef.child('merits').once('value', (meritCount) => {
+              const updatedMeritCount = meritCount.val() + meritToDelete.amount;
+              activePledgeMeritsRef.update({ merits: updatedMeritCount });
+              res.sendStatus(200);
+            });
+          } else {
             res.sendStatus(200);
-          });
+          }
         })
       }
     })
