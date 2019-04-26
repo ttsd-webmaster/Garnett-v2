@@ -8,7 +8,7 @@ import { UserInfo } from 'components';
 import { ThemeOptions } from './components';
 import type { User } from 'api/models';
 
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import Subheader from 'material-ui/Subheader';
 import FontIcon from 'material-ui/FontIcon';
 
@@ -55,25 +55,23 @@ export class Settings extends PureComponent<Props> {
     return (
       <div className="content animate-in">
         <UserInfo user={state} name={state.name} />
-        {isMobile() && (
-          <Fragment>
-            <Subheader>Features</Subheader>
-            <div id="options-container">
-              {state.status !== 'pledge' && (
-                <div className="option-row" onClick={this.viewDataApp}>
-                  <FontIcon className="garnett-icon icon-chart-bar" />
-                  View Pledging Data
-                </div>
-              )}
-              <ThemeOptions />
-              {state.status === 'pledge' ? (
-                <div className="logout-button" onClick={this.logout}>Log Out</div>
-              ) : (
-                <div className="logout-button" onClick={this.goHome}>Back Home</div>
-              )}
+        <Subheader>Features</Subheader>
+        <div id="options-container">
+          {state.status !== 'pledge' && (
+            <div className="option-row" onClick={this.viewDataApp}>
+              <FontIcon className="garnett-icon icon-chart-bar" />
+              View Pledging Data
             </div>
-          </Fragment>
-        )}
+          )}
+          <ThemeOptions />
+          {isMobile() && (
+            state.status === 'pledge' ? (
+              <div className="logout-button" onClick={this.logout}>Log Out</div>
+            ) : (
+              <div className="logout-button" onClick={this.goHome}>Back Home</div>
+            )
+          )}
+        </div>
       </div>
     )
   }

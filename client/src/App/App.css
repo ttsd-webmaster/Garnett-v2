@@ -31,6 +31,7 @@ body {
   --text-light: rgba(0, 0, 0, 0.54);
   --icon-color: var(--primary-color);
   --icon-dark: var(--secondary-color);
+  --sidebar-color: var(--primary-color);
   --dialog-button: var(--primary-color);
   --label-color: rgba(0, 0, 0, 0.3);
   --placeholder-color: #e0e0e0;
@@ -51,10 +52,12 @@ body.dark-mode {
   --text-light: #e0e0e0;
   --icon-color: var(--text-color);
   --icon-dark: #777;
+  --sidebar-color: #101010;
   --dialog-button: var(--text-color);
   --label-color: #777;
   --placeholder-color: #363636;
   --fader-color: rgb(26, 26, 26, 0);
+  --hover-color: #323232;
 }
 
 @media (max-width: 420px) {

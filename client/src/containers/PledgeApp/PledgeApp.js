@@ -20,9 +20,7 @@ type Props = {
 export class PledgeApp extends PureComponent<Props> {
   componentDidMount() {
     localStorage.setItem('route', 'pledge-app');
-    if (isMobile()) {
-      configureThemeMode();
-    }
+    configureThemeMode();
   }
 
   render() {

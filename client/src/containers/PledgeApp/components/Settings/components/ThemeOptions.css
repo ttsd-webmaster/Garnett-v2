@@ -1,5 +1,5 @@
 #theme-options-container {
-  padding: 0 0 20px;
+  padding: 0 16px 20px;
 }
 
 #theme-label {
@@ -25,13 +25,20 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-  width: 33.33%;
+  width: 33.34%;
   border-right: 1px solid var(--primary-color);
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
 }
 .theme-option:last-child {
   border: none;
 }
 .theme-option.active {
   background-color: var(--primary-color);
-  color: #fafafa;
+  color: #fefefe;
+}
+@media (min-width: 768px) {
+  .theme-option:hover {
+    opacity: 0.8;
+  }
 }

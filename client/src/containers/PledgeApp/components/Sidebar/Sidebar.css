@@ -6,15 +6,10 @@
   align-items: center;
   position: sticky;
   bottom: 0;
-  background-color: #c0001f;
-  color: #fff;
+  background-color: var(--sidebar-color);
+  color: #fefefe;
   width: 280px;
   padding: 70px 0 46px;
   letter-spacing: 0.5px;
   z-index: 10;
-}
-
-/* Used to unstyle close button for merit fullscreen dialog */
-#sidebar svg {
-  fill: unset !important;
 }

@@ -1,6 +1,5 @@
 #options-container {
   background-color: var(--background-color);
-  padding: 0 16px;
 }
 
 .option-row {
@@ -9,7 +8,16 @@
   color: var(--text-color);
   height: 73px;
   font-weight: 700;
+  padding: 0 16px;
   margin: 0 0 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+@media (min-width: 768px) {
+  .option-row:hover {
+    background-color: var(--hover-color);
+  }
 }
 .option-row .garnett-icon {
   margin-right: 24px;

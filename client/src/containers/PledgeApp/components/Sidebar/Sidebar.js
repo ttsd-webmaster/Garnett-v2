@@ -5,7 +5,7 @@ import { AccountInfo, NavItems } from './components';
 import { LoadableMeritDialog } from './Dialogs';
 import type { User } from 'api/models';
 
-import React, { Component, Fragment, type Node } from 'react';
+import React, { Component, type Node } from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
@@ -57,7 +57,7 @@ export class Sidebar extends Component<Props, State> {
       )
     }
     return (
-      <Fragment>
+      <div id="merit-dialog">
         <LoadableMeritDialog
           open={this.state.openMerit}
           state={user}
@@ -65,7 +65,7 @@ export class Sidebar extends Component<Props, State> {
           handleRequestOpen={this.props.handleRequestOpen}
         />
         { logoutDialog }
-      </Fragment>
+      </div>
     )
   }
 
