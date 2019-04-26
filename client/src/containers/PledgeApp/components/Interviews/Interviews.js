@@ -12,18 +12,17 @@ import { List } from 'material-ui/List';
 import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 
-const cachedCompletedInterviews = JSON.parse(localStorage.getItem('completedInterviews'));
-const cachedIncompleteInterviews = JSON.parse(localStorage.getItem('incompleteInterviews'));
-
 type Props = {
   state: User
 };
 
 export class Interviews extends PureComponent<Props> {
-  state = {
-    completedInterviews: cachedCompletedInterviews,
-    incompleteInterviews: cachedIncompleteInterviews
-  };
+  constructor(props) {
+    super(props);
+    const completedInterviews = JSON.parse(localStorage.getItem('completedInterviews'));
+    const incompleteInterviews = JSON.parse(localStorage.getItem('incompleteInterviews'));
+    this.state = { completedInterviews, incompleteInterviews };
+  }
 
   componentDidMount() {
     if (navigator.onLine) {

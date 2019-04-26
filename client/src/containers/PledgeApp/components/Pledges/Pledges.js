@@ -27,9 +27,6 @@ const FILTER_OPTIONS = [
   'Completed Interviews'
 ];
 
-const cachedPledges = JSON.parse(localStorage.getItem('pledges'));
-const cachedFilter = localStorage.getItem('pledgesFilter') || 'lastName';
-
 function sortPledges(pledges: Array<User>, filter: string): Array<User> {
   if (!pledges) {
     return null;
@@ -61,15 +58,20 @@ type State = {
 };
 
 export class Pledges extends PureComponent<Props, State> {
-  state = {
-    pledges: sortPledges(cachedPledges, cachedFilter),
-    pledge: null,
-    filter: cachedFilter,
-    reverse: false,
-    openPledge: false,
-    openPopover: false,
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
+    const pledges = JSON.parse(localStorage.getItem('pledges'));
+    const filter = localStorage.getItem('pledgesFilter') || 'lastName';
+    this.state = {
+      pledges: sortPledges(pledges, filter),
+      pledge: null,
+      filter,
+      reverse: false,
+      openPledge: false,
+      openPopover: false,
+      anchorEl: null
+    };
+  }
 
   componentDidMount() {
     if (navigator.onLine) {

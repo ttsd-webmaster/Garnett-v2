@@ -32,8 +32,6 @@ const FILTER_OPTIONS = [
   'Personality Type'
 ];
 
-const cachedBrothers = JSON.parse(localStorage.getItem('brothersArray'));
-
 type State = {
   brothers: ?Array<User>,
   filteredBrothers: ?Array<User>,
@@ -49,19 +47,26 @@ type State = {
 };
 
 export class Contacts extends PureComponent<Props, State> {
-  state = {
-    brothers: cachedBrothers,
-    filteredBrothers: cachedBrothers,
-    selectedBrother: null,
-    searchedName: '',
-    filterKey: 'active',
-    filterName: 'Active',
-    filterSubgroups: filters.active,
-    reverse: false,
-    open: false,
-    openPopover: false,
-    anchorEl: null
-  };
+  constructor(props) {
+    super(props);
+    const brothers = JSON.parse(localStorage.getItem('brothers'));
+    const filterKey = localStorage.getItem('contactsFilterKey') || 'active';
+    const filterName = localStorage.getItem('contactsFilterName') || 'Active';
+    const filterSubgroups = JSON.parse(localStorage.getItem('contactsFilterSubgroups')) || filters.active;
+    this.state = {
+      brothers,
+      filteredBrothers: brothers,
+      selectedBrother: null,
+      searchedName: '',
+      filterKey,
+      filterName,
+      filterSubgroups,
+      reverse: false,
+      open: false,
+      openPopover: false,
+      anchorEl: null
+    };
+  }
 
   componentDidMount() {
     if (navigator.onLine) {
@@ -70,7 +75,7 @@ export class Contacts extends PureComponent<Props, State> {
       API.getBrothers()
       .then(res => {
         const brothers = res.data;
-        localStorage.setItem('brothersArray', JSON.stringify(res.data));
+        localStorage.setItem('brothers', JSON.stringify(res.data));
         this.setState({ brothers, filteredBrothers: brothers });
       });
     }
@@ -224,24 +229,25 @@ export class Contacts extends PureComponent<Props, State> {
     let group = filterKey;
 
     switch (filterName) {
-      case 'Active':
-        group = 'active';
-        break
       case 'Alumni':
         group = 'class';
-        break
+        break;
       case 'First Name':
       case 'Last Name':
         group = 'name';
-        break
+        break;
       case 'Personality Type':
         filterKey = 'mbti';
         group = 'mbti';
-        break
+        break;
       default:
     }
 
     const filterSubgroups = filters[group];
+
+    localStorage.setItem('contactsFilterKey', filterKey);
+    localStorage.setItem('contactsFilterName', filterName);
+    localStorage.setItem('contactsFilterSubgroups', JSON.stringify(filterSubgroups));
 
     this.setState({
       filterKey,
