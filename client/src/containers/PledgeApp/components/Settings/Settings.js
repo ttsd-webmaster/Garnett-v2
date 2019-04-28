@@ -65,11 +65,13 @@ export class Settings extends PureComponent<Props> {
           )}
           <ThemeOptions />
           {isMobile() && (
-            state.status === 'pledge' ? (
-              <div className="logout-button" onClick={this.logout}>Log Out</div>
-            ) : (
-              <div className="logout-button" onClick={this.goHome}>Back Home</div>
-            )
+            <div className="option-row">
+              {state.status === 'pledge' ? (
+                <div className="logout-button" onClick={this.logout}>Log Out</div>
+              ) : (
+                <div className="logout-button" onClick={this.goHome}>Back Home</div>
+              )}
+            </div>
           )}
         </div>
       </div>
