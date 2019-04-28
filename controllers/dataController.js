@@ -50,9 +50,6 @@ exports.get_pledging_data = function(req, res) {
           activeMostMeritsGivenCounter = activeMostMeritsGiven.get(activeName) || { instances: 0, amount: 0 };
           activeMostDemeritsGivenCounter = activeMostDemeritsGiven.get(activeName) || { instances: 0, amount: 0 };
           activeMostMeritsCreatedCounter = activeMostMeritsCreated.get(activeName) || { instances: 0, amount: 0 };
-          pledgeMostOverallMeritsGivenCounter = pledgeMostOverallMeritsGiven.get(pledgeName) || { instances: 0, amount: 0 };
-          pledgeMostMeritsGivenCounter = pledgeMostMeritsGiven.get(pledgeName) || { instances: 0, amount: 0 };
-          pledgeMostDemeritsGivenCounter = pledgeMostDemeritsGiven.get(pledgeName) || { instances: 0, amount: 0 };
 
           if (createdBy === activeName.replace(/ /g, '')) {
             const updatedActiveMeritCreated = {
@@ -67,36 +64,45 @@ exports.get_pledging_data = function(req, res) {
               instances: activeMostMeritsGivenCounter.instances + 1,
               amount: activeMostMeritsGivenCounter.amount + amount
             };
-            const updatedPledgeMeritsGiven = {
-              instances: pledgeMostMeritsGivenCounter.instances + 1,
-              amount: pledgeMostMeritsGivenCounter.amount + amount
-            };
             activeMostMeritsGiven.set(activeName, updatedActiveMeritsGiven);
-            pledgeMostMeritsGiven.set(pledgeName, updatedPledgeMeritsGiven);
           } else {
             const updatedActiveDemeritsGiven = {
               instances: activeMostDemeritsGivenCounter.instances + 1,
               amount: activeMostDemeritsGivenCounter.amount + amount
             };
-            const updatedPledgeDemeritsGiven = {
-              instances: pledgeMostDemeritsGivenCounter.instances + 1,
-              amount: pledgeMostDemeritsGivenCounter.amount + amount
-            };
             activeMostDemeritsGiven.set(activeName, updatedActiveDemeritsGiven);
-            pledgeMostDemeritsGiven.set(pledgeName, updatedPledgeDemeritsGiven);
           }
 
           const updatedActiveOverallMeritsGiven = {
             instances: activeMostOverallMeritsGivenCounter.instances + 1,
             amount: activeMostOverallMeritsGivenCounter.amount + amount
           };
-          const updatedPledgeOverallMeritsGiven = {
-            instances: pledgeMostOverallMeritsGivenCounter.instances + 1,
-            amount: pledgeMostOverallMeritsGivenCounter.amount + amount
-          };
           activeMostOverallMeritsGiven.set(activeName, updatedActiveOverallMeritsGiven);
-          pledgeMostOverallMeritsGiven.set(pledgeName, updatedPledgeOverallMeritsGiven);
         }
+
+        pledgeMostOverallMeritsGivenCounter = pledgeMostOverallMeritsGiven.get(pledgeName) || { instances: 0, amount: 0 };
+        pledgeMostMeritsGivenCounter = pledgeMostMeritsGiven.get(pledgeName) || { instances: 0, amount: 0 };
+        pledgeMostDemeritsGivenCounter = pledgeMostDemeritsGiven.get(pledgeName) || { instances: 0, amount: 0 };
+
+        if (amount > 0) {
+          const updatedPledgeMeritsGiven = {
+            instances: pledgeMostMeritsGivenCounter.instances + 1,
+            amount: pledgeMostMeritsGivenCounter.amount + amount
+          };
+          pledgeMostMeritsGiven.set(pledgeName, updatedPledgeMeritsGiven);
+        } else {
+          const updatedPledgeDemeritsGiven = {
+            instances: pledgeMostDemeritsGivenCounter.instances + 1,
+            amount: pledgeMostDemeritsGivenCounter.amount + amount
+          };
+          pledgeMostDemeritsGiven.set(pledgeName, updatedPledgeDemeritsGiven);
+        }
+
+        const updatedPledgeOverallMeritsGiven = {
+          instances: pledgeMostOverallMeritsGivenCounter.instances + 1,
+          amount: pledgeMostOverallMeritsGivenCounter.amount + amount
+        };
+        pledgeMostOverallMeritsGiven.set(pledgeName, updatedPledgeOverallMeritsGiven);
       }
     });
 

@@ -66,7 +66,7 @@ export class DataApp extends PureComponent<Props, State> {
   render() {
     const { index } = this.state;
     return (
-      <div className="loading-container">
+      <div>
 
         <div id="data-container">
           <span id="back-button" onClick={this.goHome}>←</span>

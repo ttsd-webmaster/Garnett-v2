@@ -5,7 +5,7 @@ import API from 'api/API.js';
 import goldMedal from './images/gold.png';
 import silverMedal from './images/silver.png';
 import bronzeMedal from './images/bronze.png';
-import { setRefresh } from 'helpers/functions';
+import { isMobile, setRefresh } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders';
 import { ToggleViewHeader } from 'components';
 
@@ -45,8 +45,10 @@ export class PledgingData extends PureComponent<{}, State> {
 
   componentDidMount() {
     if (navigator.onLine) {
-      localStorage.setItem('refreshContainerId', 'data-container');
-      setRefresh(this.getPledgingData);
+      if (isMobile()) {
+        localStorage.setItem('refreshContainerId', 'data-container');
+        setRefresh(this.getPledgingData);
+      }
       this.getPledgingData();
     }
   }

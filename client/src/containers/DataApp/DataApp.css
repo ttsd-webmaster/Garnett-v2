@@ -7,7 +7,10 @@
 }
 @media (max-width: 767px) {
   #data-container {
+    position: absolute;
+    height: 100%;
     padding-top: 55px;
+    overflow-y: auto;
   }
 }
 
@@ -69,7 +72,7 @@
 @media (max-width: 767px) {
   #pledging-data-container .garnett-subheader {
     position: sticky;
-    top: 62px;
+    top: 7px;
     z-index: 2;
   }
   #pledging-data-container .garnett-subheader:not(.toggle-view)::after {
@@ -93,6 +96,11 @@
   padding: 10px 0 0 !important;
   margin: 0 0 50px;
   z-index: 3;
+}
+@media (max-width: 767px) {
+  #pledging-data-container .garnett-subheader.toggle-view {
+    top: -55px;
+  }
 }
 @media (min-width: 768px) {
   #pledging-data-container .garnett-subheader.toggle-view::after {
