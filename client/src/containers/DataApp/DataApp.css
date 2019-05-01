@@ -8,6 +8,7 @@
 @media (max-width: 767px) {
   #data-container {
     position: absolute;
+    width: 100%;
     height: 100%;
     padding-top: 55px;
     overflow-y: auto;
