@@ -3,7 +3,7 @@
 import '../../../../MyMerits/MyMerits.css';
 import './ActiveView.css';
 import { getTabStyle, isMobile } from 'helpers/functions.js';
-import { UserInfo } from 'components';
+import { FullScreenDialog, UserInfo } from 'components';
 import { MeritsList } from './MeritsList';
 import { InterviewsList } from './InterviewsList';
 import type { User } from 'api/models';
@@ -11,13 +11,7 @@ import type { User } from 'api/models';
 import React, { PureComponent, type Node } from 'react';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Dialog from 'material-ui/Dialog';
-import FullscreenDialog from 'material-ui-fullscreen-dialog';
 import SwipeableViews from 'react-swipeable-views';
-
-const fullscreenDialogStyle = {
-  backgroundColor: 'var(--background-color)',
-  overflow: 'auto'
-};
 
 const slideContainer = {
   height: 'calc(100vh - 112px)',
@@ -62,10 +56,8 @@ export class ActiveView extends PureComponent<Props, State> {
     const fullName = `${firstName} ${lastName}`;
     if (isMobile()) {
       return (
-        <FullscreenDialog
+        <FullScreenDialog
           title="Pledge"
-          titleStyle={{ fontSize: '22px' }}
-          style={fullscreenDialogStyle}
           open={open}
           onRequestClose={this.props.handleClose}
         >
@@ -94,7 +86,7 @@ export class ActiveView extends PureComponent<Props, State> {
             <MeritsList pledgeName={displayName} />
             <InterviewsList pledgeName={displayName} />
           </SwipeableViews>
-        </FullscreenDialog>
+        </FullScreenDialog>
       )
     }
     return (

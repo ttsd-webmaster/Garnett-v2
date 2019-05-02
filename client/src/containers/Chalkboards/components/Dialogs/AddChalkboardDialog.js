@@ -202,7 +202,7 @@ export default class AddChalkboardDialog extends Component {
       return (
         <FullscreenDialog
           title="New Chalkboard"
-          titleStyle={{fontSize:'22px'}}
+          titleStyle={{ fontSize: '22px' }}
           containerStyle={mobileAddChalkboardStyle}
           actionButton={mobileAction}
           open={this.props.open}

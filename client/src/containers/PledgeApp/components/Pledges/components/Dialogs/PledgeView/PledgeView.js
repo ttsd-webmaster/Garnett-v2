@@ -1,12 +1,11 @@
 // @flow
 
 import { isMobile } from 'helpers/functions.js';
-import { UserInfo } from 'components';
+import { FullScreenDialog, UserInfo } from 'components';
 import type { User } from 'api/models';
 
 import React, { type Node } from 'react';
 import Dialog from 'material-ui/Dialog';
-import FullscreenDialog from 'material-ui-fullscreen-dialog';
 
 type Props = {
   pledge: User,
@@ -20,15 +19,13 @@ export function PledgeView(props: Props) {
   const fullName = `${firstName} ${lastName}`;
   if (isMobile()) {
     return (
-      <FullscreenDialog
+      <FullScreenDialog
         title="Pledge Brother"
-        titleStyle={{ fontSize:'22px' }}
-        style={{ backgroundColor: 'var(--background-color)' }}
         open={props.open}
         onRequestClose={props.handleClose}
       >
         <UserInfo user={props.pledge} name={fullName} />
-      </FullscreenDialog>
+      </FullScreenDialog>
     )
   }
   return (

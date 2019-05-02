@@ -256,7 +256,7 @@ export default class HandleChalkboardDialog extends Component {
         {isMobile() ? (
           <FullscreenDialog
             title="Chalkboard"
-            titleStyle={{fontSize:'22px'}}
+            titleStyle={{ fontSize: '22px' }}
             actionButton={mobileAction}
             open={this.props.open}
             onRequestClose={this.props.handleClose}

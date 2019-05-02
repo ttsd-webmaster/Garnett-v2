@@ -64,6 +64,7 @@
 
 /* Chip for merits toggle header in MyMerits */
 .garnett-chip {
+  color: var(--text-color);
   margin: 10px !important;
   transition: background-color 0.2s ease-in-out;
 }
@@ -258,6 +259,7 @@
   flex-direction: column;
   background-color: var(--list-color);
   padding: 0px !important;
+  border-top: 1px solid var(--border-color) !important;
   border-bottom: 1px solid var(--border-color) !important;
 }
 .garnett-dialog-body.list {

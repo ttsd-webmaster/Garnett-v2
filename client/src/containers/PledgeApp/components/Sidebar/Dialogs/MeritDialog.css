@@ -1,27 +1,12 @@
-/************* Containers ****************/
-#merit-dialog {
-  --background-color: #fefefe;
-  --list-color: #fff;
-  --primary-color: #c0001f;
-  --border-color: #e0e0e0;
-  --accent-color: #00967e;
-  --text-color: rgba(0, 0, 0, 0.87);
-  --label-color: rgba(0, 0, 0, 0.3);
-  --placeholder-color: #e0e0e0;
-  --fader-color: rgb(254, 254, 254, 0);
-  --hover-color: #f1f1f1;
-}
-
 /* Used to unstyle close button for merit fullscreen dialog */
-#merit-dialog svg {
-  fill: unset !important;
+#fullscreen-dialog svg {
+  fill: var(--text-color) !important;
 }
 
 #merit-dialog-container {
   display: flex;
   height: 100%;
   justify-items: center;
-  color: var(--text-color);
 }
 
 #merit-dialog-container .garnett-chip.merit-dialog > svg{
@@ -73,6 +58,7 @@
   width: 100%;
   height: 50px;
   font-size: 18px;
+  background-color: var(--list-color);
   color: var(--text-color);
   padding: 20px;
   margin: 0 0 20px;
@@ -109,6 +95,7 @@
   width: 100%;
   height: 50px;
   font-size: 18px;
+  background-color: var(--list-color);
   color: var(--text-color);
   border: 0;
   outline: 0;

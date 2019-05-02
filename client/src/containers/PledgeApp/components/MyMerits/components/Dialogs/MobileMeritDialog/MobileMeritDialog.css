@@ -1,9 +1,9 @@
 /* Used to unstyle close button for mobile merit fullscreen dialog */
-#my-merits svg {
-  fill: unset !important;
+#merit-dialog svg {
+  fill: var(--text-color) !important;
 }
 
-#my-merits .garnett-chip.merit-dialog > svg{
+#merit-dialog .garnett-chip.merit-dialog > svg{
   fill: #fff !important;
 }
 
@@ -18,8 +18,6 @@
   right: 0;
   z-index: 1000;
   animation: fadeup 0.4s;
-  --list-color: #fff;
-  --text-color: rgba(0, 0, 0, 0.87);
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
@@ -52,7 +50,8 @@
 }
 
 .grid-button {
-  background-color: var(--list-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
   font-size: 25px;
   border: none;
   cursor: pointer;
@@ -104,13 +103,6 @@
   right: 0;
   overflow: auto;
   animation: fadeup 0.4s;
-  --background-color: #fefefe;
-  --list-color: #fff;
-  --primary-color: #c0001f;
-  --border-color: #e0e0e0;
-  --text-color: rgba(0, 0, 0, 0.87);
-  --text-light: rgba(0, 0, 0, 0.54);
-  --label-color: rgba(0, 0, 0, 0.3);
 }
 @supports (-webkit-overflow-scrolling: touch) {
   /* CSS specific to iOS devices */
@@ -127,7 +119,7 @@
 #merit-inputs-container {
   position: sticky;
   top: 0;
-  background-color: var(--list-color);
+  background-color: var(--background-color);
   z-index: 1;
 }
 
@@ -138,7 +130,7 @@
   width: 100%;
   min-height: 60px;
   font-size: 16px;
-  background-color: var(--list-color);
+  background-color: var(--background-color);
   color: var(--text-color);
   padding: 0 10px;
   border: 0;

@@ -6,24 +6,17 @@ import { SelectUsers } from './SelectUsers';
 import type { User, MeritType } from 'api/models';
 
 import React, { PureComponent, type Node } from 'react';
+import { createPortal } from 'react-dom';
 import FullscreenDialog from 'material-ui-fullscreen-dialog';
-
-const fullscreenDialogStyle = {
-  backgroundColor: '#fff'
-};
 
 const titleStyle = {
   fontFamily: "'Helvetica Neue', Roboto, sans-serif",
   fontSize: '18px',
   fontWeight: '500',
-  color: 'rgba(0, 0, 0, 0.87)',
+  color: '--var(text-color)',
   marginRight: '38px',
   letterSpacing: '0.5px',
   textAlign: 'center'
-};
-
-const appBarStyle = {
-  backgroundColor: '#fff'
 };
 
 type Props = {
@@ -114,18 +107,21 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
   }
 
   render() {
-    return (
-      <FullscreenDialog
-        title={this.header}
-        titleStyle={titleStyle}
-        appBarStyle={appBarStyle}
-        style={fullscreenDialogStyle}
-        open={this.props.open}
-        onRequestClose={this.onClose}
-        appBarZDepth={0}
-      >
-        { this.body }
-      </FullscreenDialog>
+    return createPortal(
+      <div id="merit-dialog">
+        <FullscreenDialog
+          title={this.header}
+          titleStyle={titleStyle}
+          style={{ backgroundColor: 'var(--background-color)' }}
+          appBarStyle={{ backgroundColor: 'var(--background-color)' }}
+          appBarZDepth={0}
+          open={this.props.open}
+          onRequestClose={this.onClose}
+        >
+          { this.body }
+        </FullscreenDialog>
+      </div>,
+      document.body
     )
   }
 }

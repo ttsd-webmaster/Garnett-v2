@@ -1,5 +1,6 @@
 export { Filter } from './Filter';
 export { FilterHeader } from './FilterHeader';
+export { FullScreenDialog } from './FullScreenDialog';
 export { Header } from './Header';
 export { MeritDialogList } from './MeritDialogList';
 export { MeritDialogUserRow } from './MeritDialogUserRow';
