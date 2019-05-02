@@ -67,7 +67,7 @@ exports.get_pledges = function(req, res) {
       }
       // Set all the pledge's total merits
       pledgesArray.forEach((pledge) => {
-        const pledgeName = pledge.firstName + pledge.lastName;
+        const pledgeName = (pledge.firstName + pledge.lastName).replace(/ /g, '');
         const mappedPledge = pledgesMap.get(pledgeName);
         pledge.displayName = pledgeName;
         pledge.totalMerits = mappedPledge.merits;

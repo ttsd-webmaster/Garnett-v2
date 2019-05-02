@@ -132,7 +132,7 @@ exports.get_pledges_as_active = function(req, res) {
           if (user.val()) {
             const { firstName, lastName, Pledges } = user.val();
             const currentPledge = user.val();
-            currentPledge.displayName = firstName + lastName;
+            currentPledge.displayName = (firstName + lastName).replace(/ /g, '');
             currentPledge.remainingMerits = remainingMerits.get(user.key);
             result.push(currentPledge);
           }
@@ -155,7 +155,7 @@ exports.get_actives_as_pledge = function(req, res) {
       const { firstName, lastName, status, Pledges } = user.val();
       if (status !== 'pledge') {
         const currentActive = user.val();
-        currentActive.displayName = firstName + lastName;
+        currentActive.displayName = (firstName + lastName).replace(/ /g, '');
         currentActive.remainingMerits = Pledges[displayName].merits;
 
         if (showAlumni === 'true') {
