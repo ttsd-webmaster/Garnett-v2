@@ -33,9 +33,13 @@
   position: relative;
   max-width: 700px;
   width: 100%;
-  padding: 0 16px;
   margin: 20px 0;
   z-index: 2;
+}
+@media (max-width: 767px) {
+  #search-input-container {
+    padding: 0 16px;
+  }
 }
 
 #search-brothers-input {
