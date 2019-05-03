@@ -1,4 +1,4 @@
-const admin = require("firebase-admin");
+const admin = require('firebase-admin');
 require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
 
 admin.initializeApp({
@@ -15,92 +15,92 @@ admin.initializeApp({
     client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL
   }),
   databaseURL: process.env.FIREBASE_DATABASE_URL
-})
+});
 
+// Capitalize the first letter of every word in the given string
+const removedPledge =
+  process.argv[2]
+  .toLowerCase()
+  .split(' ')
+  .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+  .join(' ');
 const usersRef = admin.database().ref('/users');
 const meritsRef = admin.database().ref('/merits');
 const chalkboardsRef = admin.database().ref('/chalkboards');
 const approvedComplaintsRef = admin.database().ref('/approvedComplaints');
 const pendingComplaintsRef = admin.database().ref('/pendingComplaints');
 
-usersRef.once('value', (snapshot) => {
-  snapshot.forEach((user) => {
-    if (user.val().status !== 'pledge') {
-      let pledgesRef = user.ref.child('Pledges');
-
-      pledgesRef.once('value', (pledges) => {
-        let removedPledge;
-        let newPledgeArray = [];
-        let pledgeArray = Object.keys(pledges.val()).map(function(key) {
-          return key;
-        });
-
-        snapshot.forEach((user) => {
-          if (user.val().status === 'pledge') {
-            newPledgeArray.push(user.key);
-          }
-        });
-
-        pledgeArray.forEach((pledge) => {
-          if (!newPledgeArray.includes(pledge)) {
-            removedPledge = pledge;
-            pledgesRef.child(pledge).remove(() => {
-              console.log(`Removed ${pledge}`);
-            });
-          }
-        });
-
-        meritsRef.once('value', (snapshot) => {
-          snapshot.forEach((merit) => {
-            if (merit.val().pledgeName.replace(/ /g,'') === removedPledge) {
-              merit.ref.remove(() => {
-                console.log(`Removed ${attendeeName}'s merit' from Merits.`);
-              })
-            }
+usersRef.once('value', (users) => {
+  users.forEach((user) => {
+    const { firstName, lastName, email, status } = user.val();
+    const fullName = `${firstName} ${lastName}`;
+    if (status === 'pledge' && (removedPledge === fullName)) {
+      admin.auth().getUserByEmail(email).then((userRecord) => {
+        // Remove pledge from authentication
+        admin.auth().deleteUser(userRecord.uid).then(() => {
+          console.log(`Removed ${removedPledge} from authentication.`);
+          // Remove pledge from database
+          user.ref.remove(() => {
+            console.log(`Removed ${removedPledge} from database.`);
           });
-        });
+        })
+        .catch((error) => console.error(error));
+      })
+      .catch((error) => console.error(error));
+    } else if (status !== 'pledge') {
+      const pledgeDisplayName = removedPledge.replace(/ /g, '');
+      // Remove from active's Pledges array
+      user.ref.child(`Pledges/${pledgeDisplayName}`).remove(() => {
+        console.log(`Removed ${removedPledge} from ${fullName}'s' Pledges array`);
+      });
+    }
+  });
+});
 
-        chalkboardsRef.once('value', (snapshot) => {
-          snapshot.forEach((chalkboard) => {
-            let attendeesRef = chalkboard.ref.child('attendees');
+// Remove pledge's merits
+meritsRef.once('value', (merits) => {
+  merits.forEach((merit) => {
+    if (merit.val().pledgeName === removedPledge) {
+      merit.ref.remove(() => {
+        console.log(`Removed ${removedPledge}'s merit from Merits.`);
+      });
+    }
+  });
+});
 
-            attendeesRef.once('value', (attendees) => {
-              attendees.forEach((attendee) => {
-                let attendeeName = attendee.val().name.replace(/ /g,'');
-
-                if (attendeeName === removedPledge) {
-                  attendee.ref.remove(() => {
-                    console.log(`Removed ${attendeeName} from Chalkboards.`);
-                  });
-                }
-              });
-            });
+// Remove pledge from chalkboard attendees
+chalkboardsRef.once('value', (chalkboards) => {
+  chalkboards.forEach((chalkboard) => {
+    const attendeesRef = chalkboard.ref.child('attendees');
+    attendeesRef.once('value', (attendees) => {
+      attendees.forEach((attendee) => {
+        if (attendee.val().name === removedPledge) {
+          attendee.ref.remove(() => {
+            console.log(`Removed ${removedPledge} from Chalkboards.`);
           });
+        }
+      });
+    });
+  });
+});
 
-          approvedComplaintsRef.once('value', (snapshot) => {
-            snapshot.forEach((complaint) => {
-              let pledgeName = complaint.val().pledgeDisplayName;
+// Remove approved complaints
+approvedComplaintsRef.once('value', (approvedComplaints) => {
+  approvedComplaints.forEach((approvedComplaint) => {
+    if (approvedComplaint.val().pledgeDisplayName === removedPledge) {
+      approvedComplaint.ref.remove(() => {
+        console.log(`Removed ${removedPledge} from Approved Complaints.`);
+      });
+    }
+  });
+});
 
-              if (pledgeName === removedPledge) {
-                complaint.ref.remove(() => {
-                  console.log(`Removed ${pledgeName} from Approved Complaints.`);
-                });
-              }
-            });
-
-            pendingComplaintsRef.once('value', (snapshot) => {
-              snapshot.forEach((complaint) => {
-                let pledgeName = complaint.val().pledgeDisplayName;
-
-                if (pledgeName === removedPledge) {
-                  complaint.ref.remove(() => {
-                    console.log(`Removed ${pledgeName} from Pending Complaints.`);
-                  });
-                }
-              });
-            });
-          });
-        });
+// Remove pending complaints
+pendingComplaintsRef.once('value', (pendingComplaints) => {
+  pendingComplaints.forEach((pendingComplaint) => {
+    if (pendingComplaint.val().pledgeDisplayName === removedPledge) {
+      pendingComplaint.ref.remove(() => {
+        console.log(`Removed ${removedPledge} from Pending Complaints.`);
       });
     }
   });

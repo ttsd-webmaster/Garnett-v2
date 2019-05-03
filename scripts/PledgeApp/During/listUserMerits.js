@@ -17,17 +17,22 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 })
 
+// Capitalize the first letter of every word in the given string
+const userName =
+  process.argv[2]
+  .toLowerCase()
+  .split(' ')
+  .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+  .join(' ');
 const meritsRef = admin.database().ref('/merits');
-const userName = process.argv[2].toLowerCase();
 let totalMerits = 0;
 let instances = 0;
 
 meritsRef.once('value', (merits) => {
   merits.forEach((merit) => {
-    const activeName = merit.val().activeName.toLowerCase();
-    const pledgeName = merit.val().pledgeName.toLowerCase();
+    const { activeName, pledgeName, amount } = merit.val();
     if ((activeName === userName) || (pledgeName === userName)) {
-      totalMerits += merit.val().amount;
+      totalMerits += amount;
       instances += 1;
     }
   });
