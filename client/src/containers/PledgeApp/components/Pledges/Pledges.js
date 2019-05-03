@@ -179,6 +179,7 @@ export class Pledges extends PureComponent<Props, State> {
   setFilter = (filterName: string) => {
     let { pledges } = this.state;
     let filter = filterName.replace(/ /g, '');
+    // Convert first letter of filter to be lower cased
     filter = filter[0].toLowerCase() + filter.substr(1);
 
     pledges = sortPledges(pledges, filter);

@@ -185,7 +185,7 @@ export class Contacts extends PureComponent<Props, State> {
     } else {
       brothers.forEach((user) => {
         const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
-        if (userName.startsWith(searchedName.toLowerCase())) {
+        if (userName.startsWith(searchedName.trim().toLowerCase())) {
           result.push(user);
         }
       });
@@ -224,7 +224,7 @@ export class Contacts extends PureComponent<Props, State> {
 
   setFilter = (filterName: FilterName) => {
     let filterKey = filterName.replace(/ /g, '');
-    // Make first letter of filter lower cased
+    // Convert first letter of filter to be lower cased
     filterKey = filterKey[0].toLowerCase() + filterKey.substr(1);
     let group = filterKey;
 

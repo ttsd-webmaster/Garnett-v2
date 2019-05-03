@@ -56,7 +56,7 @@ export class SignUp extends PureComponent<Props, State> {
       password,
       confirmation
     } = this.state;
-    const code = this.state.code.toLowerCase();
+    const code = this.state.code.trim().toLowerCase();
 
     if (firstName && lastName && className && major && year && email &&
         validateEmail(email) && phone.length === 10 && code &&
@@ -86,10 +86,10 @@ export class SignUp extends PureComponent<Props, State> {
     lastName = lastName.replace(/ /g, '');
     phone = phone.replace(/ /g, '');
     email = email.replace(/ /g, '');
+    code = code.trim().toLowerCase();
     // Capitalize first name and last name
     firstName = firstName[0].toUpperCase() + firstName.substr(1);
     lastName = lastName[0].toUpperCase() + lastName.substr(1);
-    code = code.toLowerCase();
 
     const signUpInfo = {
       firstName,

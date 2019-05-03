@@ -267,6 +267,7 @@ export default class Chalkboards extends Component {
 
   setFilter = (filterName) => {
     let filter = filterName.replace(/ /g, '');
+    // Convert first letter of filter to be lower cased
     filter = filter[0].toLowerCase() + filter.substr(1);
 
     this.setState({

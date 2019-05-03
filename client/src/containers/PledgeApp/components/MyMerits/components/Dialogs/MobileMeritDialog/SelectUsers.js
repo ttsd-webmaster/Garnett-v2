@@ -197,7 +197,7 @@ export class SelectUsers extends Component<Props, State> {
     } else {
       this.remainingUsers.forEach((user) => {
         const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
-        if (userName.startsWith(name.toLowerCase())) {
+        if (userName.startsWith(name.trim().toLowerCase())) {
           result.push(user);
         }
       });
@@ -292,7 +292,7 @@ export class SelectUsers extends Component<Props, State> {
   addAndSortDeselectedUser(user: User): Array<Users> {
     const { filteredUsers, name } = this.state;
     const userName = `${user.firstName} ${user.lastName}`.toLowerCase();
-    if (userName.startsWith(name.toLowerCase())) {
+    if (userName.startsWith(name.trim().toLowerCase())) {
       filteredUsers.push(user);
       filteredUsers.sort((a, b) => a.firstName.localeCompare(b.firstName));
     }
