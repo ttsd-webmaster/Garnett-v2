@@ -137,23 +137,14 @@ export default class App extends Component<{}, State> {
     if (browserSupportsNotifications()) {
       registerNotificationToken(user)
       .then((res) => {
-        this.loadDatabase(user);
+        this.setData(user);
       })
       .catch((error) => {
-        this.loadDatabase(user);
+        this.setData(user);
         this.handleRequestOpen(error.message);
       })
     } else {
-      this.loadDatabase(user);
-    }
-  }
-
-  loadDatabase(user: User) {
-    if (window.firebase.database) {
       this.setData(user);
-    } else {
-      loadFirebase('database')
-      .then(() => this.setData(user));
     }
   }
 

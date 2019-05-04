@@ -1,5 +1,6 @@
 // @flow
 
+import API from 'api/API';
 import {
   initializeFirebase,
   loadFirebase,
@@ -47,22 +48,15 @@ export class SignIn extends PureComponent<Props, State> {
     loadFirebase('auth')
     .then(() => {
       const firebase= window.firebase;
-
       firebase.auth().signInWithEmailAndPassword(email, password)
       .then((userObject) => {
         const { user } = userObject;
         if (user && user.emailVerified) {
-          loadFirebase('database')
-          .then(() => {
-            const { displayName } = user;
-            const userRef = firebase.database().ref('/users/' + displayName);
-
-            userRef.once('value', (snapshot) => {
-              const userData = snapshot.val();
-              localStorage.setItem('data', JSON.stringify(userData));
-
-              this.props.loginCallback(userData);
-            });
+          API.getAuthStatus(user.displayName)
+          .then((res) => {
+            const userData = res.data;
+            localStorage.setItem('data', JSON.stringify(userData));
+            this.props.loginCallback(userData);
           });
         } else {
           const message = 'Email is not verified.';
@@ -71,10 +65,10 @@ export class SignIn extends PureComponent<Props, State> {
         }
       })
       .catch((error) => {
-        console.log(`Error: ${error}`);
         const message = 'Email or password is incorrect.';
         this.props.closeProgressDialog();
         this.props.handleRequestOpen(message);
+        console.error(`Error: ${error}`);
       });
     });
   }
