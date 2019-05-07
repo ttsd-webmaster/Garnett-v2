@@ -37,7 +37,7 @@ export function StandardizedMeritOptionsDialog(props: Props) {
           <ListItem
             key={option.reason}
             primaryText={option.reason}
-            hoverColor="#f1f1f1"
+            hoverColor="var(--hover-color)"
             onClick={() => props.selectStandardizedMeritOption(option)}
           />
         ))}
@@ -49,7 +49,7 @@ export function StandardizedMeritOptionsDialog(props: Props) {
           <ListItem
             key={option.reason}
             primaryText={option.reason}
-            hoverColor="#f1f1f1"
+            hoverColor="var(--hover-color)"
             onClick={() => props.selectStandardizedMeritOption(option)}
           />
         ))}

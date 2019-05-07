@@ -29,7 +29,7 @@ export class SignIn extends PureComponent<Props, State> {
   state = {
     email: '',
     password: ''
-  }
+  };
 
   get isFormValid(): boolean {
     const { email, password } = this.state;
