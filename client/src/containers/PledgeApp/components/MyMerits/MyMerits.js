@@ -21,8 +21,6 @@ const VIEW_OPTIONS = [
   { view: 'allMerits', label: 'All Merits' }
 ];
 
-const cachedView = localStorage.getItem('meritsView') || 'allMerits';
-
 type Props = {
   state: User,
   containerRef: ?HtmlDivElement,
@@ -36,10 +34,11 @@ type State = {
 };
 
 export class MyMerits extends PureComponent<Props, State> {
-  state = {
-    view: cachedView,
-    openMerit: false
-  };
+  constructor(props) {
+    super(props);
+    const view = localStorage.getItem('meritsView') || 'allMerits';
+    this.state = { view, openMerit: false };
+  }
 
   get meritsList(): Node {
     const { state, containerRef, handleRequestOpen } = this.props;
