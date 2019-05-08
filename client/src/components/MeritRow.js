@@ -17,7 +17,7 @@ type Props = {
   name?: string,
   primaryText?: string,
   userCreated?: boolean,
-  handleDeleteOpen?: () => void
+  handleOptionsOpen?: () => void
 };
 
 export class MeritRow extends PureComponent<Props> {
@@ -28,7 +28,7 @@ export class MeritRow extends PureComponent<Props> {
       name,
       primaryText,
       userCreated,
-      handleDeleteOpen
+      handleOptionsOpen
     } = this.props;
     return (
       <div>
@@ -59,7 +59,7 @@ export class MeritRow extends PureComponent<Props> {
             <p className="garnett-description">{ merit.description }</p>
           }
           secondaryTextLines={2}
-          onClick={() => handleDeleteOpen && handleDeleteOpen(merit)}
+          onClick={() => handleOptionsOpen && handleOptionsOpen(merit)}
         >
           <div className="merit-amount-container">
             <p className="merit-date">{ formatDate(new Date(merit.date)) }</p>

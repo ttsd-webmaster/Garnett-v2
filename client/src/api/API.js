@@ -84,6 +84,10 @@ export default {
   createMerit: function(params: MeritInfo) {
     return axios.put('/api/merit', params);
   },
+  updateMerit: function(displayName: string, status: string, meritToEdit: Merit, date: Date) {
+    const body = { displayName, status, meritToEdit, date };
+    return axios.put('/api/merit/update', body);
+  },
   deleteMerit: function(displayName: string, status: string, meritToDelete: Merit) {
     const body = { displayName, status, meritToDelete };
     return axios.delete('/api/merit', { data: body });

@@ -2,7 +2,7 @@
 
 import API from 'api/API.js';
 import { PLEDGING_START_DATE, PLEDGING_END_DATE } from 'helpers/constants';
-import { getToday, formatDate } from 'helpers/functions';
+import { formatDate } from 'helpers/functions';
 import { MeritDialogList, SelectedUsersChips } from 'components';
 import type { User, MeritType } from 'api/models';
 
@@ -110,7 +110,6 @@ export class SelectUsers extends Component<Props, State> {
         <DayPickerInput
           value={this.state.date}
           formatDate={formatDate}
-          placeholder={getToday()}
           onDayChange={this.setDate}
           inputProps={{ readOnly: true }}
           dayPickerProps={{

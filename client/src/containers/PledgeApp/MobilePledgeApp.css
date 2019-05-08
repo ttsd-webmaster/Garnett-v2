@@ -65,7 +65,7 @@
 #clear-input {
   position: absolute;
   top: 50%;
-  right: 14px;
+  right: 0;
   width: 30px;
   height: 30px;
   line-height: 30px;

@@ -59,3 +59,7 @@
   font-weight: 300;
   color: var(--label-color);
 }
+
+#contacts-container #clear-input {
+  right: 30px;
+}

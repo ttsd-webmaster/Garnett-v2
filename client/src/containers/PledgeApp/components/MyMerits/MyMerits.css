@@ -1,3 +1,14 @@
+/* Used for date input for edit merit dialog */
+.garnett-dialog-content.edit-merit > div > div {
+  overflow-y: unset !important;
+}
+
+.garnett-dialog-content.edit-merit .DayPickerInput > input {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
 .garnett-subheader.merit-view {
   position: sticky;
   top: -20px;

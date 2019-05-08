@@ -414,6 +414,16 @@ div, a {
 }
 
 /* React Day Picker */
+.DayPicker-wrapper {
+  background: var(--list-color);
+  color: var(--text-color);
+}
+
+.DayPicker-Day--disabled {
+  color: var(--text-color) !important;
+  opacity: 0.2;
+}
+
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   position: relative;
   background-color: var(--primary-color) !important;

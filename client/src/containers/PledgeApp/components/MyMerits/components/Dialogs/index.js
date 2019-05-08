@@ -12,8 +12,19 @@ export const LoadableMobileMeritDialog = Loadable({
   }
 });
 
-export const LoadableDeleteMeritDialog = Loadable({
-  loader: () => import('./DeleteMeritDialog'),
+export const LoadableMeritOptionsDialog = Loadable({
+  loader: () => import('./MeritOptionsDialog'),
+  render(loaded, props) {
+    let Component = loaded.default;
+    return <Component {...props}/>;
+  },
+  loading() {
+    return <div></div>
+  }
+});
+
+export const LoadableEditMeritDialog = Loadable({
+  loader: () => import('./EditMeritDialog'),
   render(loaded, props) {
     let Component = loaded.default;
     return <Component {...props}/>;

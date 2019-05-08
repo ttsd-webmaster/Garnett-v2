@@ -15,6 +15,7 @@ router.get('/chalkboards', controller.get_chalkboards_merit);
 
 // PUT requests
 router.put('/', controller.create_merit);
+router.put('/update', controller.update_merit);
 
 // DELETE requests
 router.delete('/', controller.delete_merit);

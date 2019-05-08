@@ -161,6 +161,18 @@
       "css": "chat",
       "code": 59408,
       "src": "fontawesome"
+    },
+    {
+      "uid": "671f29fa10dda08074a4c6a341bb4f39",
+      "css": "bell-alt",
+      "code": 61683,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "f48ae54adfb27d8ada53d0fd9e34ee10",
+      "css": "trash-empty",
+      "code": 59409,
+      "src": "fontawesome"
     }
   ]
 }

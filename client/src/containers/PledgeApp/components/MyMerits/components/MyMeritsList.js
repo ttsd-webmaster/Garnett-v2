@@ -3,7 +3,7 @@
 import { androidBackOpen, androidBackClose, setRefresh } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
-import { LoadableDeleteMeritDialog } from './Dialogs';
+import { LoadableMeritOptionsDialog, LoadableEditMeritDialog } from './Dialogs';
 import type { User, Merit } from 'api/models';
 
 import React, { Fragment, PureComponent, type Node } from 'react';
@@ -18,7 +18,9 @@ type State = {
   myMerits: ?Array<Merit>,
   selectedMerit: ?Merit,
   reverse: boolean,
-  openDelete: boolean
+  dialogView: 'edit' | 'delete' | null,
+  openOptions: boolean,
+  openEdit: boolean
 };
 
 export class MyMeritsList extends PureComponent<Props, State> {
@@ -26,7 +28,9 @@ export class MyMeritsList extends PureComponent<Props, State> {
     myMerits: null,
     selectedMerit: null,
     reverse: false,
-    openDelete: false
+    dialogView: null,
+    openOptions: false,
+    openEdit: false
   }
 
   componentDidMount() {
@@ -91,7 +95,7 @@ export class MyMeritsList extends PureComponent<Props, State> {
               photo={isPledge ? merit.activePhoto : merit.pledgePhoto}
               name={isPledge ? merit.activeName : merit.pledgeName}
               userCreated={state.displayName === merit.createdBy}
-              handleDeleteOpen={this.handleDeleteOpen}
+              handleOptionsOpen={this.handleOptionsOpen}
             />
           )
         })}
@@ -99,23 +103,37 @@ export class MyMeritsList extends PureComponent<Props, State> {
     )
   }
 
-  handleDeleteOpen = (selectedMerit: Merit) => {
+  handleOptionsOpen = (selectedMerit: Merit) => {
     if (navigator.onLine) {
       const { displayName, status } = this.props.state;
       if (status === 'pledge' && (displayName !== selectedMerit.createdBy)) {
-        this.props.handleRequestOpen('You can only delete merits you created.');
+        this.props.handleRequestOpen('You can only edit merits you created.');
       } else {
-        androidBackOpen(this.handleDeleteClose);
-        this.setState({ selectedMerit, openDelete: true });
+        androidBackOpen(this.handleEditClose);
+        this.setState({ selectedMerit, openOptions: true });
       }
     } else {
       this.props.handleRequestOpen('You are offline');
     }
   }
 
-  handleDeleteClose = () => {
+  handleOptionsClose = () => {
     androidBackClose();
-    this.setState({ selectedMerit: null, openDelete: false });
+    this.setState({ selectedMerit: null, openOptions: false });
+  }
+
+  handleEditOpen = (dialogView: 'edit' | 'delete') => {
+    if (navigator.onLine) {
+      androidBackOpen(this.handleEditClose);
+      this.setState({ dialogView, openOptions: false, openEdit: true });
+    } else {
+      this.props.handleRequestOpen('You are offline');
+    }
+  }
+
+  handleEditClose = () => {
+    androidBackClose();
+    this.setState({ selectedMerit: null, dialogView: null, openEdit: false });
   }
 
   reverse = () => {
@@ -126,19 +144,34 @@ export class MyMeritsList extends PureComponent<Props, State> {
 
   render() {
     const { state, handleRequestOpen } = this.props;
-    const { myMerits, selectedMerit, reverse, openDelete } = this.state;
+    const {
+      myMerits,
+      selectedMerit,
+      reverse,
+      dialogView,
+      openOptions,
+      openEdit
+    } = this.state;
+
     if (!myMerits) {
       return <LoadingComponent />;
     }
+
     return (
       <Fragment>
         <FilterHeader isReversed={reverse} reverse={this.reverse} />
         { this.merits }
-        <LoadableDeleteMeritDialog
-          open={openDelete}
+        <LoadableMeritOptionsDialog
+          open={openOptions}
+          handleEditOpen={this.handleEditOpen}
+          handleClose={this.handleOptionsClose}
+        />
+        <LoadableEditMeritDialog
+          open={openEdit}
           state={state}
           merit={selectedMerit}
-          handleClose={this.handleDeleteClose}
+          view={dialogView}
+          handleClose={this.handleEditClose}
           handleRequestOpen={handleRequestOpen}
         />
       </Fragment>

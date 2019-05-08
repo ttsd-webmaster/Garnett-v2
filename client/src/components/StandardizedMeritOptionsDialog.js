@@ -42,7 +42,7 @@ export function StandardizedMeritOptionsDialog(props: Props) {
           />
         ))}
       </List>
-        <Divider />
+      <Divider className="garnett-divider" />
       <List>
         <Subheader>Demerit reasons</Subheader>
         {DEMERIT_OPTIONS.map((option) => (

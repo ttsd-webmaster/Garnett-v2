@@ -286,6 +286,27 @@ exports.create_merit = function(req, res) {
   }
 };
 
+// Update merit date
+exports.update_merit = function(req, res) {
+  const { displayName, status, meritToEdit, date } = req.body;
+  const meritsRef = admin.database().ref('/merits');
+
+  // Pledges can only edit merits they created
+  if (status === 'pledge' && (displayName !== meritToEdit.createdBy)) {
+    return res.sendStatus(400);
+  }
+
+  meritsRef.once('value', (merits) => {
+    merits.forEach((merit) => {
+      // Find the merit in the merits list
+      if (equal(merit.val(), meritToEdit)) {
+        merit.ref.update({ date });
+        res.sendStatus(200);
+      }
+    });
+  });
+}
+
 // Deletes merit
 exports.delete_merit = function(req, res) {
   const { displayName, status, meritToDelete } = req.body;
@@ -327,8 +348,8 @@ exports.delete_merit = function(req, res) {
           } else {
             res.sendStatus(200);
           }
-        })
+        });
       }
-    })
-  })
+    });
+  });
 };
