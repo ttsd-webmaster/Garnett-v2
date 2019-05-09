@@ -10,7 +10,6 @@ type Props = {
 };
 
 export function MobileNavbar(props: Props) {
-  const { status } = props;
   return (
     <BottomNavigation className="bottom-tabs">
       <NavLink
@@ -42,7 +41,7 @@ export function MobileNavbar(props: Props) {
         exact
       >
         <BottomNavigationItem
-          label={status === 'pledge' ? 'Pbros' : 'Pledges'}
+          label={props.status === 'pledge' ? 'Pbros' : 'Pledges'}
           icon={<FontIcon className="icon-users" />}
         />
       </NavLink>

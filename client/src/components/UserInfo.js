@@ -25,7 +25,6 @@ export function UserInfo(props: Props) {
     email,
     major
   } = props.user;
-
   return (
     <Fragment>
       <div className="user-photo-container">

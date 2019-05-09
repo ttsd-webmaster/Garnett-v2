@@ -54,16 +54,7 @@ const routes = [
 
 // TODO: use React Context instead of State
 type State = {
-  name: string,
-  displayName: string,
-  firstName: string,
-  lastName: string,
-  phone: string,
-  email: string,
-  class: string,
-  major: string,
-  status: string,
-  photoURL: string,
+  user: User,
   authenticated: boolean,
   loading: boolean,
   open: boolean,
@@ -72,16 +63,7 @@ type State = {
 
 export default class App extends Component<{}, State> {
   state = {
-    name: '',
-    displayName: '',
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    class: '',
-    major: '',
-    status: '',
-    photoURL: '',
+    user: null,
     authenticated: false,
     loading: true,
     open: false,
@@ -148,22 +130,25 @@ export default class App extends Component<{}, State> {
     }
   }
 
-  setData(user: User) {
-    const name = `${user.firstName} ${user.lastName}`;
-    let displayName = user.firstName + user.lastName;
-    displayName = displayName.replace(/\s/g, '');
-
-    this.setState({
+  setData(fetchedUser: User) {
+    const { firstName, lastName } = fetchedUser;
+    const name = `${firstName} ${lastName}`;
+    const displayName = (firstName + lastName).replace(/\s/g, '');
+    const user = {
       name,
       displayName,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone,
-      email: user.email,
-      class: user.class,
-      major: user.major,
-      status: user.status,
-      photoURL: user.photoURL,
+      firstName,
+      lastName,
+      phone: fetchedUser.phone,
+      email: fetchedUser.email,
+      class: fetchedUser.class,
+      major: fetchedUser.major,
+      status: fetchedUser.status,
+      photoURL: fetchedUser.photoURL
+    };
+
+    this.setState({
+      user,
       authenticated: true,
       loading: false
     });
@@ -200,7 +185,7 @@ export default class App extends Component<{}, State> {
   }
 
   render() {
-    const { authenticated, loading } = this.state;
+    const { user, authenticated, loading, open, message } = this.state;
 
     if (loading) {
       return null;
@@ -218,7 +203,7 @@ export default class App extends Component<{}, State> {
           <PublicRoute
             exact
             path="/login"
-            state={this.state}
+            state={user}
             authenticated={authenticated}
             loginCallback={this.loginCallback}
             handleRequestOpen={this.handleRequestOpen}
@@ -230,7 +215,7 @@ export default class App extends Component<{}, State> {
                 key={index}
                 exact={route.exact}
                 path={route.path}
-                state={this.state}
+                state={user}
                 authenticated={authenticated}
                 component={route.component}
                 logoutCallBack={this.logoutCallBack}
@@ -240,8 +225,8 @@ export default class App extends Component<{}, State> {
             <Redirect from="/pledge-app" to="/pledge-app/my-merits" />
           </Switch>
           <Snackbar
-            open={this.state.open}
-            message={this.state.message}
+            open={open}
+            message={message}
             action="Close"
             autoHideDuration={4000}
             onActionClick={this.handleRequestClose}
