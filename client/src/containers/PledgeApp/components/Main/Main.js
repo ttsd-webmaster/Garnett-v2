@@ -66,6 +66,7 @@ const routes = [
 ];
 
 type Props = {
+  history: RouterHistory,
   state: User,
   logoutCallBack: () => void,
   handleRequestOpen: () => void
@@ -102,6 +103,21 @@ export class Main extends Component<Props, State> {
     }
   }
 
+  get header(): string {
+    switch (this.props.history.location.pathname) {
+      case '/pledge-app/my-merits':
+        return 'My Merits';
+      case '/pledge-app/interviews':
+        return 'Interviews';
+      case '/pledge-app/pledges':
+        return 'Pledges';
+      case '/pledge-app/brothers':
+        return 'Brothers';
+      default:
+        return ''
+    }
+  }
+
   handleScroll = () => {
     if (!this.containerRef) {
       return
@@ -116,6 +132,7 @@ export class Main extends Component<Props, State> {
     const { containerRef, scrollDirection } = this.state;
     return (
       <div id="content-container" ref={(ref) => this.containerRef = ref}>
+        { !isMobile() && <h1 id="content-header">{ this.header }</h1> }
         <Switch>
           {routes.map((route, index) => (
             <Route
