@@ -13,3 +13,27 @@
   letter-spacing: 0.5px;
   z-index: 10;
 }
+
+.white-background {
+  width: 170px;
+  height: 50px;
+  background-color: #fff;
+  margin: 30px 0;
+  border-radius: 9px;
+}
+
+#merit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 170px;
+  height: 50px;
+  background-color: var(--primary-light);
+  font-size: 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in-out;
+}
+#merit-button:hover {
+  opacity: 0.8;
+}

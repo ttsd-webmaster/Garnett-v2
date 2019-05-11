@@ -20,7 +20,7 @@ body {
   --background-color: #fefefe;
   --list-color: #fff;
   --primary-color: #c0001f;
-  --primary-light: #da0023;
+  --primary-light: #f60027;
   --primary-dark: #960018;
   --secondary-color: #777;
   --secondary-dark: #2e2f33;
@@ -44,7 +44,8 @@ body.dark-mode {
   background-color: var(--background-color);
   --background-color: #1a1a1a;
   --list-color: #292929;
-  --primary-color: #da0023;
+  --primary-color: #960018;
+  --primary-light: #960018;
   --secondary-color: #ccc;
   --secondary-dark: #e0e0e0;
   --border-color: #363636;
