@@ -152,15 +152,10 @@ export class MyMeritsList extends PureComponent<Props, State> {
       openOptions,
       openEdit
     } = this.state;
-
-    if (!myMerits) {
-      return <LoadingComponent />;
-    }
-
     return (
       <Fragment>
         <FilterHeader isReversed={reverse} reverse={this.reverse} />
-        { this.merits }
+        { myMerits ? this.merits : <LoadingComponent /> }
         <LoadableMeritOptionsDialog
           open={openOptions}
           handleEditOpen={this.handleEditOpen}
