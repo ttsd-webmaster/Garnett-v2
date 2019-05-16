@@ -20,12 +20,6 @@ const VIEW_OPTIONS = [
   { view: 'pledges', label: 'Pledges' }
 ];
 
-const cachedDisplayedData = JSON.parse(localStorage.getItem('displayedData'));
-const cachedActiveData = JSON.parse(localStorage.getItem('activeData'));
-const cachedPledgeData = JSON.parse(localStorage.getItem('pledgeData'));
-const cachedPhotoMap = JSON.parse(localStorage.getItem('photoMap'));
-const cachedView = localStorage.getItem('pledgingDataView') || 'actives';
-
 type State = {
   displayedData: ?Array<any>,
   activeData: ?Array<any>,
@@ -35,13 +29,21 @@ type State = {
 };
 
 export class PledgingData extends PureComponent<{}, State> {
-  state = {
-    displayedData: cachedDisplayedData,
-    activeData: cachedActiveData,
-    pledgeData: cachedPledgeData,
-    photoMap: cachedPhotoMap ? new Map(cachedPhotoMap) : null,
-    view: cachedView
-  };
+  constructor(props) {
+    super(props);
+    const displayedData = JSON.parse(localStorage.getItem('displayedData'));
+    const activeData = JSON.parse(localStorage.getItem('activeData'));
+    const pledgeData = JSON.parse(localStorage.getItem('pledgeData'));
+    const photoMap = JSON.parse(localStorage.getItem('photoMap'));
+    const view = localStorage.getItem('pledgingDataView') || 'actives';
+    this.state = {
+      displayedData,
+      activeData,
+      pledgeData,
+      photoMap: photoMap ? new Map(photoMap) : null,
+      view
+    };
+  }
 
   componentDidMount() {
     if (navigator.onLine) {

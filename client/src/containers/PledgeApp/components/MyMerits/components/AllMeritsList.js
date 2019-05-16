@@ -145,14 +145,10 @@ export class AllMeritsList extends PureComponent<Props, State> {
   }
 
   render() {
-    const { allMerits, reverse } = this.state;
-    if (!allMerits) {
-      return <LoadingComponent />;
-    }
     return (
       <Fragment>
-        <FilterHeader isReversed={reverse} reverse={this.reverse} />
-        { this.merits }
+        <FilterHeader isReversed={this.state.reverse} reverse={this.reverse} />
+        { this.state.allMerits ? this.merits : <LoadingComponent /> }
       </Fragment>
     )
   }

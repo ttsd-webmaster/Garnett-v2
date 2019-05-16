@@ -129,7 +129,7 @@ exports.get_interviews_progress = function(req, res) {
     usersRef.once('value', (users) => {
       users.forEach((user) => {
         if (status === 'pledge') {
-          if (user.val().status !== 'alumni' || user.val().status !== 'pledge') {
+          if (user.val().status !== 'alumni' && user.val().status !== 'pledge') {
             if (completedNames.includes(user.key)) {
               completed.push(user.val());
             } else {

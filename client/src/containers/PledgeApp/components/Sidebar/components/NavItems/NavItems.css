@@ -2,10 +2,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  flex: 1 0 auto;
   position: relative;
   font-size: 18px;
-  padding-bottom: 76px;
   z-index: 1;
 }
 #nav-items > a,
@@ -31,29 +29,4 @@
 }
 .nav-item.active {
   opacity: 1;
-}
-
-.white-background {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  width: 170px;
-  height: 50px;
-  background-color: #fff;
-  border-radius: 9px;
-  transform: translateX(-50%);
-}
-
-#merit-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 170px;
-  height: 50px;
-  background-color: #f60027;
-  border-radius: 8px;
-  transition: opacity 0.2s ease-in-out;
-}
-#merit-button:hover {
-  opacity: 0.8;
 }

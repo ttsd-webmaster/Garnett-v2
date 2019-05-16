@@ -98,13 +98,16 @@ export class Sidebar extends Component<Props, State> {
   }
 
   render() {
+    const { user } = this.props;
     return (
       <div id="sidebar">
-        <AccountInfo user={this.props.user} />
+        <AccountInfo user={user} />
+        <div className="white-background">
+          <div id="merit-button" onClick={this.handleMeritOpen}>Merit</div>
+        </div>
         <NavItems
-          status={this.props.user.status}
+          status={user.status}
           goHome={this.goHome}
-          handleMeritOpen={this.handleMeritOpen}
           handleLogoutOpen={this.handleLogoutOpen}
         />
         { this.dialogs }

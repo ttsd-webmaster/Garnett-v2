@@ -168,7 +168,7 @@ export default class App extends Component<{}, State> {
 
   get rootPath() {
     const route = localStorage.getItem('route');
-    if (this.state.status === 'pledge') {
+    if (this.state.user.status === 'pledge') {
       return <Redirect to="/pledge-app" />;
     } else {
       switch (route) {

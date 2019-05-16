@@ -7,7 +7,6 @@ import { NavLink } from 'react-router-dom';
 
 type Props = {
   status: string,
-  handleMeritOpen: () => void,
   goHome: () => void,
   handleLogoutOpen: () => void
 };
@@ -15,7 +14,6 @@ type Props = {
 export function NavItems(props: Props) {
   const {
     status,
-    handleMeritOpen,
     goHome,
     handleLogoutOpen
   } = props;
@@ -63,9 +61,6 @@ export function NavItems(props: Props) {
         <i className="icon-logout"></i>
         { backText }
       </a>
-      <div className="white-background">
-        <div id="merit-button" onClick={handleMeritOpen}>Merit</div>
-      </div>
     </nav>
   )
 }
