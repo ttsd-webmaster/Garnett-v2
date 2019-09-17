@@ -24,14 +24,15 @@ meritsRef.once('value', (merits) => {
   let updatedMerits = Object.keys(merits.val()).map(function(key) {
     return merits.val()[key];
   });
+
   updatedMerits = updatedMerits.filter((merit, index, self) =>
     index === self.findIndex((m) => (
       m.description === merit.description &&
       m.activeName === merit.activeName &&
       m.pledgeName === merit.pledgeName &&
       m.amount === merit.amount
-    ))
-  )
+    ));
+  );
 
   meritsRef.set(updatedMerits);
-})
+});

@@ -28,11 +28,13 @@ export class PledgeApp extends PureComponent<Props, State> {
     localStorage.setItem('route', 'pledge-app');
     configureThemeMode();
 
-    if (navigator.onLine) {
+    if (navigator.onLine && !window.firebase.database) {
       loadFirebase('database')
       .then(() => {
         this.setState({ loaded: true });
       });
+    } else {
+      this.setState({ loaded: true });
     }
   }
 
