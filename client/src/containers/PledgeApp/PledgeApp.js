@@ -13,7 +13,7 @@ import React, { Fragment, PureComponent } from 'react';
 type Props = {
   history: RouterHistory,
   state: User,
-  logoutCallBack: () => void,
+  logOut: () => void,
   handleRequestOpen: () => void
 };
 
@@ -42,7 +42,7 @@ export class PledgeApp extends PureComponent<Props, State> {
     const {
       history,
       state,
-      logoutCallBack,
+      logOut,
       handleRequestOpen
     } = this.props;
 
@@ -54,21 +54,25 @@ export class PledgeApp extends PureComponent<Props, State> {
       <div id="pledge-app-container">
         {isMobile() ? (
           <Fragment>
-            <MobileHeader history={history} state={state} />
+            <MobileHeader
+              history={history}
+              state={state}
+              logOut={logOut}
+            />
             <MobileNavbar status={state.status} />
           </Fragment>
         ) : (
           <Sidebar
             history={history}
             user={state}
-            logOut={logoutCallBack}
+            logOut={logOut}
             handleRequestOpen={handleRequestOpen}
           />
         )}
         <Main
           history={history}
           state={state}
-          logoutCallBack={logoutCallBack}
+          logOut={logOut}
           handleRequestOpen={handleRequestOpen}
         />
       </div>

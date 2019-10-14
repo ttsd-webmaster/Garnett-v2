@@ -41,7 +41,7 @@ export default {
   forgotPassword: function(email: string) {
     return axios.put('/api/forgotpassword', { email });
   },
-  logout: function() {
+  logOut: function() {
     return axios.put('/api/logout');
   },
 

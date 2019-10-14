@@ -2,7 +2,7 @@
 
 import './Settings.css';
 import API from 'api/API.js';
-import { isMobile, setRefresh } from 'helpers/functions';
+import { isMobile } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { UserInfo } from 'components';
 import { ThemeOptions } from './components';
@@ -15,34 +15,30 @@ import FontIcon from 'material-ui/FontIcon';
 type Props = {
   history: RouterHistory,
   state: User,
-  logoutCallBack: () => void
+  logOut: () => void
 };
 
 export class Settings extends PureComponent<Props> {
-  componentDidMount() {
-    setRefresh(null);
-  }
-
   goHome = () => {
     this.props.history.push('/home');
   }
   
-  logout = () => {
+  logOut = () => {
     if (navigator.onLine) {
-      API.logout()
+      API.logOut()
       .then(res => {
-        this.props.logoutCallBack();
+        this.props.logOut();
         this.props.history.push('/');
       })
       .catch(err => console.error('err', err));
     } else {
-      this.props.logoutCallBack();
+      this.props.logOut();
       this.props.history.push('/');
     }
   }
 
   viewDataApp = () => {
-    this.props.history.push('/data-app', '/pledge-app/settings');
+    this.props.history.push('/data-app', '/pledge-app');
   }
 
   render() {
@@ -67,7 +63,7 @@ export class Settings extends PureComponent<Props> {
           {isMobile() && (
             <div className="option-row">
               {state.status === 'pledge' ? (
-                <div className="logout-button" onClick={this.logout}>Log Out</div>
+                <div className="logout-button" onClick={this.logOut}>Log Out</div>
               ) : (
                 <div className="logout-button" onClick={this.goHome}>Back Home</div>
               )}

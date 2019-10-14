@@ -6,7 +6,7 @@ import React, { PureComponent } from 'react';
 
 type Props = {
   history: RouterHistory,
-  logoutCallBack: () => void,
+  logOut: () => void,
   title: string
 };
 
@@ -15,26 +15,26 @@ export class Header extends PureComponent<Props> {
     this.props.history.push('/home');
   }
 
-  logout = () => {
+  logOut = () => {
     if (navigator.onLine) {
-      API.logout()
+      API.logOut()
       .then(res => {
         console.log(res);
-        this.props.logoutCallBack();
+        this.props.logOut();
         this.props.history.push('/');
       })
       .catch(error => console.log(`Error: ${error}`));
     }
     else {
-      this.props.logoutCallBack();
+      this.props.logOut();
       this.props.history.push('/');
     }
   }
 
   render() {
-    const { title, logoutCallBack } = this.props;
-    const onClick = logoutCallBack ? this.logout : this.goHome;
-    const backText = logoutCallBack ? 'Log out' : 'Home';
+    const { title, logOut } = this.props;
+    const onClick = logOut ? this.logOut : this.goHome;
+    const backText = logOut ? 'Log out' : 'Home';
     return (
       <div className="app-header">
         <span>{ title }</span>

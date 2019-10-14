@@ -217,7 +217,7 @@ export default class App extends Component<{}, State> {
                 state={user}
                 authenticated={authenticated}
                 component={route.component}
-                logoutCallBack={this.logoutCallBack}
+                logOut={this.logoutCallBack}
                 handleRequestOpen={this.handleRequestOpen}
               />
             ))}

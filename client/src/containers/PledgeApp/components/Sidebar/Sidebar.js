@@ -30,7 +30,7 @@ export class Sidebar extends Component<Props, State> {
 
   get dialogs(): Node {
     const { user } = this.props;
-    let logoutDialog;
+    let logOutDialog;
     if (user.status === 'pledge') {
       const actions = [
         <FlatButton
@@ -44,7 +44,7 @@ export class Sidebar extends Component<Props, State> {
           onClick={this.props.logOut}
         />
       ];
-      logoutDialog = (
+      logOutDialog = (
         <Dialog
           actions={actions}
           contentClassName="garnett-dialog-content"
@@ -64,7 +64,7 @@ export class Sidebar extends Component<Props, State> {
           handleMeritClose={this.handleMeritClose}
           handleRequestOpen={this.props.handleRequestOpen}
         />
-        { logoutDialog }
+        { logOutDialog }
       </Fragment>
     )
   }

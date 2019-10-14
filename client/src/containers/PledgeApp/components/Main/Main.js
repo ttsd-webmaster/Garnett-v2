@@ -59,7 +59,7 @@ const routes = [
       <Settings
         history={props.history}
         state={props.state}
-        logoutCallBack={props.logoutCallBack}
+        logOut={props.logOut}
       />
     )
   }
@@ -68,7 +68,7 @@ const routes = [
 type Props = {
   history: RouterHistory,
   state: User,
-  logoutCallBack: () => void,
+  logOut: () => void,
   handleRequestOpen: () => void
 };
 

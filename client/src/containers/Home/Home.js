@@ -11,7 +11,7 @@ import React, { PureComponent } from 'react';
 
 type Props = {
   history: RouterHistory,
-  logoutCallBack: () => void
+  logOut: () => void
 };
 
 export class Home extends PureComponent<Props> {
@@ -23,16 +23,16 @@ export class Home extends PureComponent<Props> {
     this.props.history.push(route);
   }
 
-  logout = () => {
+  logOut = () => {
     if (navigator.onLine) {
-      API.logout()
+      API.logOut()
       .then(res => {
-        this.props.logoutCallBack();
+        this.props.logOut();
         this.props.history.push('/');
       })
       .catch(err => console.error('err', err));
     } else {
-      this.props.logoutCallBack();
+      this.props.logOut();
       this.props.history.push('/');
     }
   }
@@ -58,7 +58,7 @@ export class Home extends PureComponent<Props> {
             goTo={() => this.goTo('delibs-app')}
           />
         </div>
-        <div className="logout-button" onClick={this.logout}>Log Out</div>
+        <div className="logout-button" onClick={this.logOut}>Log Out</div>
       </div>
     )
   }
