@@ -18,6 +18,7 @@ import {
   PledgeApp
 } from 'containers';
 import { PublicRoute, PrivateRoute } from 'components/Routes';
+import ScrollToTop from 'components/ScrollToTop';
 import type { User } from 'api/models';
 
 import React, { Component } from 'react';
@@ -189,6 +190,7 @@ export default class App extends Component<{}, State> {
 
     return (
       <Router>
+        <ScrollToTop />
         <div>
           <Switch>
             <PrivateRoute

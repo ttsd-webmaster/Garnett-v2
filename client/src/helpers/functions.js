@@ -298,3 +298,21 @@ export function setRefresh(refreshFunction: () => void) {
     }
   }
 }
+
+export function scrollToTop(pathname: string) {
+  let container;
+
+  switch (pathname.split('/')[1]) {
+    case 'pledge-app':
+      container = document.getElementById('content-container');
+      break;
+    case 'data-app':
+      container = document.getElementById('data-container');
+      break;
+    default:
+  }
+
+  if (container) {
+    container.scrollTo(0, 0);
+  }
+}

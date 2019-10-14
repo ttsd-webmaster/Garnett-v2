@@ -7,7 +7,7 @@ import silverMedal from './images/silver.png';
 import bronzeMedal from './images/bronze.png';
 import { isMobile, setRefresh } from 'helpers/functions';
 import { LoadingComponent } from 'helpers/loaders';
-import { ToggleViewHeader } from 'components';
+import ToggleViewHeader from 'components/ToggleViewHeader';
 
 import React, { PureComponent, type Node } from 'react';
 import Avatar from 'material-ui/Avatar';

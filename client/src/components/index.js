@@ -8,6 +8,5 @@ export { MeritRow } from './MeritRow';
 export { MeritTypeOptions } from './MeritTypeOptions';
 export { SelectedUsersChips } from './SelectedUsersChips';
 export { StandardizedMeritOptionsDialog } from './StandardizedMeritOptionsDialog';
-export { ToggleViewHeader } from './ToggleViewHeader';
 export { UserInfo } from './UserInfo';
 export { UserRow } from './UserRow';
