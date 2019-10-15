@@ -24,13 +24,19 @@ usersRef.once('value', (snapshot) => {
     // Updates status and year for all users except alumni
     if (user.val().status !== 'alumni') {
       let newYear = parseInt(user.val().year.charAt(0)) + 1;
-      let yearString = 'th Year';
+      let yearString;
 
-      if (newYear === 2) {
-        yearString = 'nd Year';
-      }
-      else if (newYear === 3) {
-        yearString = 'rd Year';
+      switch (newYear) {
+        case 2:
+          yearString = 'nd Year';
+          break;
+        case 3:
+          yearString = 'rd Year';
+          break;
+        case 4:
+          yearString = 'th Year';
+          break;
+        default:
       }
 
       let updatedYear = newYear + yearString;

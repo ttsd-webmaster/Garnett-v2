@@ -23,17 +23,12 @@ usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
     if (user.val().status === 'pledge') {
       console.log(user.key);
-
       // Update pledge's status to active
       user.ref.update({ status: 'active' });
-
-      // Remove Merits for pledge
-      user.ref.child('Merits').remove(() => {
-        console.log(`Removed merits for ${user.key}.`);
-      });
-      // Remove Complaints for pledge
-      user.ref.child('Complaints').remove(() => {
-        console.log(`Removed complaints for ${user.key}.`);
+    } else {
+      // Remove Pledges from actives and alumni
+      user.ref.child('Pledges').remove(() => {
+        console.log(`Removed pledges from ${user.key}.`);
       });
     }
   });
