@@ -8,6 +8,7 @@ exports.get_all_merits = function(req, res) {
   const meritsRef = admin.database().ref('/merits');
   let fetchedMerits = [];
   let updatedLastKey;
+  let hasMore = false;
 
   // Subsequent fetches
   if (lastKey) {
@@ -29,7 +30,8 @@ exports.get_all_merits = function(req, res) {
         });
       }
       fetchedMerits = fetchedMerits.reverse().slice(1);
-      res.json({ fetchedMerits, lastKey: updatedLastKey });
+      hasMore = fetchedMerits.length > 0;
+      res.json({ fetchedMerits, lastKey: updatedLastKey, hasMore });
     });
   } else {
     // Initial fetch
@@ -49,7 +51,8 @@ exports.get_all_merits = function(req, res) {
         });
       }
       fetchedMerits = fetchedMerits.reverse();
-      res.json({ fetchedMerits, lastKey: updatedLastKey });
+      hasMore = fetchedMerits.length > 0;
+      res.json({ fetchedMerits, lastKey: updatedLastKey, hasMore });
     });
   }
 };
@@ -60,6 +63,7 @@ exports.get_all_merits_reverse = function(req, res) {
   const meritsRef = admin.database().ref('/merits');
   let fetchedMerits = [];
   let updatedLastKey;
+  let hasMore = false;
 
   // Subsequent fetches
   if (lastKey) {
@@ -79,6 +83,7 @@ exports.get_all_merits_reverse = function(req, res) {
         });
       }
       fetchedMerits = fetchedMerits.slice(1);
+      hasMore = fetchedMerits.length > 0;
       res.json({ fetchedMerits, lastKey: updatedLastKey });
     });
   } else {
@@ -96,6 +101,7 @@ exports.get_all_merits_reverse = function(req, res) {
           fetchedMerits.push(merit.val());
         });
       }
+      hasMore = fetchedMerits.length > 0;
       res.json({ fetchedMerits, lastKey: updatedLastKey });
     });
   }

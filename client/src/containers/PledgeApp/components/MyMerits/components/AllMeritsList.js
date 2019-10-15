@@ -24,7 +24,8 @@ export class AllMeritsList extends PureComponent<Props, State> {
   state = {
     allMerits: null,
     lastKey: null,
-    reverse: false
+    hasMore: false,
+    reverse: false,
   }
 
   componentDidMount() {
@@ -45,7 +46,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
   }
 
   get merits(): Node {
-    const { allMerits } = this.state;
+    const { allMerits, hasMore } = this.state;
     if (allMerits.length === 0) {
       return (
         <div className="no-items-container">
@@ -56,7 +57,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
     return (
       <InfiniteScroll
         loadMore={this.fetchMoreMerits}
-        hasMore={true}
+        hasMore={hasMore}
         loader={FetchingListSpinner}
         useWindow={false}
         getScrollParent={() => this.props.containerRef}
@@ -77,10 +78,7 @@ export class AllMeritsList extends PureComponent<Props, State> {
                       ? this.shortenedName(merit.activeName)
                       : merit.activeName}
                     <span style={{ fontWeight: 400 }}>
-                      {merit.amount > 0
-                        ? " merited "
-                        : " demerited "
-                      }
+                      {merit.amount > 0 ? ' merited ' : ' demerited '}
                     </span>
                     {this.shortenedName(merit.pledgeName)}
                   </p>
@@ -96,9 +94,9 @@ export class AllMeritsList extends PureComponent<Props, State> {
   fetchInitialMerits = () => {
     API.getAllMerits()
     .then((res) => {
-      const { fetchedMerits, lastKey } = res.data;
+      const { fetchedMerits, lastKey, hasMore } = res.data;
       localStorage.setItem('allMerits', JSON.stringify(fetchedMerits));
-      this.setState({ allMerits: fetchedMerits, lastKey });
+      this.setState({ allMerits: fetchedMerits, lastKey, hasMore });
     })
     .catch((err) => console.error(err));
   }
@@ -116,9 +114,9 @@ export class AllMeritsList extends PureComponent<Props, State> {
       } else {
         API.getAllMerits(this.state.lastKey)
         .then((res) => {
-          const { fetchedMerits, lastKey } = res.data;
+          const { fetchedMerits, lastKey, hasMore } = res.data;
           const allMerits = this.state.allMerits.concat(fetchedMerits);
-          this.setState({ allMerits, lastKey });
+          this.setState({ allMerits, lastKey, hasMore });
         })
         .catch((err) => console.error(err));
       }
