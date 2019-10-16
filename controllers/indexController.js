@@ -47,7 +47,8 @@ exports.get_pledges = function(req, res) {
       return res.status(400).send('No pledges found.');
     }
     const pledgesArray = Object.keys(pledges.val()).map(function(key) {
-      if (pledges.val()[key] !== displayName) {
+      if (key !== displayName) {
+        pledgesMap.set(key, { merits: 0, interviews: 0 });
         return pledges.val()[key];
       }
     });
@@ -57,7 +58,7 @@ exports.get_pledges = function(req, res) {
       if (merits.val()) {
         merits.forEach((merit) => {
           const pledgeName = merit.val().pledgeName.replace(/ /g, '');
-          const pledge = pledgesMap.get(pledgeName) || { merits: 0, interviews: 0 };
+          const pledge = pledgesMap.get(pledgeName);
           pledge.merits += merit.val().amount;
           if (merit.val().type === 'interview') {
             pledge.interviews += 1;

@@ -124,8 +124,9 @@ exports.get_pledges_as_active = function(req, res) {
   const userPledgesRef = admin.database().ref(`/users/${displayName}/Pledges`);
 
   userPledgesRef.once('value', (pledges) => {
+    const result = [];
+
     if (pledges.val()) {
-      const result = [];
       const promises = [];
       const remainingMerits = new Map();
       pledges.forEach((pledge) => {
@@ -144,6 +145,8 @@ exports.get_pledges_as_active = function(req, res) {
         })
         res.json(result)
       });
+    } else {
+      res.json(result);
     }
   });
 };
