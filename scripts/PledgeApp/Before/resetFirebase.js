@@ -19,26 +19,18 @@ admin.initializeApp({
 
 const usersRef = admin.database().ref('/users/');
 const meritsRef = admin.database().ref('/merits');
-const approvedComplaints = admin.database().ref('/approvedComplaints');
-const pendingComplaints = admin.database().ref('/pendingComplaints');
 const chalkboards = admin.database().ref('/chalkboards');
 
 meritsRef.remove();
-approvedComplaints.remove();
-pendingComplaints.remove();
 chalkboards.remove();
 
 usersRef.once('value', (snapshot) => {
   snapshot.forEach((user) => {
-    const userRef = admin.database().ref('/users/' + user.key);
+    const userRef = usersRef.child(user.key);
 
     console.log(`Reset data for ${user.key}`);
 
-    userRef.update({
-      Merits: null,
-      Complaints: null,
-      Pledges: null
-    });
+    userRef.update({ Pledges: null });
 
     // Update the active's pledge merit count for each pledge
     if (user.val().status !== 'pledge') {
