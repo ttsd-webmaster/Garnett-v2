@@ -217,10 +217,16 @@ exports.signup = function(req, res) {
   const userRef = usersRef.child(displayName);
 
   userRef.once('value', (snapshot) => {
-    if (snapshot.val() && year !== 'Alumni') {
-      return res.status(400).send('This active is already signed up.');
-    } else if (!snapshot.val() && year === 'Alumni') {
-      return res.status(400).send('This alumni does not exist.');
+    if (code === activeCode) {
+      if (snapshot.val() && year !== 'Alumni') {
+        return res.status(400).send('This active is already signed up.');
+      } else if (!snapshot.val() && year === 'Alumni') {
+        return res.status(400).send('This alumni does not exist.');
+      }
+    } else if (code === pledgeCode) {
+      if (!snapshot.val()) {
+        return res.status(400).send('This pledge does not exist. Try a different name.');
+      }
     }
     // Create user with email and password
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -237,97 +243,8 @@ exports.signup = function(req, res) {
             phone,
             email
           };
-          // Alumni
-          if (year === 'Alumni') {
-            userInfo.status = 'alumni';
-            userRef.update(userInfo);
-          } else {
-            const bucket = admin.storage().bucket();
-            const file = bucket.file(`${displayName}.jpg`);
-            // Set the status of the user based on the authorization code
-            if (code === pledgeCode) {
-              userInfo.status = 'pledge';
-            } else {
-              userInfo.status = 'active';
-            }
-            // Sets user photo here
-            // Checks first if the .jpg file is in firebase storage
-            file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
-            .then((jpgUrls) => {
-              const jpgPhoto = jpgUrls[0];
-              urlExists(jpgPhoto, function(err, exists) {
-                if (exists) {
-                  userInfo.photoURL = jpgPhoto;
-                  userRef.set(userInfo);
-                } else {
-                  // Checks if the .JPG file is in firebase storage
-                  const file = bucket.file(`${displayName}.JPG`);
-                  file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
-                  .then((signedUrls) => {
-                    const JPGPhoto = JPGUrls[0];
-                    urlExists(JPGPhoto, function(err, exists) {
-                      if (exists) {
-                        userInfo.photoURL = JPGPhoto;
-                        userRef.set(userInfo);
-                      } else {
-                        const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-                        userInfo.photoURL = defaultPhoto;
-                        userRef.set(userInfo);
-                      }
-                    });
-                  })
-                  .catch((err) => console.error(err));
-                }
-              });
-            })
-            .catch((err) => console.error(err));
-          }
 
-          // Set merits
-          usersRef.once('value', (users) => {
-            // Set merit counts based on the user's status
-            if (code === pledgeCode) {
-              users.forEach((user) => {
-                switch (user.val().status) {
-                  case 'alumni':
-                    user.ref.child(`/Pledges/${displayName}`).set({
-                      merits: 200
-                    });
-                    break;
-                  case 'pipm':
-                    user.ref.child(`/Pledges/${displayName}`).set({
-                      merits: 'Unlimited'
-                    });
-                    break
-                  case 'pledge':
-                    // don't give pledges a merit count for pledges
-                    break
-                  default:
-                    user.ref.child(`/Pledges/${displayName}`).set({
-                      merits: 100
-                    });
-                }
-              });
-            } else if (year === 'Alumni') {
-              users.forEach((user) => {
-                if (user.val().status === 'pledge') {
-                  const pledgeName = user.key;
-                  userRef.child(`/Pledges/${pledgeName}`).set({
-                    merits: 200
-                  });
-                }
-              });
-            } else {
-              users.forEach((user) => {
-                if (user.val().status === 'pledge') {
-                  const pledgeName = user.key;
-                  userRef.child(`/Pledges/${pledgeName}`).set({
-                    merits: 100
-                  });
-                }
-              });
-            }
-          });
+          userRef.update(userInfo);
 
           user.sendEmailVerification()
           .then(function() {
