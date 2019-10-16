@@ -58,6 +58,7 @@ export class ActiveView extends PureComponent<Props, State> {
       return (
         <FullScreenDialog
           title="Pledge"
+          withTabs
           open={open}
           onRequestClose={this.props.handleClose}
         >

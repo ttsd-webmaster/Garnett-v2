@@ -3,7 +3,7 @@
 import './MeritDialog.css';
 import { SelectUsers } from './SelectUsers';
 import { CreateAmount } from './CreateAmount';
-import { FullScreenDialog } from 'components';
+import { FullScreenDialog } from 'components/FullScreenDialog';
 import type { User, MeritType } from 'api/models';
 
 import React, { Component, type Node } from 'react';
@@ -77,8 +77,6 @@ export default class MeritDialog extends Component<Props, State> {
     return (
       <FullScreenDialog
         open={this.props.open}
-        appBarStyle={{ backgroundColor: 'var(--background-color)' }}
-        appBarZDepth={0}
         onRequestClose={this.handleClose}
       >
         { this.body }

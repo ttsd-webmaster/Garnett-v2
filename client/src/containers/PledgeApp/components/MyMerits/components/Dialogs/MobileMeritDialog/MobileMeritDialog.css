@@ -1,8 +1,3 @@
-/* Used to unstyle close button for mobile merit fullscreen dialog */
-#merit-dialog svg {
-  fill: var(--text-color) !important;
-}
-
 #merit-dialog .garnett-chip.merit-dialog > svg{
   fill: #fff !important;
 }

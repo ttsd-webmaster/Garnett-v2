@@ -93,3 +93,8 @@
   visibility: hidden;
   transform: translateY(-50%) scale(0.5);
 }
+
+/* Used to unstyle close button for mobile merit fullscreen dialog */
+#fullscreen-dialog svg {
+  fill: var(--text-color) !important;
+}
