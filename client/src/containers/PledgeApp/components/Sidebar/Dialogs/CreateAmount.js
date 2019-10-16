@@ -267,25 +267,23 @@ export class CreateAmount extends Component<Props, State> {
     const meritType = type === 'interview' ? 'standardized' : type;
     return (
       <div id="merit-create-amount-container">
-        <div id="merit-create-amount-content">
-          <MeritTypeOptions
-            type={meritType}
-            isMobile={false}
-            setType={this.setType}
-            setAmount={this.setAmount}
-            handleOpen={this.handleOpen}
-          />
-          <input
-            id="create-merit-amount"
-            className={`${vibrate ? 'shake' : ''}`}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            value={amount}
-            onChange={this.changeAmount}
-          />
-          { this.meritButtons }
-        </div>
+        <MeritTypeOptions
+          type={meritType}
+          isMobile={false}
+          setType={this.setType}
+          setAmount={this.setAmount}
+          handleOpen={this.handleOpen}
+        />
+        <input
+          id="create-merit-amount"
+          className={`${vibrate ? 'shake' : ''}`}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          value={amount}
+          onChange={this.changeAmount}
+        />
+        { this.meritButtons }
         <StandardizedMeritOptionsDialog
           isMobile={false}
           open={openStandardizedOptions}
