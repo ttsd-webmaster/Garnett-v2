@@ -13,7 +13,7 @@ type Props = {
 };
 
 const titleStyle = {
-  fontFamily: "'Helvetica Neue', Roboto, sans-serif",
+  fontFamily: 'Graphik, Roboto, sans-serif',
   fontSize: '18px',
   fontWeight: '500',
   color: '--var(text-color)',
