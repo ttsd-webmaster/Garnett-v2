@@ -97,15 +97,13 @@ export default class MobileMeritDialog extends PureComponent<Props, State> {
 
   render() {
     return (
-      <div id="merit-dialog">
-        <FullScreenDialog
-          title={this.header}
-          open={this.props.open}
-          onRequestClose={this.onClose}
-        >
-          { this.body }
-        </FullScreenDialog>
-      </div>
+      <FullScreenDialog
+        title={this.header}
+        open={this.props.open}
+        onRequestClose={this.onClose}
+      >
+        { this.body }
+      </FullScreenDialog>
     );
   }
 }

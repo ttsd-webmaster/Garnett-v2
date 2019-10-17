@@ -24,8 +24,6 @@
   color: var(--text-color);
   height: 56px;
   width: 100%;
-  font-size: 22px;
-  font-weight: 500;
   padding: 0 16px;
   letter-spacing: 0.5px;
   z-index: 10;
@@ -33,7 +31,8 @@
 #header-title {
   display: flex;
   align-items: center;
-
+  font-size: 22px;
+  font-weight: bold;
 }
 #mobile-header .user-photo {
   width: 35px;
