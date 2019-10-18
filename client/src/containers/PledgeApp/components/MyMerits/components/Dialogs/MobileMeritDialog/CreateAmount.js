@@ -1,7 +1,8 @@
 // @flow
 
+import { STANDARDIZED_MERIT_OPTIONS } from 'helpers/constants';
 import { MeritTypeOptions } from 'components';
-import { StandardizedMeritOptionsDialog } from 'components';
+import { OptionsDialog } from 'components';
 import type { MeritType } from 'api/models';
 
 import React, { PureComponent } from 'react';
@@ -17,6 +18,7 @@ type StandardizedMeritOption = {
 };
 
 type Props = {
+  type: ?MeritType,
   enterUsersView: (type: MeritType, amount: number, description: string) => void
 };
 
@@ -31,7 +33,7 @@ type State = {
 
 export class CreateAmount extends PureComponent<Props, State> {
   state = {
-    type: 'personal',
+    type: this.props.type || 'personal',
     amount: '0',
     description: '',
     vibrate: false,
@@ -129,8 +131,8 @@ export class CreateAmount extends PureComponent<Props, State> {
 
   selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
     let type = 'standardized';
-    let description = option.reason;
-    if (option.reason === 'Interview Merits') {
+    let description = option.text;
+    if (option.text === 'Interview Merits') {
       type = 'interview';
       description = '🤗';
     }
@@ -182,10 +184,10 @@ export class CreateAmount extends PureComponent<Props, State> {
         </div>
         { this.numbersGrid }
         { this.meritButtons }
-        <StandardizedMeritOptionsDialog
-          isMobile
+        <OptionsDialog
           open={open}
-          selectStandardizedMeritOption={this.selectStandardizedMeritOption}
+          options={STANDARDIZED_MERIT_OPTIONS}
+          onClick={this.selectStandardizedMeritOption}
           handleClose={this.handleClose}
         />
       </div>

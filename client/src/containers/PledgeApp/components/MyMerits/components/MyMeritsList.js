@@ -3,7 +3,8 @@
 import { androidBackOpen, androidBackClose, setRefresh } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
 import { FilterHeader, MeritRow } from 'components';
-import { LoadableMeritOptionsDialog, LoadableEditMeritDialog } from './Dialogs';
+import { OptionsDialog } from 'components/OptionsDialog';
+import { LoadableEditMeritDialog } from './Dialogs';
 import type { User, Merit } from 'api/models';
 
 import React, { Fragment, PureComponent, type Node } from 'react';
@@ -152,13 +153,31 @@ export class MyMeritsList extends PureComponent<Props, State> {
       openOptions,
       openEdit
     } = this.state;
+    const OPTIONS = [
+      {
+        header: 'Merit Options',
+        choices: [
+          {
+            text: 'Edit Date',
+            icon: 'icon-calendar-plus-o',
+            onClick: () => this.handleEditOpen('edit')
+          },
+          {
+            text: 'Delete Merit',
+            icon: 'icon-trash-empty',
+            onClick: () => this.handleEditOpen('delete')
+          }
+        ]
+      }
+    ];
+
     return (
       <Fragment>
         <FilterHeader isReversed={reverse} reverse={this.reverse} />
         { myMerits ? this.merits : <LoadingComponent /> }
-        <LoadableMeritOptionsDialog
+        <OptionsDialog
           open={openOptions}
-          handleEditOpen={this.handleEditOpen}
+          options={OPTIONS}
           handleClose={this.handleOptionsClose}
         />
         <LoadableEditMeritDialog

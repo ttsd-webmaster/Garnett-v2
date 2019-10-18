@@ -9,6 +9,8 @@ import type { User, MeritType } from 'api/models';
 import React, { Component, type Node } from 'react';
 
 type Props = {
+  type?: MeritType,
+  initialUser?: User,
   state: User,
   open: boolean,
   handleMeritClose: () => void,
@@ -24,7 +26,7 @@ type State = {
 
 export default class MeritDialog extends Component<Props, State> {
   state = {
-    type: 'personal',
+    type: this.props.type || 'personal',
     users: [],
     description: '',
     date: new Date()
@@ -37,6 +39,7 @@ export default class MeritDialog extends Component<Props, State> {
         <SelectUsers
           state={state}
           type={this.state.type}
+          initialUser={this.props.initialUser}
           description={this.state.description}
           setUsers={this.setUsers}
           setDescription={this.setDescription}
@@ -45,6 +48,7 @@ export default class MeritDialog extends Component<Props, State> {
         />
         <CreateAmount
           state={state}
+          type={this.state.type}
           users={this.state.users}
           description={this.state.description}
           date={this.state.date}

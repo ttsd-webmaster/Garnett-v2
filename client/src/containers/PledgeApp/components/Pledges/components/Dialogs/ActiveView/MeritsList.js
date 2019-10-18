@@ -26,7 +26,7 @@ export class MeritsList extends PureComponent<Props, State> {
   componentDidMount() {
     const { pledgeName } = this.props;
     if (navigator.onLine) {
-      API.getPledgeMerits(this.props.pledgeName)
+      API.getPledgeMerits(pledgeName)
       .then(res => {
         const { merits } = res.data;
         localStorage.setItem(`${pledgeName}Merits`, JSON.stringify(merits));

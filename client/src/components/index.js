@@ -7,6 +7,6 @@ export { MeritDialogUserRow } from './MeritDialogUserRow';
 export { MeritRow } from './MeritRow';
 export { MeritTypeOptions } from './MeritTypeOptions';
 export { SelectedUsersChips } from './SelectedUsersChips';
-export { StandardizedMeritOptionsDialog } from './StandardizedMeritOptionsDialog';
+export { OptionsDialog } from './OptionsDialog';
 export { UserInfo } from './UserInfo';
 export { UserRow } from './UserRow';

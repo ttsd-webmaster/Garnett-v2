@@ -40,136 +40,52 @@ exports.get_pledges = function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
+  const interviewsRef = admin.database().ref('/interviews');
   const pledgesMap = new Map();
 
   usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
     if (!pledges.val()) {
       return res.status(400).send('No pledges found.');
     }
+
     const pledgesArray = Object.keys(pledges.val()).map(function(key) {
-      if (key !== displayName) {
-        pledgesMap.set(key, { merits: 0, interviews: 0 });
-        return pledges.val()[key];
-      }
+      pledgesMap.set(key, { merits: 0, interviews: 0 });
+      return pledges.val()[key];
     });
 
     meritsRef.once('value', (merits) => {
       // Map the pledge's total merits
-      if (merits.val()) {
+      if (merits.exists()) {
         merits.forEach((merit) => {
           const pledgeName = merit.val().pledgeName.replace(/ /g, '');
           const pledge = pledgesMap.get(pledgeName);
           pledge.merits += merit.val().amount;
-          if (merit.val().type === 'interview') {
-            pledge.interviews += 1;
-          }
           pledgesMap.set(pledgeName, pledge);
         });
       }
-      // Set all the pledge's total merits
-      pledgesArray.forEach((pledge) => {
-        const pledgeName = (pledge.firstName + pledge.lastName).replace(/ /g, '');
-        const mappedPledge = pledgesMap.get(pledgeName);
-        pledge.displayName = pledgeName;
-        pledge.totalMerits = mappedPledge.merits;
-        pledge.completedInterviews = mappedPledge.interviews;
-      });
 
-      res.json(pledgesArray);
-    });
-  });
-};
-
-// Query for the specified pledge's merits
-exports.get_pledge_merits = function(req, res) {
-  const { pledgeName } = req.query;
-  const meritsRef = admin.database().ref('/merits');
-
-  meritsRef.orderByChild('date').once('value', (merits) => {
-    const pledgeMerits = [];
-    if (merits.val()) {
-      merits.forEach((merit) => {
-        if (pledgeName === merit.val().pledgeName.replace(/ /g,'')) {
-          pledgeMerits.push(merit.val());
+      interviewsRef.once('value', (interviews) => {
+        if (interviews.exists()) {
+          interviews.forEach((interview) => {
+            const pledgeName = interview.val().pledgeName.replace(/ /g, '');
+            const pledge = pledgesMap.get(pledgeName);
+            pledge.interviews += 1;
+            pledgesMap.set(pledgeName, pledge);
+          });
         }
+
+        // Set all the pledge's total merits
+        pledgesArray.forEach((pledge) => {
+          const pledgeName = (pledge.firstName + pledge.lastName).replace(/ /g, '');
+          const mappedPledge = pledgesMap.get(pledgeName);
+          pledge.displayName = pledgeName;
+          pledge.totalMerits = mappedPledge.merits;
+          pledge.completedInterviews = mappedPledge.interviews;
+        });
+
+        res.json(pledgesArray.filter(pledge => pledge.displayName !== displayName));
       });
-    }
-    res.json({ merits: pledgeMerits.reverse() });
-  });
-};
-
-// Query for the user's interviews progress
-exports.get_interviews_progress = function(req, res) {
-  const { displayName, status } = req.query;
-  const usersRef = admin.database().ref('/users');
-  const meritsRef = admin.database().ref('/merits');
-  const completedNames = [];
-  const completed = [];
-  const incomplete = [];
-
-  meritsRef.orderByChild('type').equalTo('interview').once('value', (merits) => {
-    merits.forEach((merit) => {
-      const activeName = merit.val().activeName.replace(/ /g, '');
-      const pledgeName = merit.val().pledgeName.replace(/ /g, '');
-      let userCheck;
-      let interviewCheck;
-
-      if (status === 'pledge') {
-        userCheck = pledgeName;
-        interviewCheck = activeName;
-      } else {
-        userCheck = activeName;
-        interviewCheck = pledgeName;
-      }
-
-      if (displayName === userCheck && !completedNames.includes(interviewCheck)) {
-        completedNames.push(interviewCheck);
-      }
     });
-
-    usersRef.once('value', (users) => {
-      users.forEach((user) => {
-        if (status === 'pledge') {
-          if (user.val().status !== 'alumni' && user.val().status !== 'pledge') {
-            if (completedNames.includes(user.key)) {
-              completed.push(user.val());
-            } else {
-              incomplete.push(user.val());
-            }
-          }
-        } else {
-          if (user.val().status === 'pledge') {
-            if (completedNames.includes(user.key)) {
-              completed.push(user.val());
-            } else {
-              incomplete.push(user.val());
-            }
-          }
-        }
-      });
-
-      res.json({ completed, incomplete });
-    });
-  });
-};
-
-// Query for the pledge's completed interviews
-exports.get_pledge_completed_interviews = function(req, res) {
-  const { pledgeName } = req.query;
-  const meritsRef = admin.database().ref('/merits');
-  let interviews = [];
-
-  meritsRef.orderByChild('type').equalTo('interview').once('value', (merits) => {
-    merits.forEach((merit) => {
-      const pledgeCheck = merit.val().pledgeName.replace(/ /g, '');
-      if (pledgeName === pledgeCheck) {
-        interviews.push(merit.val());
-      }
-    });
-
-    interviews = interviews.sort((a, b) => b.date - a.date);
-
-    res.json(interviews);
   });
 };
 

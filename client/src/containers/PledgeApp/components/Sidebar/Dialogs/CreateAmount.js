@@ -1,8 +1,9 @@
 // @flow
 
 import API from 'api/API.js';
+import { STANDARDIZED_MERIT_OPTIONS } from 'helpers/constants';
 import { SpinnerDialog } from 'helpers/loaders.js';
-import { MeritTypeOptions, StandardizedMeritOptionsDialog } from 'components';
+import { MeritTypeOptions, OptionsDialog } from 'components';
 import type { User, MeritType } from 'api/models';
 
 import React, { Component, type Node } from 'react';
@@ -17,6 +18,7 @@ type StandardizedMeritOption = {
 
 type Props = {
   state: User,
+  type: ?MeritType,
   users: Array<User>,
   description: string,
   date: Date,
@@ -38,7 +40,7 @@ type State = {
 
 export class CreateAmount extends Component<Props, State> {
   state = {
-    type: 'personal',
+    type: this.props.type || 'personal',
     amount: '0',
     vibrate: false,
     openStandardizedOptions: false,
@@ -135,10 +137,10 @@ export class CreateAmount extends Component<Props, State> {
 
   selectStandardizedMeritOption = (option: StandardizedMeritOption) => {
     let type = 'standardized';
-    if (option.reason === 'Interview Merits') {
+    if (option.text === 'Interview Merits') {
       type = 'interview';
     } else {
-      this.props.setDescription(option.reason);
+      this.props.setDescription(option.text);
     }
     this.setType(type);
     this.handleClose();
@@ -284,10 +286,10 @@ export class CreateAmount extends Component<Props, State> {
           onChange={this.changeAmount}
         />
         { this.meritButtons }
-        <StandardizedMeritOptionsDialog
-          isMobile={false}
+        <OptionsDialog
           open={openStandardizedOptions}
-          selectStandardizedMeritOption={this.selectStandardizedMeritOption}
+          options={STANDARDIZED_MERIT_OPTIONS}
+          onClick={this.selectStandardizedMeritOption}
           handleClose={this.handleClose}
         />
         <SpinnerDialog
