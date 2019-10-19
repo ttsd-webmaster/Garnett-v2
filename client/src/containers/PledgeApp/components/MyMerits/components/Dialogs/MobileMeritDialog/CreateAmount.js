@@ -134,7 +134,6 @@ export class CreateAmount extends PureComponent<Props, State> {
     let description = option.text;
     if (option.text === 'Interview Merits') {
       type = 'interview';
-      description = '🤗';
     }
     this.handleClose();
     this.setState({
@@ -146,9 +145,13 @@ export class CreateAmount extends PureComponent<Props, State> {
   }
 
   advance = (action: 'merit' | 'demerit') => {
-    const { type, amount, description } = this.state;
+    const { type, amount } = this.state;
+    let { description } = this.state;
     let meritAmount = parseInt(amount, 10);
     meritAmount = action === 'merit' ? meritAmount : -meritAmount;
+    if (type === 'interview') {
+      description = '🤗';
+    }
     this.props.enterUsersView(type, meritAmount, description);
   }
 

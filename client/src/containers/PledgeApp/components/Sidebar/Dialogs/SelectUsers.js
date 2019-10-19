@@ -45,17 +45,25 @@ export class SelectUsers extends Component<Props, State> {
   componentDidMount() {
     const { status, firstName, lastName } = this.props.state;
     const fullName = `${firstName} ${lastName}`;
+    let description = '';
+
+    if (this.props.type === 'interview') {
+      description = '🤗';
+    }
+
     if (status === 'pledge') {
       API.getActivesForMerit(fullName)
       .then((res) => {
         const user = res.data;
-        this.setInitialUser(user);
+        this.props.setDescription(description);
+        this.setInitialUser(user, description);
       });
     } else {
       API.getPledgesForMerit(fullName, status)
       .then((res) => {
         const user = res.data;
-        this.setInitialUser(user);
+        this.props.setDescription(description);
+        this.setInitialUser(user, description);
       });
     }
   }
@@ -146,12 +154,11 @@ export class SelectUsers extends Component<Props, State> {
     } else if (selectedUsers.length === 0) {
       return users;
     } else {
-      const remainingUsers = [];
-      // Add the remaining users to an array
-      users.forEach((user) => {
-        if (!selectedUsers.includes(user)) {
-          remainingUsers.push(user);
-        }
+      const remainingUsers = users.filter((user) => {
+        const isIncluded = selectedUsers.some((selectedUser) => (
+          selectedUser.displayName === user.displayName
+        ));
+        return !isIncluded;
       });
       return remainingUsers;
     }

@@ -33,13 +33,13 @@ export default class MeritDialog extends Component<Props, State> {
   };
 
   get body(): Node {
-    const { state, handleRequestOpen } = this.props;
+    const { state, initialUser, handleRequestOpen } = this.props;
     return (
       <div id="merit-dialog-container">
         <SelectUsers
           state={state}
           type={this.state.type}
-          initialUser={this.props.initialUser}
+          initialUser={initialUser}
           description={this.state.description}
           setUsers={this.setUsers}
           setDescription={this.setDescription}
@@ -49,7 +49,7 @@ export default class MeritDialog extends Component<Props, State> {
         <CreateAmount
           state={state}
           type={this.state.type}
-          users={this.state.users}
+          users={initialUser ? [initialUser] : this.state.users}
           description={this.state.description}
           date={this.state.date}
           setType={this.setType}
@@ -71,7 +71,7 @@ export default class MeritDialog extends Component<Props, State> {
   handleClose = () => {
     this.props.handleMeritClose();
     this.setState({
-      type: 'personal',
+      type: this.props.type || 'personal',
       users: [],
       description: ''
     });

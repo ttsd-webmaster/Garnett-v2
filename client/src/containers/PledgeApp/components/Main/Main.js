@@ -32,7 +32,10 @@ const routes = [
     path: '/pledge-app/interviews',
     exact: true,
     content: props => (
-      <Interviews state={props.state} />
+      <Interviews
+        state={props.state}
+        handleRequestOpen={props.handleRequestOpen}
+      />
     )
   },
   {

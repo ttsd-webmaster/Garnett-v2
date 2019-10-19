@@ -14,7 +14,8 @@ import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 
 type Props = {
-  state: User
+  state: User,
+  handleRequestOpen: () => void,
 };
 
 export class Interviews extends PureComponent<Props> {

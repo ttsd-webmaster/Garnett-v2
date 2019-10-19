@@ -23,20 +23,24 @@ exports.get_interviews_progress = function(req, res) {
 
     usersRef.once('value', (users) => {
       users.forEach((user) => {
+        const currentUser = user.val();
+        const { firstName, lastName } = currentUser;
+        currentUser.displayName = firstName + lastName;
+
         if (status === 'pledge') {
-          if (user.val().status !== 'alumni' && user.val().status !== 'pledge') {
+          if (currentUser.status !== 'alumni' && currentUser.status !== 'pledge') {
             if (completedNames.includes(user.key)) {
-              completed.push(user.val());
+              completed.push(currentUser);
             } else {
-              incomplete.push(user.val());
+              incomplete.push(currentUser);
             }
           }
         } else {
-          if (user.val().status === 'pledge') {
+          if (currentUser.status === 'pledge') {
             if (completedNames.includes(user.key)) {
-              completed.push(user.val());
+              completed.push(currentUser);
             } else {
-              incomplete.push(user.val());
+              incomplete.push(currentUser);
             }
           }
         }
@@ -118,7 +122,9 @@ exports.delete_interview = function(req, res) {
                 });
               }
 
-              res.sendStatus(200);
+              if (!res.headersSent) {
+                res.sendStatus(200);
+              }
             });
           });
         }
