@@ -53,8 +53,8 @@ exports.get_pledges = function(req, res) {
       return pledges.val()[key];
     });
 
+    // Map the pledge's total merits
     meritsRef.once('value', (merits) => {
-      // Map the pledge's total merits
       if (merits.exists()) {
         merits.forEach((merit) => {
           const pledgeName = merit.val().pledgeName.replace(/ /g, '');
@@ -64,6 +64,7 @@ exports.get_pledges = function(req, res) {
         });
       }
 
+      // Map the pledge's total interviews
       interviewsRef.once('value', (interviews) => {
         if (interviews.exists()) {
           interviews.forEach((interview) => {

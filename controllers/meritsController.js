@@ -13,6 +13,19 @@ function baseMerits(status) {
   }
 }
 
+function shouldCountTowardsMeritCap(merit) {
+  const nonPCStandardizedMerit =
+    merit.type === 'standardized' &&
+    merit.description !== 'PC Merits';
+
+  const shouldCountTowardsMeritCap =
+    merit.type === 'personal' ||
+    merit.type === 'interview' ||
+    nonPCStandardizedMerit;
+
+  return shouldCountTowardsMeritCap;
+}
+
 // Get next 50 merits for all merits list
 exports.get_all_merits = function(req, res) {
   let { lastKey } = req.query;
@@ -149,7 +162,8 @@ exports.get_remaining_merits = function(req, res) {
   meritsRef.orderByChild('activeName').equalTo(fullName).once('value', (merits) => {
     if (merits.exists()) {
       merits.forEach((merit) => {
-        if (pledgeName === merit.val().pledgeName) {
+        if (pledgeName === merit.val().pledgeName &&
+            shouldCountTowardsMeritCap(merit.val())) {
           remainingMerits -= merit.val().amount;
         }
       });
@@ -164,14 +178,20 @@ exports.get_pledges_as_active = function(req, res) {
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
   const result = [];
-  const remainingMerits = new Map();
+  const remainingMeritsMap = new Map();
 
   meritsRef.orderByChild('activeName').equalTo(fullName).once('value', (merits) => {
-    if (merits.exists()) {
+    if (merits.exists() && status !== 'pipm') {
       merits.forEach((merit) => {
         const { pledgeName, amount } = merit.val();
-        const remaining = remainingMerits.get(pledgeName) || baseMerits(status);
-        remainingMerits.set(pledgeName, remaining - amount);
+        let remainingMerits =
+          remainingMeritsMap.get(pledgeName) || baseMerits(status);
+
+        if (shouldCountTowardsMeritCap(merit.val())) {
+          remainingMerits -= amount;
+        }
+
+        remainingMeritsMap.set(pledgeName, remainingMerits);
       });
     }
 
@@ -181,7 +201,7 @@ exports.get_pledges_as_active = function(req, res) {
           const currentPledge = pledge.val();
           const pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
           currentPledge.displayName = pledge.key;
-          currentPledge.remainingMerits = remainingMerits.get(pledgeName) || baseMerits(status);
+          currentPledge.remainingMerits = remainingMeritsMap.get(pledgeName) || baseMerits(status);
           result.push(currentPledge);
         });
         res.json(result);
@@ -204,8 +224,13 @@ exports.get_actives_as_pledge = function(req, res) {
     if (merits.exists()) {
       merits.forEach((merit) => {
         const { activeName, amount } = merit.val();
-        const subtracted = meritsToSubtract.get(activeName) || 0;
-        meritsToSubtract.set(activeName, subtracted + amount);
+        let subtracted = meritsToSubtract.get(activeName) || 0;
+
+        if (shouldCountTowardsMeritCap(merit.val())) {
+          subtracted += amount;
+        }
+
+        meritsToSubtract.set(activeName, subtracted);
       });
     }
 
@@ -227,8 +252,10 @@ exports.get_actives_as_pledge = function(req, res) {
             if (status === 'alumni') {
               result.push(currentActive);
             }
-          } else if (status !== 'alumni') {
-            result.push(currentActive);
+          } else {
+            if (status !== 'alumni') {
+              result.push(currentActive);
+            }
           }
         }
       });
@@ -296,21 +323,8 @@ exports.create_merit = function(req, res) {
       pledge = selectedUser;
     }
 
-    const nonPCStandardizedMerit = (
-      merit.type === 'standardized' &&
-      merit.description !== 'PC Merits'
-    );
-    const shouldCountTowardsMeritCap = (
-      active.status !== 'pipm' &&
-      (
-        merit.type === 'personal' ||
-        merit.type === 'interview' ||
-        nonPCStandardizedMerit
-      )
-    );
-
     // Push active to array if not pi or pm
-    if (shouldCountTowardsMeritCap) {
+    if (shouldCountTowardsMeritCap(merit) && active.status !== 'pipm') {
       // Check if user does not have enough merits
       if (merit.amount > selectedUser.remainingMerits) {
         const userName = `${selectedUser.firstName} ${selectedUser.lastName}`;
