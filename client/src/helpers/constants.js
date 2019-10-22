@@ -27,3 +27,8 @@ export const STANDARDIZED_MERIT_OPTIONS = [
     ]
   }
 ];
+
+export const MERIT_FILTER_OPTIONS = [
+  'Created on Garnett',
+  'Merit Date'
+];

@@ -28,18 +28,21 @@ function shouldCountTowardsMeritCap(merit) {
 
 // Get next 50 merits for all merits list
 exports.get_all_merits = function(req, res) {
-  let { lastKey } = req.query;
-  const meritsRef = admin.database().ref('/merits');
+  let { sortByDate, lastKey } = req.query;
+  let meritsRef = admin.database().ref('/merits');
   let fetchedMerits = [];
   let updatedLastKey;
   let hasMore = false;
 
+  meritsRef = sortByDate === 'true' ? meritsRef.orderByChild('date') : meritsRef.orderByKey();
+
   // Subsequent fetches
   if (lastKey) {
     lastKey = JSON.parse(lastKey);
+    meritsRef = sortByDate === 'true'
+      ? meritsRef.endAt(lastKey.value, lastKey.key)
+      : meritsRef.endAt(lastKey.key)
     meritsRef
-    .orderByChild('date')
-    .endAt(lastKey.value, lastKey.key)
     .limitToLast(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -60,7 +63,6 @@ exports.get_all_merits = function(req, res) {
   } else {
     // Initial fetch
     meritsRef
-    .orderByChild('date')
     .limitToLast(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -83,18 +85,21 @@ exports.get_all_merits = function(req, res) {
 
 // Get next 50 merits for all merits list reversed
 exports.get_all_merits_reverse = function(req, res) {
-  let { lastKey } = req.query;
-  const meritsRef = admin.database().ref('/merits');
+  let { sortByDate, lastKey } = req.query;
+  let meritsRef = admin.database().ref('/merits');
   let fetchedMerits = [];
   let updatedLastKey;
   let hasMore = false;
 
+  meritsRef = sortByDate === 'true' ? meritsRef.orderByChild('date') : meritsRef.orderByKey();
+
   // Subsequent fetches
   if (lastKey) {
     lastKey = JSON.parse(lastKey);
+    meritsRef = sortByDate === 'true'
+      ? meritsRef.startAt(lastKey.value, lastKey.key)
+      : meritsRef.startAt(lastKey.key)
     meritsRef
-    .orderByChild('date')
-    .startAt(lastKey.value, lastKey.key)
     .limitToFirst(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -113,7 +118,6 @@ exports.get_all_merits_reverse = function(req, res) {
   } else {
     // Initial fetch
     meritsRef
-    .orderByChild('date')
     .limitToFirst(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -133,10 +137,11 @@ exports.get_all_merits_reverse = function(req, res) {
 
 // Query for the specified pledge's merits
 exports.get_pledge_merits = function(req, res) {
-  const { pledgeName } = req.query;
-  const meritsRef = admin.database().ref('/merits');
+  const { pledgeName, sortByDate } = req.query;
+  let meritsRef = admin.database().ref('/merits');
+  meritsRef = sortByDate === 'true' ? meritsRef.orderByChild('date') : meritsRef.orderByKey();
 
-  meritsRef.orderByChild('date').once('value', (merits) => {
+  meritsRef.once('value', (merits) => {
     const pledgeMerits = [];
     if (merits.val()) {
       merits.forEach((merit) => {
@@ -376,9 +381,10 @@ exports.update_merit = function(req, res) {
       // Find the merit in the merits list
       if (equal(merit.val(), meritToEdit)) {
         merit.ref.update({ date });
-        res.sendStatus(200);
       }
     });
+
+    res.sendStatus(200);
   });
 }
 
@@ -399,11 +405,10 @@ exports.delete_merit = function(req, res) {
 
       // Find the merit in the merits list
       if (equal(merit.val(), meritToDelete)) {
-        // Remove the merit from all merits list
-        merit.ref.remove(() => {
-          res.sendStatus(200);
-        });
+        merit.ref.remove();
       }
     });
+
+    res.sendStatus(200);
   });
 };

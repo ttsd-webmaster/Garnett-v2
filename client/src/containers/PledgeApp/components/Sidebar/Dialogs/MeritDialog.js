@@ -73,7 +73,8 @@ export default class MeritDialog extends Component<Props, State> {
     this.setState({
       type: this.props.type || 'personal',
       users: [],
-      description: ''
+      description: '',
+      date: new Date()
     });
   }
 

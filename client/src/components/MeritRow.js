@@ -45,7 +45,7 @@ export class MeritRow extends PureComponent<Props> {
           primaryText={
             primaryText ||
             <p className="garnett-name">
-              { name }
+              {name}
               {userCreated && (
                 <img
                   className="user-verified"
@@ -56,17 +56,17 @@ export class MeritRow extends PureComponent<Props> {
             </p>
           }
           secondaryText={
-            <p className="garnett-description">{ merit.description }</p>
+            <p className="garnett-description">{merit.description}</p>
           }
           secondaryTextLines={2}
           onClick={() => handleOptionsOpen && handleOptionsOpen(merit)}
         >
           <div className="merit-amount-container">
-            <p className="merit-date">{ formatDate(new Date(merit.date)) }</p>
+            <p className="merit-date">{formatDate(new Date(merit.date))}</p>
             {merit.amount > 0 ? (
-              <p className="merit-amount green">+{ merit.amount }</p>
+              <p className="merit-amount green">+{merit.amount}</p>
             ) : (
-              <p className="merit-amount red">{ merit.amount }</p>
+              <p className="merit-amount red">{merit.amount}</p>
             )}
           </div>
         </ListItem>
@@ -89,7 +89,7 @@ export class MeritRow extends PureComponent<Props> {
         overflow
         placeholder={PlaceholderMerit()}
       >
-        { this.body }
+        {this.body}
       </LazyLoad>
     )
   }

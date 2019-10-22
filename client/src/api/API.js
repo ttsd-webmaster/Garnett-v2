@@ -45,16 +45,16 @@ export default {
 
   // Merit Book
   // GET requests
-  getAllMerits: function(lastKey: { value?: string, key?: string }) {
-    const params = { lastKey };
+  getAllMerits: function(sortByDate: boolean, lastKey: { value?: string, key?: string }) {
+    const params = { sortByDate, lastKey };
     return axios.get('/api/merit/all', { params });
   },
-  getAllMeritsReverse: function(lastKey: { value?: string, key?: string }) {
-    const params = { lastKey };
+  getAllMeritsReverse: function(sortByDate: boolean, lastKey: { value?: string, key?: string }) {
+    const params = { sortByDate, lastKey };
     return axios.get('/api/merit/all/reverse', { params });
   },
-  getPledgeMerits: function(pledgeName: string) {
-    const params = { pledgeName };
+  getPledgeMerits: function(pledgeName: string, sortByDate: boolean) {
+    const params = { pledgeName, sortByDate };
     return axios.get('/api/merit/pledge/merits', { params });
   },
   getRemainingMerits: function(fullName: string, pledgeName: string, status: string) {
