@@ -67,7 +67,6 @@ export class DataApp extends PureComponent<Props, State> {
     const { index } = this.state;
     return (
       <div>
-
         <div id="data-container">
           <span id="back-button" onClick={this.goHome}>←</span>
           <h1 id="data-app-header">{ this.header }</h1>

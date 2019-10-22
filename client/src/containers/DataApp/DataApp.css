@@ -96,8 +96,10 @@
   justify-content: center;
   max-width: unset;
   padding: 10px 0 0 !important;
-  margin: 0 0 50px;
   z-index: 3;
+}
+#data-container #pledging-data-container .garnett-subheader.toggle-view {
+  margin: 0 0 50px;
 }
 @media (max-width: 767px) {
   #pledging-data-container .garnett-subheader.toggle-view {

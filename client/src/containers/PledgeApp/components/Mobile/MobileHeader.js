@@ -109,6 +109,8 @@ export class MobileHeader extends Component<Props, State> {
         return 'Interviews';
       case '/pledge-app/settings':
         return 'Settings';
+      case '/pledge-app/data':
+        return 'Leaderboards';
       default:
         throw new Error('unknown route');
     }

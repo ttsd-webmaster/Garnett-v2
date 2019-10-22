@@ -56,6 +56,19 @@ export function MobileNavbar(props: Props) {
           icon={<FontIcon className="icon-address-book" />}
         />
       </NavLink>
+      {props.status !== 'pledge' && (
+        <NavLink
+          className="mobile-nav-item"
+          activeClassName="active"
+          to="/pledge-app/data"
+          exact
+        >
+          <BottomNavigationItem
+            label="Data"
+            icon={<FontIcon className="icon-chart-bar" />}
+          />
+        </NavLink>
+      )}
     </BottomNavigation>
   )
 }
