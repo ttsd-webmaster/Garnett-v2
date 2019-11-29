@@ -1,9 +1,11 @@
 // @flow
 
+import { MERIT_FILTER_OPTIONS } from 'helpers/constants';
 import { androidBackOpen, androidBackClose, setRefresh } from 'helpers/functions.js';
 import { LoadingComponent } from 'helpers/loaders.js';
-import { FilterHeader, MeritRow } from 'components';
-import { LoadableMeritOptionsDialog, LoadableEditMeritDialog } from './Dialogs';
+import { Filter, FilterHeader, MeritRow } from 'components';
+import { OptionsDialog } from 'components/OptionsDialog';
+import { LoadableEditMeritDialog } from './Dialogs';
 import type { User, Merit } from 'api/models';
 
 import React, { Fragment, PureComponent, type Node } from 'react';
@@ -17,46 +19,32 @@ type Props = {
 type State = {
   myMerits: ?Array<Merit>,
   selectedMerit: ?Merit,
-  reverse: boolean,
+  isReversed: boolean,
   dialogView: 'edit' | 'delete' | null,
   openOptions: boolean,
-  openEdit: boolean
+  openEdit: boolean,
+  filterName: 'Merit Date' | 'Created on Garnett',
+  openPopover: boolean,
+  anchorEl: ?HTMLDivElement
 };
 
 export class MyMeritsList extends PureComponent<Props, State> {
   state = {
     myMerits: null,
     selectedMerit: null,
-    reverse: false,
+    isReversed: false,
     dialogView: null,
     openOptions: false,
-    openEdit: false
+    openEdit: false,
+    filterName: localStorage.getItem('meritsSort') || 'Merit Date',
+    openPopover: false,
+    anchorEl: null
   }
 
   componentDidMount() {
     if (navigator.onLine) {
-      const { firebase } = window;
-      const { firstName, lastName, status } = this.props.state;
-      const fullName = `${firstName} ${lastName}`;
-      const meritsRef = firebase.database().ref('/merits');
-      let queriedName = 'activeName';
-
-      if (status === 'pledge') {
-        queriedName = 'pledgeName';
-      }
-
       setRefresh(null);
-
-      meritsRef.orderByChild(queriedName).equalTo(fullName).on('value', (merits) => {
-        let myMerits = [];
-        if (merits.val()) {
-          myMerits = Object.keys(merits.val()).map(function(key) {
-            return merits.val()[key];
-          }).sort((a, b) => a.date - b.date).reverse();
-        }
-        localStorage.setItem('myMerits', JSON.stringify(myMerits));
-        this.setState({ myMerits });
-      });
+      this.fetchMerits();
     } else {
       const myMerits = JSON.parse(localStorage.getItem('myMerits'));
       this.setState({ myMerits });
@@ -84,11 +72,8 @@ export class MyMeritsList extends PureComponent<Props, State> {
     }
     return (
       <List id="my-merits-list" className="animate-in garnett-list">
-        {myMerits.map((merit, i) => {
-          if (!merit) {
-            return null;
-          }
-          return (
+        {myMerits.map((merit, i) => (
+          merit && (
             <MeritRow
               key={i}
               merit={merit}
@@ -98,9 +83,41 @@ export class MyMeritsList extends PureComponent<Props, State> {
               handleOptionsOpen={this.handleOptionsOpen}
             />
           )
-        })}
+        ))}
       </List>
     )
+  }
+
+  get sortByDate() {
+    return this.state.filterName === 'Merit Date';
+  }
+
+  fetchMerits = () => {
+    const { firebase } = window;
+    const { firstName, lastName, status } = this.props.state;
+    const fullName = `${firstName} ${lastName}`;
+    const meritsRef = firebase.database().ref('/merits');
+    let queriedName = 'activeName';
+
+    if (status === 'pledge') {
+      queriedName = 'pledgeName';
+    }
+
+    meritsRef.off('value');
+
+    meritsRef.orderByChild(queriedName).equalTo(fullName).on('value', (merits) => {
+      let myMerits = [];
+      if (merits.val()) {
+        myMerits = Object.keys(merits.val()).map(function(key) {
+          return merits.val()[key];
+        });
+        if (this.sortByDate) {
+          myMerits = myMerits.sort((a, b) => a.date - b.date).reverse();
+        }
+      }
+      localStorage.setItem('myMerits', JSON.stringify(myMerits));
+      this.setState({ myMerits });
+    });
   }
 
   handleOptionsOpen = (selectedMerit: Merit) => {
@@ -137,9 +154,31 @@ export class MyMeritsList extends PureComponent<Props, State> {
   }
 
   reverse = () => {
-    const { myMerits, reverse } = this.state;
+    const { myMerits, isReversed } = this.state;
     const reversedMerits = myMerits.reverse();
-    this.setState({ myMerits: reversedMerits, reverse: !reverse });
+    this.setState({ myMerits: reversedMerits, isReversed: !isReversed });
+  }
+
+  openPopover = (event: SyntheticEvent<>) => {
+    // This prevents ghost click.
+    event.preventDefault();
+    this.setState({
+      openPopover: true,
+      anchorEl: event.currentTarget
+    });
+  };
+
+  closePopover = () => this.setState({ openPopover: false });
+
+  setFilter = (filterName: string) => {
+    localStorage.setItem('meritsSort', filterName);
+    this.setState({
+      filterName,
+      isReversed: false,
+      openPopover: false
+    }, () => {
+      this.fetchMerits();
+    });
   }
 
   render() {
@@ -147,18 +186,45 @@ export class MyMeritsList extends PureComponent<Props, State> {
     const {
       myMerits,
       selectedMerit,
-      reverse,
+      isReversed,
       dialogView,
       openOptions,
-      openEdit
+      openEdit,
+      filterName,
+      openPopover,
+      anchorEl
     } = this.state;
+    const DIALOG_OPTIONS = [
+      {
+        header: 'Merit Options',
+        choices: [
+          {
+            text: 'Edit Date',
+            icon: 'icon-calendar-plus-o',
+            onClick: () => this.handleEditOpen('edit')
+          },
+          {
+            text: 'Delete Merit',
+            icon: 'icon-trash-empty',
+            onClick: () => this.handleEditOpen('delete')
+          }
+        ]
+      }
+    ];
+
     return (
       <Fragment>
-        <FilterHeader isReversed={reverse} reverse={this.reverse} />
+        <FilterHeader
+          filterName={filterName}
+          openPopover={this.openPopover}
+          isReversed={isReversed}
+          reverse={this.reverse}
+        />
+
         { myMerits ? this.merits : <LoadingComponent /> }
-        <LoadableMeritOptionsDialog
+        <OptionsDialog
           open={openOptions}
-          handleEditOpen={this.handleEditOpen}
+          options={DIALOG_OPTIONS}
           handleClose={this.handleOptionsClose}
         />
         <LoadableEditMeritDialog
@@ -168,6 +234,14 @@ export class MyMeritsList extends PureComponent<Props, State> {
           view={dialogView}
           handleClose={this.handleEditClose}
           handleRequestOpen={handleRequestOpen}
+        />
+        <Filter
+          open={openPopover}
+          anchorEl={anchorEl}
+          filters={MERIT_FILTER_OPTIONS}
+          filterName={filterName}
+          closePopover={this.closePopover}
+          setFilter={this.setFilter}
         />
       </Fragment>
     )

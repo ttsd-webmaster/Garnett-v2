@@ -1,8 +1,8 @@
 // @flow
 
 import API from 'api/API.js';
-import { FilterHeader, MeritRow } from 'components';
-import type { Merit } from 'api/models';
+import { FilterHeader, UserRow } from 'components';
+import type { User } from 'api/models';
 
 import React, { PureComponent } from 'react';
 import { List } from 'material-ui/List';
@@ -13,7 +13,7 @@ type Props = {
 };
 
 type State = {
-  interviews: ?Array<Merit>
+  interviews: ?Array<User>
 };
 
 export class InterviewsList extends PureComponent<Props, State> {
@@ -24,7 +24,7 @@ export class InterviewsList extends PureComponent<Props, State> {
   componentDidMount() {
     const { pledgeName } = this.props;
     if (navigator.onLine) {
-      API.getPledgeCompletedInterviews(this.props.pledgeName)
+      API.getPledgeCompletedInterviews(pledgeName)
       .then(res => {
         const interviews = res.data;
         localStorage.setItem(`${pledgeName}Interviews`, JSON.stringify(interviews));
@@ -71,14 +71,7 @@ export class InterviewsList extends PureComponent<Props, State> {
           if (!interview) {
             return null
           }
-          return (
-            <MeritRow
-              key={i}
-              merit={interview}
-              photo={interview.activePhoto}
-              name={interview.activeName}
-            />
-          )
+          return <UserRow key={i} user={interview} />;
         })}
       </List>
     )

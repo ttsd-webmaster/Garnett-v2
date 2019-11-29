@@ -13,6 +13,7 @@ import 'react-day-picker/lib/style.css';
 type Props = {
   state: User,
   type: MeritType,
+  initialUser: ?User,
   description: string,
   setUsers: (Array<User>) => void,
   setDescription: (string) => void,
@@ -42,18 +43,27 @@ export class SelectUsers extends Component<Props, State> {
   };
 
   componentDidMount() {
-    const { status, displayName } = this.props.state;
+    const { status, firstName, lastName } = this.props.state;
+    const fullName = `${firstName} ${lastName}`;
+    let description = '';
+
+    if (this.props.type === 'interview') {
+      description = '🤗';
+    }
+
     if (status === 'pledge') {
-      API.getActivesForMerit(displayName)
+      API.getActivesForMerit(fullName)
       .then((res) => {
-        const users = res.data;
-        this.setState({ users, filteredUsers: users });
+        const user = res.data;
+        this.props.setDescription(description);
+        this.setInitialUser(user, description);
       });
     } else {
-      API.getPledgesForMerit(displayName)
+      API.getPledgesForMerit(fullName, status)
       .then((res) => {
-        const users = res.data;
-        this.setState({ users, filteredUsers: users });
+        const user = res.data;
+        this.props.setDescription(description);
+        this.setInitialUser(user, description);
       });
     }
   }
@@ -144,15 +154,31 @@ export class SelectUsers extends Component<Props, State> {
     } else if (selectedUsers.length === 0) {
       return users;
     } else {
-      const remainingUsers = [];
-      // Add the remaining users to an array
-      users.forEach((user) => {
-        if (!selectedUsers.includes(user)) {
-          remainingUsers.push(user);
-        }
+      const remainingUsers = users.filter((user) => {
+        const isIncluded = selectedUsers.some((selectedUser) => (
+          selectedUser.displayName === user.displayName
+        ));
+        return !isIncluded;
       });
       return remainingUsers;
     }
+  }
+
+  setInitialUser = (users: Array<User>) => {
+    const { initialUser } = this.props;
+    let filteredUsers = users;
+    let selectedUsers = []
+
+    if (initialUser) {
+      filteredUsers = users.filter((user) => {
+        const userName = user.firstName + user.lastName;
+        const initialUserName = initialUser.firstName + initialUser.lastName;
+        return userName !== initialUserName;
+      });
+      selectedUsers = [initialUser];
+    }
+
+    this.setState({ users, filteredUsers, selectedUsers });
   }
 
   setName = (event: SyntheticEvent<>) => {
@@ -240,13 +266,14 @@ export class SelectUsers extends Component<Props, State> {
   }
 
   toggleAlumniView = () => {
-    const { displayName } = this.props.state;
+    const { firstName, lastName } = this.props.state;
     const { showAlumni } = this.state;
+    const fullName = `${firstName} ${lastName}`;
 
     // Show spinner while loading users
     this.setState({ filteredUsers: null });
 
-    API.getActivesForMerit(displayName, !showAlumni)
+    API.getActivesForMerit(fullName, !showAlumni)
     .then((res) => {
       const users = res.data;
       this.props.setUsers([]);

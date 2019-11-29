@@ -17,56 +17,10 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 })
 
-const usersRef = admin.database().ref('/users/');
 const meritsRef = admin.database().ref('/merits');
-const approvedComplaints = admin.database().ref('/approvedComplaints');
-const pendingComplaints = admin.database().ref('/pendingComplaints');
+const interviewsRef = admin.database().ref('/interviews');
 const chalkboards = admin.database().ref('/chalkboards');
 
 meritsRef.remove();
-approvedComplaints.remove();
-pendingComplaints.remove();
+interviewsRef.remove();
 chalkboards.remove();
-
-usersRef.once('value', (snapshot) => {
-  snapshot.forEach((user) => {
-    const userRef = admin.database().ref('/users/' + user.key);
-
-    console.log(`Reset data for ${user.key}`);
-
-    userRef.update({
-      Merits: null,
-      Complaints: null,
-      Pledges: null
-    });
-
-    // Update the active's pledge merit count for each pledge
-    if (user.val().status !== 'pledge') {
-      usersRef.once('value', (snapshot) => {
-        console.log(`Set pledge merit counts for ${user.key}`);
-
-        snapshot.forEach((child) => {
-          if (child.val().status === 'pledge') {
-            const pledgeName = child.key;
-            switch (user.val().status) {
-              case 'alumni':
-                userRef.child(`/Pledges/${pledgeName}`).update({
-                  merits: 200
-                });
-                break;
-              case 'pipm':
-                userRef.child(`/Pledges/${pledgeName}`).update({
-                  merits: 'Unlimited'
-                });
-                break;
-              default:
-                userRef.child(`/Pledges/${pledgeName}`).update({
-                  merits: 100
-                });
-            }
-          }
-        });
-      });
-    }
-  });
-});

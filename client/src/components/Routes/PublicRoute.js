@@ -10,10 +10,10 @@ export function PublicRoute({
     <Route
       {...rest}
       render={props =>
-        !authenticated ? (
-          <Component {...props} {...rest} />
-        ) : (
+        authenticated ? (
           <Redirect to="/" />
+        ) : (
+          <Component {...props} {...rest} />
         )
       }
     />

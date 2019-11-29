@@ -24,11 +24,11 @@ export function FilterHeader(props: Props) {
   return (
     <Subheader className="garnett-subheader" {...rest}>
       <Fragment>
-        { title || (isReversed ? 'Oldest' : 'Recent') }
+        {title || (isReversed ? 'Oldest' : 'Recent')}
         <span className="garnett-filter-container">
           {filterName && openPopover && (
             <span className="garnett-filter" onClick={openPopover}>
-              { filterName }
+              {filterName}
             </span>
           )}
           {reverse && (

@@ -1,9 +1,4 @@
-/* Used to unstyle close button for mobile merit fullscreen dialog */
-#merit-dialog svg {
-  fill: var(--text-color) !important;
-}
-
-#merit-dialog .garnett-chip.merit-dialog > svg{
+#fullscreen-dialog .garnett-chip.merit-dialog > svg{
   fill: #fff !important;
 }
 
@@ -65,6 +60,7 @@
   position: sticky;
   bottom: 0;
   height: 60px;
+  background-color: #fff;
 }
 
 .mobile-merit-button {
@@ -77,7 +73,7 @@
   width: 100%;
   background-color: var(--primary-color);
   color: #fff;
-  font-family: 'Helvetica Neue', Roboto, sans-serif;
+  font-family: Graphik, Roboto, sans-serif;
   font-size: 18px;
   padding: 0;
   border: 0;

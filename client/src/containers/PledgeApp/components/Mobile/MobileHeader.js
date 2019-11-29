@@ -1,13 +1,21 @@
 // @flow
 
-import React, { Fragment, Component, type Node } from 'react';
+import React, { Component, type Node } from 'react';
 import CountUp from 'react-countup';
 
 import type { User } from 'api/models';
+import {
+  androidBackOpen,
+  androidBackClose,
+  iosFullscreenDialogOpen,
+  iosFullscreenDialogClose
+} from 'helpers/functions.js';
+import { LoadableSettingsDialog } from './Dialogs';
 
 type Props = {
   history: RouterHistory,
-  state: User
+  state: User,
+  logOut: () => void
 };
 
 type State = {
@@ -18,7 +26,8 @@ type State = {
 export class MobileHeader extends Component<Props, State> {
   state = {
     totalMerits: 0,
-    previousTotalMerits: 0
+    previousTotalMerits: 0,
+    openSettings: false
   };
 
   componentDidMount() {
@@ -91,19 +100,7 @@ export class MobileHeader extends Component<Props, State> {
     switch (history.location.pathname) {
       case '/pledge-app':
       case '/pledge-app/my-merits':
-        return (
-          <Fragment>
-            <CountUp
-              className="total-merits"
-              start={this.state.previousTotalMerits}
-              end={this.state.totalMerits}
-              useEasing
-            />
-            <span>
-              merits { state.status !== 'pledge' && 'merited' }
-            </span>
-          </Fragment>
-        )
+        return 'Merits';
       case '/pledge-app/pledges':
         return state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges';
       case '/pledge-app/brothers':
@@ -112,15 +109,63 @@ export class MobileHeader extends Component<Props, State> {
         return 'Interviews';
       case '/pledge-app/settings':
         return 'Settings';
+      case '/pledge-app/data':
+        return 'Leaderboards';
       default:
         throw new Error('unknown route');
     }
   }
 
+  get totalMerits(): Node {
+    return (
+      <div id="merit-container">
+        <CountUp
+          className="total-merits"
+          start={this.state.previousTotalMerits}
+          end={this.state.totalMerits}
+          useEasing
+        />
+        <i className="icon-star merit-icon"></i>
+      </div>
+    )
+  }
+
+  handleSettingsOpen = () => {
+    iosFullscreenDialogOpen();
+    androidBackOpen(this.handleSettingsClose);
+    this.setState({ openSettings: true });
+  }
+
+  handleSettingsClose = () => {
+    androidBackClose();
+    this.setState({ openSettings: false }, () => {
+      iosFullscreenDialogClose();
+    });
+  }
+
   render() {
+    const { history, state, logOut } = this.props;
     return (
       <div id="mobile-header">
-        { this.header }
+        <div id="header-title">
+          <img
+            className="user-photo"
+            src={state.photoURL}
+            onClick={this.handleSettingsOpen}
+            alt="User"
+          />
+          {this.header}
+        </div>
+        {history.location.pathname === '/pledge-app/my-merits' && (
+          this.totalMerits
+        )}
+        <LoadableSettingsDialog
+          open={this.state.openSettings}
+          state={state}
+          history={history}
+          logOut={logOut}
+          handleSettingsClose={this.handleSettingsClose}
+        />
       </div>
     )
   }

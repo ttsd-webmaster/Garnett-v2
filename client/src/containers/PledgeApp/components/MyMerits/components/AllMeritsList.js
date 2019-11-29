@@ -1,9 +1,10 @@
 // @flow
 
 import API from 'api/API.js';
+import { MERIT_FILTER_OPTIONS } from 'helpers/constants';
 import { isMobile, setRefresh } from 'helpers/functions.js';
 import { LoadingComponent, FetchingListSpinner } from 'helpers/loaders.js';
-import { FilterHeader, MeritRow } from 'components';
+import { Filter, FilterHeader, MeritRow } from 'components';
 import type { Merit } from 'api/models';
 
 import React, { Fragment, PureComponent, type Node } from 'react';
@@ -17,14 +18,21 @@ type Props = {
 type State = {
   allMerits: ?Array<Merit>,
   lastKey: ?Object,
-  reverse: boolean
+  isReversed: boolean,
+  filterName: 'Merit Date' | 'Created on Garnett',
+  openPopover: boolean,
+  anchorEl: ?HTMLDivElement
 };
 
 export class AllMeritsList extends PureComponent<Props, State> {
   state = {
     allMerits: null,
     lastKey: null,
-    reverse: false
+    hasMore: false,
+    isReversed: false,
+    filterName: localStorage.getItem('meritsSort') || 'Merit Date',
+    openPopover: false,
+    anchorEl: null
   }
 
   componentDidMount() {
@@ -44,8 +52,12 @@ export class AllMeritsList extends PureComponent<Props, State> {
     return `${firstName} ${lastName}.`;
   }
 
+  get sortByDate() {
+    return this.state.filterName === 'Merit Date';
+  }
+
   get merits(): Node {
-    const { allMerits } = this.state;
+    const { allMerits, hasMore } = this.state;
     if (allMerits.length === 0) {
       return (
         <div className="no-items-container">
@@ -56,17 +68,14 @@ export class AllMeritsList extends PureComponent<Props, State> {
     return (
       <InfiniteScroll
         loadMore={this.fetchMoreMerits}
-        hasMore={true}
+        hasMore={hasMore}
         loader={FetchingListSpinner}
         useWindow={false}
         getScrollParent={() => this.props.containerRef}
       >
         <List className="animate-in garnett-list">
-          {allMerits.map((merit, i) => {
-            if (!merit) {
-              return null;
-            }
-            return (
+          {allMerits.map((merit, i) => (
+            merit && (
               <MeritRow
                 key={i}
                 merit={merit}
@@ -77,36 +86,37 @@ export class AllMeritsList extends PureComponent<Props, State> {
                       ? this.shortenedName(merit.activeName)
                       : merit.activeName}
                     <span style={{ fontWeight: 400 }}>
-                      {merit.amount > 0
-                        ? " merited "
-                        : " demerited "
-                      }
+                      {merit.amount > 0 ? ' merited ' : ' demerited '}
                     </span>
-                    {this.shortenedName(merit.pledgeName)}
+                    {isMobile()
+                      ? this.shortenedName(merit.pledgeName)
+                      : merit.pledgeName}
                   </p>
                 }
               />
             )
-          })}
+          ))}
         </List>
       </InfiniteScroll>
     )
   }
 
   fetchInitialMerits = () => {
-    API.getAllMerits()
+    API.getAllMerits(this.sortByDate)
     .then((res) => {
-      const { fetchedMerits, lastKey } = res.data;
+      const { fetchedMerits, lastKey, hasMore } = res.data;
       localStorage.setItem('allMerits', JSON.stringify(fetchedMerits));
-      this.setState({ allMerits: fetchedMerits, lastKey });
+      this.setState({ allMerits: fetchedMerits, lastKey, hasMore });
     })
     .catch((err) => console.error(err));
   }
 
   fetchMoreMerits = () => {
-    if (this.state.lastKey) {
-      if (this.state.reverse) {
-        API.getAllMeritsReverse(this.state.lastKey)
+    const { hasMore, isReversed } = this.state;
+
+    if (hasMore) {
+      if (isReversed) {
+        API.getAllMeritsReverse(this.sortByDate, this.state.lastKey)
         .then((res) => {
           const { fetchedMerits, lastKey } = res.data;
           const allMerits = this.state.allMerits.concat(fetchedMerits);
@@ -114,11 +124,11 @@ export class AllMeritsList extends PureComponent<Props, State> {
         })
         .catch((err) => console.error(err));
       } else {
-        API.getAllMerits(this.state.lastKey)
+        API.getAllMerits(this.sortByDate, this.state.lastKey)
         .then((res) => {
-          const { fetchedMerits, lastKey } = res.data;
+          const { fetchedMerits, lastKey, hasMore } = res.data;
           const allMerits = this.state.allMerits.concat(fetchedMerits);
-          this.setState({ allMerits, lastKey });
+          this.setState({ allMerits, lastKey, hasMore });
         })
         .catch((err) => console.error(err));
       }
@@ -126,29 +136,69 @@ export class AllMeritsList extends PureComponent<Props, State> {
   }
 
   reverse = () => {
-    const reverse = !this.state.reverse;
+    const isReversed = !this.state.isReversed;
 
     this.setState({ allMerits: null });
 
-    if (reverse) {
-      API.getAllMeritsReverse()
+    if (isReversed) {
+      API.getAllMeritsReverse(this.sortByDate)
       .then((res) => {
         const { fetchedMerits, lastKey } = res.data;
         localStorage.setItem('allMerits', JSON.stringify(fetchedMerits));
-        this.setState({ allMerits: fetchedMerits, lastKey, reverse });
+        this.setState({ allMerits: fetchedMerits, lastKey, isReversed });
       })
       .catch((err) => console.error(err));
     } else {
       this.fetchInitialMerits();
-      this.setState({ reverse });
+      this.setState({ isReversed });
     }
   }
 
+  openPopover = (event: SyntheticEvent<>) => {
+    // This prevents ghost click.
+    event.preventDefault();
+    this.setState({
+      openPopover: true,
+      anchorEl: event.currentTarget
+    });
+  };
+
+  closePopover = () => this.setState({ openPopover: false });
+
+  setFilter = (filterName: string) => {
+    localStorage.setItem('meritsSort', filterName);
+    this.setState({
+      allMerits: null,
+      filterName,
+      isReversed: false,
+      openPopover: false
+    }, () => {
+      this.fetchInitialMerits();
+    });
+  }
+
   render() {
+    const { allMerits, filterName, isReversed, openPopover, anchorEl } = this.state;
+
     return (
       <Fragment>
-        <FilterHeader isReversed={this.state.reverse} reverse={this.reverse} />
-        { this.state.allMerits ? this.merits : <LoadingComponent /> }
+        <FilterHeader
+          filterName={filterName}
+          openPopover={this.openPopover}
+          isReversed={isReversed}
+          reverse={this.reverse}
+        />
+
+        {allMerits ? this.merits : <LoadingComponent /> }
+
+        <Filter
+          open={openPopover}
+          anchorEl={anchorEl}
+          filters={MERIT_FILTER_OPTIONS}
+          filterName={filterName}
+          closePopover={this.closePopover}
+          setFilter={this.setFilter}
+        />
       </Fragment>
     )
   }

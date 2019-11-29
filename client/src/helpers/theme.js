@@ -1,4 +1,5 @@
 export const theme = {
+  fontFamily: 'Graphik, Roboto, sans-serif',
   palette: {
     primary1Color: 'var(--primary-color)',
     primary2Color: 'var(--accent-color)',

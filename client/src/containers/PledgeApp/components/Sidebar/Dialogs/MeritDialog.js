@@ -3,12 +3,14 @@
 import './MeritDialog.css';
 import { SelectUsers } from './SelectUsers';
 import { CreateAmount } from './CreateAmount';
-import { FullScreenDialog } from 'components';
+import { FullScreenDialog } from 'components/FullScreenDialog';
 import type { User, MeritType } from 'api/models';
 
 import React, { Component, type Node } from 'react';
 
 type Props = {
+  type?: MeritType,
+  initialUser?: User,
   state: User,
   open: boolean,
   handleMeritClose: () => void,
@@ -24,19 +26,20 @@ type State = {
 
 export default class MeritDialog extends Component<Props, State> {
   state = {
-    type: 'personal',
+    type: this.props.type || 'personal',
     users: [],
     description: '',
     date: new Date()
   };
 
   get body(): Node {
-    const { state, handleRequestOpen } = this.props;
+    const { state, initialUser, handleRequestOpen } = this.props;
     return (
       <div id="merit-dialog-container">
         <SelectUsers
           state={state}
           type={this.state.type}
+          initialUser={initialUser}
           description={this.state.description}
           setUsers={this.setUsers}
           setDescription={this.setDescription}
@@ -45,7 +48,8 @@ export default class MeritDialog extends Component<Props, State> {
         />
         <CreateAmount
           state={state}
-          users={this.state.users}
+          type={this.state.type}
+          users={initialUser ? [initialUser] : this.state.users}
           description={this.state.description}
           date={this.state.date}
           setType={this.setType}
@@ -67,9 +71,10 @@ export default class MeritDialog extends Component<Props, State> {
   handleClose = () => {
     this.props.handleMeritClose();
     this.setState({
-      type: 'personal',
+      type: this.props.type || 'personal',
       users: [],
-      description: ''
+      description: '',
+      date: new Date()
     });
   }
 
@@ -77,8 +82,6 @@ export default class MeritDialog extends Component<Props, State> {
     return (
       <FullScreenDialog
         open={this.props.open}
-        appBarStyle={{ backgroundColor: 'var(--background-color)' }}
-        appBarZDepth={0}
         onRequestClose={this.handleClose}
       >
         { this.body }

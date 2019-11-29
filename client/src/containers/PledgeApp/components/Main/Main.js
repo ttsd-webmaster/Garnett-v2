@@ -10,6 +10,7 @@ import {
   Interviews,
   Settings
 } from 'containers/PledgeApp/components';
+import { PledgingData } from 'containers/DataApp/components/PledgingData/PledgingData';
 import type { User } from 'api/models';
 
 import React, { Component } from 'react';
@@ -32,7 +33,10 @@ const routes = [
     path: '/pledge-app/interviews',
     exact: true,
     content: props => (
-      <Interviews state={props.state} />
+      <Interviews
+        state={props.state}
+        handleRequestOpen={props.handleRequestOpen}
+      />
     )
   },
   {
@@ -48,9 +52,7 @@ const routes = [
   {
     path: '/pledge-app/brothers',
     exact: true,
-    content: props => (
-      <Contacts />
-    )
+    content: () => <Contacts />
   },
   {
     path: '/pledge-app/settings',
@@ -59,16 +61,21 @@ const routes = [
       <Settings
         history={props.history}
         state={props.state}
-        logoutCallBack={props.logoutCallBack}
+        logOut={props.logOut}
       />
     )
-  }
+  },
+  {
+    path: '/pledge-app/data',
+    exact: true,
+    content: () => <PledgingData />
+  },
 ];
 
 type Props = {
   history: RouterHistory,
   state: User,
-  logoutCallBack: () => void,
+  logOut: () => void,
   handleRequestOpen: () => void
 };
 

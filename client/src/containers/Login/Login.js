@@ -3,7 +3,6 @@
 import './Login.css';
 import ttLogo from './images/logo.png';
 import garnettLogo from './images/garnett.svg';
-import { isMobile } from 'helpers/functions.js';
 import { SpinnerDialog } from 'helpers/loaders.js';
 import {
   LoginOptions,
@@ -47,11 +46,9 @@ export class Login extends PureComponent<Props, State> {
   render() {
     return (
       <div className="login animate-in">
-        {!isMobile() && (
-          <a className="tt-logo" role="button" href="http://ucsdthetatau.org">
-            <img className="logo" src={ttLogo} alt="TT Logo"/>
-          </a>
-        )}
+        <a id="tt-logo" role="button" href="http://ucsdthetatau.org">
+          <img className="logo" src={ttLogo} alt="TT Logo"/>
+        </a>
 
         <div className="login-logo">
           <img src={garnettLogo} alt="Garnett Logo"/>

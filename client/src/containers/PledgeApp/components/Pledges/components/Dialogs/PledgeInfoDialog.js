@@ -36,11 +36,12 @@ export default class PledgeInfoDialog extends PureComponent<Props, State> {
   retrieveRemainingMerits() {
     const { pledge, state } = this.props;
     if (navigator.onLine) {
+      const { firstName, lastName, status } = state;
       if (state.status !== 'pledge') {
-        const { displayName } = this.props.state;
-        const pledgeDisplayName = pledge.firstName + pledge.lastName;
+        const fullName = `${firstName} ${lastName}`;
+        const pledgeName = `${pledge.firstName} ${pledge.lastName}`;
 
-        API.getRemainingMerits(displayName, pledgeDisplayName)
+        API.getRemainingMerits(fullName, pledgeName, status)
         .then((res) => {
           const remainingMerits = res.data;
           this.setState({ remainingMerits });

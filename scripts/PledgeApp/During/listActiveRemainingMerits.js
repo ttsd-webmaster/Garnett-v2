@@ -17,19 +17,34 @@ admin.initializeApp({
   databaseURL: process.env.FIREBASE_DATABASE_URL
 })
 
+function shouldCountTowardsMeritCap(merit) {
+  const nonPCStandardizedMerit =
+    merit.type === 'standardized' &&
+    merit.description !== 'PC Merits';
+
+  const shouldCountTowardsMeritCap =
+    merit.type === 'personal' ||
+    merit.type === 'interview' ||
+    nonPCStandardizedMerit;
+
+  return shouldCountTowardsMeritCap;
+}
+
+// Capitalize the first letter of every word in the given string
+const activeName = process.argv[2].match(/[A-Z][a-z]+|[0-9]+/g).join(' ');
+const pledgeName = process.argv[3].match(/[A-Z][a-z]+|[0-9]+/g).join(' ');
 const meritsRef = admin.database().ref('/merits');
+let remainingMerits = 100;
 
 meritsRef.once('value', (merits) => {
   merits.forEach((merit) => {
-    const { activeName, pledgeName, amount, description, type } = merit.val();
-    if (
-      type !== 'interview' &&
-      description.toLowerCase().includes('interview') &&
-      !description.toLowerCase().includes('schedul') &&
-      amount > 20
-    ) {
-      merit.ref.update({ type: 'interview' });
-      console.log(activeName, pledgeName, description, amount, type)
+    if ((activeName === merit.val().activeName) &&
+        (pledgeName === merit.val().pledgeName) &&
+        shouldCountTowardsMeritCap(merit.val())) {
+      console.log(merit.val().type, merit.val().description)
+      remainingMerits -= merit.val().amount;
     }
   });
+
+  console.log(remainingMerits);
 });

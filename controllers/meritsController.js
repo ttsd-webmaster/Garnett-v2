@@ -2,19 +2,47 @@ const admin = require('firebase-admin');
 const equal = require('deep-equal');
 const useragent = require('useragent');
 
+function baseMerits(status) {
+  switch (status) {
+    case 'alumni':
+      return 200;
+    case 'pipm':
+      return 'Unlimited';
+    default:
+      return 100;
+  }
+}
+
+function shouldCountTowardsMeritCap(merit) {
+  const nonPCStandardizedMerit =
+    merit.type === 'standardized' &&
+    merit.description !== 'PC Merits';
+
+  const shouldCountTowardsMeritCap =
+    merit.type === 'personal' ||
+    merit.type === 'interview' ||
+    nonPCStandardizedMerit;
+
+  return shouldCountTowardsMeritCap;
+}
+
 // Get next 50 merits for all merits list
 exports.get_all_merits = function(req, res) {
-  let { lastKey } = req.query;
-  const meritsRef = admin.database().ref('/merits');
+  let { sortByDate, lastKey } = req.query;
+  let meritsRef = admin.database().ref('/merits');
   let fetchedMerits = [];
   let updatedLastKey;
+  let hasMore = false;
+
+  meritsRef = sortByDate === 'true' ? meritsRef.orderByChild('date') : meritsRef.orderByKey();
 
   // Subsequent fetches
   if (lastKey) {
     lastKey = JSON.parse(lastKey);
+    meritsRef = sortByDate === 'true'
+      ? meritsRef.endAt(lastKey.value, lastKey.key)
+      : meritsRef.endAt(lastKey.key)
     meritsRef
-    .orderByChild('date')
-    .endAt(lastKey.value, lastKey.key)
     .limitToLast(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -29,12 +57,12 @@ exports.get_all_merits = function(req, res) {
         });
       }
       fetchedMerits = fetchedMerits.reverse().slice(1);
-      res.json({ fetchedMerits, lastKey: updatedLastKey });
+      hasMore = fetchedMerits.length > 0;
+      res.json({ fetchedMerits, lastKey: updatedLastKey, hasMore });
     });
   } else {
     // Initial fetch
     meritsRef
-    .orderByChild('date')
     .limitToLast(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -49,24 +77,29 @@ exports.get_all_merits = function(req, res) {
         });
       }
       fetchedMerits = fetchedMerits.reverse();
-      res.json({ fetchedMerits, lastKey: updatedLastKey });
+      hasMore = fetchedMerits.length > 0;
+      res.json({ fetchedMerits, lastKey: updatedLastKey, hasMore });
     });
   }
 };
 
 // Get next 50 merits for all merits list reversed
 exports.get_all_merits_reverse = function(req, res) {
-  let { lastKey } = req.query;
-  const meritsRef = admin.database().ref('/merits');
+  let { sortByDate, lastKey } = req.query;
+  let meritsRef = admin.database().ref('/merits');
   let fetchedMerits = [];
   let updatedLastKey;
+  let hasMore = false;
+
+  meritsRef = sortByDate === 'true' ? meritsRef.orderByChild('date') : meritsRef.orderByKey();
 
   // Subsequent fetches
   if (lastKey) {
     lastKey = JSON.parse(lastKey);
+    meritsRef = sortByDate === 'true'
+      ? meritsRef.startAt(lastKey.value, lastKey.key)
+      : meritsRef.startAt(lastKey.key)
     meritsRef
-    .orderByChild('date')
-    .startAt(lastKey.value, lastKey.key)
     .limitToFirst(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -79,12 +112,12 @@ exports.get_all_merits_reverse = function(req, res) {
         });
       }
       fetchedMerits = fetchedMerits.slice(1);
+      hasMore = fetchedMerits.length > 0;
       res.json({ fetchedMerits, lastKey: updatedLastKey });
     });
   } else {
     // Initial fetch
     meritsRef
-    .orderByChild('date')
     .limitToFirst(50)
     .once('value', (merits) => {
       if (merits.val()) {
@@ -96,78 +129,143 @@ exports.get_all_merits_reverse = function(req, res) {
           fetchedMerits.push(merit.val());
         });
       }
+      hasMore = fetchedMerits.length > 0;
       res.json({ fetchedMerits, lastKey: updatedLastKey });
     });
   }
 }
 
-// Get remaining merits for pledge
-exports.get_remaining_merits = function(req, res) {
-  const { displayName, pledgeName } = req.query;
-  const meritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName }/merits`);
+// Query for the specified pledge's merits
+exports.get_pledge_merits = function(req, res) {
+  const { pledgeName, sortByDate } = req.query;
+  let meritsRef = admin.database().ref('/merits');
+  meritsRef = sortByDate === 'true' ? meritsRef.orderByChild('date') : meritsRef.orderByKey();
 
   meritsRef.once('value', (merits) => {
-    res.json(merits.val());
+    const pledgeMerits = [];
+    if (merits.val()) {
+      merits.forEach((merit) => {
+        if (pledgeName === merit.val().pledgeName.replace(/ /g,'')) {
+          pledgeMerits.push(merit.val());
+        }
+      });
+    }
+    res.json({ merits: pledgeMerits.reverse() });
+  });
+};
+
+// Get remaining merits for pledge
+exports.get_remaining_merits = function(req, res) {
+  const { fullName, pledgeName, status } = req.query;
+  const meritsRef = admin.database().ref('/merits');
+  let remainingMerits = baseMerits(status);
+
+  if (status === 'pipm') {
+    return res.json(remainingMerits);
+  }
+
+  meritsRef.orderByChild('activeName').equalTo(fullName).once('value', (merits) => {
+    if (merits.exists()) {
+      merits.forEach((merit) => {
+        if (pledgeName === merit.val().pledgeName &&
+            shouldCountTowardsMeritCap(merit.val())) {
+          remainingMerits -= merit.val().amount;
+        }
+      });
+    }
+    res.json(remainingMerits);
   });
 };
 
 // Gets all the pledges for meriting as active
 exports.get_pledges_as_active = function(req, res) {
-  const { displayName } = req.query;
+  const { fullName, status } = req.query;
   const usersRef = admin.database().ref('/users');
-  const userPledgesRef = admin.database().ref(`/users/${displayName}/Pledges`);
+  const meritsRef = admin.database().ref('/merits');
+  const result = [];
+  const remainingMeritsMap = new Map();
 
-  userPledgesRef.once('value', (pledges) => {
-    if (pledges.val()) {
-      const result = [];
-      const promises = [];
-      const remainingMerits = new Map();
-      pledges.forEach((pledge) => {
-        remainingMerits.set(pledge.key, pledge.val().merits);
-        promises.push(usersRef.child(pledge.key).once('value'))
-      });
+  meritsRef.orderByChild('activeName').equalTo(fullName).once('value', (merits) => {
+    if (merits.exists() && status !== 'pipm') {
+      merits.forEach((merit) => {
+        const { pledgeName, amount } = merit.val();
+        let remainingMerits =
+          remainingMeritsMap.get(pledgeName) || baseMerits(status);
 
-      Promise.all(promises).then((results) => {
-        results.forEach((user) => {
-          if (user.val()) {
-            const currentPledge = user.val();
-            currentPledge.displayName = user.key.replace(/ /g, '');
-            currentPledge.remainingMerits = remainingMerits.get(user.key);
-            result.push(currentPledge);
-          }
-        })
-        res.json(result)
+        if (shouldCountTowardsMeritCap(merit.val())) {
+          remainingMerits -= amount;
+        }
+
+        remainingMeritsMap.set(pledgeName, remainingMerits);
       });
     }
+
+    usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
+      if (pledges.exists()) {
+        pledges.forEach((pledge) => {
+          const currentPledge = pledge.val();
+          const pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
+          currentPledge.displayName = pledge.key;
+          currentPledge.remainingMerits = remainingMeritsMap.get(pledgeName) || baseMerits(status);
+          result.push(currentPledge);
+        });
+        res.json(result);
+      } else {
+        res.json(result);
+      }
+    });
   });
 };
 
 // Gets all the actives for meriting as pledge
 exports.get_actives_as_pledge = function(req, res) {
-  const { displayName, showAlumni } = req.query;
+  const { fullName, showAlumni } = req.query;
   const usersRef = admin.database().ref('/users');
+  const meritsRef = admin.database().ref('/merits');
+  const result = [];
+  const meritsToSubtract = new Map();
 
-  usersRef.once('value', (users) => {
-    const result = [];
+  meritsRef.orderByChild('pledgeName').equalTo(fullName).once('value', (merits) => {
+    if (merits.exists()) {
+      merits.forEach((merit) => {
+        const { activeName, amount } = merit.val();
+        let subtracted = meritsToSubtract.get(activeName) || 0;
 
-    users.forEach((user) => {
-      const { status, Pledges } = user.val();
-      if (status !== 'pledge') {
-        const currentActive = user.val();
-        currentActive.displayName = user.key.replace(/ /g, '');
-        currentActive.remainingMerits = Pledges[displayName].merits;
-
-        if (showAlumni === 'true') {
-          if (status === 'alumni') {
-            result.push(currentActive);
-          }
-        } else if (status !== 'alumni') {
-          result.push(currentActive);
+        if (shouldCountTowardsMeritCap(merit.val())) {
+          subtracted += amount;
         }
-      }
-    });
 
-    res.json(result);
+        meritsToSubtract.set(activeName, subtracted);
+      });
+    }
+
+    usersRef.once('value', (users) => {
+      users.forEach((active) => {
+        const { status } = active.val();
+        if (status !== 'pledge') {
+          const currentActive = active.val();
+          const activeName = `${active.val().firstName} ${active.val().lastName}`;
+          const meritsUsed = meritsToSubtract.get(activeName);
+          currentActive.displayName = active.key;
+          currentActive.remainingMerits = baseMerits(status);
+
+          if (status !== 'pipm' && meritsUsed) {
+            currentActive.remainingMerits -= meritsUsed;
+          }
+
+          if (showAlumni === 'true') {
+            if (status === 'alumni') {
+              result.push(currentActive);
+            }
+          } else {
+            if (status !== 'alumni') {
+              result.push(currentActive);
+            }
+          }
+        }
+      });
+      res.json(result);
+    });
   });
 };
 
@@ -209,7 +307,7 @@ exports.create_merit = function(req, res) {
   const { user, selectedUsers } = req.body;
   const platform = useragent.parse(req.headers['user-agent']).toString();
   const meritsRef = admin.database().ref('/merits');
-  const activesThatMerited = [];
+  const interviewsRef = admin.database().ref('/interviews');
   const meritsToAdd = [];
   let notEnoughMeritsUser;
 
@@ -230,28 +328,12 @@ exports.create_merit = function(req, res) {
       pledge = selectedUser;
     }
 
-    const nonPCStandardizedMerit = (
-      merit.type === 'standardized' &&
-      merit.description !== 'PC Merits'
-    );
-    const shouldCountTowardsMeritCap = (
-      active.status !== 'pipm' &&
-      (
-        merit.type === 'personal' ||
-        merit.type === 'interview' ||
-        nonPCStandardizedMerit
-      )
-    );
-
     // Push active to array if not pi or pm
-    if (shouldCountTowardsMeritCap) {
+    if (shouldCountTowardsMeritCap(merit) && active.status !== 'pipm') {
+      // Check if user does not have enough merits
       if (merit.amount > selectedUser.remainingMerits) {
         const userName = `${selectedUser.firstName} ${selectedUser.lastName}`;
         notEnoughMeritsUser = userName;
-      } else {
-        const activePledgeRef = admin.database().ref(`/users/${active.displayName}/Pledges/${pledge.displayName}`);
-        const updatedMerits = selectedUser.remainingMerits - merit.amount;
-        activesThatMerited.push([activePledgeRef, updatedMerits]);
       }
     }
 
@@ -275,12 +357,10 @@ exports.create_merit = function(req, res) {
     // Add the merits to the DB
     meritsToAdd.forEach((merit) => {
       meritsRef.push(merit);
-    });
-    // Update the actives' remaining merits
-    activesThatMerited.forEach((activeThatMerited) => {
-      const activePledgeRef = activeThatMerited[0];
-      const merits = activeThatMerited[1];
-      activePledgeRef.update({ merits });
+      if (merit.type === 'interview') {
+        const { activeName, pledgeName } = merit;
+        interviewsRef.push({ activeName, pledgeName });
+      }
     });
     res.sendStatus(200);
   }
@@ -301,9 +381,10 @@ exports.update_merit = function(req, res) {
       // Find the merit in the merits list
       if (equal(merit.val(), meritToEdit)) {
         merit.ref.update({ date });
-        res.sendStatus(200);
       }
     });
+
+    res.sendStatus(200);
   });
 }
 
@@ -319,37 +400,15 @@ exports.delete_merit = function(req, res) {
 
   meritsRef.once('value', (merits) => {
     merits.forEach((merit) => {
+      const activeName = merit.val().activeName.replace(/ /g,'');
+      const pledgeName = merit.val().pledgeName.replace(/ /g,'');
+
       // Find the merit in the merits list
       if (equal(merit.val(), meritToDelete)) {
-        // Remove the merit from all merits list
-        merit.ref.remove(() => {
-          const nonPCStandardizedMerit = (
-            meritToDelete.type === 'standardized' &&
-            meritToDelete.description !== 'PC Merits'
-          );
-          const shouldCountTowardsMeritCap = (
-            status !== 'pipm' &&
-            (
-              meritToDelete.type === 'personal' ||
-              meritToDelete.type === 'interview' ||
-              nonPCStandardizedMerit
-            )
-          );
-
-          // Update the active's remaining merits for the pledge
-          if (shouldCountTowardsMeritCap) {
-            const pledgeName = meritToDelete.pledgeName.replace(/ /g, '');
-            const activePledgeMeritsRef = admin.database().ref(`/users/${displayName}/Pledges/${pledgeName}`);
-            activePledgeMeritsRef.child('merits').once('value', (meritCount) => {
-              const updatedMeritCount = meritCount.val() + meritToDelete.amount;
-              activePledgeMeritsRef.update({ merits: updatedMeritCount });
-              res.sendStatus(200);
-            });
-          } else {
-            res.sendStatus(200);
-          }
-        });
+        merit.ref.remove();
       }
     });
+
+    res.sendStatus(200);
   });
 };

@@ -18,18 +18,6 @@ export default {
     const params = { displayName };
     return axios.get('/api/pledges', { params });
   },
-  getPledgeMerits: function(pledgeName: string) {
-    const params = { pledgeName };
-    return axios.get('/api/pledge/merits', { params });
-  },
-  getInterviewsProgress: function(displayName: string, status: string) {
-    const params = { displayName, status };
-    return axios.get('/api/interviews', { params });
-  },
-  getPledgeCompletedInterviews: function(pledgeName: string) {
-    const params = { pledgeName };
-    return axios.get('/api/pledge/interviews', { params });
-  },
   getPledgeComplaints: function(pledgeName: string) {
     const params = { pledgeName };
     return axios.get('/api/pledge/complaints', { params });
@@ -41,7 +29,7 @@ export default {
   forgotPassword: function(email: string) {
     return axios.put('/api/forgotpassword', { email });
   },
-  logout: function() {
+  logOut: function() {
     return axios.put('/api/logout');
   },
 
@@ -57,25 +45,29 @@ export default {
 
   // Merit Book
   // GET requests
-  getAllMerits: function(lastKey: { value?: string, key?: string }) {
-    const params = { lastKey };
+  getAllMerits: function(sortByDate: boolean, lastKey: { value?: string, key?: string }) {
+    const params = { sortByDate, lastKey };
     return axios.get('/api/merit/all', { params });
   },
-  getAllMeritsReverse: function(lastKey: { value?: string, key?: string }) {
-    const params = { lastKey };
+  getAllMeritsReverse: function(sortByDate: boolean, lastKey: { value?: string, key?: string }) {
+    const params = { sortByDate, lastKey };
     return axios.get('/api/merit/all/reverse', { params });
   },
-  getRemainingMerits: function(displayName: string, pledgeName: string) {
-    const params = { displayName, pledgeName };
+  getPledgeMerits: function(pledgeName: string, sortByDate: boolean) {
+    const params = { pledgeName, sortByDate };
+    return axios.get('/api/merit/pledge/merits', { params });
+  },
+  getRemainingMerits: function(fullName: string, pledgeName: string, status: string) {
+    const params = { fullName, pledgeName, status };
     return axios.get('/api/merit/active/remainingMerits', { params });
   },
-  getPledgesForMerit: function(displayName: string) {
-    const params = { displayName };
-    return axios.get('/api/merit/active/pledges', { params });
+  getPledgesForMerit: function(fullName: string, status: string) {
+    const params = { fullName, status };
+    return axios.get('/api/merit/pledges', { params });
   },
-  getActivesForMerit: function(displayName: string, showAlumni?: boolean) {
-    const params = { displayName, showAlumni };
-    return axios.get('/api/merit/pledge/actives', { params });
+  getActivesForMerit: function(fullName: string, showAlumni?: boolean) {
+    const params = { fullName, showAlumni };
+    return axios.get('/api/merit/actives', { params });
   },
   getChalkboardsForMerit: function(fullName: string) {
     const params = { fullName };
@@ -91,6 +83,26 @@ export default {
   deleteMerit: function(displayName: string, status: string, meritToDelete: Merit) {
     const body = { displayName, status, meritToDelete };
     return axios.delete('/api/merit', { data: body });
+  },
+
+  // Interviews
+  // GET requests
+  getInterviewsProgress: function(fullName: string, status: string) {
+    const params = { fullName, status };
+    return axios.get('/api/interview', { params });
+  },
+  getPledgeCompletedInterviews: function(pledgeName: string) {
+    const params = { pledgeName };
+    return axios.get('/api/interview/pledge', { params });
+  },
+  // PUT requests
+  completeInterview: function(activeName: string, pledgeName: string) {
+    const body = { activeName, pledgeName };
+    return axios.put('/api/interview', body);
+  },
+  deleteInterview: function(activeName: string, pledgeName: string) {
+    const body = { activeName, pledgeName };
+    return axios.delete('/api/interview', { data: body });
   },
 
   // Chalkboards

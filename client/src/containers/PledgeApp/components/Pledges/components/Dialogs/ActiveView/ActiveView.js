@@ -58,6 +58,7 @@ export class ActiveView extends PureComponent<Props, State> {
       return (
         <FullScreenDialog
           title="Pledge"
+          withTabs
           open={open}
           onRequestClose={this.props.handleClose}
         >
@@ -84,7 +85,7 @@ export class ActiveView extends PureComponent<Props, State> {
               />
             </div>
             <MeritsList pledgeName={displayName} />
-            <InterviewsList pledgeName={displayName} />
+            <InterviewsList pledgeName={fullName} />
           </SwipeableViews>
         </FullScreenDialog>
       )
@@ -117,7 +118,7 @@ export class ActiveView extends PureComponent<Props, State> {
             <MeritsList pledgeName={displayName} />
           </Tab>
           <Tab style={getTabStyle(index === 2)} label="Interviews" value={2}>
-            <InterviewsList pledgeName={displayName} />
+            <InterviewsList pledgeName={fullName} />
           </Tab>
         </Tabs>
       </Dialog>

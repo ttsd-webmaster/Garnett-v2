@@ -28,9 +28,7 @@ const FILTER_OPTIONS = [
 ];
 
 function sortPledges(pledges: Array<User>, filter: string): Array<User> {
-  if (!pledges) {
-    return null;
-  } else if (filter === 'totalMerits' || filter === 'completedInterviews') {
+  if (filter === 'totalMerits' || filter === 'completedInterviews') {
     pledges = pledges.sort(function(a, b) {
       return a[filter] < b[filter] ? 1 : -1;
     });
@@ -63,7 +61,7 @@ export class Pledges extends PureComponent<Props, State> {
     const pledges = JSON.parse(localStorage.getItem('pledges'));
     const filter = localStorage.getItem('pledgesFilter') || 'lastName';
     this.state = {
-      pledges: sortPledges(pledges, filter),
+      pledges: pledges ? sortPledges(pledges, filter) : null,
       pledge: null,
       filter,
       reverse: false,
@@ -148,6 +146,7 @@ export class Pledges extends PureComponent<Props, State> {
     })
     .catch(error => {
       console.error(`Error: ${error}`);
+      localStorage.setItem('pledges', '[]');
       this.setState({ pledges: [] });
     });
   }

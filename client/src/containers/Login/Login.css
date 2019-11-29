@@ -5,10 +5,15 @@
   overflow: auto;
 }
 
-.tt-logo {
+#tt-logo {
   position: absolute;
   top: 20px;
   left: 20px;
+}
+@media (max-width: 767px) {
+  #tt-logo {
+    display: none;
+  }
 }
 
 /* Logo and Title */

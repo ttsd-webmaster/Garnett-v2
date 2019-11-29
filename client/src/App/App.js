@@ -18,6 +18,7 @@ import {
   PledgeApp
 } from 'containers';
 import { PublicRoute, PrivateRoute } from 'components/Routes';
+import ScrollToTop from 'components/ScrollToTop';
 import type { User } from 'api/models';
 
 import React, { Component } from 'react';
@@ -168,19 +169,15 @@ export default class App extends Component<{}, State> {
 
   get rootPath() {
     const route = localStorage.getItem('route');
-    if (this.state.user.status === 'pledge') {
-      return <Redirect to="/pledge-app" />;
-    } else {
-      switch (route) {
-        case 'pledge-app':
-          return <Redirect to="/pledge-app" />;
-        case 'data-app':
-          return <Redirect to="/data-app" />;
-        case 'delibs-app':
-          return <Redirect to="/delibs-app" />;
-        default:
-          return <Redirect to="/home" />;
-      }
+    switch (route) {
+      case 'pledge-app':
+        return <Redirect to="/pledge-app" />;
+      case 'data-app':
+        return <Redirect to="/data-app" />;
+      case 'delibs-app':
+        return <Redirect to="/delibs-app" />;
+      default:
+        return <Redirect to="/home" />;
     }
   }
 
@@ -193,23 +190,25 @@ export default class App extends Component<{}, State> {
 
     return (
       <Router>
+        <ScrollToTop />
         <div>
-          <PrivateRoute
-            exact
-            path="/"
-            authenticated={authenticated}
-            component={() => this.rootPath}
-          />
-          <PublicRoute
-            exact
-            path="/login"
-            state={user}
-            authenticated={authenticated}
-            loginCallback={this.loginCallback}
-            handleRequestOpen={this.handleRequestOpen}
-            component={Login}
-          />
           <Switch>
+            <PrivateRoute
+              exact
+              path="/"
+              state={user}
+              authenticated={authenticated}
+              component={() => this.rootPath}
+            />
+            <PublicRoute
+              exact
+              path="/login"
+              state={user}
+              authenticated={authenticated}
+              loginCallback={this.loginCallback}
+              handleRequestOpen={this.handleRequestOpen}
+              component={Login}
+            />
             {routes.map((route, index) => (
               <PrivateRoute
                 key={index}
@@ -218,7 +217,7 @@ export default class App extends Component<{}, State> {
                 state={user}
                 authenticated={authenticated}
                 component={route.component}
-                logoutCallBack={this.logoutCallBack}
+                logOut={this.logoutCallBack}
                 handleRequestOpen={this.handleRequestOpen}
               />
             ))}

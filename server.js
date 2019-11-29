@@ -8,6 +8,7 @@ const firebase = require('@firebase/app').firebase;
 const admin = require('firebase-admin');
 const indexRouter = require('./routes/index');
 const meritsRouter = require('./routes/merits');
+const interviewsRouter = require('./routes/interviews');
 const chalkboardsRouter = require('./routes/chalkboards');
 const complaintsRouter = require('./routes/complaints');
 const notificationsRouter = require('./routes/notifications');
@@ -67,6 +68,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api', indexRouter);
 app.use('/api/merit', meritsRouter);
+app.use('/api/interview', interviewsRouter);
 app.use('/api/chalkboard', chalkboardsRouter);
 app.use('/api/complaint', complaintsRouter);
 app.use('/api/notification', notificationsRouter);

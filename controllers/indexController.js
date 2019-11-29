@@ -40,135 +40,53 @@ exports.get_pledges = function(req, res) {
   const { displayName } = req.query;
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
+  const interviewsRef = admin.database().ref('/interviews');
   const pledgesMap = new Map();
 
   usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
     if (!pledges.val()) {
       return res.status(400).send('No pledges found.');
     }
+
     const pledgesArray = Object.keys(pledges.val()).map(function(key) {
-      if (pledges.val()[key] !== displayName) {
-        return pledges.val()[key];
-      }
+      pledgesMap.set(key, { merits: 0, interviews: 0 });
+      return pledges.val()[key];
     });
 
+    // Map the pledge's total merits
     meritsRef.once('value', (merits) => {
-      // Map the pledge's total merits
-      if (merits.val()) {
+      if (merits.exists()) {
         merits.forEach((merit) => {
           const pledgeName = merit.val().pledgeName.replace(/ /g, '');
-          const pledge = pledgesMap.get(pledgeName) || { merits: 0, interviews: 0 };
+          const pledge = pledgesMap.get(pledgeName);
           pledge.merits += merit.val().amount;
-          if (merit.val().type === 'interview') {
-            pledge.interviews += 1;
-          }
           pledgesMap.set(pledgeName, pledge);
         });
       }
-      // Set all the pledge's total merits
-      pledgesArray.forEach((pledge) => {
-        const pledgeName = (pledge.firstName + pledge.lastName).replace(/ /g, '');
-        const mappedPledge = pledgesMap.get(pledgeName);
-        pledge.displayName = pledgeName;
-        pledge.totalMerits = mappedPledge.merits;
-        pledge.completedInterviews = mappedPledge.interviews;
-      });
 
-      res.json(pledgesArray);
-    });
-  });
-};
-
-// Query for the specified pledge's merits
-exports.get_pledge_merits = function(req, res) {
-  const { pledgeName } = req.query;
-  const meritsRef = admin.database().ref('/merits');
-
-  meritsRef.orderByChild('date').once('value', (merits) => {
-    const pledgeMerits = [];
-    if (merits.val()) {
-      merits.forEach((merit) => {
-        if (pledgeName === merit.val().pledgeName.replace(/ /g,'')) {
-          pledgeMerits.push(merit.val());
+      // Map the pledge's total interviews
+      interviewsRef.once('value', (interviews) => {
+        if (interviews.exists()) {
+          interviews.forEach((interview) => {
+            const pledgeName = interview.val().pledgeName.replace(/ /g, '');
+            const pledge = pledgesMap.get(pledgeName);
+            pledge.interviews += 1;
+            pledgesMap.set(pledgeName, pledge);
+          });
         }
+
+        // Set all the pledge's total merits
+        pledgesArray.forEach((pledge) => {
+          const pledgeName = (pledge.firstName + pledge.lastName).replace(/ /g, '');
+          const mappedPledge = pledgesMap.get(pledgeName);
+          pledge.displayName = pledgeName;
+          pledge.totalMerits = mappedPledge.merits;
+          pledge.completedInterviews = mappedPledge.interviews;
+        });
+
+        res.json(pledgesArray.filter(pledge => pledge.displayName !== displayName));
       });
-    }
-    res.json({ merits: pledgeMerits.reverse() });
-  });
-};
-
-// Query for the user's interviews progress
-exports.get_interviews_progress = function(req, res) {
-  const { displayName, status } = req.query;
-  const usersRef = admin.database().ref('/users');
-  const meritsRef = admin.database().ref('/merits');
-  const completedNames = [];
-  const completed = [];
-  const incomplete = [];
-
-  meritsRef.orderByChild('type').equalTo('interview').once('value', (merits) => {
-    merits.forEach((merit) => {
-      const activeName = merit.val().activeName.replace(/ /g, '');
-      const pledgeName = merit.val().pledgeName.replace(/ /g, '');
-      let userCheck;
-      let interviewCheck;
-
-      if (status === 'pledge') {
-        userCheck = pledgeName;
-        interviewCheck = activeName;
-      } else {
-        userCheck = activeName;
-        interviewCheck = pledgeName;
-      }
-
-      if (displayName === userCheck && !completedNames.includes(interviewCheck)) {
-        completedNames.push(interviewCheck);
-      }
     });
-
-    usersRef.once('value', (users) => {
-      users.forEach((user) => {
-        if (status === 'pledge') {
-          if (user.val().status !== 'alumni' && user.val().status !== 'pledge') {
-            if (completedNames.includes(user.key)) {
-              completed.push(user.val());
-            } else {
-              incomplete.push(user.val());
-            }
-          }
-        } else {
-          if (user.val().status === 'pledge') {
-            if (completedNames.includes(user.key)) {
-              completed.push(user.val());
-            } else {
-              incomplete.push(user.val());
-            }
-          }
-        }
-      });
-
-      res.json({ completed, incomplete });
-    });
-  });
-};
-
-// Query for the pledge's completed interviews
-exports.get_pledge_completed_interviews = function(req, res) {
-  const { pledgeName } = req.query;
-  const meritsRef = admin.database().ref('/merits');
-  let interviews = [];
-
-  meritsRef.orderByChild('type').equalTo('interview').once('value', (merits) => {
-    merits.forEach((merit) => {
-      const pledgeCheck = merit.val().pledgeName.replace(/ /g, '');
-      if (pledgeName === pledgeCheck) {
-        interviews.push(merit.val());
-      }
-    });
-
-    interviews = interviews.sort((a, b) => b.date - a.date);
-
-    res.json(interviews);
   });
 };
 
@@ -216,10 +134,16 @@ exports.signup = function(req, res) {
   const userRef = usersRef.child(displayName);
 
   userRef.once('value', (snapshot) => {
-    if (snapshot.val() && year !== 'Alumni') {
-      return res.status(400).send('This active is already signed up.');
-    } else if (!snapshot.val() && year === 'Alumni') {
-      return res.status(400).send('This alumni does not exist.');
+    if (code === activeCode) {
+      if (snapshot.val() && year !== 'Alumni') {
+        return res.status(400).send('This active is already signed up.');
+      } else if (!snapshot.val() && year === 'Alumni') {
+        return res.status(400).send('This alumni does not exist.');
+      }
+    } else if (code === pledgeCode) {
+      if (!snapshot.val()) {
+        return res.status(400).send('This pledge does not exist. Try a different name.');
+      }
     }
     // Create user with email and password
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -236,97 +160,8 @@ exports.signup = function(req, res) {
             phone,
             email
           };
-          // Alumni
-          if (year === 'Alumni') {
-            userInfo.status = 'alumni';
-            userRef.update(userInfo);
-          } else {
-            const bucket = admin.storage().bucket();
-            const file = bucket.file(`${displayName}.jpg`);
-            // Set the status of the user based on the authorization code
-            if (code === pledgeCode) {
-              userInfo.status = 'pledge';
-            } else {
-              userInfo.status = 'active';
-            }
-            // Sets user photo here
-            // Checks first if the .jpg file is in firebase storage
-            file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
-            .then((jpgUrls) => {
-              const jpgPhoto = jpgUrls[0];
-              urlExists(jpgPhoto, function(err, exists) {
-                if (exists) {
-                  userInfo.photoURL = jpgPhoto;
-                  userRef.set(userInfo);
-                } else {
-                  // Checks if the .JPG file is in firebase storage
-                  const file = bucket.file(`${displayName}.JPG`);
-                  file.getSignedUrl({ action: 'read', expires: '03-09-2491' })
-                  .then((signedUrls) => {
-                    const JPGPhoto = JPGUrls[0];
-                    urlExists(JPGPhoto, function(err, exists) {
-                      if (exists) {
-                        userInfo.photoURL = JPGPhoto;
-                        userRef.set(userInfo);
-                      } else {
-                        const defaultPhoto = 'https://cdn1.iconfinder.com/data/icons/ninja-things-1/720/ninja-background-512.png';
-                        userInfo.photoURL = defaultPhoto;
-                        userRef.set(userInfo);
-                      }
-                    });
-                  })
-                  .catch((err) => console.error(err));
-                }
-              });
-            })
-            .catch((err) => console.error(err));
-          }
 
-          // Set merits
-          usersRef.once('value', (users) => {
-            // Set merit counts based on the user's status
-            if (code === pledgeCode) {
-              users.forEach((user) => {
-                switch (user.val().status) {
-                  case 'alumni':
-                    user.ref.child(`/Pledges/${displayName}`).set({
-                      merits: 200
-                    });
-                    break;
-                  case 'pipm':
-                    user.ref.child(`/Pledges/${displayName}`).set({
-                      merits: 'Unlimited'
-                    });
-                    break
-                  case 'pledge':
-                    // don't give pledges a merit count for pledges
-                    break
-                  default:
-                    user.ref.child(`/Pledges/${displayName}`).set({
-                      merits: 100
-                    });
-                }
-              });
-            } else if (year === 'Alumni') {
-              users.forEach((user) => {
-                if (user.val().status === 'pledge') {
-                  const pledgeName = user.key;
-                  userRef.child(`/Pledges/${pledgeName}`).set({
-                    merits: 200
-                  });
-                }
-              });
-            } else {
-              users.forEach((user) => {
-                if (user.val().status === 'pledge') {
-                  const pledgeName = user.key;
-                  userRef.child(`/Pledges/${pledgeName}`).set({
-                    merits: 100
-                  });
-                }
-              });
-            }
-          });
+          userRef.update(userInfo);
 
           user.sendEmailVerification()
           .then(function() {

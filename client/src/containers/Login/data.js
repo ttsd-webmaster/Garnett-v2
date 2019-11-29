@@ -18,7 +18,7 @@ export const selectData = [
     options: [
       'Charter', 'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta',
       'Theta', 'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi',
-      'Rho', 'Sigma', 'Tau', 'Upsilon'
+      'Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi'
     ]
   },
   {

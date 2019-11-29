@@ -10,7 +10,7 @@ import {
 } from 'helpers/functions.js';
 import { MyMeritsList, AllMeritsList } from './components';
 import { LoadableMobileMeritDialog } from './components/Dialogs';
-import { ToggleViewHeader } from 'components';
+import ToggleViewHeader from 'components/ToggleViewHeader';
 import type { User } from 'api/models';
 
 import React, { PureComponent, Fragment } from 'react';
