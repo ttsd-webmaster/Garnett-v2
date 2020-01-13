@@ -69,10 +69,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', indexRouter);
 app.use('/api/merit', meritsRouter);
 app.use('/api/interview', interviewsRouter);
-app.use('/api/chalkboard', chalkboardsRouter);
-app.use('/api/complaint', complaintsRouter);
 app.use('/api/notification', notificationsRouter);
 app.use('/api/data', dataRouter);
+
+// Not used
+app.use('/api/chalkboard', chalkboardsRouter);
+app.use('/api/complaint', complaintsRouter);
 app.use('/api/delibs', delibsRouter);
 
 app.get('/*', (req, res) => {

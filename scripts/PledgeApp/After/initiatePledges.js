@@ -25,11 +25,6 @@ usersRef.once('value', (snapshot) => {
       console.log(user.key);
       // Update pledge's status to active
       user.ref.update({ status: 'active' });
-    } else {
-      // Remove Pledges from actives and alumni
-      user.ref.child('Pledges').remove(() => {
-        console.log(`Removed pledges from ${user.key}.`);
-      });
     }
   });
 });
