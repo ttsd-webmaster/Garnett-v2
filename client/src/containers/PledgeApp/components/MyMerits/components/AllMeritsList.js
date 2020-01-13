@@ -183,7 +183,6 @@ export class AllMeritsList extends PureComponent<Props, State> {
     return (
       <Fragment>
         <FilterHeader
-          filterName={filterName}
           openPopover={this.openPopover}
           isReversed={isReversed}
           reverse={this.reverse}

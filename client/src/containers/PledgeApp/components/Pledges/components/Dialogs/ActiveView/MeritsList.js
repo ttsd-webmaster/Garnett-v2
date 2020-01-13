@@ -108,7 +108,6 @@ export class MeritsList extends PureComponent<Props, State> {
     return (
       <List className="garnett-list">
         <FilterHeader
-          filterName={filterName}
           openPopover={this.openPopover}
           isReversed={isReversed}
           reverse={this.reverse}

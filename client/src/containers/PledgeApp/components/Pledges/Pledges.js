@@ -218,7 +218,6 @@ export class Pledges extends PureComponent<Props, State> {
         <FilterHeader
           title={state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges'}
           status={state.status}
-          filterName={this.filterLabel}
           openPopover={this.openPopover}
           isReversed={reverse}
           reverse={this.reverse}

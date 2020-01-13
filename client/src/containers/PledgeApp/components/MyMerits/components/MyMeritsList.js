@@ -110,9 +110,9 @@ export class MyMeritsList extends PureComponent<Props, State> {
       if (merits.val()) {
         myMerits = Object.keys(merits.val()).map(function(key) {
           return merits.val()[key];
-        });
+        }).reverse();
         if (this.sortByDate) {
-          myMerits = myMerits.sort((a, b) => a.date - b.date).reverse();
+          myMerits = myMerits.sort((a, b) => b.date - a.date);
         }
       }
       localStorage.setItem('myMerits', JSON.stringify(myMerits));
@@ -215,7 +215,6 @@ export class MyMeritsList extends PureComponent<Props, State> {
     return (
       <Fragment>
         <FilterHeader
-          filterName={filterName}
           openPopover={this.openPopover}
           isReversed={isReversed}
           reverse={this.reverse}

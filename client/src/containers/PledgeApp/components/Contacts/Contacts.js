@@ -138,7 +138,6 @@ export class Contacts extends PureComponent<Props, State> {
         <FilterHeader
           className="garnett-subheader"
           title={subgroup}
-          filterName={this.state.filterName}
           openPopover={this.openPopover}
           isReversed={this.state.reverse}
           reverse={this.reverse}

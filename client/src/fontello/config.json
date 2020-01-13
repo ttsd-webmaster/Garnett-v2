@@ -173,6 +173,12 @@
       "css": "trash-empty",
       "code": 59409,
       "src": "fontawesome"
+    },
+    {
+      "uid": "27b13eff5eb0ca15e01a6e65ffe6eeec",
+      "css": "sort-alt-down",
+      "code": 61793,
+      "src": "fontawesome"
     }
   ]
 }
