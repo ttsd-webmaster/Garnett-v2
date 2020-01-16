@@ -183,20 +183,19 @@ exports.get_pledges_as_active = function(req, res) {
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
   const result = [];
-  const remainingMeritsMap = new Map();
+  const meritsUsed = new Map();
 
   meritsRef.orderByChild('activeName').equalTo(fullName).once('value', (merits) => {
     if (merits.exists() && status !== 'pipm') {
       merits.forEach((merit) => {
         const { pledgeName, amount } = merit.val();
-        let remainingMerits =
-          remainingMeritsMap.get(pledgeName) || baseMerits(status);
+        let subtracted = meritsUsed.get(pledgeName) || 0;
 
         if (shouldCountTowardsMeritCap(merit.val())) {
-          remainingMerits -= amount;
+          subtracted += amount;
         }
 
-        remainingMeritsMap.set(pledgeName, remainingMerits);
+        meritsUsed.set(pledgeName, subtracted);
       });
     }
 
@@ -205,8 +204,14 @@ exports.get_pledges_as_active = function(req, res) {
         pledges.forEach((pledge) => {
           const currentPledge = pledge.val();
           const pledgeName = `${pledge.val().firstName} ${pledge.val().lastName}`;
+          const meritsToDeduct = meritsUsed.get(pledgeName);
           currentPledge.displayName = pledge.key;
-          currentPledge.remainingMerits = remainingMeritsMap.get(pledgeName) || baseMerits(status);
+          currentPledge.remainingMerits = baseMerits(status);
+
+          if (status !== 'pipm' && meritsToDeduct) {
+            currentPledge.remainingMerits -= meritsToDeduct;
+          }
+
           result.push(currentPledge);
         });
         res.json(result);
@@ -223,19 +228,19 @@ exports.get_actives_as_pledge = function(req, res) {
   const usersRef = admin.database().ref('/users');
   const meritsRef = admin.database().ref('/merits');
   const result = [];
-  const meritsToSubtract = new Map();
+  const meritsUsed = new Map();
 
   meritsRef.orderByChild('pledgeName').equalTo(fullName).once('value', (merits) => {
     if (merits.exists()) {
       merits.forEach((merit) => {
         const { activeName, amount } = merit.val();
-        let subtracted = meritsToSubtract.get(activeName) || 0;
+        let subtracted = meritsUsed.get(activeName) || 0;
 
         if (shouldCountTowardsMeritCap(merit.val())) {
           subtracted += amount;
         }
 
-        meritsToSubtract.set(activeName, subtracted);
+        meritsUsed.set(activeName, subtracted);
       });
     }
 
@@ -245,12 +250,12 @@ exports.get_actives_as_pledge = function(req, res) {
         if (status !== 'pledge') {
           const currentActive = active.val();
           const activeName = `${active.val().firstName} ${active.val().lastName}`;
-          const meritsUsed = meritsToSubtract.get(activeName);
+          const meritsToDeduct = meritsUsed.get(activeName);
           currentActive.displayName = active.key;
           currentActive.remainingMerits = baseMerits(status);
 
-          if (status !== 'pipm' && meritsUsed) {
-            currentActive.remainingMerits -= meritsUsed;
+          if (status !== 'pipm' && meritsToDeduct) {
+            currentActive.remainingMerits -= meritsToDeduct;
           }
 
           if (showAlumni === 'true') {
