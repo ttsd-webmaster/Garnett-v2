@@ -76,11 +76,12 @@ export class UrlApp extends PureComponent<Props, State> {
         this.handleRequestOpen('Invalid URL to shorten!')
       } else if (this.isThetaTauUrl(newUrl) === false) {
         this.handleRequestOpen('The new URL must start with "www.ucsdthetatau.org/"!')
+      } else {
+        let params = {urlToShorten, newUrl}
+        API.createUrl(params).then((res) => {
+          this.handleRequestOpen(res.data)
+        })
       }
-			let params = {urlToShorten, newUrl}
-			API.createUrl(params).then((res) => {
-        this.handleRequestOpen(res.data)
-      })
     } else {
       this.handleRequestOpen('Invalid URLs!')
     }
@@ -96,11 +97,12 @@ export class UrlApp extends PureComponent<Props, State> {
         this.handleRequestOpen('Invalid URL to shorten!')
       } else if (this.isThetaTauUrl(newUrl) === false) {
         this.handleRequestOpen('The new URL must start with "www.ucsdthetatau.org/"!')
-      }
-			let params = {urlToUpdate: urlToShorten, newUrl}
-			API.updateUrl(params).then((res) => {
+      } else {
+        let params = {urlToUpdate: urlToShorten, newUrl}
+			  API.updateUrl(params).then((res) => {
         this.handleRequestOpen(res.data)
       })
+    }
     } else {
       this.handleRequestOpen('Invalid URLs!')
     }
