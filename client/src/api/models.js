@@ -64,3 +64,8 @@ export type MeritInfo = {
   selectedUsers: Array<Object>, // TODO: Change Object to Pledge type
   merit: ActiveMerit | PledgeMerit
 };
+
+export type UrlInfo = {
+  urlToShorten: string,
+  newUrl: string
+}

@@ -85,6 +85,14 @@ export default {
     return axios.delete('/api/merit', { data: body });
   },
 
+  // URL Shortener
+  createUrl: function(params: UrlInfo) {
+    return axios.put('/api/url', params)
+  },
+  updateUrl: function(params: UrlInfo) {
+    return axios.put('/api/url/update', params)
+  },
+
   // Interviews
   // GET requests
   getInterviewsProgress: function(fullName: string, status: string) {
