@@ -27,7 +27,7 @@ export function NavItems(props: Props) {
         to="/pledge-app/my-merits"
         exact
       >
-        <i className="icon-star"></i>
+        <i className="icon-star" />
         My Merits
       </NavLink>
       <NavLink
@@ -36,7 +36,7 @@ export function NavItems(props: Props) {
         to="/pledge-app/interviews"
         exact
       >
-        <i className="icon-chat"></i>
+        <i className="icon-chat" />
         Interviews
       </NavLink>
       <NavLink
@@ -45,7 +45,7 @@ export function NavItems(props: Props) {
         to="/pledge-app/pledges"
         exact
       >
-        <i className="icon-users"></i>
+        <i className="icon-users" />
         {status === 'pledge' ? "Pledge Brothers" : "Pledges"}
       </NavLink>
       <NavLink
@@ -54,11 +54,11 @@ export function NavItems(props: Props) {
         to="/pledge-app/brothers"
         exact
       >
-        <i className="icon-address-book"></i>
+        <i className="icon-address-book" />
         Brothers
       </NavLink>
       <a className="nav-item" onClick={backClick}>
-        <i className="icon-logout"></i>
+        <i className="icon-logout" />
         { backText }
       </a>
     </nav>

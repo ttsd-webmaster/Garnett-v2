@@ -15,7 +15,6 @@ export default function MyChalkboards({
   state,
   reverse,
   filter,
-  filterName,
   openPopover,
   reverseChalkboards,
   handleOpen,
@@ -45,7 +44,6 @@ export default function MyChalkboards({
         <div>
           <FilterHeader
             title="Hosting"
-            filterName={filterName}
             openPopover={openPopover}
             isReversed={reverse}
             reverse={reverseChalkboards}
@@ -84,7 +82,6 @@ export default function MyChalkboards({
 
       <FilterHeader
         title="Attending"
-        filterName={filterName}
         openPopover={state.status === 'pledge' && openPopover}
         isReversed={state.status === 'pledge' && reverse}
         reverse={state.status === 'pledge' && reverseChalkboards}

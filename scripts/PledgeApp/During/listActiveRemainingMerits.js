@@ -32,19 +32,21 @@ function shouldCountTowardsMeritCap(merit) {
 
 // Capitalize the first letter of every word in the given string
 const activeName = process.argv[2].match(/[A-Z][a-z]+|[0-9]+/g).join(' ');
-const pledgeName = process.argv[3].match(/[A-Z][a-z]+|[0-9]+/g).join(' ');
 const meritsRef = admin.database().ref('/merits');
-let remainingMerits = 100;
+const remainingMeritsMap = new Map();
 
 meritsRef.once('value', (merits) => {
   merits.forEach((merit) => {
-    if ((activeName === merit.val().activeName) &&
-        (pledgeName === merit.val().pledgeName) &&
-        shouldCountTowardsMeritCap(merit.val())) {
-      console.log(merit.val().type, merit.val().description)
+    const activeMatch = activeName === merit.val().activeName;
+    const pledgeMerits = remainingMeritsMap.get(merit.val().pledgeName);
+    let remainingMerits = isNaN(pledgeMerits) ? 100 : pledgeMerits;
+
+    if (activeMatch && shouldCountTowardsMeritCap(merit.val())) {
       remainingMerits -= merit.val().amount;
     }
+
+    remainingMeritsMap.set(merit.val().pledgeName, remainingMerits);
   });
 
-  console.log(remainingMerits);
+  console.log(remainingMeritsMap);
 });

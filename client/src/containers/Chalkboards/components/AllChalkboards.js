@@ -14,7 +14,6 @@ export default function AllChalkboards({
   upcomingChalkboards,
   completedChalkboards,
   filter,
-  filterName,
   openPopover,
   reverse,
   reverseChalkboards,
@@ -41,7 +40,6 @@ export default function AllChalkboards({
     <div id="all-chalkboards">
       <FilterHeader
         title="Upcoming"
-        filterName={filterName}
         openPopover={openPopover}
         isReversed={reverse}
         reverse={reverseChalkboards}

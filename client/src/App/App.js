@@ -15,7 +15,8 @@ import {
   DelibsApp,
   RusheeProfile,
   DataApp,
-  PledgeApp
+  PledgeApp,
+  UrlApp
 } from 'containers';
 import { PublicRoute, PrivateRoute } from 'components/Routes';
 import ScrollToTop from 'components/ScrollToTop';
@@ -50,6 +51,11 @@ const routes = [
     path: '/delibs-app/:id',
     exact: true,
     component: RusheeProfile
+  },
+  {
+    path:'/url-app',
+    exact: true,
+    component: UrlApp
   }
 ];
 

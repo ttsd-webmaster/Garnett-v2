@@ -6,42 +6,38 @@ import IconButton from 'material-ui/IconButton';
 
 type Props = {
   title: string,
-  filterName: string,
   openPopover: () => void,
   isReversed: boolean,
   reverse: () => void
 };
 
-export function FilterHeader(props: Props) {
-  const {
-    title,
-    filterName,
-    openPopover,
-    isReversed,
-    reverse,
-    ...rest
-  } = props;
-  return (
-    <Subheader className="garnett-subheader" {...rest}>
-      <Fragment>
-        {title || (isReversed ? 'Oldest' : 'Recent')}
-        <span className="garnett-filter-container">
-          {filterName && openPopover && (
-            <span className="garnett-filter" onClick={openPopover}>
-              {filterName}
-            </span>
-          )}
-          {reverse && (
-            <IconButton
-              iconClassName={
-                isReversed ? 'icon-up-open-mini' : 'icon-down-open-mini'
-              }
-              className="reverse-toggle"
-              onClick={reverse}
-            />
-          )}
-        </span>
-      </Fragment>
-    </Subheader>
-  )
-}
+export const FilterHeader = ({
+  title,
+  openPopover,
+  isReversed,
+  reverse,
+  ...rest,
+}: Props) => (
+  <Subheader className="garnett-subheader" {...rest}>
+    <Fragment>
+      {title || (isReversed ? 'Oldest' : 'Recent')}
+      <span className="garnett-filter-container">
+        {openPopover && (
+          <span className="garnett-filter" onClick={openPopover}>
+            <i className="icon-sort-alt-down" />
+            <span style={{ marginLeft: '5px'}}>Sort</span>
+          </span>
+        )}
+        {reverse && (
+          <IconButton
+            iconClassName={
+              isReversed ? 'icon-up-open-mini' : 'icon-down-open-mini'
+            }
+            className="reverse-toggle"
+            onClick={reverse}
+          />
+        )}
+      </span>
+    </Fragment>
+  </Subheader>
+);

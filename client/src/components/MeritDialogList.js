@@ -26,7 +26,6 @@ export class MeritDialogList extends Component<Props> {
         <FilterHeader
           className="garnett-subheader mobile-merit"
           title={showAlumni ? 'Alumni' : 'Actives'}
-          filterName={`View ${showAlumni ? 'Actives' : 'Alumni'}`}
           openPopover={toggleAlumniView}
         />
       )

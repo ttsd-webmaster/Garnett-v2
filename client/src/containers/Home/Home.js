@@ -5,6 +5,7 @@ import API from 'api/API.js';
 import dataApp from './images/dataApp.png';
 import delibsApp from './images/delibsApp.png';
 import pledgeApp from './images/pledgeApp.png';
+import urlApp from './images/urlApp.png';
 import { GarnettApp } from './components/GarnettApp';
 
 import React, { PureComponent } from 'react';
@@ -51,6 +52,11 @@ export class Home extends PureComponent<Props> {
             title="Data App"
             src={dataApp}
             goTo={() => this.goTo('data-app')}
+          />
+          <GarnettApp
+            title="Url App"
+            src={urlApp}
+            goTo={() => this.goTo('url-app')}
           />
           <GarnettApp
             title="Delibs App"
