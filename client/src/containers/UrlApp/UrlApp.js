@@ -72,7 +72,7 @@ export class UrlApp extends PureComponent<Props, State> {
     const { displayName } = this.props.state;
     if (urlToShorten !== "" && newUrl !== "" && urlToShorten !== newUrl) {
       if (this.isUrl(urlToShorten) === false && this.isThetaTauUrl(newUrl) === false) {
-        this.handleRequestOpen('Invalid URL to shorten and the new URL must start with "www.ucsdthetatau.org/"!');
+        this.handleRequestOpen('Invalid URLs!');
       } else if (this.isUrl(urlToShorten) === false) {
         this.handleRequestOpen('Invalid URL to shorten!')
       } else if (this.isThetaTauUrl(newUrl) === false) {
@@ -94,7 +94,7 @@ export class UrlApp extends PureComponent<Props, State> {
     const { displayName } = this.props.state;
     if (urlToShorten !== "" && newUrl !== "" && urlToShorten !== newUrl) {
       if (this.isUrl(urlToShorten) === false && this.isThetaTauUrl(newUrl) === false) {
-        this.handleRequestOpen('Invalid URL to shorten and the new URL must start with "www.ucsdthetatau.org/"!')
+        this.handleRequestOpen('Invalid URLs!')
       } else if (this.isUrl(urlToShorten) === false) {
         this.handleRequestOpen('Invalid URL to shorten!')
       } else if (this.isThetaTauUrl(newUrl) === false) {
