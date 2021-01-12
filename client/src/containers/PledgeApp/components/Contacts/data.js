@@ -4,9 +4,10 @@ export default {
     'Delta', 'Epsilon', 'Zeta', 'Eta',
     'Theta', 'Iota', 'Kappa', 'Lambda',
     'Mu', 'Nu', 'Xi', 'Omicron',
-    'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon'
+    'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon',
+    'Phi'
   ],
-  active: ['Nu', 'Xi', 'Omicron', 'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon'],
+  active: ['Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi'],
   major: [
     'Aerospace Engineering', 'Bioengineering', 'Chemical Engineering',
     'Computer Engineering', 'Computer Science', 'Cognitive Science',
