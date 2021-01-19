@@ -42,6 +42,7 @@ exports.get_pledges = function(req, res) {
   const meritsRef = admin.database().ref('/merits');
   const interviewsRef = admin.database().ref('/interviews');
   const pledgesMap = new Map();
+  const interviewsMap = new Map(); 
 
   usersRef.orderByChild('status').equalTo('pledge').once('value', (pledges) => {
     if (!pledges.val()) {
@@ -68,10 +69,14 @@ exports.get_pledges = function(req, res) {
       interviewsRef.once('value', (interviews) => {
         if (interviews.exists()) {
           interviews.forEach((interview) => {
+            const activeName = interview.val().activeName.replace(/ /g, '');
             const pledgeName = interview.val().pledgeName.replace(/ /g, '');
             const pledge = pledgesMap.get(pledgeName);
-            pledge.interviews += 1;
-            pledgesMap.set(pledgeName, pledge);
+            if (!interviewsMap.has(pledgeName + '-' + activeName)) {
+              pledge.interviews += 1;
+              pledgesMap.set(pledgeName, pledge);
+              interviewsMap.set(pledgeName + '-' + activeName, 1);
+            }
           });
         }
 
