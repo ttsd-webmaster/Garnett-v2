@@ -69,7 +69,7 @@ exports.get_pledges = function(req, res) {
       interviewsRef.once('value', (interviews) => {
         if (interviews.exists()) {
           interviews.forEach((interview) => {
-            const activeName = interview.val().pledgeName.replace(/ /g, '');
+            const activeName = interview.val().activeName.replace(/ /g, '');
             const pledgeName = interview.val().pledgeName.replace(/ /g, '');
             const pledge = pledgesMap.get(pledgeName);
             if (!interviewsMap.has(pledgeName + '-' + activeName)) {
