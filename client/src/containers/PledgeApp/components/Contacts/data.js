@@ -7,7 +7,7 @@ export default {
     'Pi', 'Rho', 'Sigma', 'Tau', 'Upsilon',
     'Phi'
   ],
-  active: ['Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi'],
+  active: ['Rho', 'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi'],
   major: [
     'Aerospace Engineering', 'Bioengineering', 'Chemical Engineering',
     'Computer Engineering', 'Computer Science', 'Cognitive Science',
