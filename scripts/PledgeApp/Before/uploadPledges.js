@@ -2,7 +2,7 @@ const folder = './images';
 const fs = require('fs');
 const urlExists = require('url-exists');
 const admin = require('firebase-admin');
-require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
+require('dotenv').config({ path: `/Users/julianyan/Desktop/tt webmaster/Garnett-v2/controllers/.env` });
 
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -28,7 +28,7 @@ function uploadFile(file) {
   const names = userName.match(/[A-Z][a-z]+/g);
   const userRef = usersRef.child(userName);
 
-  bucket.upload(`pledgeImages/${file}`, {
+  bucket.upload(`images/${file}`, {
     destination: file,
     gzip: true,
     metadata: {
@@ -42,12 +42,12 @@ function uploadFile(file) {
       userRef.update({
         firstName: names[0],
         lastName: names[1],
-        class: 'Phi',
-        email: 'phi@thetatau.org',
+        class: 'Alpha Gamma',
+        email: 'arkhanna@ucsd.edu',
         year: '1st Year',
         status: 'pledge',
-        phone: '1234567890',
-        major: 'Computer Science',
+        phone: '9258170137',
+        major: 'Data Science',
         photoURL: signedUrls[0]
       });
     })

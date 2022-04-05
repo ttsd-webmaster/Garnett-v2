@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-require('dotenv').config({ path: `${process.env.HOME}/Projects/React/Garnett/.env` });
+require('dotenv').config({ path: `/Users/julianyan/Desktop/tt webmaster/Garnett-v2/controllers/.env` });
 
 admin.initializeApp({
   credential: admin.credential.cert({
