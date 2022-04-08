@@ -101,8 +101,8 @@ export class MobileHeader extends Component<Props, State> {
       case '/pledge-app':
       case '/pledge-app/my-merits':
         return 'Merits';
-      case '/pledge-app/pledges':
-        return state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges';
+      // case '/pledge-app/pledges':
+      //   return state.status === 'pledge' ? 'Pledge Brothers' : 'Pledges';
       case '/pledge-app/brothers':
         return 'Brothers';
       case '/pledge-app/interviews':

@@ -39,16 +39,16 @@ const routes = [
       />
     )
   },
-  {
-    path: '/pledge-app/pledges',
-    exact: true,
-    content: props => (
-      <Pledges
-        state={props.state}
-        handleRequestOpen={props.handleRequestOpen}
-      />
-    )
-  },
+  // {
+  //   path: '/pledge-app/pledges',
+  //   exact: true,
+  //   content: props => (
+  //     <Pledges
+  //       state={props.state}
+  //       handleRequestOpen={props.handleRequestOpen}
+  //     />
+  //   )
+  // },
   {
     path: '/pledge-app/brothers',
     exact: true,
@@ -116,8 +116,8 @@ export class Main extends Component<Props, State> {
         return 'My Merits';
       case '/pledge-app/interviews':
         return 'Interviews';
-      case '/pledge-app/pledges':
-        return 'Pledges';
+      // case '/pledge-app/pledges':
+      //   return 'Pledges';
       case '/pledge-app/brothers':
         return 'Brothers';
       default:

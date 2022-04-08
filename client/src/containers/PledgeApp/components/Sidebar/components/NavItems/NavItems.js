@@ -39,7 +39,7 @@ export function NavItems(props: Props) {
         <i className="icon-chat" />
         Interviews
       </NavLink>
-      <NavLink
+      {/* <NavLink
         className="nav-item"
         activeClassName="active"
         to="/pledge-app/pledges"
@@ -47,7 +47,7 @@ export function NavItems(props: Props) {
       >
         <i className="icon-users" />
         {status === 'pledge' ? "Pledge Brothers" : "Pledges"}
-      </NavLink>
+      </NavLink> */}
       <NavLink
         className="nav-item"
         activeClassName="active"

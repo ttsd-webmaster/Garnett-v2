@@ -34,7 +34,7 @@ export function MobileNavbar(props: Props) {
           icon={<FontIcon className="icon-chat" />}
         />
       </NavLink>
-      <NavLink
+      {/* <NavLink
         className="mobile-nav-item"
         activeClassName="active"
         to="/pledge-app/pledges"
@@ -44,7 +44,7 @@ export function MobileNavbar(props: Props) {
           label={props.status === 'pledge' ? 'Pbros' : 'Pledges'}
           icon={<FontIcon className="icon-users" />}
         />
-      </NavLink>
+      </NavLink> */}
       <NavLink
         className="mobile-nav-item"
         activeClassName="active"
