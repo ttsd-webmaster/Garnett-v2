@@ -14,10 +14,10 @@ export default {
   getBrothers: function() {
     return axios.get('/api/brothers');
   },
-  getPledges: function(displayName: string) {
-    const params = { displayName };
-    return axios.get('/api/pledges', { params });
-  },
+  // getPledges: function(displayName: string) {
+  //   const params = { displayName };
+  //   return axios.get('/api/pledges', { params });
+  // },
   getPledgeComplaints: function(pledgeName: string) {
     const params = { pledgeName };
     return axios.get('/api/pledge/complaints', { params });
