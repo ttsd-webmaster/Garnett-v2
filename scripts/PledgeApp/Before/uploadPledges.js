@@ -45,7 +45,7 @@ const bucket = admin.storage().bucket('garnett-230209.appspot.com');
 const usersRef = admin.database().ref('/users');
 
 function uploadFile(file) {
-  const userName = file.slice(0, -4);
+  const userName = file.slice(0, -5);
   const names = userName.match(/[A-Z][a-z]+/g);
   const userRef = usersRef.child(userName);
   console.log(names)
@@ -63,8 +63,8 @@ function uploadFile(file) {
       userRef.update({
         firstName: names[0],
         lastName: names[1],
-        class: 'Alpha Epsilon',
-        email: 'alphaepsilon@thetatau.org',
+        class: 'Alpha Zeta',
+        email: 'alphazeta@thetatau.org',
         year: '1st Year',
         status: 'pledge',
         phone: '1234567890',
