@@ -1,35 +1,35 @@
 // @flow
 
-import './Contacts.css';
-import filters from './data.js';
-import API from 'api/API';
+import "./Contacts.css";
+import filters from "./data.js";
+import API from "api/API";
 import {
   isMobile,
   androidBackOpen,
   androidBackClose,
   iosFullscreenDialogOpen,
   iosFullscreenDialogClose,
-  setRefresh
-} from 'helpers/functions.js';
-import { LoadingComponent } from 'helpers/loaders.js';
-import { Filter, FilterHeader, UserRow } from 'components';
-import { LoadableContactsDialog } from './components/Dialogs';
-import type { FilterType, FilterName } from './data.js';
-import type { User } from 'api/models';
+  setRefresh,
+} from "helpers/functions.js";
+import { LoadingComponent } from "helpers/loaders.js";
+import { Filter, FilterHeader, UserRow } from "components";
+import { LoadableContactsDialog } from "./components/Dialogs";
+import type { FilterType, FilterName } from "./data.js";
+import type { User } from "api/models";
 
-import React, { Fragment, PureComponent, type Node } from 'react';
-import { List } from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
+import React, { Fragment, PureComponent, type Node } from "react";
+import { List } from "material-ui/List";
+import Subheader from "material-ui/Subheader";
 
 const FILTER_OPTIONS = [
-  'Active', 
-  'Alumni', 
-  'Class', 
-  'Major', 
-  'Year', 
-  'First Name', 
-  'Last Name', 
-  'Personality Type'
+  "Active",
+  "Alumni",
+  "Class",
+  "Major",
+  "Year",
+  "First Name",
+  "Last Name",
+  "Personality Type",
 ];
 
 type State = {
@@ -43,28 +43,30 @@ type State = {
   reverse: boolean,
   open: boolean,
   openPopover: boolean,
-  anchorEl: ?HTMLElement
+  anchorEl: ?HTMLElement,
 };
 
 export class Contacts extends PureComponent<Props, State> {
   constructor(props) {
     super(props);
-    const brothers = JSON.parse(localStorage.getItem('brothers'));
-    const filterKey = localStorage.getItem('contactsFilterKey') || 'active';
-    const filterName = localStorage.getItem('contactsFilterName') || 'Active';
-    const filterSubgroups = JSON.parse(localStorage.getItem('contactsFilterSubgroups')) || filters.active;
+    const brothers = JSON.parse(localStorage.getItem("brothers"));
+    const filterKey = localStorage.getItem("contactsFilterKey") || "active";
+    const filterName = localStorage.getItem("contactsFilterName") || "Active";
+    const filterSubgroups =
+      JSON.parse(localStorage.getItem("contactsFilterSubgroups")) ||
+      filters.active;
     this.state = {
       brothers,
       filteredBrothers: brothers,
       selectedBrother: null,
-      searchedName: '',
+      searchedName: "",
       filterKey,
       filterName,
       filterSubgroups,
       reverse: false,
       open: false,
       openPopover: false,
-      anchorEl: null
+      anchorEl: null,
     };
   }
 
@@ -72,10 +74,9 @@ export class Contacts extends PureComponent<Props, State> {
     if (navigator.onLine) {
       setRefresh(null);
 
-      API.getBrothers()
-      .then(res => {
+      API.getBrothers().then((res) => {
         const brothers = res.data;
-        localStorage.setItem('brothers', JSON.stringify(res.data));
+        localStorage.setItem("brothers", JSON.stringify(res.data));
         this.setState({ brothers, filteredBrothers: brothers });
       });
     }
@@ -91,44 +92,45 @@ export class Contacts extends PureComponent<Props, State> {
     }
 
     filterSubgroups.forEach((subgroup) => {
-      const includesBrother = filteredBrothers.some((brother) => (
+      const includesBrother = filteredBrothers.some((brother) =>
         this.checkCondition(brother, subgroup)
-      ));
+      );
 
       if (!includesBrother) {
-        return null
+        return null;
       }
 
       const group = (
         <Fragment key={index}>
-          { this.header(subgroup, index++) }
+          {this.header(subgroup, index++)}
           <List className="garnett-list">
-            {filteredBrothers.map((brother, i) => (
-              this.checkCondition(brother, subgroup) && (
-                <UserRow
-                  key={i}
-                  user={brother}
-                  handleOpen={() => this.handleOpen(brother)}
-                />
-              )
-            ))}
+            {filteredBrothers.map(
+              (brother, i) =>
+                this.checkCondition(brother, subgroup) && (
+                  <UserRow
+                    key={i}
+                    user={brother}
+                    handleOpen={() => this.handleOpen(brother)}
+                  />
+                )
+            )}
           </List>
         </Fragment>
       );
 
       groups.push(group);
-    })
+    });
     return groups;
   }
 
   get modalTitle(): string {
     switch (this.state.filterKey) {
-      case 'active':
-        return 'Active';
-      case 'alumni':
-        return 'Alumni';
+      case "active":
+        return "Active";
+      case "alumni":
+        return "Alumni";
       default:
-        return 'Brother';
+        return "Brother";
     }
   }
 
@@ -142,14 +144,10 @@ export class Contacts extends PureComponent<Props, State> {
           isReversed={this.state.reverse}
           reverse={this.reverse}
         />
-      )
+      );
     }
-    return (
-      <Subheader className="garnett-subheader">
-        { subgroup }
-      </Subheader>
-    )
-  }
+    return <Subheader className="garnett-subheader">{subgroup}</Subheader>;
+  };
 
   checkCondition(brother: User, subgroup: string): boolean {
     if (!brother) {
@@ -157,14 +155,18 @@ export class Contacts extends PureComponent<Props, State> {
     }
 
     switch (this.state.filterKey) {
-      case 'active':
-        return brother.status !== 'alumni' && brother.class === subgroup;
-      case 'alumni':
-        return brother.status === 'alumni' && brother.class === subgroup;
-      case 'firstName':
-        return brother.firstName.startsWith(subgroup);
-      case 'lastName':
-        return brother.lastName.startsWith(subgroup);
+      case "active":
+        return brother.status !== "alumni" && brother.class === subgroup;
+      case "alumni":
+        return brother.status === "alumni" && brother.class === subgroup;
+      case "firstName":
+        return brother.firstName
+          .toLowerCase()
+          .startsWith(subgroup.toLowerCase());
+      case "lastName":
+        return brother.lastName
+          .toLowerCase()
+          .startsWith(subgroup.toLowerCase());
       default:
         return brother[this.state.filterKey] === subgroup;
     }
@@ -179,7 +181,7 @@ export class Contacts extends PureComponent<Props, State> {
       return;
     }
 
-    if (searchedName === '') {
+    if (searchedName === "") {
       result = brothers;
     } else {
       brothers.forEach((user) => {
@@ -191,79 +193,86 @@ export class Contacts extends PureComponent<Props, State> {
     }
 
     this.setState({ filteredBrothers: result, searchedName });
-  }
+  };
 
   clearInput = () => {
-    this.setState({ filteredBrothers: this.state.brothers, searchedName: '' });
-  }
+    this.setState({ filteredBrothers: this.state.brothers, searchedName: "" });
+  };
 
   handleOpen = (selectedBrother: User) => {
     iosFullscreenDialogOpen();
     androidBackOpen(this.handleClose);
     this.setState({ selectedBrother, open: true });
-  }
+  };
 
   handleClose = () => {
     androidBackClose();
     this.setState({ open: false }, () => {
       iosFullscreenDialogClose();
     });
-  }
+  };
 
   openPopover = (event: SyntheticEvent<>) => {
     // This prevents ghost click.
     event.preventDefault();
     this.setState({
       openPopover: true,
-      anchorEl: event.currentTarget
+      anchorEl: event.currentTarget,
     });
   };
 
   closePopover = () => this.setState({ openPopover: false });
 
   setFilter = (filterName: FilterName) => {
-    let filterKey = filterName.replace(/ /g, '');
+    let filterKey = filterName.replace(/ /g, "");
     // Convert first letter of filter to be lower cased
     filterKey = filterKey[0].toLowerCase() + filterKey.substr(1);
     let group = filterKey;
 
     switch (filterName) {
-      case 'Alumni':
-        group = 'class';
+      case "Alumni":
+        group = "class";
         break;
-      case 'First Name':
-      case 'Last Name':
-        group = 'name';
+      case "First Name":
+        filterKey = "firstName";
+        group = "firstName"; // Correctly set the group for first name filtering
         break;
-      case 'Personality Type':
-        filterKey = 'mbti';
-        group = 'mbti';
+      case "Last Name":
+        filterKey = "lastName";
+        group = "lastName"; // Correctly set the group for last name filtering
+        break;
+      case "Personality Type":
+        filterKey = "mbti";
+        group = "mbti";
         break;
       default:
     }
 
     const filterSubgroups = filters[group];
 
-    localStorage.setItem('contactsFilterKey', filterKey);
-    localStorage.setItem('contactsFilterName', filterName);
-    localStorage.setItem('contactsFilterSubgroups', JSON.stringify(filterSubgroups));
+    localStorage.setItem("contactsFilterKey", filterKey);
+    localStorage.setItem("contactsFilterName", filterName);
+    localStorage.setItem(
+      "contactsFilterSubgroups",
+      JSON.stringify(filterSubgroups)
+    );
 
     this.setState({
       filterKey,
       filterName,
       filterSubgroups,
       openPopover: false,
-      reverse: false
+      reverse: false,
     });
-  }
+  };
 
   reverse = () => {
     const { filterSubgroups, reverse } = this.state;
     this.setState({
       filterSubgroups: filterSubgroups.reverse(),
-      reverse: !reverse
+      reverse: !reverse,
     });
-  }
+  };
 
   render() {
     const {
@@ -273,11 +282,11 @@ export class Contacts extends PureComponent<Props, State> {
       filterName,
       open,
       openPopover,
-      anchorEl
+      anchorEl,
     } = this.state;
 
     if (!brothers) {
-      return <LoadingComponent />
+      return <LoadingComponent />;
     }
 
     return (
@@ -293,7 +302,7 @@ export class Contacts extends PureComponent<Props, State> {
           />
           <span
             id="clear-input"
-            className={`${(!isMobile() || !searchedName) && 'hidden'}`}
+            className={`${(!isMobile() || !searchedName) && "hidden"}`}
             onClick={this.clearInput}
           >
             &times;
@@ -309,7 +318,7 @@ export class Contacts extends PureComponent<Props, State> {
           setFilter={this.setFilter}
         />
 
-        { this.body }
+        {this.body}
 
         {selectedBrother && (
           <LoadableContactsDialog
@@ -320,6 +329,6 @@ export class Contacts extends PureComponent<Props, State> {
           />
         )}
       </div>
-    )
+    );
   }
 }
