@@ -27,8 +27,8 @@ const FILTER_OPTIONS = [
   "Class",
   "Major",
   "Year",
-  "First Name",
-  "Last Name",
+  // "First Name",
+  // "Last Name",
   "Personality Type",
 ];
 
@@ -160,13 +160,15 @@ export class Contacts extends PureComponent<Props, State> {
       case "alumni":
         return brother.status === "alumni" && brother.class === subgroup;
       case "firstName":
-        return brother.firstName
-          .toLowerCase()
-          .startsWith(subgroup.toLowerCase());
+        return (
+          brother.firstName &&
+          brother.firstName.toLowerCase().startsWith(subgroup.toLowerCase())
+        );
       case "lastName":
-        return brother.lastName
-          .toLowerCase()
-          .startsWith(subgroup.toLowerCase());
+        return (
+          brother.lastName &&
+          brother.lastName.toLowerCase().startsWith(subgroup.toLowerCase())
+        );
       default:
         return brother[this.state.filterKey] === subgroup;
     }
