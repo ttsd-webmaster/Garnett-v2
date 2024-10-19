@@ -65,6 +65,7 @@ export const selectData = [
       "Mechanical Engineering",
       "Nanoengineering",
       "Structural Engineering",
+      "Engineering Physics",
     ],
   },
   {
