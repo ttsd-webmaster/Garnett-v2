@@ -30,6 +30,7 @@ export default {
     "Alpha Epsilon",
     "Alpha Zeta",
     "Alpha Eta",
+    "Alpha Theta",
   ],
   active: [
     "Chi",
@@ -40,6 +41,7 @@ export default {
     "Alpha Epsilon",
     "Alpha Zeta",
     "Alpha Eta",
+    "Alpha Theta",
   ],
   major: [
     "Aerospace Engineering",
