@@ -32,7 +32,7 @@
     "url-loader": "0.6.2",
     "webpack-dev-server": "2.9.4",
     "whatwg-fetch": "2.0.3",
-    "workbox-sw": "^3.1.0",
+    "workbox-sw": "^3.1.0"
   },
   "dependencies": {
     "autoprefixer": "7.1.6",
