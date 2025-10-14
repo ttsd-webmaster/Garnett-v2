@@ -73,7 +73,7 @@ function uploadFile(file) {
         }
       }).then(() => {
         const uploadedFile = bucket.file(file);
-        uploadedFile.getSignedUrl({ action: 'read', expires: '03-17-2025' })
+        uploadedFile.getSignedUrl({ action: 'read', expires: '03-17-2026' })
         .then((signedUrls) => {
           console.log(`Updated ${userName}'s photo`);
           userRef.update({ photoURL: signedUrls[0] });

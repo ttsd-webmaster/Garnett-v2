@@ -1,9 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
-const shrinkRay = require('shrink-ray');
 const app = express();
-const equal = require('deep-equal');
 const firebase = require('@firebase/app').firebase;
 const admin = require('firebase-admin');
 const indexRouter = require('./routes/index');
@@ -15,7 +13,7 @@ const notificationsRouter = require('./routes/notifications');
 const dataRouter = require('./routes/data');
 const delibsRouter = require('./routes/delibs');
 const urlsRouter = require('./routes/urls');
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3030;
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
 
 require('dotenv').config();
@@ -49,40 +47,44 @@ admin.initializeApp({
 });
 
 // Redirect all HTTP traffic to HTTPS
-function ensureSecure(req, res, next){
+function ensureSecure(req, res, next) {
   if (req.headers["x-forwarded-proto"] === "https") {
-    // OK, continue
     return next();
   }
-  res.redirect('https://'+ req.hostname + req.url);
-};
+  res.redirect('https://' + req.hostname + req.url);
+}
 
-// Handle environments
-if (process.env.NODE_ENV == 'production') {
+// Apply HTTPS redirect only in production
+if (process.env.NODE_ENV === 'production') {
   app.all('*', ensureSecure);
 }
 
-app.use(shrinkRay()); // Gzips file
-app.use(express.static(path.join(__dirname, './client/build')));
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// API routes
 app.use('/api', indexRouter);
 app.use('/api/merit', meritsRouter);
 app.use('/api/interview', interviewsRouter);
 app.use('/api/notification', notificationsRouter);
 app.use('/api/data', dataRouter);
-app.use('/api/url', urlsRouter)
+app.use('/api/url', urlsRouter);
 
 // Not used
 app.use('/api/chalkboard', chalkboardsRouter);
 app.use('/api/complaint', complaintsRouter);
 app.use('/api/delibs', delibsRouter);
 
-app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/build/index.html'));
-});
+// Serve client/build static files only in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, './client/build')));
+
+  app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, './client/build/index.html'));
+  });
+}
 
 app.listen(port, function () {
-  console.log('Example app listening on port 4000!')
+  console.log(`Example app listening on port ${port}!`);
 });
