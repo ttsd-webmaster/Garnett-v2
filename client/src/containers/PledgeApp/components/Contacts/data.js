@@ -24,6 +24,7 @@ export default {
     "Phi",
     "Chi",
     "Psi",
+    "Tau Alpha",
     "Alpha Beta",
     "Alpha Gamma",
     "Alpha Delta",
@@ -36,6 +37,7 @@ export default {
   active: [
     "Chi",
     "Psi",
+    "Tau Alpha",
     "Alpha Beta",
     "Alpha Gamma",
     "Alpha Delta",
