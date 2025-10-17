@@ -16,6 +16,7 @@ export const selectData = [
     placeholder: "Class",
     name: "className",
     options: [
+      "Tau Alpha",
       "Charter",
       "Alpha",
       "Beta",
