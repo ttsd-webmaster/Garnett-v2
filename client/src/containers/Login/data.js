@@ -57,6 +57,7 @@ export const selectData = [
     name: "major",
     options: [
       "Aerospace Engineering",
+      "Artificial Intelligence",
       "Bioengineering",
       "Chemical Engineering",
       "Computer Engineering",
