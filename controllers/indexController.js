@@ -8,7 +8,6 @@ exports.get_auth_status = function(req, res) {
   // Send back user's info to the client
   const { displayName } = req.query;
   const userRef = admin.database().ref(`/users/${displayName}`);
-  console.log(displayName);
 
   userRef.once('value', (user) => {
     res.json(user.val());
