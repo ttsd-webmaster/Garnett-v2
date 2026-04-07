@@ -102,9 +102,11 @@ export class Sidebar extends Component<Props, State> {
     return (
       <div id="sidebar">
         <AccountInfo user={user} />
-        <div className="white-background">
-          <div id="merit-button" onClick={this.handleMeritOpen}>Merit</div>
-        </div>
+        {user.status === 'active' && (
+          <div className="white-background">
+            <div id="merit-button" onClick={this.handleMeritOpen}>Merit</div>
+          </div>
+        )}
         <NavItems
           status={user.status}
           goHome={this.goHome}

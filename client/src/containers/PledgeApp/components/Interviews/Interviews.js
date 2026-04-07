@@ -64,6 +64,20 @@ export class Interviews extends PureComponent<Props> {
     })
     .catch(err => console.error(err));
   }
+  undoInterview = (user: User) => {
+    const { firstName, lastName, status } = this.props.state;
+    const fullName = `${firstName} ${lastName}`;
+    const selectedUserName = `${user.firstName} ${user.lastName}`;
+
+    const activeName = status === 'pledge' ? selectedUserName : fullName;
+    const pledgeName = status === 'pledge' ? fullName : selectedUserName;
+
+    API.deleteInterview(activeName, pledgeName)
+      .then(() => {
+        this.fetchInterviewProgress();
+      })
+      .catch(err => console.error(err));
+  };
 
   openOptions = (user: User) => this.setState({ user, open: true });
 
@@ -98,7 +112,7 @@ export class Interviews extends PureComponent<Props> {
             <UserRow
               key={i}
               user={user}
-              handleOpen={() => this.openOptions(user)}
+              handleOpen={() => this.undoInterview(user)}
             />
           ))}
         </List>

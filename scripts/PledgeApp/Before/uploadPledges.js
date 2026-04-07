@@ -1,9 +1,9 @@
 const folder = "./images";
 const fs = require("fs");
 const admin = require("firebase-admin");
-require("dotenv").config({
-  path: `${process.env.HOME}/Projects/React/Garnett/.env`,
-});
+const path = require('path');
+const envPath = path.resolve(__dirname, "../../../.env");
+require('dotenv').config({ path: envPath });
 
 admin.initializeApp({
   credential: admin.credential.cert({
