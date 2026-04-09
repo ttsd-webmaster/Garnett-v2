@@ -92,7 +92,7 @@ export class MyMerits extends PureComponent<Props, State> {
         )}
         <div id="my-merits" className="content animate-in">
           { this.meritsList }
-          {isMobile() && state.status === 'active' && (
+          {isMobile() && state.status !== 'pledge' && (
             <Fragment>
               <FloatingActionButton
                 className={`fixed-button ${scrollDirection === 'down' ? 'hidden' : ''}`}

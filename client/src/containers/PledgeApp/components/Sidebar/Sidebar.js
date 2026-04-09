@@ -102,7 +102,7 @@ export class Sidebar extends Component<Props, State> {
     return (
       <div id="sidebar">
         <AccountInfo user={user} />
-        {user.status === 'active' && (
+        {user.status !== 'pledge' && (
           <div className="white-background">
             <div id="merit-button" onClick={this.handleMeritOpen}>Merit</div>
           </div>
