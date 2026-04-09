@@ -89,9 +89,15 @@ export class Interviews extends PureComponent<Props> {
     if (!completedInterviews || !incompleteInterviews) {
       return <LoadingComponent />
     }
+    const isValidUser = (u) =>
+    u &&
+    u.firstName &&
+    u.lastName;
+    const safeCompleted = completedInterviews.filter(isValidUser);
+    const safeIncomplete = incompleteInterviews.filter(isValidUser);
 
-    const interviewsDone = completedInterviews.length;
-    const interviewsLeft = interviewsDone + incompleteInterviews.length;
+    const interviewsDone = safeCompleted.length;
+    const interviewsLeft = interviewsDone + safeIncomplete.length;
     const percent = (interviewsDone / interviewsLeft) * 100;
 
     return (
@@ -108,7 +114,7 @@ export class Interviews extends PureComponent<Props> {
         />
         <Subheader className="garnett-subheader">Completed</Subheader>
         <List className="garnett-list">
-          {completedInterviews.map((user, i) => (
+          {safeCompleted.map((user, i) => (
             <UserRow
               key={i}
               user={user}
@@ -118,7 +124,7 @@ export class Interviews extends PureComponent<Props> {
         </List>
         <Subheader className="garnett-subheader">Incomplete</Subheader>
         <List className="garnett-list">
-          {incompleteInterviews.map((user, i) => (
+          {safeIncomplete.map((user, i) => (
             <UserRow
               key={i}
               user={user}
