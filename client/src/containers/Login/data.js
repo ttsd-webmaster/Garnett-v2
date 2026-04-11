@@ -61,6 +61,7 @@ export const selectData = [
       "Artificial Intelligence",
       "Bioengineering",
       "Chemical Engineering",
+      "Cognitive Science: Machine Learning",
       "Computer Engineering",
       "Computer Science",
       "Data Science",

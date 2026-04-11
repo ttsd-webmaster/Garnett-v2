@@ -47,8 +47,10 @@ export default {
   ],
   major: [
     "Aerospace Engineering",
+    "Artificial Intellgence",
     "Bioengineering",
     "Chemical Engineering",
+    "Cognitive Science: Machine Learning",
     "Computer Engineering",
     "Computer Science",
     "Cognitive Science",
