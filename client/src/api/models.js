@@ -69,3 +69,36 @@ export type UrlInfo = {
   urlToShorten: string,
   newUrl: string
 }
+
+// An award of active points, given by one of the hardcoded point admins.
+// `key` is the Firebase key, sent back on reads so corrections and take backs
+// address one exact award.
+export type ActivePoint = {
+  key: string,
+  activeName: string,
+  activePhoto: string,
+  amount: number,
+  title: string,
+  date: string,
+  awardedBy: string,
+  awardedByName: string,
+  awardedByPhoto: string,
+  platform: string
+};
+
+export type ActivePointInfo = {
+  user: User,
+  selectedUsers: Array<User>,
+  point: {
+    title: string,
+    amount: number,
+    date: string
+  }
+};
+
+export type LeaderboardEntry = {
+  name: string,
+  photoURL: string,
+  total: number,
+  instances: number
+};

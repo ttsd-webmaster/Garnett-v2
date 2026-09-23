@@ -1,4 +1,5 @@
 export { MyMerits } from './MyMerits/MyMerits';
+export { ActivePoints } from './ActivePoints/ActivePoints';
 export { Pledges } from './Pledges/Pledges';
 export { Contacts } from './Contacts/Contacts';
 export { Interviews } from './Interviews/Interviews';

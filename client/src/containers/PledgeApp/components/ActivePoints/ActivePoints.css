@@ -1,0 +1,155 @@
+/**************** My Points total ******************/
+#my-points-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 8px 16px;
+  color: var(--text-color);
+}
+#my-points-total .total-points {
+  font-size: 48px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+#my-points-total .total-points-label {
+  margin: 8px 0 0 0;
+  font-size: 14px;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-light);
+}
+
+/**************** Leaderboard ******************/
+#points-leaderboard .points-rank {
+  display: inline-block;
+  min-width: 28px;
+  color: var(--text-light);
+  font-weight: 500;
+}
+#points-leaderboard .medal,
+#points-breakdown-total .medal {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 32px;
+  height: 32px;
+  z-index: 1;
+}
+.points-total-badge {
+  float: right;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: normal;
+  color: var(--text-color);
+}
+
+/**************** Award / Edit inputs ******************/
+#points-inputs-container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+#points-edit-inputs {
+  display: flex;
+  flex-direction: column;
+}
+.points-input {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 8px 0;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 16px;
+  outline: none;
+}
+.points-input::placeholder {
+  color: var(--text-light);
+}
+.points-input:focus {
+  border-bottom: 2px solid var(--accent-color);
+}
+#points-name-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+#points-select-all {
+  position: absolute;
+  right: 0;
+  bottom: 18px;
+  color: var(--accent-color);
+  font-size: 14px;
+  cursor: pointer;
+}
+.points-date-label {
+  margin: 0;
+  color: var(--text-light);
+  font-size: 14px;
+}
+
+/**************** Award button ******************/
+#points-confirm-container {
+  display: flex;
+  justify-content: center;
+  padding: 16px 16px 32px 16px;
+}
+.points-button {
+  width: 100%;
+  max-width: 400px;
+  padding: 14px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--accent-color);
+  color: #fff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.points-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/**************** Breakdown dialog ******************/
+#points-breakdown-total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 16px 4px 16px;
+  color: var(--text-color);
+}
+.points-breakdown-amount {
+  font-size: 40px;
+  font-weight: 500;
+  line-height: 1;
+}
+.points-breakdown-label {
+  margin-top: 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-light);
+}
+
+/**************** Spinner ******************/
+.points-spinner-container {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+/**************** Award FAB ******************/
+@media screen and (min-width: 768px) {
+  .fixed-button.points-fab {
+    bottom: 24px;
+    right: 24px;
+  }
+}

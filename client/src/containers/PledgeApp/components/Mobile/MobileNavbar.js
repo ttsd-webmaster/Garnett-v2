@@ -23,6 +23,19 @@ export function MobileNavbar(props: Props) {
           icon={<FontIcon className="icon-star" />}
         />
       </NavLink>
+      {props.status !== 'pledge' && (
+        <NavLink
+          className="mobile-nav-item"
+          activeClassName="active"
+          to="/pledge-app/points"
+          exact
+        >
+          <BottomNavigationItem
+            label="Points"
+            icon={<FontIcon className="icon-list-alt" />}
+          />
+        </NavLink>
+      )}
       <NavLink
         className="mobile-nav-item"
         activeClassName="active"

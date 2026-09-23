@@ -12,6 +12,7 @@ const complaintsRouter = require('./routes/complaints');
 const notificationsRouter = require('./routes/notifications');
 const dataRouter = require('./routes/data');
 const delibsRouter = require('./routes/delibs');
+const activePointsRouter = require('./routes/activePoints');
 const urlsRouter = require('./routes/urls');
 const port = process.env.PORT || 3030;
 global.XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
@@ -70,6 +71,7 @@ app.use('/api/interview', interviewsRouter);
 app.use('/api/notification', notificationsRouter);
 app.use('/api/data', dataRouter);
 app.use('/api/url', urlsRouter);
+app.use('/api/points', activePointsRouter);
 
 // Not used
 app.use('/api/chalkboard', chalkboardsRouter);

@@ -1,10 +1,22 @@
 // @flow
 
 import API from 'api/API.js';
+import { POINTS_ADMINS } from 'helpers/constants';
 import { pullToRefresh } from 'helpers/pullToRefresh';
 import ptrAnimatesMaterial from 'mobile-pull-to-refresh/dist/styles/material/animates';
 
 import type { User } from 'api/models'
+
+// Active points are only ever shown on the active side of the app
+export function canViewActivePoints(user: ?User): boolean {
+  return Boolean(user) && user.status !== 'pledge';
+}
+
+// Only the two hardcoded admins can award, correct, or take back points.
+// This hides the controls; the server is what actually enforces it.
+export function isPointsAdmin(user: ?User): boolean {
+  return Boolean(user) && POINTS_ADMINS.includes(user.displayName);
+}
 
 // Used to get tab color for Pledge App
 export function getTabStyle(isActive: boolean): string {

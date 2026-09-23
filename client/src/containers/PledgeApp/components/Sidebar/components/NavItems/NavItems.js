@@ -30,6 +30,17 @@ export function NavItems(props: Props) {
         <i className="icon-star" />
         My Merits
       </NavLink>
+      {status !== 'pledge' && (
+        <NavLink
+          className="nav-item"
+          activeClassName="active"
+          to="/pledge-app/points"
+          exact
+        >
+          <i className="icon-list-alt" />
+          Points
+        </NavLink>
+      )}
       <NavLink
         className="nav-item"
         activeClassName="active"

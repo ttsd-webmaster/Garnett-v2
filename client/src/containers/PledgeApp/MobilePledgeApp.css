@@ -63,6 +63,11 @@
   min-width: unset !important;
   width: 20vw;
 }
+/* Actives get a sixth tab (Points), so split the bar six ways instead */
+.mobile-nav-item:first-child:nth-last-child(6) > button,
+.mobile-nav-item:first-child:nth-last-child(6) ~ .mobile-nav-item > button {
+  width: calc(100vw / 6);
+}
 .mobile-nav-item span {
   font-size: 22px !important;
 }

@@ -33,3 +33,13 @@ export const MERIT_FILTER_OPTIONS = [
   'Created on Garnett',
   'Merit Date'
 ];
+
+// Hardcoded active point admins. Only these two can award, correct, or take
+// back active points. Keep in sync with POINTS_ADMINS in
+// controllers/activePointsController.js, which is what actually enforces it.
+export const POINTS_ADMINS = ['EmanuelNader', 'SophiaKim'];
+
+export const POINTS_VIEW_OPTIONS = [
+  { view: 'myPoints', label: 'My Points' },
+  { view: 'leaderboard', label: 'Leaderboard' }
+];

@@ -1,7 +1,12 @@
 // @flow
 
 import axios from 'axios';
-import type { SignUpParams, Merit, MeritInfo } from 'api/models';
+import type {
+  SignUpParams,
+  Merit,
+  MeritInfo,
+  ActivePointInfo
+} from 'api/models';
 
 //Search functions to connect with back-end
 export default {
@@ -83,6 +88,42 @@ export default {
   deleteMerit: function(displayName: string, status: string, meritToDelete: Merit) {
     const body = { displayName, status, meritToDelete };
     return axios.delete('/api/merit', { data: body });
+  },
+
+  // Active Points
+  // GET requests
+  getMyPoints: function(displayName: string) {
+    const params = { displayName };
+    return axios.get('/api/points/me', { params });
+  },
+  getPointsLeaderboard: function(displayName: string) {
+    const params = { displayName };
+    return axios.get('/api/points/leaderboard', { params });
+  },
+  getActivesForPoints: function(displayName: string) {
+    const params = { displayName };
+    return axios.get('/api/points/actives', { params });
+  },
+  getActivePoints: function(displayName: string, activeName: string) {
+    const params = { displayName, activeName };
+    return axios.get('/api/points/active', { params });
+  },
+  // PUT requests
+  createPoints: function(params: ActivePointInfo) {
+    return axios.put('/api/points', params);
+  },
+  updatePoints: function(
+    displayName: string,
+    key: string,
+    amount: number,
+    title: string
+  ) {
+    const body = { displayName, key, amount, title };
+    return axios.put('/api/points/update', body);
+  },
+  deletePoints: function(displayName: string, key: string) {
+    const body = { displayName, key };
+    return axios.delete('/api/points', { data: body });
   },
 
   // URL Shortener

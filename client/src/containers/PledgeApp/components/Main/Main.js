@@ -1,10 +1,11 @@
 // @flow
 
 import './Main.css';
-import { isMobile } from 'helpers/functions';
+import { isMobile, canViewActivePoints } from 'helpers/functions';
 import { PullToRefreshSpinner } from 'helpers/loaders';
 import {
   MyMerits,
+  ActivePoints,
   Pledges,
   Contacts,
   Interviews,
@@ -27,6 +28,23 @@ const routes = [
         scrollDirection={scrollDirection}
         handleRequestOpen={props.handleRequestOpen}
       />
+    )
+  },
+  {
+    // Active points are an active side only feature. Pledges that guess the
+    // URL get bounced back to their merits.
+    path: '/pledge-app/points',
+    exact: true,
+    content: (props, containerRef, scrollDirection) => (
+      canViewActivePoints(props.state) ? (
+        <ActivePoints
+          state={props.state}
+          scrollDirection={scrollDirection}
+          handleRequestOpen={props.handleRequestOpen}
+        />
+      ) : (
+        <Redirect to="/pledge-app/my-merits" />
+      )
     )
   },
   {
@@ -114,6 +132,8 @@ export class Main extends Component<Props, State> {
     switch (this.props.history.location.pathname) {
       case '/pledge-app/my-merits':
         return 'My Merits';
+      case '/pledge-app/points':
+        return 'Points';
       case '/pledge-app/interviews':
         return 'Interviews';
       case '/pledge-app/pledges':
