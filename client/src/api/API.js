@@ -108,6 +108,10 @@ export default {
     const params = { displayName, activeName };
     return axios.get('/api/points/active', { params });
   },
+  getAllPoints: function(displayName: string) {
+    const params = { displayName };
+    return axios.get('/api/points/all', { params });
+  },
   // PUT requests
   createPoints: function(params: ActivePointInfo) {
     return axios.put('/api/points', params);

@@ -10,6 +10,7 @@ router.get('/me', controller.get_my_points);
 router.get('/leaderboard', controller.get_leaderboard);
 router.get('/actives', controller.get_actives_for_points);
 router.get('/active', controller.get_active_points);
+router.get('/all', controller.get_all_points);
 
 // PUT requests
 router.put('/', controller.create_points);

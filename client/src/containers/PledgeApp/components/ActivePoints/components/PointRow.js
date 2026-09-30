@@ -4,7 +4,7 @@ import { formatDate } from 'helpers/functions';
 import { PlaceholderMerit } from 'components/Placeholders';
 import type { ActivePoint } from 'api/models';
 
-import React, { PureComponent, type Node } from 'react';
+import React, { Fragment, PureComponent, type Node } from 'react';
 import LazyLoad from 'react-lazyload';
 import Avatar from 'material-ui/Avatar';
 import { ListItem } from 'material-ui/List';
@@ -38,7 +38,13 @@ export class PointRow extends PureComponent<Props> {
           }
           secondaryText={
             <p className="garnett-description">
-              { showRecipient ? point.title : `Awarded by ${point.awardedByName}` }
+              {showRecipient && (
+                <Fragment>
+                  { point.title }
+                  <br />
+                </Fragment>
+              )}
+              Awarded by { point.awardedByName }
             </p>
           }
           secondaryTextLines={2}

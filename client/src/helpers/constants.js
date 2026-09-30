@@ -37,9 +37,16 @@ export const MERIT_FILTER_OPTIONS = [
 // Hardcoded active point admins. Only these two can award, correct, or take
 // back active points. Keep in sync with POINTS_ADMINS in
 // controllers/activePointsController.js, which is what actually enforces it.
-export const POINTS_ADMINS = ['EmanuelNader', 'SophiaKim'];
+// Emanuel is listed under both his own key and his pledge instructor key, since
+// the PI handoff moves his account between them.
+export const POINTS_ADMINS = ['EmanuelNader', 'PledgeInstructorNader', 'SophiaKim'];
 
 export const POINTS_VIEW_OPTIONS = [
   { view: 'myPoints', label: 'My Points' },
   { view: 'leaderboard', label: 'Leaderboard' }
 ];
+
+// Point admins also get a feed of every award, like All Merits
+export const POINTS_ADMIN_VIEW_OPTIONS = POINTS_VIEW_OPTIONS.concat([
+  { view: 'allPoints', label: 'All Points' }
+]);

@@ -4,7 +4,9 @@ const useragent = require('useragent');
 // Hardcoded point admins. Only these two can award, correct, or take back
 // points. Keyed by displayName, which is `firstName + lastName` with spaces
 // removed, the same convention used everywhere else for user keys.
-const POINTS_ADMINS = ['EmanuelNader', 'SophiaKim'];
+// Emanuel is listed under both his own key and his pledge instructor key, since
+// the PI handoff moves his account between them.
+const POINTS_ADMINS = ['EmanuelNader', 'PledgeInstructorNader', 'SophiaKim'];
 
 // Statuses that take part in the active point system
 const POINTS_STATUSES = ['active', 'pipm'];
@@ -220,6 +222,32 @@ exports.get_active_points = function(req, res) {
       }
 
       res.json({ total, points: activePoints.reverse() });
+    });
+  });
+};
+
+// Gets every point award across all actives, newest first. Admins only.
+exports.get_all_points = function(req, res) {
+  const { displayName } = req.query;
+  const pointsRef = admin.database().ref('/activePoints');
+
+  requirePointsAdmin(displayName, res).then((user) => {
+    if (!user) {
+      return;
+    }
+
+    pointsRef.once('value', (points) => {
+      const allPoints = [];
+
+      if (points.exists()) {
+        points.forEach((point) => {
+          allPoints.push(Object.assign({ key: point.key }, point.val()));
+        });
+      }
+
+      allPoints.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      res.json({ points: allPoints });
     });
   });
 };

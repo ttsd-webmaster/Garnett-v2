@@ -1,7 +1,7 @@
 // @flow
 
 import './ActivePoints.css';
-import { POINTS_VIEW_OPTIONS } from 'helpers/constants';
+import { POINTS_VIEW_OPTIONS, POINTS_ADMIN_VIEW_OPTIONS } from 'helpers/constants';
 import {
   isMobile,
   isPointsAdmin,
@@ -11,7 +11,7 @@ import {
   iosFullscreenDialogClose
 } from 'helpers/functions';
 import ToggleViewHeader from 'components/ToggleViewHeader';
-import { MyPoints, PointsLeaderboard } from './components';
+import { MyPoints, PointsLeaderboard, AllPoints } from './components';
 import { BreakdownDialog, LoadableAwardPointsDialog } from './components/Dialogs';
 import type { User } from 'api/models';
 
@@ -25,7 +25,7 @@ type Props = {
 };
 
 type State = {
-  view: 'myPoints' | 'leaderboard',
+  view: 'myPoints' | 'leaderboard' | 'allPoints',
   refreshKey: number,
   breakdownActive: ?string,
   openBreakdown: boolean,
@@ -35,7 +35,11 @@ type State = {
 export class ActivePoints extends PureComponent<Props, State> {
   constructor(props) {
     super(props);
-    const view = localStorage.getItem('pointsView') || 'myPoints';
+    let view = localStorage.getItem('pointsView') || 'myPoints';
+    // All Points is admin only, so fall back if a non admin has it saved
+    if (view === 'allPoints' && !isPointsAdmin(props.state)) {
+      view = 'myPoints';
+    }
     this.state = {
       view,
       refreshKey: 0,
@@ -52,6 +56,17 @@ export class ActivePoints extends PureComponent<Props, State> {
   get body(): Node {
     const { state, handleRequestOpen } = this.props;
     const { view, refreshKey } = this.state;
+
+    if (view === 'allPoints' && this.isAdmin) {
+      return (
+        <AllPoints
+          key={`all-points-${refreshKey}`}
+          state={state}
+          openBreakdown={this.handleBreakdownOpen}
+          handleRequestOpen={handleRequestOpen}
+        />
+      )
+    }
 
     if (view === 'leaderboard') {
       return (
@@ -123,7 +138,7 @@ export class ActivePoints extends PureComponent<Props, State> {
     return (
       <Fragment>
         <ToggleViewHeader
-          viewOptions={POINTS_VIEW_OPTIONS}
+          viewOptions={this.isAdmin ? POINTS_ADMIN_VIEW_OPTIONS : POINTS_VIEW_OPTIONS}
           view={view}
           setView={this.setView}
         />

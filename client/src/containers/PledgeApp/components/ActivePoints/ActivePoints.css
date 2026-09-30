@@ -94,10 +94,17 @@
 }
 
 /**************** Award button ******************/
+/* Pinned to the bottom of the dialog so admins don't have to scroll past
+   every active to reach it */
 #points-confirm-container {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
   display: flex;
   justify-content: center;
-  padding: 16px 16px 32px 16px;
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom)) 16px;
+  background-color: var(--background-color);
+  border-top: 1px solid var(--border-color);
 }
 .points-button {
   width: 100%;
