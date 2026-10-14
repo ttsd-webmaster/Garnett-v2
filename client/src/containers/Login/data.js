@@ -50,7 +50,9 @@ export const selectData = [
       "Alpha Theta",
       "Alpha Iota",
       "Alpha Kappa",
-      "Alpha Lambda"
+      "Alpha Lambda",
+      "Tau Beta",
+      "Alpha Mu"
     ],
   },
   {

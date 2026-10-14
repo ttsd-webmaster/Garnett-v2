@@ -52,9 +52,14 @@ export class Contacts extends PureComponent<Props, State> {
     const brothers = JSON.parse(localStorage.getItem("brothers"));
     const filterKey = localStorage.getItem("contactsFilterKey") || "active";
     const filterName = localStorage.getItem("contactsFilterName") || "Active";
-    const filterSubgroups =
-      JSON.parse(localStorage.getItem("contactsFilterSubgroups")) ||
-      filters.active;
+    // Read the groups from data.js rather than the cached copy, so a newly
+    // added class shows up for people who already picked a filter. Copied
+    // because reverse() sorts in place.
+    const filterGroups = filters[filterKey === "alumni" ? "class" : filterKey];
+    const filterSubgroups = filterGroups
+      ? [...filterGroups]
+      : JSON.parse(localStorage.getItem("contactsFilterSubgroups")) ||
+        [...filters.active];
     this.state = {
       brothers,
       filteredBrothers: brothers,

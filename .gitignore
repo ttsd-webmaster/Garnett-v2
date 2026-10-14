@@ -5,3 +5,8 @@
 node_modules
 /node_modules
 prevPIPhoto
+# backups written by the PledgeApp scripts
+scripts/PledgeApp/*/backups/
+
+# pledge class data (names, phones, emails, photos)
+scripts/PledgeApp/Before/classes/

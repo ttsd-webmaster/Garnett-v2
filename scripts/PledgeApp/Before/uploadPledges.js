@@ -1,9 +1,55 @@
-const folder = "./images";
-const fs = require("fs");
-const admin = require("firebase-admin");
+/**
+ * Creates the database records for a new pledge class so they can sign up.
+ *
+ * Takes a class folder (gitignored, under classes/) holding:
+ *   pledges.json   { "class": "Alpha Mu", "pledges": [{ firstName, lastName,
+ *                    year, major, phone, email }, ...] }
+ *   <key>.jpg      one upright photo per pledge, key = firstName + lastName
+ *
+ * Each pledge gets /users/<key> with status "pledge" and their photo
+ * uploaded to Storage. When they sign up with the pledge code, the first and
+ * last name they type have to match their record exactly.
+ *
+ * Refuses to run while anyone still has status "pledge", because
+ * initiatePledges.js would sweep the new class in with the old one. Run that
+ * first.
+ *
+ * Dry run by default. Nothing is written until you pass --commit:
+ *
+ *   node scripts/PledgeApp/Before/uploadPledges.js <folder>            (preview)
+ *   node scripts/PledgeApp/Before/uploadPledges.js <folder> --commit   (apply)
+ */
 const path = require('path');
-const envPath = path.resolve(__dirname, "../../../.env");
-require('dotenv').config({ path: envPath });
+const fs = require('fs');
+const admin = require('firebase-admin');
+require('dotenv').config({ path: path.join(__dirname, '../../../.env') });
+
+const BUCKET = 'garnett-230209.appspot.com';
+// Keep this far out so the stored photoURL doesn't expire
+const SIGNED_URL_EXPIRES = '01-01-2100';
+
+const commit = process.argv.includes('--commit');
+const folder = process.argv.slice(2).find((arg) => !arg.startsWith('--'));
+
+if (!folder || !fs.existsSync(path.join(folder, 'pledges.json'))) {
+  console.error('Usage: node scripts/PledgeApp/Before/uploadPledges.js <folder with pledges.json> [--commit]');
+  process.exit(1);
+}
+
+if (!process.env.FIREBASE_PRIVATE_KEY || !process.env.FIREBASE_DATABASE_URL) {
+  console.error(`Missing Firebase credentials. Put the .env file at ${path.join(__dirname, '../../../.env')}`);
+  process.exit(1);
+}
+
+// The Brothers tab and signup form only know these classes
+const KNOWN_CLASSES = (() => {
+  const data = fs.readFileSync(
+    path.join(__dirname, '../../../client/src/containers/PledgeApp/components/Contacts/data.js'),
+    'utf8'
+  );
+  const classBlock = data.match(/class:\s*\[([\s\S]*?)\]/);
+  return classBlock ? classBlock[1].match(/"([^"]+)"/g).map((c) => c.slice(1, -1)) : [];
+})();
 
 admin.initializeApp({
   credential: admin.credential.cert({
@@ -18,92 +64,83 @@ admin.initializeApp({
     auth_provider_x509_cert_url: process.env.FIREBASE_AUTH_PROVIDER_X509_CERT_URL,
     client_x509_cert_url: process.env.FIREBASE_CLIENT_X509_CERT_URL
   }),
-  databaseURL: process.env.FIREBASE_DATABASE_URL
-})
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  storageBucket: BUCKET
+});
 
-const bucket = admin.storage().bucket("garnett-230209.appspot.com");
-const usersRef = admin.database().ref("/users");
+const bucket = admin.storage().bucket(BUCKET);
+const usersRef = admin.database().ref('/users');
 
-function uploadFile(file) {
-  const userName = file.slice(0, -4); // Remove file extension (e.g., '.jpg')
+const { class: className, pledges } = JSON.parse(fs.readFileSync(path.join(folder, 'pledges.json'), 'utf8'));
+const keyFor = (pledge) => (pledge.firstName + pledge.lastName).replace(/\s/g, '');
 
-  // Regular expression to match capitalized words (First and Last names)
-  const names = userName.match(/([A-Z][a-z]+)/g) || []; // Matches capital letter followed by lowercase letters
-
-  const userRef = usersRef.child(userName);
-  console.log(`Extracted names:`, names);
-
-  // Define first and last names, defaulting to empty strings if not found
-  const firstName = names[0] || "Unknown"; // Use "Unknown" if first name is not found
-  const lastName = names[1] || ""; // Use empty string if last name is not found
-
-  bucket
-    .upload(`images/${file}`, {
-      destination: file,
-      gzip: true,
-      metadata: {
-        cacheControl: "public, max-age=31536000",
-      },
-    })
-    .then(() => {
-      const uploadedFile = bucket.file(file);
-      uploadedFile
-        .getSignedUrl({ action: "read", expires: "03-17-2027" })
-        .then((signedUrls) => {
-          console.log(`Updated ${userName}'s photo`);
-          userRef.update({
-            firstName: firstName,
-            lastName: lastName,
-            class: "Alpha Zeta",
-            email: "alphazeta@thetatau.org",
-            year: "1st Year",
-            status: "pledge",
-            phone: "1234567890",
-            major: "Computer Science",
-            photoURL: signedUrls[0],
-          });
-        })
-        .catch((err) => console.error(err));
-    })
-    .catch((err) => {
-      console.error("ERROR:", err);
-    });
+function upload(photo, destination) {
+  return bucket.upload(photo, {
+    destination,
+    gzip: true,
+    metadata: { contentType: 'image/jpeg', cacheControl: 'public, max-age=31536000' }
+  })
+  .then(() => bucket.file(destination).getSignedUrl({ action: 'read', expires: SIGNED_URL_EXPIRES }))
+  .then((urls) => urls[0]);
 }
 
-fs.readdir(folder, (err, files) => {
-  // Check if an error occurred while reading the directory
-  if (err) {
-    console.error("Error reading directory:", err);
-    return; // Exit the function if there's an error
-  }
+usersRef.once('value')
+.then((snapshot) => {
+  const users = snapshot.val() || {};
+  const currentPledges = Object.keys(users).filter((key) => users[key].status === 'pledge');
 
-  // Ensure 'files' is defined before proceeding
-  if (!files || files.length === 0) {
-    console.log("No files found in the directory.");
-    return; // Exit if there are no files
-  }
-
-  // Process each file
-  files.forEach((file) => {
-    const userName = file.slice(0, -4);
-    const jpg = `${userName}.jpg`;
-    const JPG = `${userName}.JPG`;
-    bucket
-      .file(jpg)
-      .delete()
-      .then(() => {
-        uploadFile(file);
-      })
-      .catch((error) => {
-        bucket
-          .file(JPG)
-          .delete()
-          .then(() => {
-            uploadFile(file);
-          })
-          .catch((error) => {
-            uploadFile(file);
-          });
-      });
+  console.log(`\n${commit ? 'Applying' : 'Dry run, nothing will be written'}: ${pledges.length} pledges in ${className}`);
+  pledges.forEach((pledge) => {
+    const key = keyFor(pledge);
+    const photo = fs.existsSync(path.join(folder, `${key}.jpg`)) ? `${key}.jpg` : 'NO PHOTO';
+    console.log(`  ${pledge.firstName} ${pledge.lastName} (${key}), ${pledge.year}, ${pledge.major}, ${photo}`);
   });
+
+  const problems = [];
+  if (!KNOWN_CLASSES.includes(className)) {
+    problems.push(`"${className}" isn't in Contacts/data.js.`);
+  }
+  if (currentPledges.length) {
+    problems.push(`${currentPledges.length} users are still pledges. Run initiatePledges.js first.`);
+  }
+  const taken = pledges.map(keyFor).filter((key) => users[key]);
+  if (taken.length) {
+    problems.push(`Already in the database: ${taken.join(', ')}`);
+  }
+  const missingPhotos = pledges.map(keyFor).filter((key) => !fs.existsSync(path.join(folder, `${key}.jpg`)));
+  if (missingPhotos.length) {
+    problems.push(`Missing photos: ${missingPhotos.join(', ')}`);
+  }
+  if (problems.length) {
+    throw new Error(`\n  ${problems.join('\n  ')}`);
+  }
+
+  if (!commit) {
+    console.log('\nRe-run with --commit to apply.');
+    return null;
+  }
+
+  // One at a time so a failure leaves a clear stopping point
+  return pledges.reduce((chain, pledge) => chain.then(() => {
+    const key = keyFor(pledge);
+    return upload(path.join(folder, `${key}.jpg`), `${key}.jpg`)
+      .then((photoURL) => usersRef.child(key).set({
+        firstName: pledge.firstName,
+        lastName: pledge.lastName,
+        class: className,
+        year: pledge.year,
+        major: pledge.major,
+        phone: pledge.phone,
+        email: pledge.email,
+        status: 'pledge',
+        photoURL
+      }))
+      .then(() => console.log(`  added ${key}`));
+  }), Promise.resolve())
+  .then(() => console.log(`\nDone. ${pledges.length} ${className} pledges can now sign up with the pledge code.`));
+})
+.then(() => process.exit(0))
+.catch((error) => {
+  console.error(`\nFailed: ${error.message}`);
+  process.exit(1);
 });
