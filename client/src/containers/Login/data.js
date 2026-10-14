@@ -16,7 +16,6 @@ export const selectData = [
     placeholder: "Class",
     name: "className",
     options: [
-      "Tau Alpha",
       "Charter",
       "Alpha",
       "Beta",
@@ -49,6 +48,7 @@ export const selectData = [
       "Alpha Eta",
       "Alpha Theta",
       "Alpha Iota",
+      "Tau Alpha",
       "Alpha Kappa",
       "Alpha Lambda",
       "Tau Beta",

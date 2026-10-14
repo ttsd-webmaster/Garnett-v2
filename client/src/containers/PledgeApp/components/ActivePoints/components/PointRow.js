@@ -44,7 +44,7 @@ export class PointRow extends PureComponent<Props> {
                   <br />
                 </Fragment>
               )}
-              Awarded by { point.awardedByName }
+              { point.amount < 0 ? 'Demerited' : 'Awarded' } by { point.awardedByName }
             </p>
           }
           secondaryTextLines={2}

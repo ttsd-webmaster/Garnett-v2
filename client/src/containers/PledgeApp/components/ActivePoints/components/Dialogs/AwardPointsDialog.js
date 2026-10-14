@@ -22,6 +22,8 @@ type Props = {
   handleRequestOpen: (string) => void
 };
 
+type PointAction = 'award' | 'demerit';
+
 type State = {
   actives: ?Array<User>,
   selectedUsers: Array<User>,
@@ -77,7 +79,7 @@ export default class AwardPointsDialog extends Component<Props, State> {
       selectedUsers.length === 0 ||
       !title.trim() ||
       !Number.isFinite(parsedAmount) ||
-      parsedAmount === 0
+      parsedAmount <= 0
     );
   }
 
@@ -177,9 +179,13 @@ export default class AwardPointsDialog extends Component<Props, State> {
     }
   }
 
-  awardPoints = () => {
+  // Points are entered as a positive number, and demerits are saved as
+  // negative, the same way pledge merits work
+  awardPoints = (action: PointAction) => {
     const { state, handleRequestOpen } = this.props;
-    const { selectedUsers, title, amount } = this.state;
+    const { selectedUsers, title } = this.state;
+    const isDemerit = action === 'demerit';
+    const amount = Math.abs(Number(this.state.amount));
 
     if (!navigator.onLine) {
       return handleRequestOpen('You are offline');
@@ -192,15 +198,17 @@ export default class AwardPointsDialog extends Component<Props, State> {
       selectedUsers,
       point: {
         title: title.trim(),
-        amount: Number(amount),
+        amount: isDemerit ? -amount : amount,
         date: new Date().toISOString()
       }
     })
     .then(() => {
       const count = selectedUsers.length;
       this.setState({ openSpinner: false });
-      handleRequestOpen(
-        `Awarded ${amount} points to ${count} ${count === 1 ? 'active' : 'actives'}.`
+      const actives = `${count} ${count === 1 ? 'active' : 'actives'}`;
+      handleRequestOpen(isDemerit
+        ? `Demerited ${amount} points from ${actives}.`
+        : `Awarded ${amount} points to ${actives}.`
       );
       this.reset();
       this.props.onAwarded();
@@ -251,6 +259,7 @@ export default class AwardPointsDialog extends Component<Props, State> {
           <input
             className="points-input"
             type="number"
+            min="1"
             placeholder="Points"
             autoComplete="off"
             value={amount}
@@ -283,15 +292,22 @@ export default class AwardPointsDialog extends Component<Props, State> {
 
         <div id="points-confirm-container">
           <button
+            className="points-button demerit"
+            onClick={() => this.awardPoints('demerit')}
+            disabled={this.buttonDisabled}
+          >
+            Demerit
+          </button>
+          <button
             className="points-button"
-            onClick={this.awardPoints}
+            onClick={() => this.awardPoints('award')}
             disabled={this.buttonDisabled}
           >
             Award Points
           </button>
         </div>
 
-        <SpinnerDialog open={openSpinner} message="Awarding points" />
+        <SpinnerDialog open={openSpinner} message="Saving points" />
       </FullScreenDialog>
     );
   }
