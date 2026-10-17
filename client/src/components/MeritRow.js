@@ -11,6 +11,14 @@ import Avatar from 'material-ui/Avatar';
 import { ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
+// Undoes ListItem's two-line clamp so long descriptions show in full
+const fullDescription = {
+  height: 'auto',
+  display: 'block',
+  overflow: 'visible',
+  WebkitLineClamp: 'unset'
+};
+
 type Props = {
   merit: Merit,
   photo: string,
@@ -56,7 +64,9 @@ export class MeritRow extends PureComponent<Props> {
             </p>
           }
           secondaryText={
-            <p className="garnett-description">{merit.description}</p>
+            <p className="garnett-description" style={fullDescription}>
+              {merit.description}
+            </p>
           }
           secondaryTextLines={2}
           onClick={() => handleOptionsOpen && handleOptionsOpen(merit)}
