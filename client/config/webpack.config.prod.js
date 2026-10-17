@@ -310,7 +310,10 @@ module.exports = {
       dest: 'index.html',
       inline: true,
       minify: true,
-      extract: true,
+      // Extracting renames the stylesheet to one the service worker doesn't
+      // precache, so after a deploy the cached index.html points at a file
+      // that's gone and the app opens unstyled
+      extract: false,
       penthouse: {
         blockJSRequests: false,
       }
