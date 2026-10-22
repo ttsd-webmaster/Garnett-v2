@@ -2,7 +2,12 @@
 
 import './MobilePledgeApp.css';
 import './PledgeApp.css';
-import { isMobile, loadFirebase, configureThemeMode } from 'helpers/functions';
+import {
+  isMobile,
+  initializeFirebase,
+  loadFirebase,
+  configureThemeMode
+} from 'helpers/functions';
 import { MobileHeader, MobileNavbar } from './components/Mobile';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Main } from './components/Main/Main';
@@ -28,10 +33,18 @@ export class PledgeApp extends PureComponent<Props, State> {
     localStorage.setItem('route', 'pledge-app');
     configureThemeMode();
 
-    if (navigator.onLine && !window.firebase.database) {
-      loadFirebase('database')
+    if (navigator.onLine) {
+      // The app now shows before Firebase finishes loading, so make sure it's
+      // initialized here too
+      initializeFirebase()
+      .then(() => loadFirebase('database'))
       .then(() => {
         this.setState({ loaded: true });
+      })
+      .catch((error) => {
+        console.error(error);
+        // Merits read straight from the database, so there's nothing to show
+        this.props.handleRequestOpen('Could not connect. Please reload Garnett.');
       });
     } else {
       this.setState({ loaded: true });

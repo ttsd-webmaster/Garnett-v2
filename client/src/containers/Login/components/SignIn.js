@@ -43,9 +43,8 @@ export class SignIn extends PureComponent<Props, State> {
     const { email, password } = this.state;
 
     this.props.openProgressDialog('Signing in...');
-    initializeFirebase();
-
-    loadFirebase('auth')
+    initializeFirebase()
+    .then(() => loadFirebase('auth'))
     .then(() => {
       const firebase= window.firebase;
       firebase.auth().signInWithEmailAndPassword(email, password)
@@ -55,8 +54,16 @@ export class SignIn extends PureComponent<Props, State> {
           API.getAuthStatus(user.displayName)
           .then((res) => {
             const userData = res.data;
+            if (!userData) {
+              throw new Error(`No user found for ${user.displayName}`);
+            }
             localStorage.setItem('data', JSON.stringify(userData));
             this.props.loginCallback(userData);
+          })
+          .catch((error) => {
+            this.props.closeProgressDialog();
+            this.props.handleRequestOpen('Could not sign in. Please try again.');
+            console.error(error);
           });
         } else {
           const message = 'Email is not verified.';
@@ -70,6 +77,11 @@ export class SignIn extends PureComponent<Props, State> {
         this.props.handleRequestOpen(message);
         console.error(`Error: ${error}`);
       });
+    })
+    .catch((error) => {
+      this.props.closeProgressDialog();
+      this.props.handleRequestOpen('Could not connect. Please try again.');
+      console.error(error);
     });
   }
 

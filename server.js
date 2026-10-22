@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const compression = require('compression');
 const path = require('path');
 const app = express();
 const firebase = require('@firebase/app').firebase;
@@ -61,6 +62,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Middleware
+// Gzip responses. The main bundle alone is over 1MB uncompressed.
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

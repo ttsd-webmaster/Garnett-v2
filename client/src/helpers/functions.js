@@ -35,8 +35,8 @@ export function isMobile(): boolean {
   );
 }
 
-export function initializeFirebase() {
-  loadFirebase('app')
+export function initializeFirebase(): Promise<void> {
+  return loadFirebase('app')
   .then(() => {
     const { firebase } = window;
     if (!firebase.apps.length) {
@@ -51,15 +51,35 @@ export function initializeFirebase() {
   });
 }
 
+const firebaseModules: { [string]: Promise<void> } = {};
+
 export function loadFirebase(module: string): Promise<void> {
-  return new Promise(resolve => {
-    const script = document.createElement('script');
-    script.src = `https://www.gstatic.com/firebasejs/5.9.3/firebase-${module}.js`;
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => { throw new Error(); };
-    document.head.appendChild(script);
-  });
+  if (!firebaseModules[module]) {
+    // Every module registers itself on firebase-app, so app has to finish
+    // loading first. Async scripts run in whatever order they arrive, and
+    // auth arriving before app left the app stuck on a white page.
+    const appLoaded = module === 'app' ? Promise.resolve() : loadFirebase('app');
+
+    firebaseModules[module] = appLoaded
+    .then(() => new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = `https://www.gstatic.com/firebasejs/5.9.3/firebase-${module}.js`;
+      script.async = true;
+      script.onload = () => resolve();
+      script.onerror = () => {
+        script.remove();
+        reject(new Error(`Could not load firebase-${module}.`));
+      };
+      document.head.appendChild(script);
+    }))
+    .catch((error) => {
+      // Forget the failed attempt so the next call tries again
+      delete firebaseModules[module];
+      throw error;
+    });
+  }
+
+  return firebaseModules[module];
 }
 
 export function registerNotificationToken(user: User) {
@@ -113,8 +133,10 @@ export function registerNotificationToken(user: User) {
         .catch((err) => {
           reject(new Error('Notifications have been turned off.'));
         });
-      });
-    });
+      })
+      .catch(reject);
+    })
+    .catch(reject);
   });
 }
 

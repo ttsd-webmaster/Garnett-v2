@@ -96,44 +96,52 @@ export default class App extends Component<{}, State> {
       return;
     }
 
-    // Check if we are online
+    // Show the app straight away from the cached user. Waiting on Firebase,
+    // the server, and notifications first kept the page blank, and forever if
+    // any of them failed.
+    this.setData(data);
+
     if (!navigator.onLine) {
-      this.setData(data);
       return;
     }
 
-    initializeFirebase();
-
-    loadFirebase('auth')
+    // Then confirm the session and refresh the user in the background
+    initializeFirebase()
+    .then(() => loadFirebase('auth'))
     .then(() => {
       const { firebase } = window;
 
       firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          API.getAuthStatus(user.displayName)
-          .then((res) => {
-            const userData = res.data;
-            this.loginCallback(userData);
-          });
-        } else {
-          this.setState({ loading: false });
+        if (!user) {
+          this.setState({ user: null, authenticated: false });
+          return;
         }
+
+        API.getAuthStatus(user.displayName)
+        .then((res) => {
+          if (res.data) {
+            this.loginCallback(res.data);
+          } else {
+            this.setState({ user: null, authenticated: false });
+          }
+        })
+        .catch((error) => console.error(error));
       });
-    });
+    })
+    .catch((error) => console.error(error));
   }
 
   loginCallback = (user: User) => {
+    // Keep the cached copy current so the next launch starts from it
+    localStorage.setItem('data', JSON.stringify(user));
+    this.setData(user);
+
+    // Notifications are set up after the app shows, never before
     if (browserSupportsNotifications()) {
       registerNotificationToken(user)
-      .then((res) => {
-        this.setData(user);
-      })
       .catch((error) => {
-        this.setData(user);
         this.handleRequestOpen(error.message);
-      })
-    } else {
-      this.setData(user);
+      });
     }
   }
 
@@ -197,7 +205,9 @@ export default class App extends Component<{}, State> {
     return (
       <Router>
         <ScrollToTop />
-        <div>
+        {/* Pages fetch once on mount, so remount them if the background
+            check finds the cached user is out of date (e.g. renamed to PI) */}
+        <div key={user ? `${user.displayName}-${user.status}` : 'signed-out'}>
           <Switch>
             <PrivateRoute
               exact
