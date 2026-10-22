@@ -148,15 +148,6 @@ export default {
     const params = { pledgeName };
     return axios.get('/api/interview/pledge', { params });
   },
-  // PUT requests
-  completeInterview: function(activeName: string, pledgeName: string) {
-    const body = { activeName, pledgeName };
-    return axios.put('/api/interview', body);
-  },
-  deleteInterview: function(activeName: string, pledgeName: string) {
-    const body = { activeName, pledgeName };
-    return axios.delete('/api/interview', { data: body });
-  },
 
   // Chalkboards
   // GET requests

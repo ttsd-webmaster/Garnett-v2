@@ -52,33 +52,6 @@ export class Interviews extends PureComponent<Props> {
     .catch(err => console.error(err));
   }
 
-  completeInterview = (user: User) => {
-    const { firstName, lastName, status } = this.props.state;
-    const fullName = `${firstName} ${lastName}`;
-    const selectedUserName = `${user.firstName} ${user.lastName}`;
-    const activeName = status === 'pledge' ? selectedUserName : fullName;
-    const pledgeName = status === 'pledge' ? fullName : selectedUserName;
-    API.completeInterview(activeName, pledgeName)
-    .then((res) => {
-      this.fetchInterviewProgress();
-    })
-    .catch(err => console.error(err));
-  }
-  undoInterview = (user: User) => {
-    const { firstName, lastName, status } = this.props.state;
-    const fullName = `${firstName} ${lastName}`;
-    const selectedUserName = `${user.firstName} ${user.lastName}`;
-
-    const activeName = status === 'pledge' ? selectedUserName : fullName;
-    const pledgeName = status === 'pledge' ? fullName : selectedUserName;
-
-    API.deleteInterview(activeName, pledgeName)
-      .then(() => {
-        this.fetchInterviewProgress();
-      })
-      .catch(err => console.error(err));
-  };
-
   openOptions = (user: User) => this.setState({ user, open: true });
 
   closeOptions = () => this.setState({ open: false });
@@ -114,22 +87,15 @@ export class Interviews extends PureComponent<Props> {
         />
         <Subheader className="garnett-subheader">Completed</Subheader>
         <List className="garnett-list">
+          {/* Interviews only change through interview merits */}
           {safeCompleted.map((user, i) => (
-            <UserRow
-              key={i}
-              user={user}
-              handleOpen={() => this.undoInterview(user)}
-            />
+            <UserRow key={i} user={user} />
           ))}
         </List>
         <Subheader className="garnett-subheader">Incomplete</Subheader>
         <List className="garnett-list">
           {safeIncomplete.map((user, i) => (
-            <UserRow
-              key={i}
-              user={user}
-              handleOpen={() => this.completeInterview(user)}
-            />
+            <UserRow key={i} user={user} />
           ))}
         </List>
         <Dialogs

@@ -18,9 +18,9 @@ function shouldCountTowardsMeritCap(merit) {
     merit.type === 'standardized' &&
     merit.description !== 'PC Merits';
 
+  // Interview merits are separate from personal merits and never use them up
   const shouldCountTowardsMeritCap =
     merit.type === 'personal' ||
-    merit.type === 'interview' ||
     nonPCStandardizedMerit;
 
   return shouldCountTowardsMeritCap;

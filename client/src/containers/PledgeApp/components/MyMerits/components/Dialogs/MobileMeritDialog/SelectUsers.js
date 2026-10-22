@@ -182,7 +182,6 @@ export class SelectUsers extends Component<Props, State> {
       state.status !== 'pipm' &&
       (
         type === 'personal' ||
-        type === 'interview' ||
         nonPCStandardizedMerit
       )
     );

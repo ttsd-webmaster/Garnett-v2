@@ -59,6 +59,10 @@ exports.get_pledges = function(req, res) {
         merits.forEach((merit) => {
           const pledgeName = merit.val().pledgeName.replace(/ /g, '');
           const pledge = pledgesMap.get(pledgeName);
+          // Skip merits left behind by removed or initiated pledges
+          if (!pledge) {
+            return;
+          }
           pledge.merits += merit.val().amount;
           pledgesMap.set(pledgeName, pledge);
         });
@@ -71,7 +75,8 @@ exports.get_pledges = function(req, res) {
             const activeName = interview.val().activeName.replace(/ /g, '');
             const pledgeName = interview.val().pledgeName.replace(/ /g, '');
             const pledge = pledgesMap.get(pledgeName);
-            if (!interviewsMap.has(pledgeName + '-' + activeName)) {
+            // Skip interviews left behind by removed or initiated pledges
+            if (pledge && !interviewsMap.has(pledgeName + '-' + activeName)) {
               pledge.interviews += 1;
               pledgesMap.set(pledgeName, pledge);
               interviewsMap.set(pledgeName + '-' + activeName, 1);

@@ -1,6 +1,5 @@
 // @flow
 
-import API from 'api/API.js';
 import {
   isMobile,
   androidBackOpen,
@@ -53,20 +52,6 @@ export class Dialogs extends PureComponent<Props> {
     );
   }
 
-  deleteInterview = (user: User) => {
-    const { firstName, lastName, status } = this.props.state;
-    const fullName = `${firstName} ${lastName}`;
-    const selectedUserName = `${user.firstName} ${user.lastName}`;
-    const activeName = status === 'pledge' ? selectedUserName : fullName;
-    const pledgeName = status === 'pledge' ? fullName : selectedUserName;
-    API.deleteInterview(activeName, pledgeName)
-    .then((res) => {
-      this.props.fetchInterviewProgress();
-      this.props.handleClose();
-    })
-    .catch(err => console.error(err));
-  }
-
   handleMeritOpen = () => {
     this.setState({ openMerit: true });
     if (navigator.onLine) {
@@ -87,7 +72,7 @@ export class Dialogs extends PureComponent<Props> {
   }
 
   render() {
-    const { open, user, handleClose } = this.props;
+    const { open, handleClose } = this.props;
     const OPTIONS = [
       {
         header: 'Options',
@@ -96,11 +81,6 @@ export class Dialogs extends PureComponent<Props> {
             text: 'Add merits',
             icon: 'icon-star',
             onClick: () => this.handleMeritOpen()
-          },
-          {
-            text: 'Delete interview',
-            icon: 'icon-trash-empty',
-            onClick: () => this.deleteInterview(user)
           }
         ]
       }
